@@ -55,12 +55,14 @@ def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
         return
 
     try:
-        check_output([get_sherlock_exe_path(), "-grpcPort="+str(port)] + list(sherlock_args), shell=True)
+        check_output([get_sherlock_exe_path(), "-grpcPort="+str(port)] + list(sherlock_args),
+                     shell=True)
     except Exception as process_return:
         if process_return.returncode == 1:
             print("Sherlock has exited successfully.")
         else:
-            print("Error encountered while starting or executing Sherlock, error = ", process_return.returncode,
+            print("Error encountered while starting or executing Sherlock, error = ",
+                  process_return.returncode,
                   process_return.output)
 
 
@@ -73,7 +75,8 @@ def get_base_ansys():
     """
 
     supported_installed_versions = {
-        env_key: path for env_key, path in os.environ.items() if env_key.startswith("AWP_ROOT") and os.path.isdir(path)
+        env_key: path for env_key, path in os.environ.items() if env_key.startswith("AWP_ROOT") and
+                                                                 os.path.isdir(path)
     }
 
     for key in sorted(supported_installed_versions, reverse=True):
@@ -112,5 +115,3 @@ def get_sherlock_exe_path():
         return ""
     sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
     return sherlock_bin
-
-

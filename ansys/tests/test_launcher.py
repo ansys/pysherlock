@@ -22,7 +22,8 @@ class TestLauncher(unittest.TestCase):
     @patch('test_launcher.launcher.get_base_ansys')
     def test_get_sherlock_exe_path(self, mock_get_base_ansys):
         mock_get_base_ansys.return_value = "base_ansys_path"
-        self.assertEqual('base_ansys_path\\sherlock\\SherlockClient.exe', launcher.get_sherlock_exe_path())
+        self.assertEqual('base_ansys_path\\sherlock\\SherlockClient.exe',
+                         launcher.get_sherlock_exe_path())
 
 
 if __name__ == '__main__':
