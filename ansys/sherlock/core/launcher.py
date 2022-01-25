@@ -2,8 +2,6 @@
 import errno
 import os
 import socket
-import subprocess
-from _sqlite3 import version
 
 from ansys.sherlock.core.errors import (
     SherlockCannotUsePortError
@@ -62,7 +60,8 @@ def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
         if process_return.returncode == 1:
             print("Sherlock has exited successfully.")
         else:
-            print("Error encountered while starting or executing Sherlock, error = ", process_return.returncode, process_return.output)
+            print("Error encountered while starting or executing Sherlock, error = ", process_return.returncode,
+                  process_return.output)
 
 
 def get_base_ansys():
