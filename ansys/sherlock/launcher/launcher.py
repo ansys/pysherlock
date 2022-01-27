@@ -57,13 +57,14 @@ def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
         return
 
     try:
-        check_output([get_sherlock_exe_path(), "-grpcPort="+str(port)] + list(sherlock_args),
+        check_output([get_sherlock_exe_path(), "-grpcPort=" + str(port)] + list(sherlock_args),
                      shell=True)
     except Exception as process_return:
         if process_return.returncode == 1:
             LOG.debug("Sherlock has exited successfully.")
         else:
-            LOG.error("Error encountered while starting or executing Sherlock, error = ", process_return.returncode,
+            LOG.error("Error encountered while starting or executing Sherlock, error = ",
+                      process_return.returncode,
                       process_return.output)
 
 
