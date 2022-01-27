@@ -3,6 +3,8 @@ import errno
 import os
 import socket
 
+from ansys.sherlock.core import LOG
+
 from ansys.sherlock.core.errors import (
     SherlockCannotUsePortError
 )
@@ -59,11 +61,10 @@ def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
                      shell=True)
     except Exception as process_return:
         if process_return.returncode == 1:
-            print("Sherlock has exited successfully.")
+            LOG.debug("Sherlock has exited successfully.")
         else:
-            print("Error encountered while starting or executing Sherlock, error = ",
-                  process_return.returncode,
-                  process_return.output)
+            LOG.error("Error encountered while starting or executing Sherlock, error = ", process_return.returncode,
+                      process_return.output)
 
 
 def get_base_ansys():
