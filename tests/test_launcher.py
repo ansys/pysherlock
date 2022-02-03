@@ -2,7 +2,7 @@ import os
 import unittest
 
 from unittest.mock import patch
-from ansys.sherlock.launcher import launcher
+from ansys.sherlock.launcher import launcher;
 
 
 class TestLauncher(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestLauncher(unittest.TestCase):
         self.assertEqual(223, launcher.get_ansys_version_from_awp_root('AWP_ROOT223'))
         self.assertEqual("", launcher.get_ansys_version_from_awp_root('AWPROOT223'))
 
-    @patch('test_launcher.launcher.get_base_ansys')
+    @patch('ansys.sherlock.launcher.launcher.get_base_ansys')
     def test_get_sherlock_exe_path(self, mock_get_base_ansys):
         mock_get_base_ansys.return_value = "base_ansys_path"
         self.assertEqual('base_ansys_path\\sherlock\\SherlockClient.exe',
