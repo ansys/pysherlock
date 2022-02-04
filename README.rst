@@ -13,7 +13,7 @@ The following sections should be filled and documented for your project.
 
 Project Overview
 ----------------
-Provide a description of your PyAnsys Python library.
+The PySherlock library provides access to Sherlock's functions via a set of Python APIs.
 
 
 Installation
@@ -22,18 +22,18 @@ Include installation directions.  Note that this README will be
 included in your PyPI package, so be sure to include ``pip``
 directions along with developer installation directions.  For example.
 
-Install <PyAnsys Library> with:
+Install PyAnsys PySherlock with:
 
 .. code::
 
-   pip install ansys-<product/service>-<library>
+   pip install ansys-sherlock-launcher
 
 Alternatively, clone and install in development mode with:
 
 .. code::
 
    git clone https://github.com/pyansys/
-   cd <PyAnsys-Library>
+   cd pysherlock
    pip install -e .
 
 
