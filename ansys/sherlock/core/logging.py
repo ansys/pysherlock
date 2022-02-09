@@ -1,0 +1,58 @@
+from datetime import datetime
+from logging.handlers import TimedRotatingFileHandler
+import logging
+import sys
+
+LOG_LEVEL = logging.DEBUG
+FILE_NAME = "PySherlock.log"
+
+# Formatting
+STDOUT_MSG_FORMAT = (
+    "%(levelname)s - %(instance_name)s - %(module)s - %(funcName)s - %(message)s"
+)
+FILE_MSG_FORMAT = STDOUT_MSG_FORMAT
+
+DEFAULT_STDOUT_HEADER = """
+LEVEL - INSTANCE NAME - MODULE - FUNCTION - MESSAGE
+"""
+DEFAULT_FILE_HEADER = DEFAULT_STDOUT_HEADER
+
+NEW_SESSION_HEADER = f"""
+===============================================================================
+       NEW SESSION - {datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}
+==============================================================================="""
+
+
+def get_console_handler():
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(STDOUT_MSG_FORMAT)
+    return console_handler
+
+
+def get_file_handler():
+    file_handler = TimedRotatingFileHandler(FILE_NAME, when='midnight')
+    file_handler.setFormatter(STDOUT_MSG_FORMAT)
+    file_handler.stream.write(NEW_SESSION_HEADER)
+    file_handler.stream.write(DEFAULT_FILE_HEADER)
+    return file_handler
+
+
+def get_logger(logger_name):
+    return logging.get_logger(logger_name)
+
+
+class Logger:
+    def __init__(self, logger_name, level=logging.WARN):
+        self.logger = logging.getLogger(logger_name)
+        self.logger.setLevel(LOG_LEVEL)
+        self.logger.addHandler(get_console_handler())
+        self.logger.addHandler(get_file_handler())
+        self.debug = self.logger.debug
+        self.info = self.logger.info
+        self.warning = self.logger.warning
+        self.error = self.logger.error
+        self.critical = self.logger.critical
+        self.log = self.logger.log
+
+    def setLevel(self, level):
+        self.logger.setLevel(level)

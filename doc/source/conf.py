@@ -1,4 +1,4 @@
-from ansys.product.library import __version__
+from ansys.sherlock.core import __version__
 
 # Project information
 project = 'pyansys_library_'
