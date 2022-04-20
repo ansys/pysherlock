@@ -3,7 +3,7 @@ import codecs
 import os
 from io import open as io_open
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # Use single source package versioning.  Follows:
 # https://packaging.python.org/guides/single-sourcing-package-version/
@@ -13,7 +13,7 @@ from setuptools import setup
 # the module
 HERE = os.path.abspath(os.path.dirname(__file__))
 __version__ = None
-version_file = os.path.join(HERE, 'ansys', 'sherlock', 'core', '_version.py')
+version_file = os.path.join(HERE, 'ansys', 'product', 'library', '_version.py')
 with io_open(version_file, mode='r') as fd:
     exec(fd.read())
 
@@ -30,16 +30,18 @@ with open(os.path.join(HERE, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(
-    name='ansys-sherlock-core',
-    packages=['ansys.sherlock.core', 'ansys.sherlock.launcher'],
+    name='ansys-sherlock',
+    packages=['ansys.sherlock'],
     version=__version__,
-    description='PyAnsys Sherlock library',
-    long_description=long_description,
-    long_description_content_type='text/x-rst',
-    url='https://github.com/pyansys/template/',
+    description='A Python wrapper for Ansys Sherlock gRPC APIs',
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
+    #long_description=long_description,
+    #long_description_content_type='text/x-rst',
+    url='https://github.com/pyansys/pySherlock/',
     license='MIT',
     author='ANSYS, Inc.',  # this is required
-    maintainer='PyAnsys Sherlock developers',  # you can change this
+    maintainer='PyAnsys developers',  # you can change this
 
     # this email group works
     maintainer_email='pyansys.support@ansys.com',
@@ -50,7 +52,7 @@ setup(
     install_requires=[],
 
     # Plan on supporting only the currently supported versions of Python
-    python_requires='>=3.6',
+    python_requires='>=3.8',
 
     # Less than critical but helpful
     classifiers=[
