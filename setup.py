@@ -31,7 +31,6 @@ with open(os.path.join(HERE, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='ansys-sherlock',
-    packages=['ansys.sherlock'],
     version=__version__,
     description='A Python wrapper for Ansys Sherlock gRPC APIs',
     packages=find_packages(where="src"),
