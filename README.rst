@@ -8,6 +8,7 @@ users to automate and customize their specific workflows.
 Below is a list of the currently supported features:
 
 * Launch a Sherlock gRPC server and a Sherlock client
+
 .. * Import ECAD files and generate project reports
 .. * Define life cycle events and profiles
 .. * Generate a stackup and update a stackup layer
