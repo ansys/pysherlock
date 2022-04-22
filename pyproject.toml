@@ -4,9 +4,9 @@ build-backend = "flit_core.buildapi"
 
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
-name = "ansys-pysherlock"
+name = "ansys-sherlock"
 version = "0.1.dev0"
-description = "A Python wrapper for Ansys pysherlock"
+description = "A Python wrapper for Ansys Sherlock"
 readme = "README.rst"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
@@ -28,7 +28,7 @@ dependencies = [
 ]
 
 [tool.flit.module]
-name = "ansys.pysherlock"
+name = "ansys.sherlock"
 
 [project.urls]
-Source = "https://github.com/pyansys/pypysherlock"
+Source = "https://github.com/pyansys/pysherlock"
