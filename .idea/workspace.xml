@@ -2,65 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a19b4003-14b3-41e0-b103-218dcc7e3135" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/doc/build/doctrees/environment.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/doctrees/index.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/.buildinfo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_sources/index.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/basic.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/css/blank.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/css/theme.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/doctools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/documentation_options.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/file.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/fonts/SourceSansPro-Light.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/fonts/SourceSansPro-Regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/fonts/SourceSansPro-SemiBold.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/jquery-3.5.1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/js/index.be7d3bbb2ef33a8344ce.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/language_data.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/minus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/plus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/pyansys-logo-black-cropped.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/pyansys-logo-white-cropped.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/pygments.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/searchtools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/underscore-1.13.1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/underscore.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/css/all.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-regular-400.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-regular-400.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-regular-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-regular-400.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-regular-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/_static/webpack-macros.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/genindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/objects.inv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/search.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/build/html/searchindex.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/source/api/index.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/source/api/launcher.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/source/getting_started/index.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/source/user_guide/index.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/doc/source/conf.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/doc/source/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/doc/source/index.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/launcher/launcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ansys/sherlock/launcher/launcher.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
