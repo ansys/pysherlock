@@ -1,7 +1,7 @@
 from ansys.sherlock.core import __version__
 
 # Project information
-project = 'pyansys_library_'
+project = 'pysherlock'
 copyright = '(c) 2021 ANSYS, Inc. All rights reserved'
 author = 'ANSYS Inc.'
 release = version = __version__

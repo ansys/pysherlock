@@ -1,66 +1,80 @@
-PyAnsys Library Template
-########################
-
-This repository is a template repository where you can `Create a
-repository from a template`_ and create a new PyAnsys project that
-follows the guidelines specified in the `PyAnsys Developer's Guide`_.
-
-The following sections should be filled and documented for your project.
-
-.. _Create a repository from a template: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
-.. _PyAnsys Developer's Guide: https://github.com/pyansys/about
-
-
 Project Overview
 ----------------
-The PySherlock library provides access to Sherlock's functions via a set of Python APIs.
+ANSYS Sherlock is a reliability physics-based electronics design tool that provides
+fast and accurate life predictions for electronic hardware at the component, 
+board and system levels in early stage design.
+The PySherlock library provides Pythonic access to Sherlock's functions, enabling
+users to automate and customize their specific workflows.
+Below is a list of the currently supported features:
 
+* Launch a Sherlock gRPC server and a Sherlock client
+
+.. * Import ECAD files and generate project reports
+.. * Define life cycle events and profiles
+.. * Generate a stackup and update a stackup layer
+.. * Update a project parts list
+.. * Perform layer view operations such as updating a component's location
+.. * Export a 3D model, material definitions and material assignments for integration with ANSYS Workbench
+.. * Execute one or more analyses
 
 Installation
 ------------
-Include installation directions.  Note that this README will be
-included in your PyPI package, so be sure to include ``pip``
-directions along with developer installation directions.  For example.
+.. Include installation directions.  Note that this README will be
+.. included in your PyPI package, so be sure to include ``pip``
+.. directions along with developer installation directions.  For example.
 
-Install PyAnsys PySherlock with:
+Install PySherlock with:
 
 .. code::
 
-   pip install ansys-sherlock-launcher
+   pip install ansys-sherlock-core
 
 Alternatively, clone and install in development mode with:
 
 .. code::
 
-   git clone https://github.com/pyansys/
-   cd pysherlock
+   git clone https://github.com/pyansys/pysherlock
    pip install -e .
 
 
-Documentation
--------------
-Include a link to the full sphinx documentation.  For example `PyAnsys <https://docs.pyansys.com/>`_
+Documentation and Issues
+------------------------
+Documentation link will be provided here once the documentation site becomes available.
 
 
-Usage
------
-It's best to provide a sample code or even a figure demonstrating the usage of your library.  For example:
+Getting Started
+---------------
+Launch Sherlock Locally
+^^^^^^^^^^^^^^^^^^^^^^^
+.. code::
 
-.. code:: python
+    from ansys.sherlock.launcher import launcher
+    launcher.launch_sherlock()
 
-   >>> from ansys.<product/service> import <library>
-   >>> my_object.<library>()
-   >>> my_object.foo()
-   'bar'
+This automatically searches for the latest local version of Sherlock, and launches the Sherlock gRPC server on port 9090. It also launches a Sherlock client connected to the same port.
+
+Alternatively you can start the Sherlock gRPC server on a different port by using the ``port`` parameter. For example:
+
+.. code::
+
+    from ansys.sherlock.launcher import launcher
+    launcher.launch_sherlock(port=9092)
+
+.. Example Usage
+.. -------------
+
+.. .. code:: python
 
 
-Testing
--------
-You can feel free to include this at the README level or in CONTRIBUTING.md
+.. Testing
+.. -------
+.. You can feel free to include this at the README level or in CONTRIBUTING.md
 
 
 License
 -------
-Be sure to point out your license (and any acknowledgments).  State
-that the full license can be found in the root directory of the
-repository.
+``PySherlock`` is licensed under the MIT license.
+
+This module allows users access to existing Sherlock functionalities and requires a legally licensed local copy of Ansys.
+
+Please visit `Ansys <http://www.ansys.com>`_ for more information on getting a licensed copy.
