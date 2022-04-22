@@ -1,6 +1,6 @@
 ..
    Just reuse the root readme to avoid duplicating the documentation.
-   Provide any documetnation specific to your online documentation
+   Provide any documentation specific to your online documentation
    here.
 
 .. include:: ../../README.rst
@@ -13,7 +13,7 @@
 Code Examples
 ~~~~~~~~~~~~~
 Here's a quick preview for how Python code looks using the
-``pyansys-product-library``.  For more examples, click the links at the
+``pySherlock``.  For more examples, click the links at the
 top of the page to see function, method, and class documentation.
 
 
