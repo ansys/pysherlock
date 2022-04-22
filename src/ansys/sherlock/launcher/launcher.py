@@ -17,15 +17,15 @@ sherlock_cmd_args = []
 
 
 def is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
-    """Checks if a port on the host is available
-
-    Parameters
-    ----------
-    host : str, required
-        The hostname in internet domain notation or an IPv4 address
-    port : integer, required
-        The socket port number to use for the connection
-    """
+#    """Checks if a port on the host is available
+#
+#    Parameters
+#    ----------
+#    host : str, required
+#        The hostname in internet domain notation or an IPv4 address
+#    port : integer, required
+#        The socket port number to use for the connection
+#    """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         try:
             sock.bind((host, port))
@@ -38,8 +38,7 @@ def is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 
 
 def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
-    """Launches Sherlock and starts gRPC on the given port
-    Example: launch_sherlock("-singleProject","-wbWorkingDir=c:\\Temp", host='127.0.0.1', port=9092)
+    """Launches Sherlock and starts gRPC on the given port.
 
     Parameters
     ----------
@@ -49,6 +48,15 @@ def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
         The hostname in internet domain notation or an IPv4 address
     port : integer, required
         The socket port number to use for the connection
+
+    Examples
+    --------
+    >>> from ansys.sherlock.launcher import launcher
+    >>> launch_sherlock()
+
+    >>> from ansys.sherlock.launcher import launcher
+    >>> launch_sherlock(port=9092)
+
     """
     try:
         is_port_available(host, port)
@@ -69,12 +77,12 @@ def launch_sherlock(*sherlock_args, host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 
 
 def get_base_ansys():
-    """Return the latest supported and installed ANSYS path in Windows
-    For example: 'C:\\Program Files\\ANSYS INC\\v222'
-    Returns
-    -------
-    ansys_path : str
-    """
+#    """Return the latest supported and installed ANSYS path in Windows
+#    For example: 'C:\\Program Files\\ANSYS INC\\v222'
+#    Returns
+#    -------
+#    ansys_path : str
+#    """
 
     supported_installed_versions = {
         env_key: path for env_key, path in os.environ.items() if env_key.startswith("AWP_ROOT") and
@@ -89,16 +97,16 @@ def get_base_ansys():
 
 
 def get_ansys_version_from_awp_root(awp_root):
-    """Returns the Ansys version (ie 212, 221) given an AWP_ROOT environment variable name
-    Parameter
-    ---------
-    awp_root : str
-        The AWP_ROOT* environment variable name
-
-    Returns
-    -------
-    ansys_version : int
-    """
+#    """Returns the Ansys version (ie 212, 221) given an AWP_ROOT environment variable name
+#    Parameter
+#    ---------
+#    awp_root : str
+#        The AWP_ROOT* environment variable name
+#
+#    Returns
+#    -------
+#    ansys_version : int
+#    """
 
     if awp_root.find("AWP_ROOT") >= 0:
         return int(awp_root.replace("AWP_ROOT", ""))
@@ -107,11 +115,11 @@ def get_ansys_version_from_awp_root(awp_root):
 
 
 def get_sherlock_exe_path():
-    """Returns the latest SherlockClient.exe path
-    Returns
-    -------
-    sherlock_path : str
-    """
+#    """Returns the latest SherlockClient.exe path
+#    Returns
+#    -------
+#    sherlock_path : str
+#    """
     ansys_base = get_base_ansys()
     if not ansys_base:
         return ""
