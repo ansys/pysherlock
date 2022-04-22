@@ -16,7 +16,6 @@ Below is a list of the currently supported features:
 .. * Export a 3D model, material definitions and material assignments for integration with ANSYS Workbench
 .. * Execute one or more analyses
 
-
 Installation
 ------------
 .. Include installation directions.  Note that this README will be
