@@ -83,19 +83,3 @@ jobs:
           folder: doc/build/html
           clean: true
 
-
-  build:
-    name: Build library
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip flit
-          python -m pip install -r requirements/requirements_build.txt
-          flit build
-          python -m twine check dist/*
