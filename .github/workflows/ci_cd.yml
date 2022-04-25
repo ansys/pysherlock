@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: HTML-Documentation
-          path: doc/_build/html/
+          path: doc/build/html/
           retention-days: 7
       
       - name: Deploy
