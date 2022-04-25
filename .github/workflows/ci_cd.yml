@@ -101,6 +101,14 @@ jobs:
           name: Documentation-pdf
           path: doc/build/latex/*.pdf
           retention-days: 7
+          
+      - name: Deploy
+        if: github.event_name == 'push' && contains(github.ref, 'refs/heads/main')
+        uses: JamesIves/github-pages-deploy-action@4.3.0
+        with:
+          branch: gh-pages
+          folder: doc/build/html
+          clean: true
 
   Release:
     if: contains(github.ref, 'refs/tags')
