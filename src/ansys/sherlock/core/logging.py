@@ -1,6 +1,6 @@
 from datetime import datetime
-from logging.handlers import TimedRotatingFileHandler
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import sys
 
 LOG_LEVEL = logging.DEBUG

@@ -1,6 +1,8 @@
-from ansys.sherlock.core import __version__
 import os
 import sys
+
+from ansys.sherlock.core import __version__
+
 sys.path.insert(0, os.path.abspath('../../src'))
 
 # Project information

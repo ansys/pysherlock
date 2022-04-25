@@ -1,7 +1,7 @@
 import os
 import unittest
-
 from unittest.mock import patch
+
 from ansys.sherlock.launcher import launcher
 
 
