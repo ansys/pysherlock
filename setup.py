@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name='ansys-sherlock',
@@ -20,7 +20,7 @@ setup(
     install_requires=[],
 
     # Plan on supporting only the currently supported versions of Python
-    python_requires='>=3.8',
+    python_requires='>=3.7',
 
     # Less than critical but helpful
     classifiers=[

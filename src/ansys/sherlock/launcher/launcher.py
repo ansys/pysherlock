@@ -2,13 +2,10 @@
 import errno
 import os
 import socket
+from subprocess import check_output
 
 from ansys.sherlock.core import LOG
-
-from ansys.sherlock.core.errors import (
-    SherlockCannotUsePortError
-)
-from subprocess import check_output
+from ansys.sherlock.core.errors import SherlockCannotUsePortError
 
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090

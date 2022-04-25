@@ -1,8 +1,8 @@
 import os
 import unittest
-
 from unittest.mock import patch
-from ansys.sherlock.launcher import launcher;
+
+from ansys.sherlock.launcher import launcher
 
 
 class TestLauncher(unittest.TestCase):
