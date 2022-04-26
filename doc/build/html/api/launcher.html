@@ -181,15 +181,11 @@
 <span class="target" id="module-ansys.sherlock.launcher.launcher"></span><p>Module for launching Sherlock locally or connecting to a local instance with gRPC.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ansys.sherlock.launcher.launcher.launch_sherlock">
-<span class="sig-prename descclassname"><span class="pre">ansys.sherlock.launcher.launcher.</span></span><span class="sig-name descname"><span class="pre">launch_sherlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">sherlock_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9090</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.launcher.launcher.launch_sherlock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Launches Sherlock and starts gRPC on the given port.</p>
+<span class="sig-prename descclassname"><span class="pre">ansys.sherlock.launcher.launcher.</span></span><span class="sig-name descname"><span class="pre">launch_sherlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9090</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.launcher.launcher.launch_sherlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch Sherlock and starts gRPC on the given localhost port.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sherlock_args</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of optional sherlock command arguments, i.e. -singleProject</p></li>
-<li><p><strong>host</strong> (<em>str</em><em>, </em><em>required</em>) – The hostname in internet domain notation or an IPv4 address</p></li>
-<li><p><strong>port</strong> (<em>integer</em><em>, </em><em>required</em>) – The socket port number to use for the connection</p></li>
-</ul>
+<dd class="field-odd"><p><strong>port</strong> (<em>integer</em><em>, </em><em>optional</em>) – The socket port number to use for the connection. By default, 9090 is used.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>

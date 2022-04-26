@@ -1,7 +1,7 @@
 repos:
 
 - repo: https://github.com/psf/black
-  rev: 22.1.0
+  rev: 22.3.0
   hooks:
   - id: black
     args: [
@@ -31,11 +31,11 @@ repos:
   rev: v2.1.0
   hooks:
   - id: codespell
+    files: ^src/
 
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.1.1
   hooks:
   - id: pydocstyle
     additional_dependencies: [toml]
-    args: ["--match-dir='^(src)'"]
-    exclude: "^(tests/)"
+    files: ^src/
