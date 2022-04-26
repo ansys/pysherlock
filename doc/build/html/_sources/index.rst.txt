@@ -13,5 +13,5 @@
     getting_started/index
     user_guide/index
     api/index
-    examples/index
+..    examples/index
 ..    contributing

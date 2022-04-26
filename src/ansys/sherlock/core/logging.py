@@ -1,3 +1,4 @@
+"""pysherlock logger."""
 from datetime import datetime
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -7,9 +8,7 @@ LOG_LEVEL = logging.DEBUG
 FILE_NAME = "PySherlock.log"
 
 # Formatting
-STDOUT_MSG_FORMAT = (
-    "%(levelname)s - %(instance_name)s - %(module)s - %(funcName)s - %(message)s"
-)
+STDOUT_MSG_FORMAT = "%(levelname)s - %(instance_name)s - %(module)s - %(funcName)s - %(message)s"
 FILE_MSG_FORMAT = STDOUT_MSG_FORMAT
 
 DEFAULT_STDOUT_HEADER = """
@@ -23,30 +22,33 @@ NEW_SESSION_HEADER = f"""
 ==============================================================================="""
 
 
-def get_console_handler():
+def _get_console_handler():
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(STDOUT_MSG_FORMAT)
     return console_handler
 
 
-def get_file_handler():
-    file_handler = TimedRotatingFileHandler(FILE_NAME, when='midnight')
+def _get_file_handler():
+    file_handler = TimedRotatingFileHandler(FILE_NAME, when="midnight")
     file_handler.setFormatter(STDOUT_MSG_FORMAT)
     file_handler.stream.write(NEW_SESSION_HEADER)
     file_handler.stream.write(DEFAULT_FILE_HEADER)
     return file_handler
 
 
-def get_logger(logger_name):
+def __get_logger(logger_name):
     return logging.get_logger(logger_name)
 
 
 class Logger:
+    """pysherlock logger."""
+
     def __init__(self, logger_name, level=logging.WARN):
+        """Initialize logger."""
         self.logger = logging.getLogger(logger_name)
         self.logger.setLevel(LOG_LEVEL)
-        self.logger.addHandler(get_console_handler())
-        self.logger.addHandler(get_file_handler())
+        self.logger.addHandler(_get_console_handler())
+        self.logger.addHandler(_get_file_handler())
         self.debug = self.logger.debug
         self.info = self.logger.info
         self.warning = self.logger.warning
@@ -55,4 +57,5 @@ class Logger:
         self.log = self.logger.log
 
     def setLevel(self, level):
+        """Set the logging level."""
         self.logger.setLevel(level)
