@@ -3,24 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a19b4003-14b3-41e0-b103-218dcc7e3135" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.pre-commit-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.pre-commit-config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/build/doctrees/api/launcher.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/doc/build/doctrees/api/launcher.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/build/doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/doc/build/doctrees/environment.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/build/doctrees/index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/doc/build/doctrees/index.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/build/html/_sources/index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/build/html/_sources/index.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/build/html/api/launcher.html" beforeDir="false" afterPath="$PROJECT_DIR$/doc/build/html/api/launcher.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.rst" beforeDir="false" afterPath="$PROJECT_DIR$/README.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/doc/source/PySherlock.log" beforeDir="false" afterPath="$PROJECT_DIR$/doc/source/PySherlock.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/doc/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ansys/sherlock/core/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/core/_version.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ansys/sherlock/core/_version.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/core/errors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ansys/sherlock/core/errors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/core/logging.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ansys/sherlock/core/logging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/launcher/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ansys/sherlock/launcher/launcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ansys/sherlock/launcher/launcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_launcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_launcher.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

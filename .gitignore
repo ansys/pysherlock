@@ -37,6 +37,7 @@ _autosummary
 .coverage
 *,cover
 test-output.xml
+.tox
 
 \#*
 .\#*
