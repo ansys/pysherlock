@@ -1,4 +1,4 @@
-Project Overview
+PySherlock Project Overview
 ----------------
 ANSYS Sherlock is a reliability physics-based electronics design tool that provides
 fast and accurate life predictions for electronic hardware at the component, 
