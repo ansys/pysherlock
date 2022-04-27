@@ -71,8 +71,9 @@ jobs:
       - name: Build Documentation
         run: |
           pip install -r requirements_docs.txt
-          make -C doc html
-          touch doc/build/html/.nojekyll
+          cd doc
+          make html
+          touch build/html/.nojekyll
       
       - name: Update HTML Documentation
         uses: actions/upload-artifact@v2
