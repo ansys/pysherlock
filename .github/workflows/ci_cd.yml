@@ -70,7 +70,7 @@ jobs:
       
       - name: Build Documentation
         run: |
-          echo ./src" >> $GITHUB_PATH
+          echo "./src" >> $GITHUB_PATH
           pip install -r requirements_docs.txt
           cd doc
           make html
