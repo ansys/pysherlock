@@ -24,10 +24,9 @@ jobs:
       
       - name: Build Documentation
         run: |
-          echo "PYTHONPATH=./src" >> $GITHUB_ENV
-          echo "${{ env.PYTHONPATH }}"
-          pip install -r requirements_docs.txt
-          cd doc
+          cd src
+          pip install -r ../requirements_docs.txt
+          cd ../doc
           make html
           touch build/html/.nojekyll
       
