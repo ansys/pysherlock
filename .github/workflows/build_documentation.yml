@@ -1,4 +1,4 @@
-name: GitHub CI
+name: Documentation Build
 on:
   pull_request:
   push:
@@ -25,6 +25,7 @@ jobs:
       - name: Build Documentation
         run: |
           echo "PYTHONPATH=./src" >> $GITHUB_ENV
+          echo "${{ env.PYTHONPATH }}
           pip install -r requirements_docs.txt
           cd doc
           make html
