@@ -70,7 +70,6 @@ jobs:
       
       - name: Build Documentation
         run: |
-          echo "PYTHONPATH=src" >> $GITHUB_ENV
           pip install -r requirements_docs.txt
           cd doc
           make html
