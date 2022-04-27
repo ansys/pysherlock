@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "src" >> $GITHUB_PATH
           pip install -r requirements_docs.txt
-          make doc html
+          make -C doc html
           touch doc/build/html/.nojekyll
       
       - name: Update HTML Documentation
