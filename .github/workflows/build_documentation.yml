@@ -1,0 +1,38 @@
+name: GitHub CI
+on:
+  pull_request:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+jobs:
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip flit tox
+      
+      - name: Build Documentation
+        run: |
+          echo "PYTHONPATH=./src" >> $GITHUB_ENV
+          pip install -r requirements_docs.txt
+          cd doc
+          make html
+          touch build/html/.nojekyll
+      
+      - name: Update HTML Documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: HTML-Documentation
+          path: doc/build/html
+          retention-days: 7
