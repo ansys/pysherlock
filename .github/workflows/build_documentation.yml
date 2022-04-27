@@ -25,7 +25,7 @@ jobs:
       - name: Build Documentation
         run: |
           echo "PYTHONPATH=./src" >> $GITHUB_ENV
-          echo "${{ env.PYTHONPATH }}
+          echo "${{ env.PYTHONPATH }}"
           pip install -r requirements_docs.txt
           cd doc
           make html
