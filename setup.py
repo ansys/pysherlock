@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="ansys-sherlock",
-    version="0.1.dev0",
+    version="0.1.dev0.1",
     description="A Python wrapper for Ansys Sherlock gRPC APIs",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
