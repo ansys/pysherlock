@@ -52,7 +52,7 @@ def launch_sherlock(port=SHERLOCK_DEFAULT_PORT):
 
     """
     try:
-        _is_port_available(host, port)
+        _is_port_available(port)
     except Exception as e:
         print(str(e))
         return
