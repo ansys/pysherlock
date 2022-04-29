@@ -28,12 +28,13 @@ jobs:
         python-version: '3.x'
         
     - name: 'Upload to PyPi'
-      if: contains(github.ref, 'refs/tags')
+      #if: contains(github.ref, 'refs/tags')
       run: |
           pip install twine
           python setup.py sdist
           twine upload dist/*
       env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{secrets.PYPI_TOKEN}}
+          #TWINE_PASSWORD: ${{secrets.PYPI_TOKEN}}
+          TWINE_PASSWORD: ${{secrets.MEDSON_PYPI}}
           TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
