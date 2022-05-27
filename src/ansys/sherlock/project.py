@@ -13,6 +13,13 @@ def delete_project(project):
     #   project : str, required
     #       The name of the project to be deleted
     #   """
+    try:
+        if project == "":
+            raise SherlockDeleteProjectError("Empty Project Name")
+    except SherlockDeleteProjectError as e:
+        LOG.error(str(e))
+        return
+    
     channel = grpc.insecure_channel('localhost:9090')
     stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
@@ -28,7 +35,7 @@ def delete_project(project):
         else:
             LOG.info(response.message)
     except SherlockDeleteProjectError as e:
-        print(str(e))
+        LOG.error(str(e))
         return
     
 
