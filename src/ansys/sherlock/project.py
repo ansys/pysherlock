@@ -5,7 +5,7 @@ from ansys.sherlock.core import LOG
 import grpc
 
 
-def delete_project(project):
+def delete_project(*project):
     #   """Deletes an existing project
     #
     #   Parameters
@@ -14,8 +14,10 @@ def delete_project(project):
     #       The name of the project to be deleted
     #   """
     try:
-        if project == "":
-            raise SherlockDeleteProjectError("Empty Project Name")
+        if (len(project) != 1):
+            raise SherlockDeleteProjectError("No Project Name Provided")
+        elif project == "":
+            raise SherlockDeleteProjectError("Invalid Blank Project Name")
     except SherlockDeleteProjectError as e:
         LOG.error(str(e))
         return
@@ -26,7 +28,6 @@ def delete_project(project):
     request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
 
     # The stub represents the initialized services available to client
-    # TODO: What is the right way to initialize/generate the stub, Miu Lin has conncecting object
     response = stub.deleteProject(request)
 
     try:
@@ -38,4 +39,6 @@ def delete_project(project):
         LOG.error(str(e))
         return
     
-
+if __name__ == "__main__":
+    # Testing purposes
+    delete_project("holy")
