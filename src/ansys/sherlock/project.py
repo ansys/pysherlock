@@ -25,7 +25,7 @@ def delete_project(*project):
     channel = grpc.insecure_channel('localhost:9090')
     stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
-    request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
+    request = SherlockProjectService_pb2.DeleteProjectRequest(project=project[0])
 
     # The stub represents the initialized services available to client
     response = stub.deleteProject(request)
