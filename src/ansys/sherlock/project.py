@@ -1,3 +1,4 @@
+"""Module for basic project services on client-side"""
 import SherlockProjectService_pb2_grpc
 import SherlockProjectService_pb2
 from ansys.sherlock.core.errors import SherlockDeleteProjectError
@@ -16,7 +17,7 @@ def delete_project(*project):
     try:
         if (len(project) != 1):
             raise SherlockDeleteProjectError("No Project Name Provided")
-        elif project == "":
+        elif project[0] == "":
             raise SherlockDeleteProjectError("Invalid Blank Project Name")
     except SherlockDeleteProjectError as e:
         LOG.error(str(e))
@@ -38,7 +39,3 @@ def delete_project(*project):
     except SherlockDeleteProjectError as e:
         LOG.error(str(e))
         return
-    
-if __name__ == "__main__":
-    # Testing purposes
-    delete_project("holy")
