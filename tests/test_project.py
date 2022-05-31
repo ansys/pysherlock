@@ -27,7 +27,9 @@ def test_all():
     #   """Test all project APIs"""
     #
     #   REQUIRES: Sherlock server must already be opened to port 9090
+    # open_connection()
     test_delete_project()
+
 
 if __name__ == "__main__":
     test_all()

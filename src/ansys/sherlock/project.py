@@ -1,13 +1,14 @@
-"""Module for basic project services on client-side"""
-import SherlockProjectService_pb2_grpc
+"""Module for basic project services on client-side."""
 import SherlockProjectService_pb2
-from ansys.sherlock.core.errors import SherlockDeleteProjectError
-from ansys.sherlock.core import LOG
+import SherlockProjectService_pb2_grpc
 import grpc
+
+from ansys.sherlock.core import LOG
+from ansys.sherlock.core.errors import SherlockDeleteProjectError
 
 
 def delete_project(*project):
-    """Deletes an existing project
+    """Delete an existing project.
 
     Parameters
     ----------
@@ -18,7 +19,7 @@ def delete_project(*project):
     --------
     >>> from ansys.sherlock.project import delete_project
     >>> delete_project("Test Project")
-    
+
     """
     try:
         if len(project) != 1:
@@ -28,8 +29,8 @@ def delete_project(*project):
     except SherlockDeleteProjectError as e:
         LOG.error(str(e))
         return
-    
-    channel = grpc.insecure_channel('localhost:9090')
+
+    channel = grpc.insecure_channel("localhost:9090")
     stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
     request = SherlockProjectService_pb2.DeleteProjectRequest(project=project[0])
