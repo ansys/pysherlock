@@ -15,6 +15,9 @@ def open_connection(port=9090):
 
 def test_delete_project():
     #   """Test delete_project API"""
+    #
+    #   Must evaluate results by looking at logging files, not automated
+    #   Refer to test_project.txt in tests
     project.delete_project()
     project.delete_project("")
     project.delete_project("test project")

@@ -7,15 +7,21 @@ import grpc
 
 
 def delete_project(*project):
-    #   """Deletes an existing project
-    #
-    #   Parameters
-    #   ----------
-    #   project : str, required
-    #       The name of the project to be deleted
-    #   """
+    """Deletes an existing project
+
+    Parameters
+    ----------
+    project : str, required
+        The name of the project to be deleted
+
+    Examples
+    --------
+    >>> from ansys.sherlock.project import delete_project
+    >>> delete_project("Test Project")
+    
+    """
     try:
-        if (len(project) != 1):
+        if len(project) != 1:
             raise SherlockDeleteProjectError("No Project Name Provided")
         elif project[0] == "":
             raise SherlockDeleteProjectError("Invalid Blank Project Name")
