@@ -70,4 +70,12 @@ def import_ODB_archive(
 
     response = stub.importODBArchive(request)
 
-    # TODO: Copy general structure and work on errors
+    try:
+        if response.value == -1:
+            raise SherlockImportODBError(response.message)
+        else:
+            LOG.info(response.message)
+            return response.value, response.message
+    except SherlockImportODBError as e:
+        LOG.error(str(e))
+        return response.value, str(e)
