@@ -15,16 +15,13 @@ def open_connection(port=9090):
 
 def test_delete_project():
     #   """Test delete_project API"""
-    #
-    #   Must evaluate results by looking at logging files, not automated
-    #   Refer to test_project.txt in tests
     RC1, STR1 = project.delete_project("")
     assert RC1 == -1
     assert STR1 == "Delete project error: Invalid Blank Project Name"
 
-    # RC2, STR2 = project.delete_project("test project")
-    # assert(RC2 == -1)
-    # assert(STR2 == "Delete project error: Cannot find project: {projectName} test project")
+    RC2, STR2 = project.delete_project("test")
+    assert RC2 == -1
+    assert STR2 == "Delete project error: Cannot find project: {projectName} test"
 
 
 def test_all():

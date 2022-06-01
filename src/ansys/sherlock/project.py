@@ -1,10 +1,17 @@
 """Module for basic project services on client-side."""
-import SherlockProjectService_pb2
-import SherlockProjectService_pb2_grpc
+import os
+import sys
+
 import grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockDeleteProjectError
+from ansys.sherlock.launcher import launcher
+
+ansys_base = launcher._get_base_ansys()
+sys.path.append(os.path.join(ansys_base, "grpc", "python"))
+import SherlockProjectService_pb2
+import SherlockProjectService_pb2_grpc
 
 
 def delete_project(project):
@@ -31,7 +38,7 @@ def delete_project(project):
     channel = grpc.insecure_channel("localhost:9090")
     stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
-    request = SherlockProjectService_pb2.DeleteProjectRequest(project=project[0])
+    request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
 
     # The stub represents the initialized services available to client
     response = stub.deleteProject(request)
