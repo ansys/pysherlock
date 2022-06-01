@@ -9,7 +9,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockImportODBError
 
 
-def import_ODB_archive(
+def import_odb_archive(
     archiveFile,
     processLayerThickness,
     includeOtherLayers,
