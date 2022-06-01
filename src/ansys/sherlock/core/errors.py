@@ -17,3 +17,15 @@ class SherlockCannotUsePortError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Specified gRPC port {self.port} cannot be used: {self.error}"
+
+
+class SherlockImportODBError(Exception):
+    """Raised when importing ODB archive results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Import ODB error: {self.message}"
