@@ -7,7 +7,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockDeleteProjectError
 
 
-def delete_project(*project):
+def delete_project(project):
     """Delete an existing project.
 
     Parameters
@@ -22,13 +22,11 @@ def delete_project(*project):
 
     """
     try:
-        if len(project) != 1:
-            raise SherlockDeleteProjectError("No Project Name Provided")
-        elif project[0] == "":
+        if project == "":
             raise SherlockDeleteProjectError("Invalid Blank Project Name")
     except SherlockDeleteProjectError as e:
         LOG.error(str(e))
-        return
+        return -1, str(e)
 
     channel = grpc.insecure_channel("localhost:9090")
     stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
@@ -43,6 +41,7 @@ def delete_project(*project):
             raise SherlockDeleteProjectError(response.message)
         else:
             LOG.info(response.message)
+            return response.value, response.message
     except SherlockDeleteProjectError as e:
         LOG.error(str(e))
-        return
+        return response.value, str(e)
