@@ -14,7 +14,7 @@ def import_odb_archive(
     processLayerThickness,
     includeOtherLayers,
     processCutoutFile,
-    guessPartProprties,
+    guessPartProperties,
     project=None,
     ccaName=None,
 ):
@@ -51,16 +51,16 @@ def import_odb_archive(
         return -1, str(e)
 
     if project is None:
-        project = os.path.splittext(archiveFile)[0]
+        project = os.path.splitext(archiveFile)[0]
     if ccaName is None:
-        project = os.path.splittext(archiveFile)[0]
+        project = os.path.splitext(archiveFile)[0]
 
     request = SherlockProjectService_pb2.ImportODBRequest(
         archiveFile=archiveFile,
         processLayerThickness=processLayerThickness,
         includeOtherLayers=includeOtherLayers,
         processCutoutFile=processCutoutFile,
-        guessPartProprties=guessPartProprties,
+        guessPartProperties=guessPartProperties,
         project=project,
         ccaName=ccaName,
     )
