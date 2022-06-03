@@ -8,7 +8,7 @@ LOG_LEVEL = logging.DEBUG
 FILE_NAME = "PySherlock.log"
 
 # Formatting
-STDOUT_MSG_FORMAT = "%(levelname)s - %(instance_name)s - %(module)s - %(funcName)s - %(message)s"
+STDOUT_MSG_FORMAT = logging.Formatter("%(levelname)s - %(module)s - %(funcName)s - %(message)s")
 FILE_MSG_FORMAT = STDOUT_MSG_FORMAT
 
 DEFAULT_STDOUT_HEADER = """
