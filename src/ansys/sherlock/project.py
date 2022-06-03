@@ -51,9 +51,9 @@ def import_odb_archive(
         return -1, str(e)
 
     if project is None:
-        project = os.path.splitext(archiveFile)[0]
+        project = os.path.splitext(os.path.basename(archiveFile))[0]
     if ccaName is None:
-        project = os.path.splitext(archiveFile)[0]
+        ccaName = os.path.splitext(os.path.basename(archiveFile))[0]
 
     request = SherlockProjectService_pb2.ImportODBRequest(
         archiveFile=archiveFile,
