@@ -1,5 +1,0 @@
-Function: delete_project Unit Tests
------------------------------------
-ERROR - project - delete_project - Delete project error: No Project Name Provided
-ERROR - project - delete_project - Delete project error: Invalid Blank Project Name
-ERROR - project - delete_project - Delete project error: Cannot find project: {projectName} test project

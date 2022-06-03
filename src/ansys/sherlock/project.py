@@ -1,17 +1,10 @@
 """Module for basic project services on client-side."""
-import os
-import sys
-
+import SherlockProjectService_pb2
+import SherlockProjectService_pb2_grpc
 import grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockDeleteProjectError
-from ansys.sherlock.launcher import launcher
-
-ansys_base = launcher._get_base_ansys()
-sys.path.append(os.path.join(ansys_base, "grpc", "python"))
-import SherlockProjectService_pb2
-import SherlockProjectService_pb2_grpc
 
 
 def delete_project(project):
