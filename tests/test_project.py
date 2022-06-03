@@ -3,9 +3,9 @@ from ansys.sherlock import project
 
 def test_delete_project():
     #   """Test delete_project API"""
-    RC1, STR1 = project.delete_project("")
-    assert RC1 == -1
-    assert STR1 == "Delete project error: Invalid Blank Project Name"
+    rc1, str1 = project.delete_project("")
+    assert rc1 == -1
+    assert str1 == "Delete project error: Invalid Blank Project Name"
 
     # RC2, STR2 = project.delete_project("test")
     # assert RC2 == -1
