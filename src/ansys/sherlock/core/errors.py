@@ -19,6 +19,18 @@ class SherlockCannotUsePortError(Exception):
         return f"Specified gRPC port {self.port} cannot be used: {self.error}"
 
 
+class SherlockDeleteProjectError(Exception):
+    """Raised when deleting an error results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete project error: {self.message}"
+
+
 class SherlockImportODBError(Exception):
     """Raised when importing ODB archive results in an error."""
 
