@@ -61,7 +61,7 @@ def import_ipc2581_archive(
     Parameters
     ----------
     archiveFile : str, required
-        Full path to the ODB++ arhicve file to be imported.
+        Full path to the IPC2581 arhicve file to be imported.
     includeOtherLayers : bool, required
         Option to include other layers.
     guessPartProperties: bool, required
@@ -73,7 +73,7 @@ def import_ipc2581_archive(
     Examples
     --------
     >>> from ansys.sherlock.project import import_ipc2581_archive
-    >>> import_odb_archive("ODB++ Tutorial.tgz", True, True,
+    >>> import_ipc2581_archive("Tutorial.zip", True, True,
                             project="Tutorial",
                             ccaName="Card")
     """
