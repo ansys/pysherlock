@@ -39,8 +39,11 @@ def import_odb_archive(
 
     Examples
     --------
-    >>> from ansys.sherlock.project import import_ODB_archive
-    >>> TODO
+    >>> from ansys.sherlock.project import import_odb_archive
+    >>> import_odb_archive("ODB++ Tutorial.tgz", True, True,
+                            True, True,
+                            project="Tutorial",
+                            ccaName="Card")
 
     """
     try:
