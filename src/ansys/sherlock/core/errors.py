@@ -29,3 +29,15 @@ class SherlockDeleteProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete project error: {self.message}"
+
+
+class SherlockImportIpc2581Error(Exception):
+    """Raised when importing IPC2581 archive results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Import IPC2581 error: {self.message}"
