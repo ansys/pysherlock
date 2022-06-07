@@ -29,3 +29,15 @@ class SherlockDeleteProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete project error: {self.message}"
+
+
+class SherlockCreateLifePhaseError(Exception):
+    """Raised when creating a life phase rsults in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Create life phase error: {self.message}"
