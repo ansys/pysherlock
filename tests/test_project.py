@@ -1,4 +1,4 @@
-from ansys.sherlock import project
+from ansys.sherlock.core import project
 
 
 def test_delete_project():
