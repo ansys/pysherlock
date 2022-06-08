@@ -32,12 +32,17 @@ class SherlockDeleteProjectError(Exception):
 
 
 class SherlockCreateLifePhaseError(Exception):
-    """Raised when creating a life phase rsults in an error."""
+    """Raised when creating a life phase results in an error."""
 
-    def __init__(self, message):
+    def __init__(self, message=None, errorArray=None):
         """Initialize error message."""
         self.message = message
+        self.errorArray = errorArray
 
-    def __str__(self):
-        """Format error message."""
-        return f"Create life phase error: {self.message}"
+    def strItr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Create life phase error: {error}" for error in self.errorArray]
+        else:
+            assert self.errorArray is None
+            return [f"Create life phase error: {self.message}"]

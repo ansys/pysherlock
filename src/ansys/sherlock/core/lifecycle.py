@@ -38,18 +38,19 @@ def create_life_phase(
     """
     try:
         if phaseName == "":
-            raise SherlockCreateLifePhaseError("Invalid Phase Name")
-        elif duration < 0.0:
-            raise SherlockCreateLifePhaseError("Duration Must Be Greater Than 0")
+            raise SherlockCreateLifePhaseError(message="Invalid Phase Name")
         elif durationUnits not in DURATION_UNIT_LIST:
-            raise SherlockCreateLifePhaseError("Invalid Duration Units")
-        elif numOfCycles < 0.0:
-            raise SherlockCreateLifePhaseError("Number of Cycles Must Be Greater Than 0")
+            raise SherlockCreateLifePhaseError(message="Invalid Duration Unit Specified")
+        elif duration < 0.0:
+            raise SherlockCreateLifePhaseError(message="Duration Must Be Greater Than 0")
         elif cycleType not in CYCLE_TYPE_LIST:
-            raise SherlockCreateLifePhaseError("Invalid Cycle Type")
+            raise SherlockCreateLifePhaseError(message="Invalid Cycle Type")
+        elif numOfCycles < 0.0:
+            raise SherlockCreateLifePhaseError(message="Number of Cycles Must Be Greater Than 0")
     except SherlockCreateLifePhaseError as e:
-        LOG.error(str(e))
-        return -1, str(e)
+        for error in e.strItr():
+            LOG.error(error)
+        return -1, e.strItr()[0]
 
     if description is None:
         description = ""
@@ -73,10 +74,14 @@ def create_life_phase(
 
     try:
         if returnCode.value == -1:
-            raise SherlockCreateLifePhaseError(returnCode.message)
+            if returnCode.message == "":
+                raise SherlockCreateLifePhaseError(errorArray=response.errors)
+            else:
+                raise SherlockCreateLifePhaseError(message=returnCode.message)
         else:
             LOG.info(returnCode.message)
             return returnCode.value, returnCode.message
     except SherlockCreateLifePhaseError as e:
-        LOG.error(str(e))
-        return returnCode.value, str(e)
+        for error in e.strItr():
+            LOG.error(error)
+        return returnCode.value, e.strItr()[0]
