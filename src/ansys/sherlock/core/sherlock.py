@@ -15,20 +15,13 @@ import SherlockStackupService_pb2
 import SherlockStackupService_pb2_grpc
 
 from ansys.sherlock.core.common import Common
+from ansys.sherlock.core.model import Model
 
 
 class Sherlock:
-    """pysherlock logger."""
+    """Sherlock gRPC connection object."""
 
     def __init__(self, channel):
         """Initialize Sherlock gRPC connection object."""
-        self.channel = channel
-        #self.analysis = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
         self.common = Common(channel)
-        #self.layer = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
-        #self.lifecycle = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
-        #self.parts = SherlockPartsService_pb2_grpc.SherlockPartsServiceStub(channel)
-        #self.project = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
-        #self.model = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
-        #self.stackup = SherlockStackupService_pb2_grpc.SherlockStackupServiceStub(channel)
-        
+        self.model = Model(channel)

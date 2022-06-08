@@ -1,37 +1,44 @@
 """Module for running the gRPC APIs in the SherlockCommonService."""
-import errno
 import grpc
 import SherlockCommonService_pb2
 import SherlockCommonService_pb2_grpc
 
-from ansys.sherlock.core.errors import SherlockConnectionError
+from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCommonServiceError
+from ansys.sherlock.core.grpc_stub import GrpcStub
 
-class Common:
+class Common(GrpcStub):
+    """Contains methods from the Sherlock Common Service."""
     def __init__(self, channel):
-        print("initializing Common obj")
+        self.channel = channel
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
+
     def check(self):
-        try:
-            #__check_grpc_connection()
-            response = self.stub.check(SherlockCommonService_pb2.HealthCheckRequest())
-            print(str(response))
-            LOG.info(str(response))
-        except as e:
-            LOG.error("Health check failed: ", str(e))
+        """Perform a health check on the gRPC connection."""
+        if (not self._is_connection_up()):
+            LOG.error("Health check failed.")
+        else:
+            LOG.info("Connection is up.")
 
 
-    def exit(self, close_sherlock_client):
+    def exit(self, close_sherlock_client=False):
+        """Close the gRPC connection.
+
+        Parameters
+        ----------
+        close_sherlock_client : boolean, optional
+            If set to True and if the Sherlock client is open, then closes 
+            the Sherlock client also.
+        """
+        if (not self._is_connection_up()):
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         try:
-            response = self.stub.exit(SherlockCommonService_pb2.ExitRequest())
-            print(str(response))
+            exit_message = SherlockCommonService_pb2.ExitRequest()
+            exit_message.closeSherlockClient = close_sherlock_client
+            response = self.stub.exit(exit_message)
             LOG.info(str(response))
         except SherlockCommonServiceError as err:
-            LOG.error("Exit error: ", err)
-            return -1
-
-
-    def __check_grpc_connection(self):
-        if SHERLOCK is None or SHERLOCK.model_stub is None:
-            raise SherlockConnectionError("The Sherlock gRPC connection has not been established.")
+            LOG.error("Exit error: ", str(err))
