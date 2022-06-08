@@ -1,9 +1,10 @@
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
-import grpc
 import os
 import socket
 import subprocess
+
+import grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCannotUsePortError
@@ -13,6 +14,7 @@ LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
 EARLIEST_SUPPORTED_VERSION = 211
 sherlock_cmd_args = []
+
 
 def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -50,12 +52,10 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
         return
 
     try:
-        subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + str(port), sherlock_cmd_args])  
+        subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + str(port), sherlock_cmd_args])
     except Exception as e:
-            LOG.error(
-                "Error encountered while starting or executing Sherlock, error = " + str(e)
-            )
-    
+        LOG.error("Error encountered while starting or executing Sherlock, error = " + str(e))
+
     try:
         sherlock = connect_grpc_channel()
         return sherlock
@@ -65,9 +65,8 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """Create a gRPC connection to the specified port."""
-
     global SHERLOCK
-    channel_param = f'{LOCALHOST}:{port}'
+    channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
     SHERLOCK = Sherlock(channel)
     return SHERLOCK

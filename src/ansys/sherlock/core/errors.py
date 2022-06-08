@@ -41,7 +41,8 @@ class SherlockDeleteProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete project error: {self.message}"
-    
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
@@ -52,6 +53,7 @@ class SherlockCommonServiceError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Sherlock common service error: {self.message}"
+
 
 class SherlockModelServiceError(Exception):
     """Raised when executing an API in the model service resulted in an error."""

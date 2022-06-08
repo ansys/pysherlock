@@ -1,11 +1,15 @@
-import grpc
+"""Module for shared methods for the gRPC stubs."""
 import SherlockCommonService_pb2
 import SherlockCommonService_pb2_grpc
+import grpc
+
 
 class GrpcStub:
-    def __init__(self, channel):
-        self.channel = channel
+    """gRPC stub class."""
 
+    def __init__(self, channel):
+        """Initialize GrpcStub."""
+        self.channel = channel
 
     def _is_connection_up(self):
         try:
