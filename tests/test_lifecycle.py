@@ -43,26 +43,26 @@ def test_create_life_phase():
 
     # Following tests depend on the existence of a connection and a project named "Test"
 
-    rc7, str7 = lifecycle.create_life_phase(
-        "Fake", "Example", 5, "sec", 4, "PER SEC", description="Test1"
-    )
-    assert rc7 == -1
-    assert str7 == "Create life phase error: Cannot find project: Fake"
+    # rc7, str7 = lifecycle.create_life_phase(
+    #     "Fake", "Example", 5, "sec", 4, "PER SEC", description="Test1"
+    # )
+    # assert rc7 == -1
+    # assert str7 == "Create life phase error: Cannot find project: Fake"
 
-    rc8, str8 = lifecycle.create_life_phase(
-        "Test", "Example", 5, "sec", 4, "PER SEC", description="Test1"
-    )
-    assert rc8 == 0
-    assert str8 == ""
+    # rc8, str8 = lifecycle.create_life_phase(
+    #     "Test", "Example", 5, "sec", 4, "PER SEC", description="Test1"
+    # )
+    # assert rc8 == 0
+    # assert str8 == ""
 
-    rc9, str9 = lifecycle.create_life_phase(
-        "Test", "Example", 5, "sec", 4, "PER SEC", description="Test1"
-    )
-    assert rc9 == -1
-    assert str9 == (
-        "Create life phase error: Duplicate phase name 'Example' specified"
-        ".\nEnter a different name or delete the old phase before updating this phase."
-    )
+    # rc9, str9 = lifecycle.create_life_phase(
+    #     "Test", "Example", 5, "sec", 4, "PER SEC", description="Test1"
+    # )
+    # assert rc9 == -1
+    # assert str9 == (
+    #     "Create life phase error: Duplicate phase name 'Example' specified"
+    #     ".\nEnter a different name or delete the old phase before updating this phase."
+    # )
 
 
 if __name__ == "__main__":
