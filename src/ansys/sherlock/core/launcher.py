@@ -1,17 +1,20 @@
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
+import grpc
 import os
 import socket
+import subprocess
 from subprocess import check_output
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCannotUsePortError
+from ansys.sherlock.core.sherlock import Sherlock
 
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
 EARLIEST_SUPPORTED_VERSION = 211
 sherlock_cmd_args = []
-
+__channel = None
 
 def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
     #    """Checks if a port on the host is available
@@ -34,7 +37,7 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
                 raise SherlockCannotUsePortError(port, str(e))
 
 
-def launch_sherlock(port=SHERLOCK_DEFAULT_PORT):
+def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_args=""):
     """Launch Sherlock and starts gRPC on the given localhost port.
 
     Parameters
@@ -52,24 +55,34 @@ def launch_sherlock(port=SHERLOCK_DEFAULT_PORT):
 
     """
     try:
-        _is_port_available(port)
+        _is_port_available(host, port)
     except Exception as e:
         print(str(e))
         return
 
     try:
-        check_output(
-            [_get_sherlock_exe_path(), "-grpcPort=" + str(port)] + list(sherlock_args), shell=True
-        )
-    except Exception as process_return:
-        if process_return.returncode == 1:
-            LOG.debug("Sherlock has exited successfully.")
-        else:
+        print("before check_output")
+        subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + str(port), sherlock_cmd_args])
+        print("after check_output")
+    
+    except Exception as e:
             LOG.error(
-                "Error encountered while starting or executing Sherlock, error = ",
-                process_return.returncode,
-                process_return.output,
+                "Error encountered while starting or executing Sherlock, error = " + str(e)
             )
+    
+    try:
+        sherlock = connect_grpc_channel()
+        return sherlock
+    except Exception as e:
+        LOG.error(str(e))
+
+
+def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
+    global SHERLOCK
+    channel_param = f'{LOCALHOST}:{port}'
+    __channel = grpc.insecure_channel(channel_param)
+    SHERLOCK = Sherlock(__channel)
+    return SHERLOCK
 
 
 def _get_base_ansys():
