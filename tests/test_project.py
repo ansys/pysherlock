@@ -1,9 +1,11 @@
-from ansys.sherlock import project
+import time
+
+from ansys.sherlock.core.launcher import launch_sherlock
 
 
-def test_delete_project():
+def test_delete_project(sherlock):
     #   """Test delete_project API"""
-    rc1, str1 = project.delete_project("")
+    rc1, str1 = sherlock.project.delete_project("")
     assert rc1 == -1
     assert str1 == "Delete project error: Invalid Blank Project Name"
 
@@ -15,8 +17,13 @@ def test_delete_project():
 def test_all():
     #   """Test all project APIs"""
     #
-    #   REQUIRES: Sherlock server must already be opened to port 9090
-    test_delete_project()
+    #   REQUIRED: Sherlock needs to start fresh
+    sherlock = launch_sherlock()
+    time.sleep(15)
+
+    test_delete_project(sherlock)
+
+    sherlock.common.exit(close_sherlock_client=True)
 
 
 if __name__ == "__main__":
