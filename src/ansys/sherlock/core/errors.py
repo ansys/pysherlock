@@ -29,3 +29,20 @@ class SherlockDeleteProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete project error: {self.message}"
+
+
+class SherlockAddRandomVibeEventError(Exception):
+    """Raised when adding a random vibe event results in an error."""
+
+    def __init__(self, message=None, errorArray=None):
+        """Initialize error message."""
+        self.message = message
+        self.errorArray = errorArray
+
+    def strItr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add random vibe event error: {error}" for error in self.errorArray]
+        else:
+            assert self.errorArray is None
+            return [f"Add random vibe event error: {self.message}"]
