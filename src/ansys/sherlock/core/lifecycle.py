@@ -37,15 +37,17 @@ def create_life_phase(
     TODO: write the examples
     """
     try:
-        if phaseName == "":
+        if project == "":
+            raise SherlockCreateLifePhaseError(message="Invalid Project Name")
+        elif phaseName == "":
             raise SherlockCreateLifePhaseError(message="Invalid Phase Name")
         elif durationUnits not in DURATION_UNIT_LIST:
             raise SherlockCreateLifePhaseError(message="Invalid Duration Unit Specified")
-        elif duration < 0.0:
+        elif duration <= 0.0:
             raise SherlockCreateLifePhaseError(message="Duration Must Be Greater Than 0")
         elif cycleType not in CYCLE_TYPE_LIST:
             raise SherlockCreateLifePhaseError(message="Invalid Cycle Type")
-        elif numOfCycles < 0.0:
+        elif numOfCycles <= 0.0:
             raise SherlockCreateLifePhaseError(message="Number of Cycles Must Be Greater Than 0")
     except SherlockCreateLifePhaseError as e:
         for error in e.strItr():
@@ -66,7 +68,7 @@ def create_life_phase(
     )
 
     channel = grpc.insecure_channel("localhost:9090")
-    stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleService(channel)
+    stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
 
     response = stub.createLifePhase(request)
 
