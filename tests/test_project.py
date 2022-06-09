@@ -1,11 +1,11 @@
-import time
+import grpc
 
-from ansys.sherlock.core.launcher import launch_sherlock
+from ansys.sherlock.core.project import Project
 
 
-def test_delete_project(sherlock):
+def test_delete_project(project):
     #   """Test delete_project API"""
-    rc1, str1 = sherlock.project.delete_project("")
+    rc1, str1 = project.delete_project("")
     assert rc1 == -1
     assert str1 == "Delete project error: Invalid Blank Project Name"
 
@@ -17,13 +17,11 @@ def test_delete_project(sherlock):
 def test_all():
     #   """Test all project APIs"""
     #
-    #   REQUIRED: Sherlock needs to start fresh
-    sherlock = launch_sherlock()
-    time.sleep(15)
+    channel_param = "127.0.0.1:9090"
+    channel = grpc.insecure_channel(channel_param)
+    project = Project(channel)
 
-    test_delete_project(sherlock)
-
-    sherlock.common.exit(close_sherlock_client=True)
+    test_delete_project(project)
 
 
 if __name__ == "__main__":
