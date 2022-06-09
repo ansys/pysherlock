@@ -1,6 +1,6 @@
-import time
+import grpc
 
-from ansys.sherlock.core.launcher import launch_sherlock
+from ansys.sherlock.core.project import Project
 
 
 def test_import_odb_archive(project):
@@ -29,14 +29,11 @@ def test_all():
     #   """Test all project APIs"""
     #
 
-    sherlock = launch_sherlock()
-    time.sleep(15)
-
-    project = sherlock.project
+    channel_param = "127.0.0.1:9090"
+    channel = grpc.insecure_channel(channel_param)
+    project = Project(channel)
 
     test_import_odb_archive(project)
-
-    sherlock.common.exit(close_sherlock_client=True)
 
 
 if __name__ == "__main__":

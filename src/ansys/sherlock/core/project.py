@@ -56,16 +56,16 @@ class Project(GrpcStub):
                                 ccaName="Card")
 
         """
-        if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
-            return
-
         try:
             if not os.path.exists(archiveFile):
                 raise SherlockImportODBError("Invalid project path")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             return -1, str(e)
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         if project is None:
             project = os.path.splitext(os.path.basename(archiveFile))[0]
