@@ -1,7 +1,9 @@
-from ansys.sherlock import project
+import time
+
+from ansys.sherlock.core.launcher import launch_sherlock
 
 
-def test_import_odb_archive():
+def test_import_odb_archive(project):
     #   """Test import_odb_archive API"""
 
     RC1, STR1 = project.import_odb_archive("hello", True, True, True, True)
@@ -23,23 +25,18 @@ def test_import_odb_archive():
     # assert STR3 == ""
 
 
-def test_delete_project():
-    #   """Test delete_project API"""
-    rc1, str1 = project.delete_project("")
-    assert rc1 == -1
-    assert str1 == "Delete project error: Invalid Blank Project Name"
-
-    # RC2, STR2 = project.delete_project("test")
-    # assert RC2 == -1
-    # assert STR2 == "Delete project error: Cannot find project: {projectName} test"
-
-
 def test_all():
     #   """Test all project APIs"""
     #
-    #   REQUIRES: Sherlock server must already be opened to port 9090
-    test_delete_project()
-    test_import_odb_archive()
+
+    sherlock = launch_sherlock()
+    time.sleep(15)
+
+    project = sherlock.project
+
+    test_import_odb_archive(project)
+
+    sherlock.common.exit(close_sherlock_client=True)
 
 
 if __name__ == "__main__":
