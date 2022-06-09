@@ -48,14 +48,18 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.project import import_odb_archive
-        >>> import_odb_archive("ODB++ Tutorial.tgz", True, True,
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
                                 True, True,
                                 project="Tutorial",
                                 ccaName="Card")
-            TODO: Change documentation
 
         """
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         try:
             if not os.path.exists(archiveFile):
                 raise SherlockImportODBError("Invalid project path")
