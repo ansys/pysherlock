@@ -58,7 +58,7 @@ class Project(GrpcStub):
         """
         try:
             if not os.path.exists(archiveFile):
-                raise SherlockImportODBError("Invalid project path")
+                raise SherlockImportODBError("Invalid file path")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             return -1, str(e)
