@@ -1,18 +1,9 @@
-from ansys.sherlock.core import project
+import grpc
+
+from ansys.sherlock.core.project import Project
 
 
-def test_delete_project():
-    #   """Test delete_project API"""
-    rc1, str1 = project.delete_project("")
-    assert rc1 == -1
-    assert str1 == "Delete project error: Invalid Blank Project Name"
-
-    # RC2, STR2 = project.delete_project("test")
-    # assert RC2 == -1
-    # assert STR2 == "Delete project error: Cannot find project: {projectName} test"
-
-
-def test_import_ipc2581_archive():
+def test_import_ipc2581_archive(project):
     #   """Test import_ipc2581_archive API"""
     rc1, str1 = project.import_ipc2581_archive("Hello", True, True)
     assert rc1 == -1
@@ -32,10 +23,11 @@ def test_import_ipc2581_archive():
 
 def test_all():
     #   """Test all project APIs"""
-    #
-    #   REQUIRES: Sherlock server must already be opened to port 9090
-    test_delete_project()
-    test_import_ipc2581_archive()
+    channel_param = "127.0.0.1:9090"
+    channel = grpc.insecure_channel(channel_param)
+    project = Project(channel)
+
+    test_import_ipc2581_archive(project)
 
 
 if __name__ == "__main__":
