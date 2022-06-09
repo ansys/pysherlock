@@ -18,7 +18,7 @@ class Lifecycle(GrpcStub):
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
 
-    def add_random_vive_event(
+    def add_random_vibe_event(
         self,
         project,
         phaseName,
@@ -82,6 +82,8 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddRandomVibeEventError(message="Invalid Project Name")
             elif phaseName == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid Phase Name")
+            elif eventName == "":
+                raise SherlockAddRandomVibeEventError(message="Invalid Event Name")
             elif durationUnits not in DURATION_UNIT_LIST:
                 raise SherlockAddRandomVibeEventError(message="Invalid Duration Unit Specified")
             elif duration <= 0.0:
