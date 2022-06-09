@@ -49,7 +49,18 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        TODO: write the examples
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+
+        ""Example: There exists a project named 'Test'""
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "PER SEC",
+        )
         """
         try:
             if project == "":
