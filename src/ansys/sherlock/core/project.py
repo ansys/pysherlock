@@ -29,16 +29,16 @@ class Project(GrpcStub):
         >>> delete_project("Test Project")
 
         """
-        if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
-            return
-
         try:
             if project == "":
                 raise SherlockDeleteProjectError("Invalid Blank Project Name")
         except SherlockDeleteProjectError as e:
             LOG.error(str(e))
             return -1, str(e)
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
 
