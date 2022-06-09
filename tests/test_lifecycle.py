@@ -1,12 +1,17 @@
-from ansys.sherlock.core import lifecycle
+import grpc
+
+from ansys.sherlock.core.lifecycle import Lifecycle
 
 
 def test_all():
     """Test all life cycle APIs"""
-    test_create_life_phase()
+    channel_param = "127.0.0.1:9090"
+    channel = grpc.insecure_channel(channel_param)
+    lifecycle = Lifecycle(channel)
+    test_create_life_phase(lifecycle)
 
 
-def test_create_life_phase():
+def test_create_life_phase(lifecycle):
     """Test create_life_phase API"""
 
     rc1, str1 = lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
