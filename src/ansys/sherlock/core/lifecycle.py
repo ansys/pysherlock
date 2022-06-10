@@ -80,7 +80,7 @@ class Lifecycle(GrpcStub):
         except SherlockCreateLifePhaseError as e:
             for error in e.strItr():
                 LOG.error(error)
-            return -1, e.strItr()[0]
+            raise e
 
         if description is None:
             description = ""
@@ -107,8 +107,8 @@ class Lifecycle(GrpcStub):
                     raise SherlockCreateLifePhaseError(message=returnCode.message)
             else:
                 LOG.info(returnCode.message)
-                return returnCode.value, returnCode.message
+                return
         except SherlockCreateLifePhaseError as e:
             for error in e.strItr():
                 LOG.error(error)
-            return returnCode.value, e.strItr()[0]
+            raise e
