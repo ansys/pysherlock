@@ -18,15 +18,16 @@ def test_import_odb_archive(project):
     except SherlockImportODBError as e:
         assert str(e) == "Import ODB error: Invalid file path"
 
-    # RC3, STR3 = project.import_odb_archive(
-    #     "C:/Program Files/Ansys Inc/v231/sherlock/tutorial/ODB++ Tutorial.tgz",
-    #     True,
-    #     True,
-    #     True,
-    #     True,
-    # )
-    # assert RC3 == 0
-    # assert STR3 == ""
+    # try:
+    #     project.import_odb_archive(
+    #         "C:/Program Files/Ansys Inc/v231/sherlock/tutorial/ODB++ Tutorial.tgz",
+    #         True,
+    #         True,
+    #         True,
+    #         True,
+    #     )
+    # except SherlockImportODBError as e:
+    #     assert False
 
 
 def test_delete_project(project):
@@ -37,9 +38,11 @@ def test_delete_project(project):
     except SherlockDeleteProjectError as e:
         assert str(e) == "Delete project error: Invalid Blank Project Name"
 
-    # rc2, str2 = project.delete_project("Invalid")
-    # assert rc2 == -1
-    # assert str2 == "Delete project error: Cannot find project: {projectName} Invalid"
+    # try:
+    #     project.delete_project("Invalid")
+    #     assert False
+    # except SherlockDeleteProjectError as e:
+    #     assert str(e) == "Delete project error: Cannot find project: {projectName} Invalid"
 
 
 def test_all():
