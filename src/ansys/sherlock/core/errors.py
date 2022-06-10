@@ -31,6 +31,23 @@ class SherlockConnectionError(Exception):
         return f"gRPC connection error: {self.message}"
 
 
+class SherlockAddRandomVibeProfileError(Exception):
+    """Raised when adding a random vibe profile results in an error."""
+
+    def __init__(self, message=None, errorArray=None):
+        """Initialize error message."""
+        self.message = message
+        self.errorArray = errorArray
+
+    def strItr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add random vibe profile error: {error}" for error in self.errorArray]
+        else:
+            assert self.errorArray is None
+            return [f"Add random vibe profile error: {self.message}"]
+
+
 class SherlockDeleteProjectError(Exception):
     """Raised when deleting an error results in an error."""
 
