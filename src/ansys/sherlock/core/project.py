@@ -52,7 +52,7 @@ class Project(GrpcStub):
                 raise SherlockImportIpc2581Error("Invalid file path")
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
-            return -1, str(e)
+            raise e
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
@@ -78,7 +78,7 @@ class Project(GrpcStub):
                 raise SherlockImportIpc2581Error(response.message)
             else:
                 LOG.info(response.message)
-                return response.value, response.message
+                return
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
-            return response.value, str(e)
+            raise e
