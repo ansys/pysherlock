@@ -61,7 +61,7 @@ class Project(GrpcStub):
                 raise SherlockImportODBError("Invalid file path")
         except SherlockImportODBError as e:
             LOG.error(str(e))
-            return -1, str(e)
+            raise e
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
@@ -89,10 +89,10 @@ class Project(GrpcStub):
                 raise SherlockImportODBError(response.message)
             else:
                 LOG.info(response.message)
-                return response.value, response.message
+                return
         except SherlockImportODBError as e:
             LOG.error(str(e))
-            return response.value, str(e)
+            raise e
 
     def delete_project(self, project):
         """Delete an existing project.
@@ -113,7 +113,7 @@ class Project(GrpcStub):
                 raise SherlockDeleteProjectError("Invalid Blank Project Name")
         except SherlockDeleteProjectError as e:
             LOG.error(str(e))
-            return -1, str(e)
+            raise e
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
@@ -128,7 +128,7 @@ class Project(GrpcStub):
                 raise SherlockDeleteProjectError(response.message)
             else:
                 LOG.info(response.message)
-                return response.value, response.message
+                return
         except SherlockDeleteProjectError as e:
             LOG.error(str(e))
-            return response.value, str(e)
+            raise e
