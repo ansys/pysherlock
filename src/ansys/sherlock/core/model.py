@@ -25,64 +25,104 @@ class Model(GrpcStub):
         overwrite=True,
         display_model=False,
         generate_models_for_all_layers=False,
-        trace_parameter=None,
-        trace_drill_hole_parameter=None,
+        trace_param_diameter_threshold_val=2,
+        trace_param_diameter_threshold_unit="mm",
+        trace_param_min_hole_diameter_val=0.25,
+        trace_param_min_hole_diameter_unit="mm",
+        trace_drill_hole_modeling="DISABLED",
+        trace_drill_hole_min_diameter_val=2,
+        trace_drill_hole_min_diameter_unit="mm",
+        trace_drill_hole_max_edge_val=1,
+        trace_drill_hole_max_edge_unit="mm",
     ):
         r"""Export a trace reinforcement model.
 
         Parameters
         ----------
-        project_name : string, required
+        project_name : str, required
             The Sherlock project name from which the trace reinforcement model will be generated.
 
-        cca_name : string, required
+        cca_name : str, required
             The Sherlock CCA name from which the trace reinforcement model will be generated.
 
-        export_file : string, required
+        export_file : str, required
             The file path where the files from the trace reinforcement model export will be saved.
             The suffix must be ".wbjn".
 
-        overwrite : boolean, optional
+        overwrite : bool, optional
             If set to True, overwrite an existing file that has the same file name.
             By default, this is set to True.
 
-        display_model : boolean, optional
+        display_model : bool, optional
             At the end of the export, launches and displays the exported model in
             Workbench Mechanical.
             By default, this is set to False.
 
-        generate_models_for_all_layers :  boolean, optional
+        generate_models_for_all_layers :  bool, optional
             By default, Sherlock exports only those layers for which you have generated trace
             reinforcement layers. When this is set to True, Sherlock will generate trace models
             for all the other layers and include them in the exported model.
             By default, this is set to False.
 
-        trace_parameter : TraceParam, optional
-            A TraceParam message. If omitted, default values are used.
-            This can be created by using the method set_trace_parameter().
+        trace_param_diameter_threshold_val: float, optional
+            This value determines whether a hole is modeled with beams or shell
+            reinforcement elements. Holes equal to or greater than the Diameter Threshold
+            value are modeled with shell reinforcement elements. Smaller holes are modeled
+            with beam elements. (A hole buried inside the board is always modeled as a beam.)
+            By default, this is set to "2mm".
 
-        trace_drill_hole_parameter : TraceDrillHoleParam, optional
-            A TraceDrillHoleParam message. If omitted, default values are used.
-            This can be created by using the method set_drill_hole_parameter().
+        trace_param_diameter_threshold_unit: str, optional
+            The units associated with the trace_param_diameter_threshold_val.
+            By default, this is set to "mm".
 
+        trace_param_min_hole_diameter_val: float, optional
+            Vias smaller than the specified diameter will not be exported.
+            A value of zero will export all vias.
+            By default, this is set to "0.25mm".
+
+        trace_param_min_hole_diameter_unit: str, optional
+            The units associated with trace_param_min_hole_diameter_val.
+            By default, this is set to "mm".
+
+        trace_drill_hole_modeling: str, optional
+            Set to ENABLED to model drill holes in the export.
+            By default, this is set to "DISABLED". When this is "DISABLED",
+            the parameters trace_drill_hole_min_diameter and trace_drill_hole_max_edge
+            will not be used.
+
+        trace_drill_hole_min_diameter_val: float, optional
+            Drill holes smaller than the specified diameter will not be exported.
+            A value of zero will export all drill holes.
+            By default, this is set to "2mm".
+
+        trace_drill_hole_min_diameter_unit: str, optional
+            The units associated with trace_drill_hole_min_diameter_val.
+            By default, this is set to "mm".
+
+        trace_drill_hole_max_edge_val: float, optional
+            This value specifies the maximum segment size used when representing
+            round drill holes by a polygon.
+            By default, this is set to "1mm".
+
+        trace_drill_hole_max_edge_unit: str, optional
+            The units associated with trace_drill_hole_max_edge_val.
+            By default this is set to "mm".
 
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
         >>> sherlock = launcher.launch_sherlock()
-        >>> trace_param = model.set_trace_parameter(None, 1, "mm", 0.2, "mm")
-        >>> trace_drill_hole_param =
-                model.set_trace_drill_hole_parameter(None, "ENABLED", 1, "mm", 1, "mm")
         >>> sherlock.model.export_trace_reinforcement_model(
             'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
-            True, False, False, trace_param, trace_drill_hole_param)
+            True, False, False)
 
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
         >>> sherlock = launcher.launch_sherlock()
-        >>> sherlock.model.export_trace_reinforcement_model('Tutorial Project', 'Main Board',
-            'c:\Temp\export.wbjn', True, False, False)
+        >>> sherlock.model.export_trace_reinforcement_model(
+            'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
+            True, False, False, 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
         """
         try:
             if not project_name:
@@ -114,20 +154,21 @@ class Model(GrpcStub):
             False  # This only applies to *.apdl files and is not applicable here.
         )
         export_request.generateModelsForAllLayers = generate_models_for_all_layers
+        export_request.traceParam.diameterThreshold.value = trace_param_diameter_threshold_val
+        export_request.traceParam.diameterThreshold.unit = trace_param_diameter_threshold_unit
+        export_request.traceParam.minHoleDiameterForShellOrBeam.value = (
+            trace_param_min_hole_diameter_val
+        )
+        export_request.traceParam.minHoleDiameterForShellOrBeam.unit = (
+            trace_param_min_hole_diameter_unit
+        )
+        export_request.traceDrillHoleParam.drillHoleModeling = trace_drill_hole_modeling
+        export_request.traceDrillHoleParam.minHoleDiameter.value = trace_drill_hole_min_diameter_val
+        export_request.traceDrillHoleParam.minHoleDiameter.unit = trace_drill_hole_min_diameter_unit
+        export_request.traceDrillHoleParam.maxEdgeLength.value = trace_drill_hole_max_edge_val
+        export_request.traceDrillHoleParam.maxEdgeLength.unit = trace_drill_hole_max_edge_unit
 
         try:
-            if trace_parameter is None:
-                # If no trace property is provided, then set using the default values.
-                set_trace_parameter(export_request.traceParam)
-            else:
-                export_request.traceParam.CopyFrom(trace_parameter)
-
-            if trace_drill_hole_parameter is None:
-                # If no trace drill hole property is provided, then set using the default values.
-                set_trace_drill_hole_parameter(export_request.traceDrillHoleParam)
-            else:
-                export_request.traceDrillHoleParam.CopyFrom(trace_drill_hole_parameter)
-
             return_code = self.stub.exportTraceReinforcementModel(export_request)
             if return_code.value != 0:
                 raise SherlockModelServiceError(return_code.message)
@@ -138,60 +179,60 @@ class Model(GrpcStub):
             raise
 
 
-def set_trace_parameter(
-    trace_param=None,
-    trace_param_diameter_threshold_val=2,
-    trace_param_diameter_threshold_unit="mm",
-    trace_param_min_hole_diameter_val=0.25,
-    trace_param_min_hole_diameter_unit="mm",
-):
-    """Set the Trace Properties for the Export Trace Reinforcement Model operation."""
-    if trace_param is None:
-        trace_param = SherlockModelService_pb2.ExportTraceReinforcementModelRequest().TraceParam()
-    else:
-        if not isinstance(
-            trace_param, SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceParam
-        ):
-            raise SherlockModelServiceError(
-                "trace_param object is not of type "
-                "SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceParam."
-            )
+# def set_trace_parameter(
+#     trace_param=None,
+#     trace_param_diameter_threshold_val=2,
+#     trace_param_diameter_threshold_unit="mm",
+#     trace_param_min_hole_diameter_val=0.25,
+#     trace_param_min_hole_diameter_unit="mm",
+# ):
+#     """Set the Trace Properties for the Export Trace Reinforcement Model operation."""
+#     if trace_param is None:
+#         trace_param = SherlockModelService_pb2.ExportTraceReinforcementModelRequest().TraceParam()
+#     else:
+#         if not isinstance(
+#             trace_param, SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceParam
+#         ):
+#             raise SherlockModelServiceError(
+#                 "trace_param object is not of type "
+#                 "SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceParam."
+#             )
 
-    trace_param.diameterThreshold.value = trace_param_diameter_threshold_val
-    trace_param.diameterThreshold.unit = trace_param_diameter_threshold_unit
-    trace_param.minHoleDiameterForShellOrBeam.value = trace_param_min_hole_diameter_val
-    trace_param.minHoleDiameterForShellOrBeam.unit = trace_param_min_hole_diameter_unit
+#     trace_param.diameterThreshold.value = trace_param_diameter_threshold_val
+#     trace_param.diameterThreshold.unit = trace_param_diameter_threshold_unit
+#     trace_param.minHoleDiameterForShellOrBeam.value = trace_param_min_hole_diameter_val
+#     trace_param.minHoleDiameterForShellOrBeam.unit = trace_param_min_hole_diameter_unit
 
-    return trace_param
+#     return trace_param
 
 
-def set_trace_drill_hole_parameter(
-    trace_drill_hole_param=None,
-    trace_drill_hole_modeling="DISABLED",
-    trace_drill_hole_min_diameter_val=2,
-    trace_drill_hole_min_diameter_unit="mm",
-    trace_drill_hole_max_edge_val=1,
-    trace_drill_hole_max_edge_unit="mm",
-):
-    """Set the Drill Hole Properties for the Export Trace Reinforcement Model operation."""
-    if trace_drill_hole_param is None:
-        trace_drill_hole_param = (
-            SherlockModelService_pb2.ExportTraceReinforcementModelRequest().TraceDrillHoleParam()
-        )
-    else:
-        if not isinstance(
-            trace_drill_hole_param,
-            SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceDrillHoleParam,
-        ):
-            raise SherlockModelServiceError(
-                "trace_drill_hole_param object is not of type "
-                "SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceDrillHoleParam."
-            )
+# def set_trace_drill_hole_parameter(
+#     trace_drill_hole_param=None,
+#     trace_drill_hole_modeling="DISABLED",
+#     trace_drill_hole_min_diameter_val=2,
+#     trace_drill_hole_min_diameter_unit="mm",
+#     trace_drill_hole_max_edge_val=1,
+#     trace_drill_hole_max_edge_unit="mm",
+# ):
+#     """Set the Drill Hole Properties for the Export Trace Reinforcement Model operation."""
+#     if trace_drill_hole_param is None:
+#         trace_drill_hole_param = (
+#             SherlockModelService_pb2.ExportTraceReinforcementModelRequest().TraceDrillHoleParam()
+#         )
+#     else:
+#         if not isinstance(
+#             trace_drill_hole_param,
+#             SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceDrillHoleParam,
+#         ):
+#             raise SherlockModelServiceError(
+#                 "trace_drill_hole_param object is not of type "
+#                 "SherlockModelService_pb2.ExportTraceReinforcementModelRequest.TraceDrillHoleParam."
+#             )
 
-    trace_drill_hole_param.drillHoleModeling = trace_drill_hole_modeling
-    trace_drill_hole_param.minHoleDiameter.value = trace_drill_hole_min_diameter_val
-    trace_drill_hole_param.minHoleDiameter.unit = trace_drill_hole_min_diameter_unit
-    trace_drill_hole_param.maxEdgeLength.value = trace_drill_hole_max_edge_val
-    trace_drill_hole_param.maxEdgeLength.unit = trace_drill_hole_max_edge_unit
+#     trace_drill_hole_param.drillHoleModeling = trace_drill_hole_modeling
+#     trace_drill_hole_param.minHoleDiameter.value = trace_drill_hole_min_diameter_val
+#     trace_drill_hole_param.minHoleDiameter.unit = trace_drill_hole_min_diameter_unit
+#     trace_drill_hole_param.maxEdgeLength.value = trace_drill_hole_max_edge_val
+#     trace_drill_hole_param.maxEdgeLength.unit = trace_drill_hole_max_edge_unit
 
-    return trace_drill_hole_param
+#     return trace_drill_hole_param
