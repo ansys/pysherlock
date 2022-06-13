@@ -133,6 +133,65 @@ def test_add_random_vibe_event(lifecycle):
             e.strItr()[0] == "Add random vibe event error: Number of Cycles Must Be Greater Than 0"
         )
 
+    try:
+        lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1",
+            5,
+            "sec",
+            4,
+            "PER SEC",
+            "45,x",
+            "Uniaxial",
+            "1,2,3",
+            description="Test1",
+        )
+        assert False
+    except SherlockAddRandomVibeEventError as e:
+        assert e.strItr()[0] == "Add random vibe event error: Invalid elevation value"
+
+    try:
+        lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1",
+            5,
+            "sec",
+            4,
+            "PER MIN",
+            "45,45",
+            "Uniaxial",
+            "0,0,0",
+            description="Test1",
+        )
+        assert False
+    except SherlockAddRandomVibeEventError as e:
+        assert (
+            e.strItr()[0]
+            == "Add random vibe event error: At least one direction coordinate must be non-zero"
+        )
+
+    try:
+        lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1",
+            5,
+            "sec",
+            4,
+            "PER MIN",
+            "4545",
+            "Uniaxial",
+            "0,1,0",
+            description="Test1",
+        )
+        assert False
+    except SherlockAddRandomVibeEventError as e:
+        assert (
+            e.strItr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
+        )
+
     # Following tests depend on the existence of a connection and a project named "Test"
 
     # try:
