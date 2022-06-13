@@ -8,3 +8,6 @@ This section gives an overview of the PySherlock APIs.
    :hidden:
 
    launcher
+   model
+   project
+   
