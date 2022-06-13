@@ -6,9 +6,6 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCreateLifePhaseError
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
-DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
-CYCLE_TYPE_LIST = ["COUNT", "DUTY CYCLE", "PER YEAR", "PER DAY", "PER HOUR", "PER MIN", "PER SEC"]
-
 
 class Lifecycle(GrpcStub):
     """Contains methods from the Sherlock Lifecycle Service."""
@@ -17,6 +14,16 @@ class Lifecycle(GrpcStub):
         """Initialize a gRPC stub for SherlockLifecycleService."""
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
+        self.DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
+        self.CYCLE_TYPE_LIST = [
+            "COUNT",
+            "DUTY CYCLE",
+            "PER YEAR",
+            "PER DAY",
+            "PER HOUR",
+            "PER MIN",
+            "PER SEC",
+        ]
 
     def create_life_phase(
         self,
@@ -67,11 +74,11 @@ class Lifecycle(GrpcStub):
                 raise SherlockCreateLifePhaseError(message="Invalid Project Name")
             elif phaseName == "":
                 raise SherlockCreateLifePhaseError(message="Invalid Phase Name")
-            elif durationUnits not in DURATION_UNIT_LIST:
+            elif durationUnits not in self.DURATION_UNIT_LIST:
                 raise SherlockCreateLifePhaseError(message="Invalid Duration Unit Specified")
             elif duration <= 0.0:
                 raise SherlockCreateLifePhaseError(message="Duration Must Be Greater Than 0")
-            elif cycleType not in CYCLE_TYPE_LIST:
+            elif cycleType not in self.CYCLE_TYPE_LIST:
                 raise SherlockCreateLifePhaseError(message="Invalid Cycle Type")
             elif numOfCycles <= 0.0:
                 raise SherlockCreateLifePhaseError(
