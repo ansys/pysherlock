@@ -11,7 +11,7 @@ class Lifecycle(GrpcStub):
     """Contains methods from the Sherlock Lifecycle Service."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for SherlockLifecycleService."""
+        """Initialize a gRPC stub for SherlockLifeCycleService."""
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
@@ -35,7 +35,7 @@ class Lifecycle(GrpcStub):
         cycle_type,
         description=None,
     ):
-        """Create a new lifephase.
+        """Define and add a new life phase.
 
         Parameters
         ----------
