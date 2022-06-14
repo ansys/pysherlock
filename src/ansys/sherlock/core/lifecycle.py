@@ -11,7 +11,7 @@ class Lifecycle(GrpcStub):
     """Contains methods from the Sherlock Lifecycle Service."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for SherlockLifecycleService."""
+        """Initialize a gRPC stub for SherlockLifeCycleService."""
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
@@ -98,7 +98,7 @@ class Lifecycle(GrpcStub):
         ampl_units,
         random_profile_entries,
     ):
-        """Add a new random vibe profile to a random vibe event.
+        """Define and add a new random vibe life cycle event profile.
 
         Parameters
         ----------
