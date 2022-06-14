@@ -6,9 +6,6 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockAddRandomVibeEventError
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
-DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
-CYCLE_TYPE_LIST = ["COUNT", "DUTY CYCLE", "PER YEAR", "PER DAY", "PER HOUR", "PER MIN", "PER SEC"]
-
 
 class Lifecycle(GrpcStub):
     """Contains methods from the Sherlock Lifecycle Service."""
@@ -17,6 +14,16 @@ class Lifecycle(GrpcStub):
         """Initialize a gRPC stub for SherlockLifecycleService."""
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
+        self.DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
+        self.CYCLE_TYPE_LIST = [
+            "COUNT",
+            "DUTY CYCLE",
+            "PER YEAR",
+            "PER DAY",
+            "PER HOUR",
+            "PER MIN",
+            "PER SEC",
+        ]
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
@@ -58,15 +65,15 @@ class Lifecycle(GrpcStub):
     def add_random_vibe_event(
         self,
         project,
-        phaseName,
-        eventName,
+        phase_name,
+        event_name,
         duration,
-        durationUnits,
-        numOfCycles,
-        cycleType,
+        duration_units,
+        num_of_cycles,
+        cycle_type,
         orientation,
-        profileType,
-        loadDirection,
+        profile_type,
+        load_direction,
         description=None,
     ):
         """Add a new random vibe event to a life cycle.
@@ -75,25 +82,25 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        phaseName : str, required
+        phase_name : str, required
             The name of new life phase.
-        eventName : str, required
+        event_name : str, required
             Name of the random vibe event.
         description : str, optional
             Description of new life phase.
         duration : double, required
             Event duration length.
-        durationUnits : str, required
+        duration_units : str, required
             Event duration length units.
-        numOfCycles : double, required
+        num_of_cycles : double, required
             Number of cycles defined for new life phase.
-        cycleType : str, required
+        cycle_type : str, required
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
-        profileType : str, required
+        profile_type : str, required
             Random load profile type. Example valid value is "Uniaxial".
-        loadDirection : str, required
+        load_direction : str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         Examples
         --------
@@ -116,17 +123,17 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid Project Name")
-            elif phaseName == "":
+            elif phase_name == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid Phase Name")
-            elif eventName == "":
+            elif event_name == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid Event Name")
-            elif durationUnits not in DURATION_UNIT_LIST:
+            elif duration_units not in self.DURATION_UNIT_LIST:
                 raise SherlockAddRandomVibeEventError(message="Invalid Duration Unit Specified")
             elif duration <= 0.0:
                 raise SherlockAddRandomVibeEventError(message="Duration Must Be Greater Than 0")
-            elif cycleType not in CYCLE_TYPE_LIST:
+            elif cycle_type not in self.CYCLE_TYPE_LIST:
                 raise SherlockAddRandomVibeEventError(message="Invalid Cycle Type")
-            elif numOfCycles <= 0.0:
+            elif num_of_cycles <= 0.0:
                 raise SherlockAddRandomVibeEventError(
                     message="Number of Cycles Must Be Greater Than 0"
                 )
@@ -136,11 +143,11 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_load_direction_validity(loadDirection)
+            valid1, message1 = self._check_load_direction_validity(load_direction)
             valid2, message2 = self._check_orientation_validity(orientation)
             if not valid1:
                 raise SherlockAddRandomVibeEventError(message=message1)
-            elif profileType != "Uniaxial":
+            elif profile_type != "Uniaxial":
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a Random event can only be Uniaxial"
                 )
@@ -156,30 +163,30 @@ class Lifecycle(GrpcStub):
 
         request = SherlockLifeCycleService_pb2.AddRandomVibeEventRequest(
             project=project,
-            phaseName=phaseName,
-            eventName=eventName,
+            phaseName=phase_name,
+            eventName=event_name,
             description=description,
             duration=duration,
-            durationUnits=durationUnits,
-            numOfCycles=numOfCycles,
-            cycleType=cycleType,
+            durationUnits=duration_units,
+            numOfCycles=num_of_cycles,
+            cycleType=cycle_type,
             orientation=orientation,
-            profileType=profileType,
-            loadDirection=loadDirection,
+            profileType=profile_type,
+            loadDirection=load_direction,
         )
 
         response = self.stub.addRandomVibeEvent(request)
 
-        returnCode = response.returnCode
+        return_code = response.returnCode
 
         try:
-            if returnCode.value == -1:
-                if returnCode.message == "":
+            if return_code.value == -1:
+                if return_code.message == "":
                     raise SherlockAddRandomVibeEventError(errorArray=response.errors)
                 else:
-                    raise SherlockAddRandomVibeEventError(message=returnCode.message)
+                    raise SherlockAddRandomVibeEventError(message=return_code.message)
             else:
-                LOG.info(returnCode.message)
+                LOG.info(return_code.message)
                 return
         except SherlockAddRandomVibeEventError as e:
             for error in e.strItr():

@@ -193,6 +193,7 @@ def test_add_random_vibe_event(lifecycle):
         )
 
     # Following tests depend on the existence of a connection and a project named "Test"
+    # with a lifecycle phase named "Example"
 
     # try:
     #     lifecycle.add_random_vibe_event(
@@ -202,7 +203,7 @@ def test_add_random_vibe_event(lifecycle):
     #         5,
     #         "sec",
     #         4,
-    #         "PER SEC",
+    #         "PER MIN",
     #         "45,45",
     #         "Uniaxial",
     #         "1,2,3",
@@ -220,7 +221,7 @@ def test_add_random_vibe_event(lifecycle):
     #         5,
     #         "sec",
     #         4,
-    #         "PER SEC",
+    #         "PER MIN",
     #         "45,45",
     #         "Uniaxial",
     #         "1,2,3",
@@ -237,7 +238,7 @@ def test_add_random_vibe_event(lifecycle):
     #         5,
     #         "sec",
     #         4,
-    #         "PER SEC",
+    #         "PER MIN",
     #         "45,45",
     #         "Uniaxial",
     #         "1,2,3",
@@ -245,9 +246,10 @@ def test_add_random_vibe_event(lifecycle):
     #     )
     #     assert False
     # except SherlockAddRandomVibeEventError as e:
+    #     print(e.strItr()[0])
     #     assert e.strItr()[0] == (
-    #         "Add random vibe event error: Duplicate phase name 'Example' specified"
-    #         ".\nEnter a different name or delete the old phase before updating this phase."
+    #         "Add random vibe event error: Duplicate event name 'Event1' specified"
+    #         ".\nEnter a different name or delete the old event before updating this event."
     #     )
 
 
