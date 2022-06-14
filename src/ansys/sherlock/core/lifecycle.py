@@ -75,12 +75,12 @@ class Lifecycle(GrpcStub):
     def add_random_vibe_profile(
         self,
         project,
-        phaseName,
-        eventName,
-        profileName,
-        freqUnits,
-        amplUnits,
-        randomProfileEntries,
+        phase_name,
+        event_name,
+        profile_name,
+        freq_units,
+        ampl_units,
+        random_profile_entries,
     ):
         """Add a new random vibe profile to a random vibe event.
 
@@ -88,50 +88,46 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        phaseName : str, required
+        phase_name : str, required
             The name of new life phase.
-        eventName : str, required
+        event_name : str, required
             Name of the random vibe event.
-        pofileName : str, required
+        profile_name : str, required
             Name of the random vibe profile.
-        freqUnits : str, required
+        freq_units : str, required
             Frequency Units.
-        amplUnits : str, required
+        ampl_units : str, required
             Amplitude Units.
-        randomProfileEntries : (double, double) list, required
+        random_profile_entries : (double, double) list, required
             List of (frequency, amplitude) entries
 
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        ""Example: There exists a project named 'Test' with a life cycle named 'Example""
+
         >>> sherlock.lifecycle.add_random_vibe_event(
             "Test",
             "Example",
             "Event1"
-            1.5,
-            "sec",
-            4.0,
-            "PER SEC",
-            "45,45",
-            "Uniaxial"
-            "2,4,5",
+            "Profile1",
+            "HZ",
+            "G2/Hz",
+            [(4,8), (5, 50)],
         )
-        TODO: Fix the example
         """
         try:
             if project == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid Project Name")
-            elif phaseName == "":
+            elif phase_name == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid Phase Name")
-            elif eventName == "":
+            elif event_name == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid Event Name")
-            elif profileName == "":
+            elif profile_name == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid Profile Name")
-            elif freqUnits not in FREQ_UNIT_LIST:
+            elif freq_units not in FREQ_UNIT_LIST:
                 raise SherlockAddRandomVibeProfileError(message="Invalid Frequency Unit")
-            elif amplUnits not in AMPL_UNIT_LIST:
+            elif ampl_units not in AMPL_UNIT_LIST:
                 raise SherlockAddRandomVibeProfileError(message="Invalid Amplitude Type")
         except SherlockAddRandomVibeProfileError as e:
             for error in e.strItr():
@@ -139,7 +135,7 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_profile_entries_validity(randomProfileEntries)
+            valid1, message1 = self._check_profile_entries_validity(random_profile_entries)
             if not valid1:
                 raise SherlockAddRandomVibeProfileError(message=message1)
         except SherlockAddRandomVibeProfileError as e:
@@ -152,27 +148,27 @@ class Lifecycle(GrpcStub):
 
         request = SherlockLifeCycleService_pb2.AddRandomProfileRequest(
             project=project,
-            phaseName=phaseName,
-            eventName=eventName,
-            profileName=profileName,
-            freqUnits=freqUnits,
-            amplUnits=amplUnits,
-            randomProfileEntries=randomProfileEntries,
+            phaseName=phase_name,
+            eventName=event_name,
+            profileName=profile_name,
+            freqUnits=freq_units,
+            amplUnits=ampl_units,
+            randomProfileEntries=random_profile_entries,
         )
         # TODO: Investigate how to handle the entries
 
         response = self.stub.addRandomProfile(request)
 
-        returnCode = response.returnCode
+        return_code = response.returnCode
 
         try:
-            if returnCode.value == -1:
-                if returnCode.message == "":
+            if return_code.value == -1:
+                if return_code.message == "":
                     raise SherlockAddRandomVibeProfileError(errorArray=response.errors)
                 else:
-                    raise SherlockAddRandomVibeProfileError(message=returnCode.message)
+                    raise SherlockAddRandomVibeProfileError(message=return_code.message)
             else:
-                LOG.info(returnCode.message)
+                LOG.info(return_code.message)
                 return
         except SherlockAddRandomVibeProfileError as e:
             for error in e.strItr():

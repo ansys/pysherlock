@@ -38,10 +38,10 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
 
     Examples
     --------
-    >>> from ansys.sherlock.launcher import launcher
+    >>> from ansys.sherlock.core import launcher
     >>> launch_sherlock()
 
-    >>> from ansys.sherlock.launcher import launcher
+    >>> from ansys.sherlock.core import launcher
     >>> launch_sherlock(port=9092)
 
     """

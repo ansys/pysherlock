@@ -48,17 +48,28 @@ Launch Sherlock Locally
 ^^^^^^^^^^^^^^^^^^^^^^^
 .. code::
 
-    from ansys.sherlock.launcher import launcher
-    launcher.launch_sherlock()
+    from ansys.sherlock.core import launcher
+    sherlock = launcher.launch_sherlock()
 
-This automatically searches for the latest local version of Sherlock, and launches the Sherlock gRPC server on port 9090. It also launches a Sherlock client connected to the same port.
+This automatically searches for the latest local version of Sherlock, and 
+launches the Sherlock gRPC server on port 9090.  It also launches a Sherlock 
+client connected to the same port and returns a gRPC connection object 
+which can be used to invoke the APIs from their respective services.
 
-Alternatively you can start the Sherlock gRPC server on a different port by using the ``port`` parameter. For example:
+Alternatively you can start the Sherlock gRPC server on a different port by 
+using the ``port`` parameter. For example:
 
 .. code::
 
-    from ansys.sherlock.launcher import launcher
-    launcher.launch_sherlock(port=9092)
+    from ansys.sherlock.core import launcher
+    sherlock = launcher.launch_sherlock(port=9092)
+
+Below is an example of using the gRPC connection object to perform a health check on 
+the gRPC connection using the SherlockCommonService's check() API:
+
+.. code::
+
+    sherlock.common.check()
 
 .. Example Usage
 .. -------------

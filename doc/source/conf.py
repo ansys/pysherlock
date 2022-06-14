@@ -45,3 +45,15 @@ html_static_path = ["_static"]
 
 # We have our own custom templates
 templates_path = ["_templates"]
+
+autodoc_mock_imports = [
+    "grpc",
+    "SherlockCommonService_pb2",
+    "SherlockCommonService_pb2_grpc",
+    "SherlockProjectService_pb2",
+    "SherlockProjectService_pb2_grpc",
+    "SherlockModelService_pb2",
+    "SherlockModelService_pb2_grpc",
+    "SherlockLifecycleService_pb2",
+    "SherlockLifecycleService_pb2_grpc",
+]

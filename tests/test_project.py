@@ -1,22 +1,41 @@
-from ansys.sherlock.core import project
+import grpc
+
+from ansys.sherlock.core.errors import SherlockDeleteProjectError, SherlockImportODBError
+from ansys.sherlock.core.project import Project
 
 
-def test_delete_project():
+def test_import_odb_archive(project):
+    #   """Test import_odb_archive API"""
+    try:
+        project.import_odb_archive("hello", True, True, True, True)
+        assert False
+    except SherlockImportODBError as e:
+        assert str(e) == "Import ODB error: Invalid file path"
+
+    try:
+        project.import_odb_archive("hello.tgz", True, True, True, True)
+        assert False
+    except SherlockImportODBError as e:
+        assert str(e) == "Import ODB error: Invalid file path"
+
+
+def test_delete_project(project):
     #   """Test delete_project API"""
-    rc1, str1 = project.delete_project("")
-    assert rc1 == -1
-    assert str1 == "Delete project error: Invalid Blank Project Name"
-
-    # RC2, STR2 = project.delete_project("test")
-    # assert RC2 == -1
-    # assert STR2 == "Delete project error: Cannot find project: {projectName} test"
+    try:
+        project.delete_project("")
+        assert False
+    except SherlockDeleteProjectError as e:
+        assert str(e) == "Delete project error: Invalid Blank Project Name"
 
 
 def test_all():
     #   """Test all project APIs"""
-    #
-    #   REQUIRES: Sherlock server must already be opened to port 9090
-    test_delete_project()
+    channel_param = "127.0.0.1:9090"
+    channel = grpc.insecure_channel(channel_param)
+    project = Project(channel)
+
+    test_delete_project(project)
+    test_import_odb_archive(project)
 
 
 if __name__ == "__main__":
