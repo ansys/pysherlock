@@ -1,4 +1,4 @@
-"""Module for basic project services on client-side."""
+"""Module for lifecycle services on client-side."""
 import SherlockLifeCycleService_pb2
 import SherlockLifeCycleService_pb2_grpc
 
