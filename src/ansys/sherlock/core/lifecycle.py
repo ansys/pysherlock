@@ -28,11 +28,11 @@ class Lifecycle(GrpcStub):
     def create_life_phase(
         self,
         project,
-        phaseName,
+        phase_name,
         duration,
-        durationUnits,
-        numOfCycles,
-        cycleType,
+        duration_units,
+        num_of_cycles,
+        cycle_type,
         description=None,
     ):
         """Create a new lifephase.
@@ -41,17 +41,17 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        phaseName : str, required
+        phase_name : str, required
             The name of new life phase.
         description : str, optional
             Description of new life phase.
         duration : double, required
             Event duration length.
-        durationUnits : str, required
+        duration_units : str, required
             Event duration length units.
-        numOfCycles : double, required
+        num_of_cycles : double, required
             Number of cycles defined for new life phase.
-        cycleType : str, required
+        cycle_type : str, required
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
 
         Examples
@@ -70,15 +70,15 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockCreateLifePhaseError(message="Invalid Project Name")
-            elif phaseName == "":
+            elif phase_name == "":
                 raise SherlockCreateLifePhaseError(message="Invalid Phase Name")
-            elif durationUnits not in self.DURATION_UNIT_LIST:
+            elif duration_units not in self.DURATION_UNIT_LIST:
                 raise SherlockCreateLifePhaseError(message="Invalid Duration Unit Specified")
             elif duration <= 0.0:
                 raise SherlockCreateLifePhaseError(message="Duration Must Be Greater Than 0")
-            elif cycleType not in self.CYCLE_TYPE_LIST:
+            elif cycle_type not in self.CYCLE_TYPE_LIST:
                 raise SherlockCreateLifePhaseError(message="Invalid Cycle Type")
-            elif numOfCycles <= 0.0:
+            elif num_of_cycles <= 0.0:
                 raise SherlockCreateLifePhaseError(
                     message="Number of Cycles Must Be Greater Than 0"
                 )
@@ -87,31 +87,35 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         if description is None:
             description = ""
 
         request = SherlockLifeCycleService_pb2.CreateLifePhaseRequest(
             project=project,
-            phaseName=phaseName,
+            phaseName=phase_name,
             description=description,
             duration=duration,
-            durationUnits=durationUnits,
-            numOfCycles=numOfCycles,
-            cycleType=cycleType,
+            durationUnits=duration_units,
+            numOfCycles=num_of_cycles,
+            cycleType=cycle_type,
         )
 
         response = self.stub.createLifePhase(request)
 
-        returnCode = response.returnCode
+        return_code = response.returnCode
 
         try:
-            if returnCode.value == -1:
-                if returnCode.message == "":
+            if return_code.value == -1:
+                if return_code.message == "":
                     raise SherlockCreateLifePhaseError(errorArray=response.errors)
                 else:
-                    raise SherlockCreateLifePhaseError(message=returnCode.message)
+                    raise SherlockCreateLifePhaseError(message=return_code.message)
             else:
-                LOG.info(returnCode.message)
+                LOG.info(return_code.message)
                 return
         except SherlockCreateLifePhaseError as e:
             for error in e.strItr():
