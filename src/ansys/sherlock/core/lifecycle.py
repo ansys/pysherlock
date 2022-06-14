@@ -58,8 +58,6 @@ class Lifecycle(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-
-        ""Example: There exists a project named 'Test'""
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
             "Example",
