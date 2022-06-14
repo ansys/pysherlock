@@ -86,8 +86,6 @@ class Lifecycle(GrpcStub):
             The name of new life phase.
         event_name : str, required
             Name of the random vibe event.
-        description : str, optional
-            Description of new life phase.
         duration : double, required
             Event duration length.
         duration_units : str, required
@@ -102,6 +100,8 @@ class Lifecycle(GrpcStub):
             Random load profile type. Example valid value is "Uniaxial".
         load_direction : str, required
             Load direction in the format of x,y,z. Example: 0,0,1
+        description : str, optional
+            Description of new life phase.
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
