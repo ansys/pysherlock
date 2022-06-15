@@ -9,10 +9,10 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     lifecycle = Lifecycle(channel)
-    test_create_life_phase(lifecycle)
+    helper_test_create_life_phase(lifecycle)
 
 
-def test_create_life_phase(lifecycle):
+def helper_test_create_life_phase(lifecycle):
     """Test create_life_phase API"""
 
     try:
