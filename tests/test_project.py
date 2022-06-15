@@ -1,7 +1,26 @@
 import grpc
 
-from ansys.sherlock.core.errors import SherlockDeleteProjectError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockDeleteProjectError,
+    SherlockImportIpc2581Error,
+    SherlockImportODBError,
+)
 from ansys.sherlock.core.project import Project
+
+
+def test_import_ipc2581_archive(project):
+    #   """Test import_ipc2581_archive API"""
+    try:
+        project.import_ipc2581_archive("Hello", True, True)
+        assert False
+    except SherlockImportIpc2581Error as e:
+        assert str(e) == "Import IPC2581 error: Invalid file path"
+
+    try:
+        project.import_ipc2581_archive("Hello.zip", True, True)
+        assert False
+    except SherlockImportIpc2581Error as e:
+        assert str(e) == "Import IPC2581 error: Invalid file path"
 
 
 def test_import_odb_archive(project):
@@ -36,6 +55,7 @@ def test_all():
 
     test_delete_project(project)
     test_import_odb_archive(project)
+    test_import_ipc2581_archive(project)
 
 
 if __name__ == "__main__":

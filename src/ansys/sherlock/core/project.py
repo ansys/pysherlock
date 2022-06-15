@@ -5,7 +5,11 @@ import SherlockProjectService_pb2
 import SherlockProjectService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockDeleteProjectError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockDeleteProjectError,
+    SherlockImportIpc2581Error,
+    SherlockImportODBError,
+)
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -17,35 +21,100 @@ class Project(GrpcStub):
         self.channel = channel
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
+    def import_ipc2581_archive(
+        self,
+        archive_file,
+        include_other_layers,
+        guess_part_properties,
+        project=None,
+        cca_name=None,
+    ):
+        """Import an IPC2581 archive.
+
+        Parameters
+        ----------
+        archive_file : str, required
+            Full path to the ODB++ arhicve file to be imported.
+        include_other_layers : bool, required
+            Option to include other layers.
+        guess_part_properties: bool, required
+            Option to guess part properties
+        project: str, optional
+            Sherlock project name. If empty, the filename will be used for the project name.
+        cca_name : str, optional
+            Project CCA name. If empty, the filename will be used for the CCA name.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
+                                project="Tutorial",
+                                cca_name="Card")
+        """
+        try:
+            if not os.path.exists(archive_file):
+                raise SherlockImportIpc2581Error("Invalid file path")
+        except SherlockImportIpc2581Error as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        if project is None:
+            project = os.path.splitext(os.path.basename(archive_file))[0]
+        if cca_name is None:
+            cca_name = os.path.splitext(os.path.basename(archive_file))[0]
+
+        request = SherlockProjectService_pb2.ImportIPC2581Request(
+            archiveFile=archive_file,
+            includeOtherLayers=include_other_layers,
+            guessPartProperties=guess_part_properties,
+            project=project,
+            ccaName=cca_name,
+        )
+
+        response = self.stub.importIPC2581Archive(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockImportIpc2581Error(response.message)
+            else:
+                LOG.info(response.message)
+                return
+        except SherlockImportIpc2581Error as e:
+            LOG.error(str(e))
+            raise e
+
     def import_odb_archive(
         self,
-        archiveFile,
-        processLayerThickness,
-        includeOtherLayers,
-        processCutoutFile,
-        guessPartProperties,
+        archive_file,
+        process_layer_thickness,
+        include_other_layers,
+        process_cutout_file,
+        guess_part_properties,
         project=None,
-        ccaName=None,
+        cca_name=None,
     ):
         """Import an ODB++ archive.
 
         Parameters
         ----------
-        archiveFile : str, required
+        archive_file : str, required
             Full path to the ODB++ arhicve file to be imported.
-        processLayerThickness : bool, required
+        process_layer_thickness : bool, required
             Option to assign stackup thickness.
-        includeOtherLayers : bool, required
+        include_other_layers : bool, required
             Option to include other layers.
-        processCutoutFile : bool, required
+        process_cutout_file : bool, required
             Option to process cutouts.
-        guessPartProperties: bool, required
+        guess_part_properties: bool, required
             Option to guess part properties
         project: str, optional
             Sherlock project name. If empty, the filename will be used for the project name.
-        ccaName : str, optional
+        cca_name : str, optional
             Project CCA name. If empty, the filename will be used for the CCA name.
-
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -53,11 +122,10 @@ class Project(GrpcStub):
         >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
                                 True, True,
                                 project="Tutorial",
-                                ccaName="Card")
-
+                                cca_name="Card")
         """
         try:
-            if not os.path.exists(archiveFile):
+            if not os.path.exists(archive_file):
                 raise SherlockImportODBError("Invalid file path")
         except SherlockImportODBError as e:
             LOG.error(str(e))
@@ -68,18 +136,18 @@ class Project(GrpcStub):
             return
 
         if project is None:
-            project = os.path.splitext(os.path.basename(archiveFile))[0]
-        if ccaName is None:
-            ccaName = os.path.splitext(os.path.basename(archiveFile))[0]
+            project = os.path.splitext(os.path.basename(archive_file))[0]
+        if cca_name is None:
+            cca_name = os.path.splitext(os.path.basename(archive_file))[0]
 
         request = SherlockProjectService_pb2.ImportODBRequest(
-            archiveFile=archiveFile,
-            processLayerThickness=processLayerThickness,
-            includeOtherLayers=includeOtherLayers,
-            processCutoutFile=processCutoutFile,
-            guessPartProperties=guessPartProperties,
+            archiveFile=archive_file,
+            processLayerThickness=process_layer_thickness,
+            includeOtherLayers=include_other_layers,
+            processCutoutFile=process_cutout_file,
+            guessPartProperties=guess_part_properties,
             project=project,
-            ccaName=ccaName,
+            ccaName=cca_name,
         )
 
         response = self.stub.importODBArchive(request)
@@ -101,12 +169,10 @@ class Project(GrpcStub):
         ----------
         project : str, required
             The name of the project to be deleted
-
         Examples
         --------
         >>> from ansys.sherlock.project import delete_project
         >>> delete_project("Test Project")
-
         """
         try:
             if project == "":
