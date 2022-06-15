@@ -92,14 +92,15 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 4:
                     return False, f"Invalid entry {i}: Wrong number of args"
-                elif not isinstance(str, entry[0]):
+                elif not isinstance(entry[0], str):
                     return False, f"Invalid entry {i}: Invalid step name"
                 elif entry[1] not in self.TYPE_LIST:
                     return False, f"Invalid entry {i}: Invalid step type"
                 elif entry[2] <= 0:
-                    return False, f"Invalid entry{i}: Time must be greater than 0"
-                elif not (isinstance(int, entry[3]) or isinstance(float, entry[3])):
-                    return False, f"invalid entry {i}: Invalid temp"
+                    return False, f"Invalid entry {i}: Time must be greater than 0"
+                elif not (isinstance(entry[3], int) or isinstance(entry[3], float)):
+                    return False, f"Invalid entry {i}: Invalid temp"
+            return True, ""
         except TypeError:
             return False, f"Invalid entry {i}: Invalid time"
 
@@ -138,7 +139,7 @@ class Lifecycle(GrpcStub):
         phase_name : str, required
             The name of new life phase.
         event_name : str, required
-            Name of the random vibe event.
+            Name of the thermal event.
         profile_name : str, required
             Name of the thermal profile.
         time_units : str, required
@@ -160,8 +161,8 @@ class Lifecycle(GrpcStub):
             "sec",
             "F",
             [
-                ("Increase", "RAMP", 40, 40),
-                ("Steady", "HOLD", 20, 20),
+                ("Increase", "HOLD", 40, 40),
+                ("Steady", "RAMP", 20, 20),
                 ("Back", "RAMP", 20, 40),
             ],
         )
@@ -197,18 +198,18 @@ class Lifecycle(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        request = SherlockLifeCycleService_pb2.AddRandomProfileRequest(
+        request = SherlockLifeCycleService_pb2.AddThermalProfileRequest(
             project=project,
             phaseName=phase_name,
             eventName=event_name,
             profileName=profile_name,
             timeUnits=time_units,
-            temp_units=temp_units,
+            tempUnits=temp_units,
         )
 
         self._add_thermal_profile_entries(request, thermal_profile_entries)
 
-        response = self.stub.addRandomProfile(request)
+        response = self.stub.addThermalProfile(request)
 
         return_code = response.returnCode
 

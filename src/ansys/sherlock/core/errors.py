@@ -93,4 +93,4 @@ class SherlockAddThermalProfileError(Exception):
             return [f"Add thermal profile error: {error}" for error in self.errorArray]
         else:
             assert self.errorArray is None
-            return [f"Add profile profile error: {self.message}"]
+            return [f"Add thermal profile error: {self.message}"]
