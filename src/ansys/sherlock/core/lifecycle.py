@@ -14,7 +14,7 @@ class Lifecycle(GrpcStub):
         """Initialize a gRPC stub for SherlockLifeCycleService."""
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
-        self.DURATION_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
+        self.TIME_UNIT_LIST = ["ms", "sec", "min", "hr", "day", "year"]
         self.CYCLE_TYPE_LIST = [
             "COUNT",
             "DUTY CYCLE",
@@ -72,7 +72,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockCreateLifePhaseError(message="Invalid Project Name")
             elif phase_name == "":
                 raise SherlockCreateLifePhaseError(message="Invalid Phase Name")
-            elif duration_units not in self.DURATION_UNIT_LIST:
+            elif duration_units not in self.TIME_UNIT_LIST:
                 raise SherlockCreateLifePhaseError(message="Invalid Duration Unit Specified")
             elif duration <= 0.0:
                 raise SherlockCreateLifePhaseError(message="Duration Must Be Greater Than 0")
