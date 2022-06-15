@@ -53,34 +53,6 @@ def test_create_life_phase(lifecycle):
     except SherlockCreateLifePhaseError as e:
         assert e.strItr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
 
-    # Following tests depend on the existence of a connection and a project named "Test"
-
-    # try:
-    #     lifecycle.create_life_phase(
-    #         "Fake", "Example", 5, "sec", 4, "PER SEC", description="Test1"
-    #     )
-    #     assert False
-    # except SherlockCreateLifePhaseError as e:
-    #     assert e.strItr()[0] == "Create life phase error: Cannot find project: Fake"
-
-    # try:
-    #     lifecycle.create_life_phase(
-    #         "Test", "Example", 5, "sec", 4, "PER SEC", description="Test1"
-    #     )
-    # except SherlockCreateLifePhaseError as e:
-    #     assert False
-
-    # try:
-    #     lifecycle.create_life_phase(
-    #         "Test", "Example", 5, "sec", 4, "PER SEC", description="Test1"
-    #     )
-    #     assert False
-    # except SherlockCreateLifePhaseError as e:
-    #     assert e.strItr()[0] == (
-    #         "Create life phase error: Duplicate phase name 'Example' specified"
-    #         ".\nEnter a different name or delete the old phase before updating this phase."
-    #     )
-
 
 if __name__ == "__main__":
     test_all()
