@@ -21,40 +21,22 @@ class Project(GrpcStub):
         self.channel = channel
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
-    def import_ipc2581_archive(
-        self,
-        archive_file,
-        include_other_layers,
-        guess_part_properties,
-        project=None,
-        cca_name=None,
-    ):
-        """Import an IPC2581 archive.
+    def delete_project(self, project):
+        """Delete a project from Sherlock.
 
         Parameters
         ----------
-        archive_file : str, required
-            Full path to the ODB++ arhicve file to be imported.
-        include_other_layers : bool, required
-            Option to include other layers.
-        guess_part_properties: bool, required
-            Option to guess part properties
-        project: str, optional
-            Sherlock project name. If empty, the filename will be used for the project name.
-        cca_name : str, optional
-            Project CCA name. If empty, the filename will be used for the CCA name.
+        project : str, required
+            Project name of project to be deleted
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
-                                project="Tutorial",
-                                cca_name="Card")
+        >>> from ansys.sherlock.project import delete_project
+        >>> delete_project("Test Project")
         """
         try:
-            if not os.path.exists(archive_file):
-                raise SherlockImportIpc2581Error("Invalid file path")
-        except SherlockImportIpc2581Error as e:
+            if project == "":
+                raise SherlockDeleteProjectError("Invalid Blank Project Name")
+        except SherlockDeleteProjectError as e:
             LOG.error(str(e))
             raise e
 
@@ -62,28 +44,17 @@ class Project(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        if project is None:
-            project = os.path.splitext(os.path.basename(archive_file))[0]
-        if cca_name is None:
-            cca_name = os.path.splitext(os.path.basename(archive_file))[0]
+        request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
 
-        request = SherlockProjectService_pb2.ImportIPC2581Request(
-            archiveFile=archive_file,
-            includeOtherLayers=include_other_layers,
-            guessPartProperties=guess_part_properties,
-            project=project,
-            ccaName=cca_name,
-        )
-
-        response = self.stub.importIPC2581Archive(request)
+        response = self.stub.deleteProject(request)
 
         try:
             if response.value == -1:
-                raise SherlockImportIpc2581Error(response.message)
+                raise SherlockDeleteProjectError(response.message)
             else:
                 LOG.info(response.message)
                 return
-        except SherlockImportIpc2581Error as e:
+        except SherlockDeleteProjectError as e:
             LOG.error(str(e))
             raise e
 
@@ -162,22 +133,40 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def delete_project(self, project):
-        """Delete an existing project.
+    def import_ipc2581_archive(
+        self,
+        archive_file,
+        include_other_layers,
+        guess_part_properties,
+        project=None,
+        cca_name=None,
+    ):
+        """Import an IPC2581 archive.
 
         Parameters
         ----------
-        project : str, required
-            The name of the project to be deleted
+        archive_file : str, required
+            Full path to the ODB++ arhicve file to be imported.
+        include_other_layers : bool, required
+            Option to include other layers.
+        guess_part_properties: bool, required
+            Option to guess part properties
+        project: str, optional
+            Sherlock project name. If empty, the filename will be used for the project name.
+        cca_name : str, optional
+            Project CCA name. If empty, the filename will be used for the CCA name.
         Examples
         --------
-        >>> from ansys.sherlock.project import delete_project
-        >>> delete_project("Test Project")
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
+                                project="Tutorial",
+                                cca_name="Card")
         """
         try:
-            if project == "":
-                raise SherlockDeleteProjectError("Invalid Blank Project Name")
-        except SherlockDeleteProjectError as e:
+            if not os.path.exists(archive_file):
+                raise SherlockImportIpc2581Error("Invalid file path")
+        except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
 
@@ -185,16 +174,27 @@ class Project(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
+        if project is None:
+            project = os.path.splitext(os.path.basename(archive_file))[0]
+        if cca_name is None:
+            cca_name = os.path.splitext(os.path.basename(archive_file))[0]
 
-        response = self.stub.deleteProject(request)
+        request = SherlockProjectService_pb2.ImportIPC2581Request(
+            archiveFile=archive_file,
+            includeOtherLayers=include_other_layers,
+            guessPartProperties=guess_part_properties,
+            project=project,
+            ccaName=cca_name,
+        )
+
+        response = self.stub.importIPC2581Archive(request)
 
         try:
             if response.value == -1:
-                raise SherlockDeleteProjectError(response.message)
+                raise SherlockImportIpc2581Error(response.message)
             else:
                 LOG.info(response.message)
                 return
-        except SherlockDeleteProjectError as e:
+        except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e

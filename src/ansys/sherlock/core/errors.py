@@ -32,7 +32,7 @@ class SherlockConnectionError(Exception):
 
 
 class SherlockDeleteProjectError(Exception):
-    """Raised when deleting an error results in an error."""
+    """Raised when deleting a project results in an error."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -41,6 +41,18 @@ class SherlockDeleteProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete project error: {self.message}"
+
+
+class SherlockImportODBError(Exception):
+    """Raised when importing ODB archive results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Import ODB error: {self.message}"
 
 
 class SherlockImportIpc2581Error(Exception):
@@ -55,6 +67,23 @@ class SherlockImportIpc2581Error(Exception):
         return f"Import IPC2581 error: {self.message}"
 
 
+class SherlockCreateLifePhaseError(Exception):
+    """Raised when creating a life phase results in an error."""
+
+    def __init__(self, message=None, errorArray=None):
+        """Initialize error message."""
+        self.message = message
+        self.errorArray = errorArray
+
+    def strItr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Create life phase error: {error}" for error in self.errorArray]
+        else:
+            assert self.errorArray is None
+            return [f"Create life phase error: {self.message}"]
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
@@ -65,18 +94,6 @@ class SherlockCommonServiceError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Sherlock common service error: {self.message}"
-
-
-class SherlockImportODBError(Exception):
-    """Raised when importing ODB archive results in an error."""
-
-    def __init__(self, message):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return f"Import ODB error: {self.message}"
 
 
 class SherlockModelServiceError(Exception):

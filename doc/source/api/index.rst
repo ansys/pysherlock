@@ -10,4 +10,4 @@ This section gives an overview of the PySherlock APIs.
    launcher
    model
    project
-   
+   lifecycle

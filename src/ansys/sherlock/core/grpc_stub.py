@@ -18,4 +18,5 @@ class GrpcStub:
             return True
         except grpc.RpcError as rpc_error:
             return False
-        return False
+        except:
+            return False
