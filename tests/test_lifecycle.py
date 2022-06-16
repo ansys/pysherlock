@@ -33,19 +33,22 @@ def helper_test_create_life_phase(lifecycle):
     except SherlockCreateLifePhaseError as e:
         assert e.strItr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
 
-    try:
-        lifecycle.create_life_phase(
-            "Test", "Example", 0, "invalid", 1, "PER SEC", description="Test1"
-        )
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Invalid Duration Unit Specified"
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.create_life_phase(
+                "Test", "Example", 0, "invalid", 1, "PER SEC", description="Test1"
+            )
+            assert False
+        except SherlockCreateLifePhaseError as e:
+            assert e.strItr()[0] == "Create life phase error: Invalid Duration Unit Specified"
 
-    try:
-        lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "invalid", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Invalid Cycle Type"
+        try:
+            lifecycle.create_life_phase(
+                "Test", "Example", 5, "sec", 0, "invalid", description="Test1"
+            )
+            assert False
+        except SherlockCreateLifePhaseError as e:
+            assert e.strItr()[0] == "Create life phase error: Invalid Cycle Type"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
