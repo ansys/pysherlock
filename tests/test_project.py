@@ -1,10 +1,29 @@
 import grpc
 
-from ansys.sherlock.core.errors import SherlockDeleteProjectError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockDeleteProjectError,
+    SherlockImportIpc2581Error,
+    SherlockImportODBError,
+)
 from ansys.sherlock.core.project import Project
 
 
-def test_import_odb_archive(project):
+def helper_test_import_ipc2581_archive(project):
+    #   """Test import_ipc2581_archive API"""
+    try:
+        project.import_ipc2581_archive("Hello", True, True)
+        assert False
+    except SherlockImportIpc2581Error as e:
+        assert str(e) == "Import IPC2581 error: Invalid file path"
+
+    try:
+        project.import_ipc2581_archive("Hello.zip", True, True)
+        assert False
+    except SherlockImportIpc2581Error as e:
+        assert str(e) == "Import IPC2581 error: Invalid file path"
+
+
+def helper_test_import_odb_archive(project):
     #   """Test import_odb_archive API"""
     try:
         project.import_odb_archive("hello", True, True, True, True)
@@ -19,7 +38,7 @@ def test_import_odb_archive(project):
         assert str(e) == "Import ODB error: Invalid file path"
 
 
-def test_delete_project(project):
+def helper_test_delete_project(project):
     #   """Test delete_project API"""
     try:
         project.delete_project("")
@@ -34,8 +53,9 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     project = Project(channel)
 
-    test_delete_project(project)
-    test_import_odb_archive(project)
+    helper_test_delete_project(project)
+    helper_test_import_odb_archive(project)
+    helper_test_import_ipc2581_archive(project)
 
 
 if __name__ == "__main__":
