@@ -23,7 +23,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid Project Name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -41,7 +41,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid Phase Name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -59,7 +59,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid Event Name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -77,7 +77,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add random vibe event error: Duration Must Be Greater Than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -96,7 +96,7 @@ def helper_test_add_random_vibe_event(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeEventError as e:
-            assert e.strItr()[0] == "Add random vibe event error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Add random vibe event error: Invalid Duration Unit Specified"
 
         try:
             lifecycle.add_random_vibe_event(
@@ -114,7 +114,7 @@ def helper_test_add_random_vibe_event(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeEventError as e:
-            assert e.strItr()[0] == "Add random vibe event error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Add random vibe event error: Invalid Cycle Type"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -133,7 +133,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.strItr()[0] == "Add random vibe event error: Number of Cycles Must Be Greater Than 0"
+            e.str_itr()[0] == "Add random vibe event error: Number of Cycles Must Be Greater Than 0"
         )
 
     try:
@@ -152,7 +152,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid elevation value"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid elevation value"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -171,7 +171,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.strItr()[0]
+            e.str_itr()[0]
             == "Add random vibe event error: At least one direction coordinate must be non-zero"
         )
 
@@ -192,7 +192,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.strItr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
+            e.str_itr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
         )
 
 
@@ -203,19 +203,19 @@ def helper_test_create_life_phase(lifecycle):
         lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Invalid Project Name"
+        assert e.str_itr()[0] == "Create life phase error: Invalid Project Name"
 
     try:
         lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Create life phase error: Invalid Phase Name"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -224,7 +224,7 @@ def helper_test_create_life_phase(lifecycle):
             )
             assert False
         except SherlockCreateLifePhaseError as e:
-            assert e.strItr()[0] == "Create life phase error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Create life phase error: Invalid Duration Unit Specified"
 
         try:
             lifecycle.create_life_phase(
@@ -232,13 +232,13 @@ def helper_test_create_life_phase(lifecycle):
             )
             assert False
         except SherlockCreateLifePhaseError as e:
-            assert e.strItr()[0] == "Create life phase error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Create life phase error: Invalid Cycle Type"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
 
 
 if __name__ == "__main__":

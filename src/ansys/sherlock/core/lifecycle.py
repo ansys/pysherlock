@@ -130,7 +130,7 @@ class Lifecycle(GrpcStub):
                     message="Number of Cycles Must Be Greater Than 0"
                 )
         except SherlockCreateLifePhaseError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -165,7 +165,7 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockCreateLifePhaseError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -181,7 +181,7 @@ class Lifecycle(GrpcStub):
         orientation,
         profile_type,
         load_direction,
-        description=None,
+        description="",
     ):
         """Define and add a new random vibe life cycle event.
 
@@ -260,7 +260,7 @@ class Lifecycle(GrpcStub):
                     message="Number of Cycles Must Be Greater Than 0"
                 )
         except SherlockAddRandomVibeEventError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -276,12 +276,9 @@ class Lifecycle(GrpcStub):
             elif not valid2:
                 raise SherlockAddRandomVibeEventError(message=message2)
         except SherlockAddRandomVibeEventError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
-
-        if description is None:
-            description = ""
 
         request = SherlockLifeCycleService_pb2.AddRandomVibeEventRequest(
             project=project,
@@ -311,6 +308,6 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddRandomVibeEventError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
