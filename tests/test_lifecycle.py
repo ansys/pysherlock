@@ -1,6 +1,10 @@
 import grpc
 
-from ansys.sherlock.core.errors import SherlockAddRandomVibeEventError, SherlockCreateLifePhaseError
+from ansys.sherlock.core.errors import (
+    SherlockAddRandomVibeEventError,
+    SherlockAddRandomVibeProfileError,
+    SherlockCreateLifePhaseError,
+)
 from ansys.sherlock.core.lifecycle import Lifecycle
 
 
@@ -12,6 +16,7 @@ def test_all():
 
     helper_test_create_life_phase(lifecycle)
     helper_test_add_random_vibe_event(lifecycle)
+    helper_test_add_random_vibe_profile(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -239,6 +244,100 @@ def helper_test_create_life_phase(lifecycle):
         assert False
     except SherlockCreateLifePhaseError as e:
         assert e.str_itr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
+
+
+def helper_test_add_random_vibe_profile(lifecycle):
+    """Test the add_random_vibe_profile API"""
+
+    try:
+        lifecycle.add_random_vibe_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "",
+            "HZ",
+            "G2/Hz",
+            [(1, 2), (3, 4), (5, 6)],
+        )
+        assert False
+    except SherlockAddRandomVibeProfileError as e:
+        assert e.str_itr()[0] == "Add random vibe profile error: Invalid Profile Name"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_random_vibe_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "per sec",
+                "G2/Hz",
+                [(1, 2), (3, 4), (5, 6)],
+            )
+            assert False
+        except SherlockAddRandomVibeProfileError as e:
+            assert e.str_itr()[0] == "Add random vibe profile error: Invalid Frequency Unit"
+
+        try:
+            lifecycle.add_random_vibe_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "HZ",
+                "G2/sec",
+                [(1, 2), (3, 4), (5, 6)],
+            )
+            assert False
+        except SherlockAddRandomVibeProfileError as e:
+            assert e.str_itr()[0] == "Add random vibe profile error: Invalid Amplitude Type"
+
+    try:
+        lifecycle.add_random_vibe_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G2/Hz",
+            [(12,), (3, 4), (5, 6)],
+        )
+        assert False
+    except SherlockAddRandomVibeProfileError as e:
+        assert (
+            e.str_itr()[0] == "Add random vibe profile error: Invalid entry 0: Wrong number of args"
+        )
+
+    try:
+        lifecycle.add_random_vibe_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G2/Hz",
+            [(12, 4), (3, "x"), (5, 6)],
+        )
+        assert False
+    except SherlockAddRandomVibeProfileError as e:
+        assert e.str_itr()[0] == "Add random vibe profile error: Invalid entry 1: Invalid freq/ampl"
+
+    try:
+        lifecycle.add_random_vibe_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G2/Hz",
+            [(12, 4), (3, 4), (-5, 6)],
+        )
+        assert False
+    except SherlockAddRandomVibeProfileError as e:
+        assert (
+            e.str_itr()[0]
+            == "Add random vibe profile error: Invalid entry 2: Frequencies must be greater than 0"
+        )
 
 
 if __name__ == "__main__":
