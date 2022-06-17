@@ -360,7 +360,7 @@ class Lifecycle(GrpcStub):
         profile_name,
         freq_units,
         ampl_units,
-        random_profile_entries,
+        random_vibe_profile_entries,
     ):
         """Add a new random vibe profile to a random vibe event.
 
@@ -378,7 +378,7 @@ class Lifecycle(GrpcStub):
             Frequency Units.
         ampl_units : str, required
             Amplitude Units.
-        random_profile_entries : (double, double) list, required
+        random_vibe_profile_entries : (double, double) list, required
             List of (frequency, amplitude) entries
         Examples
         --------
@@ -441,7 +441,7 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_profile_entries_validity(random_profile_entries)
+            valid1, message1 = self._check_profile_entries_validity(random_vibe_profile_entries)
             if not valid1:
                 raise SherlockAddRandomVibeProfileError(message=message1)
         except SherlockAddRandomVibeProfileError as e:
@@ -462,7 +462,7 @@ class Lifecycle(GrpcStub):
             amplUnits=ampl_units,
         )
 
-        self._add_profile_entries(request, random_profile_entries)
+        self._add_profile_entries(request, random_vibe_profile_entries)
 
         response = self.stub.addRandomProfile(request)
 
