@@ -101,7 +101,7 @@ class Lifecycle(GrpcStub):
     def _add_profile_entries(self, request, entries):
         """Add the entries to the request."""
         for e in entries:
-            entry = request.randomProfileEntries.add()
+            entry = request.randomVibeProfileEntries.add()
             entry.freq = e[0]
             entry.ampl = e[1]
 
@@ -453,7 +453,7 @@ class Lifecycle(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        request = SherlockLifeCycleService_pb2.AddRandomProfileRequest(
+        request = SherlockLifeCycleService_pb2.AddRandomVibeProfileRequest(
             project=project,
             phaseName=phase_name,
             eventName=event_name,
@@ -464,7 +464,7 @@ class Lifecycle(GrpcStub):
 
         self._add_profile_entries(request, random_vibe_profile_entries)
 
-        response = self.stub.addRandomProfile(request)
+        response = self.stub.addRandomVibeProfile(request)
 
         return_code = response.returnCode
 
