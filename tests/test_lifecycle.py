@@ -263,33 +263,34 @@ def helper_test_add_random_vibe_profile(lifecycle):
     except SherlockAddRandomVibeProfileError as e:
         assert e.strItr()[0] == "Add random vibe profile error: Invalid Profile Name"
 
-    try:
-        lifecycle.add_random_vibe_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "per sec",
-            "G2/Hz",
-            [(1, 2), (3, 4), (5, 6)],
-        )
-        assert False
-    except SherlockAddRandomVibeProfileError as e:
-        assert e.strItr()[0] == "Add random vibe profile error: Invalid Frequency Unit"
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_random_vibe_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "per sec",
+                "G2/Hz",
+                [(1, 2), (3, 4), (5, 6)],
+            )
+            assert False
+        except SherlockAddRandomVibeProfileError as e:
+            assert e.strItr()[0] == "Add random vibe profile error: Invalid Frequency Unit"
 
-    try:
-        lifecycle.add_random_vibe_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G2/sec",
-            [(1, 2), (3, 4), (5, 6)],
-        )
-        assert False
-    except SherlockAddRandomVibeProfileError as e:
-        assert e.strItr()[0] == "Add random vibe profile error: Invalid Amplitude Type"
+        try:
+            lifecycle.add_random_vibe_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "HZ",
+                "G2/sec",
+                [(1, 2), (3, 4), (5, 6)],
+            )
+            assert False
+        except SherlockAddRandomVibeProfileError as e:
+            assert e.strItr()[0] == "Add random vibe profile error: Invalid Amplitude Type"
 
     try:
         lifecycle.add_random_vibe_profile(
