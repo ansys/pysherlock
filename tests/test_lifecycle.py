@@ -28,7 +28,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid Project Name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -46,7 +46,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid Phase Name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -64,7 +64,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid Event Name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -82,7 +82,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add random vibe event error: Duration Must Be Greater Than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -101,7 +101,7 @@ def helper_test_add_random_vibe_event(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeEventError as e:
-            assert e.strItr()[0] == "Add random vibe event error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Add random vibe event error: Invalid Duration Unit Specified"
 
         try:
             lifecycle.add_random_vibe_event(
@@ -119,7 +119,7 @@ def helper_test_add_random_vibe_event(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeEventError as e:
-            assert e.strItr()[0] == "Add random vibe event error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Add random vibe event error: Invalid Cycle Type"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -138,7 +138,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.strItr()[0] == "Add random vibe event error: Number of Cycles Must Be Greater Than 0"
+            e.str_itr()[0] == "Add random vibe event error: Number of Cycles Must Be Greater Than 0"
         )
 
     try:
@@ -157,7 +157,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.strItr()[0] == "Add random vibe event error: Invalid elevation value"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid elevation value"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -176,7 +176,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.strItr()[0]
+            e.str_itr()[0]
             == "Add random vibe event error: At least one direction coordinate must be non-zero"
         )
 
@@ -197,7 +197,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.strItr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
+            e.str_itr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
         )
 
 
@@ -208,19 +208,19 @@ def helper_test_create_life_phase(lifecycle):
         lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Invalid Project Name"
+        assert e.str_itr()[0] == "Create life phase error: Invalid Project Name"
 
     try:
         lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Create life phase error: Invalid Phase Name"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -229,7 +229,7 @@ def helper_test_create_life_phase(lifecycle):
             )
             assert False
         except SherlockCreateLifePhaseError as e:
-            assert e.strItr()[0] == "Create life phase error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Create life phase error: Invalid Duration Unit Specified"
 
         try:
             lifecycle.create_life_phase(
@@ -237,17 +237,17 @@ def helper_test_create_life_phase(lifecycle):
             )
             assert False
         except SherlockCreateLifePhaseError as e:
-            assert e.strItr()[0] == "Create life phase error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Create life phase error: Invalid Cycle Type"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.strItr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
 
 
 def helper_test_add_random_vibe_profile(lifecycle):
-    #   "Test the add_random_vibe_profile API"
+    """Test the add_random_vibe_profile API"""
 
     try:
         lifecycle.add_random_vibe_profile(
@@ -261,7 +261,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeProfileError as e:
-        assert e.strItr()[0] == "Add random vibe profile error: Invalid Profile Name"
+        assert e.str_itr()[0] == "Add random vibe profile error: Invalid Profile Name"
 
     if lifecycle._is_connection_up():
         try:
@@ -276,7 +276,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeProfileError as e:
-            assert e.strItr()[0] == "Add random vibe profile error: Invalid Frequency Unit"
+            assert e.str_itr()[0] == "Add random vibe profile error: Invalid Frequency Unit"
 
         try:
             lifecycle.add_random_vibe_profile(
@@ -290,7 +290,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeProfileError as e:
-            assert e.strItr()[0] == "Add random vibe profile error: Invalid Amplitude Type"
+            assert e.str_itr()[0] == "Add random vibe profile error: Invalid Amplitude Type"
 
     try:
         lifecycle.add_random_vibe_profile(
@@ -305,7 +305,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
         assert False
     except SherlockAddRandomVibeProfileError as e:
         assert (
-            e.strItr()[0] == "Add random vibe profile error: Invalid entry 0: Wrong number of args"
+            e.str_itr()[0] == "Add random vibe profile error: Invalid entry 0: Wrong number of args"
         )
 
     try:
@@ -320,7 +320,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeProfileError as e:
-        assert e.strItr()[0] == "Add random vibe profile error: Invalid entry 1: Invalid freq/ampl"
+        assert e.str_itr()[0] == "Add random vibe profile error: Invalid entry 1: Invalid freq/ampl"
 
     try:
         lifecycle.add_random_vibe_profile(
@@ -335,25 +335,9 @@ def helper_test_add_random_vibe_profile(lifecycle):
         assert False
     except SherlockAddRandomVibeProfileError as e:
         assert (
-            e.strItr()[0]
+            e.str_itr()[0]
             == "Add random vibe profile error: Invalid entry 2: Frequencies must be greater than 0"
         )
-
-    # Below are the grpc-reliants testcases
-
-    # try:
-    #     lifecycle.add_random_vibe_profile(
-    #         "Test",
-    #         "Example",
-    #         "Event1",
-    #         "Profile1",
-    #         "HZ",
-    #         "G2/Hz",
-    #         [(1, 2), (3, 4), (5, 6)],
-    #     )
-    #     assert True
-    # except SherlockAddRandomVibeProfileError as e:
-    #     assert False
 
 
 if __name__ == "__main__":

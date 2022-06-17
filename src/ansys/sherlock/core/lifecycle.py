@@ -170,7 +170,7 @@ class Lifecycle(GrpcStub):
                     message="Number of Cycles Must Be Greater Than 0"
                 )
         except SherlockCreateLifePhaseError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -205,7 +205,7 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockCreateLifePhaseError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -221,7 +221,7 @@ class Lifecycle(GrpcStub):
         orientation,
         profile_type,
         load_direction,
-        description=None,
+        description="",
     ):
         """Define and add a new random vibe life cycle event.
 
@@ -300,7 +300,7 @@ class Lifecycle(GrpcStub):
                     message="Number of Cycles Must Be Greater Than 0"
                 )
         except SherlockAddRandomVibeEventError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -316,12 +316,9 @@ class Lifecycle(GrpcStub):
             elif not valid2:
                 raise SherlockAddRandomVibeEventError(message=message2)
         except SherlockAddRandomVibeEventError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
-
-        if description is None:
-            description = ""
 
         request = SherlockLifeCycleService_pb2.AddRandomVibeEventRequest(
             project=project,
@@ -351,7 +348,7 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddRandomVibeEventError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -387,7 +384,35 @@ class Lifecycle(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test"
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
         >>> sherlock.lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1"
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "Uniaxial"
+            "2,4,5",
+        )
+        >>> sherlock.lifecycle.add_random_vibe_profile(
             "Test",
             "Example",
             "Event1"
@@ -411,7 +436,7 @@ class Lifecycle(GrpcStub):
             elif (self.AMPL_UNIT_LIST is not None) and (ampl_units not in self.AMPL_UNIT_LIST):
                 raise SherlockAddRandomVibeProfileError(message="Invalid Amplitude Type")
         except SherlockAddRandomVibeProfileError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -420,7 +445,7 @@ class Lifecycle(GrpcStub):
             if not valid1:
                 raise SherlockAddRandomVibeProfileError(message=message1)
         except SherlockAddRandomVibeProfileError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -453,6 +478,6 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddRandomVibeProfileError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e

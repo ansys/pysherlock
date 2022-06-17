@@ -70,51 +70,51 @@ class SherlockImportIpc2581Error(Exception):
 class SherlockCreateLifePhaseError(Exception):
     """Raised when creating a life phase results in an error."""
 
-    def __init__(self, message=None, errorArray=None):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
-        self.errorArray = errorArray
+        self.error_array = error_array
 
-    def strItr(self):
+    def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Create life phase error: {error}" for error in self.errorArray]
+            return [f"Create life phase error: {error}" for error in self.error_array]
         else:
-            assert self.errorArray is None
+            assert self.error_array is None
             return [f"Create life phase error: {self.message}"]
 
 
 class SherlockAddRandomVibeEventError(Exception):
     """Raised when adding a random vibe event results in an error."""
 
-    def __init__(self, message=None, errorArray=None):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
-        self.errorArray = errorArray
+        self.error_array = error_array
 
-    def strItr(self):
+    def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Add random vibe event error: {error}" for error in self.errorArray]
+            return [f"Add random vibe event error: {error}" for error in self.error_array]
         else:
-            assert self.errorArray is None
+            assert self.error_array is None
             return [f"Add random vibe event error: {self.message}"]
 
 
 class SherlockAddRandomVibeProfileError(Exception):
     """Raised when adding a random vibe profile results in an error."""
 
-    def __init__(self, message=None, errorArray=None):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
-        self.errorArray = errorArray
+        self.error_array = error_array
 
-    def strItr(self):
+    def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Add random vibe profile error: {error}" for error in self.errorArray]
+            return [f"Add random vibe profile error: {error}" for error in self.error_array]
         else:
-            assert self.errorArray is None
+            assert self.error_array is None
             return [f"Add random vibe profile error: {self.message}"]
 
 
