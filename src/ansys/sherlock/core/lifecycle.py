@@ -156,7 +156,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test"
+            project="Test",
         )
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
@@ -251,7 +251,7 @@ class Lifecycle(GrpcStub):
         duration_units : str, required
             Event duration length units.
         num_of_cycles : double, required
-            Number of cycles defined for new life phase.
+            Number of cycles defined for this random vibe event.
         cycle_type : str, required
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         orientation : str, required
@@ -272,7 +272,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test"
+            project="Test",
         )
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
@@ -285,13 +285,13 @@ class Lifecycle(GrpcStub):
         >>> sherlock.lifecycle.add_random_vibe_event(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             1.5,
             "sec",
             4.0,
             "PER MIN",
             "45,45",
-            "Uniaxial"
+            "Uniaxial",
             "2,4,5",
         )
         """
@@ -403,7 +403,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test"
+            project="Test",
         )
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
@@ -416,19 +416,19 @@ class Lifecycle(GrpcStub):
         >>> sherlock.lifecycle.add_random_vibe_event(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             1.5,
             "sec",
             4.0,
             "PER MIN",
             "45,45",
-            "Uniaxial"
+            "Uniaxial",
             "2,4,5",
         )
         >>> sherlock.lifecycle.add_random_vibe_profile(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             "Profile1",
             "HZ",
             "G2/Hz",
@@ -516,7 +516,7 @@ class Lifecycle(GrpcStub):
         event_name : str, required
             Name of the thermal event.
         num_of_cycles : double, required
-            Number of cycles defined for new life phase.
+            Number of cycles defined for this thermal event.
         cycle_type : str, required
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         cycle_state : str, required
@@ -533,7 +533,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test"
+            project="Test",
         )
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
@@ -546,7 +546,7 @@ class Lifecycle(GrpcStub):
         >>> sherlock.lifecycle.add_thermal_event(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             4.0,
             "PER YEAR",
             "STORAGE,
