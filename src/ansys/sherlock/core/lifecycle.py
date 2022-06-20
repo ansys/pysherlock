@@ -3,7 +3,12 @@ import SherlockLifeCycleService_pb2
 import SherlockLifeCycleService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockAddHarmonicEventError, SherlockCreateLifePhaseError
+from ansys.sherlock.core.errors import (
+    SherlockAddHarmonicEventError,
+    SherlockAddRandomVibeEventError,
+    SherlockAddRandomVibeProfileError,
+    SherlockCreateLifePhaseError,
+)
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -16,6 +21,8 @@ class Lifecycle(GrpcStub):
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.TIME_UNIT_LIST = None
         self.CYCLE_TYPE_LIST = None
+        self.FREQ_UNIT_LIST = None
+        self.AMPL_UNIT_LIST = None
 
         if self._is_connection_up():
             duration_unit_request = SherlockLifeCycleService_pb2.ListDurationUnitsRequest()
@@ -27,6 +34,16 @@ class Lifecycle(GrpcStub):
             cycle_type_response = self.stub.listLifeCycleTypes(cycle_type_request)
             if cycle_type_response.returnCode.value == 0:
                 self.CYCLE_TYPE_LIST = cycle_type_response.types
+
+            freq_unit_request = SherlockLifeCycleService_pb2.ListFreqUnitsRequest()
+            freq_type_response = self.stub.listFreqUnits(freq_unit_request)
+            if freq_type_response.returnCode.value == 0:
+                self.FREQ_UNIT_LIST = freq_type_response.freqUnits
+
+            ampl_unit_request = SherlockLifeCycleService_pb2.ListAmplUnitsRequest()
+            ampl_type_response = self.stub.listAmplUnits(ampl_unit_request)
+            if ampl_type_response.returnCode.value == 0:
+                self.AMPL_UNIT_LIST = ampl_type_response.amplUnits
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
@@ -65,6 +82,30 @@ class Lifecycle(GrpcStub):
         except:
             return False, "Invalid elevation value"
 
+    def _check_profile_entries_validity(self, input):
+        """Check input array if all elements are valid."""
+        if not isinstance(input, list):
+            return False, "Invalid entries argument"
+
+        try:
+            for i, entry in enumerate(input):
+                if len(entry) != 2:
+                    return False, f"Invalid entry {i}: Wrong number of args"
+                elif entry[0] <= 0:
+                    return False, f"Invalid entry {i}: Frequencies must be greater than 0"
+                elif entry[1] <= 0:
+                    return False, f"Invalid entry {i}: Amplitudes must be greater than 0"
+            return True, ""
+        except TypeError:
+            return False, f"Invalid entry {i}: Invalid freq/ampl"
+
+    def _add_profile_entries(self, request, entries):
+        """Add the entries to the request."""
+        for e in entries:
+            entry = request.randomVibeProfileEntries.add()
+            entry.freq = e[0]
+            entry.ampl = e[1]
+
     def create_life_phase(
         self,
         project,
@@ -93,7 +134,6 @@ class Lifecycle(GrpcStub):
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         description : str, optional
             Description of new life phase.
-
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -112,7 +152,7 @@ class Lifecycle(GrpcStub):
             1.5,
             "sec",
             4.0,
-            "PER SEC",
+            "COUNT",
         )
         """
         try:
@@ -131,7 +171,7 @@ class Lifecycle(GrpcStub):
                     message="Number of Cycles Must Be Greater Than 0"
                 )
         except SherlockCreateLifePhaseError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -166,7 +206,280 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockCreateLifePhaseError as e:
-            for error in e.strItr():
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_random_vibe_event(
+        self,
+        project,
+        phase_name,
+        event_name,
+        duration,
+        duration_units,
+        num_of_cycles,
+        cycle_type,
+        orientation,
+        profile_type,
+        load_direction,
+        description="",
+    ):
+        """Define and add a new random vibe life cycle event.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        phase_name : str, required
+            The name of the life cycle phase to add this event to.
+        event_name : str, required
+            Name of the random vibe event.
+        duration : double, required
+            Event duration length.
+        duration_units : str, required
+            Event duration length units.
+        num_of_cycles : double, required
+            Number of cycles defined for this random vibe event.
+        cycle_type : str, required
+            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+        orientation : str, required
+            PCB orientation in the format of azimuth, elevation. Example: 30,15
+        profile_type : str, required
+            Random load profile type. Example valid value is "Uniaxial".
+        load_direction : str, required
+            Load direction in the format of x,y,z. Example: 0,0,1
+        description : str, optional
+            Description of the random vibe event.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test"
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockAddRandomVibeEventError(message="Invalid Project Name")
+            elif phase_name == "":
+                raise SherlockAddRandomVibeEventError(message="Invalid Phase Name")
+            elif event_name == "":
+                raise SherlockAddRandomVibeEventError(message="Invalid Event Name")
+            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+                raise SherlockAddRandomVibeEventError(message="Invalid Duration Unit Specified")
+            elif duration <= 0.0:
+                raise SherlockAddRandomVibeEventError(message="Duration Must Be Greater Than 0")
+            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+                raise SherlockAddRandomVibeEventError(message="Invalid Cycle Type")
+            elif num_of_cycles <= 0.0:
+                raise SherlockAddRandomVibeEventError(
+                    message="Number of Cycles Must Be Greater Than 0"
+                )
+        except SherlockAddRandomVibeEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        try:
+            valid1, message1 = self._check_load_direction_validity(load_direction)
+            valid2, message2 = self._check_orientation_validity(orientation)
+            if not valid1:
+                raise SherlockAddRandomVibeEventError(message=message1)
+            elif profile_type != "Uniaxial":
+                raise SherlockAddRandomVibeEventError(
+                    message="Valid profile type for a random event can only be Uniaxial"
+                )
+            elif not valid2:
+                raise SherlockAddRandomVibeEventError(message=message2)
+        except SherlockAddRandomVibeEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        request = SherlockLifeCycleService_pb2.AddRandomVibeEventRequest(
+            project=project,
+            phaseName=phase_name,
+            eventName=event_name,
+            description=description,
+            duration=duration,
+            durationUnits=duration_units,
+            numOfCycles=num_of_cycles,
+            cycleType=cycle_type,
+            orientation=orientation,
+            profileType=profile_type,
+            loadDirection=load_direction,
+        )
+
+        response = self.stub.addRandomVibeEvent(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddRandomVibeEventError(errorArray=response.errors)
+                else:
+                    raise SherlockAddRandomVibeEventError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddRandomVibeEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_random_vibe_profile(
+        self,
+        project,
+        phase_name,
+        event_name,
+        profile_name,
+        freq_units,
+        ampl_units,
+        random_vibe_profile_entries,
+    ):
+        """Add a new random vibe profile to a random vibe event.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        phase_name : str, required
+            The name of new life phase.
+        event_name : str, required
+            Name of the random vibe event.
+        profile_name : str, required
+            Name of the random vibe profile.
+        freq_units : str, required
+            Frequency Units.
+        ampl_units : str, required
+            Amplitude Units.
+        random_vibe_profile_entries : (double, double) list, required
+            List of (frequency, amplitude) entries
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        >>> sherlock.lifecycle.add_random_vibe_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G2/Hz",
+            [(4,8), (5, 50)],
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockAddRandomVibeProfileError(message="Invalid Project Name")
+            elif phase_name == "":
+                raise SherlockAddRandomVibeProfileError(message="Invalid Phase Name")
+            elif event_name == "":
+                raise SherlockAddRandomVibeProfileError(message="Invalid Event Name")
+            elif profile_name == "":
+                raise SherlockAddRandomVibeProfileError(message="Invalid Profile Name")
+            elif (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
+                raise SherlockAddRandomVibeProfileError(message="Invalid Frequency Unit")
+            elif (self.AMPL_UNIT_LIST is not None) and (ampl_units not in self.AMPL_UNIT_LIST):
+                raise SherlockAddRandomVibeProfileError(message="Invalid Amplitude Type")
+        except SherlockAddRandomVibeProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        try:
+            valid1, message1 = self._check_profile_entries_validity(random_vibe_profile_entries)
+            if not valid1:
+                raise SherlockAddRandomVibeProfileError(message=message1)
+        except SherlockAddRandomVibeProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockLifeCycleService_pb2.AddRandomVibeProfileRequest(
+            project=project,
+            phaseName=phase_name,
+            eventName=event_name,
+            profileName=profile_name,
+            freqUnits=freq_units,
+            amplUnits=ampl_units,
+        )
+
+        self._add_profile_entries(request, random_vibe_profile_entries)
+
+        response = self.stub.addRandomVibeProfile(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddRandomVibeProfileError(errorArray=response.errors)
+                else:
+                    raise SherlockAddRandomVibeProfileError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddRandomVibeProfileError as e:
+            for error in e.str_itr():
                 LOG.error(error)
             raise e
 
@@ -200,7 +513,7 @@ class Lifecycle(GrpcStub):
         duration_units : str, required
             Event duration length units.
         num_of_cycles : double, required
-            Number of cycles defined for new life phase.
+            Number of cycles defined for this harmonic event.
         cycle_type : str, required
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         sweep_rate : double, required
@@ -215,7 +528,6 @@ class Lifecycle(GrpcStub):
             Description of the harmonic vibe event.
         Examples
         --------
-        TODO: Update examples
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -230,18 +542,19 @@ class Lifecycle(GrpcStub):
             "Test",
             "Example",
             1.5,
-            "sec",
+            "year",
             4.0,
             "COUNT",
         )
-        >>> sherlock.lifecycle.add_random_vibe_event(
+        >>> sherlock.lifecycle.add_harmonic_event(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             1.5,
             "sec",
             4.0,
             "PER MIN",
+            5,
             "45,45",
             "Uniaxial"
             "2,4,5",

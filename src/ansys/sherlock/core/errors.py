@@ -84,6 +84,40 @@ class SherlockCreateLifePhaseError(Exception):
             return [f"Create life phase error: {self.message}"]
 
 
+class SherlockAddRandomVibeEventError(Exception):
+    """Raised when adding a random vibe event results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add random vibe event error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add random vibe event error: {self.message}"]
+
+
+class SherlockAddRandomVibeProfileError(Exception):
+    """Raised when adding a random vibe profile results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add random vibe profile error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add random vibe profile error: {self.message}"]
+
+
 class SherlockAddHarmonicEventError(Exception):
     """Raised when adding a harmonic event results in an error."""
 
