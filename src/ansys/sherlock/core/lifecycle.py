@@ -26,32 +26,49 @@ class Lifecycle(GrpcStub):
         self.AMPL_UNIT_LIST = None
         self.CYCLE_STATE_LIST = None
 
+    def _init_time_units(self):
+        """Initialize TIME_UNIT_LIST."""
         if self._is_connection_up():
             duration_unit_request = SherlockLifeCycleService_pb2.ListDurationUnitsRequest()
             duration_unit_response = self.stub.listDurationUnits(duration_unit_request)
             if duration_unit_response.returnCode.value == 0:
                 self.TIME_UNIT_LIST = duration_unit_response.durationUnits
 
+    def _init_cycle_types(self):
+        """Initialize CYCLE_TYPE_LIST."""
+        if self._is_connection_up():
             cycle_type_request = SherlockLifeCycleService_pb2.ListLCTypesRequest()
             cycle_type_response = self.stub.listLifeCycleTypes(cycle_type_request)
             if cycle_type_response.returnCode.value == 0:
                 self.CYCLE_TYPE_LIST = cycle_type_response.types
 
+    def _init_rv_profiles(self):
+        """Initialize RV_PROFILE_LIST."""
+        if self._is_connection_up():
             rv_profile_request = SherlockLifeCycleService_pb2.ListRandomProfileTypesRequest()
             rv_profile_response = self.stub.listRandomProfileTypes(rv_profile_request)
             if rv_profile_response.returnCode.value == 0:
                 self.RV_PROFILE_LIST = rv_profile_response.types
 
+    def _init_freq_units(self):
+        """Initialize FREQ_UNIT_LIST."""
+        if self._is_connection_up():
             freq_unit_request = SherlockLifeCycleService_pb2.ListFreqUnitsRequest()
             freq_type_response = self.stub.listFreqUnits(freq_unit_request)
             if freq_type_response.returnCode.value == 0:
                 self.FREQ_UNIT_LIST = freq_type_response.freqUnits
 
+    def _init_ampl_units(self):
+        """Initialize AMPL_UNIT_LIST."""
+        if self._is_connection_up():
             ampl_unit_request = SherlockLifeCycleService_pb2.ListAmplUnitsRequest()
             ampl_type_response = self.stub.listAmplUnits(ampl_unit_request)
             if ampl_type_response.returnCode.value == 0:
                 self.AMPL_UNIT_LIST = ampl_type_response.amplUnits
 
+    def _init_cycle_states(self):
+        """Initialize CYCLE_STATES_LIST."""
+        if self._is_connection_up():
             cycle_state_request = SherlockLifeCycleService_pb2.ListLCStatesRequest()
             cycle_state_response = self.stub.listLifeCycleStates(cycle_state_request)
             if cycle_state_response.returnCode.value == 0:
@@ -167,6 +184,11 @@ class Lifecycle(GrpcStub):
             "COUNT",
         )
         """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+
         try:
             if project == "":
                 raise SherlockCreateLifePhaseError(message="Invalid Project Name")
@@ -295,6 +317,13 @@ class Lifecycle(GrpcStub):
             "2,4,5",
         )
         """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+        if self.RV_PROFILE_LIST is None:
+            self._init_rv_profiles()
+
         try:
             if project == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid Project Name")
@@ -435,6 +464,11 @@ class Lifecycle(GrpcStub):
             [(4,8), (5, 50)],
         )
         """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.AMPL_UNIT_LIST is None:
+            self._init_ampl_units()
+
         try:
             if project == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid Project Name")
@@ -552,6 +586,11 @@ class Lifecycle(GrpcStub):
             "STORAGE,
         )
         """
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+        if self.CYCLE_STATE_LIST is None:
+            self._init_cycle_states()
+
         try:
             if project == "":
                 raise SherlockAddThermalEventError(message="Invalid Project Name")
