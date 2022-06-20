@@ -208,11 +208,11 @@ class Lifecycle(GrpcStub):
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         profile_type : str, required
-            Random load profile type. Example valid value is "Uniaxial".
+            Harmonic load profile types. Example valid values are "Uniaxial" and "Triaxial".
         load_direction: str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
-            Description of the random vibe event.
+            Description of the harmonic vibe event.
         Examples
         --------
         TODO: Update examples
