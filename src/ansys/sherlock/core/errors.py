@@ -140,3 +140,20 @@ class SherlockModelServiceError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Sherlock model service error: {self.message}"
+
+
+class SherlockAddThermalEventError(Exception):
+    """Raised when adding a thermal event results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add thermal event error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add thermal event error: {self.message}"]
