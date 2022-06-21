@@ -19,8 +19,8 @@ def test_all():
     helper_test_create_life_phase(lifecycle)
     helper_test_add_random_vibe_event(lifecycle)
     helper_test_add_random_vibe_profile(lifecycle)
-    helper_test_add_harmonic_event(lifecycle)
     helper_test_add_thermal_event(lifecycle)
+    helper_test_add_harmonic_event(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
