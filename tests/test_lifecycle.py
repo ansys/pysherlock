@@ -4,6 +4,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
+    SherlockAddThermalEventError,
     SherlockCreateLifePhaseError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
@@ -19,6 +20,7 @@ def test_all():
     helper_test_add_random_vibe_event(lifecycle)
     helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_harmonic_event(lifecycle)
+    helper_test_add_thermal_event(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -340,6 +342,89 @@ def helper_test_add_random_vibe_profile(lifecycle):
             e.str_itr()[0]
             == "Add random vibe profile error: Invalid entry 2: Frequencies must be greater than 0"
         )
+
+
+def helper_test_add_thermal_event(lifecycle):
+    """Test add_thermal_event API"""
+
+    try:
+        lifecycle.add_thermal_event(
+            "",
+            "",
+            "",
+            1,
+            "PER SEC",
+            "STORAGE",
+        )
+        assert False
+    except SherlockAddThermalEventError as e:
+        assert e.str_itr()[0] == "Add thermal event error: Invalid Project Name"
+
+    try:
+        lifecycle.add_thermal_event(
+            "Test",
+            "",
+            "",
+            1,
+            "PER SEC",
+            "STORAGE",
+        )
+        assert False
+    except SherlockAddThermalEventError as e:
+        assert e.str_itr()[0] == "Add thermal event error: Invalid Phase Name"
+
+    try:
+        lifecycle.add_thermal_event(
+            "Test",
+            "Example",
+            "",
+            1,
+            "PER SEC",
+            "STORAGE",
+        )
+        assert False
+    except SherlockAddThermalEventError as e:
+        assert e.str_itr()[0] == "Add thermal event error: Invalid Event Name"
+
+    try:
+        lifecycle.add_thermal_event(
+            "Test",
+            "Example",
+            "Event1",
+            -1,
+            "PER SEC",
+            "STORAGE",
+        )
+        assert False
+    except SherlockAddThermalEventError as e:
+        assert e.str_itr()[0] == "Add thermal event error: Number of Cycles Must Be Greater Than 0"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_thermal_event(
+                "Test",
+                "Example",
+                "Event1",
+                -1,
+                "PER 0.5MIN",
+                "STORAGE",
+            )
+            assert False
+        except SherlockAddThermalEventError as e:
+            assert e.str_itr()[0] == "Add thermal event error: Invalid Cycle Type"
+
+        try:
+            lifecycle.add_thermal_event(
+                "Test",
+                "Example",
+                "Event1",
+                1,
+                "PER SEC",
+                "Invalid",
+            )
+            assert False
+        except SherlockAddThermalEventError as e:
+            assert e.str_itr()[0] == "Add thermal event error: Invalid Cycle State"
 
 
 def helper_test_add_harmonic_event(lifecycle):
