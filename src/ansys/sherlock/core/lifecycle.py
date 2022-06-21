@@ -780,7 +780,7 @@ class Lifecycle(GrpcStub):
         try:
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockAddHarmonicEventError(errorArray=response.errors)
+                    raise SherlockAddHarmonicEventError(error_array=response.errors)
                 else:
                     raise SherlockAddHarmonicEventError(message=return_code.message)
             else:
