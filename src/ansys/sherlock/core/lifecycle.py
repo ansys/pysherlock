@@ -7,6 +7,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
+    SherlockAddThermalEventError,
     SherlockCreateLifePhaseError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
@@ -21,29 +22,58 @@ class Lifecycle(GrpcStub):
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.TIME_UNIT_LIST = None
         self.CYCLE_TYPE_LIST = None
+        self.RV_PROFILE_LIST = None
         self.FREQ_UNIT_LIST = None
         self.AMPL_UNIT_LIST = None
+        self.CYCLE_STATE_LIST = None
 
+    def _init_time_units(self):
+        """Initialize TIME_UNIT_LIST."""
         if self._is_connection_up():
             duration_unit_request = SherlockLifeCycleService_pb2.ListDurationUnitsRequest()
             duration_unit_response = self.stub.listDurationUnits(duration_unit_request)
             if duration_unit_response.returnCode.value == 0:
                 self.TIME_UNIT_LIST = duration_unit_response.durationUnits
 
+    def _init_cycle_types(self):
+        """Initialize CYCLE_TYPE_LIST."""
+        if self._is_connection_up():
             cycle_type_request = SherlockLifeCycleService_pb2.ListLCTypesRequest()
             cycle_type_response = self.stub.listLifeCycleTypes(cycle_type_request)
             if cycle_type_response.returnCode.value == 0:
                 self.CYCLE_TYPE_LIST = cycle_type_response.types
 
+    def _init_rv_profiles(self):
+        """Initialize RV_PROFILE_LIST."""
+        if self._is_connection_up():
+            rv_profile_request = SherlockLifeCycleService_pb2.ListRandomProfileTypesRequest()
+            rv_profile_response = self.stub.listRandomProfileTypes(rv_profile_request)
+            if rv_profile_response.returnCode.value == 0:
+                self.RV_PROFILE_LIST = rv_profile_response.types
+
+    def _init_freq_units(self):
+        """Initialize FREQ_UNIT_LIST."""
+        if self._is_connection_up():
             freq_unit_request = SherlockLifeCycleService_pb2.ListFreqUnitsRequest()
             freq_type_response = self.stub.listFreqUnits(freq_unit_request)
             if freq_type_response.returnCode.value == 0:
                 self.FREQ_UNIT_LIST = freq_type_response.freqUnits
 
+    def _init_ampl_units(self):
+        """Initialize AMPL_UNIT_LIST."""
+        if self._is_connection_up():
             ampl_unit_request = SherlockLifeCycleService_pb2.ListAmplUnitsRequest()
             ampl_type_response = self.stub.listAmplUnits(ampl_unit_request)
             if ampl_type_response.returnCode.value == 0:
                 self.AMPL_UNIT_LIST = ampl_type_response.amplUnits
+
+    def _init_cycle_states(self):
+        """Initialize CYCLE_STATES_LIST."""
+        if self._is_connection_up():
+            cycle_state_request = SherlockLifeCycleService_pb2.ListLCStatesRequest()
+            cycle_state_response = self.stub.listLifeCycleStates(cycle_state_request)
+            if cycle_state_response.returnCode.value == 0:
+                self.CYCLE_STATE_LIST = cycle_state_response.states
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
@@ -144,7 +174,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test"
+            project="Test",
         )
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
@@ -155,6 +185,11 @@ class Lifecycle(GrpcStub):
             "COUNT",
         )
         """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+
         try:
             if project == "":
                 raise SherlockCreateLifePhaseError(message="Invalid Project Name")
@@ -199,7 +234,7 @@ class Lifecycle(GrpcStub):
         try:
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockCreateLifePhaseError(errorArray=response.errors)
+                    raise SherlockCreateLifePhaseError(error_array=response.errors)
                 else:
                     raise SherlockCreateLifePhaseError(message=return_code.message)
             else:
@@ -260,7 +295,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test"
+            project="Test",
         )
         >>> sherlock.lifecycle.create_life_phase(
             "Test",
@@ -283,6 +318,13 @@ class Lifecycle(GrpcStub):
             "2,4,5",
         )
         """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+        if self.RV_PROFILE_LIST is None:
+            self._init_rv_profiles()
+
         try:
             if project == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid Project Name")
@@ -310,7 +352,7 @@ class Lifecycle(GrpcStub):
             valid2, message2 = self._check_orientation_validity(orientation)
             if not valid1:
                 raise SherlockAddRandomVibeEventError(message=message1)
-            elif profile_type != "Uniaxial":
+            elif (self.RV_PROFILE_LIST is not None) and (profile_type not in self.RV_PROFILE_LIST):
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a random event can only be Uniaxial"
                 )
@@ -342,7 +384,7 @@ class Lifecycle(GrpcStub):
         try:
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockAddRandomVibeEventError(errorArray=response.errors)
+                    raise SherlockAddRandomVibeEventError(error_array=response.errors)
                 else:
                     raise SherlockAddRandomVibeEventError(message=return_code.message)
             else:
@@ -423,6 +465,11 @@ class Lifecycle(GrpcStub):
             [(4,8), (5, 50)],
         )
         """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.AMPL_UNIT_LIST is None:
+            self._init_ampl_units()
+
         try:
             if project == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid Project Name")
@@ -472,13 +519,123 @@ class Lifecycle(GrpcStub):
         try:
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockAddRandomVibeProfileError(errorArray=response.errors)
+                    raise SherlockAddRandomVibeProfileError(error_array=response.errors)
                 else:
                     raise SherlockAddRandomVibeProfileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
         except SherlockAddRandomVibeProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_thermal_event(
+        self,
+        project,
+        phase_name,
+        event_name,
+        num_of_cycles,
+        cycle_type,
+        cycle_state,
+        description="",
+    ):
+        """Add a new thermal event to a life cycle.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        phase_name : str, required
+            The name of new life phase.
+        event_name : str, required
+            Name of the thermal event.
+        num_of_cycles : double, required
+            Number of cycles defined for this thermal event.
+        cycle_type : str, required
+            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+        cycle_state : str, required
+            The life cycle state. For example: "OPERATING", "STORAGE".
+        description : str, optional
+            Description of new thermal event.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "year",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_thermal_event(
+            "Test",
+            "Example",
+            "Event1",
+            4.0,
+            "PER YEAR",
+            "STORAGE,
+        )
+        """
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+        if self.CYCLE_STATE_LIST is None:
+            self._init_cycle_states()
+
+        try:
+            if project == "":
+                raise SherlockAddThermalEventError(message="Invalid Project Name")
+            elif phase_name == "":
+                raise SherlockAddThermalEventError(message="Invalid Phase Name")
+            elif event_name == "":
+                raise SherlockAddThermalEventError(message="Invalid Event Name")
+            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+                raise SherlockAddThermalEventError(message="Invalid Cycle Type")
+            elif num_of_cycles <= 0.0:
+                raise SherlockAddThermalEventError(
+                    message="Number of Cycles Must Be Greater Than 0"
+                )
+            elif (self.CYCLE_STATE_LIST is not None) and (cycle_state not in self.CYCLE_STATE_LIST):
+                raise SherlockAddThermalEventError(message="Invalid Cycle State")
+        except SherlockAddThermalEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        request = SherlockLifeCycleService_pb2.AddThermalEventRequest(
+            project=project,
+            phaseName=phase_name,
+            eventName=event_name,
+            description=description,
+            numOfCycles=num_of_cycles,
+            cycleType=cycle_type,
+            cycleState=cycle_state,
+        )
+
+        response = self.stub.addThermalEvent(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddThermalEventError(error_array=response.errors)
+                else:
+                    raise SherlockAddThermalEventError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddThermalEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
@@ -560,6 +717,11 @@ class Lifecycle(GrpcStub):
             "2,4,5",
         )
         """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+
         try:
             if project == "":
                 raise SherlockAddHarmonicEventError(message="Invalid Project Name")
