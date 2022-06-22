@@ -125,40 +125,52 @@ class Lifecycle(GrpcStub):
     def _check_random_vibe_profile_entries_validity(self, input):
         """Check input array if all elements are valid for random vibe entries."""
         if not isinstance(input, list):
-            return False, "Invalid entries argument"
+            raise SherlockAddRandomVibeProfileError(message="Invalid entries argument")
 
         try:
             for i, entry in enumerate(input):
                 if len(entry) != 2:
-                    return False, f"Invalid entry {i}: Wrong number of args"
+                    raise SherlockAddRandomVibeProfileError(
+                        message=f"Invalid entry {i}: Wrong number of args"
+                    )
                 elif entry[0] <= 0:
-                    return False, f"Invalid entry {i}: Frequencies must be greater than 0"
+                    raise SherlockAddRandomVibeProfileError(
+                        message=f"Invalid entry {i}: Frequencies must be greater than 0"
+                    )
                 elif entry[1] <= 0:
-                    return False, f"Invalid entry {i}: Amplitudes must be greater than 0"
-            return True, ""
+                    raise SherlockAddRandomVibeProfileError(
+                        message=f"Invalid entry {i}: Amplitudes must be greater than 0"
+                    )
         except TypeError:
-            return False, f"Invalid entry {i}: Invalid freq/ampl"
+            raise SherlockAddRandomVibeProfileError(message=f"Invalid entry {i}: Invalid freq/ampl")
 
     def _check_thermal_profile_entries_validity(self, input):
         """Check input array if all elements are valid for thermal entries."""
         if not isinstance(input, list):
-            return False, "Invalid entries argument"
+            raise SherlockAddThermalProfileError(message="Invalid entries argument")
 
         try:
             for i, entry in enumerate(input):
                 if len(entry) != 4:
-                    return False, f"Invalid entry {i}: Wrong number of args"
+                    raise SherlockAddThermalProfileError(
+                        message=f"Invalid entry {i}: Wrong number of args"
+                    )
                 elif not isinstance(entry[0], str):
-                    return False, f"Invalid entry {i}: Invalid step name"
+                    raise SherlockAddThermalProfileError(
+                        message=f"Invalid entry {i}: Invalid step name"
+                    )
                 elif entry[1] not in self.STEP_TYPE_LIST:
-                    return False, f"Invalid entry {i}: Invalid step type"
+                    raise SherlockAddThermalProfileError(
+                        message=f"Invalid entry {i}: Invalid step type"
+                    )
                 elif entry[2] <= 0:
-                    return False, f"Invalid entry {i}: Time must be greater than 0"
+                    raise SherlockAddThermalProfileError(
+                        message=f"Invalid entry {i}: Time must be greater than 0"
+                    )
                 elif not isinstance(entry[3], (int, float)):
-                    return False, f"Invalid entry {i}: Invalid temp"
-            return True, ""
+                    raise SherlockAddThermalProfileError(message=f"Invalid entry {i}: Invalid temp")
         except TypeError:
-            return False, f"Invalid entry {i}: Invalid time"
+            raise SherlockAddThermalProfileError(message=f"Invalid entry {i}: Invalid time")
 
     def _add_random_vibe_profile_entries(self, request, entries):
         """Add the random vibe entries to the request."""
@@ -529,11 +541,7 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_random_vibe_profile_entries_validity(
-                random_vibe_profile_entries
-            )
-            if not valid1:
-                raise SherlockAddRandomVibeProfileError(message=message1)
+            self._check_random_vibe_profile_entries_validity(random_vibe_profile_entries)
         except SherlockAddRandomVibeProfileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -776,9 +784,7 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_thermal_profile_entries_validity(thermal_profile_entries)
-            if not valid1:
-                raise SherlockAddThermalProfileError(message=message1)
+            self._check_thermal_profile_entries_validity(thermal_profile_entries)
         except SherlockAddThermalProfileError as e:
             for error in e.str_itr():
                 LOG.error(error)
