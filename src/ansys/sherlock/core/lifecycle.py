@@ -141,26 +141,39 @@ class Lifecycle(GrpcStub):
     def _check_harmonic_profile_entries_validity(self, input):
         """Check input array if all elements are valid for harmonic entries."""
         if not isinstance(input, list):
-            return False, "Invalid entries argument"
+            raise SherlockAddHarmonicProfileError(message="Invalid entries argument")
 
         try:
             for i, entry in enumerate(input):
                 if len(entry) != 2:
-                    return False, f"Invalid entry {i}: Wrong number of args"
+                    raise SherlockAddHarmonicProfileError(
+                        message=f"Invalid entry {i}: Wrong number of args"
+                    )
                 elif entry[0] <= 0:
-                    return False, f"Invalid entry {i}: Frequencies must be greater than 0"
+                    raise SherlockAddHarmonicProfileError(
+                        message=f"Invalid entry {i}: Frequencies must be greater than 0"
+                    )
                 elif entry[1] <= 0:
-                    return False, f"Invalid entry {i}: Load must be greater than 0"
+                    raise SherlockAddHarmonicProfileError(
+                        message=f"Invalid entry {i}: Load must be greater than 0"
+                    )
             return True, ""
         except TypeError:
-            return False, f"Invalid entry {i}: Invalid freq/load"
+            raise SherlockAddHarmonicProfileError(message=f"Invalid entry {i}: Invalid freq/load")
 
-    def _add_profile_entries(self, request, entries):
-        """Add the entries to the request."""
+    def _add_random_vibe_profile_entries(self, request, entries):
+        """Add the entries to the random vibe profile request."""
         for e in entries:
             entry = request.randomVibeProfileEntries.add()
             entry.freq = e[0]
             entry.ampl = e[1]
+
+    def _add_harmonic_profile_entries(self, request, entries):
+        """Add the entries to the harmonic profile request."""
+        for e in entries:
+            entry = request.harmonicProfileEntries.add()
+            entry.freq = e[0]
+            entry.load = e[1]
 
     def create_life_phase(
         self,
@@ -515,7 +528,9 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_profile_entries_validity(random_vibe_profile_entries)
+            valid1, message1 = self._check_random_vibe_profile_entries_validity(
+                random_vibe_profile_entries
+            )
             if not valid1:
                 raise SherlockAddRandomVibeProfileError(message=message1)
         except SherlockAddRandomVibeProfileError as e:
@@ -536,7 +551,7 @@ class Lifecycle(GrpcStub):
             amplUnits=ampl_units,
         )
 
-        self._add_profile_entries(request, random_vibe_profile_entries)
+        self._add_random_vibe_profile_entries(request, random_vibe_profile_entries)
 
         response = self.stub.addRandomVibeProfile(request)
 
@@ -789,8 +804,7 @@ class Lifecycle(GrpcStub):
             triaxialAxis=triaxial_axis,
         )
 
-        # TODO: Make add_profile entries for harmonic
-        self._add_profile_entries(request, harmonic_profiles_entries)
+        self._add_harmonic_profile_entries(request, harmonic_profiles_entries)
 
         response = self.stub.addHarmonicProfile(request)
 
