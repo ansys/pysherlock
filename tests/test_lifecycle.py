@@ -20,6 +20,7 @@ def test_all():
     helper_test_add_random_vibe_event(lifecycle)
     helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_thermal_event(lifecycle)
+    helper_test_add_thermal_profile(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -447,41 +448,42 @@ def helper_test_add_thermal_profile(lifecycle):
     except SherlockAddThermalProfileError as e:
         assert e.str_itr()[0] == "Add thermal profile error: Invalid Profile Name"
 
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "Sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, 40),
-                ("Up", "RAMP", 20, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid Time Unit"
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_thermal_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "Sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    ("Up", "RAMP", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )
+            assert False
+        except SherlockAddThermalProfileError as e:
+            assert e.str_itr()[0] == "Add thermal profile error: Invalid Time Unit"
 
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "IDK",
-            [
-                ("Initial", "HOLD", 40, 40),
-                ("Up", "RAMP", 20, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid Temperature Unit"
+        try:
+            lifecycle.add_thermal_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "IDK",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    ("Up", "RAMP", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )
+            assert False
+        except SherlockAddThermalProfileError as e:
+            assert e.str_itr()[0] == "Add thermal profile error: Invalid Temperature Unit"
 
     try:
         lifecycle.add_thermal_profile(
@@ -574,7 +576,6 @@ def helper_test_add_thermal_profile(lifecycle):
         )
         assert False
     except SherlockAddThermalProfileError as e:
-        print(e.str_itr()[0])
         assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 1: Invalid time"
 
     try:

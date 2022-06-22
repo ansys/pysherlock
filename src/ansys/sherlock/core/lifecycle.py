@@ -27,6 +27,7 @@ class Lifecycle(GrpcStub):
         self.AMPL_UNIT_LIST = None
         self.CYCLE_STATE_LIST = None
         self.TEMP_UNIT_LIST = None
+        self.STEP_TYPE_LIST = ["RAMP", "HOLD"]
 
     def _init_time_units(self):
         """Initialize TIME_UNIT_LIST."""
@@ -82,7 +83,7 @@ class Lifecycle(GrpcStub):
             temp_unit_request = SherlockLifeCycleService_pb2.ListTempUnitsRequest()
             temp_unit_response = self.stub.listTempUnits(temp_unit_request)
             if temp_unit_response.returnCode.value == 0:
-                self.TEMP_UNIT_LIST = temp_unit_response.states
+                self.TEMP_UNIT_LIST = temp_unit_response.tempUnits
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
@@ -147,12 +148,15 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 4:
                     return False, f"Invalid entry {i}: Wrong number of args"
-                elif not isinstance(str, entry[0]):
+                elif not isinstance(entry[0], str):
                     return False, f"Invalid entry {i}: Invalid step name"
+                elif entry[1] not in self.STEP_TYPE_LIST:
+                    return False, f"Invalid entry {i}: Invalid step type"
                 elif entry[2] <= 0:
-                    return False, f"Invalid entry{i}: Time must be greater than 0"
-                elif not (isinstance(int, entry[3]) or isinstance(float, entry[3])):
-                    return False, f"invalid entry {i}: Invalid temp"
+                    return False, f"Invalid entry {i}: Time must be greater than 0"
+                elif not isinstance(entry[3], (int, float)):
+                    return False, f"Invalid entry {i}: Invalid temp"
+            return True, ""
         except TypeError:
             return False, f"Invalid entry {i}: Invalid time"
 
@@ -710,6 +714,30 @@ class Lifecycle(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "year",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_thermal_event(
+            "Test",
+            "Example",
+            "Event1",
+            4.0,
+            "PER YEAR",
+            "STORAGE,
+        )
         >>> sherlock.lifecycle.add_thermal_profile(
             "Test",
             "Example",
@@ -718,7 +746,7 @@ class Lifecycle(GrpcStub):
             "sec",
             "F",
             [
-                ("Increase", "RAMP", 40, 40),
+                ("Steady1", "HOLD", 40, 40),
                 ("Steady", "HOLD", 20, 20),
                 ("Back", "RAMP", 20, 40),
             ],
@@ -738,9 +766,9 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddThermalProfileError(message="Invalid Event Name")
             elif profile_name == "":
                 raise SherlockAddThermalProfileError(message="Invalid Profile Name")
-            elif time_units not in self.TIME_UNIT_LIST:
+            elif (self.TIME_UNIT_LIST is not None) and (time_units not in self.TIME_UNIT_LIST):
                 raise SherlockAddThermalProfileError(message="Invalid Time Unit")
-            elif temp_units not in self.TEMP_UNIT_LIST:
+            elif (self.TEMP_UNIT_LIST is not None) and (temp_units not in self.TEMP_UNIT_LIST):
                 raise SherlockAddThermalProfileError(message="Invalid Temperature Unit")
         except SherlockAddThermalProfileError as e:
             for error in e.str_itr():
@@ -760,18 +788,18 @@ class Lifecycle(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        request = SherlockLifeCycleService_pb2.AddRandomProfileRequest(
+        request = SherlockLifeCycleService_pb2.AddThermalProfileRequest(
             project=project,
             phaseName=phase_name,
             eventName=event_name,
             profileName=profile_name,
             timeUnits=time_units,
-            temp_units=temp_units,
+            tempUnits=temp_units,
         )
 
         self._add_thermal_profile_entries(request, thermal_profile_entries)
 
-        response = self.stub.addRandomProfile(request)
+        response = self.stub.addThermalProfile(request)
 
         return_code = response.returnCode
 
