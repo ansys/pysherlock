@@ -715,7 +715,6 @@ class Lifecycle(GrpcStub):
             Valid values are: x, y, z.
         Examples
         --------
-        TODO: Update example
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -734,7 +733,7 @@ class Lifecycle(GrpcStub):
             4.0,
             "COUNT",
         )
-        >>> sherlock.lifecycle.add_random_vibe_event(
+        >>> sherlock.lifecycle.add_harmonic_event(
             "Test",
             "Example",
             "Event1",
@@ -742,18 +741,23 @@ class Lifecycle(GrpcStub):
             "sec",
             4.0,
             "PER MIN",
+            5,
             "45,45",
-            "Uniaxial",
+            "Uniaxial"
             "2,4,5",
         )
-        >>> sherlock.lifecycle.add_random_vibe_profile(
+        >>> sherlock.lifecycle.add_harmonic_profile(
             "Test",
             "Example",
             "Event1",
             "Profile1",
-            "HZ",
-            "G2/Hz",
-            [(4,8), (5, 50)],
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
         )
         """
         if self.FREQ_UNIT_LIST is None:
