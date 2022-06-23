@@ -1,6 +1,7 @@
 import grpc
 
 from ansys.sherlock.core.errors import (
+    SherlockAddHarmonicProfileError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
     SherlockAddThermalEventError,
@@ -19,6 +20,7 @@ def test_all():
     helper_test_add_random_vibe_event(lifecycle)
     helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_thermal_event(lifecycle)
+    helper_test_add_harmonic_profile(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -423,6 +425,176 @@ def helper_test_add_thermal_event(lifecycle):
             assert False
         except SherlockAddThermalEventError as e:
             assert e.str_itr()[0] == "Add thermal event error: Invalid Cycle State"
+
+
+def helper_test_add_harmonic_profile(lifecycle):
+    """Test add_harmonic_profile API."""
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "",
+            "Example",
+            "Event1",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Project Name"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "",
+            "Event1",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Phase Name"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Event Name"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Profile Name"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_harmonic_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "Invalid",
+                "G",
+                [
+                    (10, 1),
+                    (1000, 1),
+                ],
+                "",
+            )
+            assert False
+        except SherlockAddHarmonicProfileError as e:
+            assert e.str_itr()[0] == "Add harmonic profile error: Invalid Frequency Unit"
+
+        try:
+            lifecycle.add_harmonic_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "HZ",
+                "Invalid",
+                [
+                    (10, 1),
+                    (1000, 1),
+                ],
+                "",
+            )
+            assert False
+        except SherlockAddHarmonicProfileError as e:
+            assert e.str_itr()[0] == "Add harmonic profile error: Invalid Load Unit"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G",
+            [
+                (10,),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid entry 0: Wrong number of args"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G",
+            [
+                (10, 1),
+                (1000, "Invalid"),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid entry 1: Invalid freq/load"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G",
+            [
+                (10, -5),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert (
+            e.str_itr()[0]
+            == "Add harmonic profile error: Invalid entry 0: Load must be greater than 0"
+        )
 
 
 if __name__ == "__main__":

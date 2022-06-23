@@ -82,7 +82,7 @@ class Lifecycle(GrpcStub):
             load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()
             load_unit_response = self.stub.listShockLoadUnits(load_unit_request)
             if load_unit_response.returnCode.value == 0:
-                self.LOAD_UNIT_LIST = load_unit_response.states
+                self.LOAD_UNIT_LIST = load_unit_response.units
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
