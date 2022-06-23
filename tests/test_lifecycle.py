@@ -21,8 +21,8 @@ def test_all():
     helper_test_add_random_vibe_event(lifecycle)
     helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_thermal_event(lifecycle)
-    helper_test_add_harmonic_event(lifecycle)
     helper_test_add_thermal_profile(lifecycle)
+    helper_test_add_harmonic_event(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -728,6 +728,24 @@ def helper_test_add_harmonic_event(lifecycle):
         assert False
     except SherlockAddHarmonicEventError as e:
         assert e.str_itr()[0] == "Add harmonic event error: Number of Cycles Must Be Greater Than 0"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            0,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Sweep Rate Must Be Greater Than 0"
 
     try:
         lifecycle.add_harmonic_event(

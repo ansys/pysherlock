@@ -931,23 +931,18 @@ class Lifecycle(GrpcStub):
                     message="Number of Cycles Must Be Greater Than 0"
                 )
             elif sweep_rate <= 0.0:
-                raise SherlockAddHarmonicEventError(message="Sweep Rate must be greater than 0")
+                raise SherlockAddHarmonicEventError(message="Sweep Rate Must Be Greater Than 0")
         except SherlockAddHarmonicEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
 
         try:
-            valid1, message1 = self._check_load_direction_validity(load_direction)
-            valid2, message2 = self._check_orientation_validity(orientation)
-            if not valid1:
-                raise SherlockAddHarmonicEventError(message=message1)
-            elif not valid2:
-                raise SherlockAddHarmonicEventError(message=message2)
-        except SherlockAddHarmonicEventError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
+            self._check_load_direction_validity(load_direction)
+            self._check_orientation_validity(orientation)
+        except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
+            LOG.error(f"Add harmonic event error: {str(e)}")
+            raise SherlockAddHarmonicEventError(message=str(e))
 
         request = SherlockLifeCycleService_pb2.AddHarmonicEventRequest(
             project=project,
