@@ -9,6 +9,10 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
     SherlockCreateLifePhaseError,
+    SherlockInvalidLoadDirectionError,
+    SherlockInvalidOrientationError,
+    SherlockInvalidRandomVibeProfileEntriesError,
+    SherlockInvalidThermalProfileEntriesError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -90,7 +94,7 @@ class Lifecycle(GrpcStub):
         directions = input.split(",")
 
         if len(directions) != 3:
-            return False, "Invalid number of direction coordinates"
+            raise SherlockInvalidLoadDirectionError("Invalid number of direction coordinates")
 
         try:
             nonzero = 0
@@ -99,78 +103,84 @@ class Lifecycle(GrpcStub):
                     nonzero += 1
 
             if nonzero == 0:
-                return False, "At least one direction coordinate must be non-zero"
+                raise SherlockInvalidLoadDirectionError(
+                    "At least one direction coordinate must be non-zero"
+                )
             return True, ""
-        except:
-            return False, "Invalid direction coordinates"
+        except TypeError:
+            raise SherlockInvalidLoadDirectionError("Invalid direction coordinates")
 
     def _check_orientation_validity(self, input):
         """Check input string if it is a valid orientation."""
         orientation = input.split(",")
 
         if len(orientation) != 2:
-            return False, "Invalid number of spherical coordinates"
+            raise SherlockInvalidOrientationError("Invalid number of spherical coordinates")
 
         try:
             float(orientation[0])
         except:
-            return False, "Invalid azimuth value"
+            raise SherlockInvalidOrientationError("Invalid azimuth value")
 
         try:
             float(orientation[1])
             return True, ""
         except:
-            return False, "Invalid elevation value"
+            raise SherlockInvalidOrientationError("Invalid elevation value")
 
     def _check_random_vibe_profile_entries_validity(self, input):
         """Check input array if all elements are valid for random vibe entries."""
         if not isinstance(input, list):
-            raise SherlockAddRandomVibeProfileError(message="Invalid entries argument")
+            raise SherlockInvalidRandomVibeProfileEntriesError("Invalid entries argument")
 
         try:
             for i, entry in enumerate(input):
                 if len(entry) != 2:
-                    raise SherlockAddRandomVibeProfileError(
-                        message=f"Invalid entry {i}: Wrong number of args"
+                    raise SherlockInvalidRandomVibeProfileEntriesError(
+                        f"Invalid entry {i}: Wrong number of args"
                     )
                 elif entry[0] <= 0:
-                    raise SherlockAddRandomVibeProfileError(
-                        message=f"Invalid entry {i}: Frequencies must be greater than 0"
+                    raise SherlockInvalidRandomVibeProfileEntriesError(
+                        f"Invalid entry {i}: Frequencies must be greater than 0"
                     )
                 elif entry[1] <= 0:
-                    raise SherlockAddRandomVibeProfileError(
-                        message=f"Invalid entry {i}: Amplitudes must be greater than 0"
+                    raise SherlockInvalidRandomVibeProfileEntriesError(
+                        f"Invalid entry {i}: Amplitudes must be greater than 0"
                     )
         except TypeError:
-            raise SherlockAddRandomVibeProfileError(message=f"Invalid entry {i}: Invalid freq/ampl")
+            raise SherlockInvalidRandomVibeProfileEntriesError(
+                f"Invalid entry {i}: Invalid freq/ampl"
+            )
 
     def _check_thermal_profile_entries_validity(self, input):
         """Check input array if all elements are valid for thermal entries."""
         if not isinstance(input, list):
-            raise SherlockAddThermalProfileError(message="Invalid entries argument")
+            raise SherlockAddThermalProfileError("Invalid entries argument")
 
         try:
             for i, entry in enumerate(input):
                 if len(entry) != 4:
-                    raise SherlockAddThermalProfileError(
-                        message=f"Invalid entry {i}: Wrong number of args"
+                    raise SherlockInvalidThermalProfileEntriesError(
+                        f"Invalid entry {i}: Wrong number of args"
                     )
                 elif not isinstance(entry[0], str):
-                    raise SherlockAddThermalProfileError(
-                        message=f"Invalid entry {i}: Invalid step name"
+                    raise SherlockInvalidThermalProfileEntriesError(
+                        f"Invalid entry {i}: Invalid step name"
                     )
                 elif entry[1] not in self.STEP_TYPE_LIST:
-                    raise SherlockAddThermalProfileError(
-                        message=f"Invalid entry {i}: Invalid step type"
+                    raise SherlockInvalidThermalProfileEntriesError(
+                        f"Invalid entry {i}: Invalid step type"
                     )
                 elif entry[2] <= 0:
-                    raise SherlockAddThermalProfileError(
-                        message=f"Invalid entry {i}: Time must be greater than 0"
+                    raise SherlockInvalidThermalProfileEntriesError(
+                        f"Invalid entry {i}: Time must be greater than 0"
                     )
                 elif not isinstance(entry[3], (int, float)):
-                    raise SherlockAddThermalProfileError(message=f"Invalid entry {i}: Invalid temp")
+                    raise SherlockInvalidThermalProfileEntriesError(
+                        f"Invalid entry {i}: Invalid temp"
+                    )
         except TypeError:
-            raise SherlockAddThermalProfileError(message=f"Invalid entry {i}: Invalid time")
+            raise SherlockInvalidThermalProfileEntriesError(f"Invalid entry {i}: Invalid time")
 
     def _add_random_vibe_profile_entries(self, request, entries):
         """Add the random vibe entries to the request."""
@@ -400,16 +410,15 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_load_direction_validity(load_direction)
-            valid2, message2 = self._check_orientation_validity(orientation)
-            if not valid1:
-                raise SherlockAddRandomVibeEventError(message=message1)
-            elif (self.RV_PROFILE_LIST is not None) and (profile_type not in self.RV_PROFILE_LIST):
+            self._check_load_direction_validity(load_direction)
+            self._check_orientation_validity(orientation)
+            if (self.RV_PROFILE_LIST is not None) and (profile_type not in self.RV_PROFILE_LIST):
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a random event can only be Uniaxial"
                 )
-            elif not valid2:
-                raise SherlockAddRandomVibeEventError(message=message2)
+        except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
+            LOG.error(f"Add random vibe event error: {str(e)}")
+            raise SherlockAddRandomVibeEventError(message=str(e))
         except SherlockAddRandomVibeEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -542,10 +551,9 @@ class Lifecycle(GrpcStub):
 
         try:
             self._check_random_vibe_profile_entries_validity(random_vibe_profile_entries)
-        except SherlockAddRandomVibeProfileError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
+        except SherlockInvalidRandomVibeProfileEntriesError as e:
+            LOG.error(f"Add random vibe profile error: {str(e)}")
+            raise SherlockAddRandomVibeProfileError(message=str(e))
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
@@ -785,10 +793,9 @@ class Lifecycle(GrpcStub):
 
         try:
             self._check_thermal_profile_entries_validity(thermal_profile_entries)
-        except SherlockAddThermalProfileError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
+        except SherlockInvalidThermalProfileEntriesError as e:
+            LOG.error(f"Add thermal profile error: {str(e)}")
+            raise SherlockAddThermalProfileError(message=str(e))
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")

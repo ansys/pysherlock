@@ -118,30 +118,6 @@ class SherlockAddRandomVibeProfileError(Exception):
             return [f"Add random vibe profile error: {self.message}"]
 
 
-class SherlockCommonServiceError(Exception):
-    """Raised when executing an API in the common service resulted in an error."""
-
-    def __init__(self, message):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return f"Sherlock common service error: {self.message}"
-
-
-class SherlockModelServiceError(Exception):
-    """Raised when executing an API in the model service resulted in an error."""
-
-    def __init__(self, message):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return f"Sherlock model service error: {self.message}"
-
-
 class SherlockAddThermalEventError(Exception):
     """Raised when adding a thermal event results in an error."""
 
@@ -174,3 +150,75 @@ class SherlockAddThermalProfileError(Exception):
         else:
             assert self.error_array is None
             return [f"Add thermal profile error: {self.message}"]
+
+
+class SherlockCommonServiceError(Exception):
+    """Raised when executing an API in the common service resulted in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Sherlock common service error: {self.message}"
+
+
+class SherlockModelServiceError(Exception):
+    """Raised when executing an API in the model service resulted in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Sherlock model service error: {self.message}"
+
+
+class SherlockInvalidLoadDirectionError(Exception):
+    """Raised when an invalid load direction string is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidOrientationError(Exception):
+    """Raised when an invalid orientation string is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidRandomVibeProfileEntriesError(Exception):
+    """Raised when an invalid random vibe profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidThermalProfileEntriesError(Exception):
+    """Raised when an invalid thermal profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
