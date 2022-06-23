@@ -6,6 +6,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
+    SherlockAddShockEventError,
     SherlockAddThermalEventError,
     SherlockCreateLifePhaseError,
 )
@@ -635,6 +636,143 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddThermalEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_shock_event(
+        self,
+        project,
+        phase_name,
+        event_name,
+        duration,
+        duration_units,
+        num_of_cycles,
+        cycle_type,
+        orientation,
+        load_direction,
+        description="",
+    ):
+        """Define and add a new shock life cycle event.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        phase_name : str, required
+            The name of the life cycle phase to add this event to.
+        event_name : str, required
+            Name of the shock event.
+        duration : double, required
+            Event duration length.
+        duration_units : str, required
+            Event duration length units.
+        num_of_cycles : double, required
+            Number of cycles defined for this shock event.
+        cycle_type : str, required
+            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+        orientation : str, required
+            PCB orientation in the format of azimuth, elevation. Example: 30,15
+        load_direction : str, required
+            Load direction in the format of x,y,z. Example: 0,0,1
+        description : str, optional
+            Description of the random vibe event.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+
+        try:
+            if project == "":
+                raise SherlockAddShockEventError(message="Invalid Project Name")
+            elif phase_name == "":
+                raise SherlockAddShockEventError(message="Invalid Phase Name")
+            elif event_name == "":
+                raise SherlockAddShockEventError(message="Invalid Event Name")
+            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+                raise SherlockAddShockEventError(message="Invalid Duration Unit Specified")
+            elif duration <= 0.0:
+                raise SherlockAddShockEventError(message="Duration Must Be Greater Than 0")
+            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+                raise SherlockAddShockEventError(message="Invalid Cycle Type")
+            elif num_of_cycles <= 0.0:
+                raise SherlockAddShockEventError(message="Number of Cycles Must Be Greater Than 0")
+        except SherlockAddShockEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        try:
+            valid1, message1 = self._check_load_direction_validity(load_direction)
+            valid2, message2 = self._check_orientation_validity(orientation)
+            if not valid1:
+                raise SherlockAddShockEventError(message=message1)
+            elif not valid2:
+                raise SherlockAddShockEventError(message=message2)
+        except SherlockAddShockEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        request = SherlockLifeCycleService_pb2.AddShockEventRequest(
+            project=project,
+            phaseName=phase_name,
+            eventName=event_name,
+            description=description,
+            duration=duration,
+            durationUnits=duration_units,
+            numOfCycles=num_of_cycles,
+            cycleType=cycle_type,
+            orientation=orientation,
+            loadDirection=load_direction,
+        )
+
+        response = self.stub.addShockEvent(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddShockEventError(error_array=response.errors)
+                else:
+                    raise SherlockAddShockEventError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddShockEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
