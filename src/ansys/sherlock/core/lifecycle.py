@@ -411,11 +411,11 @@ class Lifecycle(GrpcStub):
 
         try:
             self._check_load_direction_validity(load_direction)
-            self._check_orientation_validity(orientation)
             if (self.RV_PROFILE_LIST is not None) and (profile_type not in self.RV_PROFILE_LIST):
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a random event can only be Uniaxial"
                 )
+            self._check_orientation_validity(orientation)
         except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
             LOG.error(f"Add random vibe event error: {str(e)}")
             raise SherlockAddRandomVibeEventError(message=str(e))
