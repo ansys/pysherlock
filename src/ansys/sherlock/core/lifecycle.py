@@ -11,6 +11,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
     SherlockCreateLifePhaseError,
+    SherlockInvalidHarmonicProfileEntriesError,
     SherlockInvalidLoadDirectionError,
     SherlockInvalidOrientationError,
     SherlockInvalidRandomVibeProfileEntriesError,
@@ -231,25 +232,27 @@ class Lifecycle(GrpcStub):
     def _check_harmonic_profile_entries_validity(self, input):
         """Check input array if all elements are valid for harmonic entries."""
         if not isinstance(input, list):
-            raise SherlockAddHarmonicProfileError(message="Invalid entries argument")
+            raise SherlockInvalidHarmonicProfileEntriesError(message="Invalid entries argument")
 
         try:
             for i, entry in enumerate(input):
                 if len(entry) != 2:
-                    raise SherlockAddHarmonicProfileError(
+                    raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Wrong number of args"
                     )
                 elif entry[0] <= 0:
-                    raise SherlockAddHarmonicProfileError(
+                    raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Frequencies must be greater than 0"
                     )
                 elif entry[1] <= 0:
-                    raise SherlockAddHarmonicProfileError(
+                    raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Load must be greater than 0"
                     )
             return True, ""
         except TypeError:
-            raise SherlockAddHarmonicProfileError(message=f"Invalid entry {i}: Invalid freq/load")
+            raise SherlockInvalidHarmonicProfileEntriesError(
+                message=f"Invalid entry {i}: Invalid freq/load"
+            )
 
     def _add_random_vibe_profile_entries(self, request, entries):
         """Add the random vibe entries to the request."""
@@ -1165,15 +1168,10 @@ class Lifecycle(GrpcStub):
             raise e
 
         try:
-            valid1, message1 = self._check_harmonic_profile_entries_validity(
-                harmonic_profiles_entries
-            )
-            if not valid1:
-                raise SherlockAddHarmonicProfileError(message=message1)
-        except SherlockAddHarmonicProfileError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
+            self._check_harmonic_profile_entries_validity(harmonic_profiles_entries)
+        except SherlockInvalidHarmonicProfileEntriesError as e:
+            LOG.error(f"Add harmonic profile error: {str(e)}")
+            raise SherlockAddHarmonicProfileError(message=str(e))
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")

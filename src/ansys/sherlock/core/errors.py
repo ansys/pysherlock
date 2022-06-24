@@ -256,3 +256,15 @@ class SherlockInvalidThermalProfileEntriesError(Exception):
     def __str__(self):
         """Format error message."""
         return self.message
+
+
+class SherlockInvalidHarmonicProfileEntriesError(Exception):
+    """Raised when an invalid harmonic profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
