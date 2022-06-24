@@ -5,6 +5,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddHarmonicProfileError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
+    SherlockAddShockEventError,
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
     SherlockCreateLifePhaseError,
@@ -25,6 +26,7 @@ def test_all():
     helper_test_add_thermal_profile(lifecycle)
     helper_test_add_harmonic_event(lifecycle)
     helper_test_add_harmonic_profile(lifecycle)
+    helper_test_add_shock_event(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -993,6 +995,177 @@ def helper_test_add_harmonic_profile(lifecycle):
             e.str_itr()[0]
             == "Add harmonic profile error: Invalid entry 0: Load must be greater than 0"
         )
+
+
+def helper_test_add_shock_event(lifecycle):
+    """Test add_shock_event API."""
+
+    try:
+        lifecycle.add_shock_event(
+            "",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Invalid Project Name"
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Invalid Phase Name"
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Invalid Event Name"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_shock_event(
+                "Test",
+                "Example",
+                "Event1",
+                1.5,
+                "Invalid",
+                4.0,
+                "PER MIN",
+                "45,45",
+                "2,4,5",
+            )
+            assert False
+        except SherlockAddShockEventError as e:
+            assert e.str_itr()[0] == "Add shock event error: Invalid Duration Unit Specified"
+
+        try:
+            lifecycle.add_shock_event(
+                "Test",
+                "Example",
+                "Event1",
+                1.5,
+                "sec",
+                4.0,
+                "Invalid",
+                "45,45",
+                "2,4,5",
+            )
+            assert False
+        except SherlockAddShockEventError as e:
+            assert e.str_itr()[0] == "Add shock event error: Invalid Cycle Type"
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            0,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Duration Must Be Greater Than 0"
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Number of Cycles Must Be Greater Than 0"
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            5,
+            "sec",
+            4,
+            "PER SEC",
+            "45,x",
+            "1,2,3",
+            description="Test1",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Invalid elevation value"
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            5,
+            "sec",
+            4,
+            "PER MIN",
+            "45,45",
+            "0,0,0",
+            description="Test1",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert (
+            e.str_itr()[0]
+            == "Add shock event error: At least one direction coordinate must be non-zero"
+        )
+
+    try:
+        lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            5,
+            "sec",
+            4,
+            "PER MIN",
+            "4545",
+            "0,1,0",
+            description="Test1",
+        )
+        assert False
+    except SherlockAddShockEventError as e:
+        assert e.str_itr()[0] == "Add shock event error: Invalid number of spherical coordinates"
 
 
 if __name__ == "__main__":
