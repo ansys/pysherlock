@@ -4,6 +4,7 @@ import SherlockLifeCycleService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockAddHarmonicEventError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
     SherlockAddThermalEventError,
@@ -826,6 +827,152 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddThermalProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_harmonic_event(
+        self,
+        project,
+        phase_name,
+        event_name,
+        duration,
+        duration_units,
+        num_of_cycles,
+        cycle_type,
+        sweep_rate,
+        orientation,
+        profile_type,
+        load_direction,
+        description="",
+    ):
+        """Define and add a new harmonic vibe life cycle event.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        phase_name : str, required
+            The name of the life cycle phase to add this event to.
+        event_name : str, required
+            Name of the harmonic event.
+        duration : double, required
+            Event duration length.
+        duration_units : str, required
+            Event duration length units.
+        num_of_cycles : double, required
+            Number of cycles defined for this harmonic event.
+        cycle_type : str, required
+            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+        sweep_rate : double, required
+            Sweep rate for the harmonic event
+        orientation : str, required
+            PCB orientation in the format of azimuth, elevation. Example: 30,15
+        profile_type : str, required
+            Harmonic load profile types. Example valid values are "Uniaxial" and "Triaxial".
+        load_direction: str, required
+            Load direction in the format of x,y,z. Example: 0,0,1
+        description : str, optional
+            Description of the harmonic vibe event.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test"
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "year",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial"
+            "2,4,5",
+        )
+        """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.CYCLE_TYPE_LIST is None:
+            self._init_cycle_types()
+
+        try:
+            if project == "":
+                raise SherlockAddHarmonicEventError(message="Invalid Project Name")
+            elif phase_name == "":
+                raise SherlockAddHarmonicEventError(message="Invalid Phase Name")
+            elif event_name == "":
+                raise SherlockAddHarmonicEventError(message="Invalid Event Name")
+            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+                raise SherlockAddHarmonicEventError(message="Invalid Duration Unit Specified")
+            elif duration <= 0.0:
+                raise SherlockAddHarmonicEventError(message="Duration Must Be Greater Than 0")
+            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+                raise SherlockAddHarmonicEventError(message="Invalid Cycle Type")
+            elif num_of_cycles <= 0.0:
+                raise SherlockAddHarmonicEventError(
+                    message="Number of Cycles Must Be Greater Than 0"
+                )
+            elif sweep_rate <= 0.0:
+                raise SherlockAddHarmonicEventError(message="Sweep Rate Must Be Greater Than 0")
+        except SherlockAddHarmonicEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        try:
+            self._check_load_direction_validity(load_direction)
+            self._check_orientation_validity(orientation)
+        except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
+            LOG.error(f"Add harmonic event error: {str(e)}")
+            raise SherlockAddHarmonicEventError(message=str(e))
+
+        request = SherlockLifeCycleService_pb2.AddHarmonicEventRequest(
+            project=project,
+            phaseName=phase_name,
+            eventName=event_name,
+            description=description,
+            duration=duration,
+            durationUnits=duration_units,
+            numOfCycles=num_of_cycles,
+            cycleType=cycle_type,
+            sweepRate=sweep_rate,
+            orientation=orientation,
+            profileType=profile_type,
+            loadDirection=load_direction,
+        )
+
+        response = self.stub.addHarmonicEvent(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddHarmonicEventError(error_array=response.errors)
+                else:
+                    raise SherlockAddHarmonicEventError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddHarmonicEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e

@@ -1,6 +1,7 @@
 import grpc
 
 from ansys.sherlock.core.errors import (
+    SherlockAddHarmonicEventError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
     SherlockAddThermalEventError,
@@ -21,6 +22,7 @@ def test_all():
     helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_thermal_event(lifecycle)
     helper_test_add_thermal_profile(lifecycle)
+    helper_test_add_harmonic_event(lifecycle)
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -595,6 +597,212 @@ def helper_test_add_thermal_profile(lifecycle):
         assert False
     except SherlockAddThermalProfileError as e:
         assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 0: Invalid temp"
+
+
+def helper_test_add_harmonic_event(lifecycle):
+    """Test add_harmonic_event API"""
+
+    try:
+        lifecycle.add_harmonic_event(
+            "",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid Project Name"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid Phase Name"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid Event Name"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            0,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Duration Must Be Greater Than 0"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_harmonic_event(
+                "Test",
+                "Example",
+                "Event1",
+                1.5,
+                "Invalid",
+                4.0,
+                "PER MIN",
+                5,
+                "45,45",
+                "Uniaxial",
+                "2,4,5",
+            )
+            assert False
+        except SherlockAddHarmonicEventError as e:
+            assert e.str_itr()[0] == "Add harmonic event error: Invalid Duration Unit Specified"
+
+        try:
+            lifecycle.add_harmonic_event(
+                "Test",
+                "Example",
+                "Event1",
+                1.5,
+                "sec",
+                4.0,
+                "Invalid",
+                5,
+                "45,45",
+                "Uniaxial",
+                "2,4,5",
+            )
+            assert False
+        except SherlockAddHarmonicEventError as e:
+            assert e.str_itr()[0] == "Add harmonic event error: Invalid Cycle Type"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Number of Cycles Must Be Greater Than 0"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            0,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Sweep Rate Must Be Greater Than 0"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "x,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid azimuth value"
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "0,0,0",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert (
+            e.str_itr()[0]
+            == "Add harmonic event error: At least one direction coordinate must be non-zero"
+        )
+
+    try:
+        lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "4545",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert False
+    except SherlockAddHarmonicEventError as e:
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid number of spherical coordinates"
 
 
 if __name__ == "__main__":
