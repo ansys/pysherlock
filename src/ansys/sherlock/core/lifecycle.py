@@ -175,30 +175,6 @@ class Lifecycle(GrpcStub):
                 f"Invalid entry {i}: Invalid freq/ampl"
             )
 
-    def _check_random_vibe_profile_entries_validity(self, input):
-        """Check input array if all elements are valid for random vibe entries."""
-        if not isinstance(input, list):
-            raise SherlockInvalidRandomVibeProfileEntriesError("Invalid entries argument")
-
-        try:
-            for i, entry in enumerate(input):
-                if len(entry) != 2:
-                    raise SherlockInvalidRandomVibeProfileEntriesError(
-                        f"Invalid entry {i}: Wrong number of args"
-                    )
-                elif entry[0] <= 0:
-                    raise SherlockInvalidRandomVibeProfileEntriesError(
-                        f"Invalid entry {i}: Frequencies must be greater than 0"
-                    )
-                elif entry[1] <= 0:
-                    raise SherlockInvalidRandomVibeProfileEntriesError(
-                        f"Invalid entry {i}: Amplitudes must be greater than 0"
-                    )
-        except TypeError:
-            raise SherlockInvalidRandomVibeProfileEntriesError(
-                f"Invalid entry {i}: Invalid freq/ampl"
-            )
-
     def _check_thermal_profile_entries_validity(self, input):
         """Check input array if all elements are valid for thermal entries."""
         if not isinstance(input, list):
