@@ -135,6 +135,40 @@ class SherlockAddThermalEventError(Exception):
             return [f"Add thermal event error: {self.message}"]
 
 
+class SherlockAddThermalProfileError(Exception):
+    """Raised when adding a thermal profile results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add thermal profile error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add thermal profile error: {self.message}"]
+
+
+class SherlockAddHarmonicEventError(Exception):
+    """Raised when adding a harmonic event results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Create life phase error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add harmonic event error: {self.message}"]
+
+
 class SherlockAddHarmonicProfileError(Exception):
     """Raised when adding a harmonic profile results in an error."""
 
@@ -174,3 +208,51 @@ class SherlockModelServiceError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Sherlock model service error: {self.message}"
+
+
+class SherlockInvalidLoadDirectionError(Exception):
+    """Raised when an invalid load direction string is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidOrientationError(Exception):
+    """Raised when an invalid orientation string is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidRandomVibeProfileEntriesError(Exception):
+    """Raised when an invalid random vibe profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidThermalProfileEntriesError(Exception):
+    """Raised when an invalid thermal profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
