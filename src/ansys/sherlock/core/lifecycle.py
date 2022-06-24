@@ -29,8 +29,8 @@ class Lifecycle(GrpcStub):
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.TIME_UNIT_LIST = None
         self.CYCLE_TYPE_LIST = None
-        self.RV_PROFILE_LIST = None
-        self.HARMONIC_PROFILE_LIST = None
+        self.RV_PROFILE_TYPE_LIST = None
+        self.HARMONIC_PROFILE_TYPE_LIST = None
         self.FREQ_UNIT_LIST = None
         self.AMPL_UNIT_LIST = None
         self.CYCLE_STATE_LIST = None
@@ -54,23 +54,23 @@ class Lifecycle(GrpcStub):
             if cycle_type_response.returnCode.value == 0:
                 self.CYCLE_TYPE_LIST = cycle_type_response.types
 
-    def _init_rv_profiles(self):
-        """Initialize RV_PROFILE_LIST."""
+    def _init_rv_profile_types(self):
+        """Initialize RV_PROFILE_TYPE_LIST."""
         if self._is_connection_up():
             rv_profile_request = SherlockLifeCycleService_pb2.ListRandomProfileTypesRequest()
             rv_profile_response = self.stub.listRandomProfileTypes(rv_profile_request)
             if rv_profile_response.returnCode.value == 0:
-                self.RV_PROFILE_LIST = rv_profile_response.types
+                self.RV_PROFILE_TYPE_LIST = rv_profile_response.types
 
-    def _init_harmonic_profiles(self):
-        """Initialize HARMONIC_PROFILE_LIST."""
+    def _init_harmonic_profile_types(self):
+        """Initialize HARMONIC_PROFILE_TYPE_LIST."""
         if self._is_connection_up():
             harmonic_profile_request = (
                 SherlockLifeCycleService_pb2.ListHarmonicProfileTypesRequest()
             )
             harmonic_profile_response = self.stub.listHarmonicProfileTypes(harmonic_profile_request)
             if harmonic_profile_response.returnCode.value == 0:
-                self.HARMONIC_PROFILE_LIST = harmonic_profile_response.types
+                self.HARMONIC_PROFILE_TYPE_LIST = harmonic_profile_response.types
 
     def _init_freq_units(self):
         """Initialize FREQ_UNIT_LIST."""
@@ -439,8 +439,8 @@ class Lifecycle(GrpcStub):
             self._init_time_units()
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
-        if self.RV_PROFILE_LIST is None:
-            self._init_rv_profiles()
+        if self.RV_PROFILE_TYPE_LIST is None:
+            self._init_rv_profile_types()
 
         try:
             if project == "":
@@ -466,7 +466,9 @@ class Lifecycle(GrpcStub):
 
         try:
             self._check_load_direction_validity(load_direction)
-            if (self.RV_PROFILE_LIST is not None) and (profile_type not in self.RV_PROFILE_LIST):
+            if (self.RV_PROFILE_TYPE_LIST is not None) and (
+                profile_type not in self.RV_PROFILE_TYPE_LIST
+            ):
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a random event can only be Uniaxial"
                 )
@@ -966,8 +968,8 @@ class Lifecycle(GrpcStub):
             self._init_time_units()
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
-        if self.HARMONIC_PROFILE_LIST is None:
-            self._init_harmonic_profiles()
+        if self.HARMONIC_PROFILE_TYPE_LIST is None:
+            self._init_harmonic_profile_types()
 
         try:
             if project == "":
@@ -996,8 +998,8 @@ class Lifecycle(GrpcStub):
         try:
             self._check_load_direction_validity(load_direction)
             self._check_orientation_validity(orientation)
-            if (self.HARMONIC_PROFILE_LIST is not None) and (
-                profile_type not in self.HARMONIC_PROFILE_LIST
+            if (self.HARMONIC_PROFILE_TYPE_LIST is not None) and (
+                profile_type not in self.HARMONIC_PROFILE_TYPE_LIST
             ):
                 raise SherlockAddHarmonicEventError(message="Invalid Profile Type")
         except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
