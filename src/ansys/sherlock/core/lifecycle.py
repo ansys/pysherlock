@@ -34,8 +34,8 @@ class Lifecycle(GrpcStub):
         self.FREQ_UNIT_LIST = None
         self.AMPL_UNIT_LIST = None
         self.CYCLE_STATE_LIST = None
-        self.LOAD_UNIT_LIST = None
         self.TEMP_UNIT_LIST = None
+        self.LOAD_UNIT_LIST = None
         self.STEP_TYPE_LIST = ["RAMP", "HOLD"]
 
     def _init_time_units(self):
@@ -96,14 +96,6 @@ class Lifecycle(GrpcStub):
             if cycle_state_response.returnCode.value == 0:
                 self.CYCLE_STATE_LIST = cycle_state_response.states
 
-    def _init_load_units(self):
-        """Initialize LOAD_UNIT_LIST."""
-        if self._is_connection_up():
-            load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()
-            load_unit_response = self.stub.listShockLoadUnits(load_unit_request)
-            if load_unit_response.returnCode.value == 0:
-                self.LOAD_UNIT_LIST = load_unit_response.units
-
     def _init_temp_units(self):
         """Initialize TEMP_UNIT_LIST."""
         if self._is_connection_up():
@@ -111,6 +103,14 @@ class Lifecycle(GrpcStub):
             temp_unit_response = self.stub.listTempUnits(temp_unit_request)
             if temp_unit_response.returnCode.value == 0:
                 self.TEMP_UNIT_LIST = temp_unit_response.tempUnits
+
+    def _init_load_units(self):
+        """Initialize LOAD_UNIT_LIST."""
+        if self._is_connection_up():
+            load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()
+            load_unit_response = self.stub.listShockLoadUnits(load_unit_request)
+            if load_unit_response.returnCode.value == 0:
+                self.LOAD_UNIT_LIST = load_unit_response.units
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
