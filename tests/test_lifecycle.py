@@ -2,6 +2,7 @@ import grpc
 
 from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
+    SherlockAddHarmonicProfileError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
     SherlockAddThermalEventError,
@@ -23,6 +24,52 @@ def test_all():
     helper_test_add_thermal_event(lifecycle)
     helper_test_add_thermal_profile(lifecycle)
     helper_test_add_harmonic_event(lifecycle)
+    helper_test_add_harmonic_profile(lifecycle)
+
+
+def helper_test_create_life_phase(lifecycle):
+    """Test create_life_phase API"""
+
+    try:
+        lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
+        assert False
+    except SherlockCreateLifePhaseError as e:
+        assert e.str_itr()[0] == "Create life phase error: Invalid Project Name"
+
+    try:
+        lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
+        assert False
+    except SherlockCreateLifePhaseError as e:
+        assert e.str_itr()[0] == "Create life phase error: Invalid Phase Name"
+
+    try:
+        lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
+        assert False
+    except SherlockCreateLifePhaseError as e:
+        assert e.str_itr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.create_life_phase(
+                "Test", "Example", 0, "invalid", 1, "PER SEC", description="Test1"
+            )
+            assert False
+        except SherlockCreateLifePhaseError as e:
+            assert e.str_itr()[0] == "Create life phase error: Invalid Duration Unit Specified"
+
+        try:
+            lifecycle.create_life_phase(
+                "Test", "Example", 5, "sec", 0, "invalid", description="Test1"
+            )
+            assert False
+        except SherlockCreateLifePhaseError as e:
+            assert e.str_itr()[0] == "Create life phase error: Invalid Cycle Type"
+
+    try:
+        lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
+        assert False
+    except SherlockCreateLifePhaseError as e:
+        assert e.str_itr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -205,51 +252,6 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert (
             e.str_itr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
         )
-
-
-def helper_test_create_life_phase(lifecycle):
-    """Test create_life_phase API"""
-
-    try:
-        lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Invalid Project Name"
-
-    try:
-        lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Invalid Phase Name"
-
-    try:
-        lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.create_life_phase(
-                "Test", "Example", 0, "invalid", 1, "PER SEC", description="Test1"
-            )
-            assert False
-        except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Invalid Duration Unit Specified"
-
-        try:
-            lifecycle.create_life_phase(
-                "Test", "Example", 5, "sec", 0, "invalid", description="Test1"
-            )
-            assert False
-        except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Invalid Cycle Type"
-
-    try:
-        lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
 
 
 def helper_test_add_random_vibe_profile(lifecycle):
@@ -711,6 +713,24 @@ def helper_test_add_harmonic_event(lifecycle):
         except SherlockAddHarmonicEventError as e:
             assert e.str_itr()[0] == "Add harmonic event error: Invalid Cycle Type"
 
+        try:
+            lifecycle.add_harmonic_event(
+                "Test",
+                "Example",
+                "Event1",
+                1.5,
+                "sec",
+                4.0,
+                "PER MIN",
+                5,
+                "45,45",
+                "Invalid",
+                "2,4,5",
+            )
+            assert False
+        except SherlockAddHarmonicEventError as e:
+            assert e.str_itr()[0] == "Add harmonic event error: Invalid Profile Type"
+
     try:
         lifecycle.add_harmonic_event(
             "Test",
@@ -803,6 +823,176 @@ def helper_test_add_harmonic_event(lifecycle):
         assert False
     except SherlockAddHarmonicEventError as e:
         assert e.str_itr()[0] == "Add harmonic event error: Invalid number of spherical coordinates"
+
+
+def helper_test_add_harmonic_profile(lifecycle):
+    """Test add_harmonic_profile API."""
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "",
+            "Example",
+            "Event1",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Project Name"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "",
+            "Event1",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Phase Name"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Event Name"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Profile Name"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_harmonic_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "Invalid",
+                "G",
+                [
+                    (10, 1),
+                    (1000, 1),
+                ],
+                "",
+            )
+            assert False
+        except SherlockAddHarmonicProfileError as e:
+            assert e.str_itr()[0] == "Add harmonic profile error: Invalid Frequency Unit"
+
+        try:
+            lifecycle.add_harmonic_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                "HZ",
+                "Invalid",
+                [
+                    (10, 1),
+                    (1000, 1),
+                ],
+                "",
+            )
+            assert False
+        except SherlockAddHarmonicProfileError as e:
+            assert e.str_itr()[0] == "Add harmonic profile error: Invalid Load Unit"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G",
+            [
+                (10,),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid entry 0: Wrong number of args"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G",
+            [
+                (10, 1),
+                (1000, "Invalid"),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid entry 1: Invalid freq/load"
+
+    try:
+        lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "HZ",
+            "G",
+            [
+                (10, -5),
+                (1000, 1),
+            ],
+            "",
+        )
+        assert False
+    except SherlockAddHarmonicProfileError as e:
+        assert (
+            e.str_itr()[0]
+            == "Add harmonic profile error: Invalid entry 0: Load must be greater than 0"
+        )
 
 
 if __name__ == "__main__":

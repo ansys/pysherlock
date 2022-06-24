@@ -5,11 +5,13 @@ import SherlockLifeCycleService_pb2_grpc
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
+    SherlockAddHarmonicProfileError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
     SherlockCreateLifePhaseError,
+    SherlockInvalidHarmonicProfileEntriesError,
     SherlockInvalidLoadDirectionError,
     SherlockInvalidOrientationError,
     SherlockInvalidRandomVibeProfileEntriesError,
@@ -27,11 +29,13 @@ class Lifecycle(GrpcStub):
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.TIME_UNIT_LIST = None
         self.CYCLE_TYPE_LIST = None
-        self.RV_PROFILE_LIST = None
+        self.RV_PROFILE_TYPE_LIST = None
+        self.HARMONIC_PROFILE_TYPE_LIST = None
         self.FREQ_UNIT_LIST = None
         self.AMPL_UNIT_LIST = None
         self.CYCLE_STATE_LIST = None
         self.TEMP_UNIT_LIST = None
+        self.LOAD_UNIT_LIST = None
         self.STEP_TYPE_LIST = ["RAMP", "HOLD"]
 
     def _init_time_units(self):
@@ -50,13 +54,23 @@ class Lifecycle(GrpcStub):
             if cycle_type_response.returnCode.value == 0:
                 self.CYCLE_TYPE_LIST = cycle_type_response.types
 
-    def _init_rv_profiles(self):
-        """Initialize RV_PROFILE_LIST."""
+    def _init_rv_profile_types(self):
+        """Initialize RV_PROFILE_TYPE_LIST."""
         if self._is_connection_up():
             rv_profile_request = SherlockLifeCycleService_pb2.ListRandomProfileTypesRequest()
             rv_profile_response = self.stub.listRandomProfileTypes(rv_profile_request)
             if rv_profile_response.returnCode.value == 0:
-                self.RV_PROFILE_LIST = rv_profile_response.types
+                self.RV_PROFILE_TYPE_LIST = rv_profile_response.types
+
+    def _init_harmonic_profile_types(self):
+        """Initialize HARMONIC_PROFILE_TYPE_LIST."""
+        if self._is_connection_up():
+            harmonic_profile_request = (
+                SherlockLifeCycleService_pb2.ListHarmonicProfileTypesRequest()
+            )
+            harmonic_profile_response = self.stub.listHarmonicProfileTypes(harmonic_profile_request)
+            if harmonic_profile_response.returnCode.value == 0:
+                self.HARMONIC_PROFILE_TYPE_LIST = harmonic_profile_response.types
 
     def _init_freq_units(self):
         """Initialize FREQ_UNIT_LIST."""
@@ -89,6 +103,14 @@ class Lifecycle(GrpcStub):
             temp_unit_response = self.stub.listTempUnits(temp_unit_request)
             if temp_unit_response.returnCode.value == 0:
                 self.TEMP_UNIT_LIST = temp_unit_response.tempUnits
+
+    def _init_load_units(self):
+        """Initialize LOAD_UNIT_LIST."""
+        if self._is_connection_up():
+            load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()
+            load_unit_response = self.stub.listShockLoadUnits(load_unit_request)
+            if load_unit_response.returnCode.value == 0:
+                self.LOAD_UNIT_LIST = load_unit_response.units
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
@@ -183,6 +205,31 @@ class Lifecycle(GrpcStub):
         except TypeError:
             raise SherlockInvalidThermalProfileEntriesError(f"Invalid entry {i}: Invalid time")
 
+    def _check_harmonic_profile_entries_validity(self, input):
+        """Check input array if all elements are valid for harmonic entries."""
+        if not isinstance(input, list):
+            raise SherlockInvalidHarmonicProfileEntriesError(message="Invalid entries argument")
+
+        try:
+            for i, entry in enumerate(input):
+                if len(entry) != 2:
+                    raise SherlockInvalidHarmonicProfileEntriesError(
+                        message=f"Invalid entry {i}: Wrong number of args"
+                    )
+                elif entry[0] <= 0:
+                    raise SherlockInvalidHarmonicProfileEntriesError(
+                        message=f"Invalid entry {i}: Frequencies must be greater than 0"
+                    )
+                elif entry[1] <= 0:
+                    raise SherlockInvalidHarmonicProfileEntriesError(
+                        message=f"Invalid entry {i}: Load must be greater than 0"
+                    )
+            return True, ""
+        except TypeError:
+            raise SherlockInvalidHarmonicProfileEntriesError(
+                message=f"Invalid entry {i}: Invalid freq/load"
+            )
+
     def _add_random_vibe_profile_entries(self, request, entries):
         """Add the random vibe entries to the request."""
         for e in entries:
@@ -198,6 +245,13 @@ class Lifecycle(GrpcStub):
             entry.type = e[1]
             entry.time = e[2]
             entry.temp = e[3]
+
+    def _add_harmonic_profile_entries(self, request, entries):
+        """Add the entries to the harmonic profile request."""
+        for e in entries:
+            entry = request.harmonicProfileEntries.add()
+            entry.freq = e[0]
+            entry.load = e[1]
 
     def create_life_phase(
         self,
@@ -385,8 +439,8 @@ class Lifecycle(GrpcStub):
             self._init_time_units()
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
-        if self.RV_PROFILE_LIST is None:
-            self._init_rv_profiles()
+        if self.RV_PROFILE_TYPE_LIST is None:
+            self._init_rv_profile_types()
 
         try:
             if project == "":
@@ -412,7 +466,9 @@ class Lifecycle(GrpcStub):
 
         try:
             self._check_load_direction_validity(load_direction)
-            if (self.RV_PROFILE_LIST is not None) and (profile_type not in self.RV_PROFILE_LIST):
+            if (self.RV_PROFILE_TYPE_LIST is not None) and (
+                profile_type not in self.RV_PROFILE_TYPE_LIST
+            ):
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a random event can only be Uniaxial"
                 )
@@ -912,6 +968,8 @@ class Lifecycle(GrpcStub):
             self._init_time_units()
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
+        if self.HARMONIC_PROFILE_TYPE_LIST is None:
+            self._init_harmonic_profile_types()
 
         try:
             if project == "":
@@ -940,9 +998,17 @@ class Lifecycle(GrpcStub):
         try:
             self._check_load_direction_validity(load_direction)
             self._check_orientation_validity(orientation)
+            if (self.HARMONIC_PROFILE_TYPE_LIST is not None) and (
+                profile_type not in self.HARMONIC_PROFILE_TYPE_LIST
+            ):
+                raise SherlockAddHarmonicEventError(message="Invalid Profile Type")
         except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
             LOG.error(f"Add harmonic event error: {str(e)}")
             raise SherlockAddHarmonicEventError(message=str(e))
+        except SherlockAddHarmonicEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
 
         request = SherlockLifeCycleService_pb2.AddHarmonicEventRequest(
             project=project,
@@ -973,6 +1039,148 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddHarmonicEventError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_harmonic_profile(
+        self,
+        project,
+        phase_name,
+        event_name,
+        profile_name,
+        freq_units,
+        load_units,
+        harmonic_profiles_entries,
+        triaxial_axis,
+    ):
+        """Define and add a new harmonic life cycle event profile.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        phase_name : str, required
+            The name of the life cycle phase this event is associated.
+        event_name : str, required
+            Name of the harmonic event.
+        profile_name : str, required
+            Name of the harmonic profile.
+        freq_units : str, required
+            Frequency Units.
+        load_units : str, required
+            Load Units.
+        harmonic_profile_entries : (double, double) list, required
+            List of (frequency, load) entries
+        triaxial_axis : (string, required)
+            If the harmonic profile type is "Triaxial", the axis this profile should be assigned to.
+            Valid values are: x, y, z.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial"
+            "2,4,5",
+        )
+        >>> sherlock.lifecycle.add_harmonic_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            "Hz",
+            "G",
+            [
+                (10, 1),
+                (1000, 1),
+            ],
+            "",
+        )
+        """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.LOAD_UNIT_LIST is None:
+            self._init_load_units()
+
+        try:
+            if project == "":
+                raise SherlockAddHarmonicProfileError(message="Invalid Project Name")
+            elif phase_name == "":
+                raise SherlockAddHarmonicProfileError(message="Invalid Phase Name")
+            elif event_name == "":
+                raise SherlockAddHarmonicProfileError(message="Invalid Event Name")
+            elif profile_name == "":
+                raise SherlockAddHarmonicProfileError(message="Invalid Profile Name")
+            elif (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
+                raise SherlockAddHarmonicProfileError(message="Invalid Frequency Unit")
+            elif (self.LOAD_UNIT_LIST is not None) and (load_units not in self.LOAD_UNIT_LIST):
+                raise SherlockAddHarmonicProfileError(message="Invalid Load Unit")
+        except SherlockAddHarmonicProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        try:
+            self._check_harmonic_profile_entries_validity(harmonic_profiles_entries)
+        except SherlockInvalidHarmonicProfileEntriesError as e:
+            LOG.error(f"Add harmonic profile error: {str(e)}")
+            raise SherlockAddHarmonicProfileError(message=str(e))
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockLifeCycleService_pb2.AddHarmonicProfileRequest(
+            project=project,
+            phaseName=phase_name,
+            eventName=event_name,
+            profileName=profile_name,
+            freqUnits=freq_units,
+            loadUnits=load_units,
+            triaxialAxis=triaxial_axis,
+        )
+
+        self._add_harmonic_profile_entries(request, harmonic_profiles_entries)
+
+        response = self.stub.addHarmonicProfile(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddHarmonicProfileError(error_array=response.errors)
+                else:
+                    raise SherlockAddHarmonicProfileError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddHarmonicProfileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
