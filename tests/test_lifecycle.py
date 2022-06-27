@@ -36,19 +36,19 @@ def helper_test_create_life_phase(lifecycle):
         lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Invalid Project Name"
+        assert e.str_itr()[0] == "Create life phase error: Invalid project name"
 
     try:
         lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Create life phase error: Invalid phase name"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Create life phase error: Duration must be greater than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -57,7 +57,7 @@ def helper_test_create_life_phase(lifecycle):
             )
             assert False
         except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Create life phase error: Invalid duration unit specified"
 
         try:
             lifecycle.create_life_phase(
@@ -65,13 +65,13 @@ def helper_test_create_life_phase(lifecycle):
             )
             assert False
         except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Create life phase error: Invalid cycle type"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Number of Cycles Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Create life phase error: Number of cycles must be greater than 0"
 
 
 def helper_test_add_random_vibe_event(lifecycle):
@@ -83,7 +83,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid project name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -101,7 +101,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid phase name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -119,7 +119,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add random vibe event error: Invalid event name"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -137,7 +137,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add random vibe event error: Duration must be greater than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -156,7 +156,7 @@ def helper_test_add_random_vibe_event(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeEventError as e:
-            assert e.str_itr()[0] == "Add random vibe event error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Add random vibe event error: Invalid duration unit specified"
 
         try:
             lifecycle.add_random_vibe_event(
@@ -174,7 +174,7 @@ def helper_test_add_random_vibe_event(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeEventError as e:
-            assert e.str_itr()[0] == "Add random vibe event error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Add random vibe event error: Invalid cycle type"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -193,7 +193,7 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe event error: Number of Cycles Must Be Greater Than 0"
+            e.str_itr()[0] == "Add random vibe event error: Number of cycles must be greater than 0"
         )
 
     try:
@@ -271,7 +271,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockAddRandomVibeProfileError as e:
-        assert e.str_itr()[0] == "Add random vibe profile error: Invalid Profile Name"
+        assert e.str_itr()[0] == "Add random vibe profile error: Invalid profile name"
 
     if lifecycle._is_connection_up():
         try:
@@ -286,7 +286,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeProfileError as e:
-            assert e.str_itr()[0] == "Add random vibe profile error: Invalid Frequency Unit"
+            assert e.str_itr()[0] == "Add random vibe profile error: Invalid frequency unit"
 
         try:
             lifecycle.add_random_vibe_profile(
@@ -300,7 +300,7 @@ def helper_test_add_random_vibe_profile(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeProfileError as e:
-            assert e.str_itr()[0] == "Add random vibe profile error: Invalid Amplitude Type"
+            assert e.str_itr()[0] == "Add random vibe profile error: Invalid amplitude type"
 
     try:
         lifecycle.add_random_vibe_profile(
@@ -364,7 +364,7 @@ def helper_test_add_thermal_event(lifecycle):
         )
         assert False
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add thermal event error: Invalid project name"
 
     try:
         lifecycle.add_thermal_event(
@@ -377,7 +377,7 @@ def helper_test_add_thermal_event(lifecycle):
         )
         assert False
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add thermal event error: Invalid phase name"
 
     try:
         lifecycle.add_thermal_event(
@@ -390,7 +390,7 @@ def helper_test_add_thermal_event(lifecycle):
         )
         assert False
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add thermal event error: Invalid event name"
 
     try:
         lifecycle.add_thermal_event(
@@ -403,7 +403,7 @@ def helper_test_add_thermal_event(lifecycle):
         )
         assert False
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Number of Cycles Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add thermal event error: Number of cycles must be greater than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -417,7 +417,7 @@ def helper_test_add_thermal_event(lifecycle):
             )
             assert False
         except SherlockAddThermalEventError as e:
-            assert e.str_itr()[0] == "Add thermal event error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Add thermal event error: Invalid cycle type"
 
         try:
             lifecycle.add_thermal_event(
@@ -430,7 +430,7 @@ def helper_test_add_thermal_event(lifecycle):
             )
             assert False
         except SherlockAddThermalEventError as e:
-            assert e.str_itr()[0] == "Add thermal event error: Invalid Cycle State"
+            assert e.str_itr()[0] == "Add thermal event error: Invalid cycle state"
 
 
 def helper_test_add_thermal_profile(lifecycle):
@@ -452,7 +452,7 @@ def helper_test_add_thermal_profile(lifecycle):
         )
         assert False
     except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid Profile Name"
+        assert e.str_itr()[0] == "Add thermal profile error: Invalid profile name"
 
     if lifecycle._is_connection_up():
         try:
@@ -471,7 +471,7 @@ def helper_test_add_thermal_profile(lifecycle):
             )
             assert False
         except SherlockAddThermalProfileError as e:
-            assert e.str_itr()[0] == "Add thermal profile error: Invalid Time Unit"
+            assert e.str_itr()[0] == "Add thermal profile error: Invalid time unit"
 
         try:
             lifecycle.add_thermal_profile(
@@ -489,7 +489,7 @@ def helper_test_add_thermal_profile(lifecycle):
             )
             assert False
         except SherlockAddThermalProfileError as e:
-            assert e.str_itr()[0] == "Add thermal profile error: Invalid Temperature Unit"
+            assert e.str_itr()[0] == "Add thermal profile error: Invalid temperature unit"
 
     try:
         lifecycle.add_thermal_profile(
@@ -622,7 +622,7 @@ def helper_test_add_harmonic_event(lifecycle):
         )
         assert False
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid project name"
 
     try:
         lifecycle.add_harmonic_event(
@@ -640,7 +640,7 @@ def helper_test_add_harmonic_event(lifecycle):
         )
         assert False
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid phase name"
 
     try:
         lifecycle.add_harmonic_event(
@@ -658,7 +658,7 @@ def helper_test_add_harmonic_event(lifecycle):
         )
         assert False
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add harmonic event error: Invalid event name"
 
     try:
         lifecycle.add_harmonic_event(
@@ -676,7 +676,7 @@ def helper_test_add_harmonic_event(lifecycle):
         )
         assert False
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add harmonic event error: Duration must be greater than 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -695,7 +695,7 @@ def helper_test_add_harmonic_event(lifecycle):
             )
             assert False
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Add harmonic event error: Invalid duration unit specified"
 
         try:
             lifecycle.add_harmonic_event(
@@ -713,7 +713,7 @@ def helper_test_add_harmonic_event(lifecycle):
             )
             assert False
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Add harmonic event error: Invalid cycle type"
 
         try:
             lifecycle.add_harmonic_event(
@@ -731,7 +731,7 @@ def helper_test_add_harmonic_event(lifecycle):
             )
             assert False
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Invalid Profile Type"
+            assert e.str_itr()[0] == "Add harmonic event error: Invalid profile type"
 
     try:
         lifecycle.add_harmonic_event(
@@ -749,7 +749,7 @@ def helper_test_add_harmonic_event(lifecycle):
         )
         assert False
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Number of Cycles Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add harmonic event error: Number of cycles must be greater than 0"
 
     try:
         lifecycle.add_harmonic_event(
@@ -767,7 +767,7 @@ def helper_test_add_harmonic_event(lifecycle):
         )
         assert False
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Sweep Rate Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add harmonic event error: Sweep rate must be greater than 0"
 
     try:
         lifecycle.add_harmonic_event(
@@ -846,7 +846,7 @@ def helper_test_add_harmonic_profile(lifecycle):
         )
         assert False
     except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid project name"
 
     try:
         lifecycle.add_harmonic_profile(
@@ -864,7 +864,7 @@ def helper_test_add_harmonic_profile(lifecycle):
         )
         assert False
     except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid phase name"
 
     try:
         lifecycle.add_harmonic_profile(
@@ -882,7 +882,7 @@ def helper_test_add_harmonic_profile(lifecycle):
         )
         assert False
     except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid event name"
 
     try:
         lifecycle.add_harmonic_profile(
@@ -900,7 +900,7 @@ def helper_test_add_harmonic_profile(lifecycle):
         )
         assert False
     except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid Profile Name"
+        assert e.str_itr()[0] == "Add harmonic profile error: Invalid profile name"
 
     if lifecycle._is_connection_up():
         try:
@@ -919,7 +919,7 @@ def helper_test_add_harmonic_profile(lifecycle):
             )
             assert False
         except SherlockAddHarmonicProfileError as e:
-            assert e.str_itr()[0] == "Add harmonic profile error: Invalid Frequency Unit"
+            assert e.str_itr()[0] == "Add harmonic profile error: Invalid frequency unit"
 
         try:
             lifecycle.add_harmonic_profile(
@@ -937,7 +937,7 @@ def helper_test_add_harmonic_profile(lifecycle):
             )
             assert False
         except SherlockAddHarmonicProfileError as e:
-            assert e.str_itr()[0] == "Add harmonic profile error: Invalid Load Unit"
+            assert e.str_itr()[0] == "Add harmonic profile error: Invalid load unit"
 
     try:
         lifecycle.add_harmonic_profile(
@@ -1014,7 +1014,7 @@ def helper_test_add_shock_event(lifecycle):
         )
         assert False
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Invalid Project Name"
+        assert e.str_itr()[0] == "Add shock event error: Invalid project name"
 
     try:
         lifecycle.add_shock_event(
@@ -1030,7 +1030,7 @@ def helper_test_add_shock_event(lifecycle):
         )
         assert False
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Invalid Phase Name"
+        assert e.str_itr()[0] == "Add shock event error: Invalid phase name"
 
     try:
         lifecycle.add_shock_event(
@@ -1046,7 +1046,7 @@ def helper_test_add_shock_event(lifecycle):
         )
         assert False
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Invalid Event Name"
+        assert e.str_itr()[0] == "Add shock event error: Invalid event name"
 
     if lifecycle._is_connection_up():
         try:
@@ -1063,7 +1063,7 @@ def helper_test_add_shock_event(lifecycle):
             )
             assert False
         except SherlockAddShockEventError as e:
-            assert e.str_itr()[0] == "Add shock event error: Invalid Duration Unit Specified"
+            assert e.str_itr()[0] == "Add shock event error: Invalid duration unit specified"
 
         try:
             lifecycle.add_shock_event(
@@ -1079,7 +1079,7 @@ def helper_test_add_shock_event(lifecycle):
             )
             assert False
         except SherlockAddShockEventError as e:
-            assert e.str_itr()[0] == "Add shock event error: Invalid Cycle Type"
+            assert e.str_itr()[0] == "Add shock event error: Invalid cycle type"
 
     try:
         lifecycle.add_shock_event(
@@ -1095,7 +1095,7 @@ def helper_test_add_shock_event(lifecycle):
         )
         assert False
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Duration Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add shock event error: Duration must be greater than 0"
 
     try:
         lifecycle.add_shock_event(
@@ -1111,7 +1111,7 @@ def helper_test_add_shock_event(lifecycle):
         )
         assert False
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Number of Cycles Must Be Greater Than 0"
+        assert e.str_itr()[0] == "Add shock event error: Number of cycles must be greater than 0"
 
     try:
         lifecycle.add_shock_event(
