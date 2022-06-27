@@ -249,7 +249,7 @@ class Lifecycle(GrpcStub):
 
         try:
             for i, entry in enumerate(input):
-                if len(entry) != 2:
+                if len(entry) != 4:
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Wrong number of args"
                     )
@@ -269,9 +269,9 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Frequency must be greater than 0"
                     )
-                elif entry[3] <= 0:
+                elif entry[3] < 0:
                     raise SherlockInvalidShockProfileEntriesError(
-                        message=f"Invalid entry {i}: Decay must be greater than 0"
+                        message=f"Invalid entry {i}: Decay must be nonnegative"
                     )
             return
         except TypeError:
@@ -1416,7 +1416,6 @@ class Lifecycle(GrpcStub):
         shock_profile_entries : (str, double, double, double) list, required
             Primary shape entry for the shock profile
             List of (shape, load, freq, decay) entries
-        TODO: Fix example
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1433,29 +1432,34 @@ class Lifecycle(GrpcStub):
             "Test",
             "Example",
             1.5,
-            "year",
+            "sec",
             4.0,
             "COUNT",
         )
-        >>> sherlock.lifecycle.add_thermal_event(
+        >>> sherlock.lifecycle.add_shock_event(
             "Test",
             "Example",
             "Event1",
+            1.5,
+            "sec",
             4.0,
-            "PER YEAR",
-            "STORAGE,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
         )
-        >>> sherlock.lifecycle.add_thermal_profile(
+        >>> sherlock.lifecycle.add_shock_profile(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             "Profile1",
-            "sec",
-            "F",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
             [
-                ("Steady1", "HOLD", 40, 40),
-                ("Steady", "HOLD", 20, 20),
-                ("Back", "RAMP", 20, 40),
+                ("HalfSine", 100.0, 100.0, 0)
             ],
         )
         """

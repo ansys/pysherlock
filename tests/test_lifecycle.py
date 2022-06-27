@@ -6,6 +6,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
     SherlockAddShockEventError,
+    SherlockAddShockProfileError,
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
     SherlockCreateLifePhaseError,
@@ -27,6 +28,7 @@ def test_all():
     helper_test_add_harmonic_event(lifecycle)
     helper_test_add_harmonic_profile(lifecycle)
     helper_test_add_shock_event(lifecycle)
+    helper_test_add_shock_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1166,6 +1168,286 @@ def helper_test_add_shock_event(lifecycle):
         assert False
     except SherlockAddShockEventError as e:
         assert e.str_itr()[0] == "Add shock event error: Invalid number of spherical coordinates"
+
+
+def helper_test_add_shock_profile(lifecycle):
+    """Test add_shock_profile API."""
+
+    try:
+        lifecycle.add_shock_profile(
+            "",
+            "Example",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Invalid project name"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Invalid phase name"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Invalid event name"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Invalid profile name"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Duration must be greater than 0"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            0,
+            "Invalid",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Duration must be greater than 0"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_shock_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                10.0,
+                "Invalid",
+                0.1,
+                "ms",
+                "G",
+                "HZ",
+                [("HalfSine", 100.0, 100.0, 0)],
+            )
+            assert False
+        except SherlockAddShockProfileError as e:
+            assert e.str_itr()[0] == "Add shock profile error: Invalid duration unit"
+
+        try:
+            lifecycle.add_shock_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                10.0,
+                "ms",
+                0.1,
+                "Invalid",
+                "G",
+                "HZ",
+                [("HalfSine", 100.0, 100.0, 0)],
+            )
+            assert False
+        except SherlockAddShockProfileError as e:
+            assert e.str_itr()[0] == "Add shock profile error: Invalid sample rate unit"
+
+        try:
+            lifecycle.add_shock_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                10.0,
+                "ms",
+                0.1,
+                "ms",
+                "Invalid",
+                "HZ",
+                [("HalfSine", 100.0, 100.0, 0)],
+            )
+            assert False
+        except SherlockAddShockProfileError as e:
+            assert e.str_itr()[0] == "Add shock profile error: Invalid load unit"
+
+        try:
+            lifecycle.add_shock_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                10.0,
+                "ms",
+                0.1,
+                "ms",
+                "G",
+                "",
+                [("HalfSine", 100.0, 100.0, 0)],
+            )
+            assert False
+        except SherlockAddShockProfileError as e:
+            assert e.str_itr()[0] == "Add shock profile error: Invalid frequency unit"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Sample rate must be greater than 0"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [(100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Wrong number of args"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("Invalid", 100.0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Invalid shape type"
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 0, 100.0, 0)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert (
+            e.str_itr()[0]
+            == "Add shock profile error: Invalid entry 0: Load must be greater than 0"
+        )
+
+    try:
+        lifecycle.add_shock_profile(
+            "Test",
+            "Example",
+            "Event1",
+            "Profile1",
+            10.0,
+            "ms",
+            0.1,
+            "ms",
+            "G",
+            "HZ",
+            [("HalfSine", 100.0, 100.0, -5)],
+        )
+        assert False
+    except SherlockAddShockProfileError as e:
+        assert (
+            e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Decay must be nonnegative"
+        )
 
 
 if __name__ == "__main__":
