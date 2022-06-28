@@ -39,16 +39,8 @@ class Lifecycle(GrpcStub):
         self.CYCLE_STATE_LIST = None
         self.TEMP_UNIT_LIST = None
         self.LOAD_UNIT_LIST = None
+        self.SHOCK_SHAPE_LIST = None
         self.STEP_TYPE_LIST = ["RAMP", "HOLD"]
-        self.SHAPE_LIST = [
-            "FullSine",
-            "HalfSine",
-            "Haversine",
-            "Triangle",
-            "Sawtooth",
-            "FullSquare",
-            "HalfSquare",
-        ]
 
     def _init_time_units(self):
         """Initialize TIME_UNIT_LIST."""
@@ -123,6 +115,14 @@ class Lifecycle(GrpcStub):
             load_unit_response = self.stub.listShockLoadUnits(load_unit_request)
             if load_unit_response.returnCode.value == 0:
                 self.LOAD_UNIT_LIST = load_unit_response.units
+
+    def _init_shock_shapes(self):
+        """Initialize SHOCK_SHAPE_LIST."""
+        if self._is_connection_up():
+            shock_shape_request = SherlockLifeCycleService_pb2.ListShockPulsesRequest()
+            shock_shape_response = self.stub.listShockPulses(shock_shape_request)
+            if shock_shape_response.returnCode.value == 0:
+                self.SHOCK_SHAPE_LIST = shock_shape_response.shockPulse
 
     def _check_load_direction_validity(self, input):
         """Check input string if it is a valid load."""
@@ -257,7 +257,9 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Invalid shape name"
                     )
-                elif entry[0] not in self.SHAPE_LIST:
+                elif (self.SHOCK_SHAPE_LIST is not None) and (
+                    entry[0] not in self.SHOCK_SHAPE_LIST
+                ):
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Invalid shape type"
                     )
@@ -1469,6 +1471,8 @@ class Lifecycle(GrpcStub):
             self._init_load_units()
         if self.FREQ_UNIT_LIST is None:
             self._init_freq_units()
+        if self.SHOCK_SHAPE_LIST is None:
+            self._init_shock_shapes()
 
         try:
             if project == "":
