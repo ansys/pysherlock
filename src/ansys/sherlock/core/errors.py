@@ -67,6 +67,18 @@ class SherlockImportIpc2581Error(Exception):
         return f"Import IPC2581 error: {self.message}"
 
 
+class SherlockGenerateProjectReportError(Exception):
+    """Raised when generating a project report results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Generate project report error: {self.message}"
+
+
 class SherlockCreateLifePhaseError(Exception):
     """Raised when creating a life phase results in an error."""
 
