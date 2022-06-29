@@ -200,15 +200,6 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    # /**
-    #   * Request for project report.
-    #   */
-    # message GenReportRequest {
-    #   string project		= 1;	// Sherlock project name.
-    #   string author			= 2;	// Name of the author who generates the report.
-    #   string company		= 3;	// Name of author's company.
-    # }
-
     def generate_project_report(
         self,
         project,
