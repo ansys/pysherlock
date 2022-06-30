@@ -205,7 +205,7 @@ class Project(GrpcStub):
         project,
         author,
         company,
-        destination,
+        report_file,
     ):
         """Generate a project report.
 
@@ -217,7 +217,7 @@ class Project(GrpcStub):
             Name of the author who generates the report.
         company : str, required
             Name of author's company.
-        destination: str, required
+        report_file: str, required
             Full path to where the report will be written.
         Examples
         --------
@@ -241,7 +241,7 @@ class Project(GrpcStub):
                 raise SherlockGenerateProjectReportError(message="Invalid author name")
             elif company == "":
                 raise SherlockGenerateProjectReportError(message="Invalid company name")
-            elif not os.path.exists(destination):
+            elif not os.path.exists(report_file):
                 raise SherlockGenerateProjectReportError("Invalid file path")
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
@@ -258,7 +258,7 @@ class Project(GrpcStub):
         )
 
         try:
-            with open(destination, "wb") as dest:
+            with open(report_file, "wb") as dest:
                 for response in self.stub.genReport(request):
                     if response.returnCode.value == -1:
                         raise SherlockGenerateProjectReportError(
