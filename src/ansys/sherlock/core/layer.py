@@ -17,14 +17,6 @@ class Layer(GrpcStub):
         self.channel = channel
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
-    #     /**
-    #  * Request to update mount points properties of a CCA from a CSV formatted file
-    #  */
-    # message UpdateMountPointsRequest {
-    #   string project 	= 1;	// Sherlock project name
-    #   string ccaName 	= 2;	// The cca Name
-    #   string filePath 	= 3;	// The filepath of the CSV file containing the mount points properties
-    # }
     def update_mount_points_by_file(
         self,
         project,
