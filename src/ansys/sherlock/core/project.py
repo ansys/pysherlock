@@ -241,7 +241,7 @@ class Project(GrpcStub):
                 raise SherlockGenerateProjectReportError(message="Invalid author name")
             elif company == "":
                 raise SherlockGenerateProjectReportError(message="Invalid company name")
-            elif not os.path.exists(report_file):
+            elif not os.path.exists(os.path.dirname(report_file)):
                 raise SherlockGenerateProjectReportError("Invalid file path")
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
@@ -266,6 +266,7 @@ class Project(GrpcStub):
                         )
                     else:
                         dest.write(response.content)
+                else:
                     LOG.info(response.returnCode.message)
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
