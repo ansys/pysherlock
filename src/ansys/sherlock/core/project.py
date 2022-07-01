@@ -7,6 +7,7 @@ import SherlockProjectService_pb2_grpc
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockDeleteProjectError,
+    SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
 )
@@ -196,5 +197,77 @@ class Project(GrpcStub):
                 LOG.info(response.message)
                 return
         except SherlockImportIpc2581Error as e:
+            LOG.error(str(e))
+            raise e
+
+    def generate_project_report(
+        self,
+        project,
+        author,
+        company,
+        report_file,
+    ):
+        """Generate a project report.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        author : str, required
+            Name of the author who generates the report.
+        company : str, required
+            Name of author's company.
+        report_file: str, required
+            Full path to where the report will be written.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
+                                True, True,
+                                project="Tutorial",
+                                cca_name="Card")
+        >>> sherlock.project.generate_project_report(
+            "Tutorial",
+            "John Doe",
+            "Example",
+            "example.pdf",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockGenerateProjectReportError(message="Invalid project name")
+            elif author == "":
+                raise SherlockGenerateProjectReportError(message="Invalid author name")
+            elif company == "":
+                raise SherlockGenerateProjectReportError(message="Invalid company name")
+            elif not os.path.exists(os.path.dirname(report_file)):
+                raise SherlockGenerateProjectReportError("Invalid file path")
+        except SherlockGenerateProjectReportError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockProjectService_pb2.GenReportRequest(
+            project=project,
+            author=author,
+            company=company,
+        )
+
+        try:
+            with open(report_file, "wb") as dest:
+                for response in self.stub.genReport(request):
+                    if response.returnCode.value == -1:
+                        raise SherlockGenerateProjectReportError(
+                            message=response.returnCode.message
+                        )
+                    else:
+                        dest.write(response.content)
+                else:
+                    LOG.info(response.returnCode.message)
+        except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
             raise e
