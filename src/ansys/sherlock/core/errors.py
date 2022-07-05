@@ -67,6 +67,18 @@ class SherlockImportIpc2581Error(Exception):
         return f"Import IPC2581 error: {self.message}"
 
 
+class SherlockGenerateProjectReportError(Exception):
+    """Raised when generating a project report results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Generate project report error: {self.message}"
+
+
 class SherlockCreateLifePhaseError(Exception):
     """Raised when creating a life phase results in an error."""
 
@@ -203,6 +215,23 @@ class SherlockAddShockEventError(Exception):
             return [f"Add shock event error: {self.message}"]
 
 
+class SherlockAddShockProfileError(Exception):
+    """Raised when adding a shock profile results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add shock profile error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add shock profile error: {self.message}"]
+
+
 class SherlockUpdateMountPointsError(Exception):
     """Raised when updating mount points results in an error."""
 
@@ -294,6 +323,18 @@ class SherlockInvalidThermalProfileEntriesError(Exception):
 
 class SherlockInvalidHarmonicProfileEntriesError(Exception):
     """Raised when an invalid harmonic profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidShockProfileEntriesError(Exception):
+    """Raised when an invalid shock profile entry is inputted."""
 
     def __init__(self, message):
         """Initialize error message."""
