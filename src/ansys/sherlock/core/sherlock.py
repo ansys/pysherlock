@@ -16,4 +16,4 @@ class Sherlock:
         self.lifecycle = Lifecycle(channel)
         self.project = Project(channel)
         self.lifecycle = Lifecycle(channel)
-        self.layer = Layer
+        self.layer = Layer(channel)

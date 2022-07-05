@@ -46,7 +46,11 @@ class Layer(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        TODO: Write the final example and test it
+        >>> sherlock.layer.update_mount_points_by_file(
+            "Test",
+            "Card",
+            "MountPointImport.csv",
+        )
         """
         try:
             if project == "":

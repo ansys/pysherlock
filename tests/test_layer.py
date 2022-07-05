@@ -18,13 +18,32 @@ def helper_test_update_mount_points_by_file(layer):
     try:
         layer.update_mount_points_by_file(
             "",
-            "",
-            "",
+            "Card",
+            "MountPointImport.csv",
         )
         assert False
     except SherlockUpdateMountPointsError as e:
         assert e.str_itr()[0] == "Update mount points error: Invalid project name"
-    "TODO: Rest of testcases"
+
+    try:
+        layer.update_mount_points_by_file(
+            "Test",
+            "",
+            "MountPointImport.csv",
+        )
+        assert False
+    except SherlockUpdateMountPointsError as e:
+        assert e.str_itr()[0] == "Update mount points error: Invalid cca name"
+
+    try:
+        layer.update_mount_points_by_file(
+            "Test",
+            "Card",
+            "Invalid",
+        )
+        assert False
+    except SherlockUpdateMountPointsError as e:
+        assert e.str_itr()[0] == "Update mount points error: Invalid file path"
 
 
 if __name__ == "__main__":

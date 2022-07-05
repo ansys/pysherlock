@@ -56,4 +56,6 @@ autodoc_mock_imports = [
     "SherlockModelService_pb2_grpc",
     "SherlockLifeCycleService_pb2",
     "SherlockLifeCycleService_pb2_grpc",
+    "SherlockLayerService_pb2",
+    "SherlockLayerService_pb2_grpc",
 ]
