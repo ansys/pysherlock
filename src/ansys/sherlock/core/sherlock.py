@@ -1,5 +1,6 @@
 """Module for the gRPC connection object."""
 from ansys.sherlock.core.common import Common
+from ansys.sherlock.core.layer import Layer
 from ansys.sherlock.core.lifecycle import Lifecycle
 from ansys.sherlock.core.model import Model
 from ansys.sherlock.core.project import Project
@@ -15,3 +16,4 @@ class Sherlock:
         self.lifecycle = Lifecycle(channel)
         self.project = Project(channel)
         self.lifecycle = Lifecycle(channel)
+        self.layer = Layer(channel)

@@ -232,6 +232,23 @@ class SherlockAddShockProfileError(Exception):
             return [f"Add shock profile error: {self.message}"]
 
 
+class SherlockUpdateMountPointsError(Exception):
+    """Raised when updating mount points results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Update mount points error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Update mount points error: {self.message}"]
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
