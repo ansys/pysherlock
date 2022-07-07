@@ -4,6 +4,7 @@ from ansys.sherlock.core.layer import Layer
 from ansys.sherlock.core.lifecycle import Lifecycle
 from ansys.sherlock.core.model import Model
 from ansys.sherlock.core.project import Project
+from ansys.sherlock.core.stackup import Stackup
 
 
 class Sherlock:
@@ -17,3 +18,4 @@ class Sherlock:
         self.project = Project(channel)
         self.lifecycle = Lifecycle(channel)
         self.layer = Layer(channel)
+        self.stackup = Stackup(channel)

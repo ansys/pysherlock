@@ -12,3 +12,4 @@ This section gives an overview of the PySherlock APIs.
    project
    lifecycle
    layer
+   stackup
