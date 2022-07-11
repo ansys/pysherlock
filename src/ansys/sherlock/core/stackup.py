@@ -40,7 +40,7 @@ class Stackup(GrpcStub):
                 laminate_material_manufacturer_request
             )
             if laminate_material_manufacturer_response.returnCode.value == 0:
-                self.LAMINATE_THICKNESS_UNIT_LIST = (
+                self.LAMINATE_MATERIAL_MANUFACTURER_LIST = (
                     laminate_material_manufacturer_response.manufacturer
                 )
 
@@ -65,9 +65,9 @@ class Stackup(GrpcStub):
                         if material in grade_material.laminateMaterial:
                             return
                         else:
-                            raise SherlockGenStackupError(
-                                "Invalid laminate manufacturer, grade, or material provided"
-                            )
+                            raise SherlockGenStackupError("Invalid laminate material provided")
+                else:
+                    raise SherlockGenStackupError("Invalid laminate grade provided")
 
     def gen_stackup(
         self,
@@ -84,6 +84,8 @@ class Stackup(GrpcStub):
         min_laminate_thickness,
         min_laminate_thickness_unit,
         maintain_symmetry,
+        power_layer_thickness,
+        power_layer_thickness_unit,
     ):
         """Generate a new stackup from the properties.
 
@@ -115,6 +117,10 @@ class Stackup(GrpcStub):
             Minimum laminate layer thickness unit.
         maintain_symmetry : bool, required
             If set to true, maintain symmetry.
+        power_layer_thickness : double, required
+            Power layer thickness.
+        power_layer_thickness_unit : str, required
+            Power layer thickness unit.
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -142,6 +148,8 @@ class Stackup(GrpcStub):
             1.0,
             "mil",
             False,
+            1.0,
+            "mil",
         )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
@@ -161,12 +169,10 @@ class Stackup(GrpcStub):
                     self.LAMINATE_THICKNESS_UNIT_LIST is not None
                 ) and board_thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST:
                     raise SherlockGenStackupError(message="Invalid board thickness unit provided")
-            elif (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
+            if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
                 pcb_material_manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
             ):
-                raise SherlockGenStackupError(
-                    message="Invalid laminate manufacturer, grade, or material provided"
-                )
+                raise SherlockGenStackupError(message="Invalid laminate manufacturer provided")
             self._check_pcb_material_validity(
                 pcb_material_manufacturer, pcb_material_grade, pcb_material
             )
@@ -176,16 +182,16 @@ class Stackup(GrpcStub):
                 )
             elif signal_layer_thickness < 0:
                 raise SherlockGenStackupError(message="Invalid conductor thickness provided")
-            elif board_thickness > 0:
+            elif signal_layer_thickness > 0:
                 if (
-                    (board_thickness_unit != "oz")
+                    (signal_layer_thickness_unit != "oz")
                     and (self.LAMINATE_THICKNESS_UNIT_LIST is not None)
-                    and (board_thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST)
+                    and (signal_layer_thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST)
                 ):
                     raise SherlockGenStackupError(
                         message="Invalid conductor thickness unit provided"
                     )
-            elif min_laminate_thickness < 0:
+            if min_laminate_thickness < 0:
                 raise SherlockGenStackupError(message="Invalid laminate thickness provided")
             elif min_laminate_thickness > 0:
                 if (self.LAMINATE_THICKNESS_UNIT_LIST is not None) and (
@@ -194,6 +200,15 @@ class Stackup(GrpcStub):
                     raise SherlockGenStackupError(
                         message="Invalid laminate thickness unit provided"
                     )
+            if power_layer_thickness < 0:
+                raise SherlockGenStackupError(message="Invalid power thickness provided")
+            elif power_layer_thickness > 0:
+                if (
+                    (power_layer_thickness_unit != "oz")
+                    and (self.LAMINATE_THICKNESS_UNIT_LIST is not None)
+                    and (power_layer_thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST)
+                ):
+                    raise SherlockGenStackupError(message="Invalid power thickness unit provided")
         except SherlockGenStackupError as e:
             LOG.error(str(e))
             raise e
@@ -212,6 +227,8 @@ class Stackup(GrpcStub):
             minLaminateThickness=min_laminate_thickness,
             minLaminateThicknessUnit=min_laminate_thickness_unit,
             maintainSymmetry=maintain_symmetry,
+            powerLayerThickness=power_layer_thickness,
+            powerLayerThicknessUnit=power_layer_thickness_unit,
         )
 
         response = self.stub.genStackup(request)
