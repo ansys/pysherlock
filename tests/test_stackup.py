@@ -1,6 +1,6 @@
 import grpc
 
-from ansys.sherlock.core.errors import SherlockGenStackupError
+from ansys.sherlock.core.errors import SherlockGenStackupError, SherlockUpdateConductorLayerError
 from ansys.sherlock.core.stackup import Stackup
 
 
@@ -11,6 +11,7 @@ def test_all():
     stackup = Stackup(channel)
 
     helper_test_gen_stackup(stackup)
+    helper_test_update_conductor_layer(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -348,6 +349,196 @@ def helper_test_gen_stackup(stackup):
             assert False
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Invalid power thickness unit provided"
+
+
+def helper_test_update_conductor_layer(stackup):
+    """Test update_conductor_layer API."""
+    try:
+        stackup.update_conductor_layer(
+            "",
+            "Card",
+            "3",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == "Update conductor layer error: Invalid project name"
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "",
+            "3",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == "Update conductor layer error: Invalid cca name"
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == "Update conductor layer error: Missing conductor layer ID"
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "-4",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == (
+            "Update conductor layer error: "
+            "Invalid layer ID provided, it must be an integer greater than 0"
+        )
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "Invalid",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == "Update conductor layer error: Invalid layer ID, layer ID must be numeric"
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "3",
+            "Invalid",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == (
+            "Update conductor layer error: "
+            'Invalid conductor type provided. Valid values are "SIGNAL", "POWER", or "SUBSTRATE".'
+        )
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_conductor_layer(
+                "Test",
+                "Card",
+                "3",
+                "",
+                "Invalid",
+                1.0,
+                "oz",
+                "94.2",
+                "Generic FR-4 Generic FR-4",
+            )
+            assert False
+        except SherlockUpdateConductorLayerError as e:
+            assert str(e) == "Update conductor layer error: Invalid conductor material provided"
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "3",
+            "POWER",
+            "COPPER",
+            -4,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == "Update conductor layer error: Invalid board thickness provided"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_conductor_layer(
+                "Test",
+                "Card",
+                "3",
+                "POWER",
+                "COPPER",
+                1.0,
+                "Invalid",
+                "94.2",
+                "Generic FR-4 Generic FR-4",
+            )
+            assert False
+        except SherlockUpdateConductorLayerError as e:
+            assert str(e) == "Update conductor layer error: Invalid thickness unit provided"
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "3",
+            "POWER",
+            "COPPER",
+            0,
+            "oz",
+            "105",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == (
+            "Update conductor layer error: "
+            "Invalid conductor percent provided. It must be between 0 and 100"
+        )
+
+    try:
+        stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "3",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "Invalid",
+            "Generic FR-4 Generic FR-4",
+        )
+        assert False
+    except SherlockUpdateConductorLayerError as e:
+        assert str(e) == "Update conductor layer error: Invalid percent, percent must be numeric"
 
 
 if __name__ == "__main__":

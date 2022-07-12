@@ -56,38 +56,6 @@ class Stackup(GrpcStub):
             if conductor_materials_response.returnCode.value == 0:
                 self.CONDUCTOR_MATERIAL_LIST = conductor_materials_response.conductorMaterial
 
-    def _check_layer_id(layerid):
-        """Check layer argument if it is valid."""
-        if layerid == "":
-            raise SherlockUpdateConductorLayerError(message="Missing conductor layer ID")
-        else:
-            try:
-                id = int(layerid)
-                if id < 0:
-                    raise SherlockUpdateConductorLayerError(
-                        message="Invalid layer ID provided, it must be an integer greater than 0"
-                    )
-            except ValueError:
-                raise SherlockUpdateConductorLayerError(
-                    message="Invalid layer ID, layer ID must be numeric"
-                )
-
-    def _check_conductor_percent(input):
-        """Check input string if it is a valid conductor percent."""
-        if input == "":
-            return
-        else:
-            try:
-                percent = float(input)
-                if percent < 0 or percent > 100:
-                    raise SherlockUpdateConductorLayerError(
-                        message="Invalid conductor percent provided. It must be between 0 and 100"
-                    )
-            except ValueError:
-                raise SherlockUpdateConductorLayerError(
-                    message="Invalid percent, percent must be numeric"
-                )
-
     def _check_pcb_material_validity(self, manufacturer, grade, material):
         """Check pcb arguments if they are valid."""
         if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
@@ -113,6 +81,38 @@ class Stackup(GrpcStub):
                             raise SherlockGenStackupError("Invalid laminate material provided")
                 else:
                     raise SherlockGenStackupError("Invalid laminate grade provided")
+
+    def _check_layer_id(self, layerid):
+        """Check layer argument if it is valid."""
+        if layerid == "":
+            raise SherlockUpdateConductorLayerError(message="Missing conductor layer ID")
+        else:
+            try:
+                id = int(layerid)
+                if id < 0:
+                    raise SherlockUpdateConductorLayerError(
+                        message="Invalid layer ID provided, it must be an integer greater than 0"
+                    )
+            except ValueError:
+                raise SherlockUpdateConductorLayerError(
+                    message="Invalid layer ID, layer ID must be numeric"
+                )
+
+    def _check_conductor_percent(self, input):
+        """Check input string if it is a valid conductor percent."""
+        if input == "":
+            return
+        else:
+            try:
+                percent = float(input)
+                if percent < 0 or percent > 100:
+                    raise SherlockUpdateConductorLayerError(
+                        message="Invalid conductor percent provided. It must be between 0 and 100"
+                    )
+            except ValueError:
+                raise SherlockUpdateConductorLayerError(
+                    message="Invalid percent, percent must be numeric"
+                )
 
     def gen_stackup(
         self,
@@ -288,23 +288,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    # /**
-    #  * Represents the conductor layer properties requested to be updated.
-    #  * To update a thickness, a thickness unit must be provided also.
-    #  * Any property left out or set to "" or 0.0 will not be updated.
-    #  */
-    # message UpdateConductorLayerRequest {
-    #   string project				= 1;	// Sherlock project name.
-    #   string ccaName				= 2;	// The CCA name.
-    #   string layer					= 3;	// The layer ID associated with this conductor layer.
-    #   string type					= 4;	// Layer type (i.e. SIGNAL, POWER, SUBSTRATE).
-    #   string material 				= 5;	// Name of this conductor material.
-    #   double thickness 				= 6;	// Conductor layer thickness.
-    #   string thicknessUnit			= 7;	// Conductor layer thickness unit.
-    #   string conductorPercent 		= 8;	// Conductor percentage.
-    #   string resinMaterial			= 9;	// Resin material.
-    # }
-
     def update_conductor_layer(
         self,
         project,
@@ -353,7 +336,17 @@ class Stackup(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        TODO: Write the example
+        >>> sherlock.stackup.update_conductor_layer(
+            "Test",
+            "Card",
+            "3",
+            "POWER",
+            "COPPER",
+            1.0,
+            "oz",
+            "94.2",
+            "Generic FR-4 Generic FR-4",
+        )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -362,9 +355,9 @@ class Stackup(GrpcStub):
 
         try:
             if project == "":
-                raise SherlockGenStackupError(message="Invalid project name")
+                raise SherlockUpdateConductorLayerError(message="Invalid project name")
             if cca_name == "":
-                raise SherlockGenStackupError(message="Invalid cca name")
+                raise SherlockUpdateConductorLayerError(message="Invalid cca name")
             self._check_layer_id(layer)
             if (type != "") and type not in self.LAYER_TYPE_LIST:
                 raise SherlockUpdateConductorLayerError(
@@ -384,12 +377,12 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateConductorLayerError(message="Invalid board thickness provided")
             if thickness > 0:
                 if (
-                    self.LAMINATE_THICKNESS_UNIT_LIST is not None
+                    thickness_unit != "oz" and self.LAMINATE_THICKNESS_UNIT_LIST is not None
                 ) and thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST:
                     raise SherlockUpdateConductorLayerError(
                         message="Invalid thickness unit provided"
                     )
-            self._check_conductor_percent()
+            self._check_conductor_percent(conductor_percent)
         except SherlockUpdateConductorLayerError as e:
             LOG.error(str(e))
             raise e
