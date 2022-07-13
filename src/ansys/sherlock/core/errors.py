@@ -273,6 +273,18 @@ class SherlockUpdateConductorLayerError(Exception):
         return f"Update conductor layer error: {self.message}"
 
 
+class SherlockUpdateLaminateLayerError(Exception):
+    """Raised when updating a laminate layer resulted in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update laminate layer error: {self.message}"
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
@@ -359,6 +371,42 @@ class SherlockInvalidHarmonicProfileEntriesError(Exception):
 
 class SherlockInvalidShockProfileEntriesError(Exception):
     """Raised when an invalid shock profile entry is inputted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidLayerIDError(Exception):
+    """Raised when an invalid layer ID is provided."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidMaterialError(Exception):
+    """Raised when an invalid manufacturer/grade/material is provided."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidConductorPercentError(Exception):
+    """Raised when an invalid conductor percent is provided."""
 
     def __init__(self, message):
         """Initialize error message."""
