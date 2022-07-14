@@ -415,3 +415,27 @@ class SherlockInvalidConductorPercentError(Exception):
     def __str__(self):
         """Format error message."""
         return self.message
+
+
+class SherlockInvalidThicknessArgumentError(Exception):
+    """Raised when invalid thickness arguments are provided."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidGlassConstructionError(Exception):
+    """Raised when invalid glass construction arguments are provided."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message

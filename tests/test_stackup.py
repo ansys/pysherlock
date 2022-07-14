@@ -486,7 +486,7 @@ def helper_test_update_conductor_layer(stackup):
         )
         assert False
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == "Update conductor layer error: Invalid board thickness provided"
+        assert str(e) == "Update conductor layer error: Invalid conductor thickness provided"
 
     if stackup._is_connection_up():
         try:
@@ -503,7 +503,9 @@ def helper_test_update_conductor_layer(stackup):
             )
             assert False
         except SherlockUpdateConductorLayerError as e:
-            assert str(e) == "Update conductor layer error: Invalid thickness unit provided"
+            assert (
+                str(e) == "Update conductor layer error: Invalid conductor thickness unit provided"
+            )
 
     try:
         stackup.update_conductor_layer(

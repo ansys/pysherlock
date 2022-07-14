@@ -236,7 +236,7 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Load must be greater than 0"
                     )
-            return True, ""
+            return
         except TypeError:
             raise SherlockInvalidHarmonicProfileEntriesError(
                 message=f"Invalid entry {i}: Invalid freq/load"
