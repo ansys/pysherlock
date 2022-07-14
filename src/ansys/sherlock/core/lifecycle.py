@@ -141,7 +141,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockInvalidLoadDirectionError(
                     "At least one direction coordinate must be non-zero"
                 )
-            return True, ""
+            return
         except TypeError:
             raise SherlockInvalidLoadDirectionError("Invalid direction coordinates")
 
@@ -159,7 +159,7 @@ class Lifecycle(GrpcStub):
 
         try:
             float(orientation[1])
-            return True, ""
+            return
         except:
             raise SherlockInvalidOrientationError("Invalid elevation value")
 
