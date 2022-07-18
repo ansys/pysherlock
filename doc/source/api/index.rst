@@ -13,3 +13,4 @@ This section gives an overview of the PySherlock APIs.
    lifecycle
    layer
    stackup
+   parts
