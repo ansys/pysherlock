@@ -19,18 +19,18 @@ class Parts(GrpcStub):
 
     def _add_matching_duplication(self, request, matching, duplication):
         if matching == "Both":
-            request.matching = SherlockPartsService_pb2.Both
+            request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Both
         elif matching == "Part":
-            request.matching = SherlockPartsService_pb2.Part
+            request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Part
 
         if duplication == "First":
-            request.duplication = SherlockPartsService_pb2.First
+            request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.First
         elif duplication == "Error":
-            request.duplication = SherlockPartsService_pb2.Error
+            request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.Error
         elif duplication == "Ignore":
-            request.duplication = SherlockPartsService_pb2.Ignore
+            request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.Ignore
 
-    def update_part_lists(
+    def update_parts_list(
         self,
         project,
         cca_name,
@@ -48,7 +48,6 @@ class Parts(GrpcStub):
             The cca name
         part_library : str, required
             Parts library name.
-        TODO: Consider strings vs python enums?
         matching : str, required
             Designates the matching mode for updates.
             Valid arguments: "Both", "Part"
@@ -68,7 +67,13 @@ class Parts(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        TODO: Finish example
+        >>> sherlock.parts.update_parts_list(
+            "Test",
+            "Card",
+            "Sherlock Part Library",
+            "Both",
+            "Error",
+        )
         """
         if project == "":
             raise SherlockUpdatePartsListError(message="Invalid project name")
@@ -76,7 +81,6 @@ class Parts(GrpcStub):
             raise SherlockUpdatePartsListError(message="Invalid cca name")
         if part_library == "":
             raise SherlockUpdatePartsListError(message="Invalid parts library")
-        # TODO: Ask about sherlock code behavior where it defaults to BOTH, FIRST
         if matching not in self.MATCHING_ARGS:
             raise SherlockUpdatePartsListError(message="Invalid matching argument")
         if duplication not in self.DUPLICATION_ARGS:
