@@ -75,16 +75,21 @@ class Parts(GrpcStub):
             "Error",
         )
         """
-        if project == "":
-            raise SherlockUpdatePartsListError(message="Invalid project name")
-        if cca_name == "":
-            raise SherlockUpdatePartsListError(message="Invalid cca name")
-        if part_library == "":
-            raise SherlockUpdatePartsListError(message="Invalid parts library")
-        if matching not in self.MATCHING_ARGS:
-            raise SherlockUpdatePartsListError(message="Invalid matching argument")
-        if duplication not in self.DUPLICATION_ARGS:
-            raise SherlockUpdatePartsListError(message="Invalid duplication argument")
+        try:
+            if project == "":
+                raise SherlockUpdatePartsListError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockUpdatePartsListError(message="Invalid cca name")
+            if part_library == "":
+                raise SherlockUpdatePartsListError(message="Invalid parts library")
+            if matching not in self.MATCHING_ARGS:
+                raise SherlockUpdatePartsListError(message="Invalid matching argument")
+            if duplication not in self.DUPLICATION_ARGS:
+                raise SherlockUpdatePartsListError(message="Invalid duplication argument")
+        except SherlockUpdatePartsListError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
 
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
             project=project, ccaName=cca_name, partLibrary=part_library
