@@ -58,57 +58,68 @@ class Parts(GrpcStub):
         for i, part in enumerate(input):
             if len(part) != 7:
                 raise SherlockUpdatePartsLocationsError(
-                    message="Invalid part location {i}: Invalid number of fields"
+                    message=f"Invalid part location {i}: Invalid number of fields"
                 )
             if part[0] == "":
-                raise SherlockUpdatePartsLocationsError(message="Missing ref des")
+                raise SherlockUpdatePartsLocationsError(
+                    message=f"Invalid part location {i}: Missing ref des"
+                )
             if part[4] != "":
                 if self.PART_LOCATION_UNITS is not None and part[4] not in self.PART_LOCATION_UNITS:
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Invalid location units specified"
+                        message=f"Invalid part location {i}: Invalid location units specified"
                     )
             if part[1] != "":
                 if part[4] == "":
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Missing location units"
+                        message=f"Invalid part location {i}: Missing location units"
                     )
                 try:
                     float(part[1])
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Invalid location X coordinate specified"
+                        message=(
+                            f"Invalid part location {i}: "
+                            f"Invalid location X coordinate specified"
+                        )
                     )
             if part[2] != "":
                 if part[4] == "":
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Missing location units"
+                        message=f"Invalid part location {i}: Missing location units"
                     )
                 try:
                     float(part[2])
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Invalid location Y coordinate specified"
+                        message=(
+                            f"Invalid part location {i}: "
+                            f"Invalid location Y coordinate specified"
+                        )
                     )
             if part[3] != "":
                 try:
                     rotation = float(part[3])
                     if rotation < -360 or rotation > 360:
                         raise SherlockUpdatePartsLocationsError(
-                            message="Invalid part location {i}: Invalid location rotation specified"
+                            message=(
+                                f"Invalid part location {i}: "
+                                f"Invalid location rotation specified"
+                            )
                         )
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Invalid location rotation specified"
+                        message=f"Invalid part location {i}: Invalid location rotation specified"
                     )
             if part[5] != "":
                 if self.BOARD_SIDES is not None and part[5] not in self.BOARD_SIDES:
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Invalid location board side specified"
+                        message=f"Invalid part location {i}: Invalid location board side specified"
                     )
             if part[6] != "":
                 if part[6] != "True" and part[6] != "False":
                     raise SherlockUpdatePartsLocationsError(
-                        message="Invalid part location {i}: Invalid location mirrored specified"
+                        message=f"Invalid part location {i}: Invalid location mirrored specified"
                     )
 
     def _init_location_units(self):
@@ -242,7 +253,7 @@ class Parts(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.part.update_parts_locations(
+        >>> sherlock.parts.update_parts_locations(
             "Test",
             "Card",
             [
