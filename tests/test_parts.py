@@ -2,6 +2,7 @@ import grpc
 
 from ansys.sherlock.core.errors import (
     SherlockUpdatePartsListError,
+    SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
@@ -15,6 +16,7 @@ def test_all():
 
     helper_test_update_parts_list(parts)
     helper_test_update_parts_locations(parts)
+    helper_test_update_parts_locations_by_file(parts)
 
 
 def helper_test_update_parts_list(parts):
@@ -299,6 +301,40 @@ def helper_test_update_parts_locations(parts):
             "Update parts locations error: Invalid part location 0: "
             "Invalid location mirrored specified"
         )
+
+
+def helper_test_update_parts_locations_by_file(parts):
+    """Test update_parts_locations_by_file API."""
+
+    try:
+        parts.update_parts_locations_by_file(
+            "",
+            "Card",
+            "Parts Locations.csv",
+        )
+        assert False
+    except SherlockUpdatePartsLocationsByFileError as e:
+        assert e.str_itr()[0] == "Update parts locations by file error: Invalid project name"
+
+    try:
+        parts.update_parts_locations_by_file(
+            "Test",
+            "",
+            "Parts Locations.csv",
+        )
+        assert False
+    except SherlockUpdatePartsLocationsByFileError as e:
+        assert e.str_itr()[0] == "Update parts locations by file error: Invalid cca name"
+
+    try:
+        parts.update_parts_locations_by_file(
+            "Test",
+            "Card",
+            "Invalid",
+        )
+        assert False
+    except SherlockUpdatePartsLocationsByFileError as e:
+        assert e.str_itr()[0] == "Update parts locations by file error: Invalid file path"
 
 
 if __name__ == "__main__":

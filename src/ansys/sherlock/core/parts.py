@@ -339,8 +339,11 @@ class Parts(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        TODO: Write example and find test file
-        >>>
+        >>> sherlock.parts.update_parts_locations_by_file(
+            "Test",
+            "Card",
+            "Parts Locations.csv",
+        )
         """
         try:
             if project == "":
