@@ -420,7 +420,7 @@ class Parts(GrpcStub):
         >>> sherlock.parts.import_parts_list(
             "Test",
             "Card",
-            "Parts List.csv"
+            "Parts List.csv",
             True,
         )
         """
