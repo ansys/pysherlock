@@ -6,6 +6,7 @@ import SherlockPartsService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
@@ -380,4 +381,75 @@ class Parts(GrpcStub):
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
+            raise e
+
+    def import_parts_list(
+        self,
+        project,
+        cca_name,
+        import_file,
+        import_as_user_src,
+    ):
+        """Import a parts list for a project CCA.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name
+        import_file : str, required
+            Full file path to the parts list .csv file.
+        import_as_user_src : bool, required
+            If true, set the data source of the properties to "User".
+            Otherwise, set the data source to the name of the importFile.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.import_parts_list(
+            "Test",
+            "Card",
+            "Parts List.csv"
+            True,
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockImportPartsListError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockImportPartsListError(message="Invalid cca name")
+            if not os.path.exists(import_file):
+                raise SherlockImportPartsListError("Invalid file path")
+        except SherlockImportPartsListError as e:
+            LOG.error(str(e))
+            raise e
+
+        request = SherlockPartsService_pb2.ImportPartsListRequest(
+            project=project,
+            ccaName=cca_name,
+            importFile=import_file,
+            importAsUserSrc=import_as_user_src,
+        )
+
+        response = self.stub.importPartsList(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockImportPartsListError(response.message)
+            else:
+                LOG.info(response.message)
+                return
+        except SherlockImportPartsListError as e:
+            LOG.error(str(e))
             raise e
