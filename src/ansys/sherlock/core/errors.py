@@ -348,6 +348,18 @@ class SherlockImportPartsListError(Exception):
         return f"Import parts list error: {self.message}"
 
 
+class SherlockRunAnalysisError(Exception):
+    """Raised when running an analysis results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Run analysis error: {self.message}"
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
@@ -494,6 +506,18 @@ class SherlockInvalidThicknessArgumentError(Exception):
 
 class SherlockInvalidGlassConstructionError(Exception):
     """Raised when invalid glass construction arguments are provided."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return self.message
+
+
+class SherlockInvalidPhaseError(Exception):
+    """Raised when invalid phase arguments are provided."""
 
     def __init__(self, message):
         """Initialize error message."""

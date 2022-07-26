@@ -1,4 +1,5 @@
 """Module for the gRPC connection object."""
+from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.layer import Layer
 from ansys.sherlock.core.lifecycle import Lifecycle
@@ -21,3 +22,4 @@ class Sherlock:
         self.layer = Layer(channel)
         self.stackup = Stackup(channel)
         self.parts = Parts(channel)
+        self.analysis = Analysis(channel)

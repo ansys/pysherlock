@@ -14,3 +14,4 @@ This section gives an overview of the PySherlock APIs.
    layer
    stackup
    parts
+   analysis
