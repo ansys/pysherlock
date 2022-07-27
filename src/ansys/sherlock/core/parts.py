@@ -46,7 +46,7 @@ class Parts(GrpcStub):
             part.rotation = p[3]
             part.locationUnits = p[4]
             part.boardSide = p[5]
-            part.mirrored = p
+            part.mirrored = p[6]
 
     def _check_part_loc_validity(self, input):
         """Check input if it is a valid part location list."""
