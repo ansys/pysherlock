@@ -1,6 +1,6 @@
 import grpc
 
-from ansys.sherlock.core.errors import SherlockUpdateMountPointsError
+from ansys.sherlock.core.errors import SherlockUpdateMountPointsByFileError
 from ansys.sherlock.core.layer import Layer
 
 
@@ -22,8 +22,8 @@ def helper_test_update_mount_points_by_file(layer):
             "MountPointImport.csv",
         )
         assert False
-    except SherlockUpdateMountPointsError as e:
-        assert e.str_itr()[0] == "Update mount points error: Invalid project name"
+    except SherlockUpdateMountPointsByFileError as e:
+        assert e.str_itr()[0] == "Update mount points by file error: Invalid project name"
 
     try:
         layer.update_mount_points_by_file(
@@ -32,8 +32,8 @@ def helper_test_update_mount_points_by_file(layer):
             "MountPointImport.csv",
         )
         assert False
-    except SherlockUpdateMountPointsError as e:
-        assert e.str_itr()[0] == "Update mount points error: Invalid cca name"
+    except SherlockUpdateMountPointsByFileError as e:
+        assert e.str_itr()[0] == "Update mount points by file error: Invalid cca name"
 
     try:
         layer.update_mount_points_by_file(
@@ -42,8 +42,8 @@ def helper_test_update_mount_points_by_file(layer):
             "Invalid",
         )
         assert False
-    except SherlockUpdateMountPointsError as e:
-        assert e.str_itr()[0] == "Update mount points error: Invalid file path"
+    except SherlockUpdateMountPointsByFileError as e:
+        assert e.str_itr()[0] == "Update mount points by file error: Invalid file path"
 
 
 if __name__ == "__main__":
