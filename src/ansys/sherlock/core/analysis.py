@@ -87,26 +87,15 @@ class Analysis(GrpcStub):
         cca_name : str, required
             The cca name
         analyses : (str, phases) list, required
-        enum AnalysisType {
-            UNKNOWN	 			= 0;	// Default enum to catch invalid analysis.
-            NaturalFreq 			= 1;	// Enum for the Natural Frequency analysis.
-            HarmonicVibe 			= 2;	// Enum for the Harmonic Vibe analysis.
-            ICTAnalysis 			= 3;	// Enum for the ICA analysis.
-            MechanicalShock 		= 4;	// Enum for the Mechanical Shock analysis.
-            RandomVibe 			= 5;	// Enum for the Random Vibe analysis.
-            HoleToHoleCAF 		= 6;	// Enum for the CAF Failure analysis.
-            ComponentFailureMode	= 7;	// Enum for the Component Failure Mechanism analysis.
-            DFMEAModule			= 8;	// Enum for the DFMEA analysis.
-            PTHFatigue			= 9;	// Enum for the PTH Fatigue analysis.
-            PartValidation		= 10;	// Enum for the Part Validation analysis.
-            SemiconductorWearout	= 11;	// Enum for the Semiconductor Wearout analysis.
-            SolderJointFatigue	= 12;	// Enum for the Solder Fatigue analysis.
-            ThermalDerating		= 13;	// Enum for the Thermal Derating analysis.
-            ThermalMech			= 14;	// Enum for the Thermal Mech analysis.
-        }
+            (AnalysisType, _) list
+            AnalysisType: "UNKNOWN", "NATURALFREQ", "HARMONICVIBE", "ICTANALYSIS",
+            "MECHANICALSHOCK", "RANDOMVIBE", "HOLETOHOLECAF", "COMPONENTFAILUREMODE",
+            "DFMEAMODULE", "PTHFATIGUE", "PARTVALIDATION", "SEMICONDUCTORWEAROUT",
+            "SOLDERJOINTFATIGUE", "THERMALDERATING", "THERMALMECH"
         phases : (str, events) list
+            (PhaseName, _) list
         events : str list
-        TODO: Clean up documentation
+            (EventName) list
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -126,19 +115,11 @@ class Analysis(GrpcStub):
             [
                 ("NATURALFREQ",
                 [
-                    (
-                        "Phase 1",
-                        ["Harmonic Event"]
-                    )
+                    ("Phase 1", ["Harmonic Event"])
                 ]
                 )
             ]
         )
-        """
-        """
-        analyses size must be greater than 0
-        Analysischeck for each element
-        phases should all be non empty strings
         """
         try:
             if project == "":
