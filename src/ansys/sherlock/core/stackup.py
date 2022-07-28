@@ -48,9 +48,7 @@ class Stackup(GrpcStub):
         if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
             manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
         ):
-            raise SherlockGenStackupError(
-                message="Invalid laminate manufacturer, grade, or material provided"
-            )
+            raise SherlockGenStackupError(message="Invalid laminate manufacturer provided")
         elif self._is_connection_up():
             request = SherlockStackupService_pb2.ListLaminateMaterialsRequest(
                 manufacturer=manufacturer
@@ -169,10 +167,6 @@ class Stackup(GrpcStub):
                     self.LAMINATE_THICKNESS_UNIT_LIST is not None
                 ) and board_thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST:
                     raise SherlockGenStackupError(message="Invalid board thickness unit provided")
-            if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
-                pcb_material_manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
-            ):
-                raise SherlockGenStackupError(message="Invalid laminate manufacturer provided")
             self._check_pcb_material_validity(
                 pcb_material_manufacturer, pcb_material_grade, pcb_material
             )
