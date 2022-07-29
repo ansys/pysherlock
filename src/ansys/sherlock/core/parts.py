@@ -3,10 +3,7 @@ import SherlockPartsService_pb2
 import SherlockPartsService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import (
-    SherlockUpdatePartsListError,
-    SherlockUpdatePartsLocationsError,
-)
+from ansys.sherlock.core.errors import SherlockUpdatePartsLocationsError
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -137,91 +134,6 @@ class Parts(GrpcStub):
             board_sides_response = self.stub.getBoardSides(board_sides_request)
             if board_sides_response.returnCode.value == 0:
                 self.BOARD_SIDES = board_sides_response.boardSides
-
-    def update_parts_list(
-        self,
-        project,
-        cca_name,
-        part_library,
-        matching,
-        duplication,
-    ):
-        """Update a parts list based on matching and duplication preference provided.
-
-        Parameters
-        ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
-        part_library : str, required
-            Parts library name.
-        matching : str, required
-            Designates the matching mode for updates.
-            Valid arguments: "Both", "Part"
-        duplication : str, required
-            Designates how to handle duplications during update.
-            Valid arguments: "First", "Error", "Ignore"
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> sherlock.parts.update_parts_list(
-            "Test",
-            "Card",
-            "Sherlock Part Library",
-            "Both",
-            "Error",
-        )
-        """
-        try:
-            if project == "":
-                raise SherlockUpdatePartsListError(message="Invalid project name")
-            if cca_name == "":
-                raise SherlockUpdatePartsListError(message="Invalid cca name")
-            if part_library == "":
-                raise SherlockUpdatePartsListError(message="Invalid parts library")
-            if matching not in self.MATCHING_ARGS:
-                raise SherlockUpdatePartsListError(message="Invalid matching argument")
-            if duplication not in self.DUPLICATION_ARGS:
-                raise SherlockUpdatePartsListError(message="Invalid duplication argument")
-        except SherlockUpdatePartsListError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
-
-        request = SherlockPartsService_pb2.UpdatePartsListRequest(
-            project=project, ccaName=cca_name, partLibrary=part_library
-        )
-
-        self._add_matching_duplication(request, matching, duplication)
-
-        response = self.stub.updatePartsList(request)
-
-        return_code = response.returnCode
-
-        try:
-            if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockUpdatePartsListError(error_array=response.updateError)
-                else:
-                    raise SherlockUpdatePartsListError(message=return_code.message)
-            else:
-                LOG.info(return_code.message)
-                return
-        except SherlockUpdatePartsListError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
 
     def update_parts_locations(
         self,
