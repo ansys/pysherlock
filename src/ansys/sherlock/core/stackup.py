@@ -289,10 +289,6 @@ class Stackup(GrpcStub):
             if cca_name == "":
                 raise SherlockGenStackupError(message="Invalid cca name")
             self._check_thickness(board_thickness, board_thickness_unit, spec="board")
-            if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
-                pcb_material_manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
-            ):
-                raise SherlockGenStackupError(message="Invalid laminate manufacturer provided")
             self._check_pcb_material_validity(
                 pcb_material_manufacturer, pcb_material_grade, pcb_material
             )
@@ -607,6 +603,9 @@ class Stackup(GrpcStub):
             thickness=thickness,
             thicknessUnit=thickness_unit,
             constructionStyle=construction_style,
+            fiberMaterial=fiber_material,
+            conductorMaterial=conductor_material,
+            conductorPercent=conductor_percent,
         )
 
         self._add_glass_construction_layers(request, glass_construction)
