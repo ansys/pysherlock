@@ -261,6 +261,18 @@ class SherlockGenStackupError(Exception):
         return f"Generate stackup error: {self.message}"
 
 
+class SherlockUpdateConductorLayerError(Exception):
+    """Raised when updating a conductor layer resulted in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update conductor layer error: {self.message}"
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
