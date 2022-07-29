@@ -249,6 +249,18 @@ class SherlockUpdateMountPointsError(Exception):
             return [f"Update mount points error: {self.message}"]
 
 
+class SherlockGenStackupError(Exception):
+    """Raised when generating a stackup resulted in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Generate stackup error: {self.message}"
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
