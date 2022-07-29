@@ -141,7 +141,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockInvalidLoadDirectionError(
                     "At least one direction coordinate must be non-zero"
                 )
-            return True, ""
+            return
         except TypeError:
             raise SherlockInvalidLoadDirectionError("Invalid direction coordinates")
 
@@ -159,7 +159,7 @@ class Lifecycle(GrpcStub):
 
         try:
             float(orientation[1])
-            return True, ""
+            return
         except:
             raise SherlockInvalidOrientationError("Invalid elevation value")
 
@@ -236,7 +236,7 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Load must be greater than 0"
                     )
-            return True, ""
+            return
         except TypeError:
             raise SherlockInvalidHarmonicProfileEntriesError(
                 message=f"Invalid entry {i}: Invalid freq/load"

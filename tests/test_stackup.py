@@ -1,6 +1,10 @@
 import grpc
 
-from ansys.sherlock.core.errors import SherlockGenStackupError, SherlockUpdateConductorLayerError
+from ansys.sherlock.core.errors import (
+    SherlockGenStackupError,
+    SherlockUpdateConductorLayerError,
+    SherlockUpdateLaminateLayerError,
+)
 from ansys.sherlock.core.stackup import Stackup
 
 
@@ -12,6 +16,7 @@ def test_all():
 
     helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
+    helper_test_update_laminate_layer(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -486,7 +491,7 @@ def helper_test_update_conductor_layer(stackup):
         )
         assert False
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == "Update conductor layer error: Invalid board thickness provided"
+        assert str(e) == "Update conductor layer error: Invalid conductor thickness provided"
 
     if stackup._is_connection_up():
         try:
@@ -503,7 +508,9 @@ def helper_test_update_conductor_layer(stackup):
             )
             assert False
         except SherlockUpdateConductorLayerError as e:
-            assert str(e) == "Update conductor layer error: Invalid thickness unit provided"
+            assert (
+                str(e) == "Update conductor layer error: Invalid conductor thickness unit provided"
+            )
 
     try:
         stackup.update_conductor_layer(
@@ -521,7 +528,7 @@ def helper_test_update_conductor_layer(stackup):
     except SherlockUpdateConductorLayerError as e:
         assert str(e) == (
             "Update conductor layer error: "
-            "Invalid conductor percent provided. It must be between 0 and 100"
+            "Invalid conductor percent provided, it must be between 0 and 100"
         )
 
     try:
@@ -539,6 +546,366 @@ def helper_test_update_conductor_layer(stackup):
         assert False
     except SherlockUpdateConductorLayerError as e:
         assert str(e) == "Update conductor layer error: Invalid percent, percent must be numeric"
+
+
+def helper_test_update_laminate_layer(stackup):
+    """Test update_laminate_layer API."""
+
+    try:
+        stackup.update_laminate_layer(
+            "",
+            "Card",
+            "2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid project name"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "",
+            "2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid cca name"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Missing laminate layer ID"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "-2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == (
+            "Update laminate layer error: Invalid layer ID provided, "
+            "it must be an integer greater than 0"
+        )
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "Invalid",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid layer ID, layer ID must be numeric"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Invalid",
+                "FR-4",
+                "Generic FR-4",
+                0.015,
+                "in",
+                "106",
+                [("106", 68.0, 0.015, "in")],
+                "E-GLASS",
+                "COPPER",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert str(e) == "Update laminate layer error: Invalid laminate manufacturer provided"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Generic",
+                "Invalid",
+                "Generic FR-4",
+                0.015,
+                "in",
+                "106",
+                [("106", 68.0, 0.015, "in")],
+                "E-GLASS",
+                "COPPER",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert str(e) == "Update laminate layer error: Invalid laminate grade provided"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Generic",
+                "FR-4",
+                "Invalid",
+                0.015,
+                "in",
+                "106",
+                [("106", 68.0, 0.015, "in")],
+                "E-GLASS",
+                "COPPER",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert str(e) == "Update laminate layer error: Invalid laminate material provided"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            -0.015,
+            "in",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid laminate thickness provided"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Generic",
+                "FR-4",
+                "Generic FR-4",
+                0.015,
+                "Invalid",
+                "106",
+                [("106", 68.0, 0.015, "in")],
+                "E-GLASS",
+                "COPPER",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert str(e) == "Update laminate layer error: Invalid laminate thickness unit provided"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            "Invalid",
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid glass_construction argument"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid layer 0: Wrong number of args"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "2",
+            "Generic",
+            "FR-4",
+            "Generic FR-4",
+            0.015,
+            "in",
+            "106",
+            [("106", 68.0, -0.015, "in")],
+            "E-GLASS",
+            "COPPER",
+            "0.0",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == "Update laminate layer error: Invalid layer 0: Invalid thickness provided"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Generic",
+                "FR-4",
+                "Generic FR-4",
+                0.015,
+                "in",
+                "106",
+                [("106", 68.0, 0.015, "Invalid")],
+                "E-GLASS",
+                "COPPER",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert (
+                str(e)
+                == "Update laminate layer error: Invalid layer 0: Invalid thickness unit provided"
+            )
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Generic",
+                "FR-4",
+                "Generic FR-4",
+                0.015,
+                "in",
+                "106",
+                [("106", 68.0, 0.015, "in")],
+                "Invalid",
+                "COPPER",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert str(e) == "Update laminate layer error: Invalid fiber material"
+
+    if stackup._is_connection_up():
+        try:
+            stackup.update_laminate_layer(
+                "Test",
+                "Card",
+                "2",
+                "Generic",
+                "FR-4",
+                "Generic FR-4",
+                0.015,
+                "in",
+                "106",
+                [("106", 68.0, 0.015, "in")],
+                "E-GLASS",
+                "Invalid",
+                "0.0",
+            )
+            assert False
+        except SherlockUpdateLaminateLayerError as e:
+            assert str(e) == "Update laminate layer error: Invalid conductor material"
+
+    try:
+        stackup.update_laminate_layer(
+            "Test",
+            "Card",
+            "2",
+            "",
+            "FR-4",
+            "Generic FR-4",
+            0,
+            "Invalid",
+            "106",
+            [("106", 68.0, 0.015, "in")],
+            "",
+            "",
+            "101",
+        )
+        assert False
+    except SherlockUpdateLaminateLayerError as e:
+        assert str(e) == (
+            "Update laminate layer error: Invalid conductor percent provided,"
+            " it must be between 0 and 100"
+        )
 
 
 if __name__ == "__main__":
