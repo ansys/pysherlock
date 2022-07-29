@@ -287,12 +287,12 @@ class Stackup(GrpcStub):
         project,
         cca_name,
         layer,
-        type,
-        material,
-        thickness,
-        thickness_unit,
-        conductor_percent,
-        resin_material,
+        type="",
+        material="",
+        thickness=0,
+        thickness_unit="",
+        conductor_percent="",
+        resin_material="",
     ):
         """Update a conductor layer with the given properties.
 
@@ -316,6 +316,7 @@ class Stackup(GrpcStub):
             Conductor percentage.
         resin_material : str, required
             Resin material.
+        Default values used will cause no changes for the given property.
 
         Example
         -------
