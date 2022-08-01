@@ -285,6 +285,23 @@ class SherlockUpdateLaminateLayerError(Exception):
         return f"Update laminate layer error: {self.message}"
 
 
+class SherlockUpdatePartsListError(Exception):
+    """Raised when updating a parts list results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Update parts list error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Update parts list error: {self.message}"]
+
+
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""
 
