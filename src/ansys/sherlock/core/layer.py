@@ -5,7 +5,7 @@ import SherlockLayerService_pb2
 import SherlockLayerService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockUpdateMountPointsError
+from ansys.sherlock.core.errors import SherlockUpdateMountPointsByFileError
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -54,18 +54,18 @@ class Layer(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockUpdateMountPointsError(message="Invalid project name")
+                raise SherlockUpdateMountPointsByFileError(message="Invalid project name")
             elif cca_name == "":
-                raise SherlockUpdateMountPointsError(message="Invalid cca name")
-        except SherlockUpdateMountPointsError as e:
+                raise SherlockUpdateMountPointsByFileError(message="Invalid cca name")
+        except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
 
         try:
             if not os.path.exists(file_path):
-                raise SherlockUpdateMountPointsError(message="Invalid file path")
-        except SherlockUpdateMountPointsError as e:
+                raise SherlockUpdateMountPointsByFileError(message="Invalid file path")
+        except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
@@ -74,26 +74,26 @@ class Layer(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        request = SherlockLayerService_pb2.UpdateMountPointsRequest(
+        request = SherlockLayerService_pb2.UpdateMountPointsRequestByFile(
             project=project,
             ccaName=cca_name,
             filePath=file_path,
         )
 
-        response = self.stub.updateMountPoints(request)
+        response = self.stub.updateMountPointsByFile(request)
 
         return_code = response.returnCode
 
         try:
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockUpdateMountPointsError(error_array=response.updateError)
+                    raise SherlockUpdateMountPointsByFileError(error_array=response.updateError)
                 else:
-                    raise SherlockUpdateMountPointsError(message=return_code.message)
+                    raise SherlockUpdateMountPointsByFileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
-        except SherlockUpdateMountPointsError as e:
+        except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
