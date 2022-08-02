@@ -232,7 +232,7 @@ class SherlockAddShockProfileError(Exception):
             return [f"Add shock profile error: {self.message}"]
 
 
-class SherlockUpdateMountPointsError(Exception):
+class SherlockUpdateMountPointsByFileError(Exception):
     """Raised when updating mount points results in an error."""
 
     def __init__(self, message=None, error_array=None):
@@ -243,10 +243,10 @@ class SherlockUpdateMountPointsError(Exception):
     def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Update mount points error: {error}" for error in self.error_array]
+            return [f"Update mount points by file error: {error}" for error in self.error_array]
         else:
             assert self.error_array is None
-            return [f"Update mount points error: {self.message}"]
+            return [f"Update mount points by file error: {self.message}"]
 
 
 class SherlockGenStackupError(Exception):
