@@ -1,10 +1,13 @@
 """Module for parts services on client-side."""
+import os
+
 import SherlockPartsService_pb2
 import SherlockPartsService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockUpdatePartsListError,
+    SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
@@ -299,6 +302,82 @@ class Parts(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockUpdatePartsLocationsError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def update_parts_locations_by_file(
+        self,
+        project,
+        cca_name,
+        file_path,
+        numeric_format="",
+    ):
+        """Update one or more parts' locations using a CSV file.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name
+        file_path : str, required
+            File that contains the components and location properties.
+        numeric_format : str, optional
+            Numeric format for the file.
+            If not provided, it will default to "English (United States)".
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.update_parts_locations_by_file(
+            "Test",
+            "Card",
+            "Parts Locations.csv",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockUpdatePartsLocationsByFileError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockUpdatePartsLocationsByFileError(message="Invalid cca name")
+            if not os.path.exists(file_path):
+                raise SherlockUpdatePartsLocationsByFileError("Invalid file path")
+        except SherlockUpdatePartsLocationsByFileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        request = SherlockPartsService_pb2.UpdatePartsLocationsByFileRequest(
+            project=project,
+            ccaName=cca_name,
+            numericFormat=numeric_format,
+            filePath=file_path,
+        )
+
+        response = self.stub.updatePartsLocationsByFile(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockUpdatePartsLocationsByFileError(error_array=response.updateError)
+                else:
+                    raise SherlockUpdatePartsLocationsByFileError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
