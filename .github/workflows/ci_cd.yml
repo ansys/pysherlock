@@ -48,8 +48,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
+        env:
+          INDEX_URL='https://$PYANSYS_PYPI_PRIVATE_PAT@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/'
         run: |
-          python -m pip install --upgrade pip flit tox tox-gh-actions
+          python -m pip install --upgrade pip flit tox tox-gh-actions ansys-api-sherlock
       - name: Test with tox
         # Only the tox environment specified in the tox.ini gh-actions is run
         run: tox
