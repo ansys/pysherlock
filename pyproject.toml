@@ -27,7 +27,7 @@ classifiers = [
 ]
 dependencies = [
     "importlib-metadata >=4.0",
-    "ansys-api-sherlock >=0.1.0 @ https://${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/"
+    "ansys-api-sherlock"
 ]
 
 [tool.flit.module]
