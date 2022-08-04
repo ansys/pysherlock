@@ -22,7 +22,6 @@ class Analysis(GrpcStub):
             "ICTANALYSIS": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.ICTAnalysis,
             "MECHANICALSHOCK": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.MechanicalShock,
             "RANDOMVIBE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.RandomVibe,
-            "HOLETOHOLECAF": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.HoleToHoleCAF,
             "COMPONENTFAILUREMODE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.ComponentFailureMode,
             "DFMEAMODULE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.DFMEAModule,
             "PTHFATIGUE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.PTHFatigue,
@@ -89,7 +88,7 @@ class Analysis(GrpcStub):
         analyses : (str, phases) list, required
             (AnalysisType, _) list
             AnalysisType: "UNKNOWN", "NATURALFREQ", "HARMONICVIBE", "ICTANALYSIS",
-            "MECHANICALSHOCK", "RANDOMVIBE", "HOLETOHOLECAF", "COMPONENTFAILUREMODE",
+            "MECHANICALSHOCK", "RANDOMVIBE", "COMPONENTFAILUREMODE",
             "DFMEAMODULE", "PTHFATIGUE", "PARTVALIDATION", "SEMICONDUCTORWEAROUT",
             "SOLDERJOINTFATIGUE", "THERMALDERATING", "THERMALMECH"
         phases : (str, events) list
