@@ -1,6 +1,7 @@
 import grpc
 
 from ansys.sherlock.core.errors import (
+    SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
@@ -17,6 +18,7 @@ def test_all():
     helper_test_update_parts_list(parts)
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
+    helper_test_import_parts_list(parts)
 
 
 def helper_test_update_parts_list(parts):
@@ -335,6 +337,42 @@ def helper_test_update_parts_locations_by_file(parts):
         assert False
     except SherlockUpdatePartsLocationsByFileError as e:
         assert e.str_itr()[0] == "Update parts locations by file error: Invalid file path"
+
+
+def helper_test_import_parts_list(parts):
+    """Tests import_parts_list API."""
+    try:
+        parts.import_parts_list(
+            "",
+            "Card",
+            "Parts List.csv",
+            True,
+        )
+        assert False
+    except SherlockImportPartsListError as e:
+        assert str(e) == "Import parts list error: Invalid project name"
+
+    try:
+        parts.import_parts_list(
+            "Test",
+            "",
+            "Parts List.csv",
+            True,
+        )
+        assert False
+    except SherlockImportPartsListError as e:
+        assert str(e) == "Import parts list error: Invalid cca name"
+
+    try:
+        parts.import_parts_list(
+            "Test",
+            "Card",
+            "Invalid",
+            True,
+        )
+        assert False
+    except SherlockImportPartsListError as e:
+        assert str(e) == "Import parts list error: Invalid file path"
 
 
 if __name__ == "__main__":
