@@ -74,7 +74,7 @@ class Layer(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return
 
-        request = SherlockLayerService_pb2.UpdateMountPointsRequestByFile(
+        request = SherlockLayerService_pb2.UpdateMountPointsByFileRequest(
             project=project,
             ccaName=cca_name,
             filePath=file_path,
