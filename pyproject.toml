@@ -24,7 +24,7 @@ packages = [
 
 [[tool.poetry.source]]
 name = "Ansys Private Pypi"
-url = "https://65w37vhx6b2r7rweix54hxblqhrkm5u6aleiz76tyua53hqpafvq@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/"
+url = https://nb6akpfmmn66j5ioz2mzyq6bxi45jmlmp7gsoth5d7yfyx3b6okq@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0"
