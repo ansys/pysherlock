@@ -6,6 +6,7 @@ import SherlockPartsService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockExportPartsListError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
@@ -451,5 +452,70 @@ class Parts(GrpcStub):
                 LOG.info(response.message)
                 return
         except SherlockImportPartsListError as e:
+            LOG.error(str(e))
+            raise e
+
+    def export_parts_list(
+        self,
+        project,
+        cca_name,
+        export_file,
+    ):
+        """Export a parts list for a project CCA.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name
+        export_file : str, required
+            Full file path to the export parts list .csv file.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.export_parts_list(
+            "Test",
+            "Card",
+            "Parts List.csv",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockExportPartsListError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockExportPartsListError(message="Invalid cca name")
+            if not os.path.exists(os.path.dirname(export_file)):
+                raise SherlockExportPartsListError("Invalid file path")
+        except SherlockExportPartsListError as e:
+            LOG.error(str(e))
+            raise e
+
+        request = SherlockPartsService_pb2.ExportPartsListRequest(
+            project=project,
+            ccaName=cca_name,
+            exportFile=export_file,
+        )
+
+        response = self.stub.exportPartsList(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockExportPartsListError(response.message)
+            else:
+                LOG.info(response.message)
+                return
+        except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
