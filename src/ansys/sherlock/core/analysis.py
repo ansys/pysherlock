@@ -130,6 +130,10 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockAnalysisService_pb2.RunAnalysisRequest(
             project=project,
             ccaName=cca_name,

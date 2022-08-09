@@ -204,6 +204,10 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
             project=project, ccaName=cca_name, partLibrary=part_library
         )
@@ -283,6 +287,10 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockPartsService_pb2.UpdatePartsLocationsRequest(
             project=project,
             ccaName=cca_name,
@@ -358,6 +366,10 @@ class Parts(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockPartsService_pb2.UpdatePartsLocationsByFileRequest(
             project=project,
@@ -436,6 +448,10 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockPartsService_pb2.ImportPartsListRequest(
             project=project,
             ccaName=cca_name,
@@ -501,6 +517,10 @@ class Parts(GrpcStub):
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockPartsService_pb2.ExportPartsListRequest(
             project=project,
