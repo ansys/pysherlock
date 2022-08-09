@@ -67,7 +67,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip poetry pytest
-          python -m pip install --upgrade pip ansys-api-sherlock 'https://nb6akpfmmn66j5ioz2mzyq6bxi45jmlmp7gsoth5d7yfyx3b6okq@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/' --no-dependencies
+          python -m pip install ansys-api-sherlock --index-url 'https://${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/' --no-dependencies
       - name: Test with pytest
         # Only the tox environment specified in the tox.ini gh-actions is run
         run: pytest
