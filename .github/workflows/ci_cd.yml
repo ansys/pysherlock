@@ -56,7 +56,7 @@ jobs:
         run: |
           pip install build
           python -m build
-          pip install dist/*.whl
+          pip install dist\ansys_sherlock-0.1.dev0-py3-none-any.whl
           python -c "from ansys.sherlock import core as pysherlock; print('Successful import')"
       - name: Test with pytest
         # Only the tox environment specified in the tox.ini gh-actions is run
