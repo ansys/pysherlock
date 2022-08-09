@@ -1,7 +1,11 @@
 """Module for analysis services on client-side."""
 
-import SherlockAnalysisService_pb2
-import SherlockAnalysisService_pb2_grpc
+try:
+    import SherlockAnalysisService_pb2
+    import SherlockAnalysisService_pb2_grpc
+except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockInvalidPhaseError, SherlockRunAnalysisError

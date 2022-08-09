@@ -1390,23 +1390,24 @@ def helper_test_add_shock_profile(lifecycle):
     except SherlockAddShockProfileError as e:
         assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Wrong number of args"
 
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("Invalid", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Invalid shape type"
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_shock_profile(
+                "Test",
+                "Example",
+                "Event1",
+                "Profile1",
+                10.0,
+                "ms",
+                0.1,
+                "ms",
+                "G",
+                "HZ",
+                [("Invalid", 100.0, 100.0, 0)],
+            )
+            assert False
+        except SherlockAddShockProfileError as e:
+            assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Invalid shape type"
 
     try:
         lifecycle.add_shock_profile(
