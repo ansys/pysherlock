@@ -17,7 +17,7 @@ class TestLauncher(unittest.TestCase):
     @patch("os.path.isdir")
     def test_base_ansys(self, mock_os_path_isdir):
         mock_os_path_isdir.return_value = True
-        self.assertEqual("C:\\Program Files\\ANSYS Inc\\v231", launcher._get_base_ansys())
+        self.assertEqual("C:\\Program Files\\ANSYS Inc\\v223", launcher._get_base_ansys())
 
     def test_get_ansys_version_from_awp_root(self):
         self.assertEqual(223, launcher._get_ansys_version_from_awp_root("AWP_ROOT223"))
