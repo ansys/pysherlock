@@ -403,11 +403,11 @@ def helper_test_export_parts_list(parts):
         parts.export_parts_list(
             "Test",
             "Card",
-            "Invalid",
+            "C:Invalid/Invalid",
         )
         assert False
     except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: Invalid file path"
+        assert str(e) == "Export parts list error: Export file directory does not exist"
 
 
 if __name__ == "__main__":

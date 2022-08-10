@@ -97,6 +97,10 @@ class Project(GrpcStub):
                                 cca_name="Card")
         """
         try:
+            if archive_file == "":
+                raise SherlockImportODBError(message="Archive file path required")
+            if len(archive_file) <= 1 or archive_file[1] != ":":
+                archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
                 raise SherlockImportODBError("Invalid file path")
         except SherlockImportODBError as e:
@@ -165,6 +169,10 @@ class Project(GrpcStub):
                                 cca_name="Card")
         """
         try:
+            if archive_file == "":
+                raise SherlockImportIpc2581Error(message="Archive file path required")
+            if len(archive_file) <= 1 or archive_file[1] != ":":
+                archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
                 raise SherlockImportIpc2581Error("Invalid file path")
         except SherlockImportIpc2581Error as e:
@@ -205,7 +213,7 @@ class Project(GrpcStub):
         project,
         author,
         company,
-        report_file,
+        export_file,
     ):
         """Generate a project report.
 
@@ -217,7 +225,7 @@ class Project(GrpcStub):
             Name of the author who generates the report.
         company : str, required
             Name of author's company.
-        report_file: str, required
+        export_file: str, required
             Full path to where the report will be written.
         Examples
         --------
@@ -241,8 +249,15 @@ class Project(GrpcStub):
                 raise SherlockGenerateProjectReportError(message="Invalid author name")
             elif company == "":
                 raise SherlockGenerateProjectReportError(message="Invalid company name")
-            elif not os.path.exists(os.path.dirname(report_file)):
-                raise SherlockGenerateProjectReportError("Invalid file path")
+            if export_file == "":
+                raise SherlockGenerateProjectReportError(message="Export file path required")
+            if len(export_file) <= 1 or export_file[1] != ":":
+                export_file = f"{os.getcwd()}\\{export_file}"
+            else:  # For locally rooted path
+                if not os.path.exists(os.path.dirname(export_file)):
+                    raise SherlockGenerateProjectReportError(
+                        message=("Export file directory does not exist")
+                    )
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
             raise e

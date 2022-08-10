@@ -360,6 +360,10 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsByFileError(message="Invalid project name")
             if cca_name == "":
                 raise SherlockUpdatePartsLocationsByFileError(message="Invalid cca name")
+            if file_path == "":
+                raise SherlockUpdatePartsLocationsByFileError(message="File path required")
+            if len(file_path) <= 1 or file_path[1] != ":":
+                file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
                 raise SherlockUpdatePartsLocationsByFileError("Invalid file path")
         except SherlockUpdatePartsLocationsByFileError as e:
@@ -442,6 +446,10 @@ class Parts(GrpcStub):
                 raise SherlockImportPartsListError(message="Invalid project name")
             if cca_name == "":
                 raise SherlockImportPartsListError(message="Invalid cca name")
+            if import_file == "":
+                raise SherlockImportPartsListError(message="Import file path required")
+            if len(import_file) <= 1 or import_file[1] != ":":
+                import_file = f"{os.getcwd()}\\{import_file}"
             if not os.path.exists(import_file):
                 raise SherlockImportPartsListError("Invalid file path")
         except SherlockImportPartsListError as e:
@@ -512,8 +520,15 @@ class Parts(GrpcStub):
                 raise SherlockExportPartsListError(message="Invalid project name")
             if cca_name == "":
                 raise SherlockExportPartsListError(message="Invalid cca name")
-            if not os.path.exists(os.path.dirname(export_file)):
-                raise SherlockExportPartsListError("Invalid file path")
+            if export_file == "":
+                raise SherlockExportPartsListError(message="Export file path required")
+            if len(export_file) <= 1 or export_file[1] != ":":
+                export_file = f"{os.getcwd()}\\{export_file}"
+            else:  # For locally rooted path
+                if not os.path.exists(os.path.dirname(export_file)):
+                    raise SherlockExportPartsListError(
+                        message="Export file directory does not exist"
+                    )
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
