@@ -273,7 +273,7 @@ class Project(GrpcStub):
         )
 
         try:
-            with open(report_file, "wb") as dest:
+            with open(export_file, "wb") as dest:
                 for response in self.stub.genReport(request):
                     if response.returnCode.value == -1:
                         raise SherlockGenerateProjectReportError(
