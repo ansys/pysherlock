@@ -19,21 +19,22 @@ class Analysis(GrpcStub):
         """Initialize a gRPC stub for SherlockAnalysisService."""
         self.channel = channel
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
+        self.ANALYSIS_HOME = SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis
         self.ANALYSIS_TYPES = {
-            "UNKNOWN": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.UNKNOWN,
-            "NATURALFREQ": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.NaturalFreq,
-            "HARMONICVIBE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.HarmonicVibe,
-            "ICTANALYSIS": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.ICTAnalysis,
-            "MECHANICALSHOCK": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.MechanicalShock,
-            "RANDOMVIBE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.RandomVibe,
-            "COMPONENTFAILUREMODE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.ComponentFailureMode,
-            "DFMEAMODULE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.DFMEAModule,
-            "PTHFATIGUE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.PTHFatigue,
-            "PARTVALIDATION": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.PartValidation,
-            "SEMICONDUCTORWEAROUT": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.SemiconductorWearout,
-            "SOLDERJOINTFATIGUE": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.SolderJointFatigue,
-            "THERMALDERATING": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.ThermalDerating,
-            "THERMALMECH": SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.ThermalMech,
+            "UNKNOWN": self.ANALYSIS_HOME.UNKNOWN,
+            "NATURALFREQ": self.ANALYSIS_HOME.NaturalFreq,
+            "HARMONICVIBE": self.ANALYSIS_HOME.HarmonicVibe,
+            "ICTANALYSIS": self.ANALYSIS_HOME.ICTAnalysis,
+            "MECHANICALSHOCK": self.ANALYSIS_HOME.MechanicalShock,
+            "RANDOMVIBE": self.ANALYSIS_HOME.RandomVibe,
+            "COMPONENTFAILUREMODE": self.ANALYSIS_HOME.ComponentFailureMode,
+            "DFMEAMODULE": self.ANALYSIS_HOME.DFMEAModule,
+            "PTHFATIGUE": self.ANALYSIS_HOME.PTHFatigue,
+            "PARTVALIDATION": self.ANALYSIS_HOME.PartValidation,
+            "SEMICONDUCTORWEAROUT": self.ANALYSIS_HOME.SemiconductorWearout,
+            "SOLDERJOINTFATIGUE": self.ANALYSIS_HOME.SolderJointFatigue,
+            "THERMALDERATING": self.ANALYSIS_HOME.ThermalDerating,
+            "THERMALMECH": self.ANALYSIS_HOME.ThermalMech,
         }
 
     def _add_analyses(self, request, analyses):
