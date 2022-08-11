@@ -1,8 +1,12 @@
 """Module for basic project services on client-side."""
 import os
 
-import SherlockProjectService_pb2
-import SherlockProjectService_pb2_grpc
+try:
+    import SherlockProjectService_pb2
+    import SherlockProjectService_pb2_grpc
+except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockProjectService_pb2
+    from ansys.api.sherlock.v0 import SherlockProjectService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (

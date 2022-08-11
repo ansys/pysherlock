@@ -1,34 +1,47 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
-# Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
+[tool.poetry]
+# Check https://python-poetry.org/docs/pyproject/ for all available sections
 name = "ansys-sherlock"
 version = "0.1.dev0"
-description = "A Python wrapper for Ansys Sherlock"
+description = "A python wrapper for Ansys Sherlock"
+license = "MIT"
+authors = ["ANSYS, Inc. <ansys.support@ansys.com>"]
+maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
 readme = "README.rst"
-requires-python = ">=3.7"
-license = {file = "LICENSE"}
-authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
-]
-maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
-]
-
+repository = "https://github.com/pyansys/pysherlock"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-    "importlib-metadata >=4.0",
+packages = [
+    { include = "ansys", from = "src" },
 ]
 
-[tool.flit.module]
-name = "ansys.sherlock"
+[tool.poetry.dependencies]
+python = ">=3.7,<4.0"
+grpcio = "~=1.17"
+protobuf = "~=3.19"
+# ansys-api-sherlock = ">=0.1.0" 
+# The above should be uncommented with the proper package version when PySherlock is released
+importlib-metadata = {version = "^4.0", python = "<3.8"}
 
-[project.urls]
-Source = "https://github.com/pyansys/pysherlock"
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+force_sort_within_sections = true
+line_length = 100
+default_section = "THIRDPARTY"
+src_paths = ["doc", "src", "tests"]
+
+[tool.coverage.run]
+source = ["ansys.product"]
+
+[tool.coverage.report]
+show_missing = true

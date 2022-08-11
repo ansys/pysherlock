@@ -1,8 +1,12 @@
 """Module for running the gRPC APIs in the SherlockModelService."""
 import os.path
 
-import SherlockModelService_pb2
-import SherlockModelService_pb2_grpc
+try:
+    import SherlockModelService_pb2
+    import SherlockModelService_pb2_grpc
+except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockModelService_pb2
+    from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockModelServiceError
