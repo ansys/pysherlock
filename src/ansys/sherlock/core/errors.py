@@ -348,6 +348,18 @@ class SherlockImportPartsListError(Exception):
         return f"Import parts list error: {self.message}"
 
 
+class SherlockEnableLeadModelingError(Exception):
+    """Raised when enabling lead modeling resulted in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Enable lead modeling error: {self.message}"
+
+
 class SherlockRunAnalysisError(Exception):
     """Raised when running an analysis results in an error."""
 

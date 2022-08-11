@@ -457,3 +457,61 @@ class Parts(GrpcStub):
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
+
+    def enable_lead_modeling(
+        self,
+        project,
+        cca_name,
+    ):
+        """Enable lead modeling for all non LEADLESS parts leads.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.enable_lead_modeling(
+            "Test",
+            "Card",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockEnableLeadModelingError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockEnableLeadModelingError(message="Invalid cca name")
+        except SherlockEnableLeadModelingError as e:
+            LOG.error(str(e))
+            raise e
+
+        request = SherlockPartsService_pb2.UpdateLeadModelingRequest(
+            project=project,
+            ccaName=cca_name,
+        )
+
+        response = self.stub.updateLeadModeling(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockEnableLeadModelingError(response.message)
+            else:
+                LOG.info(response.message)
+                return
+        except SherlockEnableLeadModelingError as e:
+            LOG.error(str(e))
+            raise e
