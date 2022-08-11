@@ -133,13 +133,18 @@ class Model(GrpcStub):
                 raise SherlockModelServiceError("Project name is required")
             if not cca_name:
                 raise SherlockModelServiceError("CCA name is required")
-            if not export_file:
-                raise SherlockModelServiceError("Export file path is required")
-            export_directory = os.path.dirname(export_file)
-            if not os.path.exists(export_directory):
-                raise SherlockModelServiceError(
-                    f"Export file directory ({export_directory}) does not exist"
-                )
+            if export_file == "":
+                raise SherlockModelServiceError(message="Export file path required")
+            if len(export_file) <= 1 or export_file[1] != ":":
+                export_file = f"{os.getcwd()}\\{export_file}"
+            else:  # For locally rooted path
+                if not os.path.exists(os.path.dirname(export_file)):
+                    raise SherlockModelServiceError(
+                        message=(
+                            f"Export file directory ({os.path.dirname(export_file)})"
+                            " does not exist"
+                        )
+                    )
         except Exception as e:
             LOG.error(str(e))
             raise

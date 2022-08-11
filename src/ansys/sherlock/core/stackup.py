@@ -316,6 +316,10 @@ class Stackup(GrpcStub):
             LOG.error(f"Generate stackup error: {str(e)}")
             raise SherlockGenStackupError(message=str(e))
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockStackupService_pb2.GenStackupRequest(
             project=project,
             ccaName=cca_name,
@@ -447,6 +451,10 @@ class Stackup(GrpcStub):
         ) as e:
             LOG.error(f"Update conductor layer error: {str(e)}")
             raise SherlockUpdateConductorLayerError(message=str(e))
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockStackupService_pb2.UpdateConductorLayerRequest(
             project=project,
@@ -604,6 +612,10 @@ class Stackup(GrpcStub):
         ) as e:
             LOG.error(f"Update laminate layer error: {str(e)}")
             raise SherlockUpdateLaminateLayerError(message=str(e))
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockStackupService_pb2.UpdateLaminateRequest(
             project=project,

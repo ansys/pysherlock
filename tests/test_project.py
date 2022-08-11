@@ -81,10 +81,10 @@ def helper_test_generate_project_report(project):
         assert str(e) == "Generate project report error: Invalid company name"
 
     try:
-        project.generate_project_report("Test", "John Doe", "Generic Co.", "Invalid")
+        project.generate_project_report("Test", "John Doe", "Generic Co.", "C:/Invalid/Invalid")
         assert False
     except SherlockGenerateProjectReportError as e:
-        assert str(e) == "Generate project report error: Invalid file path"
+        assert str(e) == "Generate project report error: Export file directory does not exist"
 
 
 if __name__ == "__main__":

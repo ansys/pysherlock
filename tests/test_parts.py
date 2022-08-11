@@ -1,6 +1,7 @@
 import grpc
 
 from ansys.sherlock.core.errors import (
+    SherlockExportPartsListError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
@@ -19,6 +20,7 @@ def test_all():
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
     helper_test_import_parts_list(parts)
+    helper_test_export_parts_list(parts)
 
 
 def helper_test_update_parts_list(parts):
@@ -373,6 +375,39 @@ def helper_test_import_parts_list(parts):
         assert False
     except SherlockImportPartsListError as e:
         assert str(e) == "Import parts list error: Invalid file path"
+
+
+def helper_test_export_parts_list(parts):
+    """Tests iexort_parts_list API."""
+    try:
+        parts.export_parts_list(
+            "",
+            "Card",
+            "Parts List.csv",
+        )
+        assert False
+    except SherlockExportPartsListError as e:
+        assert str(e) == "Export parts list error: Invalid project name"
+
+    try:
+        parts.export_parts_list(
+            "Test",
+            "",
+            "Parts List.csv",
+        )
+        assert False
+    except SherlockExportPartsListError as e:
+        assert str(e) == "Export parts list error: Invalid cca name"
+
+    try:
+        parts.export_parts_list(
+            "Test",
+            "Card",
+            "C:Invalid/Invalid",
+        )
+        assert False
+    except SherlockExportPartsListError as e:
+        assert str(e) == "Export parts list error: Export file directory does not exist"
 
 
 if __name__ == "__main__":

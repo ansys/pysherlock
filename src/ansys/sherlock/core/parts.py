@@ -10,6 +10,7 @@ except ModuleNotFoundError:
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockExportPartsListError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
@@ -207,6 +208,10 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
             project=project, ccaName=cca_name, partLibrary=part_library
         )
@@ -286,6 +291,10 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
         request = SherlockPartsService_pb2.UpdatePartsLocationsRequest(
             project=project,
             ccaName=cca_name,
@@ -355,12 +364,20 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsByFileError(message="Invalid project name")
             if cca_name == "":
                 raise SherlockUpdatePartsLocationsByFileError(message="Invalid cca name")
+            if file_path == "":
+                raise SherlockUpdatePartsLocationsByFileError(message="File path required")
+            if len(file_path) <= 1 or file_path[1] != ":":
+                file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
                 raise SherlockUpdatePartsLocationsByFileError("Invalid file path")
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockPartsService_pb2.UpdatePartsLocationsByFileRequest(
             project=project,
@@ -433,11 +450,19 @@ class Parts(GrpcStub):
                 raise SherlockImportPartsListError(message="Invalid project name")
             if cca_name == "":
                 raise SherlockImportPartsListError(message="Invalid cca name")
+            if import_file == "":
+                raise SherlockImportPartsListError(message="Import file path required")
+            if len(import_file) <= 1 or import_file[1] != ":":
+                import_file = f"{os.getcwd()}\\{import_file}"
             if not os.path.exists(import_file):
                 raise SherlockImportPartsListError("Invalid file path")
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
 
         request = SherlockPartsService_pb2.ImportPartsListRequest(
             project=project,
@@ -455,5 +480,81 @@ class Parts(GrpcStub):
                 LOG.info(response.message)
                 return
         except SherlockImportPartsListError as e:
+            LOG.error(str(e))
+            raise e
+
+    def export_parts_list(
+        self,
+        project,
+        cca_name,
+        export_file,
+    ):
+        """Export a parts list for a project CCA.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name
+        export_file : str, required
+            Full file path to the export parts list .csv file.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.export_parts_list(
+            "Test",
+            "Card",
+            "Parts List.csv",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockExportPartsListError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockExportPartsListError(message="Invalid cca name")
+            if export_file == "":
+                raise SherlockExportPartsListError(message="Export file path required")
+            if len(export_file) <= 1 or export_file[1] != ":":
+                export_file = f"{os.getcwd()}\\{export_file}"
+            else:  # For locally rooted path
+                if not os.path.exists(os.path.dirname(export_file)):
+                    raise SherlockExportPartsListError(
+                        message="Export file directory does not exist"
+                    )
+        except SherlockExportPartsListError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockPartsService_pb2.ExportPartsListRequest(
+            project=project,
+            ccaName=cca_name,
+            exportFile=export_file,
+        )
+
+        response = self.stub.exportPartsList(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockExportPartsListError(response.message)
+            else:
+                LOG.info(response.message)
+                return
+        except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
