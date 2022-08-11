@@ -16,7 +16,7 @@ class TestModel(unittest.TestCase):
             except Exception as e:
                 assert (
                     str(e) == "Sherlock model service error: Export file directory "
-                    "(C:\Temp2) does not exist"
+                    "(C:\\Temp2) does not exist"
                 )
 
 

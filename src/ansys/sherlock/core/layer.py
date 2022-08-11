@@ -67,8 +67,12 @@ class Layer(GrpcStub):
             raise e
 
         try:
+            if file_path == "":
+                raise SherlockUpdateMountPointsByFileError(message="File path required")
+            if len(file_path) <= 1 or file_path[1] != ":":
+                file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdateMountPointsByFileError(message="Invalid file path")
+                raise SherlockUpdateMountPointsByFileError(f"Invalid file path")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
