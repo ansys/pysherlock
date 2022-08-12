@@ -1,6 +1,7 @@
 import grpc
 
 from ansys.sherlock.core.errors import (
+    SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
@@ -21,6 +22,7 @@ def test_all():
     helper_test_update_parts_locations_by_file(parts)
     helper_test_import_parts_list(parts)
     helper_test_export_parts_list(parts)
+    helper_test_enable_lead_modeling(parts)
 
 
 def helper_test_update_parts_list(parts):
@@ -408,6 +410,27 @@ def helper_test_export_parts_list(parts):
         assert False
     except SherlockExportPartsListError as e:
         assert str(e) == "Export parts list error: Export file directory does not exist"
+
+
+def helper_test_enable_lead_modeling(parts):
+    """Test enable_lead_modelign API."""
+    try:
+        parts.enable_lead_modeling(
+            "",
+            "Card",
+        )
+        assert False
+    except SherlockEnableLeadModelingError as e:
+        assert str(e) == "Enable lead modeling error: Invalid project name"
+
+    try:
+        parts.enable_lead_modeling(
+            "Test",
+            "",
+        )
+        assert False
+    except SherlockEnableLeadModelingError as e:
+        assert str(e) == "Enable lead modeling error: Invalid cca name"
 
 
 if __name__ == "__main__":
