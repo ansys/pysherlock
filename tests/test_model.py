@@ -1,23 +1,26 @@
+import grpc
+import os
 import unittest
-from unittest.mock import patch
 
 from ansys.sherlock.core.model import Model
 
-
 class TestModel(unittest.TestCase):
     def test_model_export_file_directory(self):
-        with patch.object(Model, "__init__", lambda a, b, c, d: None):
-            instance = Model(None, None, None)
+        channel_param = "127.0.0.1:9090"
+        channel = grpc.insecure_channel(channel_param)
+        instance = Model(channel)
 
-            try:
-                instance.export_trace_reinforcement_model(
-                    "Tutorial Project", "Main Board", "C:\\Temp2\\export.wbjn"
-                )
-            except Exception as e:
-                assert (
-                    str(e) == "Sherlock model service error: Export file directory "
-                    "(C:\\Temp2) does not exist"
-                )
+        tempDir = os.environ.get('TEMP','C:\\TEMP');
+
+        try:
+            instance.export_trace_reinforcement_model(
+                "Tutorial Project", "Main Board", tempDir + "\\export.wbjn"
+            )
+        except Exception as e:
+            assert (
+                str(e) == "Sherlock model service error: Export file directory "
+                "(" + tempDir + ") does not exist"
+            )
 
 
 if __name__ == "__main__":

@@ -29,6 +29,7 @@ class Model(GrpcStub):
         overwrite=True,
         display_model=False,
         generate_models_for_all_layers=False,
+        coordinate_units="mm",
         trace_param_diameter_threshold_val=2,
         trace_param_diameter_threshold_unit="mm",
         trace_param_min_hole_diameter_val=0.25,
@@ -67,6 +68,10 @@ class Model(GrpcStub):
             reinforcement layers. When this is set to True, Sherlock will generate trace models
             for all the other layers and include them in the exported model.
             By default, this is set to False.
+
+        coordinate_units : str, optional
+            The units of the model coordinates to use when exporting a model.
+            By default, this is set to "mm".
 
         trace_param_diameter_threshold_val: float, optional
             This value determines whether a hole is modeled with beams or shell
@@ -126,7 +131,7 @@ class Model(GrpcStub):
         >>> sherlock = launcher.launch_sherlock()
         >>> sherlock.model.export_trace_reinforcement_model(
             'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
-            True, False, False, 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
+            True, False, False, "mm", 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
         """
         try:
             if not project_name:
@@ -162,6 +167,7 @@ class Model(GrpcStub):
         export_request.clearFEADatabase = (
             False  # This only applies to *.apdl files and is not applicable here.
         )
+        export_request.coordinateUnits = coordinate_units
         export_request.generateModelsForAllLayers = generate_models_for_all_layers
         export_request.traceParam.diameterThreshold.value = trace_param_diameter_threshold_val
         export_request.traceParam.diameterThreshold.unit = trace_param_diameter_threshold_unit
