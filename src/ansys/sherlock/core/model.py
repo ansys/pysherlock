@@ -115,7 +115,7 @@ class Model(GrpcStub):
 
         trace_drill_hole_max_edge_unit: str, optional
             The units associated with trace_drill_hole_max_edge_val.
-            By default this is set to "mm".
+            By default, this is set to "mm".
 
         Examples
         --------
@@ -185,6 +185,114 @@ class Model(GrpcStub):
 
         try:
             return_code = self.stub.exportTraceReinforcementModel(export_request)
+            if return_code.value != 0:
+                raise SherlockModelServiceError(return_code.message)
+
+            return return_code.value, return_code.message
+        except Exception as e:
+            LOG.error(str(e))
+            raise
+
+    def generate_trace_model(
+        self,
+        project_name,
+        cca_name="",
+        copper_layer_name="",
+        max_arc_segment=0.0,
+        max_arc_segment_units="mm",
+        min_trace_area=0.0,
+        min_trace_area_units="mm2",
+        min_hole_area=0.0,
+        min_hole_area_units="mm2"
+    ):
+        r"""Generate one or more trace models for a given project.
+
+        Parameters
+        ----------
+        project_name : str, required
+            The Sherlock project name from which the trace model will be generated.
+
+        cca_name : str, optional
+            The Sherlock CCA name from which the trace model will be generated.
+            If this is empty, trace models will be generated for CCAs and all layers.
+
+        copper_layer_name : str, optional
+            The copper layer from which the trace model will be generated.
+            If this is empty, trace models will be generated for all layers for the
+            given CCA.
+
+        max_arc_segment : float, required
+            Specifies the maximum length of a segment to be generated when Sherlock
+            converts EDA arc drawing commands to line segments. Smaller values for
+            Max Arc Segment result in smoother arc representations on the FEA model,
+            at the cost of generating a larger number of shorter segments. Such short
+            segments will then cause the FEA tool to generate a larger number of
+            smaller elements to represent the curved solid.
+
+        max_arc_segment_units : str, required
+            Units for max_arc_segment
+
+        min_trace_area : float, required
+            Specifies the minimum area of any trace polygon to be included in the
+            trace model.  Setting this value to zero disables any area filtering.
+
+        min_trace_area_units : str, required
+            Units for min_trace_area
+
+        min_hole_area : float, required
+            Specifies the minimum hole area of any trace hole to be included in the
+            trace model.  Setting this value to zero disables any hole filtering.
+
+        min_hole_area_units : str, required
+            Units for min_hole_area
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.sherlock.core import model
+        >>> sherlock = launcher.launch_sherlock()
+        >>> sherlock.model.generate_trace_model(
+            'Tutorial Project', 'Main Board', 0.05, 'mm'
+            0.0, 'mm2', 0.0, 'mm2')
+
+
+        """
+        try:
+            if not project_name:
+                raise SherlockModelServiceError("Project name is required")
+            if not max_arc_segment:
+                raise SherlockModelServiceError("Max Arc Segment is required")
+            if not max_arc_segment_units:
+                raise SherlockModelServiceError("Max Arc Segment Units is required")
+            if not min_trace_area:
+                raise SherlockModelServiceError("Min Trace Area is required")
+            if not min_trace_area_units:
+                raise SherlockModelServiceError("Min Trace Area Units is required")
+            if not min_hole_area:
+                raise SherlockModelServiceError("Min Hole Area is required")
+            if not min_hole_area_units:
+                raise SherlockModelServiceError("Min Hole Area Units is required")
+        except Exception as e:
+            LOG.error(str(e))
+            raise
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            raise
+
+        gen_request = SherlockModelService_pb2.GenerateTraceModelRequest()
+        gen_request.project = project_name
+        gen_request.ccaName = cca_name
+        gen_request.copperLayerName = copper_layer_name
+        gen_request.maxArcSegment = max_arc_segment
+        gen_request.maxArcSegmentUnits = max_arc_segment_units
+        gen_request.minTraceArea = min_trace_area
+        gen_request.minTraceAreaUnits = min_trace_area_units
+        gen_request.minHoleArea = min_hole_area
+        gen_request.minHoleAreaUnits = min_hole_area_units
+
+        try:
+            return_code = self.stub.generateTraceModel(gen_request)
             if return_code.value != 0:
                 raise SherlockModelServiceError(return_code.message)
 
