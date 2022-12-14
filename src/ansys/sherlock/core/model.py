@@ -152,11 +152,11 @@ class Model(GrpcStub):
                     )
         except Exception as e:
             LOG.error(str(e))
-            raise
+            raise e
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
-            raise
+            return
 
         export_request = SherlockModelService_pb2.ExportTraceReinforcementModelRequest()
         export_request.project = project_name
