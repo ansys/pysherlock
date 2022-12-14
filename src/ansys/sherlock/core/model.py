@@ -1,5 +1,6 @@
 """Module for running the gRPC APIs in the SherlockModelService."""
 import os.path
+import platform
 
 try:
     import SherlockModelService_pb2
@@ -141,7 +142,10 @@ class Model(GrpcStub):
             if export_file == "":
                 raise SherlockModelServiceError(message="Export file path required")
             if len(export_file) <= 1 or export_file[1] != ":":
-                export_file = f"{os.getcwd()}\\{export_file}"
+                if platform.system() == "Windows":
+                    export_file = f"{os.getcwd()}\\{export_file}"
+                else:
+                    export_file = f"{os.getcwd()}/{export_file}"
             else:  # For locally rooted path
                 if not os.path.exists(os.path.dirname(export_file)):
                     raise SherlockModelServiceError(

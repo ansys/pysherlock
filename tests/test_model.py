@@ -1,3 +1,5 @@
+import platform
+
 import grpc
 import os
 import unittest
@@ -11,12 +13,20 @@ class TestModel(unittest.TestCase):
         channel = grpc.insecure_channel(channel_param)
         instance = Model(channel)
 
-        temp_dir = os.environ.get('TEMP', 'C:\\TEMP')
+        if platform.system() == "Windows":
+            temp_dir = os.environ.get('TEMP', 'C:\\TEMP')
+        else:
+            temp_dir = os.environ.get('TEMP', "/tmp")
 
         try:
-            instance.export_trace_reinforcement_model(
-                "Tutorial Project", "Main Board", temp_dir + "\\export.wbjn"
-            )
+            if platform.system() == "Windows":
+                instance.export_trace_reinforcement_model(
+                    "Tutorial Project", "Main Board", temp_dir + "\\export.wbjn"
+                )
+            else:
+                instance.export_trace_reinforcement_model(
+                    "Tutorial Project", "Main Board", temp_dir + "/export.wbjn"
+                )
         except Exception as e:
             assert (
                 str(e) == "Sherlock model service error: Export file directory"
