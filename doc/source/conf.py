@@ -1,5 +1,6 @@
 import os
 import sys
+import ansys_sphinx_theme
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
@@ -20,6 +21,10 @@ html_theme = "pyansys_sphinx_theme"
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-sphinx-theme",
     "show_prev_next": False,
+    "switcher": {
+        "json_url": f"https://{cname}/release/versions.json",
+        "version_match": ansys_sphinx_theme.get_version_match(__version__),
+    },
 }
 
 # Sphinx extensions
