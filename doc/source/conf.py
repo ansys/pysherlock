@@ -1,7 +1,7 @@
 import os
 import sys
-from pyansys_sphinx_theme import __version__ as pyansys_version
-from pyansys_sphinx_theme import pyansys_logo_black
+from ansys_sphinx_theme import __version__ as pyansys_version
+from ansys_sphinx_theme import pyansys_logo_black
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
@@ -24,7 +24,7 @@ html_theme_options = {
     "show_prev_next": False,
     "switcher": {
         "json_url": f"https://{project}/release/versions.json",
-        "version_match": pyansys_sphinx_theme.get_version_match(__version__),
+        "version_match": ansys_sphinx_theme.get_version_match(__version__),
     },
 }
 
