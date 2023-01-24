@@ -252,8 +252,9 @@ class Model(GrpcStub):
             Units for min_hole_area
 
         use_snapshot_for_non_image_layer : bool, optional
-            Specifies whether to use an image to generate the trace model for layers that are not image layers.
-            If a snapshot image exists for the layer, that snapshot is used. Otherwise this creates an image that is identical to creating a snapshot.
+            Specifies whether to use an image to generate the trace model for layers that are not
+            image layers. If a snapshot image exists for the layer, that snapshot is used.
+            Otherwise this creates an image that is identical to creating a snapshot.
             By default, this is set to False.
 
         Examples
