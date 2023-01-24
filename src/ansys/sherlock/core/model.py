@@ -207,7 +207,8 @@ class Model(GrpcStub):
         min_trace_area=0.0,
         min_trace_area_units="mm2",
         min_hole_area=0.0,
-        min_hole_area_units="mm2"
+        min_hole_area_units="mm2",
+        use_snapshot_for_non_image_layer=False,
     ):
         r"""Generate one or more trace models for a given project.
 
@@ -249,6 +250,11 @@ class Model(GrpcStub):
 
         min_hole_area_units : str, required
             Units for min_hole_area
+
+        use_snapshot_for_non_image_layer : bool, optional
+            Specifies whether to use an image to generate the trace model for layers that are not image layers.
+            If a snapshot image exists for the layer, that snapshot is used. Otherwise this creates an image that is identical to creating a snapshot.
+            By default, this is set to False.
 
         Examples
         --------
@@ -294,6 +300,7 @@ class Model(GrpcStub):
         gen_request.minTraceAreaUnits = min_trace_area_units
         gen_request.minHoleArea = min_hole_area
         gen_request.minHoleAreaUnits = min_hole_area_units
+        gen_request.useSnapshotForNonImageLayer = use_snapshot_for_non_image_layer
 
         try:
             return_code = self.stub.generateTraceModel(gen_request)
