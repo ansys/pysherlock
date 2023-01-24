@@ -24,7 +24,7 @@ html_theme_options = {
     "show_prev_next": False,
     "switcher": {
         "json_url": f"https://{project}/release/versions.json",
-        "version_match": ansys_sphinx_theme.get_version_match(__version__),
+        "version_match": pyansys_sphinx_theme.get_version_match(__version__),
     },
 }
 
