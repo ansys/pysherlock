@@ -1,6 +1,7 @@
 import os
 import sys
-from ansys_sphinx_theme import __version__ as pyansys_version
+#from ansys_sphinx_theme import __version__ as pyansys_version
+import ansys_sphinx_theme
 from ansys_sphinx_theme import pyansys_logo_black
 
 sys.path.insert(0, os.path.abspath("../../src"))
@@ -20,7 +21,7 @@ html_theme = "ansys_sphinx_theme"
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pyansys-sphinx-theme",
+    "github_url": "https://github.com/pyansys/ansys-sphinx-theme",
     "show_prev_next": False,
     "switcher": {
         "json_url": f"https://{project}/release/versions.json",
