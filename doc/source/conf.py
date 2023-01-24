@@ -23,7 +23,7 @@ html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-sphinx-theme",
     "show_prev_next": False,
     "switcher": {
-        "json_url": f"https://{cname}/release/versions.json",
+        "json_url": f"https://{project}/release/versions.json",
         "version_match": ansys_sphinx_theme.get_version_match(__version__),
     },
 }
