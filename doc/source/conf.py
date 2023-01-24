@@ -1,6 +1,7 @@
 import os
 import sys
-import ansys_sphinx_theme
+from pyansys_sphinx_theme import __version__ as pyansys_version
+from pyansys_sphinx_theme import pyansys_logo_black
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
