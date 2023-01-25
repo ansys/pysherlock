@@ -46,3 +46,4 @@ test-output.xml
 /bin/
 /.project
 /.pydevproject
+.idea/
