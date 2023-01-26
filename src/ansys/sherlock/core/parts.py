@@ -1,4 +1,4 @@
-"""Module for parts services on client-side."""
+"""Module containing all the parts management capabilities."""
 import os
 
 try:
@@ -21,7 +21,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Parts(GrpcStub):
-    """Contains methods form the Sherlock Parts Service."""
+    """Module containing all the parts management capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockPartsService."""
@@ -243,7 +243,7 @@ class Parts(GrpcStub):
         cca_name,
         part_loc,
     ):
-        """Set parts' locations.
+        """Update one or more parts' locations.
 
         Parameters
         ----------

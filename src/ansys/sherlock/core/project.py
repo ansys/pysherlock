@@ -1,4 +1,4 @@
-"""Module for basic project services on client-side."""
+"""Module containing all the project management capabilities."""
 import os
 
 try:
@@ -19,7 +19,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Project(GrpcStub):
-    """Contains methods from the Sherlock Project Service."""
+    """Module containing all the project management capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockProjectService."""
@@ -35,8 +35,9 @@ class Project(GrpcStub):
             Project name of project to be deleted
         Examples
         --------
-        >>> from ansys.sherlock.project import delete_project
-        >>> delete_project("Test Project")
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.delete_project("Test Project")
         """
         try:
             if project == "":
@@ -64,14 +65,14 @@ class Project(GrpcStub):
             raise e
 
     def import_odb_archive(
-        self,
-        archive_file,
-        process_layer_thickness,
-        include_other_layers,
-        process_cutout_file,
-        guess_part_properties,
-        project=None,
-        cca_name=None,
+            self,
+            archive_file,
+            process_layer_thickness,
+            include_other_layers,
+            process_cutout_file,
+            guess_part_properties,
+            project=None,
+            cca_name=None,
     ):
         """Import an ODB++ archive.
 

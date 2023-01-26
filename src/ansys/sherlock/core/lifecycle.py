@@ -1,4 +1,5 @@
-"""Module for lifecycle services on client-side."""
+"""Module containing all the lifecycle management capabilities."""
+
 try:
     import SherlockLifeCycleService_pb2
     import SherlockLifeCycleService_pb2_grpc
@@ -28,7 +29,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Lifecycle(GrpcStub):
-    """Contains methods from the Sherlock Lifecycle Service."""
+    """Module containing all the lifecycle management capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockLifeCycleService."""

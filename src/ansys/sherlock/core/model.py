@@ -1,4 +1,4 @@
-"""Module for running the gRPC APIs in the SherlockModelService."""
+"""Module containing different model generation capabilities."""
 import os.path
 import platform
 
@@ -15,7 +15,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Model(GrpcStub):
-    """Contains methods for the Sherlock Model Service."""
+    """Module containing different model generation capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for the Sherlock Model Service."""
