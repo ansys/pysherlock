@@ -1,8 +1,6 @@
 import os
 import sys
 
-from sphinx.ext.autosummary import Autosummary
-
 sys.path.insert(0, os.path.abspath("../../src"))
 
 from ansys.sherlock.core import __version__
