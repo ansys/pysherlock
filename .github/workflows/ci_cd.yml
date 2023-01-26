@@ -93,24 +93,24 @@ jobs:
           path: doc/build/html
           retention-days: 7
       
-      - name: Deploy stable documentation
-        uses: pyansys/actions/doc-deploy-stable@v3
-        # The following commented condition should be uncommented when the release is public to ensure a stable user documentation.
-        # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, 'dev')
-        if: github.event_name == 'push' && contains(github.ref, 'refs/heads/main')
-        with:
-            doc-artifact-name: 'HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}'
-            decompress_artifact: true
-            cname: ${{ env.DOCUMENTATION_CNAME }}
-            token: ${{ secrets.GH_TOKEN }}
-      
-#      - name: Old Deploy
+#      - name: Deploy stable documentation
+#        uses: pyansys/actions/doc-deploy-stable@v3
+#        # The following commented condition should be uncommented when the release is public to ensure a stable user documentation.
+#        # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, 'dev')
 #        if: github.event_name == 'push' && contains(github.ref, 'refs/heads/main')
-#        uses: JamesIves/github-pages-deploy-action@4.1.5
 #        with:
-#          branch: gh-pages
-#          folder: doc/build/html
-#          clean: true
+#            doc-artifact-name: 'HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}'
+#            decompress_artifact: true
+#            cname: ${{ env.DOCUMENTATION_CNAME }}
+#            token: ${{ secrets.GH_TOKEN }}
+      
+      - name: Deploy
+        if: github.event_name == 'push' && contains(github.ref, 'refs/heads/main')
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: doc/build/html
+          clean: true
 
   release:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
