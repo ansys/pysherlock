@@ -1,4 +1,4 @@
-"""Module for stackup service on client-side."""
+"""Module containing all the stackup management capabilities."""
 
 try:
     import SherlockStackupService_pb2
@@ -22,7 +22,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Stackup(GrpcStub):
-    """Contains the methods from the Sherlock Stackup Service."""
+    """Module containing all the stackup management capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockStackupService."""

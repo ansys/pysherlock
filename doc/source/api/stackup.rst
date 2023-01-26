@@ -1,7 +1,13 @@
 Stackup
 =======
 
-Library containing all the stackup management capabilities.
+Module containing all the stackup management capabilities.
 
-.. automodule:: ansys.sherlock.core.stackup
-   :members:
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. autosummary::
+     :toctree: _autosummary
+
+     ansys.sherlock.core.stackup.Stackup.gen_stackup
+     ansys.sherlock.core.stackup.Stackup.update_conductor_layer
+     ansys.sherlock.core.stackup.Stackup.update_laminate_layer

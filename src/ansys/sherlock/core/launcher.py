@@ -3,6 +3,7 @@ import errno
 import os
 import socket
 import subprocess
+import time
 
 import grpc
 
@@ -53,18 +54,20 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
 
     try:
         subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + str(port), sherlock_cmd_args])
+        time.sleep(10)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = " + str(e))
 
     try:
-        sherlock = connect_grpc_channel()
+        sherlock = connect_grpc_channel(port)
         return sherlock
     except Exception as e:
         LOG.error(str(e))
 
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
-    """Create a gRPC connection to the specified port."""
+    """Create a gRPC connection to the specified port and returns a gRPC connection object ``Sherlock``
+    which can be used to invoke the APIs from their respective services.."""
     global SHERLOCK
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)

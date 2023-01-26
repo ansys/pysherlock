@@ -1,4 +1,4 @@
-"""Module for analysis services on client-side."""
+"""Module containing all the analysis capabilities."""
 
 try:
     import SherlockAnalysisService_pb2
@@ -13,7 +13,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Analysis(GrpcStub):
-    """Contains methods from the Sherlock Analysis Service."""
+    """Module containing all the analysis capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockAnalysisService."""

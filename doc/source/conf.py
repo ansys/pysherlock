@@ -29,6 +29,7 @@ extensions = [
     "sphinx.ext.autosummary",
 ]
 
+autodoc_default_flags = ['members']
 autosummary_generate = True
 
 # Numpydoc config

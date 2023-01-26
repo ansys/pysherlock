@@ -1,7 +1,14 @@
 Project
 =======
 
-Library containing all the project management capabilities.
+Module containing all the project management capabilities.
 
-.. automodule:: ansys.sherlock.core.project
-   :members:
+.. currentmodule:: ansys.sherlock.core.project
+
+.. autosummary::
+     :toctree: _autosummary
+
+     ansys.sherlock.core.project.Project.delete_project
+     ansys.sherlock.core.project.Project.generate_project_report
+     ansys.sherlock.core.project.Project.import_odb_archive
+     ansys.sherlock.core.project.Project.import_ipc2581_archive

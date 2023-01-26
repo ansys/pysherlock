@@ -1,4 +1,5 @@
-"""Module for layer services on client-side."""
+"""Module containing all the layer management capabilities."""
+
 import os
 
 try:
@@ -14,7 +15,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Layer(GrpcStub):
-    """Contains methods from the Sherlock Layer Service."""
+    """Module containing all the layer management capabilities."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockLayerService."""

@@ -3,5 +3,9 @@ Launcher
 
 Launches the Sherlock gRPC server and a Sherlock client.
 
-.. automodule:: ansys.sherlock.core.launcher
-   :members:
+.. currentmodule:: ansys.sherlock.core.launcher
+
+.. autosummary::
+     :toctree: _autosummary
+
+     ansys.sherlock.core.launcher.launch_sherlock

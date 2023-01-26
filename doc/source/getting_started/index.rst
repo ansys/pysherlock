@@ -1,11 +1,16 @@
 ===============
 Getting Started
 ===============
-To use PySherlock, you need to have a local installation of Ansys. The version
-of Ansys installed will dictate the interface and features available to you.
+PySherlock provides a Pythonic interface to Sherlock functionalities.
 
-Visit `Ansys <https://www.ansys.com>`_ for more information on getting a
-licensed copy of Ansys.
+To use PySherlock, you must have a licensed copy of Sherlock 2022 R2 or later installed locally.
 
-Installation
-------------
+For more information on Sherlock, see the
+`Ansys Sherlock page <https://www.ansys.com/products/structures/ansys-sherlock>`_ on the Ansys website.
+
+..  toctree::
+    :hidden:
+    :maxdepth: 1
+
+    installation
+    launch_sherlock

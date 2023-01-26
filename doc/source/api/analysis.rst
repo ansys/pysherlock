@@ -1,7 +1,11 @@
 Analysis
 ========
 
-Library containing all the analysis capabilities.
+Module containing all the analysis capabilities.
 
-.. automodule:: ansys.sherlock.core.analysis
-   :members:
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. autosummary::
+     :toctree: _autosummary
+
+     ansys.sherlock.core.analysis.Analysis.run_analysis

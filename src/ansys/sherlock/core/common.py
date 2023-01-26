@@ -23,8 +23,10 @@ class Common(GrpcStub):
         """Perform a health check on the gRPC connection."""
         if not self._is_connection_up():
             LOG.error("Health check failed.")
+            return False
         else:
             LOG.info("Connection is up.")
+            return True
 
     def exit(self, close_sherlock_client=False):
         """Close the gRPC connection.
