@@ -5,7 +5,6 @@ from sphinx.ext.autosummary import Autosummary
 from sphinx.ext.autosummary import get_documenter
 from docutils.parsers.rst import directives
 from sphinx.util.inspect import safe_getattr
-import re
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
@@ -75,8 +74,10 @@ autodoc_mock_imports = [
     "SherlockAnalysisService_pb2_grpc",
 ]
 
-# The following is an unsuccessful attempt to dynamically generate the API tree menu for all the public class methods.
-# https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions/30783465#30783465
+# The following is an unsuccessful attempt to dynamically generate the 
+# API tree menu for all the public class methods.
+# https://stackoverflow.com/questions/20569011/
+#     python-sphinx-autosummary-automated-listing-of-member-functions/30783465#30783465
 # Maybe we can get this to work in the future.
 class AutoAutoSummary(Autosummary):
 
