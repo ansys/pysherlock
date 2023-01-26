@@ -9,6 +9,7 @@ on:
 
 env:
   DOCUMENTATION_CNAME: 'sherlock.docs.pyansys.com'
+  DOC_DEPLOYMENT_IMAGE_TAG: v23.2.0
 
 jobs:
 
