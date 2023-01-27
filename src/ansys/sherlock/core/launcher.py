@@ -54,12 +54,28 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
 
     try:
         subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + str(port), sherlock_cmd_args])
-        time.sleep(10)
+        time.sleep(5)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = " + str(e))
 
     try:
         sherlock = connect_grpc_channel(port)
+
+        # Check that the gRPC connection is up (timeout after 3 minutes).
+        count = 0
+        while sherlock.common.check() is False and count < 90:
+            time.sleep(2)
+            count = count + 1
+
+        if sherlock.common.check() is False:
+            raise SherlockConnectionError(message="Error starting gRPC service")
+
+        # Check that the Sherlock Client has finished loading (timeout after 5 minutes).
+        count = 0
+        while sherlock.common.is_sherlock_client_loading() is False and count < 150:
+            time.sleep(2)
+            count = count + 1
+
         return sherlock
     except Exception as e:
         LOG.error(str(e))
@@ -68,7 +84,6 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """Create a gRPC connection to the specified port and returns a gRPC connection object ``Sherlock``
     which can be used to invoke the APIs from their respective services.."""
-    global SHERLOCK
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
     SHERLOCK = Sherlock(channel)
