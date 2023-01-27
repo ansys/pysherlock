@@ -28,6 +28,22 @@ class Common(GrpcStub):
             LOG.info("Connection is up.")
             return True
 
+    def is_sherlock_client_loading(self):
+        """Checks if the Sherlock Client (if opened) is still initializing."""
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        message = SherlockCommonService_pb2.IsSherlockClientLoadingRequest()
+        response = self.stub.isSherlockClientLoading(message)
+
+        if response.value == 0:
+            LOG.info("Sherlock client has finished initializing.")
+            return True
+        else:
+            LOG.error("Sherlock client has not finished initializing.")
+            return False
+
     def exit(self, close_sherlock_client=False):
         """Close the gRPC connection.
 
