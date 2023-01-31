@@ -45,15 +45,11 @@ jobs:
     - name: 'Upload to PyPi'
       #if: contains(github.ref, 'refs/tags')
       run: |
-          pip install --upgrade pip flit
-          pip install -r requirements/requirements_build.txt
-          flit build
           pip install twine
           #python setup.py sdist
           twine check dist/*
           twine upload --skip-existing dist/*
       env:
-          TWINE_USERNAME: __token__
-          #TWINE_PASSWORD: ${{secrets.PYPI_TOKEN}}
-          TWINE_PASSWORD: ${{secrets.MEDSON_PYPI}}
-          TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
+          TWINE_USERNAME: PAT
+          TWINE_PASSWORD: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+          TWINE_REPOSITORY_URL: https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/upload
