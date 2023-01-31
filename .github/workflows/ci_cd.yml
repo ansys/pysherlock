@@ -124,7 +124,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: pysherlock-client
+          name: ansys-sherlock
           path: dist
 
       # list current directory
