@@ -135,12 +135,13 @@ jobs:
 
       - name: List directory structure
         run: ls -R
+        
+      - name: "Release to the private PyPI repository"
+        uses: pyansys/actions/release-pypi-private@v3
+        with:
+          library-name: "ansys-sherlock"
+          twine-username: "__token__"
+          twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
 
-      - name: Upload to Private PyPi
-        env:
-          TWINE_USERNAME: PAT
-          TWINE_PASSWORD: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
-          TWINE_REPOSITORY_URL: https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/upload
-        run: |
-          python -m twine upload dist/* \
+
           
