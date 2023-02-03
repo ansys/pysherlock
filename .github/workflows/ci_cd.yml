@@ -65,6 +65,12 @@ jobs:
       - name: Test with pytest
         # Only the tox environment specified in the tox.ini gh-actions is run
         run: pytest
+     
+      - name: Upload ansys-sherlock artifact
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ansys-sherlock
+          path: dist
 
   docs:
     name: Documentation
@@ -124,7 +130,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: pysherlock-client
+          name: ansys-sherlock
           path: dist
 
       # list current directory
