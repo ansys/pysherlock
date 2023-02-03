@@ -134,12 +134,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip build twine
           
-      - name: Build artifacts
-        run: |
-          python -m build && python -m twine check dist/*
-
-      - name: List directory structure
-        run: ls -R
+      - name: "Build library source and wheel artifacts"
+        uses: pyansys/actions/build-library@v3
+        with:
+          library-name: "ansys-sherlock"
         
       - name: "Release to the private PyPI repository"
         uses: pyansys/actions/release-pypi-private@v3
