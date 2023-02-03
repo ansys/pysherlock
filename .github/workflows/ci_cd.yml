@@ -67,7 +67,7 @@ jobs:
         run: pytest
      
       - name: Upload ansys-sherlock artifact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: ansys-sherlock
           path: dist
