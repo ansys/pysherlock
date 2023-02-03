@@ -1,3 +1,4 @@
+
 import grpc
 
 from ansys.sherlock.core.errors import (
@@ -9,6 +10,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddShockProfileError,
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
+    SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
@@ -25,6 +27,7 @@ def test_all():
     helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_thermal_event(lifecycle)
     helper_test_add_thermal_profile(lifecycle)
+    helper_test_add_thermal_profiles(lifecycle)
     helper_test_add_harmonic_event(lifecycle)
     helper_test_add_harmonic_profile(lifecycle)
     helper_test_add_shock_event(lifecycle)
@@ -603,6 +606,204 @@ def helper_test_add_thermal_profile(lifecycle):
         assert False
     except SherlockAddThermalProfileError as e:
         assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 0: Invalid temp"
+
+
+def helper_test_add_thermal_profiles(lifecycle):
+    """Test add_thermal_profiles API."""
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "",
+                "sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    ("Up", "RAMP", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )],
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+               "Add thermal profiles error: Invalid thermal profile name for thermal profile 0"
+
+    if lifecycle._is_connection_up():
+        try:
+            lifecycle.add_thermal_profiles(
+                "Test",
+                [(
+                    "Example",
+                    "Event1",
+                    "Profile1",
+                    "Sec",
+                    "F",
+                    [
+                        ("Initial", "HOLD", 40, 40),
+                        ("Up", "RAMP", 20, 20),
+                        ("Back", "RAMP", 20, 40),
+                    ],
+                )]
+            )
+            assert False
+        except SherlockAddThermalProfilesError as e:
+            assert e.str_itr()[0] == \
+                   "Add thermal profiles error: Invalid time unit Sec for thermal profile 0"
+
+        try:
+            lifecycle.add_thermal_profiles(
+                "Test",
+                [(
+                    "Example",
+                    "Event1",
+                    "Profile1",
+                    "sec",
+                    "IDK",
+                    [
+                        ("Initial", "HOLD", 40, 40),
+                        ("Up", "RAMP", 20, 20),
+                        ("Back", "RAMP", 20, 40),
+                    ],
+                )]
+            )
+            assert False
+        except SherlockAddThermalProfilesError as e:
+            assert e.str_itr()[0] == \
+                   "Add thermal profiles error: Invalid temperature unit IDK for thermal profile 0"
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("HOLD", 40, 40),
+                    ("Up", "RAMP", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )]
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+                "Add thermal profiles error: Invalid entry 0: " \
+                "Wrong number of args for thermal profile 0"
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    (0, "RAMP", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )]
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+                "Add thermal profiles error: Invalid entry 1: " \
+                "Invalid step name for thermal profile 0"
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    ("Up", "RAMP", 20, 20),
+                    ("Back", "INVALID", 20, 40),
+                ],
+            )]
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+                "Add thermal profiles error: Invalid entry 2: " \
+                "Invalid step type for thermal profile 0"
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    ("Up", "RAMP", 0, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )]
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+                "Add thermal profiles error: Invalid entry 1: " \
+                "Time must be greater than 0 for thermal profile 0"
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, 40),
+                    ("Up", "RAMP", "Invalid", 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )]
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+               "Add thermal profiles error: Invalid entry 1: Invalid time for thermal profile 0"
+
+    try:
+        lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("Initial", "HOLD", 40, "40"),
+                    ("Up", "RAMP", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )]
+        )
+        assert False
+    except SherlockAddThermalProfilesError as e:
+        assert e.str_itr()[0] == \
+               "Add thermal profiles error: Invalid entry 0: Invalid temp for thermal profile 0"
 
 
 def helper_test_add_harmonic_event(lifecycle):
