@@ -163,7 +163,8 @@ def helper_test_update_random_vibe_props(analysis):
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == \
-               "Update random vibe properties error: Invalid analysis temperature unit specified: foo"
+               "Update random vibe properties error: Invalid analysis " \
+               "temperature unit specified: foo"
 
 if __name__ == "__main__":
     test_all()
