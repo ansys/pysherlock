@@ -86,6 +86,7 @@ def helper_test_run_analysis(analysis):
             "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Invalid event(s) name"
         )
 
+
 def helper_test_translate_random_vibe_field_names(analysis):
     """Test translating the random vibe field names."""
 
@@ -111,6 +112,7 @@ perform_nf_freq_range_check
 require_material_assignment_enabled"""
 
     assert results == expected
+
 
 def helper_test_update_random_vibe_props(analysis):
     try:
@@ -145,7 +147,8 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
-                   "Update random vibe properties error: Invalid min natural freq unit specified: foo"
+                   "Update random vibe properties error: Invalid min " \
+                   "natural freq unit specified: foo"
 
         try:
             analysis.update_random_vibe_props("Test", "Card",
@@ -157,7 +160,8 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
-                   "Update random vibe properties error: Invalid max natural freq unit specified: foo"
+                   "Update random vibe properties error: Invalid max " \
+                   "natural freq unit specified: foo"
 
         try:
             analysis.update_random_vibe_props("Test", "Card",
@@ -171,7 +175,8 @@ def helper_test_update_random_vibe_props(analysis):
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
                    "Update random vibe properties error: Invalid analysis " \
-                "temperature unit specified: foo"
+                   "temperature unit specified: foo"
+
 
 if __name__ == "__main__":
     test_all()
