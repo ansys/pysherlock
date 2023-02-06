@@ -284,19 +284,19 @@ class Analysis(GrpcStub):
             Max Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ".
             For NX Nastran analysis only.
         analysis_temp: double, optional
-        	Temperature.
+            Temperature.
         analysis_temp_units: str, optional
-        	Temperature units. Valid values: "C", "F", "K".
+            Temperature units. Valid values: "C", "F", "K".
         part_validation_enabled: bool, optional
-        	Part validation.
+            Part validation.
         force_model_rebuild: str, optional
-        	Model Creation. Valid values: "FORCE" or "AUTO".
+            Model Creation. Valid values: "FORCE" or "AUTO".
         reuse_modal_analysis: bool, optional
-        	Reuse Natural Frequency. For NX Nastran analysis only.
+            Reuse Natural Frequency. For NX Nastran analysis only.
         perform_nf_freq_range_check: bool, optional
-        	Frequency Range Check. For NX Nastran analysis only.
+            Frequency Range Check. For NX Nastran analysis only.
         require_material_assignment_enabled: bool, optional
-        	Require Material Assignment.
+            Require Material Assignment.
 
         Examples
         --------
