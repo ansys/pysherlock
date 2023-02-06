@@ -276,11 +276,13 @@ class Analysis(GrpcStub):
         natural_freq_min: double, optional
             Min Frequency. For NX Nastran analysis only.
         natural_freq_min_units: str, optional
-            Min Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ". For NX Nastran analysis only.
+            Min Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ".
+            For NX Nastran analysis only.
         natural_freq_max: double, optional
             Max Frequency. For NX Nastran analysis only.
         natural_freq_max_units: str, optional
-            Max Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ". For NX Nastran analysis only.
+            Max Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ".
+            For NX Nastran analysis only.
         analysis_temp: double, optional
         	Temperature.
         analysis_temp_units: str, optional
@@ -332,17 +334,24 @@ class Analysis(GrpcStub):
                     try:
                         float(value.strip())
                     except ValueError:
-                        raise SherlockUpdateRandomVibePropsError(message="Invalid random vibe damping value: " +
-                                                                         value.strip())
-            if (self.FREQ_UNIT_LIST is not None) and (natural_freq_min_units not in self.FREQ_UNIT_LIST):
-                raise SherlockUpdateRandomVibePropsError(message="Invalid min natural freq unit specified: " +
-                                                                 natural_freq_min_units)
-            if (self.FREQ_UNIT_LIST is not None) and (natural_freq_max_units not in self.FREQ_UNIT_LIST):
-                raise SherlockUpdateRandomVibePropsError(message="Invalid max natural freq unit specified: " +
-                                                                 natural_freq_max_units)
-            if (self.TEMP_UNIT_LIST is not None) and (analysis_temp_units not in self.TEMP_UNIT_LIST):
-                raise SherlockUpdateRandomVibePropsError(message="Invalid analysis temperature unit specified: " +
-                                                                 analysis_temp_units)
+                        raise SherlockUpdateRandomVibePropsError(
+                            message="Invalid random vibe damping value: " +
+                                    value.strip())
+            if (self.FREQ_UNIT_LIST is not None) and \
+                    (natural_freq_min_units not in self.FREQ_UNIT_LIST):
+                raise SherlockUpdateRandomVibePropsError(
+                    message="Invalid min natural freq unit specified: " +
+                            natural_freq_min_units)
+            if (self.FREQ_UNIT_LIST is not None) and \
+                    (natural_freq_max_units not in self.FREQ_UNIT_LIST):
+                raise SherlockUpdateRandomVibePropsError(
+                    message="Invalid max natural freq unit specified: " +
+                            natural_freq_max_units)
+            if (self.TEMP_UNIT_LIST is not None) and \
+                    (analysis_temp_units not in self.TEMP_UNIT_LIST):
+                raise SherlockUpdateRandomVibePropsError(
+                    message="Invalid analysis temperature unit specified: " +
+                            analysis_temp_units)
         except SherlockUpdateRandomVibePropsError as e:
             LOG.error(str(e))
             raise e

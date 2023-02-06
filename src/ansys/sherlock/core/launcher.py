@@ -82,7 +82,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
 
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
-    """Create a gRPC connection to the specified port and returns a gRPC connection object ``Sherlock``
+    """Create a gRPC connection to the specified port and returns a connection object ``Sherlock``
     which can be used to invoke the APIs from their respective services.."""
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
