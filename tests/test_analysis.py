@@ -1,5 +1,4 @@
 import grpc
-import unittest
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import SherlockRunAnalysisError, SherlockUpdateRandomVibePropsError
