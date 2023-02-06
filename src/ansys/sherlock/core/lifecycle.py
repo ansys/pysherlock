@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddShockProfileError,
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
+    SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
     SherlockInvalidHarmonicProfileEntriesError,
     SherlockInvalidLoadDirectionError,
@@ -764,7 +765,7 @@ class Lifecycle(GrpcStub):
             "Event1",
             4.0,
             "PER YEAR",
-            "STORAGE,
+            "STORAGE",
         )
         """
         if self.CYCLE_TYPE_LIST is None:
@@ -874,12 +875,12 @@ class Lifecycle(GrpcStub):
             "Event1",
             4.0,
             "PER YEAR",
-            "STORAGE,
+            "STORAGE",
         )
         >>> sherlock.lifecycle.add_thermal_profile(
             "Test",
             "Example",
-            "Event1"
+            "Event1",
             "Profile1",
             "sec",
             "F",
@@ -948,6 +949,163 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddThermalProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_thermal_profiles(
+        self,
+        project,
+        thermal_profiles,
+    ):
+        """Define and add new thermal life cycle event profiles.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        thermal_profiles : (str, str, str, str, str, thermal_profile_entries) list, required
+            List of (phase_name, event_name, profile_name, time_units, temp_units,
+                        thermal_profile_entries) entries
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "year",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_thermal_event(
+            "Test",
+            "Example",
+            "Event1",
+            4.0,
+            "PER YEAR",
+            "STORAGE",
+        )
+        >>> sherlock.lifecycle.add_thermal_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "sec",
+                "F",
+                [
+                    ("Steady1", "HOLD", 40, 40),
+                    ("Steady", "HOLD", 20, 20),
+                    ("Back", "RAMP", 20, 40),
+                ],
+            )]
+        )
+        """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.TEMP_UNIT_LIST is None:
+            self._init_temp_units()
+
+        try:
+            if project == "":
+                raise SherlockAddThermalProfileError(message="Invalid project name")
+
+            if len(thermal_profiles) == 0:
+                raise SherlockAddThermalProfilesError(message="Missing thermal profiles")
+
+            for i, profile_entry in enumerate(thermal_profiles):
+                if len(profile_entry) != 6:
+                    raise SherlockAddThermalProfilesError(
+                        f"Wrong number of args {str(len(profile_entry))} for thermal profile {i}"
+                    )
+                elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
+                    raise SherlockAddThermalProfilesError(
+                        f"Invalid thermal phase name for thermal profile {i}"
+                    )
+                elif not isinstance(profile_entry[1], str) or profile_entry[1] == "":
+                    raise SherlockAddThermalProfilesError(
+                        f"Invalid thermal event name for thermal profile {i}"
+                    )
+                elif not isinstance(profile_entry[2], str) or profile_entry[2] == "":
+                    raise SherlockAddThermalProfilesError(
+                        f"Invalid thermal profile name for thermal profile {i}"
+                    )
+                elif not isinstance(profile_entry[3], str) or \
+                        ((self.TIME_UNIT_LIST is not None) and
+                         (profile_entry[3] not in self.TIME_UNIT_LIST)):
+                    raise SherlockAddThermalProfilesError(
+                        f"Invalid time unit {profile_entry[3]} for thermal profile {i}"
+                    )
+                elif not isinstance(profile_entry[4], str) or\
+                        ((self.TEMP_UNIT_LIST is not None) and
+                         (profile_entry[4] not in self.TEMP_UNIT_LIST)):
+                    raise SherlockAddThermalProfilesError(
+                        f"Invalid temperature unit {profile_entry[4]} for thermal profile {i}"
+                    )
+
+                try:
+                    self._check_thermal_profile_entries_validity(profile_entry[5])
+
+                except (SherlockAddThermalProfileError,
+                        SherlockInvalidThermalProfileEntriesError) as e:
+                    raise SherlockAddThermalProfilesError(
+                        f"{str(e)} for thermal profile {i}"
+                    )
+
+        except SherlockAddThermalProfilesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockLifeCycleService_pb2.AddThermalProfilesRequest(
+            project=project
+        )
+
+        """Add the thermal profiles to the request"""
+        for t in thermal_profiles:
+            profile = request.thermalProfiles.add()
+            profile.phaseName = t[0]
+            profile.eventName = t[1]
+            profile.profileName = t[2]
+            profile.timeUnits = t[3]
+            profile.tempUnits = t[4]
+
+            """Add the thermal profile entries to the request."""
+            for e in t[5]:
+                entry = profile.thermalProfileEntries.add()
+                entry.step = e[0]
+                entry.type = e[1]
+                entry.time = e[2]
+                entry.temp = e[3]
+
+        response = self.stub.addThermalProfiles(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddThermalProfilesError(error_array=response.errors)
+                else:
+                    raise SherlockAddThermalProfilesError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddThermalProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e

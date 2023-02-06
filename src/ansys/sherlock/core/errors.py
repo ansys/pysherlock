@@ -164,6 +164,23 @@ class SherlockAddThermalProfileError(Exception):
             return [f"Add thermal profile error: {self.message}"]
 
 
+class SherlockAddThermalProfilesError(Exception):
+    """Raised when adding thermal profiles results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add thermal profile error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add thermal profiles error: {self.message}"]
+
+
 class SherlockAddHarmonicEventError(Exception):
     """Raised when adding a harmonic event results in an error."""
 
