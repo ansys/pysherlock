@@ -134,43 +134,44 @@ def helper_test_update_random_vibe_props(analysis):
         assert str(e) == \
                "Update random vibe properties error: Invalid random vibe damping value: foo"
 
-    try:
-        analysis.update_random_vibe_props("Test", "Card",
-                                          random_vibe_damping="0.01, 0.02",
-                                          natural_freq_min=10,
-                                          natural_freq_min_units="foo",
-                                          natural_freq_max=100,
-                                          natural_freq_max_units="HZ")
-        assert False
-    except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == \
-               "Update random vibe properties error: Invalid min natural freq unit specified: foo"
+    if analysis._is_connection_up():
+        try:
+            analysis.update_random_vibe_props("Test", "Card",
+                                              random_vibe_damping="0.01, 0.02",
+                                              natural_freq_min=10,
+                                              natural_freq_min_units="foo",
+                                              natural_freq_max=100,
+                                              natural_freq_max_units="HZ")
+            assert False
+        except SherlockUpdateRandomVibePropsError as e:
+            assert str(e) == \
+                   "Update random vibe properties error: Invalid min natural freq unit specified: foo"
 
-    try:
-        analysis.update_random_vibe_props("Test", "Card",
-                                          random_vibe_damping="0.01, 0.02",
-                                          natural_freq_min=10,
-                                          natural_freq_min_units="HZ",
-                                          natural_freq_max=100,
-                                          natural_freq_max_units="foo")
-        assert False
-    except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == \
-               "Update random vibe properties error: Invalid max natural freq unit specified: foo"
+        try:
+            analysis.update_random_vibe_props("Test", "Card",
+                                              random_vibe_damping="0.01, 0.02",
+                                              natural_freq_min=10,
+                                              natural_freq_min_units="HZ",
+                                              natural_freq_max=100,
+                                              natural_freq_max_units="foo")
+            assert False
+        except SherlockUpdateRandomVibePropsError as e:
+            assert str(e) == \
+                   "Update random vibe properties error: Invalid max natural freq unit specified: foo"
 
-    try:
-        analysis.update_random_vibe_props("Test", "Card",
-                                          random_vibe_damping="0.01, 0.02",
-                                          natural_freq_min=10,
-                                          natural_freq_min_units="HZ",
-                                          natural_freq_max=100,
-                                          natural_freq_max_units="HZ",
-                                          analysis_temp_units="foo")
-        assert False
-    except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == \
-               "Update random vibe properties error: Invalid analysis " \
-               "temperature unit specified: foo"
+        try:
+            analysis.update_random_vibe_props("Test", "Card",
+                                              random_vibe_damping="0.01, 0.02",
+                                              natural_freq_min=10,
+                                              natural_freq_min_units="HZ",
+                                              natural_freq_max=100,
+                                              natural_freq_max_units="HZ",
+                                              analysis_temp_units="foo")
+            assert False
+        except SherlockUpdateRandomVibePropsError as e:
+            assert str(e) == \
+                   "Update random vibe properties error: Invalid analysis " \
+                "temperature unit specified: foo"
 
 if __name__ == "__main__":
     test_all()
