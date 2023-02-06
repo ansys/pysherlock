@@ -137,7 +137,9 @@ def helper_test_update_random_vibe_props(analysis):
     try:
         analysis.update_random_vibe_props("Test", "Card",
                                           random_vibe_damping="0.01, 0.02",
+                                          natural_freq_min=10,
                                           natural_freq_min_units="foo",
+                                          natural_freq_max=100,
                                           natural_freq_max_units="HZ")
         assert False
     except SherlockUpdateRandomVibePropsError as e:
@@ -147,7 +149,9 @@ def helper_test_update_random_vibe_props(analysis):
     try:
         analysis.update_random_vibe_props("Test", "Card",
                                           random_vibe_damping="0.01, 0.02",
+                                          natural_freq_min=10,
                                           natural_freq_min_units="HZ",
+                                          natural_freq_max=100,
                                           natural_freq_max_units="foo")
         assert False
     except SherlockUpdateRandomVibePropsError as e:
@@ -157,7 +161,9 @@ def helper_test_update_random_vibe_props(analysis):
     try:
         analysis.update_random_vibe_props("Test", "Card",
                                           random_vibe_damping="0.01, 0.02",
+                                          natural_freq_min=10,
                                           natural_freq_min_units="HZ",
+                                          natural_freq_max=100,
                                           natural_freq_max_units="HZ",
                                           analysis_temp_units="foo")
         assert False
