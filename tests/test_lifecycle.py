@@ -474,6 +474,7 @@ def helper_test_add_random_vibe_profiles(lifecycle):
                " Frequencies must be greater than 0 for random vibe profile 0"
         )
 
+
 def helper_test_add_thermal_event(lifecycle):
     """Test add_thermal_event API"""
 
@@ -1318,6 +1319,7 @@ def helper_test_add_harmonic_profile(lifecycle):
             == "Add harmonic profile error: Invalid entry 0: Load must be greater than 0"
         )
 
+
 def helper_test_add_harmonic_vibe_profiles(lifecycle):
     """Test add_harmonic_profiles API."""
 
@@ -1513,6 +1515,7 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
                               " Invalid entry 0:"
                               " Load must be greater than 0 for harmonic vibe profile 0"
         )
+
 
 def helper_test_add_shock_event(lifecycle):
     """Test add_shock_event API."""
@@ -1965,6 +1968,7 @@ def helper_test_add_shock_profile(lifecycle):
             e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Decay must be nonnegative"
         )
 
+
 def helper_test_add_shock_profiles(lifecycle):
     """Test add_shock_profiles API."""
 
@@ -2038,7 +2042,8 @@ def helper_test_add_shock_profiles(lifecycle):
         )
         assert False
     except SherlockAddShockProfilesError as e:
-        assert e.str_itr()[0] == "Add shock profiles error: Invalid profile name for shock profile 0"
+        assert e.str_itr()[0] == "Add shock profiles error:" \
+                                 " Invalid profile name for shock profile 0"
 
     try:
         lifecycle.add_shock_profiles(
@@ -2190,7 +2195,8 @@ def helper_test_add_shock_profiles(lifecycle):
         )
         assert False
     except SherlockAddShockProfilesError as e:
-        assert e.str_itr()[0] == "Add shock profiles error: Invalid entry 0: Wrong number of args for shock profile 0"
+        assert e.str_itr()[0] == "Add shock profiles error:" \
+                                 " Invalid entry 0: Wrong number of args for shock profile 0"
 
     if lifecycle._is_connection_up():
         try:
@@ -2209,7 +2215,8 @@ def helper_test_add_shock_profiles(lifecycle):
             )
             assert False
         except SherlockAddShockProfilesError as e:
-            assert e.str_itr()[0] == "Add shock profiles error: Invalid entry 0: Invalid shape type for shock profile 0"
+            assert e.str_itr()[0] == "Add shock profiles error:" \
+                                     " Invalid entry 0: Invalid shape type for shock profile 0"
 
     try:
         lifecycle.add_shock_profiles(
@@ -2252,6 +2259,7 @@ def helper_test_add_shock_profiles(lifecycle):
             e.str_itr()[0] == "Add shock profiles error:"
                               " Invalid entry 0: Decay must be nonnegative for shock profile 0"
         )
+
 
 if __name__ == "__main__":
     test_all()

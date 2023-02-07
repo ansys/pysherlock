@@ -799,7 +799,8 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(random_vibe_profiles):
                 if len(profile_entry) != 6:
                     raise SherlockAddRandomVibeProfilesError(
-                        f"Wrong number of args {str(len(profile_entry))} for random vibe profile {i}"
+                        f"Wrong number of args {str(len(profile_entry))} for"
+                        f" random vibe profile {i}"
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddRandomVibeProfilesError(
@@ -849,11 +850,11 @@ class Lifecycle(GrpcStub):
         """Add the random vibe profiles to the request"""
         for r in random_vibe_profiles:
             profile = request.randomVibeProfiles.add()
-            profile.phaseName=r[0]
-            profile.eventName=r[1]
-            profile.profileName=r[2]
-            profile.freqUnits=r[3]
-            profile.amplUnits=r[4]
+            profile.phaseName = r[0]
+            profile.eventName = r[1]
+            profile.profileName = r[2]
+            profile.freqUnits = r[3]
+            profile.amplUnits = r[4]
 
             """Add the random vibe entries to the request."""
             for e in r[5]:
@@ -1576,7 +1577,6 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-
     def add_harmonic_vibe_profiles(
         self,
         project,
@@ -1588,7 +1588,8 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        harmonic_vibe_profiles : (str, str, str, str, str, harmonic_vibe_profile_entries) list, required
+        harmonic_vibe_profiles : (str, str, str, str, str, harmonic_vibe_profile_entries) list,
+         required
             List of (
                 phase_name : str, required
                     The name of the life cycle phase this event is associated.
@@ -1603,7 +1604,8 @@ class Lifecycle(GrpcStub):
                 harmonic_profile_entries : (double, double) list, required
                     List of (frequency, load) entries
                 triaxial_axis : (string, required)
-                    If the harmonic profile type is "Triaxial", the axis this profile should be assigned to.
+                    If the harmonic profile type is "Triaxial", the axis this profile should be
+                    assigned to.
                     Valid values are: x, y, z.
             )
         Examples
@@ -1667,7 +1669,8 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(harmonic_vibe_profiles):
                 if len(profile_entry) != 7:
                     raise SherlockAddHarmonicVibeProfilesError(
-                        f"Wrong number of args {str(len(profile_entry))} for harmonic vibe profile {i}"
+                        f"Wrong number of args {str(len(profile_entry))} for"
+                        f" harmonic vibe profile {i}"
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddHarmonicVibeProfilesError(
@@ -1717,11 +1720,11 @@ class Lifecycle(GrpcStub):
         """Add the harmonic vibe profiles to the request"""
         for h in harmonic_vibe_profiles:
             profile = request.harmonicVibeProfiles.add()
-            profile.phaseName=h[0]
-            profile.eventName=h[1]
-            profile.profileName=h[2]
-            profile.freqUnits=h[3]
-            profile.loadUnits=h[4]
+            profile.phaseName = h[0]
+            profile.eventName = h[1]
+            profile.profileName = h[2]
+            profile.freqUnits = h[3]
+            profile.loadUnits = h[4]
 
             """Add the entries to the harmonic profile request."""
             for e in h[5]:
@@ -1729,7 +1732,7 @@ class Lifecycle(GrpcStub):
                 entry.freq = e[0]
                 entry.load = e[1]
 
-            profile.triaxialAxis=h[6]
+            profile.triaxialAxis = h[6]
 
         response = self.stub.addHarmonicVibeProfiles(request)
 
@@ -2060,7 +2063,8 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        shock_profiles : (str, str, str, double, str, double, str, str, str, shock_profile_entries) list, required
+        shock_profiles : (str, str, str, double, str, double, str, str, str,
+        shock_profile_entries) list, required
             List of (
                 phase_name : str, required
                     The name of the life cycle phase this event is associated.
@@ -2214,15 +2218,15 @@ class Lifecycle(GrpcStub):
 
         for s in shock_profiles:
             profile = request.shockProfiles.add()
-            profile.phaseName=s[0]
-            profile.eventName=s[1]
-            profile.profileName=s[2]
-            profile.duration=s[3]
-            profile.durationUnits=s[4]
-            profile.sampleRate=s[5]
-            profile.sampleRateUnits=s[6]
-            profile.loadUnits=s[7]
-            profile.freqUnits=s[8]
+            profile.phaseName = s[0]
+            profile.eventName = s[1]
+            profile.profileName = s[2]
+            profile.duration = s[3]
+            profile.durationUnits = s[4]
+            profile.sampleRate = s[5]
+            profile.sampleRateUnits = s[6]
+            profile.loadUnits = s[7]
+            profile.freqUnits = s[8]
 
         """Add the shock entries to the request."""
         for e in s[9]:
