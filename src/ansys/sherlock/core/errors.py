@@ -129,6 +129,21 @@ class SherlockAddRandomVibeProfileError(Exception):
             assert self.error_array is None
             return [f"Add random vibe profile error: {self.message}"]
 
+class SherlockAddRandomVibeProfilesError(Exception):
+    """Raised when adding random vibe profiles results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add random vibe profiles error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add random vibe profiles error: {self.message}"]
 
 class SherlockAddThermalEventError(Exception):
     """Raised when adding a thermal event results in an error."""
@@ -175,7 +190,7 @@ class SherlockAddThermalProfilesError(Exception):
     def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Add thermal profile error: {error}" for error in self.error_array]
+            return [f"Add thermal profiles error: {error}" for error in self.error_array]
         else:
             assert self.error_array is None
             return [f"Add thermal profiles error: {self.message}"]
@@ -214,6 +229,21 @@ class SherlockAddHarmonicProfileError(Exception):
             assert self.error_array is None
             return [f"Add harmonic profile error: {self.message}"]
 
+class SherlockAddHarmonicVibeProfilesError(Exception):
+    """Raised when adding harmonic vibe profiles results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add harmonic vibe profiles error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add harmonic vibe profiles error: {self.message}"]
 
 class SherlockAddShockEventError(Exception):
     """Raised when adding a shock event results in an error."""
@@ -248,6 +278,21 @@ class SherlockAddShockProfileError(Exception):
             assert self.error_array is None
             return [f"Add shock profile error: {self.message}"]
 
+class SherlockAddShockProfilesError(Exception):
+    """Raised when adding shock profiles results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add shock profiles error: {error}" for error in self.error_array]
+        else:
+            assert self.error_array is None
+            return [f"Add shock profiles error: {self.message}"]
 
 class SherlockUpdateMountPointsByFileError(Exception):
     """Raised when updating mount points results in an error."""
