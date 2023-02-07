@@ -350,6 +350,7 @@ class Lifecycle(GrpcStub):
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         description : str, optional
             Description of new life phase.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -458,19 +459,21 @@ class Lifecycle(GrpcStub):
         duration : double, required
             Event duration length.
         duration_units : str, required
-            Event duration length units.
+            Event duration units. Valid units are: ms, sec, min, hr, day, year
         num_of_cycles : double, required
             Number of cycles defined for this random vibe event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         profile_type : str, required
-            Random load profile type. Example valid value is "Uniaxial".
+            Random load profile type. Valid values are: Uniaxial, Triaxial
         load_direction : str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
             Description of the random vibe event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -599,17 +602,21 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the random vibe event.
+            Name of the random vibe event for the profile.
         profile_name : str, required
             Name of the random vibe profile.
         freq_units : str, required
-            Frequency Units.
+            Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
         ampl_units : str, required
-            Amplitude Units.
-        random_vibe_profile_entries : (double, double) list, required
-            List of (frequency, amplitude) entries
+            Amplitude Unit. Valid units are: G2/Hz, m2/s4/Hz, mm2/s4/Hz, in2/s4/Hz, ft2/s4/Hz
+        random_vibe_profile_entries : List of (frequency, amplitude) entries, required
+            frequency : double, required
+                Frequency of the profile entry expressed in freq_units
+            amplitude : double, required
+                Amplitude of the profile entry expressed in ampl_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -725,21 +732,25 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        random_vibe_profiles : (str, str, str, str, str, random_vibe_profile_entries) list, required
-            List of (
-                phase_name : str, required
-                    The name of the life cycle phase this event is associated.
-                event_name : str, required
-                    Name of the random vibe event.
-                profile_name : str, required
-                    Name of the random vibe profile.
-                freq_units : str, required
-                    Frequency Units.
-                ampl_units : str, required
-                    Amplitude Units.
-                random_vibe_profile_entries : (double, double) list, required
-                    List of (frequency, amplitude) entries
-            )
+        random_vibe_profiles : List of (phase_name, event_name, profile_name, freq_units,
+                                ampl_units, random_vibe_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the random vibe event for the profile.
+            profile_name : str, required
+                Name of the random vibe profile.
+            freq_units : str, required
+                Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
+            ampl_units : str, required
+                Amplitude Unit. Valid units are: G2/Hz, m2/s4/Hz, mm2/s4/Hz, in2/s4/Hz,
+                 ft2/s4/Hz
+            random_vibe_profile_entries : List of (frequency, amplitude) entries, required
+                frequency : double, required
+                    Frequency of the profile entry expressed in freq_units
+                amplitude : double, required
+                    Amplitude of the profile entry expressed in ampl_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -903,11 +914,13 @@ class Lifecycle(GrpcStub):
         num_of_cycles : double, required
             Number of cycles defined for this thermal event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         cycle_state : str, required
-            The life cycle state. For example: "OPERATING", "STORAGE".
+            The life cycle state. Valid states are: OPERATING, STORAGE
         description : str, optional
             Description of new thermal event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1007,17 +1020,25 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the thermal event.
+            Name of the thermal event for the profile.
         profile_name : str, required
             Name of the thermal profile.
         time_units : str, required
-            Time Units.
+            Time Units. Valid units are: ms, sec, min, hr, day, year
         temp_units : str, required
-            Temperature Units.
-        thermal_profile_entries : (str, str, double, double) list, required
-            List of (step, type, time, temp) entries
+            Temperature Units. Valid units are: C, F, K
+        thermal_profile_entries : List of (step, type, time, temp) entries, required
+            step : str, required
+                Name of the profile step entry
+            type : str, required
+                Thermal step type: Valid types are: HOLD, RAMP
+            time : double, required
+                Duration of the step entry expressed in time_units
+            temperature : double, required
+                Temperature of the step entry expressed in temp_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1133,9 +1154,28 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        thermal_profiles : (str, str, str, str, str, thermal_profile_entries) list, required
-            List of (phase_name, event_name, profile_name, time_units, temp_units,
-                        thermal_profile_entries) entries
+        thermal_profiles : List of (phase_name, event_name, profile_name, time_units, temp_units,
+                            thermal_profile_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the thermal event for the profile.
+            profile_name : str, required
+                Name of the thermal profile.
+            time_units : str, required
+                Time Units. Valid units are: ms, sec, min, hr, day, year
+            temp_units : str, required
+                Temperature Units. Valid units are: C, F, K
+            thermal_profile_entries : List of (step, type, time, temp) entries, required
+                step : str, required
+                    Name of the profile step entry
+                type : str, required
+                    Thermal step type: Valid types are: HOLD, RAMP
+                time : double, required
+                    Duration of the step entry expressed in time_units
+                temperature : double, required
+                    Temperature of the step entry expressed in temp_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1307,21 +1347,23 @@ class Lifecycle(GrpcStub):
         duration : double, required
             Event duration length.
         duration_units : str, required
-            Event duration length units.
+            Event duration units. Valid units are: ms, sec, min, hr, day, year
         num_of_cycles : double, required
             Number of cycles defined for this harmonic event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         sweep_rate : double, required
             Sweep rate for the harmonic event
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         profile_type : str, required
-            Harmonic load profile types. Example valid values are "Uniaxial" and "Triaxial".
+            Harmonic load profile types. Valid values are: Uniaxial, Triaxial
         load_direction: str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
             Description of the harmonic vibe event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1453,20 +1495,24 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the harmonic event.
+            Name of the harmonic event for the profile.
         profile_name : str, required
             Name of the harmonic profile.
         freq_units : str, required
-            Frequency Units.
+            Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
         load_units : str, required
-            Load Units.
-        harmonic_profile_entries : (double, double) list, required
-            List of (frequency, load) entries
+            Load Unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
+        harmonic_profile_entries : List of (frequency, load) entries, required
+            frequency : double, required
+                Frequency of the profile entry expressed in freq_units
+            load : double, required
+                Load of the profile entry expressed in load_units
         triaxial_axis : (string, required)
             If the harmonic profile type is "Triaxial", the axis this profile should be assigned to.
-            Valid values are: x, y, z.
+            Valid values are: x, y, z
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1588,26 +1634,29 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        harmonic_vibe_profiles : (str, str, str, str, str, harmonic_vibe_profile_entries) list,
-         required
-            List of (
-                phase_name : str, required
-                    The name of the life cycle phase this event is associated.
-                event_name : str, required
-                    Name of the harmonic event.
-                profile_name : str, required
-                    Name of the harmonic profile.
-                freq_units : str, required
-                    Frequency Units.
-                load_units : str, required
-                    Load Units.
-                harmonic_profile_entries : (double, double) list, required
-                    List of (frequency, load) entries
-                triaxial_axis : (string, required)
-                    If the harmonic profile type is "Triaxial", the axis this profile should be
-                    assigned to.
-                    Valid values are: x, y, z.
-            )
+        harmonic_vibe_profiles : List of (phase_name, event_name, profile_name,
+                                    freq_units, load_units,
+                                    harmonic_vibe_profile_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the harmonic event for the profile.
+            profile_name : str, required
+                Name of the harmonic profile.
+            freq_units : str, required
+                Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
+            load_units : str, required
+                Load Unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
+            harmonic_profile_entries : List of (frequency, load) entries, required
+                frequency : double, required
+                    Frequency of the profile entry expressed in freq_units
+                load : double, required
+                    Load of the profile entry expressed in load_units
+            triaxial_axis : (string, required)
+                If the harmonic profile type is "Triaxial", the axis this profile should be
+                assigned to.
+                Valid values are: x, y, z
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1778,17 +1827,19 @@ class Lifecycle(GrpcStub):
         duration : double, required
             Event duration length.
         duration_units : str, required
-            Event duration length units.
+            Event duration units. Valid units are: ms, sec, min, hr, day, year
         num_of_cycles : double, required
             Number of cycles defined for this shock event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         load_direction : str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
             Description of the shock event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1905,26 +1956,34 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the shock event.
+            Name of the shock event for the profile.
         profile_name : str, required
             Name of the shock profile.
         duration : double, required
             Pulse duration.
         duration_units : str, required
-            Pulse duration unit.
+            Pulse duration unit. Valid units are: ms, sec, min, hr, day, year
         sample_rate : double, required
             Sample rate.
         sample_rate_units : str, required
-            Sample rate unit.
+            Sample rate unit. Valid units are: ms, sec, min, hr, day, year
         load_units : str, required
-            Load unit.
+            Load unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
         freq_units : str, required
-            Frequency unit.
-        shock_profile_entries : (str, double, double, double) list, required
-            Primary shape entry for the shock profile
-            List of (shape, load, freq, decay) entries
+            Frequency unit. Valid units are: HZ, KHZ, MHZ, GHZ
+        shock_profile_entries : List of (shape, load, freq, decay) entries, required
+            shape : str, required
+                Shape of the shock profile entry: Valid values are: FullSine, HalfSine, Haversine,
+                 Triangle, Sawtooth, FullSquare, HalfSquare
+            load : double, required
+                Load of the profile entry expressed in load_units
+            freq : double, required
+                Frequency of the profile entry expressed in freq_units
+            decay : double, required
+                The decay value of the profile entry
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -2063,31 +2122,38 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        shock_profiles : (str, str, str, double, str, double, str, str, str,
-        shock_profile_entries) list, required
-            List of (
-                phase_name : str, required
-                    The name of the life cycle phase this event is associated.
-                event_name : str, required
-                    Name of the shock event.
-                profile_name : str, required
-                    Name of the shock profile.
-                duration : double, required
-                    Pulse duration.
-                duration_units : str, required
-                    Pulse duration unit.
-                sample_rate : double, required
-                    Sample rate.
-                sample_rate_units : str, required
-                    Sample rate unit.
-                load_units : str, required
-                    Load unit.
-                freq_units : str, required
-                    Frequency unit.
-                shock_profile_entries : (str, double, double, double) list, required
-                    Primary shape entry for the shock profile
-                    List of (shape, load, freq, decay) entries
-            )
+        shock_profiles : List of (phase_name, event_name, profile_name, duration, duration_units,
+                            sample_rate, sample_rate_units, load_units, freq_units,
+                            shock_profile_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the shock event for the profile.
+            profile_name : str, required
+                Name of the shock profile.
+            duration : double, required
+                Pulse duration.
+            duration_units : str, required
+                Pulse duration unit. Valid units are: ms, sec, min, hr, day, year
+            sample_rate : double, required
+                Sample rate.
+            sample_rate_units : str, required
+                Sample rate unit. Valid units are: ms, sec, min, hr, day, year
+            load_units : str, required
+                Load unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
+            freq_units : str, required
+                Frequency unit. Valid units are: HZ, KHZ, MHZ, GHZ
+            shock_profile_entries : List of (shape, load, freq, decay) entries, required
+                shape : str, required
+                    Shape of the shock profile entry: Valid values are: FullSine, HalfSine,
+                     Haversine, Triangle, Sawtooth, FullSquare, HalfSquare
+                load : double, required
+                    Load of the profile entry expressed in load_units
+                freq : double, required
+                    Frequency of the profile entry expressed in freq_units
+                decay : double, required
+                    The decay value of the profile entry
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
