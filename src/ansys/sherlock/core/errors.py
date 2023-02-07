@@ -91,9 +91,9 @@ class SherlockCreateLifePhaseError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Create life phase error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Create life phase error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Create life phase error: {self.message}"]
 
 
 class SherlockAddRandomVibeEventError(Exception):
@@ -108,9 +108,9 @@ class SherlockAddRandomVibeEventError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add random vibe event error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add random vibe event error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add random vibe event error: {self.message}"]
 
 
 class SherlockAddRandomVibeProfileError(Exception):
@@ -125,9 +125,10 @@ class SherlockAddRandomVibeProfileError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add random vibe profile error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add random vibe profile error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add random vibe profile error: {self.message}"]
+
 
 class SherlockAddRandomVibeProfilesError(Exception):
     """Raised when adding random vibe profiles results in an error."""
@@ -141,9 +142,10 @@ class SherlockAddRandomVibeProfilesError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add random vibe profiles error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add random vibe profiles error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add random vibe profiles error: {self.message}"]
+
 
 class SherlockAddThermalEventError(Exception):
     """Raised when adding a thermal event results in an error."""
@@ -157,9 +159,9 @@ class SherlockAddThermalEventError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add thermal event error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add thermal event error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add thermal event error: {self.message}"]
 
 
 class SherlockAddThermalProfileError(Exception):
@@ -174,9 +176,9 @@ class SherlockAddThermalProfileError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add thermal profile error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add thermal profile error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add thermal profile error: {self.message}"]
 
 
 class SherlockAddThermalProfilesError(Exception):
@@ -191,9 +193,9 @@ class SherlockAddThermalProfilesError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add thermal profiles error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add thermal profiles error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add thermal profiles error: {self.message}"]
 
 
 class SherlockAddHarmonicEventError(Exception):
@@ -208,9 +210,9 @@ class SherlockAddHarmonicEventError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Create life phase error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add harmonic event error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add harmonic event error: {self.message}"]
 
 
 class SherlockAddHarmonicProfileError(Exception):
@@ -225,9 +227,10 @@ class SherlockAddHarmonicProfileError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add harmonic profile error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add harmonic profile error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add harmonic profile error: {self.message}"]
+
 
 class SherlockAddHarmonicVibeProfilesError(Exception):
     """Raised when adding harmonic vibe profiles results in an error."""
@@ -241,9 +244,10 @@ class SherlockAddHarmonicVibeProfilesError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add harmonic vibe profiles error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add harmonic vibe profiles error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add harmonic vibe profiles error: {self.message}"]
+
 
 class SherlockAddShockEventError(Exception):
     """Raised when adding a shock event results in an error."""
@@ -257,9 +261,9 @@ class SherlockAddShockEventError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add shock event error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add shock event error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add shock event error: {self.message}"]
 
 
 class SherlockAddShockProfileError(Exception):
@@ -274,9 +278,10 @@ class SherlockAddShockProfileError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add shock profile error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add shock profile error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add shock profile error: {self.message}"]
+
 
 class SherlockAddShockProfilesError(Exception):
     """Raised when adding shock profiles results in an error."""
@@ -290,9 +295,10 @@ class SherlockAddShockProfilesError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Add shock profiles error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Add shock profiles error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Add shock profiles error: {self.message}"]
+
 
 class SherlockUpdateMountPointsByFileError(Exception):
     """Raised when updating mount points results in an error."""
@@ -306,9 +312,9 @@ class SherlockUpdateMountPointsByFileError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Update mount points by file error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Update mount points by file error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Update mount points by file error: {self.message}"]
 
 
 class SherlockGenStackupError(Exception):
@@ -359,9 +365,9 @@ class SherlockUpdatePartsListError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Update parts list error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Update parts list error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Update parts list error: {self.message}"]
 
 
 class SherlockUpdatePartsLocationsError(Exception):
@@ -376,9 +382,9 @@ class SherlockUpdatePartsLocationsError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Update parts locations error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Update parts locations error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Update parts locations error: {self.message}"]
 
 
 class SherlockUpdatePartsLocationsByFileError(Exception):
@@ -393,9 +399,9 @@ class SherlockUpdatePartsLocationsByFileError(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Update parts locations by file error: {error}" for error in self.error_array]
-        else:
-            assert self.error_array is None
-            return [f"Update parts locations by file error: {self.message}"]
+
+        assert self.error_array is None
+        return [f"Update parts locations by file error: {self.message}"]
 
 
 class SherlockImportPartsListError(Exception):
