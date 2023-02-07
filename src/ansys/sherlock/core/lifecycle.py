@@ -11,10 +11,13 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
     SherlockAddHarmonicProfileError,
+    SherlockAddHarmonicVibeProfilesError,
     SherlockAddRandomVibeEventError,
     SherlockAddRandomVibeProfileError,
+    SherlockAddRandomVibeProfilesError,
     SherlockAddShockEventError,
     SherlockAddShockProfileError,
+    SherlockAddShockProfilesError,
     SherlockAddThermalEventError,
     SherlockAddThermalProfileError,
     SherlockAddThermalProfilesError,
@@ -347,6 +350,7 @@ class Lifecycle(GrpcStub):
             The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
         description : str, optional
             Description of new life phase.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -455,19 +459,21 @@ class Lifecycle(GrpcStub):
         duration : double, required
             Event duration length.
         duration_units : str, required
-            Event duration length units.
+            Event duration units. Valid units are: ms, sec, min, hr, day, year
         num_of_cycles : double, required
             Number of cycles defined for this random vibe event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         profile_type : str, required
-            Random load profile type. Example valid value is "Uniaxial".
+            Random load profile type. Valid values are: Uniaxial
         load_direction : str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
             Description of the random vibe event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -596,17 +602,21 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the random vibe event.
+            Name of the random vibe event for the profile.
         profile_name : str, required
             Name of the random vibe profile.
         freq_units : str, required
-            Frequency Units.
+            Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
         ampl_units : str, required
-            Amplitude Units.
-        random_vibe_profile_entries : (double, double) list, required
-            List of (frequency, amplitude) entries
+            Amplitude Unit. Valid units are: G2/Hz, m2/s4/Hz, mm2/s4/Hz, in2/s4/Hz, ft2/s4/Hz
+        random_vibe_profile_entries : List of (frequency, amplitude) entries, required
+            frequency : double, required
+                Frequency of the profile entry expressed in freq_units
+            amplitude : double, required
+                Amplitude of the profile entry expressed in ampl_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -711,6 +721,176 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
+    def add_random_vibe_profiles(
+        self,
+        project,
+        random_vibe_profiles,
+    ):
+        """Define and add new random vibe life cycle event profiles.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        random_vibe_profiles : List of (phase_name, event_name, profile_name, freq_units,
+                                ampl_units, random_vibe_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the random vibe event for the profile.
+            profile_name : str, required
+                Name of the random vibe profile.
+            freq_units : str, required
+                Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
+            ampl_units : str, required
+                Amplitude Unit. Valid units are: G2/Hz, m2/s4/Hz, mm2/s4/Hz, in2/s4/Hz,
+                 ft2/s4/Hz
+            random_vibe_profile_entries : List of (frequency, amplitude) entries, required
+                frequency : double, required
+                    Frequency of the profile entry expressed in freq_units
+                amplitude : double, required
+                    Amplitude of the profile entry expressed in ampl_units
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_random_vibe_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        >>> sherlock.lifecycle.add_random_vibe_profiles(
+            "Test",
+             [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "HZ",
+                "G2/Hz",
+                [(4,8), (5, 50)],
+            )]
+        )
+        """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.AMPL_UNIT_LIST is None:
+            self._init_ampl_units()
+
+        try:
+            if project == "":
+                raise SherlockAddRandomVibeProfilesError(message="Invalid project name")
+
+            if len(random_vibe_profiles) == 0:
+                raise SherlockAddRandomVibeProfilesError(message="Missing random vibe profiles")
+
+            for i, profile_entry in enumerate(random_vibe_profiles):
+                if len(profile_entry) != 6:
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"Wrong number of args {str(len(profile_entry))} for"
+                        f" random vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"Invalid phase name for random vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[1], str) or profile_entry[1] == "":
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"Invalid event name for random vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[2], str) or profile_entry[2] == "":
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"Invalid profile name for random vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[3], str) or \
+                    ((self.FREQ_UNIT_LIST is not None) and
+                     (profile_entry[3] not in self.FREQ_UNIT_LIST)):
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"Invalid frequency unit {profile_entry[3]} for random vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[4], str) or \
+                    ((self.AMPL_UNIT_LIST is not None) and
+                     (profile_entry[4] not in self.AMPL_UNIT_LIST)):
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"Invalid amplitude type {profile_entry[4]} for random vibe profile {i}"
+                    )
+
+                try:
+                    self._check_random_vibe_profile_entries_validity(profile_entry[5])
+                except SherlockInvalidRandomVibeProfileEntriesError as e:
+                    raise SherlockAddRandomVibeProfilesError(
+                        f"{str(e)} for random vibe profile {i}"
+                    )
+
+        except SherlockAddRandomVibeProfilesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockLifeCycleService_pb2.AddRandomVibeProfilesRequest(
+            project=project
+        )
+
+        """Add the random vibe profiles to the request"""
+        for r in random_vibe_profiles:
+            profile = request.randomVibeProfiles.add()
+            profile.phaseName = r[0]
+            profile.eventName = r[1]
+            profile.profileName = r[2]
+            profile.freqUnits = r[3]
+            profile.amplUnits = r[4]
+
+            """Add the random vibe entries to the request."""
+            for e in r[5]:
+                entry = profile.randomVibeProfileEntries.add()
+                entry.freq = e[0]
+                entry.ampl = e[1]
+
+        response = self.stub.addRandomVibeProfiles(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddRandomVibeProfilesError(error_array=response.errors)
+                else:
+                    raise SherlockAddRandomVibeProfilesError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddRandomVibeProfilesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
     def add_thermal_event(
         self,
         project,
@@ -734,11 +914,13 @@ class Lifecycle(GrpcStub):
         num_of_cycles : double, required
             Number of cycles defined for this thermal event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         cycle_state : str, required
-            The life cycle state. For example: "OPERATING", "STORAGE".
+            The life cycle state. Valid states are: OPERATING, STORAGE
         description : str, optional
             Description of new thermal event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -838,17 +1020,25 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the thermal event.
+            Name of the thermal event for the profile.
         profile_name : str, required
             Name of the thermal profile.
         time_units : str, required
-            Time Units.
+            Time Units. Valid units are: ms, sec, min, hr, day, year
         temp_units : str, required
-            Temperature Units.
-        thermal_profile_entries : (str, str, double, double) list, required
-            List of (step, type, time, temp) entries
+            Temperature Units. Valid units are: C, F, K
+        thermal_profile_entries : List of (step, type, time, temp) entries, required
+            step : str, required
+                Name of the profile step entry
+            type : str, required
+                Thermal step type: Valid types are: HOLD, RAMP
+            time : double, required
+                Duration of the step entry expressed in time_units
+            temperature : double, required
+                Temperature of the step entry expressed in temp_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -964,9 +1154,28 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        thermal_profiles : (str, str, str, str, str, thermal_profile_entries) list, required
-            List of (phase_name, event_name, profile_name, time_units, temp_units,
-                        thermal_profile_entries) entries
+        thermal_profiles : List of (phase_name, event_name, profile_name, time_units, temp_units,
+                            thermal_profile_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the thermal event for the profile.
+            profile_name : str, required
+                Name of the thermal profile.
+            time_units : str, required
+                Time Units. Valid units are: ms, sec, min, hr, day, year
+            temp_units : str, required
+                Temperature Units. Valid units are: C, F, K
+            thermal_profile_entries : List of (step, type, time, temp) entries, required
+                step : str, required
+                    Name of the profile step entry
+                type : str, required
+                    Thermal step type: Valid types are: HOLD, RAMP
+                time : double, required
+                    Duration of the step entry expressed in time_units
+                temperature : double, required
+                    Temperature of the step entry expressed in temp_units
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1018,7 +1227,7 @@ class Lifecycle(GrpcStub):
 
         try:
             if project == "":
-                raise SherlockAddThermalProfileError(message="Invalid project name")
+                raise SherlockAddThermalProfilesError(message="Invalid project name")
 
             if len(thermal_profiles) == 0:
                 raise SherlockAddThermalProfilesError(message="Missing thermal profiles")
@@ -1030,15 +1239,15 @@ class Lifecycle(GrpcStub):
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddThermalProfilesError(
-                        f"Invalid thermal phase name for thermal profile {i}"
+                        f"Invalid phase name for thermal profile {i}"
                     )
                 elif not isinstance(profile_entry[1], str) or profile_entry[1] == "":
                     raise SherlockAddThermalProfilesError(
-                        f"Invalid thermal event name for thermal profile {i}"
+                        f"Invalid event name for thermal profile {i}"
                     )
                 elif not isinstance(profile_entry[2], str) or profile_entry[2] == "":
                     raise SherlockAddThermalProfilesError(
-                        f"Invalid thermal profile name for thermal profile {i}"
+                        f"Invalid profile name for thermal profile {i}"
                     )
                 elif not isinstance(profile_entry[3], str) or \
                         ((self.TIME_UNIT_LIST is not None) and
@@ -1138,21 +1347,23 @@ class Lifecycle(GrpcStub):
         duration : double, required
             Event duration length.
         duration_units : str, required
-            Event duration length units.
+            Event duration units. Valid units are: ms, sec, min, hr, day, year
         num_of_cycles : double, required
             Number of cycles defined for this harmonic event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         sweep_rate : double, required
             Sweep rate for the harmonic event
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         profile_type : str, required
-            Harmonic load profile types. Example valid values are "Uniaxial" and "Triaxial".
+            Harmonic load profile types. Valid values are: Uniaxial, Triaxial
         load_direction: str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
             Description of the harmonic vibe event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1183,7 +1394,7 @@ class Lifecycle(GrpcStub):
             "PER MIN",
             5,
             "45,45",
-            "Uniaxial"
+            "Uniaxial",
             "2,4,5",
         )
         """
@@ -1284,20 +1495,24 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the harmonic event.
+            Name of the harmonic event for the profile.
         profile_name : str, required
             Name of the harmonic profile.
         freq_units : str, required
-            Frequency Units.
+            Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
         load_units : str, required
-            Load Units.
-        harmonic_profile_entries : (double, double) list, required
-            List of (frequency, load) entries
+            Load Unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
+        harmonic_profile_entries : List of (frequency, load) entries, required
+            frequency : double, required
+                Frequency of the profile entry expressed in freq_units
+            load : double, required
+                Load of the profile entry expressed in load_units
         triaxial_axis : (string, required)
             If the harmonic profile type is "Triaxial", the axis this profile should be assigned to.
-            Valid values are: x, y, z.
+            Valid values are: x, y, z
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1328,7 +1543,7 @@ class Lifecycle(GrpcStub):
             "PER MIN",
             5,
             "45,45",
-            "Uniaxial"
+            "Uniaxial",
             "2,4,5",
         )
         >>> sherlock.lifecycle.add_harmonic_profile(
@@ -1336,7 +1551,7 @@ class Lifecycle(GrpcStub):
             "Example",
             "Event1",
             "Profile1",
-            "Hz",
+            "HZ",
             "G",
             [
                 (10, 1),
@@ -1408,6 +1623,184 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
+    def add_harmonic_vibe_profiles(
+        self,
+        project,
+        harmonic_vibe_profiles,
+    ):
+        """Define and add new harmonic life cycle event profiles.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        harmonic_vibe_profiles : List of (phase_name, event_name, profile_name,
+                                    freq_units, load_units,
+                                    harmonic_vibe_profile_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the harmonic event for the profile.
+            profile_name : str, required
+                Name of the harmonic profile.
+            freq_units : str, required
+                Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
+            load_units : str, required
+                Load Unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
+            harmonic_profile_entries : List of (frequency, load) entries, required
+                frequency : double, required
+                    Frequency of the profile entry expressed in freq_units
+                load : double, required
+                    Load of the profile entry expressed in load_units
+            triaxial_axis : (string, required)
+                If the harmonic profile type is "Triaxial", the axis this profile should be
+                assigned to.
+                Valid values are: x, y, z
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_harmonic_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            5,
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        >>> sherlock.lifecycle.add_harmonic_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                "HZ",
+                "G",
+                [
+                    (10, 1),
+                    (1000, 1),
+                ],
+                "",
+            )]
+        )
+        """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.LOAD_UNIT_LIST is None:
+            self._init_load_units()
+
+        try:
+            if project == "":
+                raise SherlockAddHarmonicVibeProfilesError(message="Invalid project name")
+
+            for i, profile_entry in enumerate(harmonic_vibe_profiles):
+                if len(profile_entry) != 7:
+                    raise SherlockAddHarmonicVibeProfilesError(
+                        f"Wrong number of args {str(len(profile_entry))} for"
+                        f" harmonic vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
+                    raise SherlockAddHarmonicVibeProfilesError(
+                        f"Invalid phase name for harmonic vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[1], str) or profile_entry[1] == "":
+                    raise SherlockAddHarmonicVibeProfilesError(
+                        f"Invalid event name for harmonic vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[2], str) or profile_entry[2] == "":
+                    raise SherlockAddHarmonicVibeProfilesError(
+                        f"Invalid profile name for harmonic vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[3], str) or \
+                        ((self.FREQ_UNIT_LIST is not None) and
+                         (profile_entry[3] not in self.FREQ_UNIT_LIST)):
+                    raise SherlockAddHarmonicVibeProfilesError(
+                        f"Invalid frequency unit {profile_entry[3]} for harmonic vibe profile {i}"
+                    )
+                elif not isinstance(profile_entry[4], str) or \
+                    ((self.LOAD_UNIT_LIST is not None) and
+                     (profile_entry[4] not in self.LOAD_UNIT_LIST)):
+                    raise SherlockAddHarmonicVibeProfilesError(
+                        f"Invalid load unit {profile_entry[4]} for harmonic vibe profile {i}"
+                    )
+
+            try:
+                self._check_harmonic_profile_entries_validity(profile_entry[5])
+            except SherlockInvalidHarmonicProfileEntriesError as e:
+                raise SherlockAddHarmonicVibeProfilesError(
+                    f"{str(e)} for harmonic vibe profile {i}"
+                )
+
+        except SherlockAddHarmonicVibeProfilesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockLifeCycleService_pb2.AddHarmonicVibeProfilesRequest(
+            project=project
+        )
+
+        """Add the harmonic vibe profiles to the request"""
+        for h in harmonic_vibe_profiles:
+            profile = request.harmonicVibeProfiles.add()
+            profile.phaseName = h[0]
+            profile.eventName = h[1]
+            profile.profileName = h[2]
+            profile.freqUnits = h[3]
+            profile.loadUnits = h[4]
+
+            """Add the entries to the harmonic profile request."""
+            for e in h[5]:
+                entry = profile.harmonicVibeProfileEntries.add()
+                entry.freq = e[0]
+                entry.load = e[1]
+
+            profile.triaxialAxis = h[6]
+
+        response = self.stub.addHarmonicVibeProfiles(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddHarmonicVibeProfilesError(error_array=response.errors)
+                else:
+                    raise SherlockAddHarmonicVibeProfilesError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddHarmonicVibeProfilesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
     def add_shock_event(
         self,
         project,
@@ -1434,17 +1827,19 @@ class Lifecycle(GrpcStub):
         duration : double, required
             Event duration length.
         duration_units : str, required
-            Event duration length units.
+            Event duration units. Valid units are: ms, sec, min, hr, day, year
         num_of_cycles : double, required
             Number of cycles defined for this shock event.
         cycle_type : str, required
-            The cycle type. For example: "COUNT", "DUTY CYCLE", "PER YEAR", "PER HOUR", etc.
+            The cycle type. Valid types are: COUNT, DUTY_CYCLE, PER_YEAR, PER_DAY, PER_HOUR,
+             PER_MIN, PER_SEC
         orientation : str, required
             PCB orientation in the format of azimuth, elevation. Example: 30,15
         load_direction : str, required
             Load direction in the format of x,y,z. Example: 0,0,1
         description : str, optional
             Description of the shock event.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1561,26 +1956,34 @@ class Lifecycle(GrpcStub):
         project : str, required
             Sherlock project name.
         phase_name : str, required
-            The name of the life cycle phase this event is associated.
+            The name of the life cycle phase this profile is associated.
         event_name : str, required
-            Name of the shock event.
+            Name of the shock event for the profile.
         profile_name : str, required
             Name of the shock profile.
         duration : double, required
             Pulse duration.
         duration_units : str, required
-            Pulse duration unit.
+            Pulse duration unit. Valid units are: ms, sec, min, hr, day, year
         sample_rate : double, required
             Sample rate.
         sample_rate_units : str, required
-            Sample rate unit.
+            Sample rate unit. Valid units are: ms, sec, min, hr, day, year
         load_units : str, required
-            Load unit.
+            Load unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
         freq_units : str, required
-            Frequency unit.
-        shock_profile_entries : (str, double, double, double) list, required
-            Primary shape entry for the shock profile
-            List of (shape, load, freq, decay) entries
+            Frequency unit. Valid units are: HZ, KHZ, MHZ, GHZ
+        shock_profile_entries : List of (shape, load, freq, decay) entries, required
+            shape : str, required
+                Shape of the shock profile entry: Valid values are: FullSine, HalfSine, Haversine,
+                 Triangle, Sawtooth, FullSquare, HalfSquare
+            load : double, required
+                Load of the profile entry expressed in load_units
+            freq : double, required
+                Frequency of the profile entry expressed in freq_units
+            decay : double, required
+                The decay value of the profile entry
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1704,6 +2107,215 @@ class Lifecycle(GrpcStub):
                 LOG.info(return_code.message)
                 return
         except SherlockAddShockProfileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def add_shock_profiles(
+        self,
+        project,
+        shock_profiles,
+    ):
+        """Define and add new shock life cycle event profiles.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        shock_profiles : List of (phase_name, event_name, profile_name, duration, duration_units,
+                            sample_rate, sample_rate_units, load_units, freq_units,
+                            shock_profile_entries) profiles, required
+            phase_name : str, required
+                The name of the life cycle phase this profile is associated.
+            event_name : str, required
+                Name of the shock event for the profile.
+            profile_name : str, required
+                Name of the shock profile.
+            duration : double, required
+                Pulse duration.
+            duration_units : str, required
+                Pulse duration unit. Valid units are: ms, sec, min, hr, day, year
+            sample_rate : double, required
+                Sample rate.
+            sample_rate_units : str, required
+                Sample rate unit. Valid units are: ms, sec, min, hr, day, year
+            load_units : str, required
+                Load unit. Valid units are: G, m/s2, mm/s2, in/s2, ft/s2
+            freq_units : str, required
+                Frequency unit. Valid units are: HZ, KHZ, MHZ, GHZ
+            shock_profile_entries : List of (shape, load, freq, decay) entries, required
+                shape : str, required
+                    Shape of the shock profile entry: Valid values are: FullSine, HalfSine,
+                     Haversine, Triangle, Sawtooth, FullSquare, HalfSquare
+                load : double, required
+                    Load of the profile entry expressed in load_units
+                freq : double, required
+                    Frequency of the profile entry expressed in freq_units
+                decay : double, required
+                    The decay value of the profile entry
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+        )
+        >>> sherlock.lifecycle.create_life_phase(
+            "Test",
+            "Example",
+            1.5,
+            "sec",
+            4.0,
+            "COUNT",
+        )
+        >>> sherlock.lifecycle.add_shock_event(
+            "Test",
+            "Example",
+            "Event1",
+            1.5,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        >>> sherlock.lifecycle.add_shock_profiles(
+            "Test",
+            [(
+                "Example",
+                "Event1",
+                "Profile1",
+                10.0, "ms",
+                0.1, "ms",
+                "G",
+                "HZ",
+                [("HalfSine", 100.0, 100.0, 0)],
+            )]
+        )
+        """
+        if self.TIME_UNIT_LIST is None:
+            self._init_time_units()
+        if self.LOAD_UNIT_LIST is None:
+            self._init_load_units()
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.SHOCK_SHAPE_LIST is None:
+            self._init_shock_shapes()
+
+        try:
+            if project == "":
+                raise SherlockAddShockProfilesError(message="Invalid project name")
+
+            for i, profile_entry in enumerate(shock_profiles):
+                if len(profile_entry) != 10:
+                    raise SherlockAddShockProfilesError(
+                        f"Wrong number of args {str(len(profile_entry))} for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid phase name for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[1], str) or profile_entry[1] == "":
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid event name for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[2], str) or profile_entry[2] == "":
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid profile name for shock profile {i}"
+                    )
+                elif profile_entry[3] <= 0:
+                    raise SherlockAddShockProfilesError(
+                        f"Duration must be greater than 0 for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[4], str) or \
+                        ((self.TIME_UNIT_LIST is not None) and
+                         (profile_entry[4] not in self.TIME_UNIT_LIST)):
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid duration unit {profile_entry[4]} for shock profile {i}"
+                    )
+                elif profile_entry[5] <= 0:
+                    raise SherlockAddShockProfilesError(
+                        f"Sample rate must be greater than 0 for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[6], str) or \
+                        ((self.TIME_UNIT_LIST is not None) and
+                         (profile_entry[6] not in self.TIME_UNIT_LIST)):
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid sample rate unit {profile_entry[6]} for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[7], str) or \
+                    ((self.LOAD_UNIT_LIST is not None) and
+                     (profile_entry[7] not in self.LOAD_UNIT_LIST)):
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid load unit {profile_entry[7]} for shock profile {i}"
+                    )
+                elif not isinstance(profile_entry[8], str) or \
+                    ((self.FREQ_UNIT_LIST is not None) and
+                     (profile_entry[8] not in self.FREQ_UNIT_LIST)):
+                    raise SherlockAddShockProfilesError(
+                        f"Invalid frequency unit {profile_entry[8]} for shock profile {i}"
+                    )
+
+            try:
+                self._check_shock_profile_entries_validity(profile_entry[9])
+            except SherlockInvalidShockProfileEntriesError as e:
+                raise SherlockAddShockProfilesError(
+                    f"{str(e)} for shock profile {i}"
+                )
+
+        except SherlockAddShockProfilesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockLifeCycleService_pb2.AddShockProfilesRequest(
+            project=project
+        )
+
+        for s in shock_profiles:
+            profile = request.shockProfiles.add()
+            profile.phaseName = s[0]
+            profile.eventName = s[1]
+            profile.profileName = s[2]
+            profile.duration = s[3]
+            profile.durationUnits = s[4]
+            profile.sampleRate = s[5]
+            profile.sampleRateUnits = s[6]
+            profile.loadUnits = s[7]
+            profile.freqUnits = s[8]
+
+        """Add the shock entries to the request."""
+        for e in s[9]:
+            entry = profile.shockProfileEntries.add()
+            entry.shape = e[0]
+            entry.load = e[1]
+            entry.freq = e[2]
+            entry.decay = e[3]
+
+        response = self.stub.addShockProfiles(request)
+
+        return_code = response.returnCode
+
+        try:
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddShockProfilesError(error_array=response.errors)
+                else:
+                    raise SherlockAddShockProfilesError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return
+        except SherlockAddShockProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
