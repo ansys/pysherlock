@@ -183,11 +183,11 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidRandomVibeProfileEntriesError(
                         f"Invalid entry {i}: Wrong number of args"
                     )
-                elif entry[0] <= 0:
+                if entry[0] <= 0:
                     raise SherlockInvalidRandomVibeProfileEntriesError(
                         f"Invalid entry {i}: Frequencies must be greater than 0"
                     )
-                elif entry[1] <= 0:
+                if entry[1] <= 0:
                     raise SherlockInvalidRandomVibeProfileEntriesError(
                         f"Invalid entry {i}: Amplitudes must be greater than 0"
                     )
@@ -207,19 +207,19 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidThermalProfileEntriesError(
                         f"Invalid entry {i}: Wrong number of args"
                     )
-                elif not isinstance(entry[0], str):
+                if not isinstance(entry[0], str):
                     raise SherlockInvalidThermalProfileEntriesError(
                         f"Invalid entry {i}: Invalid step name"
                     )
-                elif entry[1] not in self.STEP_TYPE_LIST:
+                if entry[1] not in self.STEP_TYPE_LIST:
                     raise SherlockInvalidThermalProfileEntriesError(
                         f"Invalid entry {i}: Invalid step type"
                     )
-                elif entry[2] <= 0:
+                if entry[2] <= 0:
                     raise SherlockInvalidThermalProfileEntriesError(
                         f"Invalid entry {i}: Time must be greater than 0"
                     )
-                elif not isinstance(entry[3], (int, float)):
+                if not isinstance(entry[3], (int, float)):
                     raise SherlockInvalidThermalProfileEntriesError(
                         f"Invalid entry {i}: Invalid temp"
                     )
@@ -237,11 +237,11 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Wrong number of args"
                     )
-                elif entry[0] <= 0:
+                if entry[0] <= 0:
                     raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Frequencies must be greater than 0"
                     )
-                elif entry[1] <= 0:
+                if entry[1] <= 0:
                     raise SherlockInvalidHarmonicProfileEntriesError(
                         message=f"Invalid entry {i}: Load must be greater than 0"
                     )
@@ -262,25 +262,25 @@ class Lifecycle(GrpcStub):
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Wrong number of args"
                     )
-                elif not isinstance(entry[0], str):
+                if not isinstance(entry[0], str):
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Invalid shape name"
                     )
-                elif (self.SHOCK_SHAPE_LIST is not None) and (
+                if (self.SHOCK_SHAPE_LIST is not None) and (
                     entry[0] not in self.SHOCK_SHAPE_LIST
                 ):
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Invalid shape type"
                     )
-                elif entry[1] <= 0:
+                if entry[1] <= 0:
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Load must be greater than 0"
                     )
-                elif entry[2] <= 0:
+                if entry[2] <= 0:
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Frequency must be greater than 0"
                     )
-                elif entry[3] < 0:
+                if entry[3] < 0:
                     raise SherlockInvalidShockProfileEntriesError(
                         message=f"Invalid entry {i}: Decay must be nonnegative"
                     )
@@ -323,14 +323,14 @@ class Lifecycle(GrpcStub):
             entry.decay = e[3]
 
     def create_life_phase(
-        self,
-        project,
-        phase_name,
-        duration,
-        duration_units,
-        num_of_cycles,
-        cycle_type,
-        description=None,
+            self,
+            project,
+            phase_name,
+            duration,
+            duration_units,
+            num_of_cycles,
+            cycle_type,
+            description=None,
     ):
         """Define and add a new life phase.
 
@@ -380,15 +380,15 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockCreateLifePhaseError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockCreateLifePhaseError(message="Invalid phase name")
-            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+            if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
                 raise SherlockCreateLifePhaseError(message="Invalid duration unit specified")
-            elif duration <= 0.0:
+            if duration <= 0.0:
                 raise SherlockCreateLifePhaseError(message="Duration must be greater than 0")
-            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+            if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
                 raise SherlockCreateLifePhaseError(message="Invalid cycle type")
-            elif num_of_cycles <= 0.0:
+            if num_of_cycles <= 0.0:
                 raise SherlockCreateLifePhaseError(
                     message="Number of cycles must be greater than 0"
                 )
@@ -422,8 +422,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockCreateLifePhaseError(error_array=response.errors)
-                else:
-                    raise SherlockCreateLifePhaseError(message=return_code.message)
+
+                raise SherlockCreateLifePhaseError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -433,18 +433,18 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_random_vibe_event(
-        self,
-        project,
-        phase_name,
-        event_name,
-        duration,
-        duration_units,
-        num_of_cycles,
-        cycle_type,
-        orientation,
-        profile_type,
-        load_direction,
-        description="",
+            self,
+            project,
+            phase_name,
+            event_name,
+            duration,
+            duration_units,
+            num_of_cycles,
+            cycle_type,
+            orientation,
+            profile_type,
+            load_direction,
+            description="",
     ):
         """Define and add a new random vibe life cycle event.
 
@@ -517,17 +517,17 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddRandomVibeEventError(message="Invalid event name")
-            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+            if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
                 raise SherlockAddRandomVibeEventError(message="Invalid duration unit specified")
-            elif duration <= 0.0:
+            if duration <= 0.0:
                 raise SherlockAddRandomVibeEventError(message="Duration must be greater than 0")
-            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+            if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
                 raise SherlockAddRandomVibeEventError(message="Invalid cycle type")
-            elif num_of_cycles <= 0.0:
+            if num_of_cycles <= 0.0:
                 raise SherlockAddRandomVibeEventError(
                     message="Number of cycles must be greater than 0"
                 )
@@ -539,7 +539,7 @@ class Lifecycle(GrpcStub):
         try:
             self._check_load_direction_validity(load_direction)
             if (self.RV_PROFILE_TYPE_LIST is not None) and (
-                profile_type not in self.RV_PROFILE_TYPE_LIST
+                    profile_type not in self.RV_PROFILE_TYPE_LIST
             ):
                 raise SherlockAddRandomVibeEventError(
                     message="Valid profile type for a random event can only be Uniaxial"
@@ -575,8 +575,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddRandomVibeEventError(error_array=response.errors)
-                else:
-                    raise SherlockAddRandomVibeEventError(message=return_code.message)
+
+                raise SherlockAddRandomVibeEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -586,14 +586,14 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_random_vibe_profile(
-        self,
-        project,
-        phase_name,
-        event_name,
-        profile_name,
-        freq_units,
-        ampl_units,
-        random_vibe_profile_entries,
+            self,
+            project,
+            phase_name,
+            event_name,
+            profile_name,
+            freq_units,
+            ampl_units,
+            random_vibe_profile_entries
     ):
         """Add a new random vibe profile to a random vibe event.
 
@@ -667,15 +667,15 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid event name")
-            elif profile_name == "":
+            if profile_name == "":
                 raise SherlockAddRandomVibeProfileError(message="Invalid profile name")
-            elif (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
+            if (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
                 raise SherlockAddRandomVibeProfileError(message="Invalid frequency unit")
-            elif (self.AMPL_UNIT_LIST is not None) and (ampl_units not in self.AMPL_UNIT_LIST):
+            if (self.AMPL_UNIT_LIST is not None) and (ampl_units not in self.AMPL_UNIT_LIST):
                 raise SherlockAddRandomVibeProfileError(message="Invalid amplitude type")
         except SherlockAddRandomVibeProfileError as e:
             for error in e.str_itr():
@@ -711,8 +711,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddRandomVibeProfileError(error_array=response.errors)
-                else:
-                    raise SherlockAddRandomVibeProfileError(message=return_code.message)
+
+                raise SherlockAddRandomVibeProfileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -892,14 +892,14 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_thermal_event(
-        self,
-        project,
-        phase_name,
-        event_name,
-        num_of_cycles,
-        cycle_type,
-        cycle_state,
-        description="",
+            self,
+            project,
+            phase_name,
+            event_name,
+            num_of_cycles,
+            cycle_type,
+            cycle_state,
+            description=""
     ):
         """Add a new thermal event to a life cycle.
 
@@ -958,17 +958,17 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddThermalEventError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddThermalEventError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddThermalEventError(message="Invalid event name")
-            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+            if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
                 raise SherlockAddThermalEventError(message="Invalid cycle type")
-            elif num_of_cycles <= 0.0:
+            if num_of_cycles <= 0.0:
                 raise SherlockAddThermalEventError(
                     message="Number of cycles must be greater than 0"
                 )
-            elif (self.CYCLE_STATE_LIST is not None) and (cycle_state not in self.CYCLE_STATE_LIST):
+            if (self.CYCLE_STATE_LIST is not None) and (cycle_state not in self.CYCLE_STATE_LIST):
                 raise SherlockAddThermalEventError(message="Invalid cycle state")
         except SherlockAddThermalEventError as e:
             for error in e.str_itr():
@@ -993,8 +993,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddThermalEventError(error_array=response.errors)
-                else:
-                    raise SherlockAddThermalEventError(message=return_code.message)
+
+                raise SherlockAddThermalEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -1004,14 +1004,14 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_thermal_profile(
-        self,
-        project,
-        phase_name,
-        event_name,
-        profile_name,
-        time_units,
-        temp_units,
-        thermal_profile_entries,
+            self,
+            project,
+            phase_name,
+            event_name,
+            profile_name,
+            time_units,
+            temp_units,
+            thermal_profile_entries
     ):
         """Define and add a new thermal life cycle event profile.
 
@@ -1089,15 +1089,15 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddThermalProfileError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddThermalProfileError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddThermalProfileError(message="Invalid event name")
-            elif profile_name == "":
+            if profile_name == "":
                 raise SherlockAddThermalProfileError(message="Invalid profile name")
-            elif (self.TIME_UNIT_LIST is not None) and (time_units not in self.TIME_UNIT_LIST):
+            if (self.TIME_UNIT_LIST is not None) and (time_units not in self.TIME_UNIT_LIST):
                 raise SherlockAddThermalProfileError(message="Invalid time unit")
-            elif (self.TEMP_UNIT_LIST is not None) and (temp_units not in self.TEMP_UNIT_LIST):
+            if (self.TEMP_UNIT_LIST is not None) and (temp_units not in self.TEMP_UNIT_LIST):
                 raise SherlockAddThermalProfileError(message="Invalid temperature unit")
         except SherlockAddThermalProfileError as e:
             for error in e.str_itr():
@@ -1133,8 +1133,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddThermalProfileError(error_array=response.errors)
-                else:
-                    raise SherlockAddThermalProfileError(message=return_code.message)
+
+                raise SherlockAddThermalProfileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -1320,19 +1320,19 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_harmonic_event(
-        self,
-        project,
-        phase_name,
-        event_name,
-        duration,
-        duration_units,
-        num_of_cycles,
-        cycle_type,
-        sweep_rate,
-        orientation,
-        profile_type,
-        load_direction,
-        description="",
+            self,
+            project,
+            phase_name,
+            event_name,
+            duration,
+            duration_units,
+            num_of_cycles,
+            cycle_type,
+            sweep_rate,
+            orientation,
+            profile_type,
+            load_direction,
+            description=""
     ):
         """Define and add a new harmonic vibe life cycle event.
 
@@ -1408,21 +1408,21 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddHarmonicEventError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddHarmonicEventError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddHarmonicEventError(message="Invalid event name")
-            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+            if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
                 raise SherlockAddHarmonicEventError(message="Invalid duration unit specified")
-            elif duration <= 0.0:
+            if duration <= 0.0:
                 raise SherlockAddHarmonicEventError(message="Duration must be greater than 0")
-            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+            if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
                 raise SherlockAddHarmonicEventError(message="Invalid cycle type")
-            elif num_of_cycles <= 0.0:
+            if num_of_cycles <= 0.0:
                 raise SherlockAddHarmonicEventError(
                     message="Number of cycles must be greater than 0"
                 )
-            elif sweep_rate <= 0.0:
+            if sweep_rate <= 0.0:
                 raise SherlockAddHarmonicEventError(message="Sweep rate must be greater than 0")
         except SherlockAddHarmonicEventError as e:
             for error in e.str_itr():
@@ -1433,7 +1433,7 @@ class Lifecycle(GrpcStub):
             self._check_load_direction_validity(load_direction)
             self._check_orientation_validity(orientation)
             if (self.HARMONIC_PROFILE_TYPE_LIST is not None) and (
-                profile_type not in self.HARMONIC_PROFILE_TYPE_LIST
+                    profile_type not in self.HARMONIC_PROFILE_TYPE_LIST
             ):
                 raise SherlockAddHarmonicEventError(message="Invalid profile type")
         except (SherlockInvalidLoadDirectionError, SherlockInvalidOrientationError) as e:
@@ -1467,8 +1467,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddHarmonicEventError(error_array=response.errors)
-                else:
-                    raise SherlockAddHarmonicEventError(message=return_code.message)
+
+                raise SherlockAddHarmonicEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -1478,15 +1478,15 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_harmonic_profile(
-        self,
-        project,
-        phase_name,
-        event_name,
-        profile_name,
-        freq_units,
-        load_units,
-        harmonic_profiles_entries,
-        triaxial_axis,
+            self,
+            project,
+            phase_name,
+            event_name,
+            profile_name,
+            freq_units,
+            load_units,
+            harmonic_profiles_entries,
+            triaxial_axis
     ):
         """Define and add a new harmonic life cycle event profile.
 
@@ -1568,15 +1568,15 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddHarmonicProfileError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddHarmonicProfileError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddHarmonicProfileError(message="Invalid event name")
-            elif profile_name == "":
+            if profile_name == "":
                 raise SherlockAddHarmonicProfileError(message="Invalid profile name")
-            elif (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
+            if (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
                 raise SherlockAddHarmonicProfileError(message="Invalid frequency unit")
-            elif (self.LOAD_UNIT_LIST is not None) and (load_units not in self.LOAD_UNIT_LIST):
+            if (self.LOAD_UNIT_LIST is not None) and (load_units not in self.LOAD_UNIT_LIST):
                 raise SherlockAddHarmonicProfileError(message="Invalid load unit")
         except SherlockAddHarmonicProfileError as e:
             for error in e.str_itr():
@@ -1613,8 +1613,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddHarmonicProfileError(error_array=response.errors)
-                else:
-                    raise SherlockAddHarmonicProfileError(message=return_code.message)
+
+                raise SherlockAddHarmonicProfileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -1802,17 +1802,17 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_shock_event(
-        self,
-        project,
-        phase_name,
-        event_name,
-        duration,
-        duration_units,
-        num_of_cycles,
-        cycle_type,
-        orientation,
-        load_direction,
-        description="",
+            self,
+            project,
+            phase_name,
+            event_name,
+            duration,
+            duration_units,
+            num_of_cycles,
+            cycle_type,
+            orientation,
+            load_direction,
+            description=""
     ):
         """Define and add a new shock life cycle event.
 
@@ -1880,17 +1880,17 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddShockEventError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddShockEventError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddShockEventError(message="Invalid event name")
-            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+            if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
                 raise SherlockAddShockEventError(message="Invalid duration unit specified")
-            elif duration <= 0.0:
+            if duration <= 0.0:
                 raise SherlockAddShockEventError(message="Duration must be greater than 0")
-            elif (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
+            if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
                 raise SherlockAddShockEventError(message="Invalid cycle type")
-            elif num_of_cycles <= 0.0:
+            if num_of_cycles <= 0.0:
                 raise SherlockAddShockEventError(message="Number of cycles must be greater than 0")
         except SherlockAddShockEventError as e:
             for error in e.str_itr():
@@ -1925,8 +1925,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddShockEventError(error_array=response.errors)
-                else:
-                    raise SherlockAddShockEventError(message=return_code.message)
+
+                raise SherlockAddShockEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -1936,18 +1936,18 @@ class Lifecycle(GrpcStub):
             raise e
 
     def add_shock_profile(
-        self,
-        project,
-        phase_name,
-        event_name,
-        profile_name,
-        duration,
-        duration_units,
-        sample_rate,
-        sample_rate_units,
-        load_units,
-        freq_units,
-        shock_profile_entries,
+            self,
+            project,
+            phase_name,
+            event_name,
+            profile_name,
+            duration,
+            duration_units,
+            sample_rate,
+            sample_rate_units,
+            load_units,
+            freq_units,
+            shock_profile_entries
     ):
         """Define and add a new shock life cycle event profile.
 
@@ -2043,25 +2043,25 @@ class Lifecycle(GrpcStub):
         try:
             if project == "":
                 raise SherlockAddShockProfileError(message="Invalid project name")
-            elif phase_name == "":
+            if phase_name == "":
                 raise SherlockAddShockProfileError(message="Invalid phase name")
-            elif event_name == "":
+            if event_name == "":
                 raise SherlockAddShockProfileError(message="Invalid event name")
-            elif profile_name == "":
+            if profile_name == "":
                 raise SherlockAddShockProfileError(message="Invalid profile name")
-            elif duration <= 0:
+            if duration <= 0:
                 raise SherlockAddShockProfileError(message="Duration must be greater than 0")
-            elif (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
+            if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
                 raise SherlockAddShockProfileError(message="Invalid duration unit")
-            elif sample_rate <= 0:
+            if sample_rate <= 0:
                 raise SherlockAddShockProfileError(message="Sample rate must be greater than 0")
-            elif (self.TIME_UNIT_LIST is not None) and (
-                sample_rate_units not in self.TIME_UNIT_LIST
+            if (self.TIME_UNIT_LIST is not None) and (
+                    sample_rate_units not in self.TIME_UNIT_LIST
             ):
                 raise SherlockAddShockProfileError(message="Invalid sample rate unit")
-            elif (self.LOAD_UNIT_LIST is not None) and (load_units not in self.LOAD_UNIT_LIST):
+            if (self.LOAD_UNIT_LIST is not None) and (load_units not in self.LOAD_UNIT_LIST):
                 raise SherlockAddShockProfileError(message="Invalid load unit")
-            elif (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
+            if (self.FREQ_UNIT_LIST is not None) and (freq_units not in self.FREQ_UNIT_LIST):
                 raise SherlockAddShockProfileError(message="Invalid frequency unit")
         except SherlockAddShockProfileError as e:
             for error in e.str_itr():
@@ -2101,8 +2101,8 @@ class Lifecycle(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockAddShockProfileError(error_array=response.errors)
-                else:
-                    raise SherlockAddShockProfileError(message=return_code.message)
+
+                raise SherlockAddShockProfileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return

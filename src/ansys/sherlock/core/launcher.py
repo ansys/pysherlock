@@ -8,7 +8,7 @@ import time
 import grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockCannotUsePortError
+from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
 
 LOCALHOST = "127.0.0.1"
@@ -25,8 +25,8 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
         except socket.error as e:
             if e.errno == errno.EADDRINUSE:
                 raise SherlockCannotUsePortError(port, "Port is already in use")
-            else:
-                raise SherlockCannotUsePortError(port, str(e))
+
+            raise SherlockCannotUsePortError(port, str(e))
 
 
 def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_args=""):
@@ -50,13 +50,14 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
         _is_port_available(host, port)
     except Exception as e:
         print(str(e))
-        return
+        return None
 
     try:
-        subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + str(port), sherlock_cmd_args])
-        time.sleep(5)
+        with subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + \
+                                                         str(port), sherlock_cmd_args]) as p:
+            time.sleep(5)
     except Exception as e:
-        LOG.error("Error encountered while starting or executing Sherlock, error = " + str(e))
+        LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
     try:
         sherlock = connect_grpc_channel(port)
@@ -107,8 +108,8 @@ def _get_base_ansys():
 def _get_ansys_version_from_awp_root(awp_root):
     if awp_root.find("AWP_ROOT") >= 0:
         return int(awp_root.replace("AWP_ROOT", ""))
-    else:
-        return ""
+
+    return ""
 
 
 def _get_sherlock_exe_path():

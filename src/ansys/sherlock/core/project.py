@@ -57,9 +57,9 @@ class Project(GrpcStub):
         try:
             if response.value == -1:
                 raise SherlockDeleteProjectError(response.message)
-            else:
-                LOG.info(response.message)
-                return
+
+            LOG.info(response.message)
+            return
         except SherlockDeleteProjectError as e:
             LOG.error(str(e))
             raise e
@@ -72,7 +72,7 @@ class Project(GrpcStub):
             process_cutout_file,
             guess_part_properties,
             project=None,
-            cca_name=None,
+            cca_name=None
     ):
         """Import an ODB++ archive.
 
@@ -136,20 +136,20 @@ class Project(GrpcStub):
         try:
             if response.value == -1:
                 raise SherlockImportODBError(response.message)
-            else:
-                LOG.info(response.message)
-                return
+
+            LOG.info(response.message)
+            return
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
 
     def import_ipc2581_archive(
-        self,
-        archive_file,
-        include_other_layers,
-        guess_part_properties,
-        project=None,
-        cca_name=None,
+            self,
+            archive_file,
+            include_other_layers,
+            guess_part_properties,
+            project=None,
+            cca_name=None
     ):
         """Import an IPC2581 archive.
 
@@ -206,19 +206,19 @@ class Project(GrpcStub):
         try:
             if response.value == -1:
                 raise SherlockImportIpc2581Error(response.message)
-            else:
-                LOG.info(response.message)
-                return
+
+            LOG.info(response.message)
+            return
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
 
     def generate_project_report(
-        self,
-        project,
-        author,
-        company,
-        export_file,
+            self,
+            project,
+            author,
+            company,
+            export_file
     ):
         """Generate a project report.
 
@@ -250,9 +250,9 @@ class Project(GrpcStub):
         try:
             if project == "":
                 raise SherlockGenerateProjectReportError(message="Invalid project name")
-            elif author == "":
+            if author == "":
                 raise SherlockGenerateProjectReportError(message="Invalid author name")
-            elif company == "":
+            if company == "":
                 raise SherlockGenerateProjectReportError(message="Invalid company name")
             if export_file == "":
                 raise SherlockGenerateProjectReportError(message="Export file path required")

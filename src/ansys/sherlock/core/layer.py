@@ -23,10 +23,10 @@ class Layer(GrpcStub):
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
     def update_mount_points_by_file(
-        self,
-        project,
-        cca_name,
-        file_path,
+            self,
+            project,
+            cca_name,
+            file_path,
     ):
         """Update mount points properties of a CCA from a CSV formatted file.
 
@@ -60,7 +60,7 @@ class Layer(GrpcStub):
         try:
             if project == "":
                 raise SherlockUpdateMountPointsByFileError(message="Invalid project name")
-            elif cca_name == "":
+            if cca_name == "":
                 raise SherlockUpdateMountPointsByFileError(message="Invalid cca name")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
@@ -73,7 +73,7 @@ class Layer(GrpcStub):
             if len(file_path) <= 1 or file_path[1] != ":":
                 file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdateMountPointsByFileError(f"Invalid file path")
+                raise SherlockUpdateMountPointsByFileError("Invalid file path")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -97,8 +97,8 @@ class Layer(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockUpdateMountPointsByFileError(error_array=response.updateError)
-                else:
-                    raise SherlockUpdateMountPointsByFileError(message=return_code.message)
+
+                raise SherlockUpdateMountPointsByFileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return

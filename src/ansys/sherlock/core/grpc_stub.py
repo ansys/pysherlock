@@ -20,7 +20,7 @@ class GrpcStub:
             stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(self.channel)
             stub.check(SherlockCommonService_pb2.HealthCheckRequest())
             return True
-        except grpc.RpcError as rpc_error:
+        except grpc.RpcError:
             return False
-        except:
-            return False
+
+        return False

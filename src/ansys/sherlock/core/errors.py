@@ -462,6 +462,17 @@ class SherlockUpdateRandomVibePropsError(Exception):
         """Format error message."""
         return f"Update random vibe properties error: {self.message}"
 
+class SherlockUpdateNaturalFrequencyPropsError(Exception):
+    """Raised when updating the analysis properties for natural frequency results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update natural frequency properties error: {self.message}"
+
 
 class SherlockCommonServiceError(Exception):
     """Raised when executing an API in the common service resulted in an error."""

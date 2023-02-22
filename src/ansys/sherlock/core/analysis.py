@@ -13,7 +13,7 @@ except ModuleNotFoundError:
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockInvalidPhaseError, SherlockRunAnalysisError, \
-    SherlockUpdateRandomVibePropsError
+    SherlockUpdateRandomVibePropsError, SherlockUpdateNaturalFrequencyPropsError
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -44,6 +44,21 @@ class Analysis(GrpcStub):
         }
         self.TEMP_UNIT_LIST = None
         self.FREQ_UNIT_LIST = None
+        self.FIELD_NAMES = {
+            "naturalFreqCount": "natural_freq_count",
+            "randomVibeDamping": "random_vibe_damping",
+            "naturalFreqMin": "natural_freq_min",
+            "naturalFreqMinUnits": "natural_freq_min_units",
+            "naturalFreqMax": "natural_freq_max",
+            "naturalFreqMaxUnits": "natural_freq_max_units",
+            "analysisTemp": "analysis_temp",
+            "analysisTempUnits": "analysis_temp_units",
+            "partValidationEnabled": "part_validation_enabled",
+            "forceModelRebuild": "force_model_rebuild",
+            "reuseModalAnalysis": "reuse_modal_analysis",
+            "performNFFreqRangeCheck": "perform_nf_freq_range_check",
+            "requireMaterialAssignmentEnabled": "require_material_assignment_enabled"
+        }
 
     def _init_freq_units(self):
         """Initialize FREQ_UNIT_LIST."""
@@ -207,42 +222,12 @@ class Analysis(GrpcStub):
 
         message = SherlockAnalysisService_pb2.GetRandomVibeInputFieldsRequest()
         response = self.stub.getRandomVibeInputFields(message)
+        LOG.info(self._translate_field_names(response.fieldName))
 
-        # translates from Java gRPC field names to Python field names
-        field_names = {"randomVibeDamping": "random_vibe_damping",
-                       "naturalFreqMin": "natural_freq_min",
-                       "naturalFreqMinUnits": "natural_freq_min_units",
-                       "naturalFreqMax": "natural_freq_max",
-                       "naturalFreqMaxUnits": "natural_freq_max_units",
-                       "analysisTemp": "analysis_temp",
-                       "analysisTempUnits": "analysis_temp_units",
-                       "partValidationEnabled": "part_validation_enabled",
-                       "forceModelRebuild": "force_model_rebuild",
-                       "reuseModalAnalysis": "reuse_modal_analysis",
-                       "performNFFreqRangeCheck": "perform_nf_freq_range_check",
-                       "requireMaterialAssignmentEnabled": "require_material_assignment_enabled"
-                       }
-
-        LOG.info(self._translate_random_vibe_field_names(response.fieldName))
-
-    def _translate_random_vibe_field_names(self, names_list):
-        # translates from Java gRPC field names to Python field names
-        field_names = {"randomVibeDamping": "random_vibe_damping",
-                       "naturalFreqMin": "natural_freq_min",
-                       "naturalFreqMinUnits": "natural_freq_min_units",
-                       "naturalFreqMax": "natural_freq_max",
-                       "naturalFreqMaxUnits": "natural_freq_max_units",
-                       "analysisTemp": "analysis_temp",
-                       "analysisTempUnits": "analysis_temp_units",
-                       "partValidationEnabled": "part_validation_enabled",
-                       "forceModelRebuild": "force_model_rebuild",
-                       "reuseModalAnalysis": "reuse_modal_analysis",
-                       "performNFFreqRangeCheck": "perform_nf_freq_range_check",
-                       "requireMaterialAssignmentEnabled": "require_material_assignment_enabled"
-                       }
+    def _translate_field_names(self, names_list):
         names = ""
         for name in list(names_list):
-            names = names + '\n' + field_names.get(name)
+            names = names + '\n' + self.FIELD_NAMES.get(name)
 
         return names
 
@@ -386,5 +371,161 @@ class Analysis(GrpcStub):
                 LOG.info(response.message)
                 return
         except SherlockUpdateRandomVibePropsError as e:
+            LOG.error(str(e))
+            raise e
+
+    def get_natural_frequency_input_fields(self):
+        """Returns the list of valid Natural Frequency property fields based
+        on the user configuration.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock.project.import_odb_archive(
+        >>> sherlock = launch_sherlock()
+                "ODB++ Tutorial.tgz",
+                True,
+                True,
+                True,
+                True,
+                project="Test",
+                cca_name="Card",
+            )
+            >>> sherlock.analysis.get_natural_frequency_input_fields()
+            """
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        message = SherlockAnalysisService_pb2.GetNaturalFrequencyInputFieldsRequest()
+        response = self.stub.getNaturalFrequencyInputFields(message)
+        LOG.info(self._translate_field_names(response.fieldName))
+
+    def update_natural_frequency_props(
+            self,
+            project,
+            cca_name,
+            natural_freq_count,
+            natural_freq_min,
+            natural_freq_min_units,
+            natural_freq_max,
+            natural_freq_max_units,
+            part_validation_enabled,
+            require_material_assignment_enabled,
+            analysis_temp=None,
+            analysis_temp_units=None
+    ):
+        """Updates the properties for Natural Frequency analysis.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name
+        natural_freq_count: int
+            NF Result Count.
+        natural_freq_min: double
+            Min Frequency.
+        natural_freq_min_units: str
+            Min Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ".
+        natural_freq_max: double
+            Max Frequency.
+        natural_freq_max_units: str
+            Max Frequency units. Valid values: "HZ", "KHZ", "MHZ", "GHZ".
+        part_validation_enabled: bool
+            Part validation.
+        require_material_assignment_enabled: bool
+            Require Material Assignment.
+        analysis_temp: double, optional
+            Temperature.
+        analysis_temp_units: str, optional
+            Temperature units. Valid values: "C", "F", "K".
+
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card"
+        )
+        >>> sherlock.analysis.update_natural_frequency_props(
+            "Test",
+            "Card",
+            natural_freq_count=2,
+            natural_freq_min=10,
+            natural_freq_min_units="HZ",
+            natural_freq_max=100,
+            natural_freq_max_units="HZ",
+            part_validation_enabled=True,
+            require_material_assignment_enabled=False,
+            analysis_temp=25,
+            analysis_temp_units="C"
+        )
+
+        """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.TEMP_UNIT_LIST is None:
+            self._init_temp_units()
+        try:
+            if project == "":
+                raise SherlockUpdateNaturalFrequencyPropsError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockUpdateNaturalFrequencyPropsError(message="Invalid cca name")
+            if (self.FREQ_UNIT_LIST is not None) and \
+                    (natural_freq_min_units not in self.FREQ_UNIT_LIST):
+                raise SherlockUpdateNaturalFrequencyPropsError(
+                    message="Invalid min natural freq unit specified: " +
+                            natural_freq_min_units)
+            if (self.FREQ_UNIT_LIST is not None) and \
+                    (natural_freq_max_units not in self.FREQ_UNIT_LIST):
+                raise SherlockUpdateNaturalFrequencyPropsError(
+                    message="Invalid max natural freq unit specified: " +
+                            natural_freq_max_units)
+            if (self.TEMP_UNIT_LIST is not None) and \
+                    (analysis_temp_units not in self.TEMP_UNIT_LIST):
+                raise SherlockUpdateNaturalFrequencyPropsError(
+                    message="Invalid analysis temperature unit specified: " +
+                            analysis_temp_units)
+        except SherlockUpdateNaturalFrequencyPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockAnalysisService_pb2.UpdateNaturalFrequencyPropsRequest(
+            project=project,
+            ccaName=cca_name,
+            naturalFreqCount=natural_freq_count,
+            naturalFreqMin=natural_freq_min,
+            naturalFreqMinUnits=natural_freq_min_units,
+            naturalFreqMax=natural_freq_max,
+            naturalFreqMaxUnits=natural_freq_max_units,
+            partValidationEnabled=part_validation_enabled,
+            requireMaterialAssignmentEnabled=require_material_assignment_enabled,
+            analysisTemp=analysis_temp,
+            analysisTempUnits=analysis_temp_units
+        )
+
+        response = self.stub.updateNaturalFreqencyProps(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdateNaturalFrequencyPropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return
+        except SherlockUpdateNaturalFrequencyPropsError as e:
             LOG.error(str(e))
             raise e
