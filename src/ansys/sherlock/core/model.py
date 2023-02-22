@@ -23,23 +23,23 @@ class Model(GrpcStub):
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 
     def export_trace_reinforcement_model(
-        self,
-        project_name,
-        cca_name,
-        export_file,
-        overwrite=True,
-        display_model=False,
-        generate_models_for_all_layers=False,
-        coordinate_units="mm",
-        trace_param_diameter_threshold_val=2,
-        trace_param_diameter_threshold_unit="mm",
-        trace_param_min_hole_diameter_val=0.25,
-        trace_param_min_hole_diameter_unit="mm",
-        trace_drill_hole_modeling="DISABLED",
-        trace_drill_hole_min_diameter_val=2,
-        trace_drill_hole_min_diameter_unit="mm",
-        trace_drill_hole_max_edge_val=1,
-        trace_drill_hole_max_edge_unit="mm",
+            self,
+            project_name,
+            cca_name,
+            export_file,
+            overwrite=True,
+            display_model=False,
+            generate_models_for_all_layers=False,
+            coordinate_units="mm",
+            trace_param_diameter_threshold_val=2,
+            trace_param_diameter_threshold_unit="mm",
+            trace_param_min_hole_diameter_val=0.25,
+            trace_param_min_hole_diameter_unit="mm",
+            trace_drill_hole_modeling="DISABLED",
+            trace_drill_hole_min_diameter_val=2,
+            trace_drill_hole_min_diameter_unit="mm",
+            trace_drill_hole_max_edge_val=1,
+            trace_drill_hole_max_edge_unit="mm"
     ):
         r"""Export a trace reinforcement model.
 
@@ -198,17 +198,17 @@ class Model(GrpcStub):
             raise
 
     def generate_trace_model(
-        self,
-        project_name,
-        cca_name="",
-        copper_layer_name="",
-        max_arc_segment=0.0,
-        max_arc_segment_units="mm",
-        min_trace_area=0.0,
-        min_trace_area_units="mm2",
-        min_hole_area=0.0,
-        min_hole_area_units="mm2",
-        use_snapshot_for_non_image_layer=False,
+            self,
+            project_name,
+            cca_name="",
+            copper_layer_name="",
+            max_arc_segment=0.0,
+            max_arc_segment_units="mm",
+            min_trace_area=0.0,
+            min_trace_area_units="mm2",
+            min_hole_area=0.0,
+            min_hole_area_units="mm2",
+            use_snapshot_for_non_image_layer=False
     ):
         r"""Generate one or more trace models for a given project.
 

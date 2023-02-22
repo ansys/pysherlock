@@ -1,7 +1,9 @@
 import grpc
 
 from ansys.sherlock.core.analysis import Analysis
-from ansys.sherlock.core.errors import SherlockRunAnalysisError, SherlockUpdateRandomVibePropsError
+from ansys.sherlock.core.errors import SherlockRunAnalysisError, \
+    SherlockUpdateRandomVibePropsError, \
+    SherlockUpdateNaturalFrequencyPropsError
 
 
 def test_all():
@@ -13,6 +15,7 @@ def test_all():
     helper_test_run_analysis(analysis)
     helper_test_translate_random_vibe_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
+    helper_test_update_natural_frequency_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -90,8 +93,8 @@ def helper_test_run_analysis(analysis):
 def helper_test_translate_random_vibe_field_names(analysis):
     """Test translating the random vibe field names."""
 
-    results = analysis._translate_random_vibe_field_names([
-        "randomVibeDamping", "naturalFreqMin", "naturalFreqMinUnits",
+    results = analysis._translate_field_names([
+        "randomVibeDamping", "naturalFreqCount", "naturalFreqMin", "naturalFreqMinUnits",
         "naturalFreqMax", "naturalFreqMaxUnits", "analysisTemp",
         "analysisTempUnits", "partValidationEnabled", "forceModelRebuild",
         "reuseModalAnalysis", "performNFFreqRangeCheck", "requireMaterialAssignmentEnabled"
@@ -99,6 +102,7 @@ def helper_test_translate_random_vibe_field_names(analysis):
 
     expected = """
 random_vibe_damping
+natural_freq_count
 natural_freq_min
 natural_freq_min_units
 natural_freq_max
@@ -175,6 +179,76 @@ def helper_test_update_random_vibe_props(analysis):
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
                    "Update random vibe properties error: Invalid analysis " \
+                   "temperature unit specified: foo"
+
+
+def helper_test_update_natural_frequency_props(analysis):
+    try:
+        analysis.update_natural_frequency_props("", "Card", natural_freq_count=2,
+                                                natural_freq_min=10, natural_freq_min_units="HZ",
+                                                natural_freq_max=100, natural_freq_max_units="HZ",
+                                                part_validation_enabled=True,
+                                                require_material_assignment_enabled=False
+                                                )
+        assert False
+    except SherlockUpdateNaturalFrequencyPropsError as e:
+        assert str(e) == "Update natural frequency properties error: Invalid project name"
+
+    try:
+        analysis.update_natural_frequency_props("Test", "", natural_freq_count=2,
+                                                natural_freq_min=10, natural_freq_min_units="HZ",
+                                                natural_freq_max=100, natural_freq_max_units="HZ",
+                                                part_validation_enabled=True,
+                                                require_material_assignment_enabled=False)
+        assert False
+    except SherlockUpdateNaturalFrequencyPropsError as e:
+        assert str(e) == "Update natural frequency properties error: Invalid cca name"
+
+    if analysis._is_connection_up():
+        try:
+            analysis.update_natural_frequency_props("Test", "Card",
+                                                    natural_freq_count=2,
+                                                    natural_freq_min=10,
+                                                    natural_freq_min_units="foo",
+                                                    natural_freq_max=100,
+                                                    natural_freq_max_units="HZ",
+                                                    part_validation_enabled=True,
+                                                    require_material_assignment_enabled=False)
+            assert False
+        except SherlockUpdateNaturalFrequencyPropsError as e:
+            assert str(e) == \
+                   "Update natural frequency properties error: Invalid min " \
+                   "natural freq unit specified: foo"
+
+        try:
+            analysis.update_natural_frequency_props("Test", "Card",
+                                                    natural_freq_count=2,
+                                                    natural_freq_min=10,
+                                                    natural_freq_min_units="HZ",
+                                                    natural_freq_max=100,
+                                                    natural_freq_max_units="foo",
+                                                    part_validation_enabled=True,
+                                                    require_material_assignment_enabled=False)
+            assert False
+        except SherlockUpdateNaturalFrequencyPropsError as e:
+            assert str(e) == \
+                   "Update natural frequency properties error: Invalid max " \
+                   "natural freq unit specified: foo"
+
+        try:
+            analysis.update_natural_frequency_props("Test", "Card",
+                                                    natural_freq_count=2,
+                                                    natural_freq_min=10,
+                                                    natural_freq_min_units="HZ",
+                                                    natural_freq_max=100,
+                                                    natural_freq_max_units="HZ",
+                                                    part_validation_enabled=True,
+                                                    require_material_assignment_enabled=False,
+                                                    analysis_temp=25, analysis_temp_units="foo")
+            assert False
+        except SherlockUpdateNaturalFrequencyPropsError as e:
+            assert str(e) == \
+                   "Update natural frequency properties error: Invalid analysis " \
                    "temperature unit specified: foo"
 
 

@@ -227,8 +227,8 @@ class Parts(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockUpdatePartsListError(error_array=response.updateError)
-                else:
-                    raise SherlockUpdatePartsListError(message=return_code.message)
+
+                raise SherlockUpdatePartsListError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -238,10 +238,10 @@ class Parts(GrpcStub):
             raise e
 
     def update_parts_locations(
-        self,
-        project,
-        cca_name,
-        part_loc,
+            self,
+            project,
+            cca_name,
+            part_loc
     ):
         """Update one or more parts' locations.
 
@@ -311,8 +311,8 @@ class Parts(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockUpdatePartsLocationsError(error_array=response.updateError)
-                else:
-                    raise SherlockUpdatePartsLocationsError(message=return_code.message)
+
+                raise SherlockUpdatePartsLocationsError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -322,11 +322,11 @@ class Parts(GrpcStub):
             raise e
 
     def update_parts_locations_by_file(
-        self,
-        project,
-        cca_name,
-        file_path,
-        numeric_format="",
+            self,
+            project,
+            cca_name,
+            file_path,
+            numeric_format=""
     ):
         """Update one or more parts' locations using a CSV file.
 
@@ -395,8 +395,8 @@ class Parts(GrpcStub):
             if return_code.value == -1:
                 if return_code.message == "":
                     raise SherlockUpdatePartsLocationsByFileError(error_array=response.updateError)
-                else:
-                    raise SherlockUpdatePartsLocationsByFileError(message=return_code.message)
+
+                raise SherlockUpdatePartsLocationsByFileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
                 return
@@ -406,11 +406,11 @@ class Parts(GrpcStub):
             raise e
 
     def import_parts_list(
-        self,
-        project,
-        cca_name,
-        import_file,
-        import_as_user_src,
+            self,
+            project,
+            cca_name,
+            import_file,
+            import_as_user_src
     ):
         """Import a parts list for a project CCA.
 
@@ -469,7 +469,7 @@ class Parts(GrpcStub):
             project=project,
             ccaName=cca_name,
             importFile=import_file,
-            importAsUserSrc=import_as_user_src,
+            importAsUserSrc=import_as_user_src
         )
 
         response = self.stub.importPartsList(request)
@@ -477,18 +477,18 @@ class Parts(GrpcStub):
         try:
             if response.value == -1:
                 raise SherlockImportPartsListError(response.message)
-            else:
-                LOG.info(response.message)
-                return
+
+            LOG.info(response.message)
+            return
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
 
     def export_parts_list(
-        self,
-        project,
-        cca_name,
-        export_file,
+            self,
+            project,
+            cca_name,
+            export_file
     ):
         """Export a parts list for a project CCA.
 
@@ -545,7 +545,7 @@ class Parts(GrpcStub):
         request = SherlockPartsService_pb2.ExportPartsListRequest(
             project=project,
             ccaName=cca_name,
-            exportFile=export_file,
+            exportFile=export_file
         )
 
         response = self.stub.exportPartsList(request)
@@ -553,17 +553,17 @@ class Parts(GrpcStub):
         try:
             if response.value == -1:
                 raise SherlockExportPartsListError(response.message)
-            else:
-                LOG.info(response.message)
-                return
+
+            LOG.info(response.message)
+            return
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
 
     def enable_lead_modeling(
-        self,
-        project,
-        cca_name,
+            self,
+            project,
+            cca_name
     ):
         """Enable lead modeling for all non LEADLESS parts leads.
 
@@ -610,9 +610,9 @@ class Parts(GrpcStub):
         try:
             if response.value == -1:
                 raise SherlockEnableLeadModelingError(response.message)
-            else:
-                LOG.info(response.message)
-                return
+
+            LOG.info(response.message)
+            return
         except SherlockEnableLeadModelingError as e:
             LOG.error(str(e))
             raise e
