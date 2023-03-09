@@ -1,5 +1,5 @@
-Lifecycle
-=========
+Common
+======
 
 Module containing all common capabilities.
 
