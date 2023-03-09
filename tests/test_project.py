@@ -5,6 +5,8 @@ from ansys.sherlock.core.errors import (
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
+    SherlockListCCAsError,
+    SherlockListStrainMapsError,
 )
 from ansys.sherlock.core.project import Project
 
@@ -19,6 +21,8 @@ def test_all():
     helper_test_import_odb_archive(project)
     helper_test_import_ipc2581_archive(project)
     helper_test_generate_project_report(project)
+    helper_test_list_ccas(project)
+    helper_test_list_strain_maps(project)
 
 
 def helper_test_delete_project(project):
@@ -85,6 +89,38 @@ def helper_test_generate_project_report(project):
         assert False
     except SherlockGenerateProjectReportError as e:
         assert str(e) == "Generate project report error: Export file directory does not exist"
+
+
+def helper_test_list_ccas(project):
+    """Test list_ccas API"""
+
+    try:
+        project.list_ccas("")
+        assert False
+    except SherlockListCCAsError as e:
+        assert str(e) == "List CCAs error: Invalid project name"
+
+    try:
+        project.list_ccas("Tutorial Project","Not a list")
+        assert False
+    except SherlockListCCAsError as e:
+        assert str(e) == "List CCAs error: cca_names is not a list"
+
+
+def helper_test_list_strain_maps(project):
+    """Test list_strain_maps API"""
+
+    try:
+        project.list_strain_maps("")
+        assert False
+    except SherlockListStrainMapsError as e:
+        assert str(e) == "List strain maps error: Invalid project name"
+
+    try:
+        project.list_strain_maps("Tutorial Project","Not a list")
+        assert False
+    except SherlockListStrainMapsError as e:
+        assert str(e) == "List strain maps error: cca_names is not a list"
 
 
 if __name__ == "__main__":
