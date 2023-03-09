@@ -64,3 +64,103 @@ class Common(GrpcStub):
             LOG.info(str(response))
         except SherlockCommonServiceError as err:
             LOG.error("Exit error: ", str(err))
+
+    def list_units(self, unitType):
+        """List valid units for the provided unit type.
+
+        Parameters
+        ----------
+        unitType : string, required
+            The unit type. Valid types are: ACCEL_DENSITY, ACCELERATION, AREA, BANDWIDTH,
+            CAPACITANCE, CTE, CURRENT, DENSITY, DISP_DENSITY, FORCE, FREQUENCY, INDUCTANCE, LENGTH,
+            POWER, RESISTANCE, SIZE, SPECIFIC_HEAT, STRAIN, STRESS, TEMPERATURE,
+            THERMAL_CONDUCTIVITY, THERMAL_RESISTANCE, TIME, VELOCITY, VELOCITY_DENSITY, VOLTAGE,
+            VOLUME, WEIGHT
+        """
+
+        if unitType == "":
+            raise SherlockCommonServiceError(message="Missing valid unit type")
+        elif unitType == "ACCEL_DENSITY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.ACCEL_DENSITY
+        elif unitType == "ACCELERATION":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.ACCELERATION
+        elif unitType == "AREA":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.AREA
+        elif unitType == "BANDWIDTH":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.BANDWIDTH
+        elif unitType == "CAPACITANCE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.CAPACITANCE
+        elif unitType == "CTE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.CTE
+        elif unitType == "CURRENT":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.CURRENT
+        elif unitType == "DENSITY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.DENSITY
+        elif unitType == "DISP_DENSITY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.DISP_DENSITY
+        elif unitType == "FORCE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.FORCE
+        elif unitType == "FREQUENCY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.FREQUENCY
+        elif unitType == "INDUCTANCE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.INDUCTANCE
+        elif unitType == "LENGTH":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.LENGTH
+        elif unitType == "POWER":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.POWER
+        elif unitType == "RESISTANCE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.RESISTANCE
+        elif unitType == "SIZE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.SIZE
+        elif unitType == "SPECIFIC_HEAT":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.SPECIFIC_HEAT
+        elif unitType == "STRAIN":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.STRAIN
+        elif unitType == "STRESS":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.STRESS
+        elif unitType == "TEMPERATURE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.TEMPERATURE
+        elif unitType == "THERMAL_CONDUCTIVITY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.THERMAL_CONDUCTIVITY
+        elif unitType == "THERMAL_RESISTANCE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.THERMAL_RESISTANCE
+        elif unitType == "TIME":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.TIME
+        elif unitType == "VELOCITY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.VELOCITY
+        elif unitType == "VELOCITY_DENSITY":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.VELOCITY_DENSITY
+        elif unitType == "VOLTAGE":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.VOLTAGE
+        elif unitType == "VOLUME":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.VOLUME
+        elif unitType == "WEIGHT":
+            unitType = SherlockCommonService_pb2.ListUnitsRequest.WEIGHT
+        else:
+            raise SherlockCommonServiceError(message=f"Invalid unit type '{unitType}' specified")
+
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return ""
+
+        request = SherlockCommonService_pb2.ListUnitsRequest(
+            unitType=unitType
+        )
+
+        try:
+            response = self.stub.listUnits(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockCommonServiceError(error_array=response.errors)
+
+                raise SherlockCommonServiceError(message=return_code.message)
+
+        except SherlockCommonServiceError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+        return response.units
