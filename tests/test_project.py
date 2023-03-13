@@ -1,6 +1,7 @@
 import grpc
 
 from ansys.sherlock.core.errors import (
+    SherlockAddStrainMapsError,
     SherlockDeleteProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
@@ -17,6 +18,7 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     project = Project(channel)
 
+    helper_test_add_strain_maps(project)
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
     helper_test_import_ipc2581_archive(project)
@@ -101,10 +103,174 @@ def helper_test_list_ccas(project):
         assert str(e) == "List CCAs error: Invalid project name"
 
     try:
-        project.list_ccas("Tutorial Project","Not a list")
+        project.list_ccas("Tutorial Project", "Not a list")
         assert False
     except SherlockListCCAsError as e:
         assert str(e) == "List CCAs error: cca_names is not a list"
+
+
+def helper_test_add_strain_maps(project):
+    """Test add_strain_maps API"""
+
+    try:
+        project.add_strain_maps(
+            "",
+            [(
+                "StrainMap.csv",
+                "",
+                0,
+                "SolidID",
+                "PCB Strain",
+                "µε",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: Invalid project name"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "",
+                "",
+                0,
+                "SolidID",
+                "PCB Strain",
+                "µε",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: File path is required for strain map 0"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "StrainMap.csv",
+                "",
+                "0",  # Not an integer
+                "SolidID",
+                "PCB Strain",
+                "µε",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: " \
+                                 "Header row count is required for strain map 0"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "StrainMap.csv",
+                "",
+                -1,
+                "SolidID",
+                "PCB Strain",
+                "µε",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: " \
+                                 "Header row count must be greater than or equal " \
+                                 "to 0 for strain map 0"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "StrainMap.csv",
+                "",
+                0,
+                "",
+                "PCB Strain",
+                "µε",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: Reference ID column is required " \
+                                 "for strain map 0"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "StrainMap.csv",
+                "",
+                0,
+                "SolidID",
+                "",
+                "µε",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: Strain column is required for strain map 0"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "StrainMap.csv",
+                "",
+                0,
+                "SolidID",
+                "Strain",
+                "",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: Strain units are required for strain map 0"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [(
+                "StrainMap.csv",
+                "",
+                0,
+                "SolidID",
+                "Strain",
+                "BAD",
+                ["Main Board"],
+            )],
+        )
+        assert False
+    except SherlockAddStrainMapsError as e:
+        assert e.str_itr()[0] == "Add strain maps error: Invalid strain units 'BAD' " \
+                                 "specified for strain map 0"
+
+    if project._is_connection_up():
+        try:
+            project.add_strain_maps(
+                "Tutorial Project",
+                [(
+                    "C:/Users/pwalters/Source/Sherlock/dist/tutorial/StrainMaps/StrainMap.csv",
+                    "",
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )],
+            )
+            assert True
+        except SherlockAddStrainMapsError as e:
+            print(str(e))
+            assert False
 
 
 def helper_test_list_strain_maps(project):
@@ -117,7 +283,7 @@ def helper_test_list_strain_maps(project):
         assert str(e) == "List strain maps error: Invalid project name"
 
     try:
-        project.list_strain_maps("Tutorial Project","Not a list")
+        project.list_strain_maps("Tutorial Project", "Not a list")
         assert False
     except SherlockListStrainMapsError as e:
         assert str(e) == "List strain maps error: cca_names is not a list"

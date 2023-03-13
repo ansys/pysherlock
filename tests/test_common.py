@@ -19,6 +19,9 @@ def test_all():
 def helper_test_list_units(common):
     """Test list_units API"""
 
+    if not common._is_connection_up():
+        return
+
     try:
         common.list_units("NOTHING")
         assert False
