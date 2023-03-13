@@ -14,6 +14,8 @@ from ansys.sherlock.core.errors import (
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
+    SherlockListCCAsError,
+    SherlockListStrainMapsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -291,3 +293,112 @@ class Project(GrpcStub):
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
             raise e
+
+
+    def list_ccas(self, project, cca_names=None):
+        """Returns the available CCA's and sub-assembly CCA's assigned to each CCA or the requested
+        CCA's from the given project.
+
+        Parameters
+        ----------
+        project: str, required
+            Sherlock project name to provide strain maps for.
+        cca_name : List of str, optional
+            Project CCA names to return. If empty all CCA's in the project will be returned.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> ccas = project.list_ccas("AssemblyTutorial",["Main Board"])
+        """
+
+        try:
+            if project == "":
+                raise SherlockListCCAsError(message="Invalid project name")
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ListCCAsRequest(
+                project=project
+            )
+
+            if cca_names is not None and type(cca_names) is not list:
+                raise SherlockListCCAsError(message="cca_names is not a list")
+
+            """Add the CCA names to the request"""
+            if cca_names is not None:
+                for cca_name in cca_names:
+                    request.cca.append(cca_name)
+
+            response = self.stub.listCCAs(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockListCCAsError(error_array=response.errors)
+
+                raise SherlockListCCAsError(message=return_code.message)
+
+        except SherlockListCCAsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.ccas
+    
+    
+    def list_strain_maps(self, project, cca_names=None):
+        """Returns the available strain maps assigned to each CCA or the requested CCA's from
+         the given project.
+
+        Parameters
+        ----------
+        project: str, required
+            Sherlock project name to provide strain maps for.
+        cca_name : List of str, optional
+            Project CCA names to provide strain maps for. If empty all CCA's in the
+             project will be returned.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> strain_maps = project.list_strain_maps("AssemblyTutorial",["Main Board","Power Module"])
+        """
+
+        try:
+            if project == "":
+                raise SherlockListStrainMapsError(message="Invalid project name")
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ListStrainMapsRequest(
+                project=project
+            )
+
+            if cca_names is not None and type(cca_names) is not list:
+                raise SherlockListStrainMapsError(message="cca_names is not a list")
+
+            """Add the CCA names to the request"""
+            if cca_names is not None:
+                for cca_name in cca_names:
+                    request.cca.append(cca_name)
+
+            response = self.stub.listStrainMaps(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockListStrainMapsError(error_array=response.errors)
+
+                raise SherlockListStrainMapsError(message=return_code.message)
+
+        except SherlockListStrainMapsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.ccaStrainMaps

@@ -67,6 +67,30 @@ class SherlockImportIpc2581Error(Exception):
         return f"Import IPC2581 error: {self.message}"
 
 
+class SherlockListCCAsError(Exception):
+    """Raised when listing project CCAs results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"List CCAs error: {self.message}"
+
+
+class SherlockListStrainMapsError(Exception):
+    """Raised when listing strains maps for a project results in an error."""
+    
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"List strain maps error: {self.message}"
+    
+    
 class SherlockGenerateProjectReportError(Exception):
     """Raised when generating a project report results in an error."""
 

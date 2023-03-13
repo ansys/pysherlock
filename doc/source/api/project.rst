@@ -12,3 +12,5 @@ Module containing all the project management capabilities.
      ansys.sherlock.core.project.Project.generate_project_report
      ansys.sherlock.core.project.Project.import_odb_archive
      ansys.sherlock.core.project.Project.import_ipc2581_archive
+     ansys.sherlock.core.project.Project.list_ccas
+     ansys.sherlock.core.project.Project.list_strain_maps
