@@ -70,8 +70,8 @@ class Lifecycle(GrpcStub):
     def _init_rv_profile_types(self):
         """Initialize RV_PROFILE_TYPE_LIST."""
         if self._is_connection_up():
-            rv_profile_request = SherlockLifeCycleService_pb2.ListRandomProfileTypesRequest()
-            rv_profile_response = self.stub.listRandomProfileTypes(rv_profile_request)
+            rv_profile_request = SherlockLifeCycleService_pb2.ListRandomVibeProfileTypesRequest()
+            rv_profile_response = self.stub.listRandomVibeProfileTypes(rv_profile_request)
             if rv_profile_response.returnCode.value == 0:
                 self.RV_PROFILE_TYPE_LIST = rv_profile_response.types
 
