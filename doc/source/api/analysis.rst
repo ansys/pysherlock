@@ -9,5 +9,6 @@ Module containing all the analysis capabilities.
      :toctree: _autosummary
 
      ansys.sherlock.core.analysis.Analysis.run_analysis
+     ansys.sherlock.core.analysis.Analysis.run_strain_map_analysis
      ansys.sherlock.core.analysis.Analysis.get_random_vibe_input_fields
      ansys.sherlock.core.analysis.Analysis.update_random_vibe_props

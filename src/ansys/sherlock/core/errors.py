@@ -493,6 +493,30 @@ class SherlockRunAnalysisError(Exception):
         return f"Run analysis error: {self.message}"
 
 
+class SherlockRunStrainMapAnalysisError(Exception):
+    """Raised when running a strain map analysis results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Run strain map analysis error: {self.message}"
+
+
+class SherlockGetRandomVibeInputFieldsError(Exception):
+    """Raised when getting the random vibe input fields results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get random vibe input fields error: {self.message}"
+
+
 class SherlockUpdateRandomVibePropsError(Exception):
     """Raised when updating the analysis properties for random vibe results in an error."""
 
