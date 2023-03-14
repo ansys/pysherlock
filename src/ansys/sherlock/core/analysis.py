@@ -713,11 +713,6 @@ class Analysis(GrpcStub):
                             f"Missing event name for event strain map {j} for strain "
                             f"map analysis {i}"
                         )
-                    elif event_strain_map[1] == "":
-                        raise SherlockRunStrainMapAnalysisError(
-                            f"Missing event name for event strain map {j} for strain "
-                            f"map analysis {i}"
-                        )
                     elif event_strain_map[2] == "":
                         raise SherlockRunStrainMapAnalysisError(
                             f"Missing PCB side for event strain map {j} for strain map analysis {i}"
