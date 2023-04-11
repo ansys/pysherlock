@@ -12,8 +12,15 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockInvalidPhaseError, SherlockRunAnalysisError, \
-    SherlockUpdateRandomVibePropsError, SherlockUpdateNaturalFrequencyPropsError
+from ansys.sherlock.core.errors import (
+    SherlockGetRandomVibeInputFieldsError,
+    SherlockInvalidPhaseError,
+    SherlockRunAnalysisError,
+    SherlockRunStrainMapAnalysisError,
+    SherlockUpdateRandomVibePropsError,
+    SherlockUpdateNaturalFrequencyPropsError,
+)
+
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -52,12 +59,16 @@ class Analysis(GrpcStub):
             "naturalFreqMax": "natural_freq_max",
             "naturalFreqMaxUnits": "natural_freq_max_units",
             "analysisTemp": "analysis_temp",
+            "analysisTemp (optional)": "analysis_temp",
             "analysisTempUnits": "analysis_temp_units",
+            "analysisTempUnits (optional)": "analysis_temp_units",
             "partValidationEnabled": "part_validation_enabled",
             "forceModelRebuild": "force_model_rebuild",
             "reuseModalAnalysis": "reuse_modal_analysis",
             "performNFFreqRangeCheck": "perform_nf_freq_range_check",
-            "requireMaterialAssignmentEnabled": "require_material_assignment_enabled"
+            "requireMaterialAssignmentEnabled": "require_material_assignment_enabled",
+            "modelSource": "model_source",
+            "strainMapNaturalFreqs": "strain_map_natural_freqs"
         }
 
     def _init_freq_units(self):
@@ -197,9 +208,14 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_random_vibe_input_fields(self):
+    def get_random_vibe_input_fields(self, model_source=None):
         """Returns the list of valid Random Vibe property fields based on the user configuration.
 
+        Parameters
+        ----------
+        model_source : str, optional
+            The model source for which to get the random vibe input fields. When not specified,
+            defaults to the Generated input form. Valid values are: GENERATED, STRAIN_MAP
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -216,13 +232,28 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_random_vibe_input_fields()
         """
 
+        if model_source is None or model_source == "GENERATED":
+            model_source = SherlockAnalysisService_pb2.ModelSource.GENERATED
+        elif model_source == "STRAIN_MAP":
+            model_source = SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
+        else:
+            msg = f"Invalid model source {model_source} specified"
+            LOG.error(msg)
+            raise SherlockGetRandomVibeInputFieldsError(message=msg)
+
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
             return
 
-        message = SherlockAnalysisService_pb2.GetRandomVibeInputFieldsRequest()
+        message = SherlockAnalysisService_pb2.GetRandomVibeInputFieldsRequest(
+            modelSource=model_source
+        )
         response = self.stub.getRandomVibeInputFields(message)
-        LOG.info(self._translate_field_names(response.fieldName))
+
+        fields = self._translate_field_names(response.fieldName)
+        LOG.info(fields)
+
+        return fields
 
     def _translate_field_names(self, names_list):
         names = ""
@@ -246,7 +277,9 @@ class Analysis(GrpcStub):
             force_model_rebuild=None,
             reuse_modal_analysis=None,
             perform_nf_freq_range_check=None,
-            require_material_assignment_enabled=None
+            require_material_assignment_enabled=None,
+            model_source=None,
+            strain_map_natural_freqs=None
     ):
         """Updates the properties for Random Vibe analysis.
 
@@ -282,6 +315,10 @@ class Analysis(GrpcStub):
             Frequency Range Check. For NX Nastran analysis only.
         require_material_assignment_enabled: bool, optional
             Require Material Assignment.
+        model_source: str, required for strain map analysis
+            Model source: Valid values: GENERATED, STRAIN_MAP
+        strain_map_natural_freqs, str, required for strain map analysis
+            Comma-separated list of natural frequencies for strain map analysis
 
         Examples
         --------
@@ -323,20 +360,41 @@ class Analysis(GrpcStub):
                             message="Invalid random vibe damping value: " +
                                     value.strip())
             if (self.FREQ_UNIT_LIST is not None) and \
+                    (natural_freq_min_units is not None) and \
                     (natural_freq_min_units not in self.FREQ_UNIT_LIST):
                 raise SherlockUpdateRandomVibePropsError(
                     message="Invalid min natural freq unit specified: " +
                             natural_freq_min_units)
+
             if (self.FREQ_UNIT_LIST is not None) and \
+                    (natural_freq_max_units is not None) and \
                     (natural_freq_max_units not in self.FREQ_UNIT_LIST):
                 raise SherlockUpdateRandomVibePropsError(
                     message="Invalid max natural freq unit specified: " +
                             natural_freq_max_units)
+
             if (self.TEMP_UNIT_LIST is not None) and \
+                    (analysis_temp_units is not None) and \
                     (analysis_temp_units not in self.TEMP_UNIT_LIST):
                 raise SherlockUpdateRandomVibePropsError(
                     message="Invalid analysis temperature unit specified: " +
                             analysis_temp_units)
+
+            if model_source is None or model_source == "GENERATED":
+                model_source = SherlockAnalysisService_pb2.ModelSource.GENERATED
+            elif model_source == "STRAIN_MAP":
+                model_source = SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
+            else:
+                raise SherlockUpdateRandomVibePropsError(
+                    message=f"Invalid model source {model_source} specified"
+                )
+
+            if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP and \
+                    (strain_map_natural_freqs is None or strain_map_natural_freqs == ""):
+                raise SherlockUpdateRandomVibePropsError(
+                    message=f"No natural frequenices defined for strain map analysis"
+                )
+
         except SherlockUpdateRandomVibePropsError as e:
             LOG.error(str(e))
             raise e
@@ -359,8 +417,12 @@ class Analysis(GrpcStub):
             forceModelRebuild=force_model_rebuild,
             reuseModalAnalysis=reuse_modal_analysis,
             performNFFreqRangeCheck=perform_nf_freq_range_check,
-            requireMaterialAssignmentEnabled=require_material_assignment_enabled
+            requireMaterialAssignmentEnabled=require_material_assignment_enabled,
+            modelSource=model_source
         )
+
+        if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP:
+            request.strainMapNaturalFreqs = strain_map_natural_freqs
 
         response = self.stub.updateRandomVibeProps(request)
 
@@ -527,5 +589,161 @@ class Analysis(GrpcStub):
                 LOG.info(response.message)
                 return
         except SherlockUpdateNaturalFrequencyPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+    def run_strain_map_analysis(
+            self,
+            project,
+            cca_name,
+            strain_map_analyses,
+    ):
+        """Run one or more Sherlock strain map analysis.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name
+        cca_name : str, required
+            The cca name of the main CCA for the analysis.
+        analyses : List of (analysis_type, event_strain_maps) required
+            analysis_type : str, required
+                The type of analysis performed. Valid values are: RANDOMVIBE
+            event_strain_maps : List of (phase_name, event_name, pcb_side, strain_map,
+                    sub_assembly_name), required
+                The strain maps assigned to the desired life cycle events for a given PCB side.
+                phase_name : str, required
+                    Life cycle phase name for the strain map assignment.
+                event_name : str, required
+                    Life cycle event name for the strain map assignment.
+                pcb_side : str, required
+                    PCB side for the strain map. Valid values are: TOP, BOTTOM
+                strain_map : str, required
+                    The name of the strain map assigned to the life cycle event.
+                sub_assembly_name : str, optional
+                    The name of the sub-assembly CCA to be assigned the strain map.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> analysis.run_strain_map_analysis(
+                "AssemblyTutorial",
+                "Main Board",
+                [[
+                    "RANDOMVIBE",
+                    [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                     ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                     ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
+                ]]
+            )
+        """
+        try:
+            if project == "":
+                raise SherlockRunStrainMapAnalysisError(
+                    message="Invalid project name specified"
+                )
+
+            if cca_name == "":
+                raise SherlockRunStrainMapAnalysisError(
+                    message="Invalid CCA name specified"
+                )
+
+            if not isinstance(strain_map_analyses, list):
+                raise SherlockRunStrainMapAnalysisError("Invalid analyses argument")
+
+            if len(strain_map_analyses) == 0:
+                raise SherlockRunStrainMapAnalysisError("Missing one or more analyses")
+
+            request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest(
+                project=project,
+                ccaName=cca_name,
+            )
+
+            for i, analysis in enumerate(strain_map_analyses):
+
+                if not isinstance(analysis, list):
+                    raise SherlockRunStrainMapAnalysisError(
+                        f"Invalid analysis argument for strain map analysis {i}"
+                    )
+
+                if len(analysis) != 2:
+                    raise SherlockRunStrainMapAnalysisError(
+                        f"Wrong number of args {str(len(analysis))} for strain map analysis {i}"
+                    )
+
+                analysis_type = analysis[0].upper()
+                if analysis_type == "":
+                    raise SherlockRunStrainMapAnalysisError(
+                        f"Missing analysis type for strain map analysis {i}"
+                    )
+                elif analysis_type == "RANDOMVIBE":
+                    analysis_type = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.\
+                        StrainMapAnalysis.AnalysisType.RandomVibe
+                else:
+                    raise SherlockRunStrainMapAnalysisError(
+                        f"Invalid analysis type {analysis_type} for strain map analysis {i}"
+                    )
+
+                strain_map_analysis_request = request.strainMapAnalyses.add()
+                strain_map_analysis_request.type = analysis_type
+
+                if len(analysis[1]) == 0:
+                    raise SherlockRunStrainMapAnalysisError(
+                        f"Missing one or more event strain maps for strain map analysis {i}"
+                    )
+
+                for j, event_strain_map in enumerate(analysis[1]):
+
+                    if not isinstance(event_strain_map, list):
+                        raise SherlockRunStrainMapAnalysisError(
+                            f"Invalid event strain map argument for strain map analysis {i}"
+                        )
+                    elif len(event_strain_map) < 4:
+                        raise SherlockRunStrainMapAnalysisError(
+                            f"Wrong number of args {str(len(event_strain_map))} for event strain "
+                            f"map {j} for strain map analysis {i}"
+                        )
+                    elif event_strain_map[0] == "":
+                        raise SherlockRunStrainMapAnalysisError(
+                            f"Missing life phase for event strain map {j} for strain "
+                            f"map analysis {i}"
+                        )
+                    elif event_strain_map[1] == "":
+                        raise SherlockRunStrainMapAnalysisError(
+                            f"Missing event name for event strain map {j} for strain "
+                            f"map analysis {i}"
+                        )
+                    elif event_strain_map[2] == "":
+                        raise SherlockRunStrainMapAnalysisError(
+                            f"Missing PCB side for event strain map {j} for strain map analysis {i}"
+                        )
+                    elif event_strain_map[3] == "":
+                        raise SherlockRunStrainMapAnalysisError(
+                            f"Missing strain map name for event strain map {j} for strain "
+                            f"map analysis {i}"
+                        )
+
+                    event_strain_map_request = strain_map_analysis_request.eventStrainMaps.add()
+                    event_strain_map_request.phaseName = event_strain_map[0]
+                    event_strain_map_request.eventName = event_strain_map[1]
+                    event_strain_map_request.pcbSide = event_strain_map[2]
+                    event_strain_map_request.strainMap = event_strain_map[3]
+
+                    if len(event_strain_map) == 5:
+                        event_strain_map_request.subAssemblyName = event_strain_map[4]
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            response = self.stub.runStrainMapAnalysis(request)
+
+            if response.value == -1:
+                if response.message == "":
+                    raise SherlockRunStrainMapAnalysisError(error_array=response.errors)
+
+                raise SherlockRunStrainMapAnalysisError(message=response.message)
+
+        except SherlockRunStrainMapAnalysisError as e:
             LOG.error(str(e))
             raise e

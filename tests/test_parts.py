@@ -380,7 +380,7 @@ def helper_test_import_parts_list(parts):
 
 
 def helper_test_export_parts_list(parts):
-    """Tests iexort_parts_list API."""
+    """Tests export_parts_list API."""
     try:
         parts.export_parts_list(
             "",

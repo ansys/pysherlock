@@ -67,6 +67,47 @@ class SherlockImportIpc2581Error(Exception):
         return f"Import IPC2581 error: {self.message}"
 
 
+class SherlockListCCAsError(Exception):
+    """Raised when listing project CCAs results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"List CCAs error: {self.message}"
+
+
+class SherlockAddStrainMapsError(Exception):
+    """Raised when adding strain maps for a project results in an error."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Add strain maps error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Add strain maps error: {self.message}"]
+
+
+class SherlockListStrainMapsError(Exception):
+    """Raised when listing strain maps for a project results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"List strain maps error: {self.message}"
+
+
 class SherlockGenerateProjectReportError(Exception):
     """Raised when generating a project report results in an error."""
 
@@ -451,6 +492,31 @@ class SherlockRunAnalysisError(Exception):
         """Format error message."""
         return f"Run analysis error: {self.message}"
 
+
+class SherlockRunStrainMapAnalysisError(Exception):
+    """Raised when running a strain map analysis results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Run strain map analysis error: {self.message}"
+
+
+class SherlockGetRandomVibeInputFieldsError(Exception):
+    """Raised when getting the random vibe input fields results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get random vibe input fields error: {self.message}"
+
+
 class SherlockUpdateRandomVibePropsError(Exception):
     """Raised when updating the analysis properties for random vibe results in an error."""
 
@@ -461,6 +527,7 @@ class SherlockUpdateRandomVibePropsError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Update random vibe properties error: {self.message}"
+
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
     """Raised when updating the analysis properties for natural frequency results in an error."""

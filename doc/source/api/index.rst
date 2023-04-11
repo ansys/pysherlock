@@ -8,6 +8,7 @@ This section gives an overview of the PySherlock modules.
    :hidden:
 
    analysis
+   common
    launcher
    layer
    lifecycle
@@ -20,6 +21,7 @@ This section gives an overview of the PySherlock modules.
     :toctree: _autosummary
 
    ansys.sherlock.core.analysis
+   ansys.sherlock.core.common
    ansys.sherlock.core.launcher
    ansys.sherlock.core.layer
    ansys.sherlock.core.lifecycle

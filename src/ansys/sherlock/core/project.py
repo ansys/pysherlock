@@ -10,10 +10,13 @@ except ModuleNotFoundError:
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockAddStrainMapsError,
     SherlockDeleteProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
+    SherlockListCCAsError,
+    SherlockListStrainMapsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -291,3 +294,243 @@ class Project(GrpcStub):
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
             raise e
+
+    def list_ccas(self, project, cca_names=None):
+        """Returns the available CCA's and sub-assembly CCA's assigned to each CCA or the requested
+        CCA's from the given project.
+
+        Parameters
+        ----------
+        project: str, required
+            Sherlock project name to provide strain maps for.
+        cca_name : List of str, optional
+            Project CCA names to return. If empty all CCA's in the project will be returned.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> ccas = project.list_ccas("AssemblyTutorial",["Main Board"])
+        """
+
+        try:
+            if project == "":
+                raise SherlockListCCAsError(message="Invalid project name")
+
+            if cca_names is not None and type(cca_names) is not list:
+                raise SherlockListCCAsError(message="cca_names is not a list")
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ListCCAsRequest(
+                project=project
+            )
+
+            """Add the CCA names to the request"""
+            if cca_names is not None:
+                for cca_name in cca_names:
+                    request.cca.append(cca_name)
+
+            response = self.stub.listCCAs(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockListCCAsError(error_array=response.errors)
+
+                raise SherlockListCCAsError(message=return_code.message)
+
+        except SherlockListCCAsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.ccas
+
+    def add_strain_maps(self, project, strain_maps):
+        """Adds strain map CSV files to the CCA's of the given project.
+
+        Parameters
+        ----------
+        project: str, required
+            Sherlock project name to add the strain maps to.
+        strain_maps : List of (strain_map_file, file_comment, header_row_count, reference_id_column,
+                                strain_column, strain_units, ccas) required
+            strain_map_file : str, required
+                The full path to the strain map file being added to the project.
+            file_comment : str, required
+                The file comment to associate with the strain map file.
+            header_row_count : int, required
+                The number of rows before the column header in the file.
+            reference_id_column : str, required
+                The name of the column in the file containing the reference identifiers.
+            strain_column : str, required
+                The name of the column in the file containing the strain values.
+            strain_units : str, required
+                The strain units: Valid units are: µε, ε
+            ccas : List of (cca_name) optional
+                The CCA's to add the strain map file to. When not specified, all CCA's in the
+                project are assigned the strain map.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> project.add_strain_maps("Tutorial Project",
+            [("StrainMap.csv",
+            "This is the strain map file for the project",
+            0,
+            "refDes",
+            "strain",
+            "µε"
+            ["Main Board"])
+            )],
+        """
+
+        try:
+            if project == "":
+                raise SherlockAddStrainMapsError(message="Invalid project name")
+
+            if len(strain_maps) == 0:
+                raise SherlockAddStrainMapsError(message="Missing strain maps")
+
+            # Validate first
+            for i, strain_map in enumerate(strain_maps):
+                if len(strain_map) < 6 or len(strain_map) > 7:
+                    raise SherlockAddStrainMapsError(
+                        f"Wrong number of args {str(len(strain_maps))} for strain map {i}"
+                    )
+                elif not isinstance(strain_map[0], str) or strain_map[0] == "":
+                    raise SherlockAddStrainMapsError(
+                        f"File path is required for strain map {i}"
+                    )
+                elif not isinstance(strain_map[2], int) or strain_map[2] == "":
+                    raise SherlockAddStrainMapsError(
+                        f"Header row count is required for strain map {i}"
+                    )
+                elif strain_map[2] < 0:
+                    raise SherlockAddStrainMapsError(
+                        f"Header row count must be greater than or equal to 0 for strain map {i}"
+                    )
+                elif not isinstance(strain_map[3], str) or strain_map[3] == "":
+                    raise SherlockAddStrainMapsError(
+                        f"Reference ID column is required for strain map {i}"
+                    )
+                elif not isinstance(strain_map[4], str) or strain_map[4] == "":
+                    raise SherlockAddStrainMapsError(
+                        f"Strain column is required for strain map {i}"
+                    )
+                elif not isinstance(strain_map[5], str) or strain_map[5] == "":
+                    raise SherlockAddStrainMapsError(
+                        f"Strain units are required for strain map {i}"
+                    )
+                elif strain_map[5] != "µε" and strain_map[5] != "ε":
+                    raise SherlockAddStrainMapsError(
+                        f"Invalid strain units '{strain_map[5]}' specified for strain map {i}"
+                    )
+                elif len(strain_maps) == 7 and strain_map[6] is not None and \
+                        type(strain_map[6]) is not list:
+                    raise SherlockAddStrainMapsError(
+                        message="cca_names is not a list for strain map {i}"
+                    )
+
+                strain_map_file = strain_map[0]
+
+                if not os.path.exists(strain_map_file):
+                    raise SherlockAddStrainMapsError(
+                        message=f"File '{strain_map_file}' doesn't exist for strain map {i}"
+                    )
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.AddStrainMapRequest(
+                project=project
+            )
+
+            # Add the strain maps to the request
+            for s in strain_maps:
+                strain_map = request.strainMapFiles.add()
+                strain_map.strainMapFile = s[0]
+                strain_map.fileComment = s[1]
+                strain_map.headerRowCount = s[2]
+                strain_map.referenceIDColumn = s[3]
+                strain_map.strainColumn = s[4]
+                strain_map.strainUnits = s[5]
+
+                """Add the CCA names to the request"""
+                if len(s) == 7:
+                    cca_names = s[6]
+                    if cca_names is not None:
+                        for cca_name in cca_names:
+                            strain_map.cca.append(cca_name)
+
+            response = self.stub.addStrainMap(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockAddStrainMapsError(error_array=response.errors)
+
+                raise SherlockAddStrainMapsError(message=return_code.message)
+
+        except SherlockAddStrainMapsError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def list_strain_maps(self, project, cca_names=None):
+        """Returns the available strain maps assigned to each CCA or the requested CCA's from
+         the given project.
+
+        Parameters
+        ----------
+        project: str, required
+            Sherlock project name to provide strain maps for.
+        cca_name : List of str, optional
+            Project CCA names to provide strain maps for. If empty all CCA's in the
+             project will be returned.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> strain_maps = project.list_strain_maps("AssemblyTutorial",["Main Board","Power Module"])
+        """
+
+        try:
+            if project == "":
+                raise SherlockListStrainMapsError(message="Invalid project name")
+
+            if cca_names is not None and type(cca_names) is not list:
+                raise SherlockListStrainMapsError(message="cca_names is not a list")
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ListStrainMapsRequest(
+                project=project
+            )
+
+            """Add the CCA names to the request"""
+            if cca_names is not None:
+                for cca_name in cca_names:
+                    request.cca.append(cca_name)
+
+            response = self.stub.listStrainMaps(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockListStrainMapsError(error_array=response.errors)
+
+                raise SherlockListStrainMapsError(message=return_code.message)
+
+        except SherlockListStrainMapsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.ccaStrainMaps
