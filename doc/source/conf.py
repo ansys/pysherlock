@@ -6,14 +6,7 @@ sys.path.insert(0, os.path.abspath("../../src"))
 from ansys.sherlock.core import __version__
 
 from ansys_sphinx_theme import (
-    ansys_favicon,
     ansys_logo_black,
-    ansys_logo_white,
-    ansys_logo_white_cropped,
-    generate_404,
-    get_version_match,
-    latex,
-    watermark,
 )
 
 # Project information
