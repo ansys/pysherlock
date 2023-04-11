@@ -355,8 +355,8 @@ class Project(GrpcStub):
         ----------
         project: str, required
             Sherlock project name to add the strain maps to.
-        strain_maps : List of (strain_map_file, file_comment, header_row_count, reference_id_column,
-                                strain_column, strain_units, ccas) required
+        strain_maps : List of (strain_map_file, file_comment, header_row_count, \
+            reference_id_column, strain_column, strain_units, ccas) required
             strain_map_file : str, required
                 The full path to the strain map file being added to the project.
             file_comment : str, required

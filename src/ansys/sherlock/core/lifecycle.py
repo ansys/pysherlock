@@ -732,8 +732,8 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        random_vibe_profiles : List of (phase_name, event_name, profile_name, freq_units,
-                                ampl_units, random_vibe_entries) profiles, required
+        random_vibe_profiles : List of (phase_name, event_name, profile_name, freq_units, \
+            ampl_units, random_vibe_entries) profiles, required
             phase_name : str, required
                 The name of the life cycle phase this profile is associated.
             event_name : str, required
@@ -743,7 +743,7 @@ class Lifecycle(GrpcStub):
             freq_units : str, required
                 Frequency Unit. Valid units are: HZ, KHZ, MHZ, GHZ
             ampl_units : str, required
-                Amplitude Unit. Valid units are: G2/Hz, m2/s4/Hz, mm2/s4/Hz, in2/s4/Hz,
+                Amplitude Unit. Valid units are: G2/Hz, m2/s4/Hz, mm2/s4/Hz, in2/s4/Hz, \
                  ft2/s4/Hz
             random_vibe_profile_entries : List of (frequency, amplitude) entries, required
                 frequency : double, required
@@ -1154,8 +1154,8 @@ class Lifecycle(GrpcStub):
         ----------
         project : str, required
             Sherlock project name.
-        thermal_profiles : List of (phase_name, event_name, profile_name, time_units, temp_units,
-                            thermal_profile_entries) profiles, required
+        thermal_profiles : List of (phase_name, event_name, profile_name, time_units, temp_units, \
+                thermal_profile_entries) profiles, required
             phase_name : str, required
                 The name of the life cycle phase this profile is associated.
             event_name : str, required

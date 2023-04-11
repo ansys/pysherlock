@@ -29,13 +29,17 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
-def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_args=""):
+def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="",
+                    sherlock_cmd_args=""):
     """Launch Sherlock and starts gRPC on the given localhost port.
 
     Parameters
     ----------
     port : integer, optional
         The socket port number to use for the connection. By default, 9090 is used.
+
+    single_project_path : str, optional
+        If invoking Sherlock in single project mode, this is the path to the Sherlock project.
 
     Examples
     --------
@@ -45,6 +49,10 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
     >>> from ansys.sherlock.core import launcher
     >>> launch_sherlock(port=9092)
 
+    >>> from ansys.sherlock.core import launcher
+    >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
+    >>> launch_sherlock(port=9092, single_project_path=project)
+
     """
     try:
         _is_port_available(host, port)
@@ -53,8 +61,12 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, sherlock_cmd_arg
         return None
 
     try:
-        with subprocess.Popen([_get_sherlock_exe_path(), "-grpcPort=" + \
-                                                         str(port), sherlock_cmd_args]) as p:
+        args = _get_sherlock_exe_path() + " " + "-grpcPort=" + str(port)
+        if single_project_path != "":
+            args = f'{args} -singleProject "{single_project_path}"'
+        if sherlock_cmd_args != "":
+            args = f'{args} {sherlock_cmd_args}'
+        with subprocess.Popen(args) as p:
             time.sleep(5)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
