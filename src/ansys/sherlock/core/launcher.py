@@ -29,7 +29,8 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
-def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="", sherlock_cmd_args=""):
+def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="",
+                    sherlock_cmd_args=""):
     """Launch Sherlock and starts gRPC on the given localhost port.
 
     Parameters
