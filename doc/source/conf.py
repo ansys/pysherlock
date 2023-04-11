@@ -5,15 +5,25 @@ sys.path.insert(0, os.path.abspath("../../src"))
 
 from ansys.sherlock.core import __version__
 
+from ansys_sphinx_theme import (
+    ansys_favicon,
+    ansys_logo_black,
+    ansys_logo_white,
+    ansys_logo_white_cropped,
+    generate_404,
+    get_version_match,
+    latex,
+    watermark,
+)
+
 # Project information
 project = "pysherlock"
 copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
 author = "ANSYS Inc."
 release = version = __version__
 
-# optionally use the default pyansys logo
-html_logo = "https://docs.pyansys.com/_static/pyansys-logo-black-cropped.png"
-
+# use the default ansys logo
+html_logo = ansys_logo_black
 html_theme = "ansys_sphinx_theme"
 
 # specify the location of your github repo
@@ -27,6 +37,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
 ]
 
 autodoc_default_flags = ['members']

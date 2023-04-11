@@ -606,22 +606,22 @@ class Analysis(GrpcStub):
             Sherlock project name
         cca_name : str, required
             The cca name of the main CCA for the analysis.
-        analyses : List of (analysis_type, event_strain_maps) required
+        analyses : List of (analysis_type, event_strain_maps), required
             analysis_type : str, required
                 The type of analysis performed. Valid values are: RANDOMVIBE
-            event_strain_maps : List of (phase_name, event_name, pcb_side, strain_map,
-                    sub_assembly_name), required
+            event_strain_maps : List of (phase_name, event_name, pcb_side, strain_map, \
+            sub_assembly_name), required
                 The strain maps assigned to the desired life cycle events for a given PCB side.
-                phase_name : str, required
-                    Life cycle phase name for the strain map assignment.
-                event_name : str, required
-                    Life cycle event name for the strain map assignment.
-                pcb_side : str, required
-                    PCB side for the strain map. Valid values are: TOP, BOTTOM
-                strain_map : str, required
-                    The name of the strain map assigned to the life cycle event.
-                sub_assembly_name : str, optional
-                    The name of the sub-assembly CCA to be assigned the strain map.
+            phase_name : str, required
+                Life cycle phase name for the strain map assignment.
+            event_name : str, required
+                Life cycle event name for the strain map assignment.
+            pcb_side : str, required
+                PCB side for the strain map. Valid values are: TOP, BOTTOM
+            strain_map : str, required
+                The name of the strain map assigned to the life cycle event.
+            sub_assembly_name : str, optional
+                The name of the sub-assembly CCA to be assigned the strain map.
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -677,7 +677,7 @@ class Analysis(GrpcStub):
                         f"Missing analysis type for strain map analysis {i}"
                     )
                 elif analysis_type == "RANDOMVIBE":
-                    analysis_type = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.\
+                    analysis_type = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest. \
                         StrainMapAnalysis.AnalysisType.RandomVibe
                 else:
                     raise SherlockRunStrainMapAnalysisError(
