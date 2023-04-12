@@ -66,8 +66,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
             args = f'{args} -singleProject "{single_project_path}"'
         if sherlock_cmd_args != "":
             args = f'{args} {sherlock_cmd_args}'
-        with subprocess.Popen(args) as p:
-            time.sleep(5)
+        subprocess.Popen(args)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
