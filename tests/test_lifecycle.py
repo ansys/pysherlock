@@ -1,18 +1,13 @@
-
 import grpc
 
 from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
-    SherlockAddHarmonicProfileError,
     SherlockAddHarmonicVibeProfilesError,
     SherlockAddRandomVibeEventError,
-    SherlockAddRandomVibeProfileError,
     SherlockAddRandomVibeProfilesError,
     SherlockAddShockEventError,
-    SherlockAddShockProfileError,
     SherlockAddShockProfilesError,
     SherlockAddThermalEventError,
-    SherlockAddThermalProfileError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
 )
@@ -27,16 +22,12 @@ def test_all():
 
     helper_test_create_life_phase(lifecycle)
     helper_test_add_random_vibe_event(lifecycle)
-    helper_test_add_random_vibe_profile(lifecycle)
     helper_test_add_random_vibe_profiles(lifecycle)
     helper_test_add_thermal_event(lifecycle)
-    helper_test_add_thermal_profile(lifecycle)
     helper_test_add_thermal_profiles(lifecycle)
     helper_test_add_harmonic_event(lifecycle)
-    helper_test_add_harmonic_profile(lifecycle)
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
-    helper_test_add_shock_profile(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
 
 
@@ -204,7 +195,8 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe event error: Number of cycles must be greater than 0"
+                e.str_itr()[0] == "Add random vibe event error: " \
+                                  "Number of cycles must be greater than 0"
         )
 
     try:
@@ -242,8 +234,8 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0]
-            == "Add random vibe event error: At least one direction coordinate must be non-zero"
+                e.str_itr()[0]
+                == "Add random vibe event error: At least one direction coordinate must be non-zero"
         )
 
     try:
@@ -263,101 +255,8 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
-        )
-
-
-def helper_test_add_random_vibe_profile(lifecycle):
-    """Test the add_random_vibe_profile API"""
-
-    try:
-        lifecycle.add_random_vibe_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "",
-            "HZ",
-            "G2/Hz",
-            [(1, 2), (3, 4), (5, 6)],
-        )
-        assert False
-    except SherlockAddRandomVibeProfileError as e:
-        assert e.str_itr()[0] == "Add random vibe profile error: Invalid profile name"
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_random_vibe_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                "per sec",
-                "G2/Hz",
-                [(1, 2), (3, 4), (5, 6)],
-            )
-            assert False
-        except SherlockAddRandomVibeProfileError as e:
-            assert e.str_itr()[0] == "Add random vibe profile error: Invalid frequency unit"
-
-        try:
-            lifecycle.add_random_vibe_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                "HZ",
-                "G2/sec",
-                [(1, 2), (3, 4), (5, 6)],
-            )
-            assert False
-        except SherlockAddRandomVibeProfileError as e:
-            assert e.str_itr()[0] == "Add random vibe profile error: Invalid amplitude type"
-
-    try:
-        lifecycle.add_random_vibe_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G2/Hz",
-            [(12,), (3, 4), (5, 6)],
-        )
-        assert False
-    except SherlockAddRandomVibeProfileError as e:
-        assert (
-            e.str_itr()[0] == "Add random vibe profile error: Invalid entry 0: Wrong number of args"
-        )
-
-    try:
-        lifecycle.add_random_vibe_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G2/Hz",
-            [(12, 4), (3, "x"), (5, 6)],
-        )
-        assert False
-    except SherlockAddRandomVibeProfileError as e:
-        assert e.str_itr()[0] == "Add random vibe profile error: Invalid entry 1: Invalid freq/ampl"
-
-    try:
-        lifecycle.add_random_vibe_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G2/Hz",
-            [(12, 4), (3, 4), (-5, 6)],
-        )
-        assert False
-    except SherlockAddRandomVibeProfileError as e:
-        assert (
-            e.str_itr()[0]
-            == "Add random vibe profile error: Invalid entry 2: Frequencies must be greater than 0"
+                e.str_itr()[0] == "Add random vibe event error: " \
+                                  "Invalid number of spherical coordinates"
         )
 
 
@@ -431,8 +330,8 @@ def helper_test_add_random_vibe_profiles(lifecycle):
         assert False
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe profiles error:"
-                              " Invalid entry 0: Wrong number of args for random vibe profile 0"
+                e.str_itr()[0] == "Add random vibe profiles error:"
+                                  " Invalid entry 0: Wrong number of args for random vibe profile 0"
         )
 
     try:
@@ -468,10 +367,10 @@ def helper_test_add_random_vibe_profiles(lifecycle):
         assert False
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-            e.str_itr()[0]
-            == "Add random vibe profiles error:"
-               " Invalid entry 2:"
-               " Frequencies must be greater than 0 for random vibe profile 0"
+                e.str_itr()[0]
+                == "Add random vibe profiles error:"
+                   " Invalid entry 2:"
+                   " Frequencies must be greater than 0 for random vibe profile 0"
         )
 
 
@@ -556,176 +455,6 @@ def helper_test_add_thermal_event(lifecycle):
             assert False
         except SherlockAddThermalEventError as e:
             assert e.str_itr()[0] == "Add thermal event error: Invalid cycle state"
-
-
-def helper_test_add_thermal_profile(lifecycle):
-    """Test add_thermal_profile API."""
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "",
-            "sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, 40),
-                ("Up", "RAMP", 20, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid profile name"
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_thermal_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                "Sec",
-                "F",
-                [
-                    ("Initial", "HOLD", 40, 40),
-                    ("Up", "RAMP", 20, 20),
-                    ("Back", "RAMP", 20, 40),
-                ],
-            )
-            assert False
-        except SherlockAddThermalProfileError as e:
-            assert e.str_itr()[0] == "Add thermal profile error: Invalid time unit"
-
-        try:
-            lifecycle.add_thermal_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                "sec",
-                "IDK",
-                [
-                    ("Initial", "HOLD", 40, 40),
-                    ("Up", "RAMP", 20, 20),
-                    ("Back", "RAMP", 20, 40),
-                ],
-            )
-            assert False
-        except SherlockAddThermalProfileError as e:
-            assert e.str_itr()[0] == "Add thermal profile error: Invalid temperature unit"
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "F",
-            [
-                ("HOLD", 40, 40),
-                ("Up", "RAMP", 20, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 0: Wrong number of args"
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, 40),
-                (0, "RAMP", 20, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 1: Invalid step name"
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, 40),
-                ("Up", "RAMP", 20, 20),
-                ("Back", "INVALID", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 2: Invalid step type"
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, 40),
-                ("Up", "RAMP", 0, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert (
-            e.str_itr()[0]
-            == "Add thermal profile error: Invalid entry 1: Time must be greater than 0"
-        )
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, 40),
-                ("Up", "RAMP", "Invalid", 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 1: Invalid time"
-
-    try:
-        lifecycle.add_thermal_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "sec",
-            "F",
-            [
-                ("Initial", "HOLD", 40, "40"),
-                ("Up", "RAMP", 20, 20),
-                ("Back", "RAMP", 20, 40),
-            ],
-        )
-        assert False
-    except SherlockAddThermalProfileError as e:
-        assert e.str_itr()[0] == "Add thermal profile error: Invalid entry 0: Invalid temp"
 
 
 def helper_test_add_thermal_profiles(lifecycle):
@@ -814,8 +543,8 @@ def helper_test_add_thermal_profiles(lifecycle):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert e.str_itr()[0] == \
-                "Add thermal profiles error: Invalid entry 0: " \
-                "Wrong number of args for thermal profile 0"
+               "Add thermal profiles error: Invalid entry 0: " \
+               "Wrong number of args for thermal profile 0"
 
     try:
         lifecycle.add_thermal_profiles(
@@ -836,8 +565,8 @@ def helper_test_add_thermal_profiles(lifecycle):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert e.str_itr()[0] == \
-                "Add thermal profiles error: Invalid entry 1: " \
-                "Invalid step name for thermal profile 0"
+               "Add thermal profiles error: Invalid entry 1: " \
+               "Invalid step name for thermal profile 0"
 
     try:
         lifecycle.add_thermal_profiles(
@@ -858,8 +587,8 @@ def helper_test_add_thermal_profiles(lifecycle):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert e.str_itr()[0] == \
-                "Add thermal profiles error: Invalid entry 2: " \
-                "Invalid step type for thermal profile 0"
+               "Add thermal profiles error: Invalid entry 2: " \
+               "Invalid step type for thermal profile 0"
 
     try:
         lifecycle.add_thermal_profiles(
@@ -880,8 +609,8 @@ def helper_test_add_thermal_profiles(lifecycle):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert e.str_itr()[0] == \
-                "Add thermal profiles error: Invalid entry 1: " \
-                "Time must be greater than 0 for thermal profile 0"
+               "Add thermal profiles error: Invalid entry 1: " \
+               "Time must be greater than 0 for thermal profile 0"
 
     try:
         lifecycle.add_thermal_profiles(
@@ -1127,8 +856,8 @@ def helper_test_add_harmonic_event(lifecycle):
         assert False
     except SherlockAddHarmonicEventError as e:
         assert (
-            e.str_itr()[0]
-            == "Add harmonic event error: At least one direction coordinate must be non-zero"
+                e.str_itr()[0]
+                == "Add harmonic event error: At least one direction coordinate must be non-zero"
         )
 
     try:
@@ -1148,176 +877,6 @@ def helper_test_add_harmonic_event(lifecycle):
         assert False
     except SherlockAddHarmonicEventError as e:
         assert e.str_itr()[0] == "Add harmonic event error: Invalid number of spherical coordinates"
-
-
-def helper_test_add_harmonic_profile(lifecycle):
-    """Test add_harmonic_profile API."""
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "",
-            "Example",
-            "Event1",
-            "Profile1",
-            "Hz",
-            "G",
-            [
-                (10, 1),
-                (1000, 1),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid project name"
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "Test",
-            "",
-            "Event1",
-            "Profile1",
-            "Hz",
-            "G",
-            [
-                (10, 1),
-                (1000, 1),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid phase name"
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "Test",
-            "Example",
-            "",
-            "Profile1",
-            "Hz",
-            "G",
-            [
-                (10, 1),
-                (1000, 1),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid event name"
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "",
-            "Hz",
-            "G",
-            [
-                (10, 1),
-                (1000, 1),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid profile name"
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_harmonic_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                "Invalid",
-                "G",
-                [
-                    (10, 1),
-                    (1000, 1),
-                ],
-                "",
-            )
-            assert False
-        except SherlockAddHarmonicProfileError as e:
-            assert e.str_itr()[0] == "Add harmonic profile error: Invalid frequency unit"
-
-        try:
-            lifecycle.add_harmonic_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                "HZ",
-                "Invalid",
-                [
-                    (10, 1),
-                    (1000, 1),
-                ],
-                "",
-            )
-            assert False
-        except SherlockAddHarmonicProfileError as e:
-            assert e.str_itr()[0] == "Add harmonic profile error: Invalid load unit"
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G",
-            [
-                (10,),
-                (1000, 1),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid entry 0: Wrong number of args"
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G",
-            [
-                (10, 1),
-                (1000, "Invalid"),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert e.str_itr()[0] == "Add harmonic profile error: Invalid entry 1: Invalid freq/load"
-
-    try:
-        lifecycle.add_harmonic_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G",
-            [
-                (10, -5),
-                (1000, 1),
-            ],
-            "",
-        )
-        assert False
-    except SherlockAddHarmonicProfileError as e:
-        assert (
-            e.str_itr()[0]
-            == "Add harmonic profile error: Invalid entry 0: Load must be greater than 0"
-        )
 
 
 def helper_test_add_harmonic_vibe_profiles(lifecycle):
@@ -1511,9 +1070,9 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
         assert False
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error:"
-                              " Invalid entry 0:"
-                              " Load must be greater than 0 for harmonic vibe profile 0"
+                e.str_itr()[0] == "Add harmonic vibe profiles error:"
+                                  " Invalid entry 0:"
+                                  " Load must be greater than 0 for harmonic vibe profile 0"
         )
 
 
@@ -1666,8 +1225,8 @@ def helper_test_add_shock_event(lifecycle):
         assert False
     except SherlockAddShockEventError as e:
         assert (
-            e.str_itr()[0]
-            == "Add shock event error: At least one direction coordinate must be non-zero"
+                e.str_itr()[0]
+                == "Add shock event error: At least one direction coordinate must be non-zero"
         )
 
     try:
@@ -1686,287 +1245,6 @@ def helper_test_add_shock_event(lifecycle):
         assert False
     except SherlockAddShockEventError as e:
         assert e.str_itr()[0] == "Add shock event error: Invalid number of spherical coordinates"
-
-
-def helper_test_add_shock_profile(lifecycle):
-    """Test add_shock_profile API."""
-
-    try:
-        lifecycle.add_shock_profile(
-            "",
-            "Example",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Invalid project name"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Invalid phase name"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Invalid event name"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Invalid profile name"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Duration must be greater than 0"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            0,
-            "Invalid",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Duration must be greater than 0"
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_shock_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                10.0,
-                "Invalid",
-                0.1,
-                "ms",
-                "G",
-                "HZ",
-                [("HalfSine", 100.0, 100.0, 0)],
-            )
-            assert False
-        except SherlockAddShockProfileError as e:
-            assert e.str_itr()[0] == "Add shock profile error: Invalid duration unit"
-
-        try:
-            lifecycle.add_shock_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                10.0,
-                "ms",
-                0.1,
-                "Invalid",
-                "G",
-                "HZ",
-                [("HalfSine", 100.0, 100.0, 0)],
-            )
-            assert False
-        except SherlockAddShockProfileError as e:
-            assert e.str_itr()[0] == "Add shock profile error: Invalid sample rate unit"
-
-        try:
-            lifecycle.add_shock_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                10.0,
-                "ms",
-                0.1,
-                "ms",
-                "Invalid",
-                "HZ",
-                [("HalfSine", 100.0, 100.0, 0)],
-            )
-            assert False
-        except SherlockAddShockProfileError as e:
-            assert e.str_itr()[0] == "Add shock profile error: Invalid load unit"
-
-        try:
-            lifecycle.add_shock_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                10.0,
-                "ms",
-                0.1,
-                "ms",
-                "G",
-                "",
-                [("HalfSine", 100.0, 100.0, 0)],
-            )
-            assert False
-        except SherlockAddShockProfileError as e:
-            assert e.str_itr()[0] == "Add shock profile error: Invalid frequency unit"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Sample rate must be greater than 0"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [(100.0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Wrong number of args"
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_shock_profile(
-                "Test",
-                "Example",
-                "Event1",
-                "Profile1",
-                10.0,
-                "ms",
-                0.1,
-                "ms",
-                "G",
-                "HZ",
-                [("Invalid", 100.0, 100.0, 0)],
-            )
-            assert False
-        except SherlockAddShockProfileError as e:
-            assert e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Invalid shape type"
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 0, 100.0, 0)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert (
-            e.str_itr()[0]
-            == "Add shock profile error: Invalid entry 0: Load must be greater than 0"
-        )
-
-    try:
-        lifecycle.add_shock_profile(
-            "Test",
-            "Example",
-            "Event1",
-            "Profile1",
-            10.0,
-            "ms",
-            0.1,
-            "ms",
-            "G",
-            "HZ",
-            [("HalfSine", 100.0, 100.0, -5)],
-        )
-        assert False
-    except SherlockAddShockProfileError as e:
-        assert (
-            e.str_itr()[0] == "Add shock profile error: Invalid entry 0: Decay must be nonnegative"
-        )
 
 
 def helper_test_add_shock_profiles(lifecycle):
@@ -2235,8 +1513,9 @@ def helper_test_add_shock_profiles(lifecycle):
         assert False
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
-                              " Invalid entry 0: Load must be greater than 0 for shock profile 0"
+                e.str_itr()[0] == "Add shock profiles error:" \
+                                  " Invalid entry 0: Load must be " \
+                                  "greater than 0 for shock profile 0"
         )
 
     try:
@@ -2256,8 +1535,8 @@ def helper_test_add_shock_profiles(lifecycle):
         assert False
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
-                              " Invalid entry 0: Decay must be nonnegative for shock profile 0"
+                e.str_itr()[0] == "Add shock profiles error:"
+                                  " Invalid entry 0: Decay must be nonnegative for shock profile 0"
         )
 
 
