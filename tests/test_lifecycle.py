@@ -195,7 +195,8 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-                e.str_itr()[0] == "Add random vibe event error: Number of cycles must be greater than 0"
+                e.str_itr()[0] == "Add random vibe event error: " \
+                                  "Number of cycles must be greater than 0"
         )
 
     try:
@@ -254,7 +255,8 @@ def helper_test_add_random_vibe_event(lifecycle):
         assert False
     except SherlockAddRandomVibeEventError as e:
         assert (
-                e.str_itr()[0] == "Add random vibe event error: Invalid number of spherical coordinates"
+                e.str_itr()[0] == "Add random vibe event error: " \
+                                  "Invalid number of spherical coordinates"
         )
 
 
@@ -1511,8 +1513,9 @@ def helper_test_add_shock_profiles(lifecycle):
         assert False
     except SherlockAddShockProfilesError as e:
         assert (
-                e.str_itr()[0] == "Add shock profiles error:"
-                                  " Invalid entry 0: Load must be greater than 0 for shock profile 0"
+                e.str_itr()[0] == "Add shock profiles error:" \
+                                  " Invalid entry 0: Load must be " \
+                                  "greater than 0 for shock profile 0"
         )
 
     try:
