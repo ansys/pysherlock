@@ -16,7 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidMaterialError,
     SherlockInvalidThicknessArgumentError,
     SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError, SherlockListCCAsError,
+    SherlockUpdateLaminateLayerError, SherlockListCCAsError, SherlockListConductorLayersError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -683,24 +683,24 @@ class Stackup(GrpcStub):
 
         try:
             if project == "":
-                raise SherlockListCCAsError(message="Invalid project name")
-        except SherlockListCCAsError as e:
+                raise SherlockListConductorLayersError(message="Invalid project name")
+        except SherlockListConductorLayersError as e:
             LOG.error(str(e))
             raise e
-        except SherlockListCCAsError as e:
+        except SherlockListConductorLayersError as e:
             LOG.error(f"List conductor layer error:{str(e)}")
-            raise SherlockUpdateConductorLayerError(message=str(e))
+            raise SherlockListConductorLayersError(message=str(e))
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
 
-        LayersMessage = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
+        message = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
 
-        LayersResponse = self.stub.listConductorLayers(LayersMessage)
+        response = self.stub.listConductorLayers(message)
 
-        layers = LayersResponse.ccaConductorLayerProps
+        layers = response.ccaConductorLayerProps
 
-        conductor_Layers = self._translateConductorLayers(layers)
+        self._translateConductorLayers(layers)
 
     def _translateConductorLayers(self, layer_list):
         """Prints out each layer and its properties"""
