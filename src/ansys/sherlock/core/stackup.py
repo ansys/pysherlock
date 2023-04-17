@@ -683,7 +683,7 @@ class Stackup(GrpcStub):
 
         try:
             if project == "":
-                raise SherlockListConductorLayersError(message="Invalid project name")
+                raise SherlockListConductorLayersError(message="Invalid Blank Project Name")
         except SherlockListConductorLayersError as e:
             LOG.error(str(e))
             raise e

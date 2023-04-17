@@ -3,7 +3,7 @@ import grpc
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError,
+    SherlockUpdateLaminateLayerError, SherlockListConductorLayersError,
 )
 from ansys.sherlock.core.stackup import Stackup
 
@@ -17,6 +17,7 @@ def test_all():
     helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
     helper_test_update_laminate_layer(stackup)
+    helper_test_list_conductor_layers(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -907,7 +908,13 @@ def helper_test_update_laminate_layer(stackup):
             "Update laminate layer error: Invalid conductor percent provided,"
             " it must be between 0 and 100"
         )
-
+def helper_test_list_conductor_layers(stackup):
+    """Test list_conductor_layers API"""
+    try:
+        stackup.list_conductor_Layers("")
+        assert False
+    except SherlockListConductorLayersError as e:
+        assert str(e) == "List conductor layer error: Invalid Blank Project Name"
 
 if __name__ == "__main__":
     test_all()
