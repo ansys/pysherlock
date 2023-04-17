@@ -16,7 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidMaterialError,
     SherlockInvalidThicknessArgumentError,
     SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError,
+    SherlockUpdateLaminateLayerError, SherlockListCCAsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -37,7 +37,6 @@ class Stackup(GrpcStub):
         self.CONDUCTOR_THICKNESS = None
         self.CONDUCTOR_PERCENT = None
         self.RESIN_MATERIAL_LIST = None
-
 
     def _init_laminate_thickness_units(self):
         """Initialize LAMINATE_THICKNESS_UNIT_LIST."""
@@ -92,7 +91,6 @@ class Stackup(GrpcStub):
             fiber_material_response = self.stub.listFiberMaterials(fiber_material_request)
             if fiber_material_response.returnCode.value == 0:
                 self.FIBER_MATERIAL_LIST = fiber_material_response.fiberMaterial
-
 
     def _check_pcb_material_validity(self, manufacturer, grade, material):
         """Check pcb arguments if they are valid."""
@@ -203,7 +201,6 @@ class Stackup(GrpcStub):
             layer.resinPercentage = l[1]
             layer.thickness = l[2]
             layer.thicknessUnit = l[3]
-
 
     def gen_stackup(
             self,
@@ -655,7 +652,29 @@ class Stackup(GrpcStub):
     def list_conductor_Layers(
             self,
             project):
-        """Lists CCA Conductor Layers"""
+        """Lists CCA Conductor Layers
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+
+
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>>sherlock.stackup.list_conductor_Layers(project="Tutorial")"""
 
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -663,9 +682,9 @@ class Stackup(GrpcStub):
             self._init_conductor_materials()
 
         try:
-            if project =="":
+            if project == "":
                 raise SherlockListCCAsError(message="Invalid project name")
-        except SerlockUpdateConductorLayerError as e:
+        except SherlockListCCAsError as e:
             LOG.error(str(e))
             raise e
         except SherlockListCCAsError as e:
