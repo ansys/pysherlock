@@ -17,7 +17,6 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidThicknessArgumentError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-    SherlockListCCAsError,
     SherlockListConductorLayersError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
