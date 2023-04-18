@@ -16,7 +16,9 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidMaterialError,
     SherlockInvalidThicknessArgumentError,
     SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError, SherlockListCCAsError, SherlockListConductorLayersError,
+    SherlockUpdateLaminateLayerError,
+    SherlockListCCAsError,
+    SherlockListConductorLayersError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -34,9 +36,6 @@ class Stackup(GrpcStub):
         self.LAYER_TYPE_LIST = ["SIGNAL", "POWER", "SUBSTRATE"]
         self.CONSTRUCTION_STYLE_LIST = None
         self.FIBER_MATERIAL_LIST = None
-        self.CONDUCTOR_THICKNESS = None
-        self.CONDUCTOR_PERCENT = None
-        self.RESIN_MATERIAL_LIST = None
 
     def _init_laminate_thickness_units(self):
         """Initialize LAMINATE_THICKNESS_UNIT_LIST."""
@@ -649,7 +648,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def list_conductor_Layers(
+    def list_conductor_layers(
             self,
             project):
         """Lists CCA Conductor Layers
@@ -683,34 +682,24 @@ class Stackup(GrpcStub):
 
         try:
             if project == "":
-                raise SherlockListConductorLayersError(message="Invalid Blank Project Name")
-        except SherlockListConductorLayersError as e:
-            LOG.error(str(e))
-            raise e
-        except SherlockListConductorLayersError as e:
-            LOG.error(f"List conductor layer error:{str(e)}")
-            raise SherlockListConductorLayersError(message=str(e))
+                raise SherlockListConductorLayersError(message="Invalid project name")
 
-        if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
 
-        message = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
+            request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
 
-        response = self.stub.listConductorLayers(message)
+            response = self.stub.listConductorLayers(request)
 
-        layers = response.ccaConductorLayerProps
+            layers = response.ccaConductorLayerProps
 
-        self._translateConductorLayers(layers)
-
-    def _translateConductorLayers(self, layer_list):
-        """Prints out each layer and its properties"""
-
-        try:
-            for layer in layer_list:
+            for layer in layers:
                 properties = layer.conductorLayerProps
                 for prop in properties:
                     print(f"{prop}")
             return
-        except SherlockListCCAsError as e:
+
+        except SherlockListConductorLayersError as e:
             LOG.error(str(e))
             raise e
