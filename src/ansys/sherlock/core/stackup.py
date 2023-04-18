@@ -17,7 +17,8 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidThicknessArgumentError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-    SherlockListConductorLayersError
+    SherlockListConductorLayersError,
+    SherlockListLaminateLayersError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -700,5 +701,44 @@ class Stackup(GrpcStub):
             return layers
 
         except SherlockListConductorLayersError as e:
+            LOG.error(str(e))
+            raise e
+
+    def list_laminate_layers(
+            self,
+            project):
+
+        if self.LAMINATE_THICKNESS_UNIT_LIST is None:
+            self._init_laminate_thickness_units()
+        if self.LAMINATE_MATERIAL_MANUFACTURER_LIST is None:
+            self._init_laminate_material_manufacturers()
+        if self.CONSTRUCTION_STYLE_LIST is None:
+            self._init_construction_styles()
+        if self.FIBER_MATERIAL_LIST is None:
+            self._init_fiber_materials()
+        if self.CONDUCTOR_MATERIAL_LIST is None:
+            self._init_conductor_materials()
+
+        try:
+            if project == "":
+                raise SherlockListLaminateLayersError(message="Invalid project name")
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
+
+            response = self.stub.listLaminates(request)
+
+            layers = response.ccaLaminateProps
+
+            for layer in layers:
+                properties = layer.laminateProps
+                for prop in properties:
+                    print(f"{prop}")
+            return
+
+        except SherlockListLaminateLayersError as e:
             LOG.error(str(e))
             raise e
