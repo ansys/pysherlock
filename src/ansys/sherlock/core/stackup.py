@@ -672,7 +672,11 @@ class Stackup(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>>sherlock.stackup.list_conductor_Layers(project="Tutorial")"""
+        >>>sherlock.stackup.list_conductor_Layers(project="Tutorial")
+        >>> for layer in conductorLayers:
+        >>>        properties = layer.conductorlayerProps
+        >>>        for prop in properties:
+        >>>           print(f"{prop}")"""
 
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -693,11 +697,7 @@ class Stackup(GrpcStub):
 
             layers = response.ccaConductorLayerProps
 
-            for layer in layers:
-                properties = layer.conductorLayerProps
-                for prop in properties:
-                    print(f"{prop}")
-            return
+            return layers
 
         except SherlockListConductorLayersError as e:
             LOG.error(str(e))
