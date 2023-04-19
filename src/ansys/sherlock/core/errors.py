@@ -89,7 +89,6 @@ class SherlockListConductorLayersError(Exception):
         return f"List conductor layer error: {self.message}"
 
 
-
 class SherlockListLaminateLayersError(Exception):
     """Raised when listing project laminate layers results in an error."""
     def __init__(self, message):

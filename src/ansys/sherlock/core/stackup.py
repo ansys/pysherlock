@@ -667,17 +667,16 @@ class Stackup(GrpcStub):
             True,
             True,
             True,
-
-
             True,
             project="Test",
             cca_name="Card",
         )
-        >>>sherlock.stackup.list_conductor_Layers(project="Tutorial")
+        >>> conductorLayers = sherlock.stackup.list_conductor_layers(project="Tutorial")
         >>> for layer in conductorLayers:
-        >>>        properties = layer.conductorlayerProps
-        >>>        for prop in properties:
-        >>>           print(f"{prop}")"""
+        >>>     properties = layer.conductorLayerProps
+        >>>     for prop in properties:
+        >>>     print(f"{prop}")
+        """
 
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -707,7 +706,32 @@ class Stackup(GrpcStub):
     def list_laminate_layers(
             self,
             project):
+        """Returns a list of all the laminate layers and their properties in a project
 
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> laminateLayers = sherlock.stackup.list_laminate_layers(project="Tutorial")
+        >>> for layer in laminateLayers:
+        >>>     properties = layer.laminateProps
+        >>>     for prop in properties:
+        >>>     print(f"{prop}")
+        """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
         if self.LAMINATE_MATERIAL_MANUFACTURER_LIST is None:
@@ -722,22 +746,16 @@ class Stackup(GrpcStub):
         try:
             if project == "":
                 raise SherlockListLaminateLayersError(message="Invalid project name")
-
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
-
             request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
 
             response = self.stub.listLaminates(request)
 
             layers = response.ccaLaminateProps
 
-            for layer in layers:
-                properties = layer.laminateProps
-                for prop in properties:
-                    print(f"{prop}")
-            return
+            return layers
 
         except SherlockListLaminateLayersError as e:
             LOG.error(str(e))
