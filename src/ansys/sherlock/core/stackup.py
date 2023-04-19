@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidThicknessArgumentError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
+    SherlockListConductorLayersError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -643,5 +644,61 @@ class Stackup(GrpcStub):
             LOG.info(response.message)
             return
         except SherlockUpdateLaminateLayerError as e:
+            LOG.error(str(e))
+            raise e
+
+    def list_conductor_layers(
+            self,
+            project):
+        """Lists CCA Conductor Layers
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+
+
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>>sherlock.stackup.list_conductor_Layers(project="Tutorial")
+        >>> for layer in conductorLayers:
+        >>>        properties = layer.conductorlayerProps
+        >>>        for prop in properties:
+        >>>           print(f"{prop}")"""
+
+        if self.LAMINATE_THICKNESS_UNIT_LIST is None:
+            self._init_laminate_thickness_units()
+        if self.CONDUCTOR_MATERIAL_LIST is None:
+            self._init_conductor_materials()
+
+        try:
+            if project == "":
+                raise SherlockListConductorLayersError(message="Invalid project name")
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
+
+            response = self.stub.listConductorLayers(request)
+
+            layers = response.ccaConductorLayerProps
+
+            return layers
+
+        except SherlockListConductorLayersError as e:
             LOG.error(str(e))
             raise e
