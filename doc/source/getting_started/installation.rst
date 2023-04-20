@@ -1,15 +1,10 @@
 .. _installation:
 
-============
-Installation
-============
-
-The ``ansy-sherlock`` package supports Python 3.7 through
-Python 3.10 on Windows.
-
 ================
 Install packages
 ================
+
+The ``ansy-sherlock`` package supports Python 3.7 through Python 3.10 on Windows.
 
 To use PySherlock, you must download and install both the ``ansys-api-sherlock``
 and ``ansys-sherlock`` packages.
@@ -22,8 +17,8 @@ and ``ansys-sherlock`` packages.
 ..   pip install ansys-sherlock-core
 
 #. Download the latest ``ansys-api-sherlock`` package either by using the following
-   ``git clone`` command or downloading the zipped file from the GitHub
-   `ansys-api-sherlock repository <https://github.com/pyansys/ansys-api-sherlock>`_.
+   ``git clone`` command or downloading the ZIP file from the **Release** area of the
+   `ansys-api-sherlock <https://github.com/pyansys/ansys-api-sherlock>`_ GitHub repository.
 
    .. code::
 
@@ -37,8 +32,8 @@ and ``ansys-sherlock`` packages.
       pip install -e .
 
 #. Download the latest ``ansys-sherlock`` package either by using the following
-   ``git clone`` command or downloading the zipped file from the GitHub
-   `pysherlock repository <https://github.com/pyansys/pysherlock>`_.
+   ``git clone`` command or downloading the ZIP file from **Release** area of the
+   `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository.
    
    .. code::
 

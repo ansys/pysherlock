@@ -1,7 +1,10 @@
+
+.. _ref_lifecycle_module:
+
 Lifecycle
 =========
 
-Module containing all the lifecycle management capabilities.
+The ``lifecycle`` module contains all lifecycle management capabilities.
 
 .. currentmodule:: ansys.sherlock.core.lifecycle
 

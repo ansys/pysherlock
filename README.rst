@@ -1,31 +1,42 @@
-PySherlock overview
--------------------
+PySherlock
+==========
+
+Overview
+--------
 Ansys Sherlock is a reliability physics-based electronics design tool that provides
 fast and accurate life predictions for electronic hardware at the component, 
-board and system levels in early stage design.
-The PySherlock library provides Pythonic access to Sherlock's functions, enabling
+board, and system levels in early stage design.
+
+PySherlock provides Pythonic access to Sherlock's functions, enabling
 users to automate and customize their specific workflows.
-Below is a list of the currently supported features:
+With PySherlock, you can perform many tasks, including these:
 
 * Launch a Sherlock gRPC server and a Sherlock client
 * Import ECAD files and generate project reports
-* Define life cycle events and profiles
+* Define lifecycle events and profiles
 * Generate a stackup and update a stackup layer
 * Update a project parts list
 * Perform layer view operations such as updating a mount point's location
-* Export a trace or trace reinforcement model for integration with ANSYS Workbench
+* Export a trace or trace reinforcement model for integration with Ansys Workbench
 * Execute one or more analyses
 
-Documentation
--------------
-The `PySherlock Client Documentation <https://sherlock.docs.pyansys.com/>`_ contains
-information on installation, API documentations, and examples.
+Documentation and issues
+------------------------
+For comprehensive information on PySherlock, see the latest release
+`documentation <https://sherlock.docs.pyansys.com/>`_.
+
+On the `PySherlock Issues <https://github.com/pyansys/pysherlock/issues>`_ page,
+you can create issues to submit questions, report bugs, and request new features.
+This is the best place to post questions and code.
 
 License
 -------
-``PySherlock`` is licensed under the MIT license.
+PySherlock is licensed under the MIT license.
 
-This module allows users access to existing Sherlock functionalities and requires a legally licensed local
-copy of Ansys Sherlock.
+PySherlock makes no commercial claim over Ansys whatsoever. This library extends the functionality
+of Ansys Sherlock by adding a Python interface to Sherlock without changing the core behavior
+or license of the original software. The use of the interactive control of PySherlock requires
+a legally licensed local copy of Sherlock.
 
-Please visit `Ansys <http://www.ansys.com>`_ for more information on getting a licensed copy.
+For more information on Sherlock, see the `Ansys Sherlock <https://www.ansys.com/products/structures/ansys-sherlock>`_
+page on the Ansys website.

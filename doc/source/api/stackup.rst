@@ -1,7 +1,9 @@
+.. _ref_stackup_module:
+
 Stackup
 =======
 
-Module containing all the stackup management capabilities.
+The ``stackup`` contains all stackup management capabilities.
 
 .. currentmodule:: ansys.sherlock.core.stackup
 
