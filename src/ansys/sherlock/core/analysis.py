@@ -469,7 +469,7 @@ class Analysis(GrpcStub):
         -------
         list
             List of natural frequency property fields based on the user configuration.
-        
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -732,8 +732,8 @@ class Analysis(GrpcStub):
                         )
                     elif len(event_strain_map) < 4:
                         raise SherlockRunStrainMapAnalysisError(
-                            f"Number of arguments {str(len(event_strain_map))} is wrong for event strain "
-                            f"map {j} for strain map analysis {i}."
+                            f"Number of arguments {str(len(event_strain_map))} is wrong "
+                            f"for event strain map {j} for strain map analysis {i}."
                         )
                     elif event_strain_map[0] == "":
                         raise SherlockRunStrainMapAnalysisError(
@@ -747,7 +747,8 @@ class Analysis(GrpcStub):
                         )
                     elif event_strain_map[2] == "":
                         raise SherlockRunStrainMapAnalysisError(
-                            f"PCB side is missing for event strain map {j} for strain map analysis {i}."
+                            f"PCB side is missing for event strain map {j} for strain "
+                            f"map analysis {i}."
                         )
                     elif event_strain_map[3] == "":
                         raise SherlockRunStrainMapAnalysisError(

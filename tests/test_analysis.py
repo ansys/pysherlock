@@ -95,8 +95,8 @@ def helper_test_run_analysis(analysis):
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event names  " \
-            "are invalid."
+            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event " \
+            " names are invalid."
         )
 
 
@@ -236,8 +236,8 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: One or more event strain maps are missing " \
-                         "for strain map analysis 0."
+        assert str(e) == "Run strain map analysis error: One or more event strain maps are " \
+                         "missing for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -251,8 +251,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Event strain map argument is invalid for strain " \
-                  "map analysis 0."
+            e) == "Run strain map analysis error: Event strain map argument is invalid for " \
+                  "strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -268,8 +268,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Number of arguments is wrong 3 for event strain map 1 " \
-                  "for strain map analysis 0."
+            e) == "Run strain map analysis error: Number of arguments is wrong 3 for event strain " \
+                  "map 1 for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -450,8 +450,8 @@ def helper_test_update_random_vibe_props(analysis):
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == \
-               "Update random vibe properties error: No natural frequenices are defined for strain " \
-               "map analysis."
+               "Update random vibe properties error: No natural frequenices are defined for " \
+               "strain map analysis."
 
     if analysis._is_connection_up():
         try:
