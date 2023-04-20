@@ -86,7 +86,8 @@ def helper_test_run_analysis(analysis):
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Events argument is invalid."
+            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Events argument " \
+            " is invalid."
         )
 
     try:
@@ -94,7 +95,8 @@ def helper_test_run_analysis(analysis):
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event names are invalid."
+            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event names  " \
+            "are invalid."
         )
 
 
@@ -177,7 +179,7 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: Analysis argument is invalid for strain " \
-                         "map analysis 0"
+                         "map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -188,7 +190,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Number of arguments 1 is wrong for strain map analysis 0."
+            e) == "Run strain map analysis error: Number of arguments 1 is wrong for strain map " \
+                  "analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -203,8 +206,8 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Analysis type is missing for strain map." \
-                         "analysis 0"
+        assert str(e) == "Run strain map analysis error: Analysis type is missing for strain map " \
+                         "analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -282,8 +285,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Life phase is missing for event strain map 1 for " \
-                  "strain map analysis 0."
+            e) == "Run strain map analysis error: Life phase is missing for event strain map 1 " \
+                  "for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -299,8 +302,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Event name is missing for event strain map 2 for " \
-                  "strain map analysis 0."
+            e) == "Run strain map analysis error: Event name is missing for event strain map 2 " \
+                  "for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -341,8 +344,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Strain map name is missing for event strain map 2 " \
-                  "for strain map analysis 0."
+            e) == "Run strain map analysis error: Strain map name is missing for event strain " \
+                  "map 2 for strain map analysis 0."
 
 
 def helper_test_get_random_vibe_input_fields(analysis):

@@ -127,7 +127,8 @@ class Analysis(GrpcStub):
             if not isinstance(phase[1], list):
                 raise SherlockInvalidPhaseError(f"Invalid phase {i}: Events argument is invalid.")
             if "" in phase[1]:
-                raise SherlockInvalidPhaseError(f"Invalid phase {i}: One or more event names are invalid.")
+                raise SherlockInvalidPhaseError(f"Invalid phase {i}: One or more event names "
+                f"are invalid.")
 
     def run_analysis(
             self,
@@ -145,7 +146,7 @@ class Analysis(GrpcStub):
             Nam eof the CCA.
         analyses : (str, phases) list
             List of analysis types to run. Options are:
-            
+
             - ``"UNKNOWN"``
             - ``"NATURALFREQ"``
             - ``"HARMONICVIBE"``
@@ -165,7 +166,7 @@ class Analysis(GrpcStub):
             List of phase names.
         events : (str) list
             List of event names
-        
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -233,12 +234,11 @@ class Analysis(GrpcStub):
             Model source to get random vibe property fields from. The default is
             ``None``, in which case the ``"GENERATED"`` input form is used. Options
             are ``"GENERATED"`` and ``"STRAIN_MAP"``.
-        
+
         Returns
         list
             List of random vibe property fields based on the user configuration.
 
-        
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -651,7 +651,7 @@ class Analysis(GrpcStub):
                 Name of the strain map assigned to the life cycle event.
             sub_assembly_name : str, optional
                 Name of the subassembly CCA to assign the strain map.
-    
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -698,7 +698,8 @@ class Analysis(GrpcStub):
 
                 if len(analysis) != 2:
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Number of arguments is wrong {str(len(analysis))} for strain map analysis {i}."
+                        f"Number of arguments is wrong {str(len(analysis))} for "
+                        f"strain map analysis {i}."
                     )
 
                 analysis_type = analysis[0].upper()
@@ -711,7 +712,8 @@ class Analysis(GrpcStub):
                         StrainMapAnalysis.AnalysisType.RandomVibe
                 else:
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Analysis type {analysis_type} is invalid for strain map analysis {i}"
+                        f"Analysis type {analysis_type} is invalid for  "
+                        f"strain map analysis {i}."
                     )
 
                 strain_map_analysis_request = request.strainMapAnalyses.add()
