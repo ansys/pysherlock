@@ -1,5 +1,5 @@
 =============
-API Reference
+API reference
 =============
 This section gives an overview of the PySherlock modules.
 

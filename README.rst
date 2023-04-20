@@ -1,6 +1,6 @@
-PySherlock Project Overview
----------------------------
-ANSYS Sherlock is a reliability physics-based electronics design tool that provides
+PySherlock overview
+-------------------
+Ansys Sherlock is a reliability physics-based electronics design tool that provides
 fast and accurate life predictions for electronic hardware at the component, 
 board and system levels in early stage design.
 The PySherlock library provides Pythonic access to Sherlock's functions, enabling

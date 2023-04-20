@@ -1,22 +1,20 @@
 ==========
-User Guide
+User guide
 ==========
-This guide provides a general overview of the basics and usage of the PySherlock
-library.
+This section provides a basic overview of how to use PySherlock.
 
-=============
-Pre-requisite
-=============
-Please go to the section `Getting Started <../getting_started/index.html>`_ for installation instructions
-and how to launch Sherlock and the gRPC server. The Sherlock gRPC server must be running in order to use
-PySherlock.
+==============
+Prerequisites
+==============
+See the `Getting started <../getting_started/index.html>`_ for installation instructions
+and information on how to launch Sherlock and the gRPC server. The Sherlock gRPC server
+must be running to use PySherlock.
 
 ===================
-PySherlock Services
+PySherlock services
 ===================
-PySherlock methods are divided into modules which corresponds to major Sherlock functional areas.
-Please go to the `API Reference <../api/index.html>`_ to see a brief description for each and a
-complete list of the available methods, descriptions, and examples.
+This section describes PySherlock core classes, methods, and functions that correspond to major
+Sherlock functional areas. Use the search feature or click links to view API documentation.
 
 .. image:: ../_static/sherlock-services.png
   :align: center
@@ -26,10 +24,10 @@ complete list of the available methods, descriptions, and examples.
 ================
 Using PySherlock
 ================
-After the Sherlock gRPC server has started, PySherlock methods can be used to perform operations with
+After the Sherlock gRPC server has started, you can use PySherlock methods to perform operations with
 the Sherlock client.
 
-We will illustrate how to use PySherlock to automate the process depicted in the below diagram.
+Subsequent topics describe how to use PySherlock to automate the process depicted in this diagram:
 
 .. image:: ../_static/userGuide-example-workflow-chart.png
   :align: center
@@ -48,8 +46,8 @@ Launch Sherlock and start the gRPC server on default port 9090 using the ``launc
 Please go to the `launcher module documentation <../api/launcher.html>`_ to see detailed documentation
 on this module and its methods.
 
-``launch_sherlock()`` returns a a gRPC connection object ``sherlock``
-which is used to invoke the APIs from their respective services.
+The ``launch_sherlock()`` method returns a ``sherlock`` gRPC connection object.
+This object is used to invoke the APIs from their respective services.
 
 .. code::
 
@@ -57,7 +55,7 @@ which is used to invoke the APIs from their respective services.
     sherlock = launch_sherlock()
 
 --------------------
-Import ODB++ Archive
+Import ODB++ archive
 --------------------
 Import an ODB++ archive ``ODB++ Tutorial.tgz`` using the ``project`` module ``import_odb_archive()`` method.
 After the import, a project named ``Tutorial`` is created with a CCA named ``Main Board``.
@@ -77,7 +75,7 @@ on this module and its methods.
     )
 
 -----------------
-Update Parts List
+Update parts list
 -----------------
 Update the parts list for the previously created CCA ``Main Board`` using the ``parts`` module
 ``update_parts_list()`` method. The example below updates the parts list by using the Sherlock Part Library.
@@ -95,7 +93,7 @@ on this module and its methods.
     )
 
 ------------------------
-Create Random Vibe Event
+Create random vibe event
 ------------------------
 Create a random vibe event using the ``lifecycle`` module ``add_random_vibe_event()`` method.
 Please go to the `lifecycle module documentation <../api/lifecycle.html>`_ to see detailed documentation
@@ -117,7 +115,7 @@ on this module and its methods.
     )
 
 --------------------------
-Create Random Vibe Profile
+Create random vibe profile
 --------------------------
 Create a random vibe profile using the ``lifecycle`` module ``add_random_vibe_profile()`` method.
 
@@ -134,7 +132,7 @@ Create a random vibe profile using the ``lifecycle`` module ``add_random_vibe_pr
     )
 
 ------------
-Run Analysis
+Run analysis
 ------------
 Run a random vibe analysis using the ``analysis`` module ``run_analysis()`` method.
 Please go to the `analysis module documentation <../api/analysis.html>`_ to see detailed documentation
@@ -155,10 +153,10 @@ on this module and its methods.
     )
 
 ------------------------
-Generate Sherlock Report
+Generate Sherlock report
 ------------------------
 Generate a Sherlock project report for the project ``Tutorial`` using the ``project`` module
-``generate_project_report()`` method. The report will be saved in the pdf file
+``generate_project_report()`` method. The report is saved in the PDF file
 ``C:\Temp\tutorial_project_report.pdf``.
 
 .. code::

@@ -1,5 +1,5 @@
 ===============
-Getting Started
+Getting started
 ===============
 PySherlock provides a Pythonic interface to Sherlock functionalities.
 
