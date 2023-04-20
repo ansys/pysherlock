@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """Module containing all the stackup management capabilities."""
 
 try:

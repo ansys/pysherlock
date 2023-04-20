@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """pysherlock logger."""
 from datetime import datetime
 import logging
