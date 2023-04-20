@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """Module containing different model generation capabilities."""
 import os.path
 import platform
