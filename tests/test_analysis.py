@@ -65,7 +65,7 @@ def helper_test_run_analysis(analysis):
         analysis.run_analysis("Test", "Card", [("Invalid", [("Phase 1", ["Harmonic Event"])])])
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Invalid analysis is provided."
+        assert str(e) == "Run analysis error: Invalid analysis 0: An invalid analysis is provided."
 
     try:
         analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("", ["Harmonic Event"])])])
