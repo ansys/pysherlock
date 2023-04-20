@@ -3,6 +3,12 @@
    Provide any documentation specific to your online documentation
    here.
 
+==========
+PySherlock
+==========
+
+PySherlock is a Python client library for the Ansys Sherlock product.
+
 .. include:: ../../README.rst
     :start-after: .. readme_start
 
