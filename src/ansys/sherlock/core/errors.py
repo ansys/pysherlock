@@ -473,7 +473,7 @@ class SherlockGetRandomVibeInputFieldsError(Exception):
 
 
 class SherlockUpdateRandomVibePropsError(Exception):
-    """Contains the error raised when analysis properties for random vibe results cannot be updated."""
+    """Contains the error raised when properties for random vibe results cannot be updated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -485,7 +485,7 @@ class SherlockUpdateRandomVibePropsError(Exception):
 
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
-    """Contains the error raised when analysis properties for natural frequency results cannot be updated."""
+    """Contains the error raised when properties for natural frequency results cannot be updated."""
 
     def __init__(self, message):
         """Initialize error message."""
