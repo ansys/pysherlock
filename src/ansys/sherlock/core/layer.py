@@ -40,7 +40,7 @@ class Layer(GrpcStub):
             CCA name.
         file_path : str, required
             Filepath of the CSV file with the mount point properties.
-        
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock

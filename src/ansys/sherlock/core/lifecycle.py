@@ -670,7 +670,8 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddRandomVibeProfilesError(message="Project name is invalid.")
 
             if len(random_vibe_profiles) == 0:
-                raise SherlockAddRandomVibeProfilesError(message="Random vibe profiles are missing.")
+                raise SherlockAddRandomVibeProfilesError(message="Random vibe profiles are "
+                f"missing.")
 
             for i, profile_entry in enumerate(random_vibe_profiles):
                 if len(profile_entry) != 6:
@@ -961,7 +962,8 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(thermal_profiles):
                 if len(profile_entry) != 6:
                     raise SherlockAddThermalProfilesError(
-                        f"Number of arguments {str(len(profile_entry))} is wrong for thermal profile {i}."
+                        f"Number of arguments {str(len(profile_entry))} is wrong for "
+                        f"thermal profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddThermalProfilesError(
@@ -1318,7 +1320,8 @@ class Lifecycle(GrpcStub):
                         ((self.FREQ_UNIT_LIST is not None) and
                          (profile_entry[3] not in self.FREQ_UNIT_LIST)):
                     raise SherlockAddHarmonicVibeProfilesError(
-                        f"Frequency unit {profile_entry[3]} is invalid for harmonic vibe profile {i}."
+                        f"Frequency unit {profile_entry[3]} is invalid for harmonic vibe "
+                        f"profile {i}."
                     )
                 elif not isinstance(profile_entry[4], str) or \
                     ((self.LOAD_UNIT_LIST is not None) and
@@ -1625,7 +1628,8 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(shock_profiles):
                 if len(profile_entry) != 10:
                     raise SherlockAddShockProfilesError(
-                        f"Number of arguments {str(len(profile_entry))} is wrong for shock profile {i}."
+                        f"Number of arguments {str(len(profile_entry))} is wrong for shock "
+                        f"profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddShockProfilesError(

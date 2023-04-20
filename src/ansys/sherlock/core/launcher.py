@@ -42,7 +42,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
     sherlock_cmd_args : str, optional
-        Optional command arguments for launching Sherlock. 
+        Optional command arguments for launching Sherlock.
 
     Examples
     --------
@@ -98,7 +98,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """Create a gRPC connection to a specified port and return the ``sherlock``connection object.
-    
+
     The ``sherlock``connecton object is used to invoke the APIs from their respective services.
     """
     channel_param = f"{LOCALHOST}:{port}"
