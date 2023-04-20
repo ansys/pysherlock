@@ -32,6 +32,8 @@ PySherlock
 
 PySherlock is a Python client library for the Ansys Sherlock product.
 
+.. readme_start
+
 Project overview
 ----------------
 ANSYS Sherlock is a reliability physics-based electronics design tool that provides

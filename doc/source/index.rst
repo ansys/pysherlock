@@ -4,6 +4,7 @@
    here.
 
 .. include:: ../../README.rst
+    :start-after: .. readme_start
 
 .. toctree::
     :maxdepth: 2
