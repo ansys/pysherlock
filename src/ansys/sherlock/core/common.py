@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module for running the gRPC APIs in the SherlockCommonService."""
+"""Module for running the gRPC APIs in the Sherlock Common Service."""
 try:
     import SherlockCommonService_pb2
     import SherlockCommonService_pb2_grpc
@@ -17,7 +17,7 @@ class Common(GrpcStub):
     """Contains methods from the Sherlock Common Service."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for SherlockCommonService."""
+        """Initialize a gRPC stub for the Sherlock Common service."""
         self.channel = channel
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
@@ -27,13 +27,13 @@ class Common(GrpcStub):
             LOG.error("Health check failed.")
             return False
         else:
-            LOG.info("Connection is up.")
+            LOG.info("Connection is healthy.")
             return True
 
     def is_sherlock_client_loading(self):
-        """Checks if the Sherlock Client (if opened) is still initializing."""
+        """Check if the Sherlock client (if opened) is still initializing."""
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         message = SherlockCommonService_pb2.IsSherlockClientLoadingRequest()
@@ -52,8 +52,9 @@ class Common(GrpcStub):
         Parameters
         ----------
         close_sherlock_client : boolean, optional
-            If set to True and if the Sherlock client is open, then closes
-            the Sherlock client also.
+            Whether to close the Sherlock client when the gRPC connection is closed. The default
+            is ``False``, in which case the Sherlock client remains open when the gRPC connection
+            is closed..
         """
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")

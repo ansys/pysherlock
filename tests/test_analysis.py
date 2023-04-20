@@ -13,7 +13,7 @@ from ansys.sherlock.core.errors import (
 
 
 def test_all():
-    """Test all life cycle APIs"""
+    """Test all life cycle APIs."""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     analysis = Analysis(channel)
@@ -33,13 +33,13 @@ def helper_test_run_analysis(analysis):
         analysis.run_analysis("", "Card", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid project name"
+        assert str(e) == "Run analysis error: Project name is invalid."
 
     try:
         analysis.run_analysis("Test", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid cca name"
+        assert str(e) == "Run analysis error: CCA name is invalid."
 
     try:
         analysis.run_analysis(
@@ -49,7 +49,7 @@ def helper_test_run_analysis(analysis):
         )
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analyses argument"
+        assert str(e) == "Run analysis error: Analyses argument is invalid."
 
     try:
         analysis.run_analysis(
@@ -59,34 +59,34 @@ def helper_test_run_analysis(analysis):
         )
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Missing one or more analyses"
+        assert str(e) == "Run analysis error: One or more analyses are missing."
 
     try:
         analysis.run_analysis("Test", "Card", [("Invalid", [("Phase 1", ["Harmonic Event"])])])
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Invalid analysis provided"
+        assert str(e) == "Run analysis error: Invalid analysis 0: Invalid analysis is provided."
 
     try:
         analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("", ["Harmonic Event"])])])
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Invalid phase name"
+            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Phase name is invalid."
         )
 
     try:
         analysis.run_analysis("Test", "Card", [("NATURALFREQ", "Invalid")])
         assert False
     except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Invalid phases argument"
+        assert str(e) == "Run analysis error: Invalid analysis 0: Phases argument is invalid."
 
     try:
         analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("Phase 1", "Invalid")])])
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Invalid events argument"
+            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Events argument is invalid."
         )
 
     try:
@@ -94,7 +94,7 @@ def helper_test_run_analysis(analysis):
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Invalid event(s) name"
+            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event names are invalid."
         )
 
 
@@ -131,7 +131,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Invalid project name specified"
+        assert str(e) == "Run strain map analysis error: Project name is invalid."
 
     try:
         analysis.run_strain_map_analysis(
@@ -146,7 +146,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Invalid CCA name specified"
+        assert str(e) == "Run strain map analysis error: CCA name is invalid."
 
     try:
         analysis.run_strain_map_analysis(
@@ -156,7 +156,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Invalid analyses argument"
+        assert str(e) == "Run strain map analysis error: Analyses argument is invalid."
 
     try:
         analysis.run_strain_map_analysis(
@@ -166,7 +166,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Missing one or more analyses"
+        assert str(e) == "Run strain map analysis error: One or more analyses are missing."
 
     try:
         analysis.run_strain_map_analysis(
@@ -176,7 +176,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Invalid analysis argument for strain " \
+        assert str(e) == "Run strain map analysis error: Analysis argument is invalid for strain " \
                          "map analysis 0"
 
     try:
@@ -188,7 +188,7 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Wrong number of args 1 for strain map analysis 0"
+            e) == "Run strain map analysis error: Number of arguments 1 is wrong for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -203,7 +203,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Missing analysis type for strain map " \
+        assert str(e) == "Run strain map analysis error: Analysis type is missing for strain map." \
                          "analysis 0"
 
     try:
@@ -219,8 +219,8 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Invalid analysis type NOTREAL for " \
-                         "strain map analysis 0"
+        assert str(e) == "Run strain map analysis error: Analysis type is invalid NOTREAL for " \
+                         "strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -233,8 +233,8 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Missing one or more event strain maps " \
-                         "for strain map analysis 0"
+        assert str(e) == "Run strain map analysis error: One or more event strain maps are missing " \
+                         "for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -248,8 +248,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Invalid event strain map argument for strain " \
-                  "map analysis 0"
+            e) == "Run strain map analysis error: Event strain map argument is invalid for strain " \
+                  "map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -265,8 +265,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Wrong number of args 3 for event strain map 1 " \
-                  "for strain map analysis 0"
+            e) == "Run strain map analysis error: Number of arguments is wrong 3 for event strain map 1 " \
+                  "for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -282,8 +282,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Missing life phase for event strain map 1 for " \
-                  "strain map analysis 0"
+            e) == "Run strain map analysis error: Life phase is missing for event strain map 1 for " \
+                  "strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -299,8 +299,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Missing event name for event strain map 2 for " \
-                  "strain map analysis 0"
+            e) == "Run strain map analysis error: Event name is missing for event strain map 2 for " \
+                  "strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -324,8 +324,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Missing PCB side for event strain map 2 for " \
-                  "strain map analysis 1"
+            e) == "Run strain map analysis error: PCB side is missing for event strain map 2 for " \
+                  "strain map analysis 1."
 
     try:
         analysis.run_strain_map_analysis(
@@ -341,8 +341,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Missing strain map name for event strain map 2 " \
-                  "for strain map analysis 0"
+            e) == "Run strain map analysis error: Strain map name is missing for event strain map 2 " \
+                  "for strain map analysis 0."
 
 
 def helper_test_get_random_vibe_input_fields(analysis):
@@ -351,7 +351,7 @@ def helper_test_get_random_vibe_input_fields(analysis):
         assert False
     except SherlockGetRandomVibeInputFieldsError as e:
         assert str(e) == \
-               "Get random vibe input fields error: Invalid model source BADTYPE specified"
+               "Get random vibe input fields error: Model source BADTYPE is invalid."
 
     if analysis._is_connection_up():
         try:
@@ -415,21 +415,21 @@ def helper_test_update_random_vibe_props(analysis):
                                           analysis_temp=20, analysis_temp_units="C")
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == "Update random vibe properties error: Invalid project name"
+        assert str(e) == "Update random vibe properties error: Project name is invalid."
 
     try:
         analysis.update_random_vibe_props("Test", "", random_vibe_damping="0.01, 0.05",
                                           analysis_temp=20, analysis_temp_units="C")
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == "Update random vibe properties error: Invalid cca name"
+        assert str(e) == "Update random vibe properties error: CCA name is invalid."
 
     try:
         analysis.update_random_vibe_props("Test", "Card", random_vibe_damping="0.01, foo")
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == \
-               "Update random vibe properties error: Invalid random vibe damping value: foo"
+               "Update random vibe properties error: Random vibe damping value is invalid: foo"
 
     try:
         analysis.update_random_vibe_props("Test", "Card",
@@ -438,7 +438,7 @@ def helper_test_update_random_vibe_props(analysis):
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == \
-               "Update random vibe properties error: Invalid model source BAD_SOURCE specified"
+               "Update random vibe properties error: Model source BAD_SOURCE is invalid."
 
     try:
         analysis.update_random_vibe_props("Test", "Card",
@@ -447,8 +447,8 @@ def helper_test_update_random_vibe_props(analysis):
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == \
-               "Update random vibe properties error: No natural frequenices defined for strain " \
-               "map analysis"
+               "Update random vibe properties error: No natural frequenices are defined for strain " \
+               "map analysis."
 
     if analysis._is_connection_up():
         try:
@@ -461,8 +461,8 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
-                   "Update random vibe properties error: Invalid min " \
-                   "natural freq unit specified: foo"
+                   "Update random vibe properties error: Minimum " \
+                   "natural frequency unit is invalid: foo"
 
         try:
             analysis.update_random_vibe_props("Test", "Card",
@@ -474,8 +474,8 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
-                   "Update random vibe properties error: Invalid max " \
-                   "natural freq unit specified: foo"
+                   "Update random vibe properties error: Maxiumum " \
+                   "natural frequency unit is invalid: foo"
 
         try:
             analysis.update_random_vibe_props("Test", "Card",
@@ -488,8 +488,8 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
-                   "Update random vibe properties error: Invalid analysis " \
-                   "temperature unit specified: foo"
+                   "Update random vibe properties error: Analysis " \
+                   "temperature unit is invalid: foo"
 
         try:
             analysis.update_random_vibe_props("Tutorial Project", "Main Board",
@@ -526,7 +526,7 @@ def helper_test_update_natural_frequency_props(analysis):
                                                 )
         assert False
     except SherlockUpdateNaturalFrequencyPropsError as e:
-        assert str(e) == "Update natural frequency properties error: Invalid project name"
+        assert str(e) == "Update natural frequency properties error: Project name is invalid."
 
     try:
         analysis.update_natural_frequency_props("Test", "", natural_freq_count=2,
@@ -536,7 +536,7 @@ def helper_test_update_natural_frequency_props(analysis):
                                                 require_material_assignment_enabled=False)
         assert False
     except SherlockUpdateNaturalFrequencyPropsError as e:
-        assert str(e) == "Update natural frequency properties error: Invalid cca name"
+        assert str(e) == "Update natural frequency properties error: CCA name is invalid."
 
     if analysis._is_connection_up():
         try:
@@ -551,8 +551,8 @@ def helper_test_update_natural_frequency_props(analysis):
             assert False
         except SherlockUpdateNaturalFrequencyPropsError as e:
             assert str(e) == \
-                   "Update natural frequency properties error: Invalid min " \
-                   "natural freq unit specified: foo"
+                   "Update natural frequency properties error: Minimum " \
+                   "natural frequency unit is invalid: foo"
 
         try:
             analysis.update_natural_frequency_props("Test", "Card",
@@ -566,8 +566,8 @@ def helper_test_update_natural_frequency_props(analysis):
             assert False
         except SherlockUpdateNaturalFrequencyPropsError as e:
             assert str(e) == \
-                   "Update natural frequency properties error: Invalid max " \
-                   "natural freq unit specified: foo"
+                   "Update natural frequency properties error: Maximum " \
+                   "natural frequency unit is invalid: foo"
 
         try:
             analysis.update_natural_frequency_props("Test", "Card",
@@ -582,8 +582,8 @@ def helper_test_update_natural_frequency_props(analysis):
             assert False
         except SherlockUpdateNaturalFrequencyPropsError as e:
             assert str(e) == \
-                   "Update natural frequency properties error: Invalid analysis " \
-                   "temperature unit specified: foo"
+                   "Update natural frequency properties error: Analysis " \
+                   "temperature unit is invalid: foo"
 
 
 if __name__ == "__main__":

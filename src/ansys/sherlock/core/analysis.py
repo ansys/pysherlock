@@ -698,13 +698,13 @@ class Analysis(GrpcStub):
 
                 if len(analysis) != 2:
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Wrong number of arguments {str(len(analysis))} for strain map analysis {i}."
+                        f"Number of arguments is wrong {str(len(analysis))} for strain map analysis {i}."
                     )
 
                 analysis_type = analysis[0].upper()
                 if analysis_type == "":
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Analysis type is missing for strain map analysis {i}."
+                        f"Analysis type are missing for strain map analysis {i}."
                     )
                 elif analysis_type == "RANDOMVIBE":
                     analysis_type = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest. \
