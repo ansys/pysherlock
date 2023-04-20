@@ -104,7 +104,7 @@ class Common(GrpcStub):
             - ``"VOLTAGE"``
             - ``"VOLUME"``
             - ``"WEIGHT"``
-    
+
         """
 
         if unitType == "":

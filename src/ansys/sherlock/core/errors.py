@@ -9,7 +9,7 @@ SHERLOCK_DEFAULT_PORT = 9090
 
 
 class SherlockCannotUsePortError(Exception):
-    """Raised when the specified gRPC port cannot be used."""
+    """Contains the error raised when the specified gRPC port cannot be used."""
 
     def __init__(self, port, error):
         """Initialize error message."""
@@ -22,7 +22,7 @@ class SherlockCannotUsePortError(Exception):
 
 
 class SherlockConnectionError(Exception):
-    """Raised when the Sherlock gRPC channel has not been established."""
+    """Contains the error raised when the Sherlock gRPC channel has not been established."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -34,7 +34,7 @@ class SherlockConnectionError(Exception):
 
 
 class SherlockDeleteProjectError(Exception):
-    """Raised when deleting a project results in an error."""
+    """Contains the error raised when a project cannot be deleted."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -46,7 +46,7 @@ class SherlockDeleteProjectError(Exception):
 
 
 class SherlockImportODBError(Exception):
-    """Raised when importing ODB archive results in an error."""
+    """Contains the error raised when an ODB archive cannot be imported."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -58,7 +58,7 @@ class SherlockImportODBError(Exception):
 
 
 class SherlockImportIpc2581Error(Exception):
-    """Raised when importing IPC2581 archive results in an error."""
+    """Contains the error raised when an IPC2581 archive cannot be imported."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -70,7 +70,7 @@ class SherlockImportIpc2581Error(Exception):
 
 
 class SherlockListCCAsError(Exception):
-    """Raised when listing project CCAs results in an error."""
+    """Contains the error raised when a project's CCAs results cannot be listed."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -81,7 +81,7 @@ class SherlockListCCAsError(Exception):
         return f"List CCAs error: {self.message}"
 
 class SherlockListConductorLayersError(Exception):
-    """Raised when listing project conductor layers results in an error."""
+    """Contains the error raised when a project's conductor layers cannot be listed."""
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -92,7 +92,7 @@ class SherlockListConductorLayersError(Exception):
 
 
 class SherlockListLaminateLayersError(Exception):
-    """Raised when listing project laminate layers results in an error."""
+    """Contains the error raised when a project's laminate layers cannot be listed."""
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -103,7 +103,7 @@ class SherlockListLaminateLayersError(Exception):
 
 
 class SherlockAddStrainMapsError(Exception):
-    """Raised when adding strain maps for a project results in an error."""
+    """Contains the error raised when strain maps cannot be added to the project."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -120,7 +120,7 @@ class SherlockAddStrainMapsError(Exception):
 
 
 class SherlockListStrainMapsError(Exception):
-    """Raised when listing strain maps for a project results in an error."""
+    """Provides the error raised when strain maps for a project cannot be listed."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -132,7 +132,7 @@ class SherlockListStrainMapsError(Exception):
 
 
 class SherlockGenerateProjectReportError(Exception):
-    """Raised when generating a project report results in an error."""
+    """Contains the error raised when project report cannot be generated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -144,7 +144,7 @@ class SherlockGenerateProjectReportError(Exception):
 
 
 class SherlockCreateLifePhaseError(Exception):
-    """Raised when creating a life phase results in an error."""
+    """Contains the error raised when a life phase cannot be created."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -161,7 +161,7 @@ class SherlockCreateLifePhaseError(Exception):
 
 
 class SherlockAddRandomVibeEventError(Exception):
-    """Raised when adding a random vibe event results in an error."""
+    """Contains the error raised when a random vibe event cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -178,7 +178,7 @@ class SherlockAddRandomVibeEventError(Exception):
 
 
 class SherlockAddRandomVibeProfilesError(Exception):
-    """Raised when adding random vibe profiles results in an error."""
+    """Contains the error raised when random vibe profiles cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -195,7 +195,7 @@ class SherlockAddRandomVibeProfilesError(Exception):
 
 
 class SherlockAddThermalEventError(Exception):
-    """Raised when adding a thermal event results in an error."""
+    """Contains the error raised when a thermal event cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -212,7 +212,7 @@ class SherlockAddThermalEventError(Exception):
 
 
 class SherlockAddThermalProfilesError(Exception):
-    """Raised when adding thermal profiles results in an error."""
+    """Creates the error raised when thermal profiles cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -229,7 +229,7 @@ class SherlockAddThermalProfilesError(Exception):
 
 
 class SherlockAddHarmonicEventError(Exception):
-    """Raised when adding a harmonic event results in an error."""
+    """Contains the error raised when a harmonic event cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -246,7 +246,7 @@ class SherlockAddHarmonicEventError(Exception):
 
 
 class SherlockAddHarmonicVibeProfilesError(Exception):
-    """Raised when adding harmonic vibe profiles results in an error."""
+    """Contains the error raised when harmonic vibe profiles cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -263,7 +263,7 @@ class SherlockAddHarmonicVibeProfilesError(Exception):
 
 
 class SherlockAddShockEventError(Exception):
-    """Raised when adding a shock event results in an error."""
+    """Contains the error raised when a shock event cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -280,7 +280,7 @@ class SherlockAddShockEventError(Exception):
 
 
 class SherlockAddShockProfilesError(Exception):
-    """Raised when adding shock profiles results in an error."""
+    """Contains the error raised when shock profiles cannot be added."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -297,7 +297,7 @@ class SherlockAddShockProfilesError(Exception):
 
 
 class SherlockUpdateMountPointsByFileError(Exception):
-    """Raised when updating mount points results in an error."""
+    """Contains the error raised when mount points cannot be updated."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -314,7 +314,7 @@ class SherlockUpdateMountPointsByFileError(Exception):
 
 
 class SherlockGenStackupError(Exception):
-    """Raised when generating a stackup resulted in an error."""
+    """Contains the error raised when a stackup cannot be generated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -326,7 +326,7 @@ class SherlockGenStackupError(Exception):
 
 
 class SherlockUpdateConductorLayerError(Exception):
-    """Raised when updating a conductor layer resulted in an error."""
+    """Contains the error raised when a conductor layer cannot be udpated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -338,7 +338,7 @@ class SherlockUpdateConductorLayerError(Exception):
 
 
 class SherlockUpdateLaminateLayerError(Exception):
-    """Raised when updating a laminate layer resulted in an error."""
+    """Contains the error raised when a laminate layer cannot be updated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -350,7 +350,7 @@ class SherlockUpdateLaminateLayerError(Exception):
 
 
 class SherlockUpdatePartsListError(Exception):
-    """Raised when updating a parts list results in an error."""
+    """Contains the error raised when a parts list cannot be updated."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -367,7 +367,7 @@ class SherlockUpdatePartsListError(Exception):
 
 
 class SherlockUpdatePartsLocationsError(Exception):
-    """Raised when updating parts locations results in an error."""
+    """Contains the error raised when part locations cannot be updated."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -384,7 +384,7 @@ class SherlockUpdatePartsLocationsError(Exception):
 
 
 class SherlockUpdatePartsLocationsByFileError(Exception):
-    """Raised when updating parts locations by file results in an error."""
+    """Contains the error raised when part locations cannot be updated by file results."""
 
     def __init__(self, message=None, error_array=None):
         """Initialize error message."""
@@ -401,7 +401,7 @@ class SherlockUpdatePartsLocationsByFileError(Exception):
 
 
 class SherlockImportPartsListError(Exception):
-    """Raised when importing a parts list resulted in an error."""
+    """Contains the error raised when a parts list cannot be imported."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -413,7 +413,7 @@ class SherlockImportPartsListError(Exception):
 
 
 class SherlockExportPartsListError(Exception):
-    """Raised when exporting a parts list resulted in an error."""
+    """Contains the error raised when a parts list cannot be exported."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -425,7 +425,7 @@ class SherlockExportPartsListError(Exception):
 
 
 class SherlockEnableLeadModelingError(Exception):
-    """Raised when enabling lead modeling resulted in an error."""
+    """Contains the error raised when lead modeling cannot be enabled."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -437,7 +437,7 @@ class SherlockEnableLeadModelingError(Exception):
 
 
 class SherlockRunAnalysisError(Exception):
-    """Raised when running an analysis results in an error."""
+    """Contains the error raised when an analysis cannot be run."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -449,7 +449,7 @@ class SherlockRunAnalysisError(Exception):
 
 
 class SherlockRunStrainMapAnalysisError(Exception):
-    """Raised when running a strain map analysis results in an error."""
+    """Contains the error raised when a strain map analysis cannot be run."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -461,7 +461,7 @@ class SherlockRunStrainMapAnalysisError(Exception):
 
 
 class SherlockGetRandomVibeInputFieldsError(Exception):
-    """Raised when getting the random vibe input fields results in an error."""
+    """Contains the error raised when random vibe input fields cannot be returned."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -473,7 +473,7 @@ class SherlockGetRandomVibeInputFieldsError(Exception):
 
 
 class SherlockUpdateRandomVibePropsError(Exception):
-    """Raised when updating the analysis properties for random vibe results in an error."""
+    """Contains the error raised when analysis properties for random vibe results cannot be updated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -485,7 +485,7 @@ class SherlockUpdateRandomVibePropsError(Exception):
 
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
-    """Raised when updating the analysis properties for natural frequency results in an error."""
+    """Contains the error raised when analysis properties for natural frequency results cannot be updated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -497,7 +497,7 @@ class SherlockUpdateNaturalFrequencyPropsError(Exception):
 
 
 class SherlockCommonServiceError(Exception):
-    """Raised when executing an API in the common service resulted in an error."""
+    """Contains the error raised when an API in the common service cannot be executed."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -509,7 +509,7 @@ class SherlockCommonServiceError(Exception):
 
 
 class SherlockModelServiceError(Exception):
-    """Raised when executing an API in the model service resulted in an error."""
+    """Contains the error raised when an API in the model service cannot be executed."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -521,7 +521,7 @@ class SherlockModelServiceError(Exception):
 
 
 class SherlockInvalidLoadDirectionError(Exception):
-    """Raised when an invalid load direction string is inputted."""
+    """Contains the error raised when the load direction string is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -533,7 +533,7 @@ class SherlockInvalidLoadDirectionError(Exception):
 
 
 class SherlockInvalidOrientationError(Exception):
-    """Raised when an invalid orientation string is inputted."""
+    """Contains the error raised when an orientation string is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -545,7 +545,7 @@ class SherlockInvalidOrientationError(Exception):
 
 
 class SherlockInvalidRandomVibeProfileEntriesError(Exception):
-    """Raised when an invalid random vibe profile entry is inputted."""
+    """Contains the error raised when an random vibe profile is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -557,7 +557,7 @@ class SherlockInvalidRandomVibeProfileEntriesError(Exception):
 
 
 class SherlockInvalidThermalProfileEntriesError(Exception):
-    """Raised when an invalid thermal profile entry is inputted."""
+    """Contains the error raised when a thermal profile entry is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -569,7 +569,7 @@ class SherlockInvalidThermalProfileEntriesError(Exception):
 
 
 class SherlockInvalidHarmonicProfileEntriesError(Exception):
-    """Raised when an invalid harmonic profile entry is inputted."""
+    """Contains the error raised when an harmonic profile entry is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -581,7 +581,7 @@ class SherlockInvalidHarmonicProfileEntriesError(Exception):
 
 
 class SherlockInvalidShockProfileEntriesError(Exception):
-    """Raised when an invalid shock profile entry is inputted."""
+    """Contains the error raised when a shock profile entry is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -593,7 +593,7 @@ class SherlockInvalidShockProfileEntriesError(Exception):
 
 
 class SherlockInvalidLayerIDError(Exception):
-    """Raised when an invalid layer ID is provided."""
+    """Contains the error raised when an layer ID is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -605,7 +605,7 @@ class SherlockInvalidLayerIDError(Exception):
 
 
 class SherlockInvalidMaterialError(Exception):
-    """Raised when an invalid manufacturer/grade/material is provided."""
+    """Contains the error raised when a manufacturer/grade/material are invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -617,7 +617,7 @@ class SherlockInvalidMaterialError(Exception):
 
 
 class SherlockInvalidConductorPercentError(Exception):
-    """Raised when an invalid conductor percent is provided."""
+    """Contains the error raised when a conductor percent is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -629,7 +629,7 @@ class SherlockInvalidConductorPercentError(Exception):
 
 
 class SherlockInvalidThicknessArgumentError(Exception):
-    """Raised when invalid thickness arguments are provided."""
+    """Contains the error raised when thickness arguments are invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -641,7 +641,7 @@ class SherlockInvalidThicknessArgumentError(Exception):
 
 
 class SherlockInvalidGlassConstructionError(Exception):
-    """Raised when invalid glass construction arguments are provided."""
+    """Contains teh argument raised when glass construction arguments are invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -653,7 +653,7 @@ class SherlockInvalidGlassConstructionError(Exception):
 
 
 class SherlockInvalidPhaseError(Exception):
-    """Raised when invalid phase arguments are provided."""
+    """Contains the error raised when phase arguments are invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
