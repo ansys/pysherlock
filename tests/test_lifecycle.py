@@ -52,7 +52,7 @@ def helper_test_create_life_phase(lifecycle):
         lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
         assert False
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Duration must be greater than 0.
+        assert e.str_itr()[0] == "Create life phase error: Duration must be greater than 0."
 
     if lifecycle._is_connection_up():
         try:
