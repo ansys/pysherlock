@@ -18,7 +18,6 @@ This section gives an overview of the PySherlock modules.
    stackup
 
 .. autosummary::
-    :toctree: _autosummary
 
    ansys.sherlock.core.analysis
    ansys.sherlock.core.common
