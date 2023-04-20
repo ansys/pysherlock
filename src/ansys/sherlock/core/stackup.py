@@ -692,11 +692,8 @@ class Stackup(GrpcStub):
                 return
 
             request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
-
             response = self.stub.listConductorLayers(request)
-
             layers = response.ccaConductorLayerProps
-
             return layers
 
         except SherlockListConductorLayersError as e:
@@ -749,12 +746,10 @@ class Stackup(GrpcStub):
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
+
             request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
-
             response = self.stub.listLaminates(request)
-
             layers = response.ccaLaminateProps
-
             return layers
 
         except SherlockListLaminateLayersError as e:
