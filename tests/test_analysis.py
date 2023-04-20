@@ -268,8 +268,8 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(
-            e) == "Run strain map analysis error: Number of arguments is wrong 3 for event strain " \
-                  "map 1 for strain map analysis 0."
+            e) == "Run strain map analysis error: Number of arguments is wrong 3 for event " \
+                  "strain map 1 for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
