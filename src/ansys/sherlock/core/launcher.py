@@ -29,9 +29,10 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
-def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="",
-                    sherlock_cmd_args=""):
-    """Launch Sherlock and starts gRPC on the given localhost port.
+def launch_sherlock(
+    host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="", sherlock_cmd_args=""
+):
+    r"""Launch Sherlock and starts gRPC on the given localhost port.
 
     Parameters
     ----------
@@ -65,7 +66,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
         if single_project_path != "":
             args = f'{args} -singleProject "{single_project_path}"'
         if sherlock_cmd_args != "":
-            args = f'{args} {sherlock_cmd_args}'
+            args = f"{args} {sherlock_cmd_args}"
         subprocess.Popen(args)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
@@ -94,8 +95,13 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
 
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
-    """Create a gRPC connection to the specified port and returns a connection object ``Sherlock``
-    which can be used to invoke the APIs from their respective services.."""
+    """Create a gRPC connection.
+
+    Notes
+    -----
+    Connects to the specified port and returns a connection object ``Sherlock``
+    which can be used to invoke the APIs from their respective services.
+    """
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
     SHERLOCK = Sherlock(channel)

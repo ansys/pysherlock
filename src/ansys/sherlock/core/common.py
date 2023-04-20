@@ -29,7 +29,7 @@ class Common(GrpcStub):
             return True
 
     def is_sherlock_client_loading(self):
-        """Checks if the Sherlock Client (if opened) is still initializing."""
+        """Check if the Sherlock Client (if opened) is still initializing."""
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
             return
@@ -77,7 +77,6 @@ class Common(GrpcStub):
             THERMAL_CONDUCTIVITY, THERMAL_RESISTANCE, TIME, VELOCITY, VELOCITY_DENSITY, VOLTAGE,
             VOLUME, WEIGHT
         """
-
         if unitType == "":
             raise SherlockCommonServiceError(message="Missing valid unit type")
         elif unitType == "ACCEL_DENSITY":
@@ -143,9 +142,7 @@ class Common(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return ""
 
-        request = SherlockCommonService_pb2.ListUnitsRequest(
-            unitType=unitType
-        )
+        request = SherlockCommonService_pb2.ListUnitsRequest(unitType=unitType)
 
         try:
             response = self.stub.listUnits(request)

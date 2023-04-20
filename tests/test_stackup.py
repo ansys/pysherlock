@@ -2,9 +2,9 @@ import grpc
 
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
+    SherlockListConductorLayersError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-    SherlockListConductorLayersError
 )
 from ansys.sherlock.core.stackup import Stackup
 
@@ -511,8 +511,8 @@ def helper_test_update_conductor_layer(stackup):
             assert False
         except SherlockUpdateConductorLayerError as e:
             assert (
-                    str(e) == "Update conductor layer error: Invalid conductor thickness "
-                              "unit provided"
+                str(e) == "Update conductor layer error: Invalid conductor thickness "
+                "unit provided"
             )
 
     try:
@@ -910,6 +910,7 @@ def helper_test_update_laminate_layer(stackup):
             " it must be between 0 and 100"
         )
 
+
 def helper_test_list_conductor_layers(stackup):
     """Test list_conductor_layers API"""
     try:
@@ -917,6 +918,7 @@ def helper_test_list_conductor_layers(stackup):
         assert False
     except SherlockListConductorLayersError as e:
         assert str(e) == "List conductor layer error: Invalid project name"
+
 
 if __name__ == "__main__":
     test_all()

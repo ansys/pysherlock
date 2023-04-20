@@ -14,17 +14,17 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'Log level'     
+        description: 'Log level'
         required: true
-        default: 'warning' 
+        default: 'warning'
         type: choice
         options:
         - info
         - warning
-        - debug 
+        - debug
       tags:
         description: 'Test scenario tags'
-        required: false 
+        required: false
         type: boolean
 
 permissions:
@@ -41,7 +41,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: '3.x'
-        
+
     - name: 'Upload to PyPi'
       #if: contains(github.ref, 'refs/tags')
       run: |

@@ -68,14 +68,14 @@ class Project(GrpcStub):
             raise e
 
     def import_odb_archive(
-            self,
-            archive_file,
-            process_layer_thickness,
-            include_other_layers,
-            process_cutout_file,
-            guess_part_properties,
-            project=None,
-            cca_name=None
+        self,
+        archive_file,
+        process_layer_thickness,
+        include_other_layers,
+        process_cutout_file,
+        guess_part_properties,
+        project=None,
+        cca_name=None,
     ):
         """Import an ODB++ archive.
 
@@ -147,12 +147,7 @@ class Project(GrpcStub):
             raise e
 
     def import_ipc2581_archive(
-            self,
-            archive_file,
-            include_other_layers,
-            guess_part_properties,
-            project=None,
-            cca_name=None
+        self, archive_file, include_other_layers, guess_part_properties, project=None, cca_name=None
     ):
         """Import an IPC2581 archive.
 
@@ -216,13 +211,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def generate_project_report(
-            self,
-            project,
-            author,
-            company,
-            export_file
-    ):
+    def generate_project_report(self, project, author, company, export_file):
         """Generate a project report.
 
         Parameters
@@ -296,7 +285,12 @@ class Project(GrpcStub):
             raise e
 
     def list_ccas(self, project, cca_names=None):
-        """Returns the available CCA's and sub-assembly CCA's assigned to each CCA or the requested
+        """
+        Return a list of the available CCA's according to inputs.
+
+        Notes
+        -----
+        Return the available CCA's and sub-assembly CCA's assigned to each CCA or the requested
         CCA's from the given project.
 
         Parameters
@@ -311,7 +305,6 @@ class Project(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>> ccas = project.list_ccas("AssemblyTutorial",["Main Board"])
         """
-
         try:
             if project == "":
                 raise SherlockListCCAsError(message="Invalid project name")
@@ -323,9 +316,7 @@ class Project(GrpcStub):
                 LOG.error("Not connected to a gRPC service.")
                 return
 
-            request = SherlockProjectService_pb2.ListCCAsRequest(
-                project=project
-            )
+            request = SherlockProjectService_pb2.ListCCAsRequest(project=project)
 
             """Add the CCA names to the request"""
             if cca_names is not None:
@@ -349,7 +340,7 @@ class Project(GrpcStub):
         return response.ccas
 
     def add_strain_maps(self, project, strain_maps):
-        """Adds strain map CSV files to the CCA's of the given project.
+        """Add strain map CSV files to the CCA's of the given project.
 
         Parameters
         ----------
@@ -386,7 +377,6 @@ class Project(GrpcStub):
             ["Main Board"])
             )],
         """
-
         try:
             if project == "":
                 raise SherlockAddStrainMapsError(message="Invalid project name")
@@ -401,9 +391,7 @@ class Project(GrpcStub):
                         f"Wrong number of args {str(len(strain_maps))} for strain map {i}"
                     )
                 elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"File path is required for strain map {i}"
-                    )
+                    raise SherlockAddStrainMapsError(f"File path is required for strain map {i}")
                 elif not isinstance(strain_map[2], int) or strain_map[2] == "":
                     raise SherlockAddStrainMapsError(
                         f"Header row count is required for strain map {i}"
@@ -428,8 +416,11 @@ class Project(GrpcStub):
                     raise SherlockAddStrainMapsError(
                         f"Invalid strain units '{strain_map[5]}' specified for strain map {i}"
                     )
-                elif len(strain_maps) == 7 and strain_map[6] is not None and \
-                        type(strain_map[6]) is not list:
+                elif (
+                    len(strain_maps) == 7
+                    and strain_map[6] is not None
+                    and type(strain_map[6]) is not list
+                ):
                     raise SherlockAddStrainMapsError(
                         message="cca_names is not a list for strain map {i}"
                     )
@@ -445,9 +436,7 @@ class Project(GrpcStub):
                 LOG.error("Not connected to a gRPC service.")
                 return
 
-            request = SherlockProjectService_pb2.AddStrainMapRequest(
-                project=project
-            )
+            request = SherlockProjectService_pb2.AddStrainMapRequest(project=project)
 
             # Add the strain maps to the request
             for s in strain_maps:
@@ -482,8 +471,7 @@ class Project(GrpcStub):
             raise e
 
     def list_strain_maps(self, project, cca_names=None):
-        """Returns the available strain maps assigned to each CCA or the requested CCA's from
-         the given project.
+        """Return the strain maps assigned to each CCA or the requested CCA's from the project.
 
         Parameters
         ----------
@@ -498,7 +486,6 @@ class Project(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>> strain_maps = project.list_strain_maps("AssemblyTutorial",["Main Board","Power Module"])
         """
-
         try:
             if project == "":
                 raise SherlockListStrainMapsError(message="Invalid project name")
@@ -510,9 +497,7 @@ class Project(GrpcStub):
                 LOG.error("Not connected to a gRPC service.")
                 return
 
-            request = SherlockProjectService_pb2.ListStrainMapsRequest(
-                project=project
-            )
+            request = SherlockProjectService_pb2.ListStrainMapsRequest(project=project)
 
             """Add the CCA names to the request"""
             if cca_names is not None:

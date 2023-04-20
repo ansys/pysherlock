@@ -1,8 +1,8 @@
+import os
 import platform
+import unittest
 
 import grpc
-import os
-import unittest
 
 from ansys.sherlock.core.model import Model
 
@@ -14,9 +14,9 @@ class TestModel(unittest.TestCase):
         instance = Model(channel)
 
         if platform.system() == "Windows":
-            temp_dir = os.environ.get('TEMP', 'C:\\TEMP')
+            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
         else:
-            temp_dir = os.environ.get('TEMP', "/tmp")
+            temp_dir = os.environ.get("TEMP", "/tmp")
 
         try:
             if platform.system() == "Windows":
@@ -29,8 +29,8 @@ class TestModel(unittest.TestCase):
                 )
         except Exception as e:
             assert (
-                    str(e) == "Sherlock model service error: Export file directory"
-                              " (" + temp_dir + ") does not exist"
+                str(e) == "Sherlock model service error: Export file directory"
+                " (" + temp_dir + ") does not exist"
             )
 
 

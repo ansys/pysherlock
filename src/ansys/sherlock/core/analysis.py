@@ -17,10 +17,9 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidPhaseError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
-    SherlockUpdateRandomVibePropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdateRandomVibePropsError,
 )
-
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -68,7 +67,7 @@ class Analysis(GrpcStub):
             "performNFFreqRangeCheck": "perform_nf_freq_range_check",
             "requireMaterialAssignmentEnabled": "require_material_assignment_enabled",
             "modelSource": "model_source",
-            "strainMapNaturalFreqs": "strain_map_natural_freqs"
+            "strainMapNaturalFreqs": "strain_map_natural_freqs",
         }
 
     def _init_freq_units(self):
@@ -127,10 +126,10 @@ class Analysis(GrpcStub):
                 raise SherlockInvalidPhaseError(f"Invalid phase {i}: Invalid event(s) name")
 
     def run_analysis(
-            self,
-            project,
-            cca_name,
-            analyses,
+        self,
+        project,
+        cca_name,
+        analyses,
     ):
         """Run one or more Sherlock analysis.
 
@@ -209,7 +208,7 @@ class Analysis(GrpcStub):
             raise e
 
     def get_random_vibe_input_fields(self, model_source=None):
-        """Returns the list of valid Random Vibe property fields based on the user configuration.
+        """Return the list of valid Random Vibe property fields based on the user configuration.
 
         Parameters
         ----------
@@ -231,7 +230,6 @@ class Analysis(GrpcStub):
         )
         >>> sherlock.analysis.get_random_vibe_input_fields()
         """
-
         if model_source is None or model_source == "GENERATED":
             model_source = SherlockAnalysisService_pb2.ModelSource.GENERATED
         elif model_source == "STRAIN_MAP":
@@ -258,30 +256,30 @@ class Analysis(GrpcStub):
     def _translate_field_names(self, names_list):
         names = ""
         for name in list(names_list):
-            names = names + '\n' + self.FIELD_NAMES.get(name)
+            names = names + "\n" + self.FIELD_NAMES.get(name)
 
         return names
 
     def update_random_vibe_props(
-            self,
-            project,
-            cca_name,
-            random_vibe_damping=None,
-            natural_freq_min=None,
-            natural_freq_min_units=None,
-            natural_freq_max=None,
-            natural_freq_max_units=None,
-            analysis_temp=None,
-            analysis_temp_units=None,
-            part_validation_enabled=None,
-            force_model_rebuild=None,
-            reuse_modal_analysis=None,
-            perform_nf_freq_range_check=None,
-            require_material_assignment_enabled=None,
-            model_source=None,
-            strain_map_natural_freqs=None
+        self,
+        project,
+        cca_name,
+        random_vibe_damping=None,
+        natural_freq_min=None,
+        natural_freq_min_units=None,
+        natural_freq_max=None,
+        natural_freq_max_units=None,
+        analysis_temp=None,
+        analysis_temp_units=None,
+        part_validation_enabled=None,
+        force_model_rebuild=None,
+        reuse_modal_analysis=None,
+        perform_nf_freq_range_check=None,
+        require_material_assignment_enabled=None,
+        model_source=None,
+        strain_map_natural_freqs=None,
     ):
-        """Updates the properties for Random Vibe analysis.
+        """Update the properties for Random Vibe analysis.
 
         Parameters
         ----------
@@ -352,33 +350,39 @@ class Analysis(GrpcStub):
             if cca_name == "":
                 raise SherlockUpdateRandomVibePropsError(message="Invalid cca name")
             if random_vibe_damping is not None:
-                for value in random_vibe_damping.split(','):
+                for value in random_vibe_damping.split(","):
                     try:
                         float(value.strip())
                     except ValueError:
                         raise SherlockUpdateRandomVibePropsError(
-                            message="Invalid random vibe damping value: " +
-                                    value.strip())
-            if (self.FREQ_UNIT_LIST is not None) and \
-                    (natural_freq_min_units is not None) and \
-                    (natural_freq_min_units not in self.FREQ_UNIT_LIST):
+                            message="Invalid random vibe damping value: " + value.strip()
+                        )
+            if (
+                (self.FREQ_UNIT_LIST is not None)
+                and (natural_freq_min_units is not None)
+                and (natural_freq_min_units not in self.FREQ_UNIT_LIST)
+            ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Invalid min natural freq unit specified: " +
-                            natural_freq_min_units)
+                    message="Invalid min natural freq unit specified: " + natural_freq_min_units
+                )
 
-            if (self.FREQ_UNIT_LIST is not None) and \
-                    (natural_freq_max_units is not None) and \
-                    (natural_freq_max_units not in self.FREQ_UNIT_LIST):
+            if (
+                (self.FREQ_UNIT_LIST is not None)
+                and (natural_freq_max_units is not None)
+                and (natural_freq_max_units not in self.FREQ_UNIT_LIST)
+            ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Invalid max natural freq unit specified: " +
-                            natural_freq_max_units)
+                    message="Invalid max natural freq unit specified: " + natural_freq_max_units
+                )
 
-            if (self.TEMP_UNIT_LIST is not None) and \
-                    (analysis_temp_units is not None) and \
-                    (analysis_temp_units not in self.TEMP_UNIT_LIST):
+            if (
+                (self.TEMP_UNIT_LIST is not None)
+                and (analysis_temp_units is not None)
+                and (analysis_temp_units not in self.TEMP_UNIT_LIST)
+            ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Invalid analysis temperature unit specified: " +
-                            analysis_temp_units)
+                    message="Invalid analysis temperature unit specified: " + analysis_temp_units
+                )
 
             if model_source is None or model_source == "GENERATED":
                 model_source = SherlockAnalysisService_pb2.ModelSource.GENERATED
@@ -389,8 +393,9 @@ class Analysis(GrpcStub):
                     message=f"Invalid model source {model_source} specified"
                 )
 
-            if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP and \
-                    (strain_map_natural_freqs is None or strain_map_natural_freqs == ""):
+            if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP and (
+                strain_map_natural_freqs is None or strain_map_natural_freqs == ""
+            ):
                 raise SherlockUpdateRandomVibePropsError(
                     message=f"No natural frequenices defined for strain map analysis"
                 )
@@ -418,7 +423,7 @@ class Analysis(GrpcStub):
             reuseModalAnalysis=reuse_modal_analysis,
             performNFFreqRangeCheck=perform_nf_freq_range_check,
             requireMaterialAssignmentEnabled=require_material_assignment_enabled,
-            modelSource=model_source
+            modelSource=model_source,
         )
 
         if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP:
@@ -437,8 +442,7 @@ class Analysis(GrpcStub):
             raise e
 
     def get_natural_frequency_input_fields(self):
-        """Returns the list of valid Natural Frequency property fields based
-        on the user configuration.
+        """Return the list of valid Natural Frequency property fields based on user configuration.
 
         Examples
         --------
@@ -454,8 +458,7 @@ class Analysis(GrpcStub):
                 cca_name="Card",
             )
             >>> sherlock.analysis.get_natural_frequency_input_fields()
-            """
-
+        """
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
             return
@@ -465,20 +468,20 @@ class Analysis(GrpcStub):
         LOG.info(self._translate_field_names(response.fieldName))
 
     def update_natural_frequency_props(
-            self,
-            project,
-            cca_name,
-            natural_freq_count,
-            natural_freq_min,
-            natural_freq_min_units,
-            natural_freq_max,
-            natural_freq_max_units,
-            part_validation_enabled,
-            require_material_assignment_enabled,
-            analysis_temp=None,
-            analysis_temp_units=None
+        self,
+        project,
+        cca_name,
+        natural_freq_count,
+        natural_freq_min,
+        natural_freq_min_units,
+        natural_freq_max,
+        natural_freq_max_units,
+        part_validation_enabled,
+        require_material_assignment_enabled,
+        analysis_temp=None,
+        analysis_temp_units=None,
     ):
-        """Updates the properties for Natural Frequency analysis.
+        """Update the properties for Natural Frequency analysis.
 
         Parameters
         ----------
@@ -543,21 +546,24 @@ class Analysis(GrpcStub):
                 raise SherlockUpdateNaturalFrequencyPropsError(message="Invalid project name")
             if cca_name == "":
                 raise SherlockUpdateNaturalFrequencyPropsError(message="Invalid cca name")
-            if (self.FREQ_UNIT_LIST is not None) and \
-                    (natural_freq_min_units not in self.FREQ_UNIT_LIST):
+            if (self.FREQ_UNIT_LIST is not None) and (
+                natural_freq_min_units not in self.FREQ_UNIT_LIST
+            ):
                 raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Invalid min natural freq unit specified: " +
-                            natural_freq_min_units)
-            if (self.FREQ_UNIT_LIST is not None) and \
-                    (natural_freq_max_units not in self.FREQ_UNIT_LIST):
+                    message="Invalid min natural freq unit specified: " + natural_freq_min_units
+                )
+            if (self.FREQ_UNIT_LIST is not None) and (
+                natural_freq_max_units not in self.FREQ_UNIT_LIST
+            ):
                 raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Invalid max natural freq unit specified: " +
-                            natural_freq_max_units)
-            if (self.TEMP_UNIT_LIST is not None) and \
-                    (analysis_temp_units not in self.TEMP_UNIT_LIST):
+                    message="Invalid max natural freq unit specified: " + natural_freq_max_units
+                )
+            if (self.TEMP_UNIT_LIST is not None) and (
+                analysis_temp_units not in self.TEMP_UNIT_LIST
+            ):
                 raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Invalid analysis temperature unit specified: " +
-                            analysis_temp_units)
+                    message="Invalid analysis temperature unit specified: " + analysis_temp_units
+                )
         except SherlockUpdateNaturalFrequencyPropsError as e:
             LOG.error(str(e))
             raise e
@@ -577,7 +583,7 @@ class Analysis(GrpcStub):
             partValidationEnabled=part_validation_enabled,
             requireMaterialAssignmentEnabled=require_material_assignment_enabled,
             analysisTemp=analysis_temp,
-            analysisTempUnits=analysis_temp_units
+            analysisTempUnits=analysis_temp_units,
         )
 
         response = self.stub.updateNaturalFreqencyProps(request)
@@ -593,10 +599,10 @@ class Analysis(GrpcStub):
             raise e
 
     def run_strain_map_analysis(
-            self,
-            project,
-            cca_name,
-            strain_map_analyses,
+        self,
+        project,
+        cca_name,
+        strain_map_analyses,
     ):
         """Run one or more Sherlock strain map analysis.
 
@@ -639,14 +645,10 @@ class Analysis(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockRunStrainMapAnalysisError(
-                    message="Invalid project name specified"
-                )
+                raise SherlockRunStrainMapAnalysisError(message="Invalid project name specified")
 
             if cca_name == "":
-                raise SherlockRunStrainMapAnalysisError(
-                    message="Invalid CCA name specified"
-                )
+                raise SherlockRunStrainMapAnalysisError(message="Invalid CCA name specified")
 
             if not isinstance(strain_map_analyses, list):
                 raise SherlockRunStrainMapAnalysisError("Invalid analyses argument")
@@ -660,7 +662,6 @@ class Analysis(GrpcStub):
             )
 
             for i, analysis in enumerate(strain_map_analyses):
-
                 if not isinstance(analysis, list):
                     raise SherlockRunStrainMapAnalysisError(
                         f"Invalid analysis argument for strain map analysis {i}"
@@ -677,8 +678,9 @@ class Analysis(GrpcStub):
                         f"Missing analysis type for strain map analysis {i}"
                     )
                 elif analysis_type == "RANDOMVIBE":
-                    analysis_type = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest. \
-                        StrainMapAnalysis.AnalysisType.RandomVibe
+                    analysis_type = (
+                        SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe  # noqa: E501
+                    )
                 else:
                     raise SherlockRunStrainMapAnalysisError(
                         f"Invalid analysis type {analysis_type} for strain map analysis {i}"
@@ -693,7 +695,6 @@ class Analysis(GrpcStub):
                     )
 
                 for j, event_strain_map in enumerate(analysis[1]):
-
                     if not isinstance(event_strain_map, list):
                         raise SherlockRunStrainMapAnalysisError(
                             f"Invalid event strain map argument for strain map analysis {i}"

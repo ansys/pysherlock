@@ -3,11 +3,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
-from ansys.sherlock.core import __version__
+from ansys_sphinx_theme import ansys_logo_black
 
-from ansys_sphinx_theme import (
-    ansys_logo_black,
-)
+from ansys.sherlock.core import __version__
 
 # Project information
 project = "pysherlock"
@@ -33,7 +31,7 @@ extensions = [
     "sphinx.ext.intersphinx",
 ]
 
-autodoc_default_flags = ['members']
+autodoc_default_flags = ["members"]
 autosummary_generate = True
 
 # Numpydoc config

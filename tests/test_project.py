@@ -115,15 +115,17 @@ def helper_test_add_strain_maps(project):
     try:
         project.add_strain_maps(
             "",
-            [(
-                "StrainMap.csv",
-                "",
-                0,
-                "SolidID",
-                "PCB Strain",
-                "µε",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
@@ -132,15 +134,17 @@ def helper_test_add_strain_maps(project):
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "",
-                "",
-                0,
-                "SolidID",
-                "PCB Strain",
-                "µε",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "",
+                    "",
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
@@ -149,70 +153,84 @@ def helper_test_add_strain_maps(project):
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "StrainMap.csv",
-                "",
-                "0",  # Not an integer
-                "SolidID",
-                "PCB Strain",
-                "µε",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    "0",  # Not an integer
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: " \
-                                 "Header row count is required for strain map 0"
+        assert (
+            e.str_itr()[0] == "Add strain maps error: "
+            "Header row count is required for strain map 0"
+        )
 
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "StrainMap.csv",
-                "",
-                -1,
-                "SolidID",
-                "PCB Strain",
-                "µε",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    -1,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: " \
-                                 "Header row count must be greater than or equal " \
-                                 "to 0 for strain map 0"
+        assert (
+            e.str_itr()[0] == "Add strain maps error: "
+            "Header row count must be greater than or equal "
+            "to 0 for strain map 0"
+        )
 
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "StrainMap.csv",
-                "",
-                0,
-                "",
-                "PCB Strain",
-                "µε",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    0,
+                    "",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: Reference ID column is required " \
-                                 "for strain map 0"
+        assert (
+            e.str_itr()[0] == "Add strain maps error: Reference ID column is required "
+            "for strain map 0"
+        )
 
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "StrainMap.csv",
-                "",
-                0,
-                "SolidID",
-                "",
-                "µε",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    0,
+                    "SolidID",
+                    "",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
@@ -221,15 +239,17 @@ def helper_test_add_strain_maps(project):
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "StrainMap.csv",
-                "",
-                0,
-                "SolidID",
-                "Strain",
-                "",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    0,
+                    "SolidID",
+                    "Strain",
+                    "",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
@@ -238,34 +258,40 @@ def helper_test_add_strain_maps(project):
     try:
         project.add_strain_maps(
             "Tutorial Project",
-            [(
-                "StrainMap.csv",
-                "",
-                0,
-                "SolidID",
-                "Strain",
-                "BAD",
-                ["Main Board"],
-            )],
+            [
+                (
+                    "StrainMap.csv",
+                    "",
+                    0,
+                    "SolidID",
+                    "Strain",
+                    "BAD",
+                    ["Main Board"],
+                )
+            ],
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: Invalid strain units 'BAD' " \
-                                 "specified for strain map 0"
+        assert (
+            e.str_itr()[0] == "Add strain maps error: Invalid strain units 'BAD' "
+            "specified for strain map 0"
+        )
 
     if project._is_connection_up():
         try:
             project.add_strain_maps(
                 "Tutorial Project",
-                [(
-                    "C:/Users/pwalters/Source/Sherlock/dist/tutorial/StrainMaps/StrainMap.csv",
-                    "",
-                    0,
-                    "SolidID",
-                    "PCB Strain",
-                    "µε",
-                    ["Main Board"],
-                )],
+                [
+                    (
+                        "C:/Users/pwalters/Source/Sherlock/dist/tutorial/StrainMaps/StrainMap.csv",
+                        "",
+                        0,
+                        "SolidID",
+                        "PCB Strain",
+                        "µε",
+                        ["Main Board"],
+                    )
+                ],
             )
             assert True
         except SherlockAddStrainMapsError as e:

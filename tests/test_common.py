@@ -1,10 +1,7 @@
-
 import grpc
 
-from ansys.sherlock.core.errors import (
-    SherlockCommonServiceError,
-)
 from ansys.sherlock.core.common import Common
+from ansys.sherlock.core.errors import SherlockCommonServiceError
 
 
 def test_all():
@@ -47,43 +44,43 @@ def helper_test_list_units(common):
     units = common.list_units("DISP_DENSITY")
     assert len(units) == 4 and "m2/Hz" in units
     units = common.list_units("FORCE")
-    assert len(units) == 5 and 'N' in units
+    assert len(units) == 5 and "N" in units
     units = common.list_units("FREQUENCY")
-    assert len(units) == 4 and 'HZ' in units
+    assert len(units) == 4 and "HZ" in units
     units = common.list_units("INDUCTANCE")
-    assert len(units) == 5 and 'H' in units
+    assert len(units) == 5 and "H" in units
     units = common.list_units("LENGTH")
-    assert len(units) == 6 and 'in' in units
+    assert len(units) == 6 and "in" in units
     units = common.list_units("POWER")
-    assert len(units) == 12 and 'pW' in units
+    assert len(units) == 12 and "pW" in units
     units = common.list_units("RESISTANCE")
-    assert len(units) == 11 and 'picoOhm' in units
+    assert len(units) == 11 and "picoOhm" in units
     units = common.list_units("SIZE")
-    assert len(units) == 18 and 'bit' in units
+    assert len(units) == 18 and "bit" in units
     units = common.list_units("SPECIFIC_HEAT")
-    assert len(units) == 5 and 'J/kg-C' in units
+    assert len(units) == 5 and "J/kg-C" in units
     units = common.list_units("STRAIN")
-    assert len(units) == 3 and 'µε' in units
+    assert len(units) == 3 and "µε" in units
     units = common.list_units("STRESS")
-    assert len(units) == 5 and 'MPA' in units
+    assert len(units) == 5 and "MPA" in units
     units = common.list_units("TEMPERATURE")
-    assert len(units) == 3 and 'C' in units
+    assert len(units) == 3 and "C" in units
     units = common.list_units("THERMAL_CONDUCTIVITY")
-    assert len(units) == 7 and 'W/m-K' in units
+    assert len(units) == 7 and "W/m-K" in units
     units = common.list_units("THERMAL_RESISTANCE")
-    assert len(units) == 1 and 'C/W' in units
+    assert len(units) == 1 and "C/W" in units
     units = common.list_units("TIME")
-    assert len(units) == 6 and 'ms' in units
+    assert len(units) == 6 and "ms" in units
     units = common.list_units("VELOCITY")
-    assert len(units) == 4 and 'm/s' in units
+    assert len(units) == 4 and "m/s" in units
     units = common.list_units("VELOCITY_DENSITY")
-    assert len(units) == 4 and 'm2/s2/Hz' in units
+    assert len(units) == 4 and "m2/s2/Hz" in units
     units = common.list_units("VOLTAGE")
-    assert len(units) == 11 and 'pV' in units
+    assert len(units) == 11 and "pV" in units
     units = common.list_units("VOLUME")
-    assert len(units) == 6 and 'cc' in units
+    assert len(units) == 6 and "cc" in units
     units = common.list_units("WEIGHT")
-    assert len(units) == 5 and 'mg' in units
+    assert len(units) == 5 and "mg" in units
 
 
 if __name__ == "__main__":

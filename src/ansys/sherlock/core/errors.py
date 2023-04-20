@@ -78,8 +78,10 @@ class SherlockListCCAsError(Exception):
         """Format error message."""
         return f"List CCAs error: {self.message}"
 
+
 class SherlockListConductorLayersError(Exception):
     """Raised when listing project conductor layers results in an error."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -87,6 +89,7 @@ class SherlockListConductorLayersError(Exception):
     def __str__(self):
         """Format error message."""
         return f"List conductor layer error: {self.message}"
+
 
 class SherlockAddStrainMapsError(Exception):
     """Raised when adding strain maps for a project results in an error."""
