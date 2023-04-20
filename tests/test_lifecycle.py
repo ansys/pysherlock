@@ -995,7 +995,8 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
             assert False
         except SherlockAddHarmonicVibeProfilesError as e:
             assert e.str_itr()[0] == "Add harmonic vibe profiles error:" \
-                                     "Frequency unit badUnits is invalid for harmonic vibe profile 0."
+                                     "Frequency unit badUnits is invalid for harmonic " \
+                                     "vibe profile 0."
 
         try:
             lifecycle.add_harmonic_vibe_profiles(
