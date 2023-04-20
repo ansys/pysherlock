@@ -1,26 +1,64 @@
+"""Sphinx documentation configuration file."""
+from datetime import datetime
 import os
-import sys
 
-sys.path.insert(0, os.path.abspath("../../src"))
-
-from ansys_sphinx_theme import ansys_logo_black
+from ansys_sphinx_theme import (
+    ansys_favicon,
+    ansys_logo_white,
+    ansys_logo_white_cropped,
+    get_version_match,
+    latex,
+    pyansys_logo_black,
+    watermark,
+)
+from sphinx.builders.latex import LaTeXBuilder
 
 from ansys.sherlock.core import __version__
 
+LaTeXBuilder.supported_image_types = ["image/png", "image/pdf", "image/svg+xml"]
+
 # Project information
-project = "pysherlock"
-copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
+project = "ansys-sherlock-core"
+copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS Inc."
 release = version = __version__
+cname = os.getenv("DOCUMENTATION_CNAME", default="nocname.com")
+switcher_version = get_version_match(__version__)
 
-# use the default ansys logo
-html_logo = ansys_logo_black
+# Select desired logo, theme, and declare the html title
+html_logo = pyansys_logo_black
 html_theme = "ansys_sphinx_theme"
+html_short_title = html_title = "PySherlock"
+html_favicon = ansys_favicon
 
 # specify the location of your github repo
+html_context = {
+    "github_user": "pyansys",
+    "github_repo": "pysherlock",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/ansys-sphinx-theme",
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": switcher_version,
+    },
+    "check_switcher": False,
+    "github_url": "https://github.com/pyansys/pysherlock",
     "show_prev_next": False,
+    "show_breadcrumbs": True,
+    "collapse_navigation": True,
+    "use_edit_page_button": True,
+    "additional_breadcrumbs": [
+        ("PyAnsys", "https://docs.pyansys.com/"),
+    ],
+    "icon_links": [
+        {
+            "name": "Support",
+            "url": "https://github.com/pyansys/pysherlock/discussions",
+            "icon": "fa fa-comment fa-fw",
+        },
+    ],
 }
 
 # Sphinx extensions
@@ -68,3 +106,10 @@ autodoc_mock_imports = [
     "SherlockAnalysisService_pb2",
     "SherlockAnalysisService_pb2_grpc",
 ]
+
+# additional logos for the latex coverpage
+latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
+
+# change the preamble of latex with customized title page
+# variables are the title of pdf, watermark
+latex_elements = {"preamble": latex.generate_preamble(html_title)}
