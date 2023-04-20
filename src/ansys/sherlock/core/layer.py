@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module containing all the layer management capabilities."""
+"""Module containing all layer management capabilities."""
 
 import os
 
@@ -30,16 +30,17 @@ class Layer(GrpcStub):
             cca_name,
             file_path,
     ):
-        """Update mount points properties of a CCA from a CSV formatted file.
+        """Update mount point properties of a CCA from a CSV file.
 
         Parameters
         ----------
         project : str, required
-            Sherlock project name
+            Name of the sherlock project.
         cca_name : str, required
-            The cca name
+            CCA name.
         file_path : str, required
-            The filepath of the CSV file containing the mount points properties
+            Filepath of the CSV file with the mount point properties.
+        
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -71,18 +72,18 @@ class Layer(GrpcStub):
 
         try:
             if file_path == "":
-                raise SherlockUpdateMountPointsByFileError(message="File path required")
+                raise SherlockUpdateMountPointsByFileError(message="File path is required.")
             if len(file_path) <= 1 or file_path[1] != ":":
                 file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdateMountPointsByFileError("Invalid file path")
+                raise SherlockUpdateMountPointsByFileError("File path is invalid.")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockLayerService_pb2.UpdateMountPointsByFileRequest(
