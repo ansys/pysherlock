@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """Version of ansys-sherlock-core module.
 
 On the ``main`` branch, use 'dev0' to denote a development version.

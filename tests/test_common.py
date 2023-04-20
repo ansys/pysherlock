@@ -1,3 +1,4 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 import grpc
 
