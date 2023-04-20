@@ -16,4 +16,5 @@ The ``stackup`` contains all stackup management capabilities.
      ansys.sherlock.core.stackup.Stackup.list_conductor_layers
      ansys.sherlock.core.stackup.Stackup.list_laminate_layers
      ansys.sherlock.core.stackup.Stackup.get_stackup_props,
+     ansys.sherlock.core.stackup.Stackup.get_layer_count,
      ansys.sherlock.core.stackup.Stackup.get_layer_count
