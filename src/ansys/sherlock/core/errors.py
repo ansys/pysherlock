@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """pysherlock specific errors."""
 
 from builtins import Exception

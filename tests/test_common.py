@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 import grpc
 
 from ansys.sherlock.core.common import Common

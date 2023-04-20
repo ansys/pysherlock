@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """Module for running the gRPC APIs in the SherlockCommonService."""
 try:
     import SherlockCommonService_pb2
