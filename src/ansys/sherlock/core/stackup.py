@@ -433,8 +433,8 @@ class Stackup(GrpcStub):
             if (type != "") and type not in self.LAYER_TYPE_LIST:
                 raise SherlockUpdateConductorLayerError(
                     message=(
-                        "Conductor type is invalid. "
-                        "Options are "SIGNAL", "POWER", and "SUBSTRATE"."
+                        "Conductor type is invalid. " \
+                        "Options are SIGNAL, POWER, and SUBSTRATE."
                     )
                 )
             if material != "":
@@ -584,7 +584,7 @@ class Stackup(GrpcStub):
             if project == "":
                 raise SherlockUpdateLaminateLayerError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockUpdateLaminateLayerError(message="CCA name is invalid")
+                raise SherlockUpdateLaminateLayerError(message="CCA name is invalid.")
             self._check_layer_id(layer, spec="laminate")
             if manufacturer != "":
                 self._check_pcb_material_validity(manufacturer, grade, material)

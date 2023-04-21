@@ -299,7 +299,7 @@ def helper_test_add_random_vibe_profiles(lifecycle):
             assert False
         except SherlockAddRandomVibeProfilesError as e:
             assert e.str_itr()[0] == "Add random vibe profiles error: " \
-                                     "Frequency unit per second is invalid for random vibe" \
+                                     "Frequency units of seconds are invalid for random vibe " \
                                      "profile 0."
 
         try:
@@ -530,7 +530,7 @@ def helper_test_add_thermal_profiles(lifecycle):
         except SherlockAddThermalProfilesError as e:
             assert e.str_itr()[0] == \
                    "Add thermal profiles error: Temperature unit of IDK is invalid for " \
-                "thermal profile 0."
+                   "thermal profile 0."
 
     try:
         lifecycle.add_thermal_profiles(
@@ -996,7 +996,7 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
             assert False
         except SherlockAddHarmonicVibeProfilesError as e:
             assert e.str_itr()[0] == "Add harmonic vibe profiles error:" \
-                                     "Frequency unit badUnits is invalid for harmonic " \
+                                     "Frequency units badUnits are invalid for harmonic " \
                                      "vibe profile 0."
 
         try:
@@ -1018,7 +1018,7 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
             assert False
         except SherlockAddHarmonicVibeProfilesError as e:
             assert e.str_itr()[0] == "Add harmonic vibe profiles error:" \
-                                     " Load unit badUnits is invalid for harmonic vibe profile 0."
+                                     " Load units badUnits are invalid for harmonic vibe profile 0."
 
     try:
         lifecycle.add_harmonic_vibe_profiles(
@@ -1060,8 +1060,8 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
         )
         assert False
     except SherlockAddHarmonicVibeProfilesError as e:
-        assert e.str_itr()[0] == "Add harmonic vibe profiles error:" \
-                                 " Invalid entry 1: Frequency or load is invalid for " \
+        assert e.str_itr()[0] == "Add harmonic vibe profiles error: " \
+                                 "Invalid entry 1: Frequency or load is invalid for " \
                                  "harmonic vibe profile 0."
 
     try:
@@ -1300,7 +1300,7 @@ def helper_test_add_shock_profiles(lifecycle):
         assert False
     except SherlockAddShockProfilesError as e:
         assert e.str_itr()[0] == "Add shock profiles error: Phase name is invalid for " \
-                                  "shock profile 0."
+                                 "shock profile 0."
 
     try:
         lifecycle.add_shock_profiles(
@@ -1319,7 +1319,7 @@ def helper_test_add_shock_profiles(lifecycle):
         assert False
     except SherlockAddShockProfilesError as e:
         assert e.str_itr()[0] == "Add shock profiles error: Event name is invalid for " \
-                                  "shock profile 0."
+                                 "shock profile 0."
 
     try:
         lifecycle.add_shock_profiles(
@@ -1396,7 +1396,7 @@ def helper_test_add_shock_profiles(lifecycle):
             assert False
         except SherlockAddShockProfilesError as e:
             assert e.str_itr()[0] == "Add shock profiles error:" \
-                                     " Duration unit unitsInvalid is invalid for shock profile 0."
+                                     " Duration units unitsInvalid are invalid for shock profile 0."
 
         try:
             lifecycle.add_shock_profiles(
@@ -1415,7 +1415,7 @@ def helper_test_add_shock_profiles(lifecycle):
             assert False
         except SherlockAddShockProfilesError as e:
             assert e.str_itr()[0] == "Add shock profiles error:" \
-                                     " Sample rate unit unitsInvalid is invalid for " \
+                                     " Sample rate units unitsInvalid are invalid for " \
                                       "shock profile 0."
 
         try:
@@ -1435,7 +1435,7 @@ def helper_test_add_shock_profiles(lifecycle):
             assert False
         except SherlockAddShockProfilesError as e:
             assert e.str_itr()[0] == "Add shock profiles error:" \
-                                     " Load unit unitInvalid is invalid for shock profile 0."
+                                     " Load units unitInvalid are invalid for shock profile 0."
 
         try:
             lifecycle.add_shock_profiles(
@@ -1454,7 +1454,7 @@ def helper_test_add_shock_profiles(lifecycle):
             assert False
         except SherlockAddShockProfilesError as e:
             assert e.str_itr()[0] == "Add shock profiles error:" \
-                                     " Frequency unit badFreq is invalid for shock profile 0."
+                                     " Frequency units badFreq are invalid for shock profile 0."
 
     try:
         lifecycle.add_shock_profiles(

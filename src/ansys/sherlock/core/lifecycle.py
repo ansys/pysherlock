@@ -203,7 +203,7 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 4:
                     raise SherlockInvalidThermalProfileEntriesError(
-                        f"Invalid entry {i}: WNumber of arguments is  wrong."
+                        f"Invalid entry {i}: Number of arguments is wrong."
                     )
                 if not isinstance(entry[0], str):
                     raise SherlockInvalidThermalProfileEntriesError(
@@ -695,7 +695,7 @@ class Lifecycle(GrpcStub):
                     ((self.FREQ_UNIT_LIST is not None) and
                      (profile_entry[3] not in self.FREQ_UNIT_LIST)):
                     raise SherlockAddRandomVibeProfilesError(
-                        f"Frequency unit {profile_entry[3]} is invalid for random vibe profile {i}."
+                        f"Frequency units {profile_entry[3]} are invalid for random vibe profile {i}."
                     )
                 elif not isinstance(profile_entry[4], str) or \
                     ((self.AMPL_UNIT_LIST is not None) and
@@ -825,7 +825,7 @@ class Lifecycle(GrpcStub):
             if project == "":
                 raise SherlockAddThermalEventError(message="Project name is invalid.")
             if phase_name == "":
-                raise SherlockAddThermalEventError(message="IPhase name is invalid.")
+                raise SherlockAddThermalEventError(message="Phase name is invalid.")
             if event_name == "":
                 raise SherlockAddThermalEventError(message="Event name is invalid.")
             if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
@@ -981,13 +981,13 @@ class Lifecycle(GrpcStub):
                         ((self.TIME_UNIT_LIST is not None) and
                          (profile_entry[3] not in self.TIME_UNIT_LIST)):
                     raise SherlockAddThermalProfilesError(
-                        f"Time unit {profile_entry[3]} is invalid for thermal profile {i}."
+                        f"Time units {profile_entry[3]} are invalid for thermal profile {i}."
                     )
                 elif not isinstance(profile_entry[4], str) or\
                         ((self.TEMP_UNIT_LIST is not None) and
                          (profile_entry[4] not in self.TEMP_UNIT_LIST)):
                     raise SherlockAddThermalProfilesError(
-                        f"Temperature unit {profile_entry[4]} is invalid for thermal profile {i}."
+                        f"Temperature units {profile_entry[4]} are invalid for thermal profile {i}."
                     )
 
                 try:
@@ -1142,14 +1142,14 @@ class Lifecycle(GrpcStub):
             if event_name == "":
                 raise SherlockAddHarmonicEventError(message="Event name is invalid.")
             if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
-                raise SherlockAddHarmonicEventError(message="Duration unit is invalid.")
+                raise SherlockAddHarmonicEventError(message="Duration units are invalid.")
             if duration <= 0.0:
                 raise SherlockAddHarmonicEventError(message="Duration must be greater than 0.")
             if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
                 raise SherlockAddHarmonicEventError(message="Cycle type is invalid.")
             if num_of_cycles <= 0.0:
                 raise SherlockAddHarmonicEventError(
-                    message="Number of cycles must be greater than 0"
+                    message="Number of cycles must be greater than 0."
                 )
             if sweep_rate <= 0.0:
                 raise SherlockAddHarmonicEventError(message="Sweep rate must be greater than 0.")
@@ -1301,8 +1301,8 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(harmonic_vibe_profiles):
                 if len(profile_entry) != 7:
                     raise SherlockAddHarmonicVibeProfilesError(
-                        f"Number of arguments {str(len(profile_entry))} is wrong for"
-                        f" harmonic vibe profile {i}."
+                        f"Number of arguments {str(len(profile_entry))} is wrong for "
+                        f"harmonic vibe profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddHarmonicVibeProfilesError(
@@ -1320,14 +1320,14 @@ class Lifecycle(GrpcStub):
                         ((self.FREQ_UNIT_LIST is not None) and
                          (profile_entry[3] not in self.FREQ_UNIT_LIST)):
                     raise SherlockAddHarmonicVibeProfilesError(
-                        f"Frequency unit {profile_entry[3]} is invalid for harmonic vibe "
+                        f"Frequency units {profile_entry[3]} are invalid for harmonic vibe "
                         f"profile {i}."
                     )
                 elif not isinstance(profile_entry[4], str) or \
                     ((self.LOAD_UNIT_LIST is not None) and
                      (profile_entry[4] not in self.LOAD_UNIT_LIST)):
                     raise SherlockAddHarmonicVibeProfilesError(
-                        f"Load unit {profile_entry[4]} is invalid for harmonic vibe profile {i}."
+                        f"Load units {profile_entry[4]} are invalid for harmonic vibe profile {i}."
                     )
 
             try:
@@ -1470,7 +1470,7 @@ class Lifecycle(GrpcStub):
             if event_name == "":
                 raise SherlockAddShockEventError(message="Event name is invalid.")
             if (self.TIME_UNIT_LIST is not None) and (duration_units not in self.TIME_UNIT_LIST):
-                raise SherlockAddShockEventError(message="Duration unit  is invalid.")
+                raise SherlockAddShockEventError(message="Duration units are invalid.")
             if duration <= 0.0:
                 raise SherlockAddShockEventError(message="Duration must be greater than 0.")
             if (self.CYCLE_TYPE_LIST is not None) and (cycle_type not in self.CYCLE_TYPE_LIST):
@@ -1651,7 +1651,7 @@ class Lifecycle(GrpcStub):
                         ((self.TIME_UNIT_LIST is not None) and
                          (profile_entry[4] not in self.TIME_UNIT_LIST)):
                     raise SherlockAddShockProfilesError(
-                        f"Duration unit {profile_entry[4]} is invalid for shock profile {i}."
+                        f"Duration units {profile_entry[4]} are invalid for shock profile {i}."
                     )
                 elif profile_entry[5] <= 0:
                     raise SherlockAddShockProfilesError(
@@ -1661,19 +1661,19 @@ class Lifecycle(GrpcStub):
                         ((self.TIME_UNIT_LIST is not None) and
                          (profile_entry[6] not in self.TIME_UNIT_LIST)):
                     raise SherlockAddShockProfilesError(
-                        f"Sample rate unit {profile_entry[6]} is invalid for shock profile {i}."
+                        f"Sample rate unit {profile_entry[6]} are invalid for shock profile {i}."
                     )
                 elif not isinstance(profile_entry[7], str) or \
                     ((self.LOAD_UNIT_LIST is not None) and
                      (profile_entry[7] not in self.LOAD_UNIT_LIST)):
                     raise SherlockAddShockProfilesError(
-                        f"Load unit {profile_entry[7]} is invalid for shock profile {i}."
+                        f"Load units {profile_entry[7]} are invalid for shock profile {i}."
                     )
                 elif not isinstance(profile_entry[8], str) or \
                     ((self.FREQ_UNIT_LIST is not None) and
                      (profile_entry[8] not in self.FREQ_UNIT_LIST)):
                     raise SherlockAddShockProfilesError(
-                        f"Frequency unit {profile_entry[8]} is invalid for shock profile {i}."
+                        f"Frequency units {profile_entry[8]} are invalid for shock profile {i}."
                     )
 
             try:
