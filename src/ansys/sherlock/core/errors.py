@@ -80,7 +80,6 @@ class SherlockListCCAsError(Exception):
         """Format error message."""
         return f"List CCAs error: {self.message}"
 
-
 class SherlockListConductorLayersError(Exception):
     """Contains the error raised when a project's conductor layers cannot be listed."""
 

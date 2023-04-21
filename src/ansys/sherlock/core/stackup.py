@@ -21,8 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
-    SherlockListLaminateLayersError,
-    SherlockGetLayerCountError
+    SherlockListLaminateLayersError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -677,7 +676,7 @@ class Stackup(GrpcStub):
         >>> for layer in conductorLayers:
         >>>     properties = layer.conductorLayerProps
         >>>     for prop in properties:
-        >>>         print(f"{prop}")
+        >>>     print(f"{prop}")
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -726,7 +725,7 @@ class Stackup(GrpcStub):
         >>> for layer in laminateLayers:
         >>>     properties = layer.laminateProps
         >>>     for prop in properties:
-        >>>         print(f"{prop}")
+        >>>     print(f"{prop}")
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()

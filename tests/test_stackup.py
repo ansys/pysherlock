@@ -8,8 +8,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
-    SherlockListLaminateLayersError,
-    SherlockGetLayerCountError
+    SherlockListLaminateLayersError
 )
 from ansys.sherlock.core.stackup import Stackup
 
@@ -930,7 +929,6 @@ def helper_test_update_laminate_layer(stackup):
             " It must be between 0 and 100."
         )
 
-
 def helper_test_list_conductor_layers(stackup):
     """Test list_conductor_layers API"""
     try:
@@ -938,7 +936,6 @@ def helper_test_list_conductor_layers(stackup):
         assert False
     except SherlockListConductorLayersError as e:
         assert str(e) == "List conductor layer error: Project name is invalid."
-
 
 def helper_test_list_laminate_layers(stackup):
     """Test list_laminate_layers API"""
