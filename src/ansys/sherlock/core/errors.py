@@ -80,6 +80,7 @@ class SherlockListCCAsError(Exception):
         """Format error message."""
         return f"List CCAs error: {self.message}"
 
+
 class SherlockListConductorLayersError(Exception):
     """Raised when listing project conductor layers results in an error."""
     def __init__(self, message):
@@ -100,6 +101,17 @@ class SherlockListLaminateLayersError(Exception):
     def __str__(self):
         """Format error message."""
         return f"List laminate layer error: {self.message}"
+
+
+class SherlockGetStackupPropsError(Exception):
+    """Raised when getting stackup properties results in an error."""
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get stackup prop error: {self.message}"
 
 
 class SherlockAddStrainMapsError(Exception):
