@@ -676,8 +676,8 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(random_vibe_profiles):
                 if len(profile_entry) != 6:
                     raise SherlockAddRandomVibeProfilesError(
-                        f"Number of arguments is wrong {str(len(profile_entry))} for"
-                        f" random vibe profile {i}."
+                        f"Number of arguments is wrong {str(len(profile_entry))} for "
+                        f"random vibe profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
                     raise SherlockAddRandomVibeProfilesError(

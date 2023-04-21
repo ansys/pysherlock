@@ -87,7 +87,7 @@ def helper_test_run_analysis(analysis):
     except SherlockRunAnalysisError as e:
         assert str(e) == (
             "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Events argument " \
-            " is invalid."
+            "is invalid."
         )
 
     try:
@@ -96,7 +96,7 @@ def helper_test_run_analysis(analysis):
     except SherlockRunAnalysisError as e:
         assert str(e) == (
             "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event " \
-            " names are invalid."
+            "names are invalid."
         )
 
 
@@ -465,7 +465,7 @@ def helper_test_update_random_vibe_props(analysis):
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
                    "Update random vibe properties error: Minimum " \
-                   "natural frequency unit is invalid: foo"
+                   "natural frequency units are invalid: foo"
 
         try:
             analysis.update_random_vibe_props("Test", "Card",
@@ -478,7 +478,7 @@ def helper_test_update_random_vibe_props(analysis):
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
                    "Update random vibe properties error: Maxiumum " \
-                   "natural frequency unit is invalid: foo"
+                   "natural frequency units are invalid: foo"
 
         try:
             analysis.update_random_vibe_props("Test", "Card",
@@ -492,7 +492,7 @@ def helper_test_update_random_vibe_props(analysis):
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
                    "Update random vibe properties error: Analysis " \
-                   "temperature unit is invalid: foo"
+                   "temperature units are invalid: foo"
 
         try:
             analysis.update_random_vibe_props("Tutorial Project", "Main Board",
@@ -504,7 +504,7 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert str(e) == \
-                   "Update random vibe properties error: Invalid natural frequencies specified"
+                   "Update random vibe properties error: Natural frequencies are invalid."
 
             try:
                 analysis.update_random_vibe_props("Tutorial Project", "Main Board",
@@ -555,7 +555,7 @@ def helper_test_update_natural_frequency_props(analysis):
         except SherlockUpdateNaturalFrequencyPropsError as e:
             assert str(e) == \
                    "Update natural frequency properties error: Minimum " \
-                   "natural frequency unit is invalid: foo"
+                   "natural frequency units are invalid: foo"
 
         try:
             analysis.update_natural_frequency_props("Test", "Card",
@@ -570,7 +570,7 @@ def helper_test_update_natural_frequency_props(analysis):
         except SherlockUpdateNaturalFrequencyPropsError as e:
             assert str(e) == \
                    "Update natural frequency properties error: Maximum " \
-                   "natural frequency unit is invalid: foo"
+                   "natural frequency units are invalid: foo"
 
         try:
             analysis.update_natural_frequency_props("Test", "Card",
@@ -586,7 +586,7 @@ def helper_test_update_natural_frequency_props(analysis):
         except SherlockUpdateNaturalFrequencyPropsError as e:
             assert str(e) == \
                    "Update natural frequency properties error: Analysis " \
-                   "temperature unit is invalid: foo"
+                   "temperature units are invalid: foo"
 
 
 if __name__ == "__main__":

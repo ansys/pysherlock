@@ -335,7 +335,7 @@ def helper_test_add_random_vibe_profiles(lifecycle):
     except SherlockAddRandomVibeProfilesError as e:
         assert (
                 e.str_itr()[0] == "Add random vibe profiles error:"
-                                  " Invalid entry 0: Number of arguments is wrong for random vibe" \
+                                  " Invalid entry 0: Number of arguments is wrong for random vibe " \
                                   "profile 0."
         )
 

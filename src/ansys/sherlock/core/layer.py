@@ -62,9 +62,9 @@ class Layer(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockUpdateMountPointsByFileError(message="Invalid project name")
+                raise SherlockUpdateMountPointsByFileError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockUpdateMountPointsByFileError(message="Invalid cca name")
+                raise SherlockUpdateMountPointsByFileError(message="CCA name is invalid.")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)

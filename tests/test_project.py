@@ -255,7 +255,7 @@ def helper_test_add_strain_maps(project):
         assert False
     except SherlockAddStrainMapsError as e:
         assert e.str_itr()[0] == "Add strain maps error: Strain units 'BAD' " \
-                                 "is invalid for strain map 0."
+                                 "are invalid for strain map 0."
 
     if project._is_connection_up():
         try:

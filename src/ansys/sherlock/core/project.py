@@ -410,7 +410,7 @@ class Project(GrpcStub):
             for i, strain_map in enumerate(strain_maps):
                 if len(strain_map) < 6 or len(strain_map) > 7:
                     raise SherlockAddStrainMapsError(
-                        f"Number of argsuments {str(len(strain_maps))} is wrong for strain map {i}."
+                        f"Number of arguments {str(len(strain_maps))} is wrong for strain map {i}."
                     )
                 elif not isinstance(strain_map[0], str) or strain_map[0] == "":
                     raise SherlockAddStrainMapsError(

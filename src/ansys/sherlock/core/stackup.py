@@ -135,11 +135,11 @@ class Stackup(GrpcStub):
             ):
                 if spec is not None:
                     raise SherlockInvalidThicknessArgumentError(
-                        message=f"Thickness unit {spec} is invalid."
+                        message=f"Thickness units {spec} are invalid."
                     )
 
                 raise SherlockInvalidThicknessArgumentError(
-                    message="Thickness unit is invalid."
+                    message="Thickness units are invalid."
                 )
 
     def _check_layer_id(self, layerid, spec=None):
