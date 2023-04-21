@@ -17,10 +17,10 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Model(GrpcStub):
-    """Module containing different model generation capabilities."""
+    """Contains different model-generation capabilities."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for the Sherlock Model Service."""
+        """Initialize a gRPC stub for the Sherlock Model service."""
         self.channel = channel
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 
@@ -47,78 +47,61 @@ class Model(GrpcStub):
 
         Parameters
         ----------
-        project_name : str, required
-            The Sherlock project name from which the trace reinforcement model will be generated.
-
-        cca_name : str, required
+        project_name : str
+            Name of the Sherlock project to generate the trace reinforcement model from.
+        cca_name : str
             The Sherlock CCA name from which the trace reinforcement model will be generated.
-
-        export_file : str, required
-            The file path where the files from the trace reinforcement model export will be saved.
-            The suffix must be ".wbjn".
-
+        export_file : str
+            File path for saving the exported files. The suffix must be ".wbjn".
         overwrite : bool, optional
-            If set to True, overwrite an existing file that has the same file name.
-            By default, this is set to True.
-
+            Whether to overwrite an existing file that has the same file name.
+            The default is ``True``.
         display_model : bool, optional
-            At the end of the export, launches and displays the exported model in
-            Workbench Mechanical.
-            By default, this is set to False.
-
+            Whether to launch and disalay the exported model in Workbench Mechanical
+            once the export finishes. The default is ``False``.
         generate_models_for_all_layers :  bool, optional
-            By default, Sherlock exports only those layers for which you have generated trace
-            reinforcement layers. When this is set to True, Sherlock will generate trace models
-            for all the other layers and include them in the exported model.
-            By default, this is set to False.
-
+            Whether to generate and export trace models for not only the generated trace
+            reinforcement layers but also all other layers. The default is ``False``, in
+            which case only trace reinforcement layers are generated and exported.
         coordinate_units : str, optional
-            The units of the model coordinates to use when exporting a model.
-            By default, this is set to "mm".
-
+            Units of the model coordinates to use when exporting a model.
+            The default is ``"mm"``.
         trace_param_diameter_threshold_val: float, optional
-            This value determines whether a hole is modeled with beams or shell
-            reinforcement elements. Holes equal to or greater than the Diameter Threshold
-            value are modeled with shell reinforcement elements. Smaller holes are modeled
-            with beam elements. (A hole buried inside the board is always modeled as a beam.)
-            By default, this is set to "2mm".
-
+            Threshold value that determines whether a hole is modeled with shell
+            reinforcement elements or beam elements. The default is ``"2mm"``. Holes with
+            diameters equal to or greater than this threshold value are modeled with shell
+            reinforcement elements. Holes with diameters less than this threshold value
+            are modeled with beam elements. A hole buried inside the board is always modeled
+            with a beam element.
         trace_param_diameter_threshold_unit: str, optional
-            The units associated with the trace_param_diameter_threshold_val.
-            By default, this is set to "mm".
-
+            Units associated with the threshold value for the trace parameter diameter.
+            The default is ``"mm"``.
         trace_param_min_hole_diameter_val: float, optional
-            Vias smaller than the specified diameter will not be exported.
-            A value of zero will export all vias.
-            By default, this is set to "0.25mm".
-
+            Minimum trace parameter diameter for determining whether a via is exported.
+            The default is ``"0.25mm"``. Vias with diameters smaller than this diameter
+            are not exported. Setting the value to ''0'' exports all vias.
         trace_param_min_hole_diameter_unit: str, optional
-            The units associated with trace_param_min_hole_diameter_val.
-            By default, this is set to "mm".
-
+            Units associated with the value for the minimum trace parameter diameter.
+            The default is ``"mm"``.
         trace_drill_hole_modeling: str, optional
-            Set to ENABLED to model drill holes in the export.
-            By default, this is set to "DISABLED". When this is "DISABLED",
-            the parameters trace_drill_hole_min_diameter and trace_drill_hole_max_edge
-            will not be used.
-
+            Whether to enable or disable the modeling of trace drill holes. Options are
+            ``ENABLED`` and ``"DISABLED"``. The default is ``"DISABLED"``, in which
+            case the ``trace_drill_hole_min_diameter`` and ``trace_drill_hole_max_edge``
+            parameters are not used.
         trace_drill_hole_min_diameter_val: float, optional
-            Drill holes smaller than the specified diameter will not be exported.
-            A value of zero will export all drill holes.
-            By default, this is set to "2mm".
-
+            Minimimun diameter value for determining whether a trace drill hole is
+            exported. The default is ``"2mm"``. Trace drill holes with diameters smaller
+            than this diameter are not exported. Setting the value to ``0`` exports all
+            trace drill holes.
         trace_drill_hole_min_diameter_unit: str, optional
-            The units associated with trace_drill_hole_min_diameter_val.
-            By default, this is set to "mm".
-
+            Units associated with the value for the minimum trace drill hole diameter.
+            The default is ``"mm"``.
         trace_drill_hole_max_edge_val: float, optional
-            This value specifies the maximum segment size used when representing
-            round drill holes by a polygon.
-            By default, this is set to "1mm".
-
+            Maximum segment size for representing round drill holes by a polygon.
+            The default is ``"1mm"``.
         trace_drill_hole_max_edge_unit: str, optional
-            The units associated with trace_drill_hole_max_edge_val.
-            By default, this is set to "mm".
+            Units associated with the maximum segement for representing round drill holes
+            by a polygon. The default is ``"mm"``.
 
         Examples
         --------
@@ -161,7 +144,7 @@ class Model(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         export_request = SherlockModelService_pb2.ExportTraceReinforcementModelRequest()
@@ -212,52 +195,47 @@ class Model(GrpcStub):
             min_hole_area_units="mm2",
             use_snapshot_for_non_image_layer=False
     ):
-        r"""Generate one or more trace models for a given project.
+        r"""Generate one or more trace models for a project.
 
         Parameters
         ----------
-        project_name : str, required
-            The Sherlock project name from which the trace model will be generated.
-
+        project_name : str
+            Name of the Sherlock project to generate the trace model for.
         cca_name : str, optional
-            The Sherlock CCA name from which the trace model will be generated.
-            If this is empty, trace models will be generated for CCAs and all layers.
-
+            Name of the CCA to generate the trace model from. The default is
+            ``""``, in which case trace models are generated for CCAs and
+            all layers.
         copper_layer_name : str, optional
-            The copper layer from which the trace model will be generated.
-            If this is empty, trace models will be generated for all layers for the
-            given CCA.
-
-        max_arc_segment : float, required
-            Specifies the maximum length of a segment to be generated when Sherlock
-            converts EDA arc drawing commands to line segments. Smaller values for
-            Max Arc Segment result in smoother arc representations on the FEA model,
-            at the cost of generating a larger number of shorter segments. Such short
-            segments will then cause the FEA tool to generate a larger number of
-            smaller elements to represent the curved solid.
-
-        max_arc_segment_units : str, required
-            Units for max_arc_segment
-
-        min_trace_area : float, required
-            Specifies the minimum area of any trace polygon to be included in the
-            trace model.  Setting this value to zero disables any area filtering.
-
-        min_trace_area_units : str, required
-            Units for min_trace_area
-
-        min_hole_area : float, required
-            Specifies the minimum hole area of any trace hole to be included in the
-            trace model.  Setting this value to zero disables any hole filtering.
-
-        min_hole_area_units : str, required
-            Units for min_hole_area
-
+            Copper layer to generate the trace model from. The default is
+            ``""``, in which case trace models are generated for all layers for
+            the given CCA.
+        max_arc_segment : float
+            Maximum length of the segment to generate when Sherlock
+            converts EDA arc drawing commands to line segments. The default is
+            ``0.0``. Smaller values for the maximum arc segement result in smoother
+            arc representations on the FEA model. However, the cost of generating a
+            larger number of shorter segments is higher. Such short segments cause
+            the FEA tool to generate a larger number of smaller elements to represent
+            the curved solid.
+        max_arc_segment_units : str
+            Units for maximum arc segment. The default is ``"mm"``.
+        min_trace_area : float
+            Minimum area of any trace polygon to include in the trace model. 
+            The default is ``0.0``. Setting this value to ``0`` turns off any
+            area filtering.
+        min_trace_area_units : str
+            Units for the minimum trace area.
+        min_hole_area : float
+            Minimum area of any trace hole to include in the trace model.
+            The default is ``0.0``. Setting this value to ``0`` turns off any
+            hole filtering.
+        min_hole_area_units : str
+            Units for the minimum hole area.
         use_snapshot_for_non_image_layer : bool, optional
-            Specifies whether to use an image to generate the trace model for layers that are not
-            image layers. If a snapshot image exists for the layer, that snapshot is used.
-            Otherwise this creates an image that is identical to creating a snapshot.
-            By default, this is set to False.
+            Whether to use an image to generate the trace model for layers that are not
+            image layers. The default is ``False``. If ``True`` and a snapshot image for
+            the layer exists, the snapshot image is used. Otherwise, an image is created
+            in the same way as a snapshot image is created.
 
         Examples
         --------
@@ -272,25 +250,25 @@ class Model(GrpcStub):
         """
         try:
             if not project_name:
-                raise SherlockModelServiceError("Project name is required")
+                raise SherlockModelServiceError("Project name is required.")
             if not max_arc_segment:
-                raise SherlockModelServiceError("Max Arc Segment is required")
+                raise SherlockModelServiceError("Maximum arc segment is required.")
             if not max_arc_segment_units:
-                raise SherlockModelServiceError("Max Arc Segment Units is required")
+                raise SherlockModelServiceError("Maximum arc segment units are required.")
             if not min_trace_area:
-                raise SherlockModelServiceError("Min Trace Area is required")
+                raise SherlockModelServiceError("Mininum trace area is required.")
             if not min_trace_area_units:
-                raise SherlockModelServiceError("Min Trace Area Units is required")
+                raise SherlockModelServiceError("Mininum trace area units are required.")
             if not min_hole_area:
-                raise SherlockModelServiceError("Min Hole Area is required")
+                raise SherlockModelServiceError("Mininum hole area is required.")
             if not min_hole_area_units:
-                raise SherlockModelServiceError("Min Hole Area Units is required")
+                raise SherlockModelServiceError("Mininim hole area units are required.")
         except Exception as e:
             LOG.error(str(e))
             raise
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             raise
 
         gen_request = SherlockModelService_pb2.GenerateTraceModelRequest()
@@ -351,7 +329,7 @@ class Model(GrpcStub):
 #     trace_drill_hole_max_edge_val=1,
 #     trace_drill_hole_max_edge_unit="mm",
 # ):
-#     """Set the Drill Hole Properties for the Export Trace Reinforcement Model operation."""
+#     """Set the drill hole properties for exporting the trace reinforcement model."""
 #     if trace_drill_hole_param is None:
 #         trace_drill_hole_param = (
 #             SherlockModelService_pb2.ExportTraceReinforcementModelRequest().TraceDrillHoleParam()
