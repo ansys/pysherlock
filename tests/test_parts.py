@@ -130,7 +130,8 @@ def helper_test_update_parts_locations(parts):
         parts.update_parts_locations("Test", "Card", [])
         assert False
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Part location properties are missing."
+        assert e.str_itr()[0] == "Update parts locations error: Part location properties " \
+                                 "are missing."
 
     try:
         parts.update_parts_locations(
@@ -161,7 +162,8 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 1: Reference designator is missing."
+            == "Update parts locations error: Invalid part location 1: Reference designator " \
+                "is missing."
         )
 
     if parts._is_connection_up():

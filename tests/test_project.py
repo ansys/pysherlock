@@ -218,7 +218,8 @@ def helper_test_add_strain_maps(project):
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: Strain column is required for strain map 0."
+        assert e.str_itr()[0] == "Add strain maps error: Strain column is required " \
+                                 "for strain map 0."
 
     try:
         project.add_strain_maps(
@@ -235,7 +236,8 @@ def helper_test_add_strain_maps(project):
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: Strain units are required for strain map 0."
+        assert e.str_itr()[0] == "Add strain maps error: Strain units are required for " \
+                                 "strain map 0."
 
     try:
         project.add_strain_maps(

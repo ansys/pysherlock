@@ -220,7 +220,7 @@ class Model(GrpcStub):
         max_arc_segment_units : str
             Units for maximum arc segment. The default is ``"mm"``.
         min_trace_area : float
-            Minimum area of any trace polygon to include in the trace model. 
+            Minimum area of any trace polygon to include in the trace model.
             The default is ``0.0``. Setting this value to ``0`` turns off any
             area filtering.
         min_trace_area_units : str

@@ -256,7 +256,7 @@ class Parts(GrpcStub):
         part_loc : (str, str, str, str, str, str, str) list, required
             (refDes, x, y, rotation, location_units, board_side, mirrored)
             Definitions of part locations.
-    
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
