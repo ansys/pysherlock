@@ -21,8 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
-    SherlockListLaminateLayersError,
-    SherlockGetLayerCountError
+    SherlockListLaminateLayersError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -677,7 +676,7 @@ class Stackup(GrpcStub):
         >>> for layer in conductorLayers:
         >>>     properties = layer.conductorLayerProps
         >>>     for prop in properties:
-        >>>         print(f"{prop}")
+        >>>     print(f"{prop}")
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -726,7 +725,7 @@ class Stackup(GrpcStub):
         >>> for layer in laminateLayers:
         >>>     properties = layer.laminateProps
         >>>     for prop in properties:
-        >>>         print(f"{prop}")
+        >>>     print(f"{prop}")
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -752,6 +751,55 @@ class Stackup(GrpcStub):
             return layers
 
         except SherlockListLaminateLayersError as e:
+            LOG.error(str(e))
+            raise e
+    def get_layer_count(
+            self,
+            project,
+            cca_name):
+        """Returns the number of CCA layers in a stackup
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        cca_name : str, required
+            The CCA name.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> conductor_layer_count = sherlock.stackup.get_layer_count(
+        >>>    project="Test",
+        >>>    cca_name="Card")
+        >>> print(f"{conductor_layer_count}")
+        """
+        try:
+            if project == "":
+                raise SherlockGetLayerCountError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockGetLayerCountError(message="Invalid CCA name")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockStackupService_pb2.GetLayerCountRequest(
+                project=project,
+                ccaName=cca_name)
+            response = self.stub.getLayerCount(request)
+            return response
+
+        except SherlockGetLayerCountError as e:
             LOG.error(str(e))
             raise e
 
