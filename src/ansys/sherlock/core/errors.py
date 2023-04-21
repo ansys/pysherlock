@@ -80,6 +80,7 @@ class SherlockListCCAsError(Exception):
         """Format error message."""
         return f"List CCAs error: {self.message}"
 
+
 class SherlockListConductorLayersError(Exception):
     """Contains the error raised when a project's conductor layers cannot be listed."""
 
@@ -118,6 +119,17 @@ class SherlockGetStackupPropsError(Exception):
 
 class SherlockGetLayerCountError(Exception):
     """Raised when getting layer count results in an error."""
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get layer count error: {self.message}"
+
+
+class SherlockGetLayerCountError(Exception):
+    """Raised when geting layer count results in an error."""
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
