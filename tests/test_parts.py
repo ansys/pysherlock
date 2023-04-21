@@ -180,7 +180,7 @@ def helper_test_update_parts_locations(parts):
         except SherlockUpdatePartsLocationsError as e:
             assert e.str_itr()[0] == (
                 "Update parts locations error: "
-                "Invalid part location 0: Invalid location units specified"
+                "Invalid part location 0: Location units are invalid."
             )
 
     try:
@@ -212,7 +212,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == (
             "Update parts locations error: Invalid part location 0: "
-            "Invalid location X coordinate specified"
+            "Location X coordinate is invalid."
         )
 
     try:

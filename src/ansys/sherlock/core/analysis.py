@@ -111,11 +111,11 @@ class Analysis(GrpcStub):
             try:
                 if analysis[0].upper() not in self.ANALYSIS_TYPES:
                     raise SherlockRunAnalysisError(
-                        f"Invalid analysis {i}: An invalid analysis is provided."
+                        f"Invalid analysis {i}: Analysis is invalid."
                     )
                 self._check_phases(analysis[1])
             except SherlockInvalidPhaseError as e:
-                raise SherlockRunAnalysisError(f"Invalid analysis {i}: {str(e)}.")
+                raise SherlockRunAnalysisError(f"Analysis {i}: {str(e)} is invalid.")
 
     def _check_phases(self, input):
         """Check the input array for a valid phases argument."""

@@ -298,8 +298,8 @@ def helper_test_add_random_vibe_profiles(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeProfilesError as e:
-            assert e.str_itr()[0] == "Add random vibe profiles error:" \
-                                     " Frequency unit per second is invalid for random vibe" \
+            assert e.str_itr()[0] == "Add random vibe profiles error: " \
+                                     "Frequency unit per second is invalid for random vibe" \
                                      "profile 0."
 
         try:
@@ -316,8 +316,8 @@ def helper_test_add_random_vibe_profiles(lifecycle):
             )
             assert False
         except SherlockAddRandomVibeProfilesError as e:
-            assert e.str_itr()[0] == "Add random vibe profiles error:" \
-                                     " Amplitude type G2/sec is invalid for random vibe profile 0."
+            assert e.str_itr()[0] == "Add random vibe profiles error: " \
+                                     "Amplitude type G2/sec is invalid for random vibe profile 0."
 
     try:
         lifecycle.add_random_vibe_profiles(
@@ -334,8 +334,9 @@ def helper_test_add_random_vibe_profiles(lifecycle):
         assert False
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-                e.str_itr()[0] == "Add random vibe profiles error:"
-                                  " Invalid entry 0: Number of arguments is wrong for random vibe " \
+                e.str_itr()[0] == "Add random vibe profiles error: "
+                                  "Invalid entry 0: " \
+                                  "Number of arguments is wrong for random vibe " \
                                   "profile 0."
         )
 
@@ -1492,7 +1493,7 @@ def helper_test_add_shock_profiles(lifecycle):
     except SherlockAddShockProfilesError as e:
         assert e.str_itr()[0] == "Add shock profiles error:" \
                                  " Invalid entry 0: Number of arguments is wrong for shock " \
-                                 "profile 0."
+                                 " profile 0."
 
     if lifecycle._is_connection_up():
         try:

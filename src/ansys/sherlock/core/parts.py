@@ -66,7 +66,7 @@ class Parts(GrpcStub):
             raise SherlockUpdatePartsLocationsError(message="Part location argument is invalid.")
 
         if len(input) == 0:
-            raise SherlockUpdatePartsLocationsError(message="Part location properties are invalid.")
+            raise SherlockUpdatePartsLocationsError(message="Part location properties are missing.")
         for i, part in enumerate(input):
             if len(part) != 7:
                 raise SherlockUpdatePartsLocationsError(

@@ -434,7 +434,7 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateConductorLayerError(
                     message=(
                         "Conductor type is invalid. "
-                        'Options are "SIGNAL", "POWER", and "SUBSTRATE".'
+                        "Options are "SIGNAL", "POWER", and "SUBSTRATE"."
                     )
                 )
             if material != "":
