@@ -358,7 +358,7 @@ def helper_test_import_parts_list(parts):
         )
         assert False
     except SherlockImportPartsListError as e:
-        assert str(e) == "Import parts list error: Invalid project name"
+        assert str(e) == "Import parts list error: Project name is invalid."
 
     try:
         parts.import_parts_list(
