@@ -21,7 +21,8 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
-    SherlockListLaminateLayersError
+    SherlockListLaminateLayersError,
+    SherlockGetLayerCountError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
