@@ -695,7 +695,8 @@ class Lifecycle(GrpcStub):
                     ((self.FREQ_UNIT_LIST is not None) and
                      (profile_entry[3] not in self.FREQ_UNIT_LIST)):
                     raise SherlockAddRandomVibeProfilesError(
-                        f"Frequency units {profile_entry[3]} are invalid for random vibe profile {i}."
+                        f"Frequency units {profile_entry[3]} are invalid for random vibe "
+                        f"profile {i}."
                     )
                 elif not isinstance(profile_entry[4], str) or \
                     ((self.AMPL_UNIT_LIST is not None) and
