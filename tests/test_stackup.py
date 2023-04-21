@@ -27,6 +27,7 @@ def test_all():
     helper_test_list_laminate_layers(stackup)
     helper_test_get_stackup_props(stackup)
 
+    helper_test_get_layer_count(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -988,7 +989,6 @@ def helper_test_get_layer_count(stackup):
         assert str(e) == "Get layer count error: Invalid CCA name"
 
 
-def helper_test_list_laminate_ayers(stackup):
     """Test get_layer_count API"""
     try:
         stackup.get_layer_count(
