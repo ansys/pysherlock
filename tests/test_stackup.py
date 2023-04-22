@@ -7,7 +7,8 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
-    SherlockListLaminateLayersError
+    SherlockListLaminateLayersError,
+    SherlockGetStackupPropsError
 )
 from ansys.sherlock.core.stackup import Stackup
 
@@ -23,6 +24,8 @@ def test_all():
     helper_test_update_laminate_layer(stackup)
     helper_test_list_conductor_layers(stackup)
     helper_test_list_laminate_layers(stackup)
+    helper_test_get_stackup_props(stackup)
+
 
 def helper_test_gen_stackup(stackup):
     """Test gen_stackup API."""
@@ -925,6 +928,7 @@ def helper_test_list_conductor_layers(stackup):
     except SherlockListConductorLayersError as e:
         assert str(e) == "List conductor layer error: Project name is invalid."
 
+
 def helper_test_list_laminate_layers(stackup):
     """Test list_laminate_layers API"""
     try:
@@ -932,6 +936,26 @@ def helper_test_list_laminate_layers(stackup):
         assert False
     except SherlockListLaminateLayersError as e:
         assert str(e) == "List laminate layer error: Project name is invalid."
+
+
+def helper_test_get_stackup_props(stackup):
+    """Test get_stackup_props API"""
+    try:
+        stackup.get_stackup_props(
+            "",
+            "Card",
+        )
+        assert False
+    except SherlockGetStackupPropsError as e:
+        assert str(e) == "Get stackup prop error: Invalid project name"
+    try:
+        stackup.get_stackup_props(
+            "Test",
+            "",
+        )
+        assert False
+    except SherlockGetStackupPropsError as e:
+        assert str(e) == "Get stackup prop error: Invalid CCA name"
 
 
 if __name__ == "__main__":

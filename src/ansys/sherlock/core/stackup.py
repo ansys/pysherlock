@@ -20,7 +20,8 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
-    SherlockListLaminateLayersError
+    SherlockListLaminateLayersError,
+    SherlockGetStackupPropsError
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -757,5 +758,57 @@ class Stackup(GrpcStub):
             return layers
 
         except SherlockListLaminateLayersError as e:
+            LOG.error(str(e))
+            raise e
+
+    def get_stackup_props(
+            self,
+            project,
+            cca_name
+            ):
+        """Returns the stackup properties from a CCA
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        cca_name : str, required
+            The CCA name.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> stackup_props = sherlock.stackup.get_stackup_props(
+               project="Tutorial",
+               cca_name="Main Board"
+            )
+        >>> print(f"{stackup_props}")
+        """
+        try:
+            if project == "":
+                raise SherlockGetStackupPropsError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockGetStackupPropsError(message="Invalid CCA name")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockStackupService_pb2.GetStackupPropsRequest(
+                project=project,
+                ccaName=cca_name
+            )
+            response = self.stub.getStackupProps(request)
+            return response
+        except SherlockGetStackupPropsError as e:
             LOG.error(str(e))
             raise e
