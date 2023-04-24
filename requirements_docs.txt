@@ -1,3 +1,0 @@
-ansys-sphinx-theme
-numpydoc
-sphinx<6

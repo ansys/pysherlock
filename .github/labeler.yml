@@ -1,0 +1,14 @@
+documentation:
+- doc/**/*
+- README.rst
+- CONTRIBUTING.md
+maintenance:
+- .github/**/*
+- .flake8
+- pyproject.toml
+- tox.ini
+- .gitignore
+dependencies:
+- pyproject.toml
+testing:
+- tests/*

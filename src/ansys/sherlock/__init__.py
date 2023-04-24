@@ -1,1 +1,0 @@
-"""PySherlock package."""

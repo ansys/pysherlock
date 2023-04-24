@@ -19,7 +19,6 @@ Use the search feature or click links to view API documentation.
    stackup
 
 .. autosummary::
-    :toctree: _autosummary
 
    ansys.sherlock.core.analysis
    ansys.sherlock.core.common

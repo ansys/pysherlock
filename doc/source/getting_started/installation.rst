@@ -34,7 +34,7 @@ and ``ansys-sherlock`` packages.
 #. Download the latest ``ansys-sherlock`` package either by using the following
    ``git clone`` command or downloading the ZIP file from **Release** area of the
    `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository.
-   
+
    .. code::
 
       git clone https://github.com/pyansys/pysherlock.git

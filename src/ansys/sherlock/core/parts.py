@@ -540,30 +540,30 @@ class Parts(GrpcStub):
     def enable_lead_modeling(self, project, cca_name):
         """Enable lead modeling for all non-leadless parts leads.
 
-                Parameters
-                ----------
-                project : str
-                    Name of the Sherlock project.
-                cca_name : str
-                    Nam eof the CCA.
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
 
         Examples
-                --------
-                >>> from ansys.sherlock.core.launcher import launch_sherlock
-                >>> sherlock = launch_sherlock()
-                >>> sherlock.project.import_odb_archive(
-                    "ODB++ Tutorial.tgz",
-                    True,
-                    True,
-                    True,
-                    True,
-                    project="Test",
-                    cca_name="Card",
-                )
-                >>> sherlock.parts.enable_lead_modeling(
-                    "Test",
-                    "Card",
-                )
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.enable_lead_modeling(
+            "Test",
+            "Card",
+        )
         """
         try:
             if project == "":

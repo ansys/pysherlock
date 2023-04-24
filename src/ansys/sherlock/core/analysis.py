@@ -141,7 +141,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         cca_name : str
-            Nam eof the CCA.
+            Name of the CCA.
         analyses : (str, phases) list
             List of analysis types to run. Options are:
 
@@ -692,7 +692,6 @@ class Analysis(GrpcStub):
             )
 
             for i, analysis in enumerate(strain_map_analyses):
-
                 if not isinstance(analysis, list):
                     raise SherlockRunStrainMapAnalysisError(
                         f"Analysis argument is invalid for strain map analysis {i}."
@@ -727,7 +726,6 @@ class Analysis(GrpcStub):
                     )
 
                 for j, event_strain_map in enumerate(analysis[1]):
-
                     if not isinstance(event_strain_map, list):
                         raise SherlockRunStrainMapAnalysisError(
                             f"Event strain map argument is invalid for strain map analysis {i}."
