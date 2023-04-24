@@ -989,7 +989,6 @@ def helper_test_get_layer_count(stackup):
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: Invalid CCA name"
 
-
     """Test get_layer_count API"""
     try:
         stackup.get_layer_count(

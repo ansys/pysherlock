@@ -754,6 +754,7 @@ class Stackup(GrpcStub):
         except SherlockListLaminateLayersError as e:
             LOG.error(str(e))
             raise e
+
     def get_layer_count(
             self,
             project,
