@@ -1,7 +1,8 @@
 =============
-API Reference
+API reference
 =============
-This section gives an overview of the PySherlock modules.
+This section describes PySherlock modules and their classes, methods, and functions.
+Use the search feature or click links to view API documentation.
 
 .. toctree::
    :maxdepth: 2
@@ -29,4 +30,3 @@ This section gives an overview of the PySherlock modules.
    ansys.sherlock.core.parts
    ansys.sherlock.core.project
    ansys.sherlock.core.stackup
-

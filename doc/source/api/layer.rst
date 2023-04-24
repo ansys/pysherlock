@@ -1,7 +1,10 @@
+
+.. _ref_layer_module:
+
 Layer
 =====
 
-Module containing all the layer management capabilities.
+The ``layer`` module contains all layer management capabilities.
 
 .. currentmodule:: ansys.sherlock.core.layer
 

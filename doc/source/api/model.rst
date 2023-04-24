@@ -1,7 +1,9 @@
+.. _ref_model_module:
+
 Model
 ========
 
-Module containing different model generation capabilities.
+The ``model`` module contains all model generation capabilities.
 
 .. currentmodule:: ansys.sherlock.core.model
 

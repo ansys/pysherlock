@@ -1,7 +1,10 @@
+
+.. _ref_launcher_module:
+
 Launcher
 ========
 
-Launches the Sherlock gRPC server and a Sherlock client.
+The ``launcher`` module launches the Sherlock gRPC server and a Sherlock client.
 
 .. currentmodule:: ansys.sherlock.core.launcher
 

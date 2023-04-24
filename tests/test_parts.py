@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 import grpc
 
 from ansys.sherlock.core.errors import (
@@ -38,7 +40,7 @@ def helper_test_update_parts_list(parts):
         )
         assert False
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Invalid project name"
+        assert e.str_itr()[0] == "Update parts list error: Project name is invalid."
 
     try:
         parts.update_parts_list(
@@ -50,7 +52,7 @@ def helper_test_update_parts_list(parts):
         )
         assert False
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Invalid cca name"
+        assert e.str_itr()[0] == "Update parts list error: CCA name is invalid."
 
     try:
         parts.update_parts_list(
@@ -62,7 +64,7 @@ def helper_test_update_parts_list(parts):
         )
         assert False
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Invalid parts library"
+        assert e.str_itr()[0] == "Update parts list error: Parts library is invalid."
 
     try:
         parts.update_parts_list(
@@ -74,7 +76,7 @@ def helper_test_update_parts_list(parts):
         )
         assert False
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Invalid matching argument"
+        assert e.str_itr()[0] == "Update parts list error: Matching argument is invalid."
 
     try:
         parts.update_parts_list(
@@ -86,7 +88,7 @@ def helper_test_update_parts_list(parts):
         )
         assert False
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Invalid duplication argument"
+        assert e.str_itr()[0] == "Update parts list error: Duplication argument is invalid."
 
 
 def helper_test_update_parts_locations(parts):
@@ -103,7 +105,7 @@ def helper_test_update_parts_locations(parts):
         )
         assert False
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Invalid project name"
+        assert e.str_itr()[0] == "Update parts locations error: Project name is invalid."
 
     try:
         parts.update_parts_locations(
@@ -116,19 +118,22 @@ def helper_test_update_parts_locations(parts):
         )
         assert False
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Invalid cca name"
+        assert e.str_itr()[0] == "Update parts locations error: CCA name is invalid."
 
     try:
         parts.update_parts_locations("Test", "Card", "Invalid")
         assert False
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Invalid part_loc argument"
+        assert e.str_itr()[0] == "Update parts locations error: Part location argument is invalid."
 
     try:
         parts.update_parts_locations("Test", "Card", [])
         assert False
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Missing part location properties"
+        assert (
+            e.str_itr()[0] == "Update parts locations error: Part location properties "
+            "are missing."
+        )
 
     try:
         parts.update_parts_locations(
@@ -143,7 +148,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 0: Invalid number of fields"
+            == "Update parts locations error: Invalid part location 0: Number of fields is invalid."
         )
 
     try:
@@ -159,7 +164,8 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 1: Missing ref des"
+            == "Update parts locations error: Invalid part location 1: Reference designator "
+            "is missing."
         )
 
     if parts._is_connection_up():
@@ -176,7 +182,7 @@ def helper_test_update_parts_locations(parts):
         except SherlockUpdatePartsLocationsError as e:
             assert e.str_itr()[0] == (
                 "Update parts locations error: "
-                "Invalid part location 0: Invalid location units specified"
+                "Invalid part location 0: Location units are invalid."
             )
 
     try:
@@ -192,7 +198,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 0: Missing location units"
+            == "Update parts locations error: Invalid part location 0: Location units are missing."
         )
 
     try:
@@ -208,7 +214,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == (
             "Update parts locations error: Invalid part location 0: "
-            "Invalid location X coordinate specified"
+            "Location X coordinate is invalid."
         )
 
     try:
@@ -224,7 +230,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == (
             "Update parts locations error: Invalid part location 1: "
-            "Invalid location Y coordinate specified"
+            "Location Y coordinate is invalid."
         )
 
     try:
@@ -240,7 +246,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 1: Missing location units"
+            == "Update parts locations error: Invalid part location 1: Location units are missing."
         )
 
     try:
@@ -256,7 +262,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == (
             "Update parts locations error: Invalid part location 0: "
-            "Invalid location rotation specified"
+            "Location rotation is invalid."
         )
 
     try:
@@ -272,7 +278,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == (
             "Update parts locations error: Invalid part location 1: "
-            "Invalid location rotation specified"
+            "Location rotation is invalid."
         )
 
     if parts._is_connection_up():
@@ -289,7 +295,7 @@ def helper_test_update_parts_locations(parts):
         except SherlockUpdatePartsLocationsError as e:
             assert e.str_itr()[0] == (
                 "Update parts locations error: Invalid part location 0: "
-                "Invalid location board side specified"
+                "Location board side is invalid."
             )
 
     try:
@@ -305,7 +311,7 @@ def helper_test_update_parts_locations(parts):
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == (
             "Update parts locations error: Invalid part location 0: "
-            "Invalid location mirrored specified"
+            "Location mirrored is invalid."
         )
 
 
@@ -320,7 +326,7 @@ def helper_test_update_parts_locations_by_file(parts):
         )
         assert False
     except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: Invalid project name"
+        assert e.str_itr()[0] == "Update parts locations by file error: Project name is invalid."
 
     try:
         parts.update_parts_locations_by_file(
@@ -330,7 +336,7 @@ def helper_test_update_parts_locations_by_file(parts):
         )
         assert False
     except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: Invalid cca name"
+        assert e.str_itr()[0] == "Update parts locations by file error: CCA name is invalid."
 
     try:
         parts.update_parts_locations_by_file(
@@ -340,7 +346,7 @@ def helper_test_update_parts_locations_by_file(parts):
         )
         assert False
     except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: Invalid file path"
+        assert e.str_itr()[0] == "Update parts locations by file error: File path is invalid."
 
 
 def helper_test_import_parts_list(parts):
@@ -354,7 +360,7 @@ def helper_test_import_parts_list(parts):
         )
         assert False
     except SherlockImportPartsListError as e:
-        assert str(e) == "Import parts list error: Invalid project name"
+        assert str(e) == "Import parts list error: Project name is invalid."
 
     try:
         parts.import_parts_list(
@@ -365,7 +371,7 @@ def helper_test_import_parts_list(parts):
         )
         assert False
     except SherlockImportPartsListError as e:
-        assert str(e) == "Import parts list error: Invalid cca name"
+        assert str(e) == "Import parts list error: CCA name is invalid."
 
     try:
         parts.import_parts_list(
@@ -376,7 +382,7 @@ def helper_test_import_parts_list(parts):
         )
         assert False
     except SherlockImportPartsListError as e:
-        assert str(e) == "Import parts list error: Invalid file path"
+        assert str(e) == "Import parts list error: File path is invalid."
 
 
 def helper_test_export_parts_list(parts):
@@ -389,7 +395,7 @@ def helper_test_export_parts_list(parts):
         )
         assert False
     except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: Invalid project name"
+        assert str(e) == "Export parts list error: Project name is invalid."
 
     try:
         parts.export_parts_list(
@@ -399,7 +405,7 @@ def helper_test_export_parts_list(parts):
         )
         assert False
     except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: Invalid cca name"
+        assert str(e) == "Export parts list error: CCA name is invalid."
 
     try:
         parts.export_parts_list(
@@ -409,7 +415,7 @@ def helper_test_export_parts_list(parts):
         )
         assert False
     except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: Export file directory does not exist"
+        assert str(e) == "Export parts list error: Export file directory does not exist."
 
 
 def helper_test_enable_lead_modeling(parts):
@@ -421,7 +427,7 @@ def helper_test_enable_lead_modeling(parts):
         )
         assert False
     except SherlockEnableLeadModelingError as e:
-        assert str(e) == "Enable lead modeling error: Invalid project name"
+        assert str(e) == "Enable lead modeling error: Project name is invalid."
 
     try:
         parts.enable_lead_modeling(
@@ -430,7 +436,7 @@ def helper_test_enable_lead_modeling(parts):
         )
         assert False
     except SherlockEnableLeadModelingError as e:
-        assert str(e) == "Enable lead modeling error: Invalid cca name"
+        assert str(e) == "Enable lead modeling error: CCA name is invalid."
 
 
 if __name__ == "__main__":

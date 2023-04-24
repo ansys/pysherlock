@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """Module for shared methods for the gRPC stubs."""
 try:
     import SherlockCommonService_pb2
@@ -9,10 +11,10 @@ import grpc
 
 
 class GrpcStub:
-    """gRPC stub class."""
+    """Provides the gRPC stub."""
 
     def __init__(self, channel):
-        """Initialize GrpcStub."""
+        """Initialize the gRPC stub."""
         self.channel = channel
 
     def _is_connection_up(self):

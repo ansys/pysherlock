@@ -1,3 +1,5 @@
+# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+
 """Module for the gRPC connection object."""
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.common import Common
