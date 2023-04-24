@@ -4,11 +4,11 @@ import grpc
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import (
+    SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
-    SherlockGetRandomVibeInputFieldsError,
-    SherlockUpdateRandomVibePropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdateRandomVibePropsError,
 )
 
 
@@ -86,7 +86,8 @@ def helper_test_run_analysis(analysis):
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Events argument " \
+            "Run analysis error: Invalid analysis 0:"
+            " Invalid phase 0: Events argument "
             "is invalid."
         )
 
@@ -95,7 +96,8 @@ def helper_test_run_analysis(analysis):
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: One or more event " \
+            "Run analysis error: Invalid analysis 0:"
+            " Invalid phase 0: One or more event "
             "names are invalid."
         )
 
@@ -108,12 +110,16 @@ def helper_test_run_strain_map_analysis(analysis):
             analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
-                [[
-                    "RANDOMVIBE",
-                    [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                     ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                     ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-                ]]
+                [
+                    [
+                        "RANDOMVIBE",
+                        [
+                            ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                            ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                            ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                        ],
+                    ]
+                ],
             )
             assert True
         except SherlockRunAnalysisError as e:
@@ -124,12 +130,16 @@ def helper_test_run_strain_map_analysis(analysis):
         analysis.run_strain_map_analysis(
             "",
             "Main Board",
-            [[
-                "RANDOMVIBE",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
@@ -139,12 +149,16 @@ def helper_test_run_strain_map_analysis(analysis):
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "",
-            [[
-                "RANDOMVIBE",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
@@ -161,11 +175,7 @@ def helper_test_run_strain_map_analysis(analysis):
         assert str(e) == "Run strain map analysis error: Analyses argument is invalid."
 
     try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            []
-        )
+        analysis.run_strain_map_analysis("AssemblyTutorial", "Main Board", [])
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: One or more analyses are missing."
@@ -178,8 +188,10 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Analysis argument is invalid for strain " \
-                         "map analysis 0."
+        assert (
+            str(e) == "Run strain map analysis error: Analysis argument is invalid for strain "
+            "map analysis 0."
+        )
 
     try:
         analysis.run_strain_map_analysis(
@@ -189,121 +201,55 @@ def helper_test_run_strain_map_analysis(analysis):
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: Number of arguments 1 is wrong for strain map " \
-                  "analysis 0."
+        assert (
+            str(e)
+            == "Run strain map analysis error: Number of arguments (1) is wrong for strain map "
+            "analysis 0."
+        )
 
     try:
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [[
-                "",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
+            [
+                [
+                    "",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Analysis type is missing for strain map " \
-                         "analysis 0."
+        assert (
+            str(e) == "Run strain map analysis error: Analysis type is missing for strain map "
+            "analysis 0."
+        )
 
     try:
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [[
-                "NOTREAL",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
+            [
+                [
+                    "NOTREAL",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: Analysis type is invalid NOTREAL for " \
-                         "strain map analysis 0."
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [[
-                "RANDOMVIBE",
-                [],
-            ]]
+        assert (
+            str(e) == "Run strain map analysis error: Analysis type NOTREAL is invalid for "
+            "strain map analysis 0."
         )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert str(e) == "Run strain map analysis error: One or more event strain maps are " \
-                         "missing for strain map analysis 0."
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [[
-                "RANDOMVIBE",
-                ["INVALID"],
-            ]]
-        )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: Event strain map argument is invalid for " \
-                  "strain map analysis 0."
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [[
-                "RANDOMVIBE",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM"],
-                 ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
-        )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: Number of arguments is wrong 3 for event " \
-                  "strain map 1 for strain map analysis 0."
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [[
-                "RANDOMVIBE",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
-        )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: Life phase is missing for event strain map 1 " \
-                  "for strain map analysis 0."
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [[
-                "RANDOMVIBE",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-            ]]
-        )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: Event name is missing for event strain map 2 " \
-                  "for strain map analysis 0."
 
     try:
         analysis.run_strain_map_analysis(
@@ -312,40 +258,153 @@ def helper_test_run_strain_map_analysis(analysis):
             [
                 [
                     "RANDOMVIBE",
-                    [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                     ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                     ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-                ],
-                [
-                    "RANDOMVIBE",
-                    [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                     ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                     ["Phase 1", "Random Vibe", "", "MemoryCard1Strain", "Memory Card 1"]],
+                    [],
                 ]
-            ]
+            ],
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: PCB side is missing for event strain map 2 for " \
-                  "strain map analysis 1."
+        assert (
+            str(e) == "Run strain map analysis error: One or more event strain maps are "
+            "missing for strain map analysis 0."
+        )
 
     try:
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [[
-                "RANDOMVIBE",
-                [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                 ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                 ["Phase 1", "Random Vibe", "TOP", "", "Memory Card 1"]],
-            ]]
+            [
+                [
+                    "RANDOMVIBE",
+                    ["INVALID"],
+                ]
+            ],
         )
         assert False
     except SherlockRunStrainMapAnalysisError as e:
-        assert str(
-            e) == "Run strain map analysis error: Strain map name is missing for event strain " \
-                  "map 2 for strain map analysis 0."
+        assert (
+            str(e) == "Run strain map analysis error: Event strain map argument is invalid for "
+            "strain map analysis 0."
+        )
+
+    try:
+        analysis.run_strain_map_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
+        )
+        assert False
+    except SherlockRunStrainMapAnalysisError as e:
+        assert (
+            str(e) == "Run strain map analysis error: Number of arguments (3) is wrong for event "
+            "strain map 1 for strain map analysis 0."
+        )
+
+    try:
+        analysis.run_strain_map_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
+        )
+        assert False
+    except SherlockRunStrainMapAnalysisError as e:
+        assert (
+            str(e) == "Run strain map analysis error: Life phase is missing for event strain map 1 "
+            "for strain map analysis 0."
+        )
+
+    try:
+        analysis.run_strain_map_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ]
+            ],
+        )
+        assert False
+    except SherlockRunStrainMapAnalysisError as e:
+        assert (
+            str(e) == "Run strain map analysis error: Event name is missing for event strain map 2 "
+            "for strain map analysis 0."
+        )
+
+    try:
+        analysis.run_strain_map_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ],
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "", "MemoryCard1Strain", "Memory Card 1"],
+                    ],
+                ],
+            ],
+        )
+        assert False
+    except SherlockRunStrainMapAnalysisError as e:
+        assert (
+            str(e)
+            == "Run strain map analysis error: PCB side is missing for event strain map 2 for "
+            "strain map analysis 1."
+        )
+
+    try:
+        analysis.run_strain_map_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [
+                [
+                    "RANDOMVIBE",
+                    [
+                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                        ["Phase 1", "Random Vibe", "TOP", "", "Memory Card 1"],
+                    ],
+                ]
+            ],
+        )
+        assert False
+    except SherlockRunStrainMapAnalysisError as e:
+        assert (
+            str(e) == "Run strain map analysis error: Strain map name is missing for event strain "
+            "map 2 for strain map analysis 0."
+        )
 
 
 def helper_test_get_random_vibe_input_fields(analysis):
@@ -353,8 +412,7 @@ def helper_test_get_random_vibe_input_fields(analysis):
         analysis.get_random_vibe_input_fields("BADTYPE")
         assert False
     except SherlockGetRandomVibeInputFieldsError as e:
-        assert str(e) == \
-               "Get random vibe input fields error: Model source BADTYPE is invalid."
+        assert str(e) == "Get random vibe input fields error: Model source BADTYPE is invalid."
 
     if analysis._is_connection_up():
         try:
@@ -384,13 +442,25 @@ def helper_test_get_random_vibe_input_fields(analysis):
 def helper_test_translate_random_vibe_field_names(analysis):
     """Test translating the random vibe field names."""
 
-    results = analysis._translate_field_names([
-        "randomVibeDamping", "naturalFreqCount", "naturalFreqMin", "naturalFreqMinUnits",
-        "naturalFreqMax", "naturalFreqMaxUnits", "analysisTemp",
-        "analysisTempUnits", "partValidationEnabled", "forceModelRebuild",
-        "reuseModalAnalysis", "performNFFreqRangeCheck", "requireMaterialAssignmentEnabled",
-        "modelSource", "strainMapNaturalFreqs"
-    ])
+    results = analysis._translate_field_names(
+        [
+            "randomVibeDamping",
+            "naturalFreqCount",
+            "naturalFreqMin",
+            "naturalFreqMinUnits",
+            "naturalFreqMax",
+            "naturalFreqMaxUnits",
+            "analysisTemp",
+            "analysisTempUnits",
+            "partValidationEnabled",
+            "forceModelRebuild",
+            "reuseModalAnalysis",
+            "performNFFreqRangeCheck",
+            "requireMaterialAssignmentEnabled",
+            "modelSource",
+            "strainMapNaturalFreqs",
+        ]
+    )
 
     expected = """
 random_vibe_damping
@@ -414,15 +484,17 @@ strain_map_natural_freqs"""
 
 def helper_test_update_random_vibe_props(analysis):
     try:
-        analysis.update_random_vibe_props("", "Card", random_vibe_damping="0.01, 0.05",
-                                          analysis_temp=20, analysis_temp_units="C")
+        analysis.update_random_vibe_props(
+            "", "Card", random_vibe_damping="0.01, 0.05", analysis_temp=20, analysis_temp_units="C"
+        )
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == "Update random vibe properties error: Project name is invalid."
 
     try:
-        analysis.update_random_vibe_props("Test", "", random_vibe_damping="0.01, 0.05",
-                                          analysis_temp=20, analysis_temp_units="C")
+        analysis.update_random_vibe_props(
+            "Test", "", random_vibe_damping="0.01, 0.05", analysis_temp=20, analysis_temp_units="C"
+        )
         assert False
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == "Update random vibe properties error: CCA name is invalid."
@@ -431,88 +503,107 @@ def helper_test_update_random_vibe_props(analysis):
         analysis.update_random_vibe_props("Test", "Card", random_vibe_damping="0.01, foo")
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == \
-               "Update random vibe properties error: Random vibe damping value is invalid: foo"
+        assert (
+            str(e)
+            == "Update random vibe properties error: Random vibe damping value is invalid: foo"
+        )
 
     try:
-        analysis.update_random_vibe_props("Test", "Card",
-                                          random_vibe_damping="0.01, 0.02",
-                                          model_source="BAD_SOURCE")
+        analysis.update_random_vibe_props(
+            "Test", "Card", random_vibe_damping="0.01, 0.02", model_source="BAD_SOURCE"
+        )
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == \
-               "Update random vibe properties error: Model source BAD_SOURCE is invalid."
+        assert str(e) == "Update random vibe properties error: Model source BAD_SOURCE is invalid."
 
     try:
-        analysis.update_random_vibe_props("Test", "Card",
-                                          random_vibe_damping="0.01, 0.02",
-                                          model_source="STRAIN_MAP")
+        analysis.update_random_vibe_props(
+            "Test", "Card", random_vibe_damping="0.01, 0.02", model_source="STRAIN_MAP"
+        )
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == \
-               "Update random vibe properties error: No natural frequenices are defined for " \
-               "strain map analysis."
+        assert (
+            str(e) == "Update random vibe properties error: No natural frequenices are defined for "
+            "strain map analysis."
+        )
 
     if analysis._is_connection_up():
         try:
-            analysis.update_random_vibe_props("Test", "Card",
-                                              random_vibe_damping="0.01, 0.02",
-                                              natural_freq_min=10,
-                                              natural_freq_min_units="foo",
-                                              natural_freq_max=100,
-                                              natural_freq_max_units="HZ")
+            analysis.update_random_vibe_props(
+                "Test",
+                "Card",
+                random_vibe_damping="0.01, 0.02",
+                natural_freq_min=10,
+                natural_freq_min_units="foo",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+            )
             assert False
         except SherlockUpdateRandomVibePropsError as e:
-            assert str(e) == \
-                   "Update random vibe properties error: Minimum " \
-                   "natural frequency units are invalid: foo"
+            assert (
+                str(e) == "Update random vibe properties error: Minimum "
+                "natural frequency units are invalid: foo"
+            )
 
         try:
-            analysis.update_random_vibe_props("Test", "Card",
-                                              random_vibe_damping="0.01, 0.02",
-                                              natural_freq_min=10,
-                                              natural_freq_min_units="HZ",
-                                              natural_freq_max=100,
-                                              natural_freq_max_units="foo")
+            analysis.update_random_vibe_props(
+                "Test",
+                "Card",
+                random_vibe_damping="0.01, 0.02",
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="foo",
+            )
             assert False
         except SherlockUpdateRandomVibePropsError as e:
-            assert str(e) == \
-                   "Update random vibe properties error: Maxiumum " \
-                   "natural frequency units are invalid: foo"
+            assert (
+                str(e) == "Update random vibe properties error: Maxiumum "
+                "natural frequency units are invalid: foo"
+            )
 
         try:
-            analysis.update_random_vibe_props("Test", "Card",
-                                              random_vibe_damping="0.01, 0.02",
-                                              natural_freq_min=10,
-                                              natural_freq_min_units="HZ",
-                                              natural_freq_max=100,
-                                              natural_freq_max_units="HZ",
-                                              analysis_temp_units="foo")
+            analysis.update_random_vibe_props(
+                "Test",
+                "Card",
+                random_vibe_damping="0.01, 0.02",
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                analysis_temp_units="foo",
+            )
             assert False
         except SherlockUpdateRandomVibePropsError as e:
-            assert str(e) == \
-                   "Update random vibe properties error: Analysis " \
-                   "temperature units are invalid: foo"
+            assert (
+                str(e) == "Update random vibe properties error: Analysis "
+                "temperature units are invalid: foo"
+            )
 
         try:
-            analysis.update_random_vibe_props("Tutorial Project", "Main Board",
-                                              random_vibe_damping="0.01, 0.02",
-                                              model_source="STRAIN_MAP",
-                                              part_validation_enabled=True,
-                                              require_material_assignment_enabled=False,
-                                              strain_map_natural_freqs="BAD, FREQS")
+            analysis.update_random_vibe_props(
+                "Tutorial Project",
+                "Main Board",
+                random_vibe_damping="0.01, 0.02",
+                model_source="STRAIN_MAP",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                strain_map_natural_freqs="BAD, FREQS",
+            )
             assert False
         except SherlockUpdateRandomVibePropsError as e:
-            assert str(e) == \
-                   "Update random vibe properties error: Natural frequencies are invalid."
+            assert str(e) == "Update random vibe properties error: Natural frequencies are invalid."
 
             try:
-                analysis.update_random_vibe_props("Tutorial Project", "Main Board",
-                                                  random_vibe_damping="0.01, 0.02",
-                                                  model_source="STRAIN_MAP",
-                                                  part_validation_enabled=True,
-                                                  require_material_assignment_enabled=False,
-                                                  strain_map_natural_freqs="101, 201, 501, 1001")
+                analysis.update_random_vibe_props(
+                    "Tutorial Project",
+                    "Main Board",
+                    random_vibe_damping="0.01, 0.02",
+                    model_source="STRAIN_MAP",
+                    part_validation_enabled=True,
+                    require_material_assignment_enabled=False,
+                    strain_map_natural_freqs="101, 201, 501, 1001",
+                )
                 assert True
             except SherlockUpdateRandomVibePropsError as e:
                 print(str(e))
@@ -521,72 +612,96 @@ def helper_test_update_random_vibe_props(analysis):
 
 def helper_test_update_natural_frequency_props(analysis):
     try:
-        analysis.update_natural_frequency_props("", "Card", natural_freq_count=2,
-                                                natural_freq_min=10, natural_freq_min_units="HZ",
-                                                natural_freq_max=100, natural_freq_max_units="HZ",
-                                                part_validation_enabled=True,
-                                                require_material_assignment_enabled=False
-                                                )
+        analysis.update_natural_frequency_props(
+            "",
+            "Card",
+            natural_freq_count=2,
+            natural_freq_min=10,
+            natural_freq_min_units="HZ",
+            natural_freq_max=100,
+            natural_freq_max_units="HZ",
+            part_validation_enabled=True,
+            require_material_assignment_enabled=False,
+        )
         assert False
     except SherlockUpdateNaturalFrequencyPropsError as e:
         assert str(e) == "Update natural frequency properties error: Project name is invalid."
 
     try:
-        analysis.update_natural_frequency_props("Test", "", natural_freq_count=2,
-                                                natural_freq_min=10, natural_freq_min_units="HZ",
-                                                natural_freq_max=100, natural_freq_max_units="HZ",
-                                                part_validation_enabled=True,
-                                                require_material_assignment_enabled=False)
+        analysis.update_natural_frequency_props(
+            "Test",
+            "",
+            natural_freq_count=2,
+            natural_freq_min=10,
+            natural_freq_min_units="HZ",
+            natural_freq_max=100,
+            natural_freq_max_units="HZ",
+            part_validation_enabled=True,
+            require_material_assignment_enabled=False,
+        )
         assert False
     except SherlockUpdateNaturalFrequencyPropsError as e:
         assert str(e) == "Update natural frequency properties error: CCA name is invalid."
 
     if analysis._is_connection_up():
         try:
-            analysis.update_natural_frequency_props("Test", "Card",
-                                                    natural_freq_count=2,
-                                                    natural_freq_min=10,
-                                                    natural_freq_min_units="foo",
-                                                    natural_freq_max=100,
-                                                    natural_freq_max_units="HZ",
-                                                    part_validation_enabled=True,
-                                                    require_material_assignment_enabled=False)
+            analysis.update_natural_frequency_props(
+                "Test",
+                "Card",
+                natural_freq_count=2,
+                natural_freq_min=10,
+                natural_freq_min_units="foo",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+            )
             assert False
         except SherlockUpdateNaturalFrequencyPropsError as e:
-            assert str(e) == \
-                   "Update natural frequency properties error: Minimum " \
-                   "natural frequency units are invalid: foo"
+            assert (
+                str(e) == "Update natural frequency properties error: Minimum "
+                "natural frequency units are invalid: foo"
+            )
 
         try:
-            analysis.update_natural_frequency_props("Test", "Card",
-                                                    natural_freq_count=2,
-                                                    natural_freq_min=10,
-                                                    natural_freq_min_units="HZ",
-                                                    natural_freq_max=100,
-                                                    natural_freq_max_units="foo",
-                                                    part_validation_enabled=True,
-                                                    require_material_assignment_enabled=False)
+            analysis.update_natural_frequency_props(
+                "Test",
+                "Card",
+                natural_freq_count=2,
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="foo",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+            )
             assert False
         except SherlockUpdateNaturalFrequencyPropsError as e:
-            assert str(e) == \
-                   "Update natural frequency properties error: Maximum " \
-                   "natural frequency units are invalid: foo"
+            assert (
+                str(e) == "Update natural frequency properties error: Maximum "
+                "natural frequency units are invalid: foo"
+            )
 
         try:
-            analysis.update_natural_frequency_props("Test", "Card",
-                                                    natural_freq_count=2,
-                                                    natural_freq_min=10,
-                                                    natural_freq_min_units="HZ",
-                                                    natural_freq_max=100,
-                                                    natural_freq_max_units="HZ",
-                                                    part_validation_enabled=True,
-                                                    require_material_assignment_enabled=False,
-                                                    analysis_temp=25, analysis_temp_units="foo")
+            analysis.update_natural_frequency_props(
+                "Test",
+                "Card",
+                natural_freq_count=2,
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                analysis_temp=25,
+                analysis_temp_units="foo",
+            )
             assert False
         except SherlockUpdateNaturalFrequencyPropsError as e:
-            assert str(e) == \
-                   "Update natural frequency properties error: Analysis " \
-                   "temperature units are invalid: foo"
+            assert (
+                str(e) == "Update natural frequency properties error: Analysis "
+                "temperature units are invalid: foo"
+            )
 
 
 if __name__ == "__main__":

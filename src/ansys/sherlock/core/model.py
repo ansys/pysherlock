@@ -25,23 +25,23 @@ class Model(GrpcStub):
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 
     def export_trace_reinforcement_model(
-            self,
-            project_name,
-            cca_name,
-            export_file,
-            overwrite=True,
-            display_model=False,
-            generate_models_for_all_layers=False,
-            coordinate_units="mm",
-            trace_param_diameter_threshold_val=2,
-            trace_param_diameter_threshold_unit="mm",
-            trace_param_min_hole_diameter_val=0.25,
-            trace_param_min_hole_diameter_unit="mm",
-            trace_drill_hole_modeling="DISABLED",
-            trace_drill_hole_min_diameter_val=2,
-            trace_drill_hole_min_diameter_unit="mm",
-            trace_drill_hole_max_edge_val=1,
-            trace_drill_hole_max_edge_unit="mm"
+        self,
+        project_name,
+        cca_name,
+        export_file,
+        overwrite=True,
+        display_model=False,
+        generate_models_for_all_layers=False,
+        coordinate_units="mm",
+        trace_param_diameter_threshold_val=2,
+        trace_param_diameter_threshold_unit="mm",
+        trace_param_min_hole_diameter_val=0.25,
+        trace_param_min_hole_diameter_unit="mm",
+        trace_drill_hole_modeling="DISABLED",
+        trace_drill_hole_min_diameter_val=2,
+        trace_drill_hole_min_diameter_unit="mm",
+        trace_drill_hole_max_edge_val=1,
+        trace_drill_hole_max_edge_unit="mm",
     ):
         r"""Export a trace reinforcement model.
 
@@ -100,7 +100,7 @@ class Model(GrpcStub):
             Maximum segment size for representing round drill holes by a polygon.
             The default is ``"1mm"``.
         trace_drill_hole_max_edge_unit: str, optional
-            Units associated with the maximum segement for representing round drill holes
+            Units associated with the maximum segment for representing round drill holes
             by a polygon. The default is ``"mm"``.
 
         Examples
@@ -183,17 +183,17 @@ class Model(GrpcStub):
             raise
 
     def generate_trace_model(
-            self,
-            project_name,
-            cca_name="",
-            copper_layer_name="",
-            max_arc_segment=0.0,
-            max_arc_segment_units="mm",
-            min_trace_area=0.0,
-            min_trace_area_units="mm2",
-            min_hole_area=0.0,
-            min_hole_area_units="mm2",
-            use_snapshot_for_non_image_layer=False
+        self,
+        project_name,
+        cca_name="",
+        copper_layer_name="",
+        max_arc_segment=0.0,
+        max_arc_segment_units="mm",
+        min_trace_area=0.0,
+        min_trace_area_units="mm2",
+        min_hole_area=0.0,
+        min_hole_area_units="mm2",
+        use_snapshot_for_non_image_layer=False,
     ):
         r"""Generate one or more trace models for a project.
 
@@ -212,7 +212,7 @@ class Model(GrpcStub):
         max_arc_segment : float
             Maximum length of the segment to generate when Sherlock
             converts EDA arc drawing commands to line segments. The default is
-            ``0.0``. Smaller values for the maximum arc segement result in smoother
+            ``0.0``. Smaller values for the maximum arc segment result in smoother
             arc representations on the FEA model. However, the cost of generating a
             larger number of shorter segments is higher. Such short segments cause
             the FEA tool to generate a larger number of smaller elements to represent
@@ -256,11 +256,11 @@ class Model(GrpcStub):
             if not max_arc_segment_units:
                 raise SherlockModelServiceError("Maximum arc segment units are required.")
             if not min_trace_area:
-                raise SherlockModelServiceError("Mininum trace area is required.")
+                raise SherlockModelServiceError("Minimum trace area is required.")
             if not min_trace_area_units:
-                raise SherlockModelServiceError("Mininum trace area units are required.")
+                raise SherlockModelServiceError("Minimum trace area units are required.")
             if not min_hole_area:
-                raise SherlockModelServiceError("Mininum hole area is required.")
+                raise SherlockModelServiceError("Minimum hole area is required.")
             if not min_hole_area_units:
                 raise SherlockModelServiceError("Mininim hole area units are required.")
         except Exception as e:

@@ -91,8 +91,7 @@ class Parts(GrpcStub):
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
                         message=(
-                            f"Invalid part location {i}: "
-                            f"Location X coordinate is invalid."
+                            f"Invalid part location {i}: " f"Location X coordinate is invalid."
                         )
                     )
             if part[2] != "":
@@ -105,8 +104,7 @@ class Parts(GrpcStub):
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
                         message=(
-                            f"Invalid part location {i}: "
-                            f"Location Y coordinate is invalid."
+                            f"Invalid part location {i}: " f"Location Y coordinate is invalid."
                         )
                     )
             if part[3] != "":
@@ -115,8 +113,7 @@ class Parts(GrpcStub):
                     if rotation < -360 or rotation > 360:
                         raise SherlockUpdatePartsLocationsError(
                             message=(
-                                f"Invalid part location {i}: "
-                                f"Location rotation is invalid."
+                                f"Invalid part location {i}: " f"Location rotation is invalid."
                             )
                         )
                 except ValueError:
@@ -239,12 +236,7 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def update_parts_locations(
-            self,
-            project,
-            cca_name,
-            part_loc
-    ):
+    def update_parts_locations(self, project, cca_name, part_loc):
         """Update one or more part locations.
 
         Parameters
@@ -324,13 +316,7 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def update_parts_locations_by_file(
-            self,
-            project,
-            cca_name,
-            file_path,
-            numeric_format=""
-    ):
+    def update_parts_locations_by_file(self, project, cca_name, file_path, numeric_format=""):
         """Update one or more part locations using a CSV file.
 
         Parameters
@@ -409,13 +395,7 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def import_parts_list(
-            self,
-            project,
-            cca_name,
-            import_file,
-            import_as_user_src
-    ):
+    def import_parts_list(self, project, cca_name, import_file, import_as_user_src):
         """Import a parts list for a CCA.
 
         Parameters
@@ -473,7 +453,7 @@ class Parts(GrpcStub):
             project=project,
             ccaName=cca_name,
             importFile=import_file,
-            importAsUserSrc=import_as_user_src
+            importAsUserSrc=import_as_user_src,
         )
 
         response = self.stub.importPartsList(request)
@@ -488,12 +468,7 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def export_parts_list(
-            self,
-            project,
-            cca_name,
-            export_file
-    ):
+    def export_parts_list(self, project, cca_name, export_file):
         """Export a parts list for a CCA.
 
         Parameters
@@ -547,9 +522,7 @@ class Parts(GrpcStub):
             return
 
         request = SherlockPartsService_pb2.ExportPartsListRequest(
-            project=project,
-            ccaName=cca_name,
-            exportFile=export_file
+            project=project, ccaName=cca_name, exportFile=export_file
         )
 
         response = self.stub.exportPartsList(request)
@@ -564,37 +537,33 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def enable_lead_modeling(
-            self,
-            project,
-            cca_name
-    ):
+    def enable_lead_modeling(self, project, cca_name):
         """Enable lead modeling for all non-leadless parts leads.
 
-        Parameters
-        ----------
-        project : str
-            Name of the Sherlock project.
-        cca_name : str
-            Nam eof the CCA.
+                Parameters
+                ----------
+                project : str
+                    Name of the Sherlock project.
+                cca_name : str
+                    Nam eof the CCA.
 
-Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> sherlock.parts.enable_lead_modeling(
-            "Test",
-            "Card",
-        )
+        Examples
+                --------
+                >>> from ansys.sherlock.core.launcher import launch_sherlock
+                >>> sherlock = launch_sherlock()
+                >>> sherlock.project.import_odb_archive(
+                    "ODB++ Tutorial.tgz",
+                    True,
+                    True,
+                    True,
+                    True,
+                    project="Test",
+                    cca_name="Card",
+                )
+                >>> sherlock.parts.enable_lead_modeling(
+                    "Test",
+                    "Card",
+                )
         """
         try:
             if project == "":

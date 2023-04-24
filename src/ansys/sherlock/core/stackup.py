@@ -12,16 +12,16 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
+    SherlockGetStackupPropsError,
     SherlockInvalidConductorPercentError,
     SherlockInvalidGlassConstructionError,
     SherlockInvalidLayerIDError,
     SherlockInvalidMaterialError,
     SherlockInvalidThicknessArgumentError,
-    SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
-    SherlockGetStackupPropsError
+    SherlockUpdateConductorLayerError,
+    SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -97,7 +97,7 @@ class Stackup(GrpcStub):
     def _check_pcb_material_validity(self, manufacturer, grade, material):
         """Check PCB arguments to see if they are valid."""
         if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
-                manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
+            manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
         ):
             raise SherlockInvalidMaterialError(message="Laminate manufacturer is invalid.")
         if self._is_connection_up():
@@ -123,7 +123,7 @@ class Stackup(GrpcStub):
         if thickness < 0:
             if spec is not None:
                 raise SherlockInvalidThicknessArgumentError(
-                    message=f"Thickness {spec} is invalid."
+                    message=f"{str(spec).capitalize()} thickness is invalid."
                 )
 
             raise SherlockInvalidThicknessArgumentError(message="Thickness is invalid.")
@@ -132,16 +132,14 @@ class Stackup(GrpcStub):
                 if thickness_unit == "oz":
                     return
             if (self.LAMINATE_THICKNESS_UNIT_LIST is not None) and (
-                    thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST
+                thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST
             ):
                 if spec is not None:
                     raise SherlockInvalidThicknessArgumentError(
                         message=f"Thickness units {spec} are invalid."
                     )
 
-                raise SherlockInvalidThicknessArgumentError(
-                    message="Thickness units are invalid."
-                )
+                raise SherlockInvalidThicknessArgumentError(message="Thickness units are invalid.")
 
     def _check_layer_id(self, layerid, spec=None):
         """Check layer argument to see if it is valid."""
@@ -159,7 +157,7 @@ class Stackup(GrpcStub):
                 )
         except ValueError:
             raise SherlockInvalidLayerIDError(
-                message="Layer ID is invalid.  It must be an integer greater than 0."
+                message="Layer ID is invalid. It must be an integer greater than 0."
             )
 
     def _check_conductor_percent(self, input):
@@ -205,22 +203,22 @@ class Stackup(GrpcStub):
             layer.thicknessUnit = l[3]
 
     def gen_stackup(
-            self,
-            project,
-            cca_name,
-            board_thickness,
-            board_thickness_unit,
-            pcb_material_manufacturer,
-            pcb_material_grade,
-            pcb_material,
-            conductor_layers_cnt,
-            signal_layer_thickness,
-            signal_layer_thickness_unit,
-            min_laminate_thickness,
-            min_laminate_thickness_unit,
-            maintain_symmetry,
-            power_layer_thickness,
-            power_layer_thickness_unit
+        self,
+        project,
+        cca_name,
+        board_thickness,
+        board_thickness_unit,
+        pcb_material_manufacturer,
+        pcb_material_grade,
+        pcb_material,
+        conductor_layers_cnt,
+        signal_layer_thickness,
+        signal_layer_thickness_unit,
+        min_laminate_thickness,
+        min_laminate_thickness_unit,
+        maintain_symmetry,
+        power_layer_thickness,
+        power_layer_thickness_unit,
     ):
         """Generate a new stackup from the properties.
 
@@ -357,16 +355,16 @@ class Stackup(GrpcStub):
             raise e
 
     def update_conductor_layer(
-            self,
-            project,
-            cca_name,
-            layer,
-            type="",
-            material="",
-            thickness=0,
-            thickness_unit="",
-            conductor_percent="",
-            resin_material=""
+        self,
+        project,
+        cca_name,
+        layer,
+        type="",
+        material="",
+        thickness=0,
+        thickness_unit="",
+        conductor_percent="",
+        resin_material="",
     ):
         """Update a conductor layer with given properties.
 
@@ -434,13 +432,13 @@ class Stackup(GrpcStub):
             if (type != "") and type not in self.LAYER_TYPE_LIST:
                 raise SherlockUpdateConductorLayerError(
                     message=(
-                        "Conductor type is invalid. " \
-                        "Options are SIGNAL, POWER, and SUBSTRATE."
+                        "Conductor type is invalid. "
+                        'Options are "SIGNAL", "POWER", and "SUBSTRATE".'
                     )
                 )
             if material != "":
                 if (self.CONDUCTOR_MATERIAL_LIST is not None) and (
-                        material not in self.CONDUCTOR_MATERIAL_LIST
+                    material not in self.CONDUCTOR_MATERIAL_LIST
                 ):
                     raise SherlockUpdateConductorLayerError(
                         message="Conductor material is invalid."
@@ -451,9 +449,9 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
         except (
-                SherlockInvalidLayerIDError,
-                SherlockInvalidConductorPercentError,
-                SherlockInvalidThicknessArgumentError
+            SherlockInvalidLayerIDError,
+            SherlockInvalidConductorPercentError,
+            SherlockInvalidThicknessArgumentError,
         ) as e:
             LOG.error(f"Update conductor layer error: {str(e)}")
             raise SherlockUpdateConductorLayerError(message=str(e))
@@ -487,20 +485,20 @@ class Stackup(GrpcStub):
             raise e
 
     def update_laminate_layer(
-            self,
-            project,
-            cca_name,
-            layer,
-            manufacturer="",
-            grade="",
-            material="",
-            thickness=0,
-            thickness_unit="",
-            construction_style="",
-            glass_construction=[],
-            fiber_material="",
-            conductor_material="",
-            conductor_percent=""
+        self,
+        project,
+        cca_name,
+        layer,
+        manufacturer="",
+        grade="",
+        material="",
+        thickness=0,
+        thickness_unit="",
+        construction_style="",
+        glass_construction=[],
+        fiber_material="",
+        conductor_material="",
+        conductor_percent="",
     ):
         """Update a laminate layer with given properties.
 
@@ -592,18 +590,18 @@ class Stackup(GrpcStub):
             self._check_thickness(thickness, thickness_unit, spec="laminate")
             if construction_style != "":
                 if (self.CONSTRUCTION_STYLE_LIST is not None) and (
-                        construction_style not in self.CONSTRUCTION_STYLE_LIST
+                    construction_style not in self.CONSTRUCTION_STYLE_LIST
                 ):
                     raise SherlockUpdateLaminateLayerError(message="Construction style is invalid.")
                 self._check_glass_construction_validity(glass_construction)
             if fiber_material != "":
                 if (self.FIBER_MATERIAL_LIST is not None) and (
-                        fiber_material not in self.FIBER_MATERIAL_LIST
+                    fiber_material not in self.FIBER_MATERIAL_LIST
                 ):
                     raise SherlockUpdateLaminateLayerError(message="Fiber material is invalid.")
             if conductor_material != "":
                 if (self.CONDUCTOR_MATERIAL_LIST is not None) and (
-                        conductor_material not in self.CONDUCTOR_MATERIAL_LIST
+                    conductor_material not in self.CONDUCTOR_MATERIAL_LIST
                 ):
                     raise SherlockUpdateLaminateLayerError(message="Conductor material is invalid.")
             self._check_conductor_percent(conductor_percent)
@@ -611,11 +609,11 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
         except (
-                SherlockInvalidLayerIDError,
-                SherlockInvalidMaterialError,
-                SherlockInvalidConductorPercentError,
-                SherlockInvalidThicknessArgumentError,
-                SherlockInvalidGlassConstructionError
+            SherlockInvalidLayerIDError,
+            SherlockInvalidMaterialError,
+            SherlockInvalidConductorPercentError,
+            SherlockInvalidThicknessArgumentError,
+            SherlockInvalidGlassConstructionError,
         ) as e:
             LOG.error(f"Update laminate layer error: %s", {str(e)})
             raise SherlockUpdateLaminateLayerError(message=str(e))
@@ -653,9 +651,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def list_conductor_layers(
-            self,
-            project):
+    def list_conductor_layers(self, project):
         """List CCA conductor layers.
 
         Parameters
@@ -682,7 +678,6 @@ class Stackup(GrpcStub):
         >>>     for prop in properties:
         >>>     print(f"{prop}")
         """
-
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
         if self.CONDUCTOR_MATERIAL_LIST is None:
@@ -705,9 +700,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def list_laminate_layers(
-            self,
-            project):
+    def list_laminate_layers(self, project):
         """Get a list of all laminate layers and their properties.
 
         Parameters
@@ -761,12 +754,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_stackup_props(
-            self,
-            project,
-            cca_name
-            ):
-        """Returns the stackup properties from a CCA
+    def get_stackup_props(self, project, cca_name):
+        """Return the stackup properties from a CCA.
 
         Parameters
         ----------
@@ -804,8 +793,7 @@ class Stackup(GrpcStub):
                 return
 
             request = SherlockStackupService_pb2.GetStackupPropsRequest(
-                project=project,
-                ccaName=cca_name
+                project=project, ccaName=cca_name
             )
             response = self.stub.getStackupProps(request)
             return response

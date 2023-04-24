@@ -106,7 +106,6 @@ class Common(GrpcStub):
             - ``"WEIGHT"``
 
         """
-
         if unitType == "":
             raise SherlockCommonServiceError(message="Unit type is missing.")
         elif unitType == "ACCEL_DENSITY":
@@ -172,9 +171,7 @@ class Common(GrpcStub):
             LOG.error("Not connected to a gRPC service.")
             return ""
 
-        request = SherlockCommonService_pb2.ListUnitsRequest(
-            unitType=unitType
-        )
+        request = SherlockCommonService_pb2.ListUnitsRequest(unitType=unitType)
 
         try:
             response = self.stub.listUnits(request)

@@ -83,6 +83,7 @@ class SherlockListCCAsError(Exception):
 
 class SherlockListConductorLayersError(Exception):
     """Contains the error raised when a project's conductor layers cannot be listed."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -94,6 +95,7 @@ class SherlockListConductorLayersError(Exception):
 
 class SherlockListLaminateLayersError(Exception):
     """Contains the error raised when a project's laminate layers cannot be listed."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -105,6 +107,7 @@ class SherlockListLaminateLayersError(Exception):
 
 class SherlockGetStackupPropsError(Exception):
     """Raised when getting stackup properties results in an error."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -338,7 +341,7 @@ class SherlockGenStackupError(Exception):
 
 
 class SherlockUpdateConductorLayerError(Exception):
-    """Contains the error raised when a conductor layer cannot be udpated."""
+    """Contains the error raised when a conductor layer cannot be updated."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -653,7 +656,7 @@ class SherlockInvalidThicknessArgumentError(Exception):
 
 
 class SherlockInvalidGlassConstructionError(Exception):
-    """Contains teh argument raised when glass construction arguments are invalid."""
+    """Contains the argument raised when glass construction arguments are invalid."""
 
     def __init__(self, message):
         """Initialize error message."""

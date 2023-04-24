@@ -4,11 +4,11 @@ import grpc
 
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
-    SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError,
+    SherlockGetStackupPropsError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
-    SherlockGetStackupPropsError
+    SherlockUpdateConductorLayerError,
+    SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.stackup import Stackup
 
@@ -116,8 +116,7 @@ def helper_test_gen_stackup(stackup):
         assert False
     except SherlockGenStackupError as e:
         assert (
-            str(e)
-            == "Generate stackup error: Number of conductor layers must be greater than 1."
+            str(e) == "Generate stackup error: Number of conductor layers must be greater than 1."
         )
 
     try:
@@ -273,7 +272,7 @@ def helper_test_gen_stackup(stackup):
             )
             assert False
         except SherlockGenStackupError as e:
-            assert str(e) == "Generate stackup error: Laminate material is invald."
+            assert str(e) == "Generate stackup error: Laminate material is invalid."
 
         try:
             stackup.gen_stackup(
@@ -412,7 +411,7 @@ def helper_test_update_conductor_layer(stackup):
         )
         assert False
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == "Update conductor layer error: Conductor layer ID is missing."
+        assert str(e) == "Update conductor layer error: Layer ID conductor is missing."
 
     try:
         stackup.update_conductor_layer(
@@ -447,8 +446,10 @@ def helper_test_update_conductor_layer(stackup):
         )
         assert False
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == "Update conductor layer error: Layer ID is invalid. " \
-                         "It must be an integer greater than 0."
+        assert (
+            str(e) == "Update conductor layer error: Layer ID is invalid. "
+            "It must be an integer greater than 0."
+        )
 
     try:
         stackup.update_conductor_layer(
@@ -518,8 +519,7 @@ def helper_test_update_conductor_layer(stackup):
             assert False
         except SherlockUpdateConductorLayerError as e:
             assert (
-                    str(e) == "Update conductor layer error: Conductor thickness "
-                              "units are invalid."
+                str(e) == "Update conductor layer error: Conductor thickness " "units are invalid."
             )
 
     try:
@@ -555,8 +555,10 @@ def helper_test_update_conductor_layer(stackup):
         )
         assert False
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == "Update conductor layer error: Conducter percent is invalid. " \
-                         "It must be between 0 and 100."
+        assert (
+            str(e) == "Update conductor layer error: Conductor percent is invalid. "
+            "It must be between 0 and 100."
+        )
 
 
 def helper_test_update_laminate_layer(stackup):
@@ -620,7 +622,7 @@ def helper_test_update_laminate_layer(stackup):
         )
         assert False
     except SherlockUpdateLaminateLayerError as e:
-        assert str(e) == "Update laminate layer error: Laminate layer ID is missing."
+        assert str(e) == "Update laminate layer error: Layer ID laminate is missing."
 
     try:
         stackup.update_laminate_layer(
@@ -641,7 +643,7 @@ def helper_test_update_laminate_layer(stackup):
         assert False
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == (
-            "Update laminate layer error: Layer ID is invalid. " \
+            "Update laminate layer error: Layer ID is invalid. "
             "It must be an integer greater than 0."
         )
 
@@ -663,8 +665,10 @@ def helper_test_update_laminate_layer(stackup):
         )
         assert False
     except SherlockUpdateLaminateLayerError as e:
-        assert str(e) == "Update laminate layer error: Layer ID is invalid. " \
-                         "It must be an integer greater than 0."
+        assert (
+            str(e) == "Update laminate layer error: Layer ID is invalid. "
+            "It must be an integer greater than 0."
+        )
 
     if stackup._is_connection_up():
         try:
@@ -808,8 +812,10 @@ def helper_test_update_laminate_layer(stackup):
         )
         assert False
     except SherlockUpdateLaminateLayerError as e:
-        assert str(e) == "Update laminate layer error: Invalid layer 0: Number of arguments " \
-                         "is wrong."
+        assert (
+            str(e) == "Update laminate layer error: Invalid layer 0: Number of arguments "
+            "is wrong."
+        )
 
     try:
         stackup.update_laminate_layer(
@@ -919,6 +925,7 @@ def helper_test_update_laminate_layer(stackup):
             "Update laminate layer error: Conductor percent is invalid."
             " It must be between 0 and 100."
         )
+
 
 def helper_test_list_conductor_layers(stackup):
     """Test list_conductor_layers API"""
