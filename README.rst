@@ -55,6 +55,13 @@ With PySherlock, you can perform many tasks, including these:
 * Export a trace or trace reinforcement model for integration with Ansys Workbench
 * Execute one or more analyses
 
+Dependencies
+------------
+
+You must have a licensed copy of `Ansys Sherlock <https://www.ansys.com/products/structures/ansys-sherlock>`_
+installed either in your local or remote machine. When using a remote session, a connection to that
+session must be reachable from your Python program.
+
 Documentation and issues
 ------------------------
 For comprehensive information on PySherlock, see the latest release
@@ -63,6 +70,11 @@ For comprehensive information on PySherlock, see the latest release
 On the `PySherlock Issues <https://github.com/pyansys/pysherlock/issues>`_ page,
 you can create issues to submit questions, report bugs, and request new features.
 This is the best place to post questions and code.
+
+Contributing
+------------
+If you would like to test or contribute to the development of PyMechanical, please visit
+`PySherlock - Contributing <https://sherlock.docs.pyansys.com/version/stable/contributing.html>`_.
 
 License
 -------
