@@ -73,7 +73,7 @@ This is the best place to post questions and code.
 
 Contributing
 ------------
-If you would like to test or contribute to the development of PyMechanical, please visit
+If you would like to test or contribute to the development of PySherlock, please visit
 `PySherlock - Contributing <https://sherlock.docs.pyansys.com/version/stable/contributing.html>`_.
 
 License
