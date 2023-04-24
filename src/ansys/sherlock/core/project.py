@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module containing all the project management capabilities."""
+"""Module containing all project management capabilities."""
 import os
 
 try:
@@ -24,10 +24,10 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Project(GrpcStub):
-    """Module containing all the project management capabilities."""
+    """Contains all project management capabilities."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for SherlockProjectService."""
+        """Initialize a gRPC stub for Sherlock Project service."""
         self.channel = channel
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
@@ -36,8 +36,9 @@ class Project(GrpcStub):
 
         Parameters
         ----------
-        project : str, required
-            Project name of project to be deleted
+        project : str
+            Name of the Sherlock project.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -46,13 +47,13 @@ class Project(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockDeleteProjectError("Invalid Blank Project Name")
+                raise SherlockDeleteProjectError("Project name is blank. Specify a project name.")
         except SherlockDeleteProjectError as e:
             LOG.error(str(e))
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
@@ -83,20 +84,23 @@ class Project(GrpcStub):
 
         Parameters
         ----------
-        archive_file : str, required
-            Full path to the ODB++ arhicve file to be imported.
-        process_layer_thickness : bool, required
-            Option to assign stackup thickness.
-        include_other_layers : bool, required
-            Option to include other layers.
-        process_cutout_file : bool, required
-            Option to process cutouts.
-        guess_part_properties: bool, required
-            Option to guess part properties
+        archive_file : str
+            Full path to the ODB++ archive file.
+        process_layer_thickness : bool
+            Whether to assign stackup thickness.
+        include_other_layers : bool
+            Whether to include other layers.
+        process_cutout_file : bool
+            Whether to process cutouts.
+        guess_part_properties: bool
+            Whether to guess part properties.
         project: str, optional
-            Sherlock project name. If empty, the filename will be used for the project name.
+            Name of the Sherlock project. The default is ``None``, in which
+            case the filename is used for the project name.
         cca_name : str, optional
-            Project CCA name. If empty, the filename will be used for the CCA name.
+            Name of the CCA name. The default is ``None``, in which case
+            the filename is used for the CCA name.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -108,17 +112,17 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportODBError(message="Archive file path required")
+                raise SherlockImportODBError(message="Archive file path is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportODBError("Invalid file path")
+                raise SherlockImportODBError("File path is invalid.")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         if project is None:
@@ -155,16 +159,19 @@ class Project(GrpcStub):
 
         Parameters
         ----------
-        archive_file : str, required
-            Full path to the ODB++ arhicve file to be imported.
-        include_other_layers : bool, required
-            Option to include other layers.
-        guess_part_properties: bool, required
-            Option to guess part properties
+        archive_file : str
+            Full path to the ODB++ archive file.
+        include_other_layers : bool
+            Whether to include other layers.
+        guess_part_properties: bool
+            Whether to guess part properties
         project: str, optional
-            Sherlock project name. If empty, the filename will be used for the project name.
+            Name of the Sherlock project. The default is ``None``, in which case
+            the filename is used for the project name.
         cca_name : str, optional
-            Project CCA name. If empty, the filename will be used for the CCA name.
+            Name of the CCA. The default is ``None``, in which case the filename
+            is be used for the CCA name.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -175,17 +182,17 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportIpc2581Error(message="Archive file path required")
+                raise SherlockImportIpc2581Error(message="Archive file path is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportIpc2581Error("Invalid file path")
+                raise SherlockImportIpc2581Error("File path is invalid.")
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         if project is None:
@@ -218,14 +225,15 @@ class Project(GrpcStub):
 
         Parameters
         ----------
-        project : str, required
-            Sherlock project name.
-        author : str, required
-            Name of the author who generates the report.
-        company : str, required
-            Name of author's company.
-        export_file: str, required
-            Full path to where the report will be written.
+        project : str
+            Name of the Sherlock project.
+        author : str
+            Name of the author who is generating the report.
+        company : str
+            Name of the author's company.
+        export_file: str
+            Full path to where the report is to be written.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -243,26 +251,26 @@ class Project(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockGenerateProjectReportError(message="Invalid project name")
+                raise SherlockGenerateProjectReportError(message="Project name is invalid.")
             if author == "":
-                raise SherlockGenerateProjectReportError(message="Invalid author name")
+                raise SherlockGenerateProjectReportError(message="Author name is invalid.")
             if company == "":
-                raise SherlockGenerateProjectReportError(message="Invalid company name")
+                raise SherlockGenerateProjectReportError(message="Company name is invalid.")
             if export_file == "":
-                raise SherlockGenerateProjectReportError(message="Export file path required")
+                raise SherlockGenerateProjectReportError(message="Export file path is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path
                 if not os.path.exists(os.path.dirname(export_file)):
                     raise SherlockGenerateProjectReportError(
-                        message=("Export file directory does not exist")
+                        message=("Export file directory does not exist.")
                     )
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockProjectService_pb2.GenReportRequest(
@@ -287,20 +295,16 @@ class Project(GrpcStub):
             raise e
 
     def list_ccas(self, project, cca_names=None):
-        """
-        Return a list of the available CCA's according to inputs.
-
-        Notes
-        -----
-        Return the available CCA's and sub-assembly CCA's assigned to each CCA or the requested
-        CCA's from the given project.
+        """Get a list of CCAs and subassembly CCAs assigned to each CCA or requested CCAs.
 
         Parameters
         ----------
-        project: str, required
-            Sherlock project name to provide strain maps for.
+        project: str
+            Name of the Sherlock project to provide strain maps for.
         cca_name : List of str, optional
-            Project CCA names to return. If empty all CCA's in the project will be returned.
+            List of CCA names. The default is ``None``, in which case all CCAs
+            in the project are returned.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -309,18 +313,18 @@ class Project(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockListCCAsError(message="Invalid project name")
+                raise SherlockListCCAsError(message="Project name is invalid.")
 
             if cca_names is not None and type(cca_names) is not list:
-                raise SherlockListCCAsError(message="cca_names is not a list")
+                raise SherlockListCCAsError(message="cca_names is not a list.")
 
             if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
+                LOG.error("There is no connection to a gRPC service.")
                 return
 
             request = SherlockProjectService_pb2.ListCCAsRequest(project=project)
 
-            """Add the CCA names to the request"""
+            """Add the CCA names to the request."""
             if cca_names is not None:
                 for cca_name in cca_names:
                     request.cca.append(cca_name)
@@ -342,29 +346,30 @@ class Project(GrpcStub):
         return response.ccas
 
     def add_strain_maps(self, project, strain_maps):
-        """Add strain map CSV files to the CCA's of the given project.
+        """Add CSV files with strain maps to the CCAs.
 
         Parameters
         ----------
-        project: str, required
-            Sherlock project name to add the strain maps to.
+        project: str
+            Name of the Sherlock project to add strain maps to.
         strain_maps : List of (strain_map_file, file_comment, header_row_count, \
             reference_id_column, strain_column, strain_units, ccas) required
-            strain_map_file : str, required
-                The full path to the strain map file being added to the project.
-            file_comment : str, required
-                The file comment to associate with the strain map file.
-            header_row_count : int, required
-                The number of rows before the column header in the file.
-            reference_id_column : str, required
-                The name of the column in the file containing the reference identifiers.
-            strain_column : str, required
-                The name of the column in the file containing the strain values.
-            strain_units : str, required
-                The strain units: Valid units are: µε, ε
-            ccas : List of (cca_name) optional
-                The CCA's to add the strain map file to. When not specified, all CCA's in the
-                project are assigned the strain map.
+            strain_map_file : str
+                Full path to the strain map file to add to the project.
+            file_comment : str
+                File comment to associate with the strain map file.
+            header_row_count : int
+                Number of rows before the file's column header.
+            reference_id_column : str
+                Name of the column in the file with the reference IDs.
+            strain_column : str
+                Name of the column in the file with the strain values.
+            strain_units : str
+                Strain units: Options are ``µε`` and ``ε``.
+            ccas : List of (cca_name), optional
+                List of CCA names to assign the strain map file to. When no list is
+                specified, the strain  map is assigned to all CCAs in the project.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -381,42 +386,42 @@ class Project(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockAddStrainMapsError(message="Invalid project name")
+                raise SherlockAddStrainMapsError(message="Project name is invalid.")
 
             if len(strain_maps) == 0:
-                raise SherlockAddStrainMapsError(message="Missing strain maps")
+                raise SherlockAddStrainMapsError(message="Strain maps are missing.")
 
             # Validate first
             for i, strain_map in enumerate(strain_maps):
                 if len(strain_map) < 6 or len(strain_map) > 7:
                     raise SherlockAddStrainMapsError(
-                        f"Wrong number of args {str(len(strain_maps))} for strain map {i}"
+                        f"Number of arguments ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
                     )
                 elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(f"File path is required for strain map {i}")
+                    raise SherlockAddStrainMapsError(f"File path is required for strain map {i}.")
                 elif not isinstance(strain_map[2], int) or strain_map[2] == "":
                     raise SherlockAddStrainMapsError(
-                        f"Header row count is required for strain map {i}"
+                        f"Header row count is required for strain map {i}."
                     )
                 elif strain_map[2] < 0:
                     raise SherlockAddStrainMapsError(
-                        f"Header row count must be greater than or equal to 0 for strain map {i}"
+                        f"Header row count must be greater than or equal to 0 for strain map {i}."
                     )
                 elif not isinstance(strain_map[3], str) or strain_map[3] == "":
                     raise SherlockAddStrainMapsError(
-                        f"Reference ID column is required for strain map {i}"
+                        f"Reference ID column is required for strain map {i}."
                     )
                 elif not isinstance(strain_map[4], str) or strain_map[4] == "":
                     raise SherlockAddStrainMapsError(
-                        f"Strain column is required for strain map {i}"
+                        f"Strain column is required for strain map {i}."
                     )
                 elif not isinstance(strain_map[5], str) or strain_map[5] == "":
                     raise SherlockAddStrainMapsError(
-                        f"Strain units are required for strain map {i}"
+                        f"Strain units are required for strain map {i}."
                     )
                 elif strain_map[5] != "µε" and strain_map[5] != "ε":
                     raise SherlockAddStrainMapsError(
-                        f"Invalid strain units '{strain_map[5]}' specified for strain map {i}"
+                        f"Strain units '{strain_map[5]}' are invalid for strain map {i}."
                     )
                 elif (
                     len(strain_maps) == 7
@@ -424,18 +429,18 @@ class Project(GrpcStub):
                     and type(strain_map[6]) is not list
                 ):
                     raise SherlockAddStrainMapsError(
-                        message="cca_names is not a list for strain map {i}"
+                        message="cca_names is not a list for strain map {i}."
                     )
 
                 strain_map_file = strain_map[0]
 
                 if not os.path.exists(strain_map_file):
                     raise SherlockAddStrainMapsError(
-                        message=f"File '{strain_map_file}' doesn't exist for strain map {i}"
+                        message=f"File '{strain_map_file}' doesn't exist for strain map {i}."
                     )
 
             if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
+                LOG.error("There is no connection to a gRPC service.")
                 return
 
             request = SherlockProjectService_pb2.AddStrainMapRequest(project=project)
@@ -450,7 +455,7 @@ class Project(GrpcStub):
                 strain_map.strainColumn = s[4]
                 strain_map.strainUnits = s[5]
 
-                """Add the CCA names to the request"""
+                """Add the CCA names to the request."""
                 if len(s) == 7:
                     cca_names = s[6]
                     if cca_names is not None:
@@ -473,15 +478,16 @@ class Project(GrpcStub):
             raise e
 
     def list_strain_maps(self, project, cca_names=None):
-        """Return the strain maps assigned to each CCA or the requested CCA's from the project.
+        """Get the strain maps assigned to each CCA or the requested CCAs.
 
         Parameters
         ----------
-        project: str, required
-            Sherlock project name to provide strain maps for.
+        project: str
+            Name of the Sherlock project.
         cca_name : List of str, optional
-            Project CCA names to provide strain maps for. If empty all CCA's in the
-             project will be returned.
+            List of CCA names to provide strain maps for. The default is ``None``,
+            in which case all CCAs in the project are returned.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -490,18 +496,18 @@ class Project(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockListStrainMapsError(message="Invalid project name")
+                raise SherlockListStrainMapsError(message="Project name is invalid.")
 
             if cca_names is not None and type(cca_names) is not list:
-                raise SherlockListStrainMapsError(message="cca_names is not a list")
+                raise SherlockListStrainMapsError(message="cca_names is not a list.")
 
             if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
+                LOG.error("There is no connection to a gRPC service.")
                 return
 
             request = SherlockProjectService_pb2.ListStrainMapsRequest(project=project)
 
-            """Add the CCA names to the request"""
+            """Add the CCA names to the request."""
             if cca_names is not None:
                 for cca_name in cca_names:
                     request.cca.append(cca_name)

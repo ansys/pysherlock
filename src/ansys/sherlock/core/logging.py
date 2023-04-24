@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""pysherlock logger."""
+"""PySherlock logger."""
 from datetime import datetime
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -43,7 +43,7 @@ def __get_logger(logger_name):
 
 
 class Logger:
-    """pysherlock logger."""
+    """Provides the PySherlock logger."""
 
     def __init__(self, logger_name, level=logging.WARN):
         """Initialize logger."""

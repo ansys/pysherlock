@@ -25,7 +25,7 @@ def helper_test_list_units(common):
         common.list_units("NOTHING")
         assert False
     except SherlockCommonServiceError as e:
-        assert str(e) == "Sherlock common service error: Invalid unit type 'NOTHING' specified"
+        assert str(e) == "Sherlock common service error: Unit type 'NOTHING' is missing."
 
     units = common.list_units("ACCEL_DENSITY")
     assert len(units) == 5 and "G2/Hz" in units

@@ -21,4 +21,4 @@ PySherlock is a Python client library for the Ansys Sherlock product.
     user_guide/index
     api/index
 ..    examples/index
-..    contributing
+    contributing

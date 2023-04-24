@@ -1,7 +1,9 @@
+.. _ref_common_module:
+
 Common
 ======
 
-Module containing all common capabilities.
+The ``common`` module contains all common capabilities.
 
 .. currentmodule:: ansys.sherlock.core.common
 

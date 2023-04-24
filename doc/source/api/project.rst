@@ -1,7 +1,9 @@
+.. _ref_project_module:
+
 Project
 =======
 
-Module containing all the project management capabilities.
+The ``project`` module contains all project management capabilities.
 
 .. currentmodule:: ansys.sherlock.core.project
 

@@ -1,7 +1,9 @@
+.. _ref_analysis_module:
+
 Analysis
 ========
 
-Module containing all the analysis capabilities.
+The ``analysis`` module contains all analysis capabilities.
 
 .. currentmodule:: ansys.sherlock.core.analysis
 

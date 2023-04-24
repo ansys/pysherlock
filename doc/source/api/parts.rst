@@ -1,7 +1,9 @@
+.. _ref_parts_module:
+
 Parts
 =====
 
-Module containing all the parts management capabilities.
+The ``parts`` module contains all parts management capabilities.
 
 .. currentmodule:: ansys.sherlock.core.parts
 
