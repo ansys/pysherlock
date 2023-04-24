@@ -60,7 +60,7 @@ Dependencies
 
 You must have a licensed copy of `Ansys Sherlock <https://www.ansys.com/products/structures/ansys-sherlock>`_
 installed either in your local or remote machine. When using a remote session, a connection to that
-session must be reachable from your Python program.
+remote machine must be available from your Python program.
 
 Documentation and issues
 ------------------------
