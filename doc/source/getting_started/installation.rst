@@ -1,52 +1,48 @@
 .. _installation:
 
-============
-Installation
-============
+================
+Install packages
+================
 
-The ``ansy-sherlock`` package supports Python 3.7 through
-Python 3.10 on Windows.
+The ``ansy-sherlock`` package supports Python 3.7 through Python 3.10 on Windows.
 
-======================
-Installing the package
-======================
+To use PySherlock, you must download and install both the ``ansys-api-sherlock``
+and ``ansys-sherlock`` packages.
 
-.. TODO: uncomment the following lines when PySherlock is released to the public PyPi
+.. TODO: uncomment the following lines when PySherlock is released to the public PyPi.
    Install the latest ``ansys-sherlock-core`` package from PyPi with:
 
 ..   .. code::
 
 ..   pip install ansys-sherlock-core
 
-PySherlock requires ``ansys-api-sherlock``.
-Download the latest ``ansys-api-sherlock`` package using either ``git clone`` or download a zipped file
-from Github `ansys-api-sherlock repo <https://github.com/pyansys/ansys-api-sherlock>`_.
+#. Download the latest ``ansys-api-sherlock`` package either by using the following
+   ``git clone`` command or downloading the ZIP file from the **Release** area of the
+   `ansys-api-sherlock <https://github.com/pyansys/ansys-api-sherlock>`_ GitHub repository.
 
-.. code::
+   .. code::
 
-    git clone https://github.com/pyansys/ansys-api-sherlock.git
+      git clone https://github.com/pyansys/ansys-api-sherlock.git
 
-After downloading, execute the following commands to install ``ansys-api-sherlock``.
+#. After the pacakge is downloaded, execute these commands to install it:
 
-.. code::
+   .. code::
 
-    cd ansys-api-sherlock
-    pip install -e .
+      cd ansys-api-sherlock
+      pip install -e .
 
-Download the latest ``ansys-sherlock`` package using either ``git clone`` or download a zipped file
-from Github `PySherlock repo <https://github.com/pyansys/pysherlock>`_.
+#. Download the latest ``ansys-sherlock`` package either by using the following
+   ``git clone`` command or downloading the ZIP file from **Release** area of the
+   `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository.
+   
+   .. code::
 
-.. code::
+      git clone https://github.com/pyansys/pysherlock.git
 
-    git clone https://github.com/pyansys/pysherlock.git
+#. After the package is downloaded, execute these commands to install it:
 
-After downloading, execute the following commands to install ``pysherlock``.
+   .. code::
 
-.. code::
-
-    cd pysherlock
-    pip install -e .
-
-
-
+      cd pysherlock
+      pip install -e .
 

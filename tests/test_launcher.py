@@ -15,7 +15,7 @@ class TestLauncher(unittest.TestCase):
             "AWP_ROOT222": "C:\\Program Files\\ANSYS Inc\\v222",
             "AWP_ROOT102": "C:\\Program Files\\ANSYS Inc\\v102",
         },
-        clear=True
+        clear=True,
     )
     @patch("os.path.isdir")
     def test_base_ansys(self, mock_os_path_isdir):

@@ -11,10 +11,10 @@ import grpc
 
 
 class GrpcStub:
-    """gRPC stub class."""
+    """Provides the gRPC stub."""
 
     def __init__(self, channel):
-        """Initialize GrpcStub."""
+        """Initialize the gRPC stub."""
         self.channel = channel
 
     def _is_connection_up(self):

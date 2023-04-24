@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module for running the gRPC APIs in the SherlockCommonService."""
+"""Module for running the gRPC APIs in the Sherlock Common Service."""
 try:
     import SherlockCommonService_pb2
     import SherlockCommonService_pb2_grpc
@@ -17,7 +17,7 @@ class Common(GrpcStub):
     """Contains methods from the Sherlock Common Service."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for SherlockCommonService."""
+        """Initialize a gRPC stub for the Sherlock Common service."""
         self.channel = channel
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
@@ -27,13 +27,13 @@ class Common(GrpcStub):
             LOG.error("Health check failed.")
             return False
         else:
-            LOG.info("Connection is up.")
+            LOG.info("Connection is healthy.")
             return True
 
     def is_sherlock_client_loading(self):
-        """Checks if the Sherlock Client (if opened) is still initializing."""
+        """Check if the Sherlock client (if opened) is still initializing."""
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         message = SherlockCommonService_pb2.IsSherlockClientLoadingRequest()
@@ -52,11 +52,12 @@ class Common(GrpcStub):
         Parameters
         ----------
         close_sherlock_client : boolean, optional
-            If set to True and if the Sherlock client is open, then closes
-            the Sherlock client also.
+            Whether to close the Sherlock client when the gRPC connection is closed. The default
+            is ``False``, in which case the Sherlock client remains open when the gRPC connection
+            is closed.
         """
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         try:
@@ -68,20 +69,45 @@ class Common(GrpcStub):
             LOG.error("Exit error: ", str(err))
 
     def list_units(self, unitType):
-        """List valid units for the provided unit type.
+        """List units for a unit type.
 
         Parameters
         ----------
-        unitType : string, required
-            The unit type. Valid types are: ACCEL_DENSITY, ACCELERATION, AREA, BANDWIDTH,
-            CAPACITANCE, CTE, CURRENT, DENSITY, DISP_DENSITY, FORCE, FREQUENCY, INDUCTANCE, LENGTH,
-            POWER, RESISTANCE, SIZE, SPECIFIC_HEAT, STRAIN, STRESS, TEMPERATURE,
-            THERMAL_CONDUCTIVITY, THERMAL_RESISTANCE, TIME, VELOCITY, VELOCITY_DENSITY, VOLTAGE,
-            VOLUME, WEIGHT
-        """
+        unitType : string
+            Unit type. Options are:
 
+            - ``"ACCEL_DENSITY"``
+            - ``"ACCELERATION"``
+            - ``"AREA"``
+            - ``""BANDWIDTH"``
+            - ``"CAPACITANCE"``
+            - ``"CTE"``
+            - ``"CURRENT"``
+            - ``"DENSITY"``
+            - ``"DISP_DENSITY"``
+            - ``"FORCE"``
+            - ``"FREQUENCY"``
+            - ``"INDUCTANCE"``
+            - ``"LENGTH"``
+            - ``"POWER"``
+            - ``"RESISTANCE"``
+            - ``"SIZE"``
+            - ``"SPECIFIC_HEAT"``
+            - ``"STRAIN"``
+            - ``"STRESS"``
+            - ``"TEMPERATURE"``
+            - ``"THERMAL_CONDUCTIVITY"``
+            - ``"THERMAL_RESISTANCE"``
+            - ``"TIME"``
+            - ``"VELOCITY"``
+            - ``"VELOCITY_DENSITY"``
+            - ``"VOLTAGE"``
+            - ``"VOLUME"``
+            - ``"WEIGHT"``
+
+        """
         if unitType == "":
-            raise SherlockCommonServiceError(message="Missing valid unit type")
+            raise SherlockCommonServiceError(message="Unit type is missing.")
         elif unitType == "ACCEL_DENSITY":
             unitType = SherlockCommonService_pb2.ListUnitsRequest.ACCEL_DENSITY
         elif unitType == "ACCELERATION":
@@ -139,15 +165,13 @@ class Common(GrpcStub):
         elif unitType == "WEIGHT":
             unitType = SherlockCommonService_pb2.ListUnitsRequest.WEIGHT
         else:
-            raise SherlockCommonServiceError(message=f"Invalid unit type '{unitType}' specified")
+            raise SherlockCommonServiceError(message=f"Unit type '{unitType}' is invalid.")
 
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
             return ""
 
-        request = SherlockCommonService_pb2.ListUnitsRequest(
-            unitType=unitType
-        )
+        request = SherlockCommonService_pb2.ListUnitsRequest(unitType=unitType)
 
         try:
             response = self.stub.listUnits(request)

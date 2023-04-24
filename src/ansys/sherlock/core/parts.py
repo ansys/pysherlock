@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module containing all the parts management capabilities."""
+"""Module containing all parts management capabilities."""
 import os
 
 try:
@@ -23,10 +23,10 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Parts(GrpcStub):
-    """Module containing all the parts management capabilities."""
+    """Contains all parts management capabilities."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for SherlockPartsService."""
+        """Initialize a gRPC stub for the Sherlock Parts service."""
         self.channel = channel
         self.stub = SherlockPartsService_pb2_grpc.SherlockPartsServiceStub(channel)
         self.PART_LOCATION_UNITS = None
@@ -35,7 +35,7 @@ class Parts(GrpcStub):
         self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
 
     def _add_matching_duplication(self, request, matching, duplication):
-        """Add matching/duplication arguments to the request."""
+        """Add matching and duplication arguments to the request."""
         if matching == "Both":
             request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Both
         elif matching == "Part":
@@ -61,52 +61,50 @@ class Parts(GrpcStub):
             part.mirrored = p[6]
 
     def _check_part_loc_validity(self, input):
-        """Check input if it is a valid part location list."""
+        """Check input to see if it is a valid part location list."""
         if not isinstance(input, list):
-            raise SherlockUpdatePartsLocationsError(message="Invalid part_loc argument")
+            raise SherlockUpdatePartsLocationsError(message="Part location argument is invalid.")
 
         if len(input) == 0:
-            raise SherlockUpdatePartsLocationsError(message="Missing part location properties")
+            raise SherlockUpdatePartsLocationsError(message="Part location properties are missing.")
         for i, part in enumerate(input):
             if len(part) != 7:
                 raise SherlockUpdatePartsLocationsError(
-                    message=f"Invalid part location {i}: Invalid number of fields"
+                    message=f"Invalid part location {i}: Number of fields is invalid."
                 )
             if part[0] == "":
                 raise SherlockUpdatePartsLocationsError(
-                    message=f"Invalid part location {i}: Missing ref des"
+                    message=f"Invalid part location {i}: Reference designator is missing."
                 )
             if part[4] != "":
                 if self.PART_LOCATION_UNITS is not None and part[4] not in self.PART_LOCATION_UNITS:
                     raise SherlockUpdatePartsLocationsError(
-                        message=f"Invalid part location {i}: Invalid location units specified"
+                        message=f"Invalid part location {i}: Location units are invalid."
                     )
             if part[1] != "":
                 if part[4] == "":
                     raise SherlockUpdatePartsLocationsError(
-                        message=f"Invalid part location {i}: Missing location units"
+                        message=f"Invalid part location {i}: Location units are missing."
                     )
                 try:
                     float(part[1])
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
                         message=(
-                            f"Invalid part location {i}: "
-                            f"Invalid location X coordinate specified"
+                            f"Invalid part location {i}: " f"Location X coordinate is invalid."
                         )
                     )
             if part[2] != "":
                 if part[4] == "":
                     raise SherlockUpdatePartsLocationsError(
-                        message=f"Invalid part location {i}: Missing location units"
+                        message=f"Invalid part location {i}: Location units are missing."
                     )
                 try:
                     float(part[2])
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
                         message=(
-                            f"Invalid part location {i}: "
-                            f"Invalid location Y coordinate specified"
+                            f"Invalid part location {i}: " f"Location Y coordinate is invalid."
                         )
                     )
             if part[3] != "":
@@ -115,27 +113,26 @@ class Parts(GrpcStub):
                     if rotation < -360 or rotation > 360:
                         raise SherlockUpdatePartsLocationsError(
                             message=(
-                                f"Invalid part location {i}: "
-                                f"Invalid location rotation specified"
+                                f"Invalid part location {i}: " f"Location rotation is invalid."
                             )
                         )
                 except ValueError:
                     raise SherlockUpdatePartsLocationsError(
-                        message=f"Invalid part location {i}: Invalid location rotation specified"
+                        message=f"Invalid part location {i}: Location rotation is invalid."
                     )
             if part[5] != "":
                 if self.BOARD_SIDES is not None and part[5] not in self.BOARD_SIDES:
                     raise SherlockUpdatePartsLocationsError(
-                        message=f"Invalid part location {i}: Invalid location board side specified"
+                        message=f"Invalid part location {i}: Location board side is invalid."
                     )
             if part[6] != "":
                 if part[6] != "True" and part[6] != "False":
                     raise SherlockUpdatePartsLocationsError(
-                        message=f"Invalid part location {i}: Invalid location mirrored specified"
+                        message=f"Invalid part location {i}: Location mirrored is invalid."
                     )
 
     def _init_location_units(self):
-        """Initialize PART_LOCATION_UNITS."""
+        """Initialize units for part location."""
         if self._is_connection_up():
             part_location_request = SherlockPartsService_pb2.GetPartLocationUnitsRequest()
             part_location_response = self.stub.getPartLocationUnits(part_location_request)
@@ -143,7 +140,7 @@ class Parts(GrpcStub):
                 self.PART_LOCATION_UNITS = part_location_response.units
 
     def _init_board_sides(self):
-        """Initialize BOARD_SIDES."""
+        """Initialize boad sides."""
         if self._is_connection_up():
             board_sides_request = SherlockPartsService_pb2.GetBoardSidesRequest()
             board_sides_response = self.stub.getBoardSides(board_sides_request)
@@ -158,22 +155,22 @@ class Parts(GrpcStub):
         matching,
         duplication,
     ):
-        """Update a parts list based on matching and duplication preference provided.
+        """Update a parts list based on matching and duplication preferences.
 
         Parameters
         ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
-        part_library : str, required
-            Parts library name.
-        matching : str, required
-            Designates the matching mode for updates.
-            Valid arguments: "Both", "Part"
-        duplication : str, required
-            Designates how to handle duplications during update.
-            Valid arguments: "First", "Error", "Ignore"
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        part_library : str
+            Name of the parts library.
+        matching : str
+            Matching mode for updates. Options are ``"Both"`` and ``"Part"``.
+        duplication : str
+            How to handle duplications during the update.
+            Options are ``"First"``, ``"Error"``, and ``"Ignore"``.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -197,22 +194,22 @@ class Parts(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockUpdatePartsListError(message="Invalid project name")
+                raise SherlockUpdatePartsListError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockUpdatePartsListError(message="Invalid cca name")
+                raise SherlockUpdatePartsListError(message="CCA name is invalid.")
             if part_library == "":
-                raise SherlockUpdatePartsListError(message="Invalid parts library")
+                raise SherlockUpdatePartsListError(message="Parts library is invalid.")
             if matching not in self.MATCHING_ARGS:
-                raise SherlockUpdatePartsListError(message="Invalid matching argument")
+                raise SherlockUpdatePartsListError(message="Matching argument is invalid.")
             if duplication not in self.DUPLICATION_ARGS:
-                raise SherlockUpdatePartsListError(message="Invalid duplication argument")
+                raise SherlockUpdatePartsListError(message="Duplication argument is invalid.")
         except SherlockUpdatePartsListError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
@@ -239,23 +236,19 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def update_parts_locations(
-            self,
-            project,
-            cca_name,
-            part_loc
-    ):
-        """Update one or more parts' locations.
+    def update_parts_locations(self, project, cca_name, part_loc):
+        """Update one or more part locations.
 
         Parameters
         ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
         part_loc : (str, str, str, str, str, str, str) list, required
             (refDes, x, y, rotation, location_units, board_side, mirrored)
-            Definitions of part locations
+            Definitions of part locations.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -285,9 +278,9 @@ class Parts(GrpcStub):
 
         try:
             if project == "":
-                raise SherlockUpdatePartsLocationsError(message="Invalid project name")
+                raise SherlockUpdatePartsLocationsError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockUpdatePartsLocationsError(message="Invalid cca name")
+                raise SherlockUpdatePartsLocationsError(message="CCA name is invalid.")
             self._check_part_loc_validity(part_loc)
         except SherlockUpdatePartsLocationsError as e:
             for error in e.str_itr():
@@ -295,7 +288,7 @@ class Parts(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockPartsService_pb2.UpdatePartsLocationsRequest(
@@ -323,26 +316,21 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def update_parts_locations_by_file(
-            self,
-            project,
-            cca_name,
-            file_path,
-            numeric_format=""
-    ):
-        """Update one or more parts' locations using a CSV file.
+    def update_parts_locations_by_file(self, project, cca_name, file_path, numeric_format=""):
+        """Update one or more part locations using a CSV file.
 
         Parameters
         ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
-        file_path : str, required
-            File that contains the components and location properties.
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        file_path : str
+            Full path to the file with the components and location properties.
         numeric_format : str, optional
-            Numeric format for the file.
-            If not provided, it will default to "English (United States)".
+            Numeric format for the file. The default is ``""``, in which case
+            "English (United States)" is used.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -364,22 +352,22 @@ class Parts(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockUpdatePartsLocationsByFileError(message="Invalid project name")
+                raise SherlockUpdatePartsLocationsByFileError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockUpdatePartsLocationsByFileError(message="Invalid cca name")
+                raise SherlockUpdatePartsLocationsByFileError(message="CCA name is invalid.")
             if file_path == "":
-                raise SherlockUpdatePartsLocationsByFileError(message="File path required")
+                raise SherlockUpdatePartsLocationsByFileError(message="File path is required.")
             if len(file_path) <= 1 or file_path[1] != ":":
                 file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdatePartsLocationsByFileError("Invalid file path")
+                raise SherlockUpdatePartsLocationsByFileError("File path is invalid.")
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockPartsService_pb2.UpdatePartsLocationsByFileRequest(
@@ -407,26 +395,20 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def import_parts_list(
-            self,
-            project,
-            cca_name,
-            import_file,
-            import_as_user_src
-    ):
-        """Import a parts list for a project CCA.
+    def import_parts_list(self, project, cca_name, import_file, import_as_user_src):
+        """Import a parts list for a CCA.
 
         Parameters
         ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
-        import_file : str, required
-            Full file path to the parts list .csv file.
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        import_file : str
+            Full path to the CSV file with the parts list.
         import_as_user_src : bool, required
-            If true, set the data source of the properties to "User".
-            Otherwise, set the data source to the name of the importFile.
+            Whether to set the data source of the properties to ``"User"``.
+            Otherwise, the data source is set to the name of the imported CSV file.
 
         Examples
         --------
@@ -450,28 +432,28 @@ class Parts(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockImportPartsListError(message="Invalid project name")
+                raise SherlockImportPartsListError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockImportPartsListError(message="Invalid cca name")
+                raise SherlockImportPartsListError(message="CCA name is invalid.")
             if import_file == "":
-                raise SherlockImportPartsListError(message="Import file path required")
+                raise SherlockImportPartsListError(message="Import file path is required.")
             if len(import_file) <= 1 or import_file[1] != ":":
                 import_file = f"{os.getcwd()}\\{import_file}"
             if not os.path.exists(import_file):
-                raise SherlockImportPartsListError("Invalid file path")
+                raise SherlockImportPartsListError("File path is invalid.")
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockPartsService_pb2.ImportPartsListRequest(
             project=project,
             ccaName=cca_name,
             importFile=import_file,
-            importAsUserSrc=import_as_user_src
+            importAsUserSrc=import_as_user_src,
         )
 
         response = self.stub.importPartsList(request)
@@ -486,22 +468,17 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def export_parts_list(
-            self,
-            project,
-            cca_name,
-            export_file
-    ):
-        """Export a parts list for a project CCA.
+    def export_parts_list(self, project, cca_name, export_file):
+        """Export a parts list for a CCA.
 
         Parameters
         ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
-        export_file : str, required
-            Full file path to the export parts list .csv file.
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        export_file : str
+            Full path to the CSV file to export the parts list to.
 
         Examples
         --------
@@ -524,30 +501,28 @@ class Parts(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockExportPartsListError(message="Invalid project name")
+                raise SherlockExportPartsListError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockExportPartsListError(message="Invalid cca name")
+                raise SherlockExportPartsListError(message="CCA name is invalid.")
             if export_file == "":
-                raise SherlockExportPartsListError(message="Export file path required")
+                raise SherlockExportPartsListError(message="Export file path is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path
                 if not os.path.exists(os.path.dirname(export_file)):
                     raise SherlockExportPartsListError(
-                        message="Export file directory does not exist"
+                        message="Export file directory does not exist."
                     )
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
+            LOG.error("There is no connection to a gRPC service.")
             return
 
         request = SherlockPartsService_pb2.ExportPartsListRequest(
-            project=project,
-            ccaName=cca_name,
-            exportFile=export_file
+            project=project, ccaName=cca_name, exportFile=export_file
         )
 
         response = self.stub.exportPartsList(request)
@@ -562,42 +537,39 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def enable_lead_modeling(
-            self,
-            project,
-            cca_name
-    ):
-        """Enable lead modeling for all non LEADLESS parts leads.
+    def enable_lead_modeling(self, project, cca_name):
+        """Enable lead modeling for all non-leadless parts leads.
 
-        Parameters
-        ----------
-        project : str, required
-            Sherlock project name
-        cca_name : str, required
-            The cca name
+                Parameters
+                ----------
+                project : str
+                    Name of the Sherlock project.
+                cca_name : str
+                    Nam eof the CCA.
+
         Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> sherlock.parts.enable_lead_modeling(
-            "Test",
-            "Card",
-        )
+                --------
+                >>> from ansys.sherlock.core.launcher import launch_sherlock
+                >>> sherlock = launch_sherlock()
+                >>> sherlock.project.import_odb_archive(
+                    "ODB++ Tutorial.tgz",
+                    True,
+                    True,
+                    True,
+                    True,
+                    project="Test",
+                    cca_name="Card",
+                )
+                >>> sherlock.parts.enable_lead_modeling(
+                    "Test",
+                    "Card",
+                )
         """
         try:
             if project == "":
-                raise SherlockEnableLeadModelingError(message="Invalid project name")
+                raise SherlockEnableLeadModelingError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockEnableLeadModelingError(message="Invalid cca name")
+                raise SherlockEnableLeadModelingError(message="CCA name is invalid.")
         except SherlockEnableLeadModelingError as e:
             LOG.error(str(e))
             raise e

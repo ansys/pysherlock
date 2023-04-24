@@ -31,17 +31,19 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
-def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="",
-                    sherlock_cmd_args=""):
-    """Launch Sherlock and starts gRPC on the given localhost port.
+def launch_sherlock(
+    host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="", sherlock_cmd_args=""
+):
+    r"""Launch Sherlock and start gRPC on a *localhost* port.
 
     Parameters
     ----------
     port : integer, optional
-        The socket port number to use for the connection. By default, 9090 is used.
-
+        Port number for the connection. By default, ``9090`` is used.
     single_project_path : str, optional
-        If invoking Sherlock in single project mode, this is the path to the Sherlock project.
+        Path to the Sherlock project if invoking Sherlock in the single-project mode.
+    sherlock_cmd_args : str, optional
+        Optional command arguments for launching Sherlock.
 
     Examples
     --------
@@ -67,7 +69,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
         if single_project_path != "":
             args = f'{args} -singleProject "{single_project_path}"'
         if sherlock_cmd_args != "":
-            args = f'{args} {sherlock_cmd_args}'
+            args = f"{args} {sherlock_cmd_args}"
         subprocess.Popen(args)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
@@ -84,7 +86,7 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
         if sherlock.common.check() is False:
             raise SherlockConnectionError(message="Error starting gRPC service")
 
-        # Check that the Sherlock Client has finished loading (timeout after 5 minutes).
+        # Check that the Sherlock client has finished loading (timeout after 5 minutes).
         count = 0
         while sherlock.common.is_sherlock_client_loading() is False and count < 150:
             time.sleep(2)
@@ -96,8 +98,10 @@ def launch_sherlock(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_p
 
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
-    """Create a gRPC connection to the specified port and returns a connection object ``Sherlock``
-    which can be used to invoke the APIs from their respective services.."""
+    """Create a gRPC connection to a specified port and return the ``sherlock``connection object.
+
+    The ``sherlock``connecton object is used to invoke the APIs from their respective services.
+    """
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
     SHERLOCK = Sherlock(channel)
