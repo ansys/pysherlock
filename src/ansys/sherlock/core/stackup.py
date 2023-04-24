@@ -759,7 +759,7 @@ class Stackup(GrpcStub):
             self,
             project,
             cca_name):
-        """Returns the number of CCA layers in a stackup
+        """Return the number of CCA layers in a stackup.
 
         Parameters
         ----------
@@ -856,7 +856,7 @@ class Stackup(GrpcStub):
             self,
             project,
             cca_name):
-        """Returns the number of CCA layers in a stackup
+        """Return the number of CCA layers in a stackup.
 
         Parameters
         ----------
