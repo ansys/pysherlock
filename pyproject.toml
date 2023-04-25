@@ -32,7 +32,7 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.53.0",
+    "grpcio==1.54.0",
     "protobuf==3.20.3",
     "pytest==7.3.1",
     "pytest-cov==4.0.0",
