@@ -119,6 +119,7 @@ class SherlockGetStackupPropsError(Exception):
 
 class SherlockGetLayerCountError(Exception):
     """Raised when getting layer count results in an error."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
@@ -129,7 +130,8 @@ class SherlockGetLayerCountError(Exception):
 
 
 class SherlockGetLayerCountError(Exception):
-    """Raised when geting layer count results in an error."""
+    """Raised when getting layer count results in an error."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message

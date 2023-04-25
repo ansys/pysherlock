@@ -4,12 +4,12 @@ import grpc
 
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
+    SherlockGetLayerCountError,
     SherlockGetStackupPropsError,
-    SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
-    SherlockGetLayerCountError
+    SherlockUpdateConductorLayerError,
+    SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.stackup import Stackup
 
@@ -972,23 +972,16 @@ def helper_test_get_stackup_props(stackup):
 def helper_test_get_layer_count(stackup):
     """Test get_layer_count API"""
     try:
-        stackup.get_layer_count(
-            project="",
-            cca_name="Card"
-        )
+        stackup.get_layer_count(project="", cca_name="Card")
         assert False
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: Invalid project name"
 
     try:
-        stackup.get_layer_count(
-            project="Test",
-            cca_name=""
-        )
+        stackup.get_layer_count(project="Test", cca_name="")
         assert False
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: Invalid CCA name"
-
 
     """Test get_layer_count API"""
     try:
