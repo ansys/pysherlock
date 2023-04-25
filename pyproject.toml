@@ -43,7 +43,7 @@ doc = [
     "Sphinx==6.2.0",
     "sphinx-copybutton==0.5.2",
     "sphinx_design==0.4.1",
-    "sphinx-gallery==0.7.0",
+    "sphinx-gallery==0.13.0",
 ]
 
 [project.urls]
