@@ -1,41 +1,50 @@
 repos:
 
 - repo: https://github.com/psf/black
-  rev: 22.3.0
+  rev: 23.3.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY AS WELL!!
   hooks:
   - id: black
-    args: [
-      --line-length, "100",
-      src, tests
-    ]
+
+- repo: https://github.com/adamchainz/blacken-docs
+  rev: 1.13.0
+  hooks:
+  - id: blacken-docs
+    additional_dependencies: [black==23.3.0]
 
 - repo: https://github.com/pycqa/isort
-  rev: 5.10.1
+  rev: 5.12.0
   hooks:
   - id: isort
-    args: [
-      --profile, black,
-      --force-sort-within-sections,
-      --line-length, "100",
-      --section-default, THIRDPARTY,
-      src, tests, doc
-    ]
 
-- repo: https://gitlab.com/PyCQA/flake8
-  rev: 4.0.1
+- repo: https://github.com/PyCQA/flake8
+  rev: 6.0.0
   hooks:
   - id: flake8
     args: [src, tests, doc]
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.1.0
+  rev: v2.2.4
   hooks:
   - id: codespell
     files: ^src/
 
 - repo: https://github.com/pycqa/pydocstyle
-  rev: 6.1.1
+  rev: 6.3.0
   hooks:
   - id: pydocstyle
-    additional_dependencies: [toml]
+    additional_dependencies: ["tomli"]
     files: ^src/
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: check-merge-conflict
+  - id: debug-statements
+  - id: check-yaml
+  - id: trailing-whitespace
+
+# this validates our github workflow files
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.22.0
+  hooks:
+    - id: check-github-workflows

@@ -1,7 +1,7 @@
 .. _ref_model_module:
 
 Model
-========
+=====
 
 The ``model`` module contains all model generation capabilities.
 

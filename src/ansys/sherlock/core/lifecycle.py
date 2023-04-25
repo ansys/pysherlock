@@ -889,7 +889,7 @@ class Lifecycle(GrpcStub):
             profile_name : str
                 Name of the thermal profile.
             time_units : str
-                Time units. Options are ``"ms"``, ``"sec"``, ``"min"``, "``hr"``,
+                Time units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
                 ``"day"``, and ``"year"``.
             temp_units : str
                 Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.
@@ -897,11 +897,11 @@ class Lifecycle(GrpcStub):
                 step : str
                     Name of the profile step entry.
                 type : str
-                    Thermal step type. Options are ``"HOLD"`` and ``"RAMP"`.
+                    Thermal step type. Options are ``"HOLD"`` and ``"RAMP"``.
                 time : double
                     Duration of the step entry expressed in time units
                 temperature : double
-                    Temperature of the step entry expressed in temperature units
+                    Temperature of the step entry expressed in temperature units.
 
         Examples
         --------
