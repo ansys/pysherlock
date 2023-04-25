@@ -12,17 +12,17 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
+    SherlockGetLayerCountError,
     SherlockGetStackupPropsError,
     SherlockInvalidConductorPercentError,
     SherlockInvalidGlassConstructionError,
     SherlockInvalidLayerIDError,
     SherlockInvalidMaterialError,
     SherlockInvalidThicknessArgumentError,
-    SherlockUpdateConductorLayerError,
-    SherlockUpdateLaminateLayerError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
-    SherlockGetLayerCountError
+    SherlockUpdateConductorLayerError,
+    SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -755,10 +755,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_layer_count(
-            self,
-            project,
-            cca_name):
+    def get_layer_count(self, project, cca_name):
         """Return the number of CCA layers in a stackup.
 
         Parameters
@@ -796,8 +793,8 @@ class Stackup(GrpcStub):
                 return
 
             request = SherlockStackupService_pb2.GetLayerCountRequest(
-                project=project,
-                ccaName=cca_name)
+                project=project, ccaName=cca_name
+            )
             response = self.stub.getLayerCount(request)
             return response
 
@@ -849,55 +846,5 @@ class Stackup(GrpcStub):
             response = self.stub.getStackupProps(request)
             return response
         except SherlockGetStackupPropsError as e:
-            LOG.error(str(e))
-            raise e
-
-    def get_layer_count(
-            self,
-            project,
-            cca_name):
-        """Return the number of CCA layers in a stackup.
-
-        Parameters
-        ----------
-        project : str, required
-            Sherlock project name.
-        cca_name : str, required
-            The CCA name.
-
-        Example
-        -------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> conductor_layer_count = sherlock.stackup.get_layer_count(
-        >>>    project="Test",
-        >>>    cca_name="Card")
-        >>> print(f"{conductor_layer_count}")
-        """
-        try:
-            if project == "":
-                raise SherlockGetLayerCountError(message="Invalid project name")
-            if cca_name == "":
-                raise SherlockGetLayerCountError(message="Invalid CCA name")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
-
-            request = SherlockStackupService_pb2.GetLayerCountRequest(
-                project=project,
-                ccaName=cca_name)
-            response = self.stub.getLayerCount(request)
-            return response
-
-        except SherlockGetLayerCountError as e:
             LOG.error(str(e))
             raise e
