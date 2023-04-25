@@ -23,6 +23,7 @@ from ansys.sherlock.core.errors import (
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
+    SherlockGetTotalConductorThicknessError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -137,7 +138,7 @@ class Stackup(GrpcStub):
             ):
                 if spec is not None:
                     raise SherlockInvalidThicknessArgumentError(
-                        message=f"Thickness units {spec} are invalid."
+                        message=f"Thickness units  are invalid."
                     )
 
                 raise SherlockInvalidThicknessArgumentError(message="Thickness units are invalid.")
@@ -848,3 +849,57 @@ class Stackup(GrpcStub):
         except SherlockGetStackupPropsError as e:
             LOG.error(str(e))
             raise e
+
+    def get_total_conductor_thickness(self, project, cca_name, thickness_unit):
+        """Return the total conductor thickness.
+
+        Parameters
+        ----------
+        project : str, required
+            Sherlock project name.
+        cca_name : str, required
+            The CCA name.
+        thickness_unit : str, optional
+            Units for laminate thickness.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> total_thickness = sherlock.stackup.get_total_conductor_thickness(project="Tutorial",
+                                                                 cca_name="Main Board",
+                                                                 thickness_unit="oz")
+        >>>print(f"{total_thickness}")
+        """
+
+        try:
+            if project == "":
+                raise SherlockGetTotalConductorThicknessError(message="Invalid project name")
+            if cca_name == "":
+                raise SherlockGetTotalConductorThicknessError(message="Invalid CCA name")
+            if thickness_unit == "":
+                raise SherlockGetTotalConductorThicknessError(message="Invalid thickness unit")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockStackupService_pb2.GetTotalConductorThicknessRequest(
+                project=project, ccaName=cca_name, thicknessUnit=thickness_unit
+            )
+            response = self.stub.getTotalConductorThickness(request)
+            return response
+
+        except SherlockGetTotalConductorThicknessError as e:
+            LOG.error(str(e))
+            raise e
+
+
