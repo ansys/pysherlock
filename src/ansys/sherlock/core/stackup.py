@@ -669,7 +669,7 @@ class Stackup(GrpcStub):
             True,
             True,
             True,
-            True,ect name
+            True,
             project="Test",
             cca_name="Card",
         )
