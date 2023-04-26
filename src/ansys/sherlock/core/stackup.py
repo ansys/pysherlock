@@ -24,7 +24,6 @@ from ansys.sherlock.core.errors import (
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -902,5 +901,3 @@ class Stackup(GrpcStub):
         except SherlockGetTotalConductorThicknessError as e:
             LOG.error(str(e))
             raise e
-
-

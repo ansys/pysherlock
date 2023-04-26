@@ -11,7 +11,6 @@ from ansys.sherlock.core.errors import (
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-
 )
 from ansys.sherlock.core.stackup import Stackup
 
