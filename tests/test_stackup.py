@@ -6,11 +6,12 @@ from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockGetLayerCountError,
     SherlockGetStackupPropsError,
+    SherlockGetTotalConductorThicknessError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-    SherlockGetTotalConductorThicknessError,
+
 )
 from ansys.sherlock.core.stackup import Stackup
 
