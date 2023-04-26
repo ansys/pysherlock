@@ -9,6 +9,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
+    SherlockGetPartLocationError,
 )
 from ansys.sherlock.core.parts import Parts
 
@@ -25,6 +26,7 @@ def test_all():
     helper_test_import_parts_list(parts)
     helper_test_export_parts_list(parts)
     helper_test_enable_lead_modeling(parts)
+    helper_test_get_part_location(parts)
 
 
 def helper_test_update_parts_list(parts):
@@ -437,6 +439,53 @@ def helper_test_enable_lead_modeling(parts):
         assert False
     except SherlockEnableLeadModelingError as e:
         assert str(e) == "Enable lead modeling error: CCA name is invalid."
+
+
+def helper_test_get_part_location(parts):
+    """Test get_part_location API"""
+    try:
+        parts.get_part_location(
+            "",
+            "Card",
+            "C1",
+            "in",
+        )
+        assert False
+    except SherlockGetPartLocationError as e:
+        assert str(e) == "Get part location error: Invalid project name."
+
+    try:
+        parts.get_part_location(
+            "Test",
+            "",
+            "C1",
+            "in",
+        )
+        assert False
+    except SherlockGetPartLocationError as e:
+        assert str(e) == "Get part location error: Invalid CCA name."
+
+    try:
+        parts.get_part_location(
+            "Test",
+            "Card",
+            "",
+            "in",
+        )
+        assert False
+    except SherlockGetPartLocationError as e:
+        assert str(e) == "Get part location error: Invalid ref des."
+
+    try:
+        parts.get_part_location(
+            "Test",
+            "Card",
+            "C1",
+            "",
+        )
+        assert False
+    except SherlockGetPartLocationError as e:
+        assert str(e) == "Get part location error: Invalid location units."
 
 
 if __name__ == "__main__":
