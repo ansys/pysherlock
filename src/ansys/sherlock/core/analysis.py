@@ -145,25 +145,25 @@ class Analysis(GrpcStub):
         analyses : (str, phases) list
             List of analysis types to run. Options are:
 
-            - ``"UNKNOWN"``
-            - ``"NATURALFREQ"``
+            - ``"COMPONENTFAILUREMODE"``
+            - ``"DFMEAMODULE"``
             - ``"HARMONICVIBE"``
             - ``"ICTANALYSIS"``
             - ``"MECHANICALSHOCK"``
-            - ``"RANDOMVIBE"``
-            - ``"COMPONENTFAILUREMODE"``
-            - ``"DFMEAMODULE"``
+            - ``"NATURALFREQ"``
             - ``"PTHFATIGUE"``
             - ``"PARTVALIDATION"``
+            - ``"RANDOMVIBE"``
             - ``"SEMICONDUCTORWEAROUT"``
             - ``"SOLDERJOINTFATIGUE"``
             - ``"THERMALDERATING"``
             - ``"THERMALMECH"``
+            - ``"UNKNOWN"``
 
         phases : (str, events) list
             List of phase names.
         events : (str) list
-            List of event names
+            List of event names.
 
         Examples
         --------
@@ -229,11 +229,12 @@ class Analysis(GrpcStub):
         Parameters
         ----------
         model_source : str, optional
-            Model source to get random vibe property fields from. The default is
+            Model source to get the random vibe property fields from. The default is
             ``None``, in which case the ``"GENERATED"`` input form is used. Options
             are ``"GENERATED"`` and ``"STRAIN_MAP"``.
 
         Returns
+        -------
         list
             List of random vibe property fields based on the user configuration.
 
@@ -337,9 +338,10 @@ class Analysis(GrpcStub):
             analysis only.
         require_material_assignment_enabled: bool, optional
             Whether to require material assignment.
-        model_source: str for strain map analysis
+        model_source: str
             Model source. Options are ``"GENERATED"`` and ``"STRAIN_MAP"``.
-        strain_map_natural_freqs, str
+            This parameter is required for strain map analysis.
+        strain_map_natural_freqs, list
             Comma-separated list of natural frequencies. This parameter is
             required for strain map analysis.
 
@@ -633,30 +635,30 @@ class Analysis(GrpcStub):
         cca_name,
         strain_map_analyses,
     ):
-        """Run one or more Sherlock strain map analyses.
+        """Run one or more strain map analyses.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         cca_name : str
-            Name of main CCA for the analysis.
+            Name of the main CCA for the analysis.
         analyses : list of (analysis_type, event_strain_maps)
             analysis_type : str
-                Type of the analysis to perform. Option is ``"RANDOMVIBE"``.
+                Type of the analysis to perform. The only option is ``"RANDOMVIBE"``.
             event_strain_maps : list of (phase_name, event_name, pcb_side, strain_map, \
             sub_assembly_name)
-                Strain maps assigned to the desired life cycle events for a given PCB side.
+                Strain maps assigned to the desired lifecycle events for a given PCB side.
             phase_name : str
-                Life cycle phase name for the strain map assignment.
+                Lifecycle phase name for the strain map assignment.
             event_name : str
-                Life cycle event name for the strain map assignment.
+                Lifecycle event name for the strain map assignment.
             pcb_side : str
-                PCB side for the strain map. Options are``"TOP"`` and ``"BOTTOM"``.
+                PCB side for the strain map. Options are ``"TOP"`` and ``"BOTTOM"``.
             strain_map : str
-                Name of the strain map assigned to the life cycle event.
+                Name of the strain map assigned to the lifecycle event.
             sub_assembly_name : str, optional
-                Name of the subassembly CCA to assign the strain map.
+                Name of the subassembly CCA to assign the strain map to.
 
         Examples
         --------

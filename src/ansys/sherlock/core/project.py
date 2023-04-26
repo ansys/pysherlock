@@ -32,7 +32,7 @@ class Project(GrpcStub):
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
     def delete_project(self, project):
-        """Delete a project from Sherlock.
+        """Delete a Sherlock project.
 
         Parameters
         ----------
@@ -80,7 +80,7 @@ class Project(GrpcStub):
         project=None,
         cca_name=None,
     ):
-        """Import an ODB++ archive.
+        """Import an ODB++ archive file.
 
         Parameters
         ----------
@@ -96,10 +96,10 @@ class Project(GrpcStub):
             Whether to guess part properties.
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which
-            case the filename is used for the project name.
+            case the name of the ODB++ archive file is used for the project name.
         cca_name : str, optional
-            Name of the CCA name. The default is ``None``, in which case
-            the filename is used for the CCA name.
+            Name of the CCA name. The default is ``None``, in which case the
+            name of the ODB++ archive file is used for the CCA name.
 
         Examples
         --------
@@ -155,7 +155,7 @@ class Project(GrpcStub):
     def import_ipc2581_archive(
         self, archive_file, include_other_layers, guess_part_properties, project=None, cca_name=None
     ):
-        """Import an IPC2581 archive.
+        """Import an IPC-2581 archive file.
 
         Parameters
         ----------
@@ -167,10 +167,10 @@ class Project(GrpcStub):
             Whether to guess part properties
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which case
-            the filename is used for the project name.
+            the name of the IPC-2581 archive file is used for the project name.
         cca_name : str, optional
-            Name of the CCA. The default is ``None``, in which case the filename
-            is be used for the CCA name.
+            Name of the CCA. The default is ``None``, in which case the name of
+            the IPC-2581 archive file is used for the CCA name.
 
         Examples
         --------
@@ -232,7 +232,7 @@ class Project(GrpcStub):
         company : str
             Name of the author's company.
         export_file: str
-            Full path to where the report is to be written.
+            Full path to where to write the report to.
 
         Examples
         --------
@@ -295,7 +295,7 @@ class Project(GrpcStub):
             raise e
 
     def list_ccas(self, project, cca_names=None):
-        """Get a list of CCAs and subassembly CCAs assigned to each CCA or requested CCAs.
+        """List CCAs and subassembly CCAs assigned to each CCA or the requested CCAs.
 
         Parameters
         ----------
@@ -353,7 +353,7 @@ class Project(GrpcStub):
         project: str
             Name of the Sherlock project to add strain maps to.
         strain_maps : List of (strain_map_file, file_comment, header_row_count, \
-            reference_id_column, strain_column, strain_units, ccas) required
+            reference_id_column, strain_column, strain_units, ccas)
             strain_map_file : str
                 Full path to the strain map file to add to the project.
             file_comment : str
@@ -365,7 +365,7 @@ class Project(GrpcStub):
             strain_column : str
                 Name of the column in the file with the strain values.
             strain_units : str
-                Strain units: Options are ``µε`` and ``ε``.
+                Strain units. Options are ``µε`` and ``ε``.
             ccas : List of (cca_name), optional
                 List of CCA names to assign the strain map file to. When no list is
                 specified, the strain  map is assigned to all CCAs in the project.

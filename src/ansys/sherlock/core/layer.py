@@ -34,11 +34,11 @@ class Layer(GrpcStub):
 
         Parameters
         ----------
-        project : str, required
-            Name of the sherlock project.
-        cca_name : str, required
-            CCA name.
-        file_path : str, required
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        file_path : str
             Filepath of the CSV file with the mount point properties.
 
         Examples

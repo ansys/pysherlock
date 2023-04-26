@@ -16,13 +16,16 @@ and ``ansys-sherlock`` packages.
 
 ..   pip install ansys-sherlock-core
 
-#. Download the latest ``ansys-api-sherlock`` package either by using the following
-   ``git clone`` command or downloading the ZIP file from the **Release** area of the
-   `ansys-api-sherlock <https://github.com/pyansys/ansys-api-sherlock>`_ GitHub repository.
+#. Download the latest ``ansys-api-sherlock`` package by using the following
+   ``git clone`` command.
 
    .. code::
 
       git clone https://github.com/pyansys/ansys-api-sherlock.git
+
+   Alternatively, you can download the ZIP file from the **Release** area of the
+   `ansys-api-sherlock <https://github.com/pyansys/ansys-api-sherlock>`_ GitHub
+   repository.
 
 #. After the pacakge is downloaded, execute these commands to install it:
 
@@ -31,13 +34,15 @@ and ``ansys-sherlock`` packages.
       cd ansys-api-sherlock
       pip install -e .
 
-#. Download the latest ``ansys-sherlock`` package either by using the following
-   ``git clone`` command or downloading the ZIP file from **Release** area of the
-   `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository.
+#. Download the latest ``ansys-sherlock`` package by using the following
+   ``git clone`` command:
 
    .. code::
 
       git clone https://github.com/pyansys/pysherlock.git
+
+   Alternatively, you can download the ZIP file from **Release** area of the
+   `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository.
 
 #. After the package is downloaded, execute these commands to install it:
 
@@ -45,4 +50,3 @@ and ``ansys-sherlock`` packages.
 
       cd pysherlock
       pip install -e .
-

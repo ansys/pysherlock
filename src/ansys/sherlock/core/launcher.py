@@ -38,8 +38,8 @@ def launch_sherlock(
 
     Parameters
     ----------
-    port : integer, optional
-        Port number for the connection. By default, ``9090`` is used.
+    port : int, optional
+        Port number for the connection. By default, port ``9090`` is used.
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
     sherlock_cmd_args : str, optional

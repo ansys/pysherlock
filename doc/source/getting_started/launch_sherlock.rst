@@ -4,30 +4,31 @@
 Launch Sherlock
 ===============
 
-To launch Sherlock, use the :func:`launch_sherlock<ansys.sherlock.core.launcher.launch_sherlock>`
+To launch Sherlock, use the :func:`<ansys.sherlock.core.launcher.launch_sherlock>`
 method. This method takes an optional ``port`` parameter and automatically searches for the
 latest version of Sherlock installed locally. It then launches the Sherlock gRPC server on
-the port specified. If no port is specified, port 9090 is used by default.
+the port specified. If no port is specified, port ``9090`` is used by default.
 
 This method also launches a Sherlock client connected to the same port and
 returns a ``sherlock`` gRPC connection object that can be used to invoke the APIs from their
 respective services.
 
-To start the Sherlock gRPC server on the default port:
+This code starts the Sherlock gRPC server on the default port:
 
 .. code::
 
     from ansys.sherlock.core import launcher
     sherlock = launcher.launch_sherlock()
 
-To start the Sherlock gRPC server on a port other than the default, use the ``port`` parameter:
+This code uses the optional ``port`` parameter to start the Sherlock gRPC server on port ``11000``
+rather than on the default port:
 
 .. code::
 
     from ansys.sherlock.core import launcher
     sherlock = launcher.launch_sherlock(port=11000)
 
-You can use the :func:`nsys.sherlock.core.common.Common.check>`
+You can use the :func:`ansys.sherlock.core.common.Common.check>`
 method to perform a health check on the ``sherlock`` gRPC connection object:
 
 .. code::

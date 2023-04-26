@@ -328,7 +328,7 @@ class Lifecycle(GrpcStub):
         cycle_type,
         description=None,
     ):
-        """Add and define a life phase.
+        """Add a life phase.
 
         Parameters
         ----------
@@ -444,14 +444,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a random vibe life cycle event.
+        """Add a random vibe lifecycle event.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Bame of the life cycle phase to add this event to.
+            Name of the lifecycle phase to add this event to.
         event_name : str
             Name of the random vibe event.
         duration : double
@@ -465,7 +465,7 @@ class Lifecycle(GrpcStub):
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
         orientation : str
-            PCB orientation in the format of azimuth, elevation. For example, ``30,15``.
+            PCB orientation in the format of ``azimuth, elevation``. For example, ``30,15``.
         profile_type : str
             Random load profile type. Options are ``"Uniaxial"``.
         load_direction : str
@@ -598,7 +598,7 @@ class Lifecycle(GrpcStub):
         random_vibe_profiles : list of (phase_name, event_name, profile_name, freq_units, \
             ampl_units, random_vibe_entries) profiles
             phase_name : str
-                Name of the lifecycle phase to associate this profile to.
+                Name of the lifecycle phase to add this profile to.
             event_name : str
                 Name of the random vibe event for the profile.
             profile_name : str
@@ -767,7 +767,7 @@ class Lifecycle(GrpcStub):
         cycle_state,
         description="",
     ):
-        """Add a thermal event to a life cycle.
+        """Add a thermal event to a lifecycle.
 
         Parameters
         ----------
@@ -874,7 +874,7 @@ class Lifecycle(GrpcStub):
         project,
         thermal_profiles,
     ):
-        """Add thermal life cycle event profiles.
+        """Add thermal lifecycle event profiles.
 
         Parameters
         ----------
@@ -883,7 +883,7 @@ class Lifecycle(GrpcStub):
         thermal_profiles : list of (phase_name, event_name, profile_name, time_units, temp_units, \
                 thermal_profile_entries) profiles
             phase_name : str
-                Bame of the lifecycle phase this profile is associated with.
+                Name of the lifecycle phase to add this profile to.
             event_name : str
                 Name of the thermal event for the profile.
             profile_name : str
@@ -1062,14 +1062,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a harmonic vibe life cycle event.
+        """Add a harmonic vibe lifecycle event.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Bame of the lifecycle phase to add this event to.
+            Name of the lifecycle phase to add this event to.
         event_name : str
             Name of the harmonic event.
         duration : double
@@ -1211,7 +1211,7 @@ class Lifecycle(GrpcStub):
         project,
         harmonic_vibe_profiles,
     ):
-        """Add harmonic life cycle event profiles.
+        """Add harmonic lifecycle event profiles.
 
         Parameters
         ----------
@@ -1219,9 +1219,9 @@ class Lifecycle(GrpcStub):
             Name of the Sherlock project.
         harmonic_vibe_profiles : list of (phase_name, event_name, profile_name,
                                     freq_units, load_units,
-                                    harmonic_vibe_profile_entries) profiles, required
+                                    harmonic_vibe_profile_entries) profiles
             phase_name : str
-                Name of the lifecycle phase this profile is associated with.
+                Name of the lifecycle phase to add this profile to.
             event_name : str
                 Name of the harmonic event for the profile.
             profile_name : str
@@ -1231,13 +1231,13 @@ class Lifecycle(GrpcStub):
             load_units : str
                 Load units. Options are ``"G"``, ```"m/s2"``, ``"mm/s2"``, "``in/s2"``,
                 and ``"ft/s2"``.
-            harmonic_profile_entries : list of (frequency, load) entries, required
+            harmonic_profile_entries : list of (frequency, load) entries
                 frequency : double
                     Frequency of the profile entry expressed in frequency units.
                 load : double
                     Load of the profile entry expressed in load units.
-            triaxial_axis : (string, required)
-                Axis this profile should be assigned to if the harmonic profile type is
+            triaxial_axis : str
+                Axis that this profile should be assigned to if the harmonic profile type is
                 ``"Triaxial"``. Options are: ``"x"``, ``"y"``, and ``"z"``.
 
         Examples
@@ -1398,7 +1398,7 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a shock life cycle event.
+        """Add a shock lifecycle event.
 
         Parameters
         ----------
@@ -1525,7 +1525,7 @@ class Lifecycle(GrpcStub):
         project,
         shock_profiles,
     ):
-        """Add shock life cycle event profiles.
+        """Add shock lifecycle event profiles.
 
         Parameters
         ----------
@@ -1533,9 +1533,9 @@ class Lifecycle(GrpcStub):
             Name of the Sherlock project
         shock_profiles : List of (phase_name, event_name, profile_name, duration, duration_units,
                             sample_rate, sample_rate_units, load_units, freq_units,
-                            shock_profile_entries) profiles, required
+                            shock_profile_entries) profiles
             phase_name : str
-                Bame of the lifecycle phase this profile is associated with.
+                Name of the lifecycle phase to add this profile to.
             event_name : str
                 Name of the shock event for the profile.
             profile_name : str
@@ -1551,11 +1551,11 @@ class Lifecycle(GrpcStub):
                 Sample rate units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
                 ``"day"``, and ``"year"``.
             load_units : str
-                Load units. Options are: ``"G"``, ``"m/s2"``, ``"mm/s2"``, ``"in/s2"",
+                Load units. Options are: ``"G"``, ``"m/s2"``, ``"mm/s2"``, ``"in/s2"``,
                 and ``"ft/s2"``.
             freq_units : str
                 Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            shock_profile_entries : list of (shape, load, freq, decay) entries, required
+            shock_profile_entries : list of (shape, load, freq, decay) entries
                 shape : str
                     Shape of the shock profile entry. Options are ``"FullSine"``,
                     ``"HalfSine"``, ``"Haversine"``, ``"Triangle"``, ``"Sawtooth"``,

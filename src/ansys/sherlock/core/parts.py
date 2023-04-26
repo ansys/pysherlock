@@ -168,7 +168,7 @@ class Parts(GrpcStub):
         matching : str
             Matching mode for updates. Options are ``"Both"`` and ``"Part"``.
         duplication : str
-            How to handle duplications during the update.
+            How to handle duplication during the update.
             Options are ``"First"``, ``"Error"``, and ``"Ignore"``.
 
         Examples
@@ -245,7 +245,7 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        part_loc : (str, str, str, str, str, str, str) list, required
+        part_loc : (str, str, str, str, str, str, str) list,
             (refDes, x, y, rotation, location_units, board_side, mirrored)
             Definitions of part locations.
 
@@ -329,7 +329,7 @@ class Parts(GrpcStub):
             Full path to the file with the components and location properties.
         numeric_format : str, optional
             Numeric format for the file. The default is ``""``, in which case
-            "English (United States)" is used.
+            ``"English (United States)"`` is used.
 
         Examples
         --------
@@ -538,7 +538,7 @@ class Parts(GrpcStub):
             raise e
 
     def enable_lead_modeling(self, project, cca_name):
-        """Enable lead modeling for all non-leadless parts leads.
+        """Enable lead modeling for all non-leadless part leads.
 
         Parameters
         ----------

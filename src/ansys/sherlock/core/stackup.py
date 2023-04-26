@@ -42,7 +42,7 @@ class Stackup(GrpcStub):
         self.FIBER_MATERIAL_LIST = None
 
     def _init_laminate_thickness_units(self):
-        """Initialize list of units for laminate thickness."""
+        """Initialize the list of units for the laminate thickness."""
         if self._is_connection_up():
             laminate_thickness_unit_request = (
                 SherlockStackupService_pb2.ListLaminateThicknessUnitsRequest()
@@ -221,7 +221,7 @@ class Stackup(GrpcStub):
         power_layer_thickness,
         power_layer_thickness_unit,
     ):
-        """Generate a new stackup from the properties.
+        """Generate a new stackup from given properties.
 
         Parameters
         ----------
@@ -232,7 +232,7 @@ class Stackup(GrpcStub):
         board_thickness : double
             Board thickness.
         board_thickness_unit : str
-            Units for board thickness.
+            Units for the board thickness.
         pcb_material_manufacturer : str
             PCB material manufacturer.
         pcb_material_grade : str
@@ -244,7 +244,7 @@ class Stackup(GrpcStub):
         signal_layer_thickness : double
             Signal layer thickness.
         signal_layer_thickness_unit : str
-            Units for signal layer thickness.
+            Units for the signal layer thickness.
         min_laminate_thickness : double
             Minimum thickness of laminate layers.
         min_laminate_thickness_unit : str
@@ -254,7 +254,7 @@ class Stackup(GrpcStub):
         power_layer_thickness : double
             Power layer thickness.
         power_layer_thickness_unit : str
-            Units for power layer thickness.
+            Units for the power layer thickness.
 
         Examples
         --------
@@ -376,7 +376,7 @@ class Stackup(GrpcStub):
         cca_name : str
             Name of the CCA.
         layer : str
-            Layer ID associated with this conductor layer.
+            Layer ID associated with the conductor layer.
         type : str, optional
             Layer type. For example, ``"SIGNAL"``, ``"POWER"``, and ``"SUBSTRATE"``.
         material : str, optional
@@ -384,7 +384,7 @@ class Stackup(GrpcStub):
         thickness : double, optional
             Conductor layer thickness.
         thickness_unit : str, optional
-            Units for conductor layer thickness.
+            Units for the conductor layer thickness.
         conductor_percent : str, optional
             Conductor percentage.
         resin_material : str, optional
@@ -392,7 +392,7 @@ class Stackup(GrpcStub):
 
         Note
         ----
-        Using the default value for a property cause no changes for that property.
+        Using the default value for a property causes no changes for that property.
 
         Example
         -------
@@ -510,7 +510,7 @@ class Stackup(GrpcStub):
         cca_name : str
             Name of the CCA.
         layer : str
-            Layer ID associated with this conductor layer.
+            Layer ID associated with the conductor layer.
         manufacturer : str, optional
             Name of the material manufacturer. The manufacturer name must be provided
             along with the material grade and material name.
@@ -521,7 +521,7 @@ class Stackup(GrpcStub):
         thickness : double, optional
             Laminate thickness.
         thickness_unit : str, optional
-            Units for laminate thickness.
+            Units for the laminate thickness.
         construction_style : str, optional
             Construction style.
         glass_construction : (str, double, double, str) list, optional
@@ -536,7 +536,7 @@ class Stackup(GrpcStub):
 
         Note
         ----
-        Using the default value for a property cause no changes for that property.
+        Using the default value for a property causes no changes for that property.
 
         Example
         -------
@@ -669,7 +669,7 @@ class Stackup(GrpcStub):
             True,
             True,
             True,
-            True,
+            True,ect name
             project="Test",
             cca_name="Card",
         )
@@ -702,7 +702,7 @@ class Stackup(GrpcStub):
             raise e
 
     def list_laminate_layers(self, project):
-        """Get a list of all laminate layers and their properties.
+        """List all laminate layers and their properties.
 
         Parameters
         ----------
@@ -756,14 +756,14 @@ class Stackup(GrpcStub):
             raise e
 
     def get_layer_count(self, project, cca_name):
-        """Return the number of CCA layers in a stackup.
+        """Get the number of CCA layers in a stackup.
 
         Parameters
         ----------
         project : str, required
-            Sherlock project name.
+            Name of the Sherlock project.
         cca_name : str, required
-            The CCA name.
+            Name of the CCA.
 
         Example
         -------
@@ -803,14 +803,14 @@ class Stackup(GrpcStub):
             raise e
 
     def get_stackup_props(self, project, cca_name):
-        """Return the stackup properties from a CCA.
+        """Get the stackup properties from a CCA.
 
         Parameters
         ----------
         project : str, required
-            Sherlock project name.
+            Name of the Sherlock project.
         cca_name : str, required
-            The CCA name.
+            Name of the CCA.
 
         Example
         -------
