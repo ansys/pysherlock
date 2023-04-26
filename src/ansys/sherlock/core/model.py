@@ -52,7 +52,7 @@ class Model(GrpcStub):
         cca_name : str
             Name of the CCA to generate the trace reinforcement model from.
         export_file : str
-            File path for saving the exported files. The file extesion must be ".wbjn".
+            File path for saving the exported files. The file extension must be ".wbjn".
         overwrite : bool, optional
             Whether to overwrite an existing file having the same file name.
             The default is ``True``.
@@ -69,7 +69,7 @@ class Model(GrpcStub):
         trace_param_diameter_threshold_val: float, optional
             Threshold value that determines whether a hole is modeled with shell
             reinforcement elements or beam elements. The default is ``2``, with the
-            default units being ``"mm"`` as specifed by the next parameter. Holes with
+            default units being ``"mm"`` as specified by the next parameter. Holes with
             diameters equal to or greater than this threshold value are modeled with shell
             reinforcement elements. Holes with diameters less than this threshold value
             are modeled with beam elements. A hole buried inside the board is always modeled
@@ -79,7 +79,7 @@ class Model(GrpcStub):
             The default is ``"mm"``.
         trace_param_min_hole_diameter_val: float, optional
             Minimum trace parameter diameter for determining whether a via is exported.
-            The default is ``0.25``, with the default units being ``"mm"`` as specifed
+            The default is ``0.25``, with the default units being ``"mm"`` as specified
             by the next parameter. Vias with diameters smaller than this diameter
             are not exported. Setting the value to ''0'' exports all vias.
         trace_param_min_hole_diameter_unit: str, optional
@@ -93,7 +93,7 @@ class Model(GrpcStub):
         trace_drill_hole_min_diameter_val: float, optional
             Minimimun diameter value for determining whether a trace drill hole is
             exported. The default is ``2``, with the default units being ``"mm"``
-            as specifed by the next parameter. Trace drill holes with diameters smaller
+            as specified by the next parameter. Trace drill holes with diameters smaller
             than this diameter are not exported. Setting the value to ``0`` exports all
             trace drill holes.
         trace_drill_hole_min_diameter_unit: str, optional
@@ -101,7 +101,7 @@ class Model(GrpcStub):
             The default is ``"mm"``.
         trace_drill_hole_max_edge_val: float, optional
             Maximum segment size for representing round drill holes by a polygon.
-            The default is ``1``, with the default units being ``"mm"`` as specifed
+            The default is ``1``, with the default units being ``"mm"`` as specified
             by the next parameter.
         trace_drill_hole_max_edge_unit: str, optional
             Units associated with the maximum segment for representing round drill holes
