@@ -880,7 +880,6 @@ class Stackup(GrpcStub):
                                                                  thickness_unit="oz")
         >>>print(f"{total_thickness}")
         """
-
         try:
             if project == "":
                 raise SherlockGetTotalConductorThicknessError(message="Invalid project name")
