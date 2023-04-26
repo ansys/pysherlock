@@ -14,11 +14,11 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
+    SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
-    SherlockGetPartLocationError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 

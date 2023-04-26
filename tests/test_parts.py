@@ -5,11 +5,11 @@ import grpc
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
+    SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
-    SherlockGetPartLocationError,
 )
 from ansys.sherlock.core.parts import Parts
 
