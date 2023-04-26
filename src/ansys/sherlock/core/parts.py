@@ -597,6 +597,7 @@ class Parts(GrpcStub):
 
          Parameters
         ----------
+
         project : str
             Name of the Sherlock project.
         cca_name : str
@@ -608,6 +609,7 @@ class Parts(GrpcStub):
 
         Examples
         --------
+        
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
