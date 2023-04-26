@@ -14,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockGetLayerCountError,
     SherlockGetStackupPropsError,
+    SherlockGetTotalConductorThicknessError,
     SherlockInvalidConductorPercentError,
     SherlockInvalidGlassConstructionError,
     SherlockInvalidLayerIDError,
@@ -23,7 +24,7 @@ from ansys.sherlock.core.errors import (
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
-    SherlockGetTotalConductorThicknessError,
+
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
