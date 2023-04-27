@@ -1217,28 +1217,32 @@ class Lifecycle(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
-        harmonic_vibe_profiles : list of (phase_name, event_name, profile_name,
-                                    freq_units, load_units,
-                                    harmonic_vibe_profile_entries) profiles
-            phase_name : str
-                Name of the lifecycle phase to add this profile to.
-            event_name : str
-                Name of the harmonic event for the profile.
-            profile_name : str
-                Name of the harmonic profile.
-            freq_units : str
-                Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            load_units : str
-                Load units. Options are ``"G"``, ```"m/s2"``, ``"mm/s2"``, "``in/s2"``,
-                and ``"ft/s2"``.
-            harmonic_profile_entries : list of (frequency, load) entries
-                frequency : double
-                    Frequency of the profile entry expressed in frequency units.
-                load : double
-                    Load of the profile entry expressed in load units.
-            triaxial_axis : str
-                Axis that this profile should be assigned to if the harmonic profile type is
-                ``"Triaxial"``. Options are: ``"x"``, ``"y"``, and ``"z"``.
+        harmonic_vibe_profiles : list
+            List consisting of these arguments:
+
+            - phase_name : str
+                  Name of the lifecycle phase to add this profile to.
+            - event_name : str
+                  Name of the harmonic event for the profile.
+            - profile_name : str
+                  Name of the harmonic profile.
+            - freq_units : str
+                  Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``,
+                  and ``"GHZ"``.
+            - load_units : str
+                  Load units. Options are ``"G"``, ```"m/s2"``, ``"mm/s2"``,
+                  "``in/s2"``, and ``"ft/s2"``.
+            - harmonic_profile_entries : list
+                   List consisting of these arguments:
+
+                    - frequency : double
+                        Frequency of the profile entry expressed in frequency units.
+                    - load : double
+                        Load of the profile entry expressed in load units.
+
+        triaxial_axis : str
+            Axis that this profile should be assigned to if the harmonic profile type is
+            ``"Triaxial"``. Options are: ``"x"``, ``"y"``, and ``"z"``.
 
         Examples
         --------

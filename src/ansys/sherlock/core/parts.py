@@ -328,8 +328,10 @@ class Parts(GrpcStub):
         file_path : str
             Full path to the file with the components and location properties.
         numeric_format : str, optional
-            Numeric format for the file. The default is ``""``, in which case
-            ``"English (United States)"`` is used.
+            Numeric format for the file, indicating whether commas or points
+            are used as decimal markers. The default is ``""``, in which case
+            ``"English (United States)"`` is used, indicating that points are
+            used as decimal markers.
 
         Examples
         --------
