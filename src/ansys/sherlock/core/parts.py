@@ -595,7 +595,7 @@ class Parts(GrpcStub):
     def get_part_location(self, project, cca_name, ref_des, location_units):
         """Return the location properties for one or more part.
 
-         Parameters
+        Parameters
         ----------
         project : str
             Name of the Sherlock project.
