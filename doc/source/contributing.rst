@@ -135,11 +135,11 @@ guide <https://dev.docs.pyansys.com/>`_. You must follow these steps:
       # Activate it in Windows Powershell
       .venv\Scripts\Activate.ps1
 
-   If you require additional information on virutal environments, see the
+   If you require additional information on virtual environments, see the
    official Python `venv <https://docs.python.org/3/library/venv.html>`_ topic.
 
 #. To make sure you have the latest version of `pip <https://pypi.org/project/pip/>`_,
-   run thi command:
+   run this command:
 
    .. code:: bash
 
