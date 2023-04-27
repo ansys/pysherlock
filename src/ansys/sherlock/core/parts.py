@@ -605,6 +605,7 @@ class Parts(GrpcStub):
             Reference designator for specific part.
         location_units: str
             Valid units for a part's location.
+        ----------
 
         Examples
         --------

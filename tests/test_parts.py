@@ -452,7 +452,7 @@ def helper_test_get_part_location(parts):
         )
         assert False
     except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Invalid project name."
+        assert str(e) == "Get part location error: Project name is invalid."
 
     try:
         parts.get_part_location(
@@ -463,7 +463,7 @@ def helper_test_get_part_location(parts):
         )
         assert False
     except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Invalid CCA name."
+        assert str(e) == "Get part location error: CCA name is invalid."
 
     try:
         parts.get_part_location(
@@ -474,7 +474,7 @@ def helper_test_get_part_location(parts):
         )
         assert False
     except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Invalid ref des."
+        assert str(e) == "Get part location error: Ref Des is invalid."
 
     try:
         parts.get_part_location(
@@ -485,7 +485,7 @@ def helper_test_get_part_location(parts):
         )
         assert False
     except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Invalid location units."
+        assert str(e) == "Get part location error: Location unit is invalid."
 
 
 if __name__ == "__main__":
