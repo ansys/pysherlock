@@ -609,7 +609,7 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        
+
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -631,13 +631,13 @@ class Parts(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockGetPartLocationError(message="Invalid project name.")
+                raise SherlockGetPartLocationError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockGetPartLocationError(message="Invalid CCA name.")
+                raise SherlockGetPartLocationError(message="CCA name is invalid.")
             if ref_des == "":
-                raise SherlockGetPartLocationError(message="Invalid ref des.")
+                raise SherlockGetPartLocationError(message="Ref Des is invalid.")
             if location_units == "":
-                raise SherlockGetPartLocationError(message="Invalid location units.")
+                raise SherlockGetPartLocationError(message="Location unit is invalid.")
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
