@@ -16,3 +16,4 @@ The ``parts`` module contains all parts management capabilities.
      ansys.sherlock.core.parts.Parts.update_parts_list
      ansys.sherlock.core.parts.Parts.update_parts_locations
      ansys.sherlock.core.parts.Parts.update_parts_locations_by_file
+     ansys.sherlock.core.parts.Parts.get_part_location

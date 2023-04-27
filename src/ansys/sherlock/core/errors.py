@@ -487,6 +487,18 @@ class SherlockEnableLeadModelingError(Exception):
         return f"Enable lead modeling error: {self.message}"
 
 
+class SherlockGetPartLocationError(Exception):
+    """Raised when getting part location results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get part location error: {self.message}"
+
+
 class SherlockRunAnalysisError(Exception):
     """Contains the error raised when an analysis cannot be run."""
 

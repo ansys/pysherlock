@@ -14,6 +14,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
+    SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
@@ -588,5 +589,67 @@ class Parts(GrpcStub):
             LOG.info(response.message)
             return
         except SherlockEnableLeadModelingError as e:
+            LOG.error(str(e))
+            raise e
+
+    def get_part_location(self, project, cca_name, ref_des, location_units):
+        """Return the location properties for one or more part.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        ref_des : str
+            Reference designator for specific part.
+        location_units: str
+            Valid units for a part's location.
+        ----------
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> part_location = sherlock.parts.get_part_location(
+            project="Tutorial",
+            cca_name="Main Board",
+            ref_des="C1",
+            location_units="in",
+        )
+        >>> print(f"{part_location}")
+        """
+        try:
+            if project == "":
+                raise SherlockGetPartLocationError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockGetPartLocationError(message="CCA name is invalid.")
+            if ref_des == "":
+                raise SherlockGetPartLocationError(message="Ref Des is invalid.")
+            if location_units == "":
+                raise SherlockGetPartLocationError(message="Location unit is invalid.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockPartsService_pb2.GetPartLocationRequest(
+                project=project,
+                ccaName=cca_name,
+                refDes=ref_des,
+                locationUnits=location_units,
+            )
+            response = self.stub.getPartLocation(request)
+
+            return response
+        except SherlockGetPartLocationError as e:
             LOG.error(str(e))
             raise e

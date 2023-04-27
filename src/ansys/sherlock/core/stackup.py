@@ -138,7 +138,7 @@ class Stackup(GrpcStub):
             ):
                 if spec is not None:
                     raise SherlockInvalidThicknessArgumentError(
-                        message=f"Thickness units {spec} are invalid."
+                        message=f"{str(spec).capitalize()} thickness units are invalid."
                     )
 
                 raise SherlockInvalidThicknessArgumentError(message="Thickness units are invalid.")
@@ -786,9 +786,9 @@ class Stackup(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockGetLayerCountError(message="Invalid project name")
+                raise SherlockGetLayerCountError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockGetLayerCountError(message="Invalid CCA name")
+                raise SherlockGetLayerCountError(message="CCA name is invalid.")
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
@@ -834,9 +834,9 @@ class Stackup(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockGetStackupPropsError(message="Invalid project name")
+                raise SherlockGetStackupPropsError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockGetStackupPropsError(message="Invalid CCA name")
+                raise SherlockGetStackupPropsError(message="CCA name is invalid.")
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
