@@ -21,7 +21,8 @@ and ``ansys-sherlock`` packages.
 
    .. code::
 
-      git clone https://github.com/pyansys/ansys-api-sherlock.git
+      git clone https://github.com/ansys/ansys-api-sherlock.git
+
 
    Alternatively, you can download the ZIP file from the **Release** area of the
    `ansys-api-sherlock <https://github.com/pyansys/ansys-api-sherlock>`_ GitHub
