@@ -138,7 +138,7 @@ class Stackup(GrpcStub):
             ):
                 if spec is not None:
                     raise SherlockInvalidThicknessArgumentError(
-                        message=f"Thickness units  are invalid."
+                        message=f"Thickness units {spec} are invalid."
                     )
 
                 raise SherlockInvalidThicknessArgumentError(message="Thickness units are invalid.")
