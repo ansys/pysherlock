@@ -521,10 +521,7 @@ def helper_test_update_conductor_layer(stackup):
             )
             assert False
         except SherlockUpdateConductorLayerError as e:
-            assert (
-                str(e) == "Update conductor layer error: Invalid conductor thickness "
-                "unit provided"
-            )
+            assert str(e) == "Update conductor layer error: Conductor thickness units are invalid."
 
     try:
         stackup.update_conductor_layer(
@@ -958,7 +955,7 @@ def helper_test_get_stackup_props(stackup):
         )
         assert False
     except SherlockGetStackupPropsError as e:
-        assert str(e) == "Get stackup prop error: Invalid project name"
+        assert str(e) == "Get stackup prop error: Project name is invalid."
     try:
         stackup.get_stackup_props(
             "Test",
@@ -966,7 +963,7 @@ def helper_test_get_stackup_props(stackup):
         )
         assert False
     except SherlockGetStackupPropsError as e:
-        assert str(e) == "Get stackup prop error: Invalid CCA name"
+        assert str(e) == "Get stackup prop error: CCA name is invalid."
 
 
 def helper_test_get_layer_count(stackup):
@@ -975,13 +972,13 @@ def helper_test_get_layer_count(stackup):
         stackup.get_layer_count(project="", cca_name="Card")
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid project name"
+        assert str(e) == "Get layer count error: Project name is invalid."
 
     try:
         stackup.get_layer_count(project="Test", cca_name="")
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid CCA name"
+        assert str(e) == "Get layer count error: CCA name is invalid."
 
     """Test get_layer_count API"""
     try:
@@ -991,7 +988,7 @@ def helper_test_get_layer_count(stackup):
         )
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid project name"
+        assert str(e) == "Get layer count error: Project name is invalid."
 
     try:
         stackup.get_layer_count(
@@ -1000,7 +997,7 @@ def helper_test_get_layer_count(stackup):
         )
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid CCA name"
+        assert str(e) == "Get layer count error: CCA name is invalid."
 
 
 def helper_test_get_total_conductor_thickness(stackup):
