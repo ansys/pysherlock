@@ -6,6 +6,7 @@ from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockGetLayerCountError,
     SherlockGetStackupPropsError,
+    SherlockGetTotalConductorThicknessError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
@@ -19,15 +20,14 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     stackup = Stackup(channel)
-
     helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
     helper_test_update_laminate_layer(stackup)
     helper_test_list_conductor_layers(stackup)
     helper_test_list_laminate_layers(stackup)
     helper_test_get_stackup_props(stackup)
-
     helper_test_get_layer_count(stackup)
+    helper_test_get_total_conductor_thickness(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -998,6 +998,26 @@ def helper_test_get_layer_count(stackup):
         assert False
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: CCA name is invalid."
+
+
+def helper_test_get_total_conductor_thickness(stackup):
+    try:
+        stackup.get_total_conductor_thickness(project="", cca_name="Card", thickness_unit="oz")
+        assert False
+    except SherlockGetTotalConductorThicknessError as e:
+        assert str(e) == "Get total conductor thickness error: Invalid project name"
+
+    try:
+        stackup.get_total_conductor_thickness(project="Test", cca_name="", thickness_unit="oz")
+        assert False
+    except SherlockGetTotalConductorThicknessError as e:
+        assert str(e) == "Get total conductor thickness error: Invalid CCA name"
+
+    try:
+        stackup.get_total_conductor_thickness(project="Test", cca_name="Card", thickness_unit="")
+        assert False
+    except SherlockGetTotalConductorThicknessError as e:
+        assert str(e) == "Get total conductor thickness error: Invalid thickness unit"
 
 
 if __name__ == "__main__":

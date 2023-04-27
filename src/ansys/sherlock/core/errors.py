@@ -141,6 +141,18 @@ class SherlockGetLayerCountError(Exception):
         return f"Get layer count error: {self.message}"
 
 
+class SherlockGetTotalConductorThicknessError(Exception):
+    """Raised when getting total conductor thickness results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get total conductor thickness error: {self.message}"
+
+
 class SherlockAddStrainMapsError(Exception):
     """Contains the error raised when strain maps cannot be added to the project."""
 
