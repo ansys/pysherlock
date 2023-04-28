@@ -1736,7 +1736,7 @@ class Lifecycle(GrpcStub):
             raise e
 
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
-        """Load a thermal profile from a .dat or .csv file
+        """Load a thermal profile from a .dat or .csv file.
 
         Parameters
         ----------
