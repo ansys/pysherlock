@@ -328,26 +328,26 @@ class Lifecycle(GrpcStub):
         cycle_type,
         description=None,
     ):
-        """Add a life phase.
+        """Create a life phase.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the new life phase.
+            Name of the life phase.
         duration : double
             Event duration length.
         duration_units : str
-            Units for the event duration length. Options include ``"ms"``,
+            Units for the event duration length. Options are ``"ms"``,
             ``"sec"``, and ``"min"``.
         num_of_cycles : double
-            Number of cycles for the new life phase.
+            Number of cycles for the life phase.
         cycle_type : str
             Cycle type. Options include ``"COUNT"``, ``"DUTY CYCLE"``,
             ``"PER YEAR"``, and ``"PER HOUR"``.
         description : str, optional
-            Description of the new life phase.
+            Description of the life phase. The default is ``""``.
 
         Examples
         --------
@@ -460,18 +460,19 @@ class Lifecycle(GrpcStub):
             Event duration units. Options are ``"ms"``, ``"sec"``, ``"min"``,
             ``"hr"``, ``"day"``, and ``"year"``.
         num_of_cycles : double
-            Number of cycles for this random vibe event.
+            Number of cycles for the random vibe event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
         orientation : str
-            PCB orientation in the format of ``azimuth, elevation``. For example, ``30,15``.
+            PCB orientation in the format of ``"azimuth, elevation"``. For example,
+            ``"30,15"``.
         profile_type : str
-            Random load profile type. Options are ``"Uniaxial"``.
+            Random load profile type. The only option is ``"Uniaxial"``.
         load_direction : str
-            Load direction in the format of ``x,y,z``. For example, ``0,0,1``.
+            Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
-            Description of the random vibe event.
+            Description of the random vibe event. The default is ``""``.
 
         Examples
         --------
@@ -589,29 +590,32 @@ class Lifecycle(GrpcStub):
         project,
         random_vibe_profiles,
     ):
-        """Add new random vibe lifecycle event profiles.
+        """Add random vibe lifecycle event profiles.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
-        random_vibe_profiles : list of (phase_name, event_name, profile_name, freq_units, \
-            ampl_units, random_vibe_entries) profiles
-            phase_name : str
+        random_vibe_profiles : list
+            List of profiles consisting of these arguments:
+            
+            - phase_name : str
                 Name of the lifecycle phase to add this profile to.
-            event_name : str
+            - event_name : str
                 Name of the random vibe event for the profile.
-            profile_name : str
+            - profile_name : str
                 Name of the random vibe profile.
-            freq_units : str
+            - freq_units : str
                 Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            ampl_units : str
+            - ampl_units : str
                 Amplitude units. Options are ``"G2/Hz"``, ``"m2/s4/Hz"``, ``"mm2/s4/Hz"``, \
                 ``"in2/s4/Hz"``, and ``"ft2/s4/Hz"``.
-            random_vibe_profile_entries : list of (frequency, amplitude) entries
-                frequency : double
+            - random_vibe_profile_entries : list
+                List of random vibe profile entries consisting of these arguments:
+
+                - frequency : double
                     Frequency of the profile entry expressed in frequency units.
-                amplitude : double
+                - amplitude : double
                     Amplitude of the profile entry expressed in amplitude units.
 
         Examples
@@ -778,14 +782,14 @@ class Lifecycle(GrpcStub):
         event_name : str
             Name of the thermal event.
         num_of_cycles : double
-            Number of cycles for this thermal event.
+            Number of cycles for the thermal event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
         cycle_state : str
             Lifecycle state. Options are ``"OPERATING"`` and ``"STORAGE"``.
         description : str, optional
-            Description of the new thermal event.
+            Description of the thermal event. The default is ``""``.
 
         Examples
         --------
@@ -880,28 +884,32 @@ class Lifecycle(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
-        thermal_profiles : list of (phase_name, event_name, profile_name, time_units, temp_units, \
-                thermal_profile_entries) profiles
-            phase_name : str
+        thermal_profiles : list
+            List of thermal profiles consisting of these arguments:
+
+            - phase_name : str
                 Name of the lifecycle phase to add this profile to.
-            event_name : str
+            - event_name : str
                 Name of the thermal event for the profile.
-            profile_name : str
+            - profile_name : str
                 Name of the thermal profile.
-            time_units : str
+            - time_units : str
                 Time units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
                 ``"day"``, and ``"year"``.
-            temp_units : str
+            - temp_units : str
                 Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.
-            thermal_profile_entries : list of (step, type, time, temp) entries
-                step : str
+            - thermal_profile_entries : list
+                List of thermal profile entries consisting of these arguments:
+
+                - step : str
                     Name of the profile step entry.
-                type : str
+                - type : str
                     Thermal step type. Options are ``"HOLD"`` and ``"RAMP"``.
-                time : double
+                - time : double
                     Duration of the step entry expressed in time units
-                temperature : double
+                - temperature : double
                     Temperature of the step entry expressed in temperature units.
+
 
         Examples
         --------
@@ -1078,20 +1086,21 @@ class Lifecycle(GrpcStub):
             Event duration units. Options are ``"ms"``, ``"sec"``, ``"min"``,
             ``"hr"``, ``"day"``, and ``"year"``.
         num_of_cycles : double
-            Number of cycles for this harmonic vibe event.
+            Number of cycles for the harmonic vibe event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
         sweep_rate : double
             Sweep rate for the harmonic event.
         orientation : str
-            PCB orientation in the format of ``azimuth, elevation``. For example, ``30,15``.
+            PCB orientation in the format of ``"azimuth, elevation"``. For example,
+            ``"30,15"``.
         profile_type : str
             Harmonic load profile types. Options are ``"Uniaxial"`` and ``"Triaxial"``.
         load_direction: str
-            Load direction in the format of ``x,y,z``. For example, ``0,0,1``.
+            Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
-            Description of the harmonic vibe event.
+            Description of the harmonic vibe event. The default is ``""``.
 
         Examples
         --------
@@ -1218,27 +1227,27 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project.
         harmonic_vibe_profiles : list
-            List consisting of these arguments:
+            List of harmonic vibe profiles consisting of these arguments:
 
             - phase_name : str
-                  Name of the lifecycle phase to add this profile to.
+                Name of the lifecycle phase to add this profile to.
             - event_name : str
-                  Name of the harmonic event for the profile.
+                Name of the harmonic event for the profile.
             - profile_name : str
-                  Name of the harmonic profile.
+                Name of the harmonic profile.
             - freq_units : str
-                  Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``,
-                  and ``"GHZ"``.
+                Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``,
+                and ``"GHZ"``.
             - load_units : str
-                  Load units. Options are ``"G"``, ```"m/s2"``, ``"mm/s2"``,
-                  "``in/s2"``, and ``"ft/s2"``.
+                Load units. Options are ``"G"``, ```"m/s2"``, ``"mm/s2"``,
+                ``"in/s2"``, and ``"ft/s2"``.
             - harmonic_profile_entries : list
-                   List consisting of these arguments:
+                List of harmonic profile entries consisting of these arguments:
 
-                    - frequency : double
-                        Frequency of the profile entry expressed in frequency units.
-                    - load : double
-                        Load of the profile entry expressed in load units.
+                - frequency : double
+                    Frequency of the profile entry expressed in frequency units.
+                - load : double
+                    Load of the profile entry expressed in load units.
 
         triaxial_axis : str
             Axis that this profile should be assigned to if the harmonic profile type is
@@ -1420,14 +1429,15 @@ class Lifecycle(GrpcStub):
         num_of_cycles : double
             Number of cycles for the shock event.
         cycle_type : str
-            Cycle type. Options include ``"COUNT"``, ``"DUTY CYCLE"``,
+            Cycle type. Options are ``"COUNT"``, ``"DUTY CYCLE"``,
             ``"PER YEAR"``, and ``"PER HOUR"``.
         orientation : str
-            PCB orientation in the format of ``azimuth, elevation``. For example, ``30,15``.
+            PCB orientation in the format of ``"azimuth, elevation"``. For example,
+            ``"30,15"``.
         load_direction : str
-            Load direction in the format of ``x,y,z``. For example, ``0,0,1``.
+            Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
-            Description of the shock event.
+            Description of the shock event. The default is ``""``.
 
         Examples
         --------
@@ -1535,40 +1545,42 @@ class Lifecycle(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project
-        shock_profiles : List of (phase_name, event_name, profile_name, duration, duration_units,
-                            sample_rate, sample_rate_units, load_units, freq_units,
-                            shock_profile_entries) profiles
-            phase_name : str
+        shock_profiles : list
+            List of shock profiles consisting of these arguments:
+
+            - phase_name : str
                 Name of the lifecycle phase to add this profile to.
-            event_name : str
+            - event_name : str
                 Name of the shock event for the profile.
-            profile_name : str
+            - profile_name : str
                 Name of the shock profile.
-            duration : double
+            - duration : double
                 Pulse duration.
-            duration_units : str
+            - duration_units : str
                 Pulse duration units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
                 ``"day"``, and ``"year"``.
-            sample_rate : double
+            - sample_rate : double
                 Sample rate.
-            sample_rate_units : str
+            - sample_rate_units : str
                 Sample rate units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
                 ``"day"``, and ``"year"``.
-            load_units : str
+            - load_units : str
                 Load units. Options are: ``"G"``, ``"m/s2"``, ``"mm/s2"``, ``"in/s2"``,
                 and ``"ft/s2"``.
-            freq_units : str
+            - freq_units : str
                 Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            shock_profile_entries : list of (shape, load, freq, decay) entries
-                shape : str
+            - shock_profile_entries : list
+                List of shock profile entries consisting of these arguments:
+
+                - shape : str
                     Shape of the shock profile entry. Options are ``"FullSine"``,
                     ``"HalfSine"``, ``"Haversine"``, ``"Triangle"``, ``"Sawtooth"``,
                     ``"FullSquare"``, and ``"HalfSquare"``.
-                load : double
+                - load : double
                     Load of the profile entry expressed in load units.
-                freq : double
+                - freq : double
                     Frequency of the profile entry expressed in frequency units.
-                decay : double
+                - decay : double
                     Decay value of the profile entry.
 
         Examples

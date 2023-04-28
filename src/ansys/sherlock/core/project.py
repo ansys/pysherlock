@@ -160,7 +160,7 @@ class Project(GrpcStub):
         Parameters
         ----------
         archive_file : str
-            Full path to the ODB++ archive file.
+            Full path to the IPC-2581 archive file.
         include_other_layers : bool
             Whether to include other layers.
         guess_part_properties: bool
@@ -232,7 +232,7 @@ class Project(GrpcStub):
         company : str
             Name of the author's company.
         export_file: str
-            Full path to where to write the report to.
+            Full path to where to export the report to.
 
         Examples
         --------
@@ -295,12 +295,12 @@ class Project(GrpcStub):
             raise e
 
     def list_ccas(self, project, cca_names=None):
-        """List CCAs and subassembly CCAs assigned to each CCA or the requested CCAs.
+        """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
 
         Parameters
         ----------
         project: str
-            Name of the Sherlock project to provide strain maps for.
+            Name of the Sherlock project.
         cca_name : List of str, optional
             List of CCA names. The default is ``None``, in which case all CCAs
             in the project are returned.
@@ -346,29 +346,30 @@ class Project(GrpcStub):
         return response.ccas
 
     def add_strain_maps(self, project, strain_maps):
-        """Add CSV files with strain maps to the CCAs.
+        """Add a CSV file with strain maps to the CCAs.
 
         Parameters
         ----------
         project: str
             Name of the Sherlock project to add strain maps to.
-        strain_maps : List of (strain_map_file, file_comment, header_row_count, \
-            reference_id_column, strain_column, strain_units, ccas)
-            strain_map_file : str
-                Full path to the strain map file to add to the project.
-            file_comment : str
-                File comment to associate with the strain map file.
-            header_row_count : int
+        strain_maps : list
+            List of strain maps consisting of these arguments:
+
+            - strain_map_file : str
+                Full path to the CSV file with the strain maps.
+            - file_comment : str
+                Comment to associate with the file.
+            - header_row_count : int
                 Number of rows before the file's column header.
-            reference_id_column : str
-                Name of the column in the file with the reference IDs.
-            strain_column : str
-                Name of the column in the file with the strain values.
-            strain_units : str
+            - reference_id_column : str
+                Name of the column in the file with reference IDs.
+            - strain_column : str
+                Name of the column in the file with strain values.
+            - strain_units : str
                 Strain units. Options are ``µε`` and ``ε``.
-            ccas : List of (cca_name), optional
-                List of CCA names to assign the strain map file to. When no list is
-                specified, the strain  map is assigned to all CCAs in the project.
+            - ccas : list, optional
+                List of CCA names to assign the file to. When no list is
+                specified, the file is assigned to all CCAs in the project.
 
         Examples
         --------
@@ -478,7 +479,7 @@ class Project(GrpcStub):
             raise e
 
     def list_strain_maps(self, project, cca_names=None):
-        """Get the strain maps assigned to each CCA or the requested CCAs.
+        """List the strain maps assigned to each CCA or given CCAs.
 
         Parameters
         ----------

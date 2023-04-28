@@ -34,16 +34,21 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 def launch_sherlock(
     host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="", sherlock_cmd_args=""
 ):
-    r"""Launch Sherlock and start gRPC on a *localhost* port.
+    r"""Launch Sherlock and start gRPC on a given host and port.
 
     Parameters
     ----------
+    host : str, optional
+        IP address to start gRPC on. The default is ``"127.0.0.1"``, which
+        is the IP address for the local host.
     port : int, optional
-        Port number for the connection. By default, port ``9090`` is used.
+        Port number for the connection. If no port is specified, ``9090``
+        is used.
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
+        The default is ``""``.
     sherlock_cmd_args : str, optional
-        Optional command arguments for launching Sherlock.
+        Additional command arguments for launching Sherlock. The default is ``""``.
 
     Examples
     --------

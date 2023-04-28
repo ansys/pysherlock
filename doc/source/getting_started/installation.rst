@@ -42,7 +42,7 @@ and ``ansys-sherlock`` packages.
 
       git clone https://github.com/pyansys/pysherlock.git
 
-   Alternatively, you can download the ZIP file from **Release** area of the
+   Alternatively, you can download the ZIP file from the **Release** area of the
    `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository
    and unzip it before proceding with the installation.
 

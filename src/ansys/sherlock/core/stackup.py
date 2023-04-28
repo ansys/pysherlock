@@ -378,17 +378,19 @@ class Stackup(GrpcStub):
         layer : str
             Layer ID associated with the conductor layer.
         type : str, optional
-            Layer type. For example, ``"SIGNAL"``, ``"POWER"``, and ``"SUBSTRATE"``.
+            Layer type. The default is ``""1``. For example,
+            ``"SIGNAL"``, ``"POWER"``, or ``"SUBSTRATE"``.
         material : str, optional
-            Name of the conductor material.
+            Conductor material. The default is ``""``.
         thickness : double, optional
-            Conductor layer thickness.
+            Conductor layer thickness. The default is ``0``.
         thickness_unit : str, optional
-            Units for the conductor layer thickness.
+            Units for the conductor layer thickness. The
+            default is ``""``.
         conductor_percent : str, optional
-            Conductor percentage.
+            Conductor percentage. The default is ``""``.
         resin_material : str, optional
-            Resin material.
+            Resin material. The default is ``""``.
 
         Note
         ----
@@ -512,27 +514,39 @@ class Stackup(GrpcStub):
         layer : str
             Layer ID associated with the conductor layer.
         manufacturer : str, optional
-            Name of the material manufacturer. The manufacturer name must be provided
-            along with the material grade and material name.
+            Name of the material manufacturer. The default is ``""``.
+            The manufacturer name must be provided along with the material
+            grade and material name.
         grade : str, optional
-            Material grade.
+            Material grade. The default is ``""``.
         material : str, optional
-            Material name.
+            Material name. The default is ``""``.
         thickness : double, optional
-            Laminate thickness.
+            Laminate thickness. The default is ``0``.
         thickness_unit : str, optional
-            Units for the laminate thickness.
+            Units for the laminate thickness. The default is ``""``.
         construction_style : str, optional
-            Construction style.
-        glass_construction : (str, double, double, str) list, optional
-            List of (style, resinPercentage, thickness, thicknessUnit) layers
-            Represents the layers with a glass construction.
+            Construction style. The default is ``""``.
+        glass_construction : list, optional
+            List representing a glass construction. This list consists
+            of these arguments:
+
+           - style : str
+               Style of the glass construction.
+           - resinPercentage : double
+               Resin percentage.
+           - thickness: double
+               Thickness.
+           - thicknessUnit: str
+               Units for the thickness.
+
         fiber_material : str, optional
-            Fiber material. This parameter is only updated if glass construction is selected.
+            Fiber material. The default is ``""``. This parameter is only
+            updated for a glass construction.
         conductor_material : str, optional
-            Conductor material.
+            Conductor material. The default is ``""``.
         conductor_percent : str, optional
-            Conductor percentage.
+            Conductor percentage. The default is ``""``.
 
         Note
         ----

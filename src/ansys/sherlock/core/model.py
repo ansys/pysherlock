@@ -52,13 +52,13 @@ class Model(GrpcStub):
         cca_name : str
             Name of the CCA to generate the trace reinforcement model from.
         export_file : str
-            File path for saving the exported files. The file extension must be ".wbjn".
+            Filepath for saving the exported files. The file extension must be ``".wbjn"``.
         overwrite : bool, optional
             Whether to overwrite an existing file having the same file name.
             The default is ``True``.
         display_model : bool, optional
-            Whether to launch and display the exported model in Workbench Mechanical
-            once the export finishes. The default is ``False``.
+            Whether to launch and display the exported model in Ansys Workbench
+            Mechanical once the export finishes. The default is ``False``.
         generate_models_for_all_layers :  bool, optional
             Whether to generate and export trace models for not only the generated trace
             reinforcement layers but also all other layers. The default is ``False``, in
@@ -72,8 +72,8 @@ class Model(GrpcStub):
             default units being ``"mm"`` as specified by the next parameter. Holes with
             diameters equal to or greater than this threshold value are modeled with shell
             reinforcement elements. Holes with diameters less than this threshold value
-            are modeled with beam elements. A hole buried inside the board is always modeled
-            with a beam element.
+            are modeled with beam elements. Holes buried inside the board are always modeled
+            with beam elements.
         trace_param_diameter_threshold_unit: str, optional
             Units associated with the threshold value for the trace parameter diameter.
             The default is ``"mm"``.
@@ -81,7 +81,7 @@ class Model(GrpcStub):
             Minimum trace parameter diameter for determining whether a via is exported.
             The default is ``0.25``, with the default units being ``"mm"`` as specified
             by the next parameter. Vias with diameters smaller than this diameter
-            are not exported. Setting the value to ''0'' exports all vias.
+            are not exported. Setting the value to ``0`` exports all vias.
         trace_param_min_hole_diameter_unit: str, optional
             Units associated with the value for the minimum trace parameter diameter.
             The default is ``"mm"``.
@@ -204,14 +204,14 @@ class Model(GrpcStub):
         Parameters
         ----------
         project_name : str
-            Name of the Sherlock project to generate the trace model for.
+            Name of the Sherlock project to generate one or more trace models for.
         cca_name : str, optional
-            Name of the CCA to generate the trace model from. The default is
+            Name of the CCA to generate one or more trace models from. The default is
             ``""``, in which case trace models are generated for CCAs and
             all layers.
         copper_layer_name : str, optional
-            Name of the copper layer to generate the trace model from. The default is
-            ``""``, in which case trace models are generated either for the given CAA
+            Name of the copper layer to generate one or more trace models from. The default
+            is ``""``, in which case trace models are generated either for the given CAA
             or for all layers.
         max_arc_segment : float, optional
             Maximum length of the segment to generate when Sherlock

@@ -245,9 +245,24 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        part_loc : (str, str, str, str, str, str, str) list,
-            (refDes, x, y, rotation, location_units, board_side, mirrored)
-            Definitions of part locations.
+        part_loc : list
+            List defining the part locations. The list consists
+            of these arguments:
+        
+            - refDes : str
+                Reference designator of the part.        
+            - x : str
+                Value for the x coordinate.
+            - y : str
+                Value for the y coordinate.
+            - rotation: str
+                Rotation.
+            - location_units: str
+                Locations units.
+            - board_side : str
+                Board side.
+            - mirrored : str
+                Mirrored.
 
         Examples
         --------
@@ -328,10 +343,10 @@ class Parts(GrpcStub):
         file_path : str
             Full path to the file with the components and location properties.
         numeric_format : str, optional
-            Numeric format for the file, indicating whether commas or points
+            Numeric format for the file, which indicates whether commas or points
             are used as decimal markers. The default is ``""``, in which case
-            ``"English (United States)"`` is used, indicating that points are
-            used as decimal markers.
+            ``"English (United States)"`` is the numeric format. This
+            indicates that points are used as decimal markers.
 
         Examples
         --------
@@ -408,9 +423,9 @@ class Parts(GrpcStub):
             Name of the CCA.
         import_file : str
             Full path to the CSV file with the parts list.
-        import_as_user_src : bool, required
+        import_as_user_src : bool
             Whether to set the data source of the properties to ``"User"``.
-            Otherwise, the data source is set to the name of the imported CSV file.
+            Otherwise, the data source is set to the name of the CSV file.
 
         Examples
         --------
@@ -480,7 +495,7 @@ class Parts(GrpcStub):
         cca_name : str
             Name of the CCA.
         export_file : str
-            Full path to the CSV file to export the parts list to.
+            Full path for the CSV file to export the parts list to.
 
         Examples
         --------
