@@ -248,9 +248,9 @@ class Parts(GrpcStub):
         part_loc : list
             List defining the part locations. The list consists
             of these arguments:
-        
+
             - refDes : str
-                Reference designator of the part.        
+                Reference designator of the part.
             - x : str
                 Value for the x coordinate.
             - y : str

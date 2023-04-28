@@ -319,7 +319,7 @@ class Analysis(GrpcStub):
         natural_freq_min_units: str, optional
             Minimum frequency units. The default is ``None``.
             Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            This parameter is for NX Nastran analysis only. 
+            This parameter is for NX Nastran analysis only.
         natural_freq_max: double, optional
             Maximum frequency. The default is ``None``.
             This parameter is for NX Nastran analysis only.
@@ -342,7 +342,7 @@ class Analysis(GrpcStub):
             default is ``None``. This parameter is for NX Nastran analysis only.
         perform_nf_freq_range_check: bool, optional
             Whether to perform a frequency range check. The default is ``None``.
-            This parameter is for NX Nastran analysis only. 
+            This parameter is for NX Nastran analysis only.
         require_material_assignment_enabled: bool, optional
             Whether to require material assignment. The default is ``None``.
         model_source: str
@@ -652,12 +652,12 @@ class Analysis(GrpcStub):
             Name of the main CCA for the analysis.
         strain_map_analyses : list
             List of analsyses consisting of these arguments:
-            
+
             - analysis_type : str
                 Type of the analysis to perform. The only option is ``"RANDOMVIBE"``.
             - event_strain_maps : list
-                List of the strain maps assigned to the desired lifecycle events for a given PCB side.
-                The list consists of these arguments:
+                List of the strain maps assigned to the desired lifecycle events for
+                a given PCB side. The list consists of these arguments:
 
               - phase_name : str
                   Lifecycle phase name for the strain map assignment.

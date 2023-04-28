@@ -598,7 +598,7 @@ class Lifecycle(GrpcStub):
             Name of the Sherlock project.
         random_vibe_profiles : list
             List of profiles consisting of these arguments:
-            
+
             - phase_name : str
                 Name of the lifecycle phase to add this profile to.
             - event_name : str
