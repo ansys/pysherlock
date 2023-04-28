@@ -13,7 +13,6 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
     SherlockLoadThermalProfileError,
-
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 

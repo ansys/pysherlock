@@ -501,6 +501,7 @@ class SherlockGetPartLocationError(Exception):
 
 class SherlockLoadThermalProfileError(Exception):
     """Raised when loading thermal profile results in an error."""
+
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
