@@ -12,6 +12,8 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockLoadThermalProfileError,
+
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -31,6 +33,7 @@ def test_all():
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
+    helper_test_load_thermal_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1729,6 +1732,50 @@ def helper_test_add_shock_profiles(lifecycle):
             " Invalid entry 0: Decay must be non-negative for "
             "shock profile 0."
         )
+
+
+def helper_test_load_thermal_profile(lifecycle):
+    try:
+        lifecycle.load_thermal_profile(
+            "",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Project name is invalid."
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Phase name is invalid."
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "Phase 1",
+            "",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Event name is invalid."
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "Phase 1",
+            "Thermal Event",
+            "",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: File path is invalid."
 
 
 if __name__ == "__main__":

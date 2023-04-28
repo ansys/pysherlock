@@ -26,7 +26,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
-    SherlockLoadThermalProfileRequestError,
+    SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1736,29 +1736,61 @@ class Lifecycle(GrpcStub):
             raise e
 
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
-        """Load a thermal profile from a .dat or .csv file"""
+        """Load a thermal profile from a .dat or .csv file
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project
+        phase_name : str
+            Name of the lifecycle phase to add this event to.
+        event_name : str
+            Name of the random vibe event.
+        file_path : str
+            File path for thermal profile .dat or .csv file
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+
+        >>>loaded = sherlock.lifecycle.load_thermal_profile(
+                project="Tutorial",
+                phase_name="Phase 1",
+                event_name="Thermal Event",
+                file_path="Tutorial_Profile.dat"
+        )
+        """
         try:
             if project == "":
-                raise SherlockLoadThermalProfileRequestError(message="Project name is invalid.")
+                raise SherlockLoadThermalProfileError(message="Project name is invalid.")
             if phase_name == "":
-                raise SherlockLoadThermalProfileRequestError(message="Phase name is invalid.")
+                raise SherlockLoadThermalProfileError(message="Phase name is invalid.")
             if event_name == "":
-                raise SherlockLoadThermalProfileRequestError(message="Event name is invalid.")
+                raise SherlockLoadThermalProfileError(message="Event name is invalid.")
             if file_path == "":
-                raise SherlockLoadThermalProfileRequestError(message="File path is invalid.")
+                raise SherlockLoadThermalProfileError(message="File path is invalid.")
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
 
-            request = SherlockLifeCycleService_pb2_grpc.LoadThermalProfileRequest(
+            request = SherlockLifeCycleService_pb2.LoadThermalProfileRequest(
                 project=project,
                 phaseName=phase_name,
                 eventName=event_name,
                 filePath=file_path,
             )
             response = self.stub.loadThermalProfile(request)
-
             return response
-        except SherlockLoadThermalProfileRequestError as e:
+        except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
             raise e
