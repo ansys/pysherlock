@@ -26,6 +26,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
+    SherlockLoadThermalProfileRequestError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1732,4 +1733,32 @@ class Lifecycle(GrpcStub):
         except SherlockAddShockProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
+            raise e
+
+    def load_thermal_profile(self, project, phase_name, event_name, file_path):
+        """Load a thermal profile from a .dat or .csv file"""
+        try:
+            if project == "":
+                raise SherlockLoadThermalProfileRequestError(message="Project name is invalid.")
+            if phase_name == "":
+                raise SherlockLoadThermalProfileRequestError(message="Phase name is invalid.")
+            if event_name == "":
+                raise SherlockLoadThermalProfileRequestError(message="Event name is invalid.")
+            if file_path == "":
+                raise SherlockLoadThermalProfileRequestError(message="File path is invalid.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockLifeCycleService_pb2_grpc.LoadThermalProfileRequest(
+                project=project,
+                phaseName=phase_name,
+                eventName=event_name,
+                filePath=file_path,
+            )
+            response = self.stub.loadThermalProfile(request)
+
+            return response
+        except SherlockLoadThermalProfileRequestError as e:
+            LOG.error(str(e))
             raise e
