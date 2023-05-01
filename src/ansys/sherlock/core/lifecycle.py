@@ -1736,7 +1736,9 @@ class Lifecycle(GrpcStub):
             raise e
 
     def load_random_vibe_profile(self, project, phase_name, event_name, file_path):
-        """Load random vibe profile from .csv or .dat file,"""
+        """Load random vibe profile from .csv or .dat file.
+
+        """
 
         try:
             if project == "":
