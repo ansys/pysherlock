@@ -1734,9 +1734,7 @@ def helper_test_add_shock_profiles(lifecycle):
 
 
 def helper_test_load_random_vibe_profile(lifecycle):
-    """Test load_random_vibe_profile.
-
-    """
+    """Test load_random_vibe_profile."""
     try:
         lifecycle.load_random_vibe_profile(
             "",

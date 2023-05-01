@@ -349,6 +349,7 @@ class SherlockAddShockProfilesError(Exception):
 
 class SherlockLoadRandomVibeProfileError(Exception):
     """Raised when loading random vibe properties results in an error."""
+
     def __init__(self, message):
         """Initialize Error Message."""
         self.message = message

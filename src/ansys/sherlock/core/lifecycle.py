@@ -1795,4 +1795,3 @@ class Lifecycle(GrpcStub):
         except SherlockLoadRandomVibeProfileError as e:
             LOG.error(str(e))
             raise e
-
