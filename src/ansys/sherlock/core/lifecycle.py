@@ -1738,6 +1738,37 @@ class Lifecycle(GrpcStub):
     def load_random_vibe_profile(self, project, phase_name, event_name, file_path):
         """Load random vibe profile from .csv or .dat file.
 
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project
+        phase_name : str
+            Name of the lifecycle phase to add this event to.
+        event_name : str
+            Name of the random vibe event.
+        file_path : str
+            File path for thermal profile .dat or .csv file
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+
+        >>> sherlock.lifecycle.load_random_vibe_profile(
+                project="Tutorial",
+                phase_name="Phase 1",
+                event_name="Random Event",
+                file_path="C:\\Users\\rgiannam\\AppData\\Roaming\\Sherlock\\randomProfiles\\TestProfile.dat",
+)
         """
 
         try:
