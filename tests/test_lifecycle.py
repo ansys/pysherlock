@@ -12,6 +12,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockLoadRandomVibeProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -31,6 +32,7 @@ def test_all():
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
+    helper_test_load_random_vibe_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1729,6 +1731,54 @@ def helper_test_add_shock_profiles(lifecycle):
             " Invalid entry 0: Decay must be non-negative for "
             "shock profile 0."
         )
+
+
+def helper_test_load_random_vibe_profile(lifecycle):
+    """Test load_random_vibe_profile.
+
+    """
+    try:
+        lifecycle.load_random_vibe_profile(
+            "",
+            "Phase 1",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: Project name is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: Phase name is invalid."
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "Phase 1",
+            "",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: Event name is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "Phase 1",
+            "Random Event",
+            "",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: File path is invalid."
 
 
 if __name__ == "__main__":
