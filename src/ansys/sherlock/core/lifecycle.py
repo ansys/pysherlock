@@ -1767,10 +1767,9 @@ class Lifecycle(GrpcStub):
                 project="Tutorial",
                 phase_name="Phase 1",
                 event_name="Random Event",
-                file_path="C:\\Users\\rgiannam\\AppData\\Roaming\\Sherlock\\randomProfiles\\TestProfile.dat",
-)
+                file_path="TestProfile.dat",
+        )
         """
-
         try:
             if project == "":
                 raise SherlockLoadRandomVibeProfileError(message="Project name is invalid.")
