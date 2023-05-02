@@ -1766,8 +1766,8 @@ class Lifecycle(GrpcStub):
                 project="Tutorial",
                 phase_name="Phase 1",
                 event_name="Harmonic Event",
-                file_path="C:\\Users\\rgiannam\\AppData\\Roaming\\Sherlock\\harmonicProfiles\\Test_Profile.dat"
-)
+                file_path="Test_Profile.dat"
+        )
         """
         try:
             if project == "":
