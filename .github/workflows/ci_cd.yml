@@ -63,27 +63,47 @@ jobs:
   tests:
     name: Tests and coverage
     needs: [ smoke-tests ]
-    runs-on: ${{ matrix.os }}
+    runs-on: [ self-hosted, pysherlock ]
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest ]
         python-version: [ '3.8', '3.9', '3.10', '3.11' ]
-      fail-fast: false
 
     steps:
-    - name: Run pytest
-      uses: pyansys/actions/tests-pytest@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        pytest-extra-args: "--cov=ansys.sherlock --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml"
+      - uses: actions/checkout@v3
 
-    - name: Upload coverage results
-      uses: actions/upload-artifact@v3
-      if: env.MAIN_PYTHON_VERSION == matrix.python-version && 'ubuntu-latest' == matrix.os
-      with:
-        name: coverage-results
-        path: .cov
-        retention-days: 7
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create Python venv
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+
+      - name: Install packages for testing
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+          pip install --upgrade build wheel
+          pip install .[tests]
+
+      - name: Testing
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v --cov=ansys.sherlock --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml
+
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v3
+        if: env.MAIN_PYTHON_VERSION == matrix.python-version
+        with:
+          name: coverage-results
+          path: .cov
+          retention-days: 7
+
+      # - name: Upload coverage to Codecov
+      #   if: env.MAIN_PYTHON_VERSION == matrix.python-version
+      #   uses: codecov/codecov-action@v3
 
   docs:
     name: Documentation
