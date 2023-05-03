@@ -383,6 +383,18 @@ class SherlockLoadRandomVibeProfileError(Exception):
         return f"Get load random vibe profile error: {self.message}"
 
 
+class SherlockLoadHarmonicProfileError(Exception):
+    """Raised when loading a harmonic profile results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format Error Message."""
+        return f"Load Harmonic profile error: {self.message}"
+
+
 class SherlockUpdateMountPointsByFileError(Exception):
     """Contains the error raised when mount points cannot be updated."""
 
