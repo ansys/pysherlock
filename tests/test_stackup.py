@@ -6,6 +6,7 @@ from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockGetLayerCountError,
     SherlockGetStackupPropsError,
+    SherlockGetTotalConductorThicknessError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
     SherlockUpdateConductorLayerError,
@@ -19,15 +20,14 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     stackup = Stackup(channel)
-
     helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
     helper_test_update_laminate_layer(stackup)
     helper_test_list_conductor_layers(stackup)
     helper_test_list_laminate_layers(stackup)
     helper_test_get_stackup_props(stackup)
-
     helper_test_get_layer_count(stackup)
+    helper_test_get_total_conductor_thickness(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -521,10 +521,7 @@ def helper_test_update_conductor_layer(stackup):
             )
             assert False
         except SherlockUpdateConductorLayerError as e:
-            assert (
-                str(e) == "Update conductor layer error: Invalid conductor thickness "
-                "unit provided"
-            )
+            assert str(e) == "Update conductor layer error: Conductor thickness units are invalid."
 
     try:
         stackup.update_conductor_layer(
@@ -958,7 +955,7 @@ def helper_test_get_stackup_props(stackup):
         )
         assert False
     except SherlockGetStackupPropsError as e:
-        assert str(e) == "Get stackup prop error: Invalid project name"
+        assert str(e) == "Get stackup prop error: Project name is invalid."
     try:
         stackup.get_stackup_props(
             "Test",
@@ -966,7 +963,7 @@ def helper_test_get_stackup_props(stackup):
         )
         assert False
     except SherlockGetStackupPropsError as e:
-        assert str(e) == "Get stackup prop error: Invalid CCA name"
+        assert str(e) == "Get stackup prop error: CCA name is invalid."
 
 
 def helper_test_get_layer_count(stackup):
@@ -975,13 +972,13 @@ def helper_test_get_layer_count(stackup):
         stackup.get_layer_count(project="", cca_name="Card")
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid project name"
+        assert str(e) == "Get layer count error: Project name is invalid."
 
     try:
         stackup.get_layer_count(project="Test", cca_name="")
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid CCA name"
+        assert str(e) == "Get layer count error: CCA name is invalid."
 
     """Test get_layer_count API"""
     try:
@@ -991,7 +988,7 @@ def helper_test_get_layer_count(stackup):
         )
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid project name"
+        assert str(e) == "Get layer count error: Project name is invalid."
 
     try:
         stackup.get_layer_count(
@@ -1000,7 +997,27 @@ def helper_test_get_layer_count(stackup):
         )
         assert False
     except SherlockGetLayerCountError as e:
-        assert str(e) == "Get layer count error: Invalid CCA name"
+        assert str(e) == "Get layer count error: CCA name is invalid."
+
+
+def helper_test_get_total_conductor_thickness(stackup):
+    try:
+        stackup.get_total_conductor_thickness(project="", cca_name="Card", thickness_unit="oz")
+        assert False
+    except SherlockGetTotalConductorThicknessError as e:
+        assert str(e) == "Get total conductor thickness error: Invalid project name"
+
+    try:
+        stackup.get_total_conductor_thickness(project="Test", cca_name="", thickness_unit="oz")
+        assert False
+    except SherlockGetTotalConductorThicknessError as e:
+        assert str(e) == "Get total conductor thickness error: Invalid CCA name"
+
+    try:
+        stackup.get_total_conductor_thickness(project="Test", cca_name="Card", thickness_unit="")
+        assert False
+    except SherlockGetTotalConductorThicknessError as e:
+        assert str(e) == "Get total conductor thickness error: Invalid thickness unit"
 
 
 if __name__ == "__main__":

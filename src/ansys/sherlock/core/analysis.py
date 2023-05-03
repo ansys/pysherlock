@@ -624,7 +624,7 @@ class Analysis(GrpcStub):
             analysisTempUnits=analysis_temp_units,
         )
 
-        response = self.stub.updateNaturalFreqencyProps(request)
+        response = self.stub.updateNaturalFrequencyProps(request)
 
         try:
             if response.value == -1:
