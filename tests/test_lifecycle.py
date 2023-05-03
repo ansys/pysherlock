@@ -39,7 +39,6 @@ def test_all():
     helper_test_load_thermal_profile(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
-    helper_test_load_harmonic_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -2004,8 +2003,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         assert str(e) == "Load shock profile dataset error: File path is invalid."
 
 
-=======
->>>>>>> 81df4b0 (Create load_harmonic_profile method (#97))
+
 def helper_test_load_harmonic_profile(lifcycle):
     """Test load_harmonic_profile API."""
 
