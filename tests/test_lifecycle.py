@@ -12,7 +12,6 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
-
     SherlockLoadHarmonicProfileError,
     SherlockLoadShockProfileDatasetError,
 )
@@ -34,13 +33,8 @@ def test_all():
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
-<<<<<<< HEAD
-    helper_test_load_shock_profile_dataset(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
-=======
-    helper_test_load_harmonic_profile(lifecycle)
->>>>>>> 81df4b0 (Create load_harmonic_profile method (#97))
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1815,6 +1809,34 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         assert False
     except SherlockLoadShockProfileDatasetError as e:
         assert str(e) == "Load shock profile dataset error: File path is invalid."
+
+
+def helper_test_load_harmonic_profile(lifcycle):
+    """Test load_harmonic_profile API."""
+
+    try:
+        lifcycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
+        assert False
+    except SherlockLoadHarmonicProfileError as e:
+        assert "Load Harmonic profile error: Project name is invalid."
+
+    try:
+        lifcycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
+        assert False
+    except SherlockLoadHarmonicProfileError as e:
+        assert "Load Harmonic profile error: Phase name is invalid."
+
+    try:
+        lifcycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
+        assert False
+    except SherlockLoadHarmonicProfileError as e:
+        assert "Load Harmonic profile error: Event name is invalid."
+
+    try:
+        lifcycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
+        assert False
+    except SherlockLoadHarmonicProfileError as e:
+        assert "Load Harmonic profile error: File name is invalid."
 
 
 if __name__ == "__main__":
