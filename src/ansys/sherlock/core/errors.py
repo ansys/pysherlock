@@ -356,7 +356,7 @@ class SherlockLoadRandomVibeProfileError(Exception):
 
     def __str__(self):
         """Format error message."""
-        return f"Get load random vibe profile error: {self.message}"
+        return f"Load random vibe profile error: {self.message}"
 
 
 class SherlockUpdateMountPointsByFileError(Exception):
