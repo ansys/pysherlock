@@ -12,6 +12,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockLoadShockProfileDatasetError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -31,6 +32,7 @@ def test_all():
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
+    helper_test_load_shock_profile_dataset(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1729,6 +1731,54 @@ def helper_test_add_shock_profiles(lifecycle):
             " Invalid entry 0: Decay must be non-negative for "
             "shock profile 0."
         )
+
+
+def helper_test_load_shock_profile_dataset(lifecycle):
+    """Test load_shock_profile_dataset API"""
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.dat",
+        )
+        assert False
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: Project name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test",
+            "",
+            "Shock Event",
+            "Test_Profile.dat",
+        )
+        assert False
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: Phase name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test",
+            "Phase 1",
+            "",
+            "Test_Profile.dat",
+        )
+        assert False
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: Event name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test",
+            "Phase 1",
+            "Shock Event",
+            "",
+        )
+        assert False
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: File path is invalid."
 
 
 if __name__ == "__main__":
