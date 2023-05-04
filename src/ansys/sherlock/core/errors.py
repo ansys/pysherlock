@@ -547,6 +547,18 @@ class SherlockUpdateRandomVibePropsError(Exception):
         return f"Update random vibe properties error: {self.message}"
 
 
+class SherlockLoadShockProfileDatasetError(Exception):
+    """Raised when loading shock profile dataset results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Initialize error message."""
+        return f"Load shock profile dataset error: {self.message}"
+    
+
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
     """Contains the error raised when properties for natural frequency results cannot be updated."""
 
