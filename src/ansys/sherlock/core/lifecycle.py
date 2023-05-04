@@ -26,8 +26,9 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
-    SherlockLoadThermalProfileError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadThermalProfileError,
+
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1738,7 +1739,7 @@ class Lifecycle(GrpcStub):
 
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
         """Load a thermal profile from a .dat or .csv file.
-        
+
         Parameters
         ----------
         project : str
@@ -1782,7 +1783,7 @@ class Lifecycle(GrpcStub):
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
-            
+
             request = SherlockLifeCycleService_pb2.LoadThermalProfileRequest(
                 project=project,
                 phaseName=phase_name,
@@ -1794,7 +1795,7 @@ class Lifecycle(GrpcStub):
         except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
             raise e
-=======
+
     def load_harmonic_profile(self, project, phase_name, event_name, file_path):
         """Load Harmonic profile from a .dat or .csv file.
 
