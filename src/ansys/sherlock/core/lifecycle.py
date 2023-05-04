@@ -26,8 +26,8 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
-    SherlockLoadShockProfileDatasetError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadShockProfileDatasetError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1736,7 +1736,6 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-
     def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
         """Load shock profile dataset from a .csv or .dat file.
 
@@ -1850,5 +1849,3 @@ class Lifecycle(GrpcStub):
         except SherlockLoadHarmonicProfileError as e:
             LOG.error(str(e))
             raise e
-
-    

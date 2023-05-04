@@ -569,7 +569,7 @@ class SherlockLoadShockProfileDatasetError(Exception):
     def __str__(self):
         """Initialize error message."""
         return f"Load shock profile dataset error: {self.message}"
-    
+
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
     """Contains the error raised when properties for natural frequency results cannot be updated."""

@@ -1763,7 +1763,6 @@ def helper_test_load_harmonic_profile(lifcycle):
         assert "Load Harmonic profile error: File name is invalid."
 
 
-
 def helper_test_load_shock_profile_dataset(lifecycle):
     """Test load_shock_profile_dataset API"""
 
