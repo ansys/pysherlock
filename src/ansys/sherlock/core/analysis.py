@@ -142,28 +142,34 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        analyses : (str, phases) list
-            List of analysis types to run. Options are:
+        analyses : list
+            List consisting of these arguments:
 
-            - ``"COMPONENTFAILUREMODE"``
-            - ``"DFMEAMODULE"``
-            - ``"HARMONICVIBE"``
-            - ``"ICTANALYSIS"``
-            - ``"MECHANICALSHOCK"``
-            - ``"NATURALFREQ"``
-            - ``"PARTVALIDATION"``
-            - ``"PTHFATIGUE"``
-            - ``"RANDOMVIBE"``
-            - ``"SEMICONDUCTORWEAROUT"``
-            - ``"SOLDERJOINTFATIGUE"``
-            - ``"THERMALDERATING"``
-            - ``"THERMALMECH"``
-            - ``"UNKNOWN"``
+            - type : list
+              List of analyses to run. Options are:
 
-        phases : (str, events) list
-            List of phase names.
-        events : (str) list
-            List of event names.
+              - ``"COMPONENTFAILUREMODE"``
+              - ``"DFMEAMODULE"``
+              - ``"HARMONICVIBE"``
+              - ``"ICTANALYSIS"``
+              - ``"MECHANICALSHOCK"``
+              - ``"NATURALFREQ"``
+              - ``"PARTVALIDATION"``
+              - ``"PTHFATIGUE"``
+              - ``"RANDOMVIBE"``
+              - ``"SEMICONDUCTORWEAROUT"``
+              - ``"SOLDERJOINTFATIGUE"``
+              - ``"THERMALDERATING"``
+              - ``"THERMALMECH"``
+              - ``"UNKNOWN"``
+
+            - phases : list
+              List of life cycle phases consisting of these arguments:
+
+              - name : str
+                Name of the life cycle phase.
+              - event : str
+                Name of the life cycle event.
 
         Examples
         --------
@@ -651,7 +657,7 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the main CCA for the analysis.
         strain_map_analyses : list
-            List of analsyses consisting of these arguments:
+            List of analyses consisting of these arguments:
 
             - analysis_type : str
                 Type of the analysis to perform. The only option is ``"RANDOMVIBE"``.
