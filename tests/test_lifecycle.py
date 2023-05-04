@@ -12,8 +12,8 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
-    SherlockLoadRandomVibeProfileError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadRandomVibeProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -1780,6 +1780,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
     except SherlockLoadRandomVibeProfileError as e:
         assert str(e) == "Get load random vibe profile error: File path is invalid."
 
+
 def helper_test_load_harmonic_profile(lifcycle):
     """Test load_harmonic_profile API."""
 
@@ -1806,7 +1807,6 @@ def helper_test_load_harmonic_profile(lifcycle):
         assert False
     except SherlockLoadHarmonicProfileError as e:
         assert "Load Harmonic profile error: File name is invalid."
-
 
 
 if __name__ == "__main__":
