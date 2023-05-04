@@ -1738,7 +1738,7 @@ class Lifecycle(GrpcStub):
 
     def load_random_vibe_profile(self, project, phase_name, event_name, file_path):
         """Load random vibe profile from .csv or .dat file.
-        
+
         Parameters
         ----------
         project : str
@@ -1782,7 +1782,6 @@ class Lifecycle(GrpcStub):
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
-            
             request = SherlockLifeCycleService_pb2.LoadRandomVibeProfileRequest(
                 project=project,
                 phaseName=phase_name,
@@ -1790,7 +1789,6 @@ class Lifecycle(GrpcStub):
                 filePath=file_path,
             )
             response = self.stub.loadRandomVibeProfile(request)
-
             return response
         except SherlockLoadRandomVibeProfileError as e:
             LOG.error(str(e))
@@ -1843,7 +1841,6 @@ class Lifecycle(GrpcStub):
             if not self._is_connection_up():
                 LOG.error("Not connected to a gRPC service.")
                 return
-
             request = SherlockLifeCycleService_pb2.LoadHarmonicProfileRequest(
                 project=project,
                 phaseName=phase_name,
@@ -1851,7 +1848,6 @@ class Lifecycle(GrpcStub):
                 filePath=file_path,
             )
             response = self.stub.loadHarmonicProfile(request)
-            
             return response
         except SherlockLoadHarmonicProfileError as e:
             LOG.error(str(e))
