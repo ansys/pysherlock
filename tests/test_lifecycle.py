@@ -12,13 +12,11 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
-    SherlockLoadHarmonicProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadThermalProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadHarmonicProfileError,
-    SherlockLoadShockProfileDatasetError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -42,7 +40,6 @@ def test_all():
     helper_test_load_thermal_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
-
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1743,80 +1740,52 @@ def helper_test_add_shock_profiles(lifecycle):
         )
 
 
-def helper_test_load_thermal_profile(lifecycle):
-    """Test load_thermal_profile API"""
+def helper_test_load_shock_profile_dataset(lifecycle):
+    """Test load_shock_profile_dataset API"""
 
     try:
-        lifecycle.load_thermal_profile(
+        lifecycle.load_shock_profile_dataset(
             "",
             "Phase 1",
-            "Thermal Event",
-            "Tutorial_Profile.dat",
+            "Shock Event",
+            "Test_Profile.dat",
         )
         assert False
-    except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: Project name is invalid."
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: Project name is invalid."
 
     try:
-        lifecycle.load_thermal_profile(
+        lifecycle.load_shock_profile_dataset(
             "Test",
             "",
-            "Thermal Event",
-            "Tutorial_Profile.dat",
+            "Shock Event",
+            "Test_Profile.dat",
         )
         assert False
-    except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: Phase name is invalid."
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: Phase name is invalid."
 
     try:
-        lifecycle.load_thermal_profile(
-            "Test",
-            "Phase 1",
-            "",
-            "Tutorial_Profile.dat",
-        )
-        assert False
-    except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: Event name is invalid."
-
-    try:
-        lifecycle.load_thermal_profile(
+        lifecycle.load_shock_profile_dataset(
             "Test",
             "Phase 1",
-            "Thermal Event",
+            "",
+            "Test_Profile.dat",
+        )
+        assert False
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: Event name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test",
+            "Phase 1",
+            "Shock Event",
             "",
         )
         assert False
-    except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: File path is invalid."
-
-
-def helper_test_load_harmonic_profile(lifcycle):
-    """Test load_harmonic_profile API."""
-
-    try:
-        lifcycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
-        assert False
-    except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Project name is invalid."
-
-    try:
-        lifcycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
-        assert False
-    except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Phase name is invalid."
-
-    try:
-        lifcycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
-        assert False
-    except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Event name is invalid."
-
-    try:
-        lifcycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
-        assert False
-    except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: File name is invalid."
+    except SherlockLoadShockProfileDatasetError as e:
+        assert str(e) == "Load shock profile dataset error: File path is invalid."
 
 
 def helper_test_load_shock_profile_dataset(lifecycle):
@@ -1878,7 +1847,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Project name is invalid."
+        assert str(e) == "Load random vibe profile error: Project name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1889,7 +1858,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Phase name is invalid."
+        assert str(e) == "Load random vibe profile error: Phase name is invalid."
     try:
         lifecycle.load_random_vibe_profile(
             "Test",
@@ -1899,7 +1868,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Event name is invalid."
+        assert str(e) == "Load random vibe profile error: Event name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1910,55 +1879,55 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: File path is invalid."
+        assert str(e) == "Load random vibe profile error: File path is invalid."
 
 
-def helper_test_load_shock_profile_dataset(lifecycle):
-    """Test load_shock_profile_dataset API"""
+def helper_test_load_thermal_profile(lifecycle):
+    """Test load_thermal_profile API"""
 
     try:
-        lifecycle.load_shock_profile_dataset(
+        lifecycle.load_thermal_profile(
             "",
             "Phase 1",
-            "Shock Event",
-            "Test_Profile.dat",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
         )
         assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Project name is invalid."
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Project name is invalid."
 
     try:
-        lifecycle.load_shock_profile_dataset(
+        lifecycle.load_thermal_profile(
             "Test",
             "",
-            "Shock Event",
-            "Test_Profile.dat",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
         )
         assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Phase name is invalid."
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Phase name is invalid."
 
     try:
-        lifecycle.load_shock_profile_dataset(
-            "Test",
-            "Phase 1",
-            "",
-            "Test_Profile.dat",
-        )
-        assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Event name is invalid."
-
-    try:
-        lifecycle.load_shock_profile_dataset(
+        lifecycle.load_thermal_profile(
             "Test",
             "Phase 1",
-            "Shock Event",
+            "",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Event name is invalid."
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "Phase 1",
+            "Thermal Event",
             "",
         )
         assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: File path is invalid."
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: File path is invalid."
 
 
 def helper_test_load_harmonic_profile(lifcycle):
