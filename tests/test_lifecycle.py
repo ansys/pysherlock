@@ -1746,7 +1746,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Project name is invalid."
+        assert str(e) == "Load random vibe profile error: Project name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1757,7 +1757,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Phase name is invalid."
+        assert str(e) == "Load random vibe profile error: Phase name is invalid."
     try:
         lifecycle.load_random_vibe_profile(
             "Test",
@@ -1767,7 +1767,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Event name is invalid."
+        assert str(e) == "Load random vibe profile error: Event name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1778,7 +1778,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: File path is invalid."
+        assert str(e) == "Load random vibe profile error: File path is invalid."
 
 
 def helper_test_load_harmonic_profile(lifcycle):
