@@ -1736,6 +1736,8 @@ def helper_test_add_shock_profiles(lifecycle):
 
 
 def helper_test_load_thermal_profile(lifecycle):
+    """Test load_thermal_profile API"""
+    
     try:
         lifecycle.load_thermal_profile(
             "",
@@ -1746,6 +1748,7 @@ def helper_test_load_thermal_profile(lifecycle):
         assert False
     except SherlockLoadThermalProfileError as e:
         assert str(e) == "Load thermal profile error: Project name is invalid."
+
     try:
         lifecycle.load_thermal_profile(
             "Test",
@@ -1756,6 +1759,7 @@ def helper_test_load_thermal_profile(lifecycle):
         assert False
     except SherlockLoadThermalProfileError as e:
         assert str(e) == "Load thermal profile error: Phase name is invalid."
+
     try:
         lifecycle.load_thermal_profile(
             "Test",
