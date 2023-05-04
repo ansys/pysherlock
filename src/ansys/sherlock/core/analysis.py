@@ -145,31 +145,31 @@ class Analysis(GrpcStub):
         analyses : list
             List consisting of these arguments:
 
-            - type : list
-              List of analyses to run. Options are:
+            - analyses : list
+                List of analysis types to run. Options are:
 
-              - ``"COMPONENTFAILUREMODE"``
-              - ``"DFMEAMODULE"``
-              - ``"HARMONICVIBE"``
-              - ``"ICTANALYSIS"``
-              - ``"MECHANICALSHOCK"``
-              - ``"NATURALFREQ"``
-              - ``"PARTVALIDATION"``
-              - ``"PTHFATIGUE"``
-              - ``"RANDOMVIBE"``
-              - ``"SEMICONDUCTORWEAROUT"``
-              - ``"SOLDERJOINTFATIGUE"``
-              - ``"THERMALDERATING"``
-              - ``"THERMALMECH"``
-              - ``"UNKNOWN"``
+                - ``"COMPONENTFAILUREMODE"``
+                - ``"DFMEAMODULE"``
+                - ``"HARMONICVIBE"``
+                - ``"ICTANALYSIS"``
+                - ``"MECHANICALSHOCK"``
+                - ``"NATURALFREQ"``
+                - ``"PARTVALIDATION"``
+                - ``"PTHFATIGUE"``
+                - ``"RANDOMVIBE"``
+                - ``"SEMICONDUCTORWEAROUT"``
+                - ``"SOLDERJOINTFATIGUE"``
+                - ``"THERMALDERATING"``
+                - ``"THERMALMECH"``
+                - ``"UNKNOWN"``
 
             - phases : list
-              List of life cycle phases consisting of these arguments:
+                  List of life cycle phases consisting of these arguments:
 
-              - name : str
-                Name of the life cycle phase.
-              - event : str
-                Name of the life cycle event.
+                  - name : str
+                      Name of the life cycle phase.
+                  - event : str
+                      Name of the life cycle event.
 
         Examples
         --------
@@ -660,7 +660,7 @@ class Analysis(GrpcStub):
             List of analyses consisting of these arguments:
 
             - analysis_type : str
-                Type of the analysis to perform. The only option is ``"RANDOMVIBE"``.
+                Type of analysis to run. The only option is ``"RANDOMVIBE"``.
             - event_strain_maps : list
                 List of the strain maps assigned to the desired life cycle events for
                 a given PCB side. The list consists of these arguments:
