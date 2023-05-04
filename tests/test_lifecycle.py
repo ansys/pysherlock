@@ -1810,6 +1810,6 @@ def helper_test_load_shock_profile_dataset(lifecycle):
     except SherlockLoadShockProfileDatasetError as e:
         assert str(e) == "Load shock profile dataset error: File path is invalid."
 
-        
+
 if __name__ == "__main__":
     test_all()
