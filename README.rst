@@ -47,7 +47,7 @@ With PySherlock, you can perform many tasks, including these:
 
 * Launch a Sherlock gRPC server and a Sherlock client.
 * Import ECAD files and generate project reports.
-* Define lifecycle events and profiles.
+* Define life cycle events and profiles.
 * Generate a stackup and update a stackup layer.
 * Update a project parts list.
 * Perform layer view operations such as updating a mount point's location.

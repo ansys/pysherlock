@@ -656,17 +656,17 @@ class Analysis(GrpcStub):
             - analysis_type : str
                 Type of the analysis to perform. The only option is ``"RANDOMVIBE"``.
             - event_strain_maps : list
-                List of the strain maps assigned to the desired lifecycle events for
+                List of the strain maps assigned to the desired life cycle events for
                 a given PCB side. The list consists of these arguments:
 
               - phase_name : str
-                  Lifecycle phase name for the strain map assignment.
+                  Life cycle phase name for the strain map assignment.
               - event_name : str
-                  Lifecycle event name for the strain map assignment.
+                  Life cycle event name for the strain map assignment.
               - pcb_side : str
                   PCB side for the strain map. Options are ``"TOP"`` and ``"BOTTOM"``.
               - strain_map : str
-                  Name of the strain map assigned to the lifecycle event.
+                  Name of the strain map assigned to the life cycle event.
               - sub_assembly_name : str, optional
                   Name of the subassembly CCA to assign the strain map to.
 

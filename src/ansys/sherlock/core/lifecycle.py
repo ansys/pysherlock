@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module containing all lifecycle management capabilities."""
+"""Module containing all life cycle management capabilities."""
 
 try:
     import SherlockLifeCycleService_pb2
@@ -32,10 +32,10 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Lifecycle(GrpcStub):
-    """Contains all lifecycle management capabilities."""
+    """Contains all life cycle management capabilities."""
 
     def __init__(self, channel):
-        """Initialize a gRPC stub for the Sherlock LifeCycle service."""
+        """Initialize a gRPC stub for the Sherlock Life Cycle service."""
         self.channel = channel
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.TIME_UNIT_LIST = None
@@ -445,14 +445,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a random vibe lifecycle event.
+        """Add a random vibe life cycle event.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the lifecycle phase to add this event to.
+            Name of the life cycle phase to add this event to.
         event_name : str
             Name of the random vibe event.
         duration : double
@@ -591,7 +591,7 @@ class Lifecycle(GrpcStub):
         project,
         random_vibe_profiles,
     ):
-        """Add random vibe lifecycle event profiles.
+        """Add random vibe life cycle event profiles.
 
         Parameters
         ----------
@@ -601,7 +601,7 @@ class Lifecycle(GrpcStub):
             List of profiles consisting of these arguments:
 
             - phase_name : str
-                Name of the lifecycle phase to add this profile to.
+                Name of the life cycle phase to add this profile to.
             - event_name : str
                 Name of the random vibe event for the profile.
             - profile_name : str
@@ -772,14 +772,14 @@ class Lifecycle(GrpcStub):
         cycle_state,
         description="",
     ):
-        """Add a thermal event to a lifecycle.
+        """Add a thermal event to a life cycle.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the lifecycle phase to add this event to.
+            Name of the life cycle phase to add this event to.
         event_name : str
             Name of the thermal event.
         num_of_cycles : double
@@ -788,7 +788,7 @@ class Lifecycle(GrpcStub):
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
         cycle_state : str
-            Lifecycle state. Options are ``"OPERATING"`` and ``"STORAGE"``.
+            Life cycle state. Options are ``"OPERATING"`` and ``"STORAGE"``.
         description : str, optional
             Description of the thermal event. The default is ``""``.
 
@@ -879,7 +879,7 @@ class Lifecycle(GrpcStub):
         project,
         thermal_profiles,
     ):
-        """Add thermal lifecycle event profiles.
+        """Add thermal life cycle event profiles.
 
         Parameters
         ----------
@@ -889,7 +889,7 @@ class Lifecycle(GrpcStub):
             List of thermal profiles consisting of these arguments:
 
             - phase_name : str
-                Name of the lifecycle phase to add this profile to.
+                Name of the life cycle phase to add this profile to.
             - event_name : str
                 Name of the thermal event for the profile.
             - profile_name : str
@@ -1071,14 +1071,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a harmonic vibe lifecycle event.
+        """Add a harmonic vibe life cycle event.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the lifecycle phase to add this event to.
+            Name of the life cycle phase to add this event to.
         event_name : str
             Name of the harmonic event.
         duration : double
@@ -1221,7 +1221,7 @@ class Lifecycle(GrpcStub):
         project,
         harmonic_vibe_profiles,
     ):
-        """Add harmonic lifecycle event profiles.
+        """Add harmonic life cycle event profiles.
 
         Parameters
         ----------
@@ -1231,7 +1231,7 @@ class Lifecycle(GrpcStub):
             List of harmonic vibe profiles consisting of these arguments:
 
             - phase_name : str
-                Name of the lifecycle phase to add this profile to.
+                Name of the life cycle phase to add this profile to.
             - event_name : str
                 Name of the harmonic event for the profile.
             - profile_name : str
@@ -1412,14 +1412,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a shock lifecycle event.
+        """Add a shock life cycle event.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the lifecycle phase to add this event to.
+            Name of the life cycle phase to add this event to.
         event_name : str
             Name of the shock event.
         duration : double
@@ -1540,7 +1540,7 @@ class Lifecycle(GrpcStub):
         project,
         shock_profiles,
     ):
-        """Add shock lifecycle event profiles.
+        """Add shock life cycle event profiles.
 
         Parameters
         ----------
@@ -1550,7 +1550,7 @@ class Lifecycle(GrpcStub):
             List of shock profiles consisting of these arguments:
 
             - phase_name : str
-                Name of the lifecycle phase to add this profile to.
+                Name of the life cycle phase to add this profile to.
             - event_name : str
                 Name of the shock event for the profile.
             - profile_name : str
@@ -1759,7 +1759,7 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project
         phase_name : str
-            Name of the lifecycle phase to add this event to.
+            Name of the life cycle phase to add this event to.
         event_name : str
             Name of the random vibe event.
         file_path : str
