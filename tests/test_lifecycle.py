@@ -1737,7 +1737,7 @@ def helper_test_add_shock_profiles(lifecycle):
 
 def helper_test_load_thermal_profile(lifecycle):
     """Test load_thermal_profile API"""
-    
+
     try:
         lifecycle.load_thermal_profile(
             "",
