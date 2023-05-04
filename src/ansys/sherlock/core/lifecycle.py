@@ -445,7 +445,7 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a random vibe life cycle event.
+        """Add a random vibe event to a life cycle phase.
 
         Parameters
         ----------
