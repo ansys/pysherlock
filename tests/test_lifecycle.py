@@ -12,10 +12,6 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
-    SherlockLoadHarmonicProfileError,
-    SherlockLoadRandomVibeProfileError,
-    SherlockLoadThermalProfileError,
-    SherlockLoadShockProfileDatasetError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadThermalProfileError,
     SherlockLoadShockProfileDatasetError,
@@ -42,7 +38,6 @@ def test_all():
     helper_test_load_random_vibe_profile(lifecycle)
     helper_test_load_thermal_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
-
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1743,54 +1738,6 @@ def helper_test_add_shock_profiles(lifecycle):
         )
 
 
-def helper_test_load_shock_profile_dataset(lifecycle):
-    """Test load_shock_profile_dataset API"""
-
-    try:
-        lifecycle.load_shock_profile_dataset(
-            "",
-            "Phase 1",
-            "Shock Event",
-            "Test_Profile.dat",
-        )
-        assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Project name is invalid."
-
-    try:
-        lifecycle.load_shock_profile_dataset(
-            "Test",
-            "",
-            "Shock Event",
-            "Test_Profile.dat",
-        )
-        assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Phase name is invalid."
-
-    try:
-        lifecycle.load_shock_profile_dataset(
-            "Test",
-            "Phase 1",
-            "",
-            "Test_Profile.dat",
-        )
-        assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Event name is invalid."
-
-    try:
-        lifecycle.load_shock_profile_dataset(
-            "Test",
-            "Phase 1",
-            "Shock Event",
-            "",
-        )
-        assert False
-    except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: File path is invalid."
-
-
 def helper_test_load_random_vibe_profile(lifecycle):
     """Test load_random_vibe_profile."""
     try:
@@ -1803,6 +1750,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         assert False
     except SherlockLoadRandomVibeProfileError as e:
         assert str(e) == "Load random vibe profile error: Project name is invalid."
+
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -2005,52 +1953,6 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         assert False
     except SherlockLoadShockProfileDatasetError as e:
         assert str(e) == "Load shock profile dataset error: File path is invalid."
-
-
-def helper_test_load_random_vibe_profile(lifecycle):
-    """Test load_random_vibe_profile."""
-    try:
-        lifecycle.load_random_vibe_profile(
-            "",
-            "Phase 1",
-            "Random Event",
-            "TestProfile.dat",
-        )
-        assert False
-    except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Project name is invalid."
-
-    try:
-        lifecycle.load_random_vibe_profile(
-            "Test",
-            "",
-            "Random Event",
-            "TestProfile.dat",
-        )
-        assert False
-    except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Phase name is invalid."
-    try:
-        lifecycle.load_random_vibe_profile(
-            "Test",
-            "Phase 1",
-            "",
-            "TestProfile.dat",
-        )
-        assert False
-    except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: Event name is invalid."
-
-    try:
-        lifecycle.load_random_vibe_profile(
-            "Test",
-            "Phase 1",
-            "Random Event",
-            "",
-        )
-        assert False
-    except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Get load random vibe profile error: File path is invalid."
 
 
 def helper_test_load_harmonic_profile(lifcycle):
