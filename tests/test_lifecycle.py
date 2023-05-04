@@ -2034,7 +2034,6 @@ def helper_test_load_harmonic_profile(lifcycle):
         assert "Load Harmonic profile error: File name is invalid."
 
 
-<<<<<<< HEAD
 def helper_test_load_shock_profile_dataset(lifecycle):
     """Test load_shock_profile_dataset API"""
 
@@ -2083,7 +2082,5 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         assert str(e) == "Load shock profile dataset error: File path is invalid."
 
 
-=======
->>>>>>> 81df4b0 (Create load_harmonic_profile method (#97))
 if __name__ == "__main__":
     test_all()
