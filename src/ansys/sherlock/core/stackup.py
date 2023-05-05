@@ -235,11 +235,11 @@ class Stackup(GrpcStub):
         board_thickness_unit : str
             Units for the board thickness.
         pcb_material_manufacturer : str
-            PCB material manufacturer.
+            Manufacturer for the PCB material.
         pcb_material_grade : str
-            PCB material grade.
+            Grade for the PCB material.
         pcb_material : str
-            PCB material.
+            Material for the PCB.
         conductor_layers_cnt : int32
             Number of conductor layers.
         signal_layer_thickness : double
@@ -515,9 +515,12 @@ class Stackup(GrpcStub):
         layer : str
             Layer ID associated with the conductor layer.
         manufacturer : str, optional
-            Name of the material manufacturer. The default is ``""``.
-            The manufacturer name must be provided along with the material
-            grade and material name.
+            Manufacturer of the material for the laminate layer.
+            The default is ``""``. To update the material, the
+            ``manufacturer``, ``grade``, and ``material`` parameters
+            must be specified. When the ``manufacturer`` is specified,
+            there are checks to ensure that the corresponding parameters
+            are provided.
         grade : str, optional
             Material grade. The default is ``""``.
         material : str, optional
