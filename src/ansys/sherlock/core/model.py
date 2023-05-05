@@ -211,7 +211,7 @@ class Model(GrpcStub):
             all layers.
         copper_layer_name : str, optional
             Name of the copper layer to generate one or more trace models from. The default
-            is ``""``, in which case trace models are generated either for the given CAA
+            is ``""``, in which case trace models are generated either for the given CCA
             or for all layers.
         max_arc_segment : float, optional
             Maximum length of the segment to generate when Sherlock

@@ -1249,10 +1249,10 @@ class Lifecycle(GrpcStub):
                     Frequency of the harmonic profile expressed in frequency units.
                 - load : double
                     Load of the harmonic profile expressed in load units.
-
-        triaxial_axis : str
-            Axis that this profile should be assigned to if the harmonic profile type is
-            ``"Triaxial"``. Options are: ``"x"``, ``"y"``, and ``"z"``.
+                - triaxial_axis : str
+                    Axis that this profile should be assigned to if the harmonic
+                    profile type is ``"Triaxial"``. Options are: ``"x"``, ``"y"``,
+                    and ``"z"``.
 
         Examples
         --------

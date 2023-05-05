@@ -145,8 +145,8 @@ class Analysis(GrpcStub):
         analyses : list
             List consisting of these properties:
 
-            - analyses : list
-                List of analysis types to run. Options are:
+            - type : str
+                Analysis type to run. Options are:
 
                 - ``"COMPONENTFAILUREMODE"``
                 - ``"DFMEAMODULE"``

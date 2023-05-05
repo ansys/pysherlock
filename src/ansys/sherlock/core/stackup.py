@@ -533,7 +533,7 @@ class Stackup(GrpcStub):
             Construction style. The default is ``""``.
         glass_construction : list, optional
             List representing a glass construction. This list consists
-            of these properties:
+            of objects with these properties:
 
            - style : str
                Style of the glass construction.

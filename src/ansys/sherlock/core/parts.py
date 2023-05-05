@@ -556,7 +556,7 @@ class Parts(GrpcStub):
             raise e
 
     def enable_lead_modeling(self, project, cca_name):
-        """Enable lead modeling for all non-leadless part leads.
+        """Enable lead modeling for leaded parts.
 
         Parameters
         ----------
