@@ -304,14 +304,14 @@ class Lifecycle(GrpcStub):
             entry.temp = e[3]
 
     def _add_harmonic_profile_entries(self, request, entries):
-        """Add the entries to the harmonic profile request."""
+        """Add the harmonic profile entries to the request."""
         for e in entries:
             entry = request.harmonicProfileEntries.add()
             entry.freq = e[0]
             entry.load = e[1]
 
     def _add_shock_profile_entries(self, request, entries):
-        """Add the shock entries to the request."""
+        """Add the shock profile entries to the request."""
         for e in entries:
             entry = request.shockProfileEntries.add()
             entry.shape = e[0]
@@ -452,7 +452,7 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the life cycle phase to add this event to.
+            Name of the life cycle phase to add the random vibe event to.
         event_name : str
             Name of the random vibe event.
         duration : double
@@ -591,19 +591,19 @@ class Lifecycle(GrpcStub):
         project,
         random_vibe_profiles,
     ):
-        """Add random vibe life cycle event profiles.
+        """Add random vibe profiles to a life cycle phase.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         random_vibe_profiles : list
-            List of profiles consisting of these properties:
+            List of random vibe profiles consisting of these properties:
 
             - phase_name : str
-                Name of the life cycle phase to add this profile to.
+                Name of the life cycle phase to add the random vibe profile to.
             - event_name : str
-                Name of the random vibe event for the profile.
+                Name of the random vibe event.
             - profile_name : str
                 Name of the random vibe profile.
             - freq_units : str
@@ -729,7 +729,7 @@ class Lifecycle(GrpcStub):
 
         request = SherlockLifeCycleService_pb2.AddRandomVibeProfilesRequest(project=project)
 
-        """Add the random vibe profiles to the request."""
+        """Add random vibe profiles to the request."""
         for r in random_vibe_profiles:
             profile = request.randomVibeProfiles.add()
             profile.phaseName = r[0]
@@ -738,7 +738,7 @@ class Lifecycle(GrpcStub):
             profile.freqUnits = r[3]
             profile.amplUnits = r[4]
 
-            """Add the random vibe entries to the request."""
+            """Add random vibe entries to the request."""
             for e in r[5]:
                 entry = profile.randomVibeProfileEntries.add()
                 entry.freq = e[0]
@@ -772,14 +772,14 @@ class Lifecycle(GrpcStub):
         cycle_state,
         description="",
     ):
-        """Add a thermal event to a life cycle.
+        """Add a thermal event to a life cycle phase.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the life cycle phase to add this event to.
+            Name of the life cycle phase to add the thermal event to.
         event_name : str
             Name of the thermal event.
         num_of_cycles : double
@@ -879,7 +879,7 @@ class Lifecycle(GrpcStub):
         project,
         thermal_profiles,
     ):
-        """Add thermal life cycle event profiles.
+        """Add thermal profiles to a life cycle phase.
 
         Parameters
         ----------
@@ -889,9 +889,9 @@ class Lifecycle(GrpcStub):
             List of thermal profiles consisting of these properties:
 
             - phase_name : str
-                Name of the life cycle phase to add this profile to.
+                Name of the life cycle phase to add the thermal profile to.
             - event_name : str
-                Name of the thermal event for the profile.
+                Name of the thermal event.
             - profile_name : str
                 Name of the thermal profile.
             - time_units : str
@@ -903,13 +903,13 @@ class Lifecycle(GrpcStub):
                 List of thermal profile entries consisting of these properties:
 
                 - step : str
-                    Name of the profile step entry.
+                    Name of the thermal step.
                 - type : str
-                    Thermal step type. Options are ``"HOLD"`` and ``"RAMP"``.
+                    Type of the thermal step. Options are ``"HOLD"`` and ``"RAMP"``.
                 - time : double
-                    Duration of the step entry expressed in time units
+                    Duration of the thermal step expressed in time units.
                 - temperature : double
-                    Temperature of the step entry expressed in temperature units.
+                    Temperature of the step expressed in temperature units.
 
 
         Examples
@@ -1021,7 +1021,7 @@ class Lifecycle(GrpcStub):
 
         request = SherlockLifeCycleService_pb2.AddThermalProfilesRequest(project=project)
 
-        """Add the thermal profiles to the request."""
+        """Add  thermal profiles to the request."""
         for t in thermal_profiles:
             profile = request.thermalProfiles.add()
             profile.phaseName = t[0]
@@ -1030,7 +1030,7 @@ class Lifecycle(GrpcStub):
             profile.timeUnits = t[3]
             profile.tempUnits = t[4]
 
-            """Add the thermal profile entries to the request."""
+            """Add thermal profile entries to the request."""
             for e in t[5]:
                 entry = profile.thermalProfileEntries.add()
                 entry.step = e[0]
@@ -1071,14 +1071,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a harmonic vibe life cycle event.
+        """Add a harmonic event to a life cycle phase.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the life cycle phase to add this event to.
+            Name of the life cycle phase to add the harmonic event to.
         event_name : str
             Name of the harmonic event.
         duration : double
@@ -1087,7 +1087,7 @@ class Lifecycle(GrpcStub):
             Event duration units. Options are ``"ms"``, ``"sec"``, ``"min"``,
             ``"hr"``, ``"day"``, and ``"year"``.
         num_of_cycles : double
-            Number of cycles for the harmonic vibe event.
+            Number of cycles for the harmonic event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
@@ -1097,11 +1097,11 @@ class Lifecycle(GrpcStub):
             PCB orientation in the format of ``"azimuth, elevation"``. For example,
             ``"30,15"``.
         profile_type : str
-            Harmonic load profile types. Options are ``"Uniaxial"`` and ``"Triaxial"``.
+            Profile type of the harmonic load. Options are ``"Uniaxial"`` and ``"Triaxial"``.
         load_direction: str
             Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
-            Description of the harmonic vibe event. The default is ``""``.
+            Description of the harmonic event. The default is ``""``.
 
         Examples
         --------
@@ -1221,7 +1221,7 @@ class Lifecycle(GrpcStub):
         project,
         harmonic_vibe_profiles,
     ):
-        """Add harmonic life cycle event profiles.
+        """Add harmonic vibe profiles to a life cycle phase.
 
         Parameters
         ----------
@@ -1231,11 +1231,11 @@ class Lifecycle(GrpcStub):
             List of harmonic vibe profiles consisting of these properties:
 
             - phase_name : str
-                Name of the life cycle phase to add this profile to.
+                Name of the life cycle phase to add this harmonic vibe profile to.
             - event_name : str
-                Name of the harmonic event for the profile.
+                Name of the event.
             - profile_name : str
-                Name of the harmonic profile.
+                Name of the harmonic vibe profile.
             - freq_units : str
                 Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``,
                 and ``"GHZ"``.
@@ -1246,9 +1246,9 @@ class Lifecycle(GrpcStub):
                 List of harmonic profile entries consisting of these properties:
 
                 - frequency : double
-                    Frequency of the profile entry expressed in frequency units.
+                    Frequency of the harmonic profile expressed in frequency units.
                 - load : double
-                    Load of the profile entry expressed in load units.
+                    Load of the harmonic profile expressed in load units.
 
         triaxial_axis : str
             Axis that this profile should be assigned to if the harmonic profile type is
@@ -1364,7 +1364,7 @@ class Lifecycle(GrpcStub):
 
         request = SherlockLifeCycleService_pb2.AddHarmonicVibeProfilesRequest(project=project)
 
-        """Add the harmonic vibe profiles to the request."""
+        """Add harmonic vibe profiles to the request."""
         for h in harmonic_vibe_profiles:
             profile = request.harmonicVibeProfiles.add()
             profile.phaseName = h[0]
@@ -1373,7 +1373,7 @@ class Lifecycle(GrpcStub):
             profile.freqUnits = h[3]
             profile.loadUnits = h[4]
 
-            """Add the entries to the harmonic profile request."""
+            """Add entries to the harmonic profile request."""
             for e in h[5]:
                 entry = profile.harmonicVibeProfileEntries.add()
                 entry.freq = e[0]
@@ -1412,14 +1412,14 @@ class Lifecycle(GrpcStub):
         load_direction,
         description="",
     ):
-        """Add a shock life cycle event.
+        """Add a shock event to a life cycle phase.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         phase_name : str
-            Name of the life cycle phase to add this event to.
+            Name of the life cycle phase to add this shock event to.
         event_name : str
             Name of the shock event.
         duration : double
@@ -1540,7 +1540,7 @@ class Lifecycle(GrpcStub):
         project,
         shock_profiles,
     ):
-        """Add shock life cycle event profiles.
+        """Add shock profiles to a life cycle phase.
 
         Parameters
         ----------
@@ -1550,9 +1550,9 @@ class Lifecycle(GrpcStub):
             List of shock profiles consisting of these properties:
 
             - phase_name : str
-                Name of the life cycle phase to add this profile to.
+                Name of the life cycle phase to add the shock profile to.
             - event_name : str
-                Name of the shock event for the profile.
+                Name of the shock event.
             - profile_name : str
                 Name of the shock profile.
             - duration : double
@@ -1725,7 +1725,7 @@ class Lifecycle(GrpcStub):
             profile.loadUnits = s[7]
             profile.freqUnits = s[8]
 
-        """Add the shock entries to the request."""
+        """Add  shock entries to the request."""
         for e in s[9]:
             entry = profile.shockProfileEntries.add()
             entry.shape = e[0]
@@ -1752,18 +1752,18 @@ class Lifecycle(GrpcStub):
             raise e
 
     def load_harmonic_profile(self, project, phase_name, event_name, file_path):
-        """Load Harmonic profile from a .dat or .csv file.
+        """Load a harmonic profile from a DAT or CSV file to a life cycle phase.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project
         phase_name : str
-            Name of the life cycle phase to add this event to.
+            Name of the life cycle phase to add the harmonic profile to.
         event_name : str
-            Name of the random vibe event.
+            Name of the harmonic event.
         file_path : str
-            Path for the thermal profile DAT or CSV file.
+            Path for DAT or CSV file with the harmonic profile.
 
         Example
         -------
