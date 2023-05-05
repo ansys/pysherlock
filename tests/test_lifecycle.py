@@ -352,7 +352,7 @@ def helper_test_add_random_vibe_profiles(lifecycle):
         assert (
             e.str_itr()[0] == "Add random vibe profiles error: "
             "Invalid entry 0: "
-            "Number of arguments is wrong for random vibe "
+            "Number of elements is wrong for random vibe "
             "profile 0."
         )
 
@@ -586,7 +586,7 @@ def helper_test_add_thermal_profiles(lifecycle):
     except SherlockAddThermalProfilesError as e:
         assert (
             e.str_itr()[0] == "Add thermal profiles error: Invalid entry 0: "
-            "Number of arguments is wrong for thermal profile 0."
+            "Number of elements is wrong for thermal profile 0."
         )
 
     try:
@@ -1121,7 +1121,7 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
         assert (
             e.str_itr()[0] == "Add harmonic vibe profiles error:"
             " Invalid entry 0:"
-            " Number of arguments is wrong for harmonic vibe profile 0."
+            " Number of elements is wrong for harmonic vibe profile 0."
         )
 
     try:
@@ -1650,7 +1650,7 @@ def helper_test_add_shock_profiles(lifecycle):
     except SherlockAddShockProfilesError as e:
         assert (
             e.str_itr()[0] == "Add shock profiles error:"
-            " Invalid entry 0: Number of arguments is wrong for shock"
+            " Invalid entry 0: Number of elements is wrong for shock"
             " profile 0."
         )
 

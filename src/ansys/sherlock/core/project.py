@@ -112,11 +112,11 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportODBError(message="Archive file path is required.")
+                raise SherlockImportODBError(message="Archive filepath is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportODBError("File path is invalid.")
+                raise SherlockImportODBError("Filepath is invalid.")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
@@ -182,11 +182,11 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportIpc2581Error(message="Archive file path is required.")
+                raise SherlockImportIpc2581Error(message="Archive filepath is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportIpc2581Error("File path is invalid.")
+                raise SherlockImportIpc2581Error("Filepath is invalid.")
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
@@ -257,7 +257,7 @@ class Project(GrpcStub):
             if company == "":
                 raise SherlockGenerateProjectReportError(message="Company name is invalid.")
             if export_file == "":
-                raise SherlockGenerateProjectReportError(message="Export file path is required.")
+                raise SherlockGenerateProjectReportError(message="Export filepath is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path
@@ -353,7 +353,7 @@ class Project(GrpcStub):
         project: str
             Name of the Sherlock project to add strain maps to.
         strain_maps : list
-            List of strain maps consisting of these arguments:
+            List of strain maps consisting of these properties:
 
             - strain_map_file : str
                 Full path to the CSV file with the strain maps.
@@ -396,10 +396,10 @@ class Project(GrpcStub):
             for i, strain_map in enumerate(strain_maps):
                 if len(strain_map) < 6 or len(strain_map) > 7:
                     raise SherlockAddStrainMapsError(
-                        f"Number of arguments ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
+                        f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
                     )
                 elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(f"File path is required for strain map {i}.")
+                    raise SherlockAddStrainMapsError(f"Filepath is required for strain map {i}.")
                 elif not isinstance(strain_map[2], int) or strain_map[2] == "":
                     raise SherlockAddStrainMapsError(
                         f"Header row count is required for strain map {i}."

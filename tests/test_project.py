@@ -44,13 +44,13 @@ def helper_test_import_odb_archive(project):
         project.import_odb_archive("hello", True, True, True, True)
         assert False
     except SherlockImportODBError as e:
-        assert str(e) == "Import ODB error: File path is invalid."
+        assert str(e) == "Import ODB error: Filepath is invalid."
 
     try:
         project.import_odb_archive("hello.tgz", True, True, True, True)
         assert False
     except SherlockImportODBError as e:
-        assert str(e) == "Import ODB error: File path is invalid."
+        assert str(e) == "Import ODB error: Filepath is invalid."
 
 
 def helper_test_import_ipc2581_archive(project):
@@ -59,13 +59,13 @@ def helper_test_import_ipc2581_archive(project):
         project.import_ipc2581_archive("Hello", True, True)
         assert False
     except SherlockImportIpc2581Error as e:
-        assert str(e) == "Import IPC2581 error: File path is invalid."
+        assert str(e) == "Import IPC2581 error: Filepath is invalid."
 
     try:
         project.import_ipc2581_archive("Hello.zip", True, True)
         assert False
     except SherlockImportIpc2581Error as e:
-        assert str(e) == "Import IPC2581 error: File path is invalid."
+        assert str(e) == "Import IPC2581 error: Filepath is invalid."
 
 
 def helper_test_generate_project_report(project):
@@ -150,7 +150,7 @@ def helper_test_add_strain_maps(project):
         )
         assert False
     except SherlockAddStrainMapsError as e:
-        assert e.str_itr()[0] == "Add strain maps error: File path is required for strain map 0."
+        assert e.str_itr()[0] == "Add strain maps error: Filepath is required for strain map 0."
 
     try:
         project.add_strain_maps(

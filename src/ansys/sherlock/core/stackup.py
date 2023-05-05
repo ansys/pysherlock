@@ -189,7 +189,7 @@ class Stackup(GrpcStub):
             for i, layer in enumerate(input):
                 if len(layer) != 4:
                     raise SherlockInvalidGlassConstructionError(
-                        message=f"Invalid layer {i}: Number of arguments is wrong."
+                        message=f"Invalid layer {i}: Number of elements is wrong."
                     )
                 self._check_thickness(layer[2], layer[3])
         except SherlockInvalidThicknessArgumentError as e:
@@ -530,7 +530,7 @@ class Stackup(GrpcStub):
             Construction style. The default is ``""``.
         glass_construction : list, optional
             List representing a glass construction. This list consists
-            of these arguments:
+            of these properties:
 
            - style : str
                Style of the glass construction.

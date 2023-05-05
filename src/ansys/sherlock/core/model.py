@@ -52,7 +52,7 @@ class Model(GrpcStub):
         cca_name : str
             Name of the CCA to generate the trace reinforcement model from.
         export_file : str
-            Filepath for saving the exported files. The file extension must be ``".wbjn"``.
+            Path for saving exported files to. The file extension must be ``".wbjn"``.
         overwrite : bool, optional
             Whether to overwrite an existing file having the same file name.
             The default is ``True``.
@@ -129,7 +129,7 @@ class Model(GrpcStub):
             if not cca_name:
                 raise SherlockModelServiceError("CCA name is required")
             if export_file == "":
-                raise SherlockModelServiceError(message="Export file path required")
+                raise SherlockModelServiceError(message="Export filepath required")
             if len(export_file) <= 1 or export_file[1] != ":":
                 if platform.system() == "Windows":
                     export_file = f"{os.getcwd()}\\{export_file}"

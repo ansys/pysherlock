@@ -180,7 +180,7 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 2:
                     raise SherlockInvalidRandomVibeProfileEntriesError(
-                        f"Invalid entry {i}: Number of arguments is wrong"
+                        f"Invalid entry {i}: Number of elements is wrong"
                     )
                 if entry[0] <= 0:
                     raise SherlockInvalidRandomVibeProfileEntriesError(
@@ -204,7 +204,7 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 4:
                     raise SherlockInvalidThermalProfileEntriesError(
-                        f"Invalid entry {i}: Number of arguments is wrong"
+                        f"Invalid entry {i}: Number of elements is wrong"
                     )
                 if not isinstance(entry[0], str):
                     raise SherlockInvalidThermalProfileEntriesError(
@@ -234,7 +234,7 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 2:
                     raise SherlockInvalidHarmonicProfileEntriesError(
-                        message=f"Invalid entry {i}: Number of arguments is wrong"
+                        message=f"Invalid entry {i}: Number of elements is wrong"
                     )
                 if entry[0] <= 0:
                     raise SherlockInvalidHarmonicProfileEntriesError(
@@ -259,7 +259,7 @@ class Lifecycle(GrpcStub):
             for i, entry in enumerate(input):
                 if len(entry) != 4:
                     raise SherlockInvalidShockProfileEntriesError(
-                        message=f"Invalid entry {i}: Number of arguments is wrong"
+                        message=f"Invalid entry {i}: Number of elements is wrong"
                     )
                 if not isinstance(entry[0], str):
                     raise SherlockInvalidShockProfileEntriesError(
@@ -598,7 +598,7 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project.
         random_vibe_profiles : list
-            List of profiles consisting of these arguments:
+            List of profiles consisting of these properties:
 
             - phase_name : str
                 Name of the life cycle phase to add this profile to.
@@ -612,7 +612,7 @@ class Lifecycle(GrpcStub):
                 Amplitude units. Options are ``"G2/Hz"``, ``"m2/s4/Hz"``, ``"mm2/s4/Hz"``, \
                 ``"in2/s4/Hz"``, and ``"ft2/s4/Hz"``.
             - random_vibe_profile_entries : list
-                List of random vibe profile entries consisting of these arguments:
+                List of random vibe profile entries consisting of these properties:
 
                 - frequency : double
                     Frequency of the profile entry expressed in frequency units.
@@ -680,7 +680,7 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(random_vibe_profiles):
                 if len(profile_entry) != 6:
                     raise SherlockAddRandomVibeProfilesError(
-                        f"Number of arguments ({str(len(profile_entry))}) is wrong for "
+                        f"Number of elements ({str(len(profile_entry))}) is wrong for "
                         f"random vibe profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
@@ -886,7 +886,7 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project.
         thermal_profiles : list
-            List of thermal profiles consisting of these arguments:
+            List of thermal profiles consisting of these properties:
 
             - phase_name : str
                 Name of the life cycle phase to add this profile to.
@@ -900,7 +900,7 @@ class Lifecycle(GrpcStub):
             - temp_units : str
                 Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.
             - thermal_profile_entries : list
-                List of thermal profile entries consisting of these arguments:
+                List of thermal profile entries consisting of these properties:
 
                 - step : str
                     Name of the profile step entry.
@@ -971,7 +971,7 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(thermal_profiles):
                 if len(profile_entry) != 6:
                     raise SherlockAddThermalProfilesError(
-                        f"Number of arguments ({str(len(profile_entry))}) is wrong for "
+                        f"Number of elements ({str(len(profile_entry))}) is wrong for "
                         f"thermal profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
@@ -1228,7 +1228,7 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project.
         harmonic_vibe_profiles : list
-            List of harmonic vibe profiles consisting of these arguments:
+            List of harmonic vibe profiles consisting of these properties:
 
             - phase_name : str
                 Name of the life cycle phase to add this profile to.
@@ -1243,7 +1243,7 @@ class Lifecycle(GrpcStub):
                 Load units. Options are ``"G"``, ```"m/s2"``, ``"mm/s2"``,
                 ``"in/s2"``, and ``"ft/s2"``.
             - harmonic_profile_entries : list
-                List of harmonic profile entries consisting of these arguments:
+                List of harmonic profile entries consisting of these properties:
 
                 - frequency : double
                     Frequency of the profile entry expressed in frequency units.
@@ -1315,7 +1315,7 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(harmonic_vibe_profiles):
                 if len(profile_entry) != 7:
                     raise SherlockAddHarmonicVibeProfilesError(
-                        f"Number of arguments ({str(len(profile_entry))}) is wrong for "
+                        f"Number of elements ({str(len(profile_entry))}) is wrong for "
                         f"harmonic vibe profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
@@ -1547,7 +1547,7 @@ class Lifecycle(GrpcStub):
         project : str
             Name of the Sherlock project
         shock_profiles : list
-            List of shock profiles consisting of these arguments:
+            List of shock profiles consisting of these properties:
 
             - phase_name : str
                 Name of the life cycle phase to add this profile to.
@@ -1571,7 +1571,7 @@ class Lifecycle(GrpcStub):
             - freq_units : str
                 Frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             - shock_profile_entries : list
-                List of shock profile entries consisting of these arguments:
+                List of shock profile entries consisting of these properties:
 
                 - shape : str
                     Shape of the shock profile entry. Options are ``"FullSine"``,
@@ -1645,7 +1645,7 @@ class Lifecycle(GrpcStub):
             for i, profile_entry in enumerate(shock_profiles):
                 if len(profile_entry) != 10:
                     raise SherlockAddShockProfilesError(
-                        f"Number of arguments ({str(len(profile_entry))}) is wrong for shock "
+                        f"Number of elements ({str(len(profile_entry))}) is wrong for shock "
                         f"profile {i}."
                     )
                 elif not isinstance(profile_entry[0], str) or profile_entry[0] == "":
@@ -1763,7 +1763,7 @@ class Lifecycle(GrpcStub):
         event_name : str
             Name of the random vibe event.
         file_path : str
-            File path for thermal profile .dat or .csv file
+            Path for the thermal profile DAT or CSV file.
 
         Example
         -------

@@ -36,7 +36,7 @@ class Parts(GrpcStub):
         self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
 
     def _add_matching_duplication(self, request, matching, duplication):
-        """Add matching and duplication arguments to the request."""
+        """Add matching and duplication properties to the request."""
         if matching == "Both":
             request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Both
         elif matching == "Part":
@@ -248,7 +248,7 @@ class Parts(GrpcStub):
             Name of the CCA.
         part_loc : list
             List defining the part locations. The list consists
-            of these arguments:
+            of these properties:
 
             - refDes : str
                 Reference designator of the part.
@@ -374,11 +374,11 @@ class Parts(GrpcStub):
             if cca_name == "":
                 raise SherlockUpdatePartsLocationsByFileError(message="CCA name is invalid.")
             if file_path == "":
-                raise SherlockUpdatePartsLocationsByFileError(message="File path is required.")
+                raise SherlockUpdatePartsLocationsByFileError(message="Filepath is required.")
             if len(file_path) <= 1 or file_path[1] != ":":
                 file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdatePartsLocationsByFileError("File path is invalid.")
+                raise SherlockUpdatePartsLocationsByFileError("Filepath is invalid.")
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -454,11 +454,11 @@ class Parts(GrpcStub):
             if cca_name == "":
                 raise SherlockImportPartsListError(message="CCA name is invalid.")
             if import_file == "":
-                raise SherlockImportPartsListError(message="Import file path is required.")
+                raise SherlockImportPartsListError(message="Import filepath is required.")
             if len(import_file) <= 1 or import_file[1] != ":":
                 import_file = f"{os.getcwd()}\\{import_file}"
             if not os.path.exists(import_file):
-                raise SherlockImportPartsListError("File path is invalid.")
+                raise SherlockImportPartsListError("Filepath is invalid.")
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -523,7 +523,7 @@ class Parts(GrpcStub):
             if cca_name == "":
                 raise SherlockExportPartsListError(message="CCA name is invalid.")
             if export_file == "":
-                raise SherlockExportPartsListError(message="Export file path is required.")
+                raise SherlockExportPartsListError(message="Export filepath is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path

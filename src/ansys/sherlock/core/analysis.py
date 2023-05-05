@@ -143,7 +143,7 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the CCA.
         analyses : list
-            List consisting of these arguments:
+            List consisting of these properties:
 
             - analyses : list
                 List of analysis types to run. Options are:
@@ -164,7 +164,7 @@ class Analysis(GrpcStub):
                 - ``"UNKNOWN"``
 
             - phases : list
-                  List of life cycle phases consisting of these arguments:
+                  List of life cycle phases consisting of these properties:
 
                   - name : str
                       Name of the life cycle phase.
@@ -657,13 +657,13 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the main CCA for the analysis.
         strain_map_analyses : list
-            List of analyses consisting of these arguments:
+            List of analyses consisting of these properties:
 
             - analysis_type : str
                 Type of analysis to run. The only option is ``"RANDOMVIBE"``.
             - event_strain_maps : list
                 List of the strain maps assigned to the desired life cycle events for
-                a given PCB side. The list consists of these arguments:
+                a given PCB side. The list consists of these properties:
 
               - phase_name : str
                   Life cycle phase name for the strain map assignment.
@@ -717,7 +717,7 @@ class Analysis(GrpcStub):
 
                 if len(analysis) != 2:
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Number of arguments ({str(len(analysis))}) is wrong for "
+                        f"Number of elements ({str(len(analysis))}) is wrong for "
                         f"strain map analysis {i}."
                     )
 
@@ -750,7 +750,7 @@ class Analysis(GrpcStub):
                         )
                     elif len(event_strain_map) < 4:
                         raise SherlockRunStrainMapAnalysisError(
-                            f"Number of arguments ({str(len(event_strain_map))}) is wrong for "
+                            f"Number of elements ({str(len(event_strain_map))}) is wrong for "
                             f"event strain map {j} for strain map analysis {i}."
                         )
                     elif event_strain_map[0] == "":

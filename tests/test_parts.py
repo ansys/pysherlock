@@ -348,7 +348,7 @@ def helper_test_update_parts_locations_by_file(parts):
         )
         assert False
     except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: File path is invalid."
+        assert e.str_itr()[0] == "Update parts locations by file error: Filepath is invalid."
 
 
 def helper_test_import_parts_list(parts):
