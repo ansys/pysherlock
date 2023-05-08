@@ -373,17 +373,6 @@ class SherlockLoadHarmonicProfileError(Exception):
 
 class SherlockLoadRandomVibeProfileError(Exception):
     """Raised when loading random vibe properties results in an error."""
-    def __init__(self, message):
-        """Initialize Error Message."""
-        self.message=message
-
-    def __str__(self):
-        """Format Error Message."""
-        return f"Get load random vibe profile error: {self.message}"
-
-
-class SherlockLoadRandomVibeProfileError(Exception):
-    """Raised when loading random vibe properties results in an error."""
 
     def __init__(self, message):
         """Initialize Error Message."""

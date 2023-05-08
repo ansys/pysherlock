@@ -1908,7 +1908,7 @@ class Lifecycle(GrpcStub):
                 filePath=file_path,
             )
             response = self.stub.loadHarmonicProfile(request)
-            
+
             return response
         except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
