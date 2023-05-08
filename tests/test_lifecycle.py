@@ -13,6 +13,8 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadRandomVibeProfileError,
+    SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -32,7 +34,10 @@ def test_all():
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
+    helper_test_load_random_vibe_profile(lifecycle)
+    helper_test_load_thermal_profile(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
+    helper_test_load_random_vibe_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1733,6 +1738,100 @@ def helper_test_add_shock_profiles(lifecycle):
         )
 
 
+def helper_test_load_random_vibe_profile(lifecycle):
+    """Test load_random_vibe_profile."""
+    try:
+        lifecycle.load_random_vibe_profile(
+            "",
+            "Phase 1",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Load random vibe profile error: Project name is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Load random vibe profile error: Phase name is invalid."
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "Phase 1",
+            "",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Load random vibe profile error: Event name is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "Phase 1",
+            "Random Event",
+            "",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Load random vibe profile error: File path is invalid."
+
+
+def helper_test_load_thermal_profile(lifecycle):
+    """Test load_thermal_profile API"""
+
+    try:
+        lifecycle.load_thermal_profile(
+            "",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Project name is invalid."
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Phase name is invalid."
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "Phase 1",
+            "",
+            "Tutorial_Profile.dat",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: Event name is invalid."
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test",
+            "Phase 1",
+            "Thermal Event",
+            "",
+        )
+        assert False
+    except SherlockLoadThermalProfileError as e:
+        assert str(e) == "Load thermal profile error: File path is invalid."
+
+
 def helper_test_load_harmonic_profile(lifcycle):
     """Test load_harmonic_profile API."""
 
@@ -1759,6 +1858,52 @@ def helper_test_load_harmonic_profile(lifcycle):
         assert False
     except SherlockLoadHarmonicProfileError as e:
         assert "Load Harmonic profile error: File name is invalid."
+
+
+def helper_test_load_random_vibe_profile(lifecycle):
+    """Test load_random_vibe_profile."""
+    try:
+        lifecycle.load_random_vibe_profile(
+            "",
+            "Phase 1",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: Project name is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: Phase name is invalid."
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "Phase 1",
+            "",
+            "TestProfile.dat",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: Event name is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test",
+            "Phase 1",
+            "Random Event",
+            "",
+        )
+        assert False
+    except SherlockLoadRandomVibeProfileError as e:
+        assert str(e) == "Get load random vibe profile error: File path is invalid."
 
 
 if __name__ == "__main__":
