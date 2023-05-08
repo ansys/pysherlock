@@ -1861,9 +1861,7 @@ def helper_test_load_harmonic_profile(lifcycle):
 
 
 def helper_test_load_random_vibe_profile(lifecycle):
-    """Test load_random_vibe_profile.
-
-    """
+    """Test load_random_vibe_profile."""
     try:
         lifecycle.load_random_vibe_profile(
             "",
