@@ -558,7 +558,7 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert (
-                str(e) == "Update random vibe properties error: Maxiumum "
+                str(e) == "Update random vibe properties error: Maximum "
                 "natural frequency units are invalid: foo"
             )
 

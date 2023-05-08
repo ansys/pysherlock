@@ -26,9 +26,9 @@ and ``ansys-sherlock`` packages.
 
    Alternatively, you can download the ZIP file from the **Release** area of the
    `ansys-api-sherlock <https://github.com/pyansys/ansys-api-sherlock>`_ GitHub
-   repository and unzip it before proceding with the installation.
+   repository and unzip it before proceeding with the installation.
 
-#. After the pacakge is downloaded, execute these commands to install it:
+#. After the package is downloaded, execute these commands to install it:
 
    .. code::
 
@@ -44,7 +44,7 @@ and ``ansys-sherlock`` packages.
 
    Alternatively, you can download the ZIP file from the **Release** area of the
    `pysherlock <https://github.com/pyansys/pysherlock>`_ GitHub repository
-   and unzip it before proceding with the installation.
+   and unzip it before proceeding with the installation.
 
 #. After the package is downloaded, execute these commands to install it:
 
