@@ -143,7 +143,7 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the CCA.
         analyses : list of ``elements``
-            
+
             - elements: list
                 List of tuples (``type``, ``event``)
 
