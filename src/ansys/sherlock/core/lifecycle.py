@@ -27,7 +27,6 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
     SherlockLoadHarmonicProfileError,
-    SherlockLoadRandomVibeProfileError,
     SherlockLoadThermalProfileError,
     SherlockLoadRandomVibeProfileError,
 )
@@ -1850,6 +1849,9 @@ class Lifecycle(GrpcStub):
                 filePath=file_path,
             )
             response = self.stub.loadThermalProfile(request)
+            response = self.stub.loadHarmonicProfile(request)
+
+            
             return response
         except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
