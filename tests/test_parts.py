@@ -384,7 +384,7 @@ def helper_test_import_parts_list(parts):
         )
         assert False
     except SherlockImportPartsListError as e:
-        assert str(e) == "Import parts list error: File path is invalid."
+        assert str(e) == "Import parts list error: Filepath is invalid."
 
 
 def helper_test_export_parts_list(parts):
