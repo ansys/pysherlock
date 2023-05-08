@@ -13,7 +13,6 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
     SherlockLoadHarmonicProfileError,
-    SherlockLoadThermalProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadThermalProfileError,
 )
@@ -38,6 +37,7 @@ def test_all():
     helper_test_load_random_vibe_profile(lifecycle)
     helper_test_load_thermal_profile(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
+    helper_test_load_random_vibe_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -1873,7 +1873,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Load random vibe profile error: Project name is invalid."
+        assert str(e) == "Get load random vibe profile error: Project name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1884,7 +1884,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Load random vibe profile error: Phase name is invalid."
+        assert str(e) == "Get load random vibe profile error: Phase name is invalid."
     try:
         lifecycle.load_random_vibe_profile(
             "Test",
@@ -1894,7 +1894,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Load random vibe profile error: Event name is invalid."
+        assert str(e) == "Get load random vibe profile error: Event name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1905,7 +1905,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         )
         assert False
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e) == "Load random vibe profile error: File path is invalid."
+        assert str(e) == "Get load random vibe profile error: File path is invalid."
 
 
 if __name__ == "__main__":

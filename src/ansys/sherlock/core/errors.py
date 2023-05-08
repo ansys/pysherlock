@@ -381,6 +381,16 @@ class SherlockLoadRandomVibeProfileError(Exception):
         return f"Get load random vibe profile error: {self.message}"
 
 
+class SherlockLoadRandomVibeProfileError(Exception):
+    """Raised when loading random vibe properties results in an error."""
+    def __init__(self, message):
+        """Initialize Error Message."""
+        self.message=message
+
+    def __str__(self):
+        return f"Get load random vibe profile error: {self.message}"
+
+
 class SherlockUpdateMountPointsByFileError(Exception):
     """Contains the error raised when mount points cannot be updated."""
 
