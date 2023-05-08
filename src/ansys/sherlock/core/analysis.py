@@ -142,34 +142,37 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        analyses : list
-            List consisting of these properties:
+        analyses : list of ``elements``
+            
+            - elements: list
+                List of tuples (``type``, ``event``)
 
-            - type : str
-                Analysis type to run. Options are:
+                - type : str
+                    Type of analysis to run. Options are:
 
-                - ``"COMPONENTFAILUREMODE"``
-                - ``"DFMEAMODULE"``
-                - ``"HARMONICVIBE"``
-                - ``"ICTANALYSIS"``
-                - ``"MECHANICALSHOCK"``
-                - ``"NATURALFREQ"``
-                - ``"PARTVALIDATION"``
-                - ``"PTHFATIGUE"``
-                - ``"RANDOMVIBE"``
-                - ``"SEMICONDUCTORWEAROUT"``
-                - ``"SOLDERJOINTFATIGUE"``
-                - ``"THERMALDERATING"``
-                - ``"THERMALMECH"``
-                - ``"UNKNOWN"``
+                    - ``"COMPONENTFAILUREMODE"``
+                    - ``"DFMEAMODULE"``
+                    - ``"HARMONICVIBE"``
+                    - ``"ICTANALYSIS"``
+                    - ``"MECHANICALSHOCK"``
+                    - ``"NATURALFREQ"``
+                    - ``"PARTVALIDATION"``
+                    - ``"PTHFATIGUE"``
+                    - ``"RANDOMVIBE"``
+                    - ``"SEMICONDUCTORWEAROUT"``
+                    - ``"SOLDERJOINTFATIGUE"``
+                    - ``"THERMALDERATING"``
+                    - ``"THERMALMECH"``
+                    - ``"UNKNOWN"``
 
-            - phases : list
-                  List of life cycle phases consisting of these properties:
+                - event : list
+                    List of tuples (``phase_name``, ``event_name``)
 
-                  - name : str
-                      Name of the life cycle phase.
-                  - event : str
-                      Name of the life cycle event.
+                    - phase_name : str
+                        Name of the life cycle phase.
+                    - event_name : str
+                        Name of the life cycle event.
+
 
         Examples
         --------
