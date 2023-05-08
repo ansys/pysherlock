@@ -1763,7 +1763,12 @@ class Lifecycle(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-
+        >>> sherlock.lifecycle.load_shock_profile_dataset(
+                project="Tutorial",
+                phase_name="Phase 1",
+                event_name="Shock Event",
+                file_path=Test_Profile.dat",
+        )
         """
         try:
             if project == "":
