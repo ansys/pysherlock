@@ -30,6 +30,10 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadShockProfileDatasetError,
+    SherlockLoadShockProfileDatasetError,
+    SherlockLoadHarmonicProfileError,
+    SherlockLoadRandomVibeProfileError,
+    SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1872,6 +1876,64 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    def load_random_vibe_profile(self, project, phase_name, event_name, file_path):
+        """Load random vibe profile from .csv or .dat file.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project
+        phase_name : str
+            Name of the lifecycle phase to add this event to.
+        event_name : str
+            Name of the random vibe event.
+        file_path : str
+            File path for thermal profile .dat or .csv file
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+            >>> sherlock.lifecycle.load_random_vibe_profile(
+                    project="Tutorial",
+                    phase_name="Phase 1",
+                    event_name="Random Event",
+                    file_path="TestProfile.dat",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockLoadRandomVibeProfileError(message="Project name is invalid.")
+            if phase_name == "":
+                raise SherlockLoadRandomVibeProfileError(message="Phase name is invalid.")
+            if event_name == "":
+                raise SherlockLoadRandomVibeProfileError(message="Event name is invalid.")
+            if file_path == "":
+                raise SherlockLoadRandomVibeProfileError(message="File path is invalid.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+            request = SherlockLifeCycleService_pb2.LoadRandomVibeProfileRequest(
+                project=project,
+                phaseName=phase_name,
+                eventName=event_name,
+                filePath=file_path,
+            )
+            response = self.stub.loadRandomVibeProfile(request)
+            return response
+        except SherlockLoadRandomVibeProfileError as e:
+            LOG.error(str(e))
+            raise e
+
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
         """Load a thermal profile from a .dat or .csv file.
 
@@ -1930,8 +1992,6 @@ class Lifecycle(GrpcStub):
         except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
             raise e
-
-
 
     def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
         """Load shock profile dataset from a .csv or .dat file.
