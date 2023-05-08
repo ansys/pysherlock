@@ -35,9 +35,9 @@ def test_all():
     helper_test_add_harmonic_vibe_profiles(lifecycle)
     helper_test_add_shock_event(lifecycle)
     helper_test_add_shock_profiles(lifecycle)
+    helper_test_load_random_vibe_profile(lifecycle)
     helper_test_load_thermal_profile(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
-    helper_test_load_random_vibe_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
