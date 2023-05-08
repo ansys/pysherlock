@@ -511,6 +511,18 @@ class SherlockGetPartLocationError(Exception):
         return f"Get part location error: {self.message}"
 
 
+class SherlockLoadThermalProfileError(Exception):
+    """Raised when loading thermal profile results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Load thermal profile error: {self.message}"
+
+
 class SherlockRunAnalysisError(Exception):
     """Contains the error raised when an analysis cannot be run."""
 
