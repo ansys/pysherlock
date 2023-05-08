@@ -370,6 +370,7 @@ class SherlockLoadHarmonicProfileError(Exception):
         """Format Error Message."""
         return f"Load Harmonic profile error: {self.message}"
 
+class Sherlock
 
 class SherlockLoadRandomVibeProfileError(Exception):
     """Raised when loading random vibe properties results in an error."""
