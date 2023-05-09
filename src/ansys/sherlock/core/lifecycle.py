@@ -2166,12 +2166,7 @@ class Lifecycle(GrpcStub):
                 eventName=event_name,
                 filePath=file_path,
             )
-            response = self.stub.loadHarmonicProfile(request)
-
-            return response
-        except SherlockLoadHarmonicProfileError as e:
-            LOG.error(str(e))
-            raise e
+            response = self.stub.loadShockProfileDataset(request)
             return response
         except SherlockLoadShockProfileDatasetError as e:
             LOG.error(str(e))

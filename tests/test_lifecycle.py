@@ -2201,7 +2201,6 @@ def helper_test_load_shock_profile_dataset(lifecycle):
     except SherlockLoadShockProfileDatasetError as e:
         assert str(e) == "Load shock profile dataset error: File path is invalid."
 
-
 def helper_test_load_harmonic_profile(lifcycle):
     """Test load_harmonic_profile API."""
 
