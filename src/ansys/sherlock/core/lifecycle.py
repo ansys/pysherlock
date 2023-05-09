@@ -28,8 +28,8 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidThermalProfileEntriesError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
-    SherlockLoadThermalProfileError,
     SherlockLoadShockProfilePulseError,
+    SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
