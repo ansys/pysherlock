@@ -26,10 +26,10 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
-    SherlockLoadRandomVibeProfileError,
-    SherlockLoadThermalProfileError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
+    SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1982,4 +1982,4 @@ class Lifecycle(GrpcStub):
             return response
         except SherlockLoadShockProfileDatasetError as e:
             LOG.error(str(e))
-            raise ee e
+            raise e
