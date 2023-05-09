@@ -372,7 +372,7 @@ class SherlockLoadHarmonicProfileError(Exception):
 
 
 class SherlockLoadShockProfilePulseError(Exception):
-    """Raised when loading a shock profile pulse results in an error"""
+    """Raised when loading a shock profile pulse results in an error."""
 
     def __init__(self, message):
         """Initialize error message."""
