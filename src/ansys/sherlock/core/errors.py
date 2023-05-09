@@ -359,7 +359,6 @@ class SherlockLoadRandomVibeProfileError(Exception):
         return f"Load random vibe profile error: {self.message}"
 
 
-
 class SherlockLoadHarmonicProfileError(Exception):
     """Raised when loading a harmonic profile results in an error."""
 

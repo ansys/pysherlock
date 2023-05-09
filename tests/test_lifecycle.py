@@ -12,12 +12,9 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
-    SherlockLoadShockProfileDatasetError,
-    SherlockLoadRandomVibeProfileError,
-    SherlockLoadThermalProfileError,
-    SherlockLoadShockProfileDatasetError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
+    SherlockLoadShockProfileDatasetError,
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
@@ -1882,7 +1879,6 @@ def helper_test_load_thermal_profile(lifecycle):
         assert False
     except SherlockLoadThermalProfileError as e:
         assert str(e) == "Load thermal profile error: File path is invalid."
-
 
 
 def helper_test_load_harmonic_profile(lifcycle):
