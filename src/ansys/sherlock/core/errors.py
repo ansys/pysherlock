@@ -368,6 +368,17 @@ class SherlockLoadShockProfilePulseError(Exception):
 
     def __str__(self):
         """Format Error Message."""
+
+
+class SherlockLoadShockProfilePulseError(Exception):
+    """Raised when loading a shock profile pulse results in an error"""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format Error Message."""
         return f"Load shock profile pulses error: {self.message}"
 
 
