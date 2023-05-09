@@ -1947,7 +1947,7 @@ class Lifecycle(GrpcStub):
                 project="Tutorial",
                 phase_name="Phase 1",
                 event_name="Shock Event",
-                file_path="C:\\Users\\rgiannam\\AppData\\Roaming\\Sherlock\\shockProfiles\\Test_Profile.dat",
+                file_path="Test_Profile.dat",
         )
         """
         try:
