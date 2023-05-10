@@ -2002,10 +2002,10 @@ class Lifecycle(GrpcStub):
             cca_name="Card",
         )
         >>> loaded = sherlock.lifecycle.load_shock_profile_pulses(
-                    project="Tutorial",
-                    phase_name="Phase 1",
-                    event_name="Shock Event",
-                    file_path="Test_Profile.dat",
+                project="Tutorial",
+                phase_name="Phase 1",
+                event_name="Shock Event",
+                file_path="Test_Profile.dat",
         )
         """
         try:
