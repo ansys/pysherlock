@@ -6,14 +6,12 @@ This section provides an overview of PySherlock and explains how to use it.
 Prerequisites
 -------------
 For installation instructions and information on launching Sherlock and the gRPC server,
-see `Getting started <../getting_started/index.html>`_. The Sherlock gRPC server
-must be running to use PySherlock.
+see :ref:`ref_getting_started`. The Sherlock gRPC server must be running to use PySherlock.
 
 PySherlock services
 -------------------
 PySherlock methods are divided into modules that correspond to major Sherlock functional areas.
-For descriptions of each module's classes, methods, and functions, see the
-`API reference <../api/index.html>`_.
+For descriptions of each module's classes, methods, and functions, see :ref:`ref_api_ref`.
 
 .. image:: ../_static/sherlock-services.png
   :align: center
@@ -22,7 +20,7 @@ For descriptions of each module's classes, methods, and functions, see the
 
 Using PySherlock
 ----------------
-After the Sherlock gRPC server is started, you can use PySherlock methods to perform Sherlock
+After the Sherlock gRPC server is started, you can use PySherlock to perform Sherlock
 client operations.
 
 Subsequent topics describe how to use PySherlock to automate the process depicted in this diagram:
@@ -30,15 +28,15 @@ Subsequent topics describe how to use PySherlock to automate the process depicte
 .. image:: ../_static/userGuide-example-workflow-chart.png
   :align: center
   :width: 600
-  :alt: User Guide Example Workflow
+  :alt: User guide example workflow
 
-.. This workflow that demonstrates how to launch Sherlock, import an ODB++ archive to create a
+.. This workflow demonstrates how to launch Sherlock, import an ODB++ archive to create a
 .. project, update the parts list, create a random vibe event and profile, run a random vibe analysis,
 .. and generate a project report.
 
 Launch Sherlock
 ~~~~~~~~~~~~~~~
-Use the :func:`launch_sherlock<ansys.sherlock.core.launcher.launch_sherlock>`
+Use the :func:`launch_sherlock()<ansys.sherlock.core.launcher.launch_sherlock>`
 method to launch Sherlock and start the gRPC server on the default port:
 
 .. code::
@@ -49,11 +47,13 @@ method to launch Sherlock and start the gRPC server on the default port:
 This method returns the ``sherlock`` gRPC connection object, which is used to invoke
 the APIs from their respective services.
 
-Import ODB++ archive
---------------------
-Use the :func:`ansys.sherlock.core.project.Project.import_odb_archive>`
-method to import an ODB++ archive file (``ODB++ Tutorial.tgz``). This code imports the
-archive file and creates a project named ``Tutorial`` with a CCA named ``Main Board``.
+Import ODB++ archive file
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Use the :func:`import_odb_archive()<ansys.sherlock.core.project.Project.import_odb_archive>`
+method to import the ODB++ archive file (``ODB++ Tutorial.tgz``).
+
+This code imports the archive file and creates a project named ``Tutorial`` with a CCA
+named ``Main Board``:
 
 .. code::
 
@@ -71,9 +71,10 @@ For information on the ``project`` module and its methods, see :ref:`ref_project
 
 Update parts list
 ~~~~~~~~~~~~~~~~~
-Use the :func:`aansys.sherlock.core.parts.Parts.update_parts_list>` method to update the
-parts list for the previously created CCA ``Main Board``. This code uses the Sherlock Part Library
-to update the parts list:
+Use the :func:`update_parts_list()<ansys.sherlock.core.parts.Parts.update_parts_list>` method
+to update the parts list for the previously created CCA ``Main Board``.
+
+This code uses the Sherlock Part Library to update the parts list:
 
 .. code::
 
@@ -89,8 +90,8 @@ For information on the ``parts`` module and its methods, see :ref:`ref_parts_mod
 
 Add random vibe event
 ~~~~~~~~~~~~~~~~~~~~~
-Use the :func:`ansys.sherlock.core.lifecycle.Lifecycle.add_random_vibe_event>` method
-to add a random vibe event:
+Use the :func:`add_random_vibe_event()<ansys.sherlock.core.lifecycle.Lifecycle.add_random_vibe_event>`
+method to add a random vibe event:
 
 .. code::
 
@@ -111,8 +112,8 @@ For information on the ``lifecycle`` module and its methods, see :ref:`ref_lifec
 
 Add random vibe profile
 ~~~~~~~~~~~~~~~~~~~~~~~
-Use the :func:`ansys.sherlock.core.lifecycle.Lifecycle.add_random_vibe_profiles>` method to
-add a random vibe profile:
+Use the :func:`add_random_vibe_profiles()<ansys.sherlock.core.lifecycle.Lifecycle.add_random_vibe_profiles>`
+method to add a random vibe profile:
 
 .. code::
 
@@ -130,8 +131,8 @@ For information on the ``lifecycle`` module and its methods, see :ref:`ref_lifec
 
 Run analysis
 ~~~~~~~~~~~~~
-Use the :func:`ansys.sherlock.core.analysis.Analysis.run_analysis>` method to run a random
-vibe analysis:
+Use the :func:`run_analysis()<ansys.sherlock.core.analysis.Analysis.run_analysis>` method
+to run a random vibe analysis:
 
 .. code::
 
@@ -151,8 +152,8 @@ For information on the ``analysis`` module and its methods, see :ref:`ref_analys
 
 Generate Sherlock report
 ~~~~~~~~~~~~~~~~~~~~~~~~
-Use the :func:`ansys.sherlock.core.project.Project.generate_project_report>` method to
-generate a Sherlock report for the project ``Tutorial`` and save it to a PDF file
+Use the :func:`generate_project_report()<ansys.sherlock.core.project.Project.generate_project_report>`
+method to generate a Sherlock report for the project ``Tutorial`` and save it to a PDF file
 in ``C:\Temp\tutorial_project_report.pdf``:
 
 .. code::

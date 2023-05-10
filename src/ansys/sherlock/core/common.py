@@ -1,6 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
-"""Module for running the gRPC APIs in the Sherlock Common Service."""
+"""Module for running the gRPC APIs in the Sherlock Common service."""
 try:
     import SherlockCommonService_pb2
     import SherlockCommonService_pb2_grpc
@@ -14,7 +14,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
 class Common(GrpcStub):
-    """Contains methods from the Sherlock Common Service."""
+    """Contains methods from the Sherlock Common service."""
 
     def __init__(self, channel):
         """Initialize a gRPC stub for the Sherlock Common service."""
@@ -31,7 +31,7 @@ class Common(GrpcStub):
             return True
 
     def is_sherlock_client_loading(self):
-        """Check if the Sherlock client (if opened) is still initializing."""
+        """Check if the Sherlock client is opened and still initializing."""
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
@@ -51,7 +51,7 @@ class Common(GrpcStub):
 
         Parameters
         ----------
-        close_sherlock_client : boolean, optional
+        close_sherlock_client : bool, optional
             Whether to close the Sherlock client when the gRPC connection is closed. The default
             is ``False``, in which case the Sherlock client remains open when the gRPC connection
             is closed.

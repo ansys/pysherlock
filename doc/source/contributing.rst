@@ -30,10 +30,9 @@ View documentation
 Documentation for the latest stable release of PySherlock is hosted at
 `PySherlock Documentation <https://sherlock.docs.pyansys.com>`_.
 
-Documentation for the latest development version, which tracks the
-``main`` branch, is hosted at `Development PySherlock Documentation <https://sherlock.docs.pyansys.com/dev/>`_.
-This version is automatically kept up to date via GitHub actions.
-
+In the upper right corner of the documentation’s title bar, there is an option
+for switching from viewing the documentation for the latest stable release to
+viewing the documentation for the development version or previously released versions.
 
 Code style
 ----------
@@ -75,14 +74,14 @@ PySherlock has three installation modes: user, developer, and offline.
 Install in user mode
 ^^^^^^^^^^^^^^^^^^^^
 
-Before installing PySherlock in user mode, make sure you have the latest version of
-`pip`_ with:
+Before installing PySherlock in user mode, use this command to make sure that
+you have the latest version of `pip`_:
 
 .. code:: bash
 
    python -m pip install -U pip
 
-Then, install PySherlock with:
+Then, use this command to install PySherlock:
 
 .. code:: bash
 
@@ -91,7 +90,7 @@ Then, install PySherlock with:
 
 Install in developer mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-You can be up and running with four lines of code:
+To install PySherlock in developer mode, run these commands:
 
 .. code:: bash
 
@@ -100,7 +99,7 @@ You can be up and running with four lines of code:
    pip install pip -U
    pip install -e .
 
-Now you can run it with:
+Then run this command:
 
 .. code:: bash
 
@@ -111,8 +110,8 @@ Now you can run it with:
 Installing PySherlock in developer mode allows you to modify the source
 and enhance it.
 
-Before contributing to the project, please refer to the `PyAnsys Developer's
-guide <https://dev.docs.pyansys.com/>`_. You will need to follow these steps:
+Before contributing to the project, see the `PyAnsys Developer's
+guide <https://dev.docs.pyansys.com/>`_. You must follow these steps:
 
 #. Start by cloning this repository:
 
@@ -120,8 +119,7 @@ guide <https://dev.docs.pyansys.com/>`_. You will need to follow these steps:
 
       git clone https://github.com/pyansys/pysherlock
 
-#. Create a fresh-clean Python environment and activate it. Refer to the
-   official `venv <https://docs.python.org/3/library/venv.html>`_ documentation if you require further information:
+#. Create a fresh-clean Python environment and activate it:
 
    .. code:: bash
 
@@ -137,13 +135,17 @@ guide <https://dev.docs.pyansys.com/>`_. You will need to follow these steps:
       # Activate it in Windows Powershell
       .venv\Scripts\Activate.ps1
 
-#. Make sure you have the latest version of `pip <https://pypi.org/project/pip/>`_:
+   If you require additional information on virtual environments, see the
+   official Python `venv <https://docs.python.org/3/library/venv.html>`_ topic.
+
+#. To make sure you have the latest version of `pip <https://pypi.org/project/pip/>`_,
+   run this command:
 
    .. code:: bash
 
       python -m pip install -U pip
 
-#. Install the project in editable mode:
+#. Install the project in editable mode by running the following commands:
 
    .. code:: bash
 
@@ -186,7 +188,7 @@ Consider installing using a `virtual environment <https://docs.python.org/3/libr
 Testing
 -------
 
-This project takes advantage of `tox <https://tox.wiki/>`_. This tool automate common
+This project takes advantage of `tox <https://tox.wiki/>`_. This tool automates common
 development tasks (similar to Makefile), but it is oriented towards Python
 development.
 
@@ -202,13 +204,13 @@ The following environments commands are provided:
 - **tox -e style**: Checks for coding style quality.
 - **tox -e py**: Checks for unit tests.
 - **tox -e py-coverage**: Checks for unit testing and code coverage.
-- **tox -e doc**: Checks for documentation building process.
+- **tox -e doc**: Checks for successfully building the documentation.
 
 Raw testing
 ^^^^^^^^^^^
 
 PySherlock also makes use of `PyTest <https://docs.pytest.org/en/stable/>`_,
-which can be easily run by installing the ``tests`` target.
+which can be easily run by using this command to install the ``tests`` target:
 
 .. code:: bash
 
@@ -244,7 +246,7 @@ Distributing
 ------------
 
 If you would like to create either source or wheel files, start by installing
-the building requirements and then executing the build module:
+the building requirements and then executing the build module with these commands:
 
 .. code:: bash
 

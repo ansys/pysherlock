@@ -45,7 +45,7 @@ def helper_test_update_mount_points_by_file(layer):
         )
         assert False
     except SherlockUpdateMountPointsByFileError as e:
-        assert e.str_itr()[0] == "Update mount points by file error: File path is invalid."
+        assert e.str_itr()[0] == "Update mount points by file error: Filepath is invalid."
 
 
 if __name__ == "__main__":
