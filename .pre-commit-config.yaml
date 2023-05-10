@@ -26,7 +26,8 @@ repos:
   rev: v2.2.4
   hooks:
   - id: codespell
-    files: ^src/
+    args: ["--toml", "pyproject.toml"]
+    additional_dependencies: ["tomli"]
 
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.3.0

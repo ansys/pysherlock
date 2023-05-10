@@ -43,7 +43,7 @@ class Stackup(GrpcStub):
         self.FIBER_MATERIAL_LIST = None
 
     def _init_laminate_thickness_units(self):
-        """Initialize list of units for laminate thickness."""
+        """Initialize the list of units for the laminate thickness."""
         if self._is_connection_up():
             laminate_thickness_unit_request = (
                 SherlockStackupService_pb2.ListLaminateThicknessUnitsRequest()
@@ -189,7 +189,7 @@ class Stackup(GrpcStub):
             for i, layer in enumerate(input):
                 if len(layer) != 4:
                     raise SherlockInvalidGlassConstructionError(
-                        message=f"Invalid layer {i}: Number of arguments is wrong."
+                        message=f"Invalid layer {i}: Number of elements is wrong."
                     )
                 self._check_thickness(layer[2], layer[3])
         except SherlockInvalidThicknessArgumentError as e:
@@ -222,7 +222,7 @@ class Stackup(GrpcStub):
         power_layer_thickness,
         power_layer_thickness_unit,
     ):
-        """Generate a new stackup from the properties.
+        """Generate a new stackup from given properties.
 
         Parameters
         ----------
@@ -233,19 +233,19 @@ class Stackup(GrpcStub):
         board_thickness : double
             Board thickness.
         board_thickness_unit : str
-            Units for board thickness.
+            Units for the board thickness.
         pcb_material_manufacturer : str
-            PCB material manufacturer.
+            Manufacturer for the PCB material.
         pcb_material_grade : str
-            PCB material grade.
+            Grade for the PCB material.
         pcb_material : str
-            PCB material.
+            Material for the PCB.
         conductor_layers_cnt : int32
             Number of conductor layers.
         signal_layer_thickness : double
             Signal layer thickness.
         signal_layer_thickness_unit : str
-            Units for signal layer thickness.
+            Units for the signal layer thickness.
         min_laminate_thickness : double
             Minimum thickness of laminate layers.
         min_laminate_thickness_unit : str
@@ -255,7 +255,7 @@ class Stackup(GrpcStub):
         power_layer_thickness : double
             Power layer thickness.
         power_layer_thickness_unit : str
-            Units for power layer thickness.
+            Units for the power layer thickness.
 
         Examples
         --------
@@ -377,23 +377,25 @@ class Stackup(GrpcStub):
         cca_name : str
             Name of the CCA.
         layer : str
-            Layer ID associated with this conductor layer.
+            Layer ID associated with the conductor layer.
         type : str, optional
-            Layer type. For example, ``"SIGNAL"``, ``"POWER"``, and ``"SUBSTRATE"``.
+            Layer type. The default is ``""1``. For example,
+            ``"SIGNAL"``, ``"POWER"``, or ``"SUBSTRATE"``.
         material : str, optional
-            Name of the conductor material.
+            Conductor material. The default is ``""``.
         thickness : double, optional
-            Conductor layer thickness.
+            Conductor layer thickness. The default is ``0``.
         thickness_unit : str, optional
-            Units for conductor layer thickness.
+            Units for the conductor layer thickness. The
+            default is ``""``.
         conductor_percent : str, optional
-            Conductor percentage.
+            Conductor percentage. The default is ``""``.
         resin_material : str, optional
-            Resin material.
+            Resin material. The default is ``""``.
 
         Note
         ----
-        Using the default value for a property cause no changes for that property.
+        Using the default value for a property causes no changes for that property.
 
         Example
         -------
@@ -511,33 +513,48 @@ class Stackup(GrpcStub):
         cca_name : str
             Name of the CCA.
         layer : str
-            Layer ID associated with this conductor layer.
+            Layer ID associated with the conductor layer.
         manufacturer : str, optional
-            Name of the material manufacturer. The manufacturer name must be provided
-            along with the material grade and material name.
+            Manufacturer of the material for the laminate layer.
+            The default is ``""``. To update the material, the
+            ``manufacturer``, ``grade``, and ``material`` parameters
+            must be specified. When the ``manufacturer`` is specified,
+            there are checks to ensure that the corresponding parameters
+            are provided.
         grade : str, optional
-            Material grade.
+            Material grade. The default is ``""``.
         material : str, optional
-            Material name.
+            Material name. The default is ``""``.
         thickness : double, optional
-            Laminate thickness.
+            Laminate thickness. The default is ``0``.
         thickness_unit : str, optional
-            Units for laminate thickness.
+            Units for the laminate thickness. The default is ``""``.
         construction_style : str, optional
-            Construction style.
-        glass_construction : (str, double, double, str) list, optional
-            List of (style, resinPercentage, thickness, thicknessUnit) layers
-            Represents the layers with a glass construction.
+            Construction style. The default is ``""``.
+        glass_construction : list, optional
+            List representing a glass construction. This list consists
+            of objects with these properties:
+
+           - style : str
+               Style of the glass construction.
+           - resinPercentage : double
+               Resin percentage.
+           - thickness: double
+               Thickness.
+           - thicknessUnit: str
+               Units for the thickness.
+
         fiber_material : str, optional
-            Fiber material. This parameter is only updated if glass construction is selected.
+            Fiber material. The default is ``""``. This parameter is only
+            updated for a glass construction.
         conductor_material : str, optional
-            Conductor material.
+            Conductor material. The default is ``""``.
         conductor_percent : str, optional
-            Conductor percentage.
+            Conductor percentage. The default is ``""``.
 
         Note
         ----
-        Using the default value for a property cause no changes for that property.
+        Using the default value for a property causes no changes for that property.
 
         Example
         -------
@@ -703,7 +720,7 @@ class Stackup(GrpcStub):
             raise e
 
     def list_laminate_layers(self, project):
-        """Get a list of all laminate layers and their properties.
+        """List all laminate layers and their properties.
 
         Parameters
         ----------
@@ -757,14 +774,14 @@ class Stackup(GrpcStub):
             raise e
 
     def get_layer_count(self, project, cca_name):
-        """Return the number of CCA layers in a stackup.
+        """Get the number of CCA layers in a stackup.
 
         Parameters
         ----------
         project : str, required
-            Sherlock project name.
+            Name of the Sherlock project.
         cca_name : str, required
-            The CCA name.
+            Name of the CCA.
 
         Example
         -------
@@ -804,14 +821,14 @@ class Stackup(GrpcStub):
             raise e
 
     def get_stackup_props(self, project, cca_name):
-        """Return the stackup properties from a CCA.
+        """Get the stackup properties from a CCA.
 
         Parameters
         ----------
         project : str, required
-            Sherlock project name.
+            Name of the Sherlock project.
         cca_name : str, required
-            The CCA name.
+            Name of the CCA.
 
         Example
         -------

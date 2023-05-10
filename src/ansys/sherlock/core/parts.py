@@ -36,7 +36,7 @@ class Parts(GrpcStub):
         self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
 
     def _add_matching_duplication(self, request, matching, duplication):
-        """Add matching and duplication arguments to the request."""
+        """Add matching and duplication properties to the request."""
         if matching == "Both":
             request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Both
         elif matching == "Part":
@@ -169,7 +169,7 @@ class Parts(GrpcStub):
         matching : str
             Matching mode for updates. Options are ``"Both"`` and ``"Part"``.
         duplication : str
-            How to handle duplications during the update.
+            How to handle duplication during the update.
             Options are ``"First"``, ``"Error"``, and ``"Ignore"``.
 
         Examples
@@ -246,9 +246,24 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        part_loc : (str, str, str, str, str, str, str) list, required
-            (refDes, x, y, rotation, location_units, board_side, mirrored)
-            Definitions of part locations.
+        part_loc : list
+            List defining the part locations. The list consists
+            of these properties:
+
+            - refDes : str
+                Reference designator of the part.
+            - x : str
+                Value for the x coordinate.
+            - y : str
+                Value for the y coordinate.
+            - rotation: str
+                Rotation.
+            - location_units: str
+                Locations units.
+            - board_side : str
+                Board side.
+            - mirrored : str
+                Mirrored.
 
         Examples
         --------
@@ -329,8 +344,10 @@ class Parts(GrpcStub):
         file_path : str
             Full path to the file with the components and location properties.
         numeric_format : str, optional
-            Numeric format for the file. The default is ``""``, in which case
-            "English (United States)" is used.
+            Numeric format for the file, which indicates whether commas or points
+            are used as decimal markers. The default is ``""``, in which case
+            ``"English (United States)"`` is the numeric format. This
+            indicates that points are used as decimal markers.
 
         Examples
         --------
@@ -357,11 +374,11 @@ class Parts(GrpcStub):
             if cca_name == "":
                 raise SherlockUpdatePartsLocationsByFileError(message="CCA name is invalid.")
             if file_path == "":
-                raise SherlockUpdatePartsLocationsByFileError(message="File path is required.")
+                raise SherlockUpdatePartsLocationsByFileError(message="Filepath is required.")
             if len(file_path) <= 1 or file_path[1] != ":":
                 file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdatePartsLocationsByFileError("File path is invalid.")
+                raise SherlockUpdatePartsLocationsByFileError("Filepath is invalid.")
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -407,9 +424,9 @@ class Parts(GrpcStub):
             Name of the CCA.
         import_file : str
             Full path to the CSV file with the parts list.
-        import_as_user_src : bool, required
+        import_as_user_src : bool
             Whether to set the data source of the properties to ``"User"``.
-            Otherwise, the data source is set to the name of the imported CSV file.
+            Otherwise, the data source is set to the name of the CSV file.
 
         Examples
         --------
@@ -437,11 +454,11 @@ class Parts(GrpcStub):
             if cca_name == "":
                 raise SherlockImportPartsListError(message="CCA name is invalid.")
             if import_file == "":
-                raise SherlockImportPartsListError(message="Import file path is required.")
+                raise SherlockImportPartsListError(message="Import filepath is required.")
             if len(import_file) <= 1 or import_file[1] != ":":
                 import_file = f"{os.getcwd()}\\{import_file}"
             if not os.path.exists(import_file):
-                raise SherlockImportPartsListError("File path is invalid.")
+                raise SherlockImportPartsListError("Filepath is invalid.")
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -479,7 +496,7 @@ class Parts(GrpcStub):
         cca_name : str
             Name of the CCA.
         export_file : str
-            Full path to the CSV file to export the parts list to.
+            Full path for the CSV file to export the parts list to.
 
         Examples
         --------
@@ -506,7 +523,7 @@ class Parts(GrpcStub):
             if cca_name == "":
                 raise SherlockExportPartsListError(message="CCA name is invalid.")
             if export_file == "":
-                raise SherlockExportPartsListError(message="Export file path is required.")
+                raise SherlockExportPartsListError(message="Export filepath is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path
@@ -539,7 +556,7 @@ class Parts(GrpcStub):
             raise e
 
     def enable_lead_modeling(self, project, cca_name):
-        """Enable lead modeling for all non-leadless parts leads.
+        """Enable lead modeling for leaded parts.
 
         Parameters
         ----------

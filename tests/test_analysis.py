@@ -203,7 +203,7 @@ def helper_test_run_strain_map_analysis(analysis):
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e)
-            == "Run strain map analysis error: Number of arguments (1) is wrong for strain map "
+            == "Run strain map analysis error: Number of elements (1) is wrong for strain map "
             "analysis 0."
         )
 
@@ -305,7 +305,7 @@ def helper_test_run_strain_map_analysis(analysis):
         assert False
     except SherlockRunStrainMapAnalysisError as e:
         assert (
-            str(e) == "Run strain map analysis error: Number of arguments (3) is wrong for event "
+            str(e) == "Run strain map analysis error: Number of elements (3) is wrong for event "
             "strain map 1 for strain map analysis 0."
         )
 
@@ -558,7 +558,7 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
         except SherlockUpdateRandomVibePropsError as e:
             assert (
-                str(e) == "Update random vibe properties error: Maxiumum "
+                str(e) == "Update random vibe properties error: Maximum "
                 "natural frequency units are invalid: foo"
             )
 

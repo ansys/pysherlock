@@ -34,12 +34,12 @@ class Layer(GrpcStub):
 
         Parameters
         ----------
-        project : str, required
-            Name of the sherlock project.
-        cca_name : str, required
-            CCA name.
-        file_path : str, required
-            Filepath of the CSV file with the mount point properties.
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        file_path : str
+            Path for the CSV file with the mount point properties.
 
         Examples
         --------
@@ -72,11 +72,11 @@ class Layer(GrpcStub):
 
         try:
             if file_path == "":
-                raise SherlockUpdateMountPointsByFileError(message="File path is required.")
+                raise SherlockUpdateMountPointsByFileError(message="Filepath is required.")
             if len(file_path) <= 1 or file_path[1] != ":":
                 file_path = f"{os.getcwd()}\\{file_path}"
             if not os.path.exists(file_path):
-                raise SherlockUpdateMountPointsByFileError("File path is invalid.")
+                raise SherlockUpdateMountPointsByFileError("Filepath is invalid.")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
