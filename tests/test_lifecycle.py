@@ -1737,48 +1737,6 @@ def helper_test_add_shock_profiles(lifecycle):
         )
 
 
-    try:
-        lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Project name is invalid."
-
-    try:
-        lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Phase name is invalid."
-
-    try:
-        lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Duration must be greater than 0."
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.create_life_phase(
-                "Test", "Example", 0, "invalid", 1, "PER SEC", description="Test1"
-            )
-            assert False
-        except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Duration unit is invalid."
-
-        try:
-            lifecycle.create_life_phase(
-                "Test", "Example", 5, "sec", 0, "invalid", description="Test1"
-            )
-            assert False
-        except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Cycle type is invalid."
-
-    try:
-        lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
-        assert False
-    except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Number of cycles must be greater than 0."
-
-
 def helper_test_add_random_vibe_event(lifecycle):
     """Test add_random_vibe_event API"""
 
