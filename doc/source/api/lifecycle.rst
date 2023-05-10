@@ -22,3 +22,5 @@ The ``lifecycle`` module contains all lifecycle management capabilities.
      ansys.sherlock.core.lifecycle.Lifecycle.create_life_phase
      ansys.sherlock.core.lifecycle.Lifecycle.load_harmonic_profile
      ansys.sherlock.core.lifecycle.Lifecycle.load_random_vibe_profile
+     ansys.sherlock.core.lifecycle.Lifecycle.load_thermal_profile
+     ansys.sherlock.core.lifecycle.Lifecycle.load_shock_profile_pulses
