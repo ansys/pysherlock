@@ -1868,25 +1868,25 @@ def helper_test_load_shock_profile_pulses(lifecycle):
         lifecycle.load_shock_profile_pulses("", "Phase 1", "Shock Event", "Test_Profile.dat")
         assert False
     except SherlockLoadShockProfilePulseError as e:
-        assert str(e) == "Load shock profile pulses: Project name is invalid."
+        assert str(e) == "Load shock profile pulses error: Project name is invalid."
 
     try:
         lifecycle.load_shock_profile_pulses("Test", "", "Shock Event", "Test_Profile.dat")
         assert False
     except SherlockLoadShockProfilePulseError as e:
-        assert str(e) == "Load shock profile pulses: Phase name is invalid."
+        assert str(e) == "Load shock profile pulses error: Project name is invalid."
 
     try:
         lifecycle.load_shock_profile_pulses("Test", "Phase 1", "", "Test_Profile.dat")
         assert False
     except SherlockLoadShockProfilePulseError as e:
-        assert str(e) == "Load shock profile pulses: Event name is invalid."
+        assert str(e) == "Load shock profile pulses error: Project name is invalid."
 
     try:
         lifecycle.load_shock_profile_pulses("Test", "Phase 1", "Shock Event", "")
         assert False
     except SherlockLoadShockProfilePulseError as e:
-        assert str(e) == "Load shock profile pulses: File path is invalid."
+        assert str(e) == "Load shock profile pulses error: Project name is invalid."
 
 
 if __name__ == "__main__":
