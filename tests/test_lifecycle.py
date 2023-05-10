@@ -1865,25 +1865,25 @@ def helper_test_load_harmonic_profile(lifcycle):
 def helper_test_load_shock_profile_pulses(lifecycle):
     """Test load_shock_profile_pulses API"""
     try:
-        lifecycle.load_harmonic_profile("", "Phase 1", "Shock Event", "Test_Profile.dat")
+        lifecycle.load_shock_profile_pulses("", "Phase 1", "Shock Event", "Test_Profile.dat")
         assert False
     except SherlockLoadShockProfilePulseError as e:
         assert str(e) == "Load shock profile pulses: Project name is invalid."
 
     try:
-        lifecycle.load_harmonic_profile("Test", "", "Shock Event", "Test_Profile.dat")
+        lifecycle.load_shock_profile_pulses("Test", "", "Shock Event", "Test_Profile.dat")
         assert False
     except SherlockLoadShockProfilePulseError as e:
         assert str(e) == "Load shock profile pulses: Phase name is invalid."
 
     try:
-        lifecycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
+        lifecycle.load_shock_profile_pulses("Test", "Phase 1", "", "Test_Profile.dat")
         assert False
     except SherlockLoadShockProfilePulseError as e:
         assert str(e) == "Load shock profile pulses: Event name is invalid."
 
     try:
-        lifecycle.load_harmonic_profile("Test", "Phase 1", "Shock Event", "")
+        lifecycle.load_shock_profile_pulses("Test", "Phase 1", "Shock Event", "")
         assert False
     except SherlockLoadShockProfilePulseError as e:
         assert str(e) == "Load shock profile pulses: File path is invalid."
