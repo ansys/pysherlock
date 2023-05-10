@@ -44,7 +44,6 @@ def test_all():
 
 def helper_test_create_life_phase(lifecycle):
     """Test create_life_phase API"""
-
     try:
         lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
         assert False
