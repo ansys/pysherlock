@@ -775,6 +775,18 @@ class SherlockInvalidGlassConstructionError(Exception):
         return self.message
 
 
+class SherlockLoadShockProfilePulsesError(Exception):
+    """Raised when loading shock profile pulses results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Load shock profile pulses error: {self.message}"
+
+
 class SherlockInvalidPhaseError(Exception):
     """Contains the error raised when the phase is invalid."""
 

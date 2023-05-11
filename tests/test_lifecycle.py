@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadThermalProfileError,
+    SherlockLoadShockProfilePulsesError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
