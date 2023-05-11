@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadThermalProfileError,
+    SherlockLoadShockProfilePulsesError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -1888,25 +1889,53 @@ def helper_test_load_harmonic_profile(lifcycle):
         lifcycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Project name is invalid."
+        assert str(e) == "Load Harmonic profile error: Project name is invalid."
 
     try:
         lifcycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Phase name is invalid."
+        assert str(e) == "Load Harmonic profile error: Phase name is invalid."
 
     try:
         lifcycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Event name is invalid."
+        assert str(e) == "Load Harmonic profile error: Event name is invalid."
 
     try:
         lifcycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: File name is invalid."
+        assert str(e) == "Load Harmonic profile error: File name is invalid."
+
+
+def helper_test_load_shock_profile_pulses(lifecycle):
+    """Test load_shock_profile_pulses API"""
+
+    try:
+        lifecycle.load_shock_profile_pulses("", "Phase 1", "Shock Event", "Test_Profile.dat")
+        assert False
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Project name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses("Test", "", "Shock Event", "Test_Profile.dat")
+        assert False
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Phase name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses("Test", "Phase 1", "", "Test_Profile.dat")
+        assert False
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Event name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses("Test", "Phase 1", "Shock Event", "")
+        assert False
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Event name is invalid."
 
 
 if __name__ == "__main__":
