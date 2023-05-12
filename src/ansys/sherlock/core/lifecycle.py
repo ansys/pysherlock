@@ -1813,7 +1813,6 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
-
     def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
         """Load shock profile dataset from a .csv or .dat file.
 
@@ -1926,4 +1925,3 @@ class Lifecycle(GrpcStub):
         except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
             raise e
-
