@@ -1813,7 +1813,6 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
-
     def load_harmonic_profile(self, project, phase_name, event_name, file_path):
         """Load a harmonic profile from a DAT or CSV file to a life cycle phase.
 
@@ -1990,4 +1989,3 @@ class Lifecycle(GrpcStub):
         except SherlockLoadThermalProfileError as e:
             LOG.error(str(e))
             raise e
-
