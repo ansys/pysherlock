@@ -512,7 +512,7 @@ class SherlockEnableLeadModelingError(Exception):
 
 
 class SherlockGetPartLocationError(Exception):
-    """Raised when getting part location results in an error."""
+    """Contains the error raised when getting part location results in an error."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -656,7 +656,7 @@ class SherlockInvalidOrientationError(Exception):
 
 
 class SherlockInvalidRandomVibeProfileEntriesError(Exception):
-    """Contains the error raised when an random vibe profile is invalid."""
+    """Contains the error raised when a random vibe profile is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -680,7 +680,7 @@ class SherlockInvalidThermalProfileEntriesError(Exception):
 
 
 class SherlockInvalidHarmonicProfileEntriesError(Exception):
-    """Contains the error raised when an harmonic profile entry is invalid."""
+    """Contains the error raised when a harmonic profile entry is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -704,7 +704,7 @@ class SherlockInvalidShockProfileEntriesError(Exception):
 
 
 class SherlockInvalidLayerIDError(Exception):
-    """Contains the error raised when an layer ID is invalid."""
+    """Contains the error raised when a layer ID is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -716,7 +716,7 @@ class SherlockInvalidLayerIDError(Exception):
 
 
 class SherlockInvalidMaterialError(Exception):
-    """Contains the error raised when a manufacturer/grade/material are invalid."""
+    """Contains the error raised when a manufacturer/grade/material combination is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -740,7 +740,7 @@ class SherlockInvalidConductorPercentError(Exception):
 
 
 class SherlockInvalidThicknessArgumentError(Exception):
-    """Contains the error raised when thickness arguments are invalid."""
+    """Contains the error raised when the thickness is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -752,7 +752,7 @@ class SherlockInvalidThicknessArgumentError(Exception):
 
 
 class SherlockInvalidGlassConstructionError(Exception):
-    """Contains the argument raised when glass construction arguments are invalid."""
+    """Contains the error raised when the glass construction is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -764,7 +764,7 @@ class SherlockInvalidGlassConstructionError(Exception):
 
 
 class SherlockInvalidPhaseError(Exception):
-    """Contains the error raised when phase arguments are invalid."""
+    """Contains the error raised when the phase is invalid."""
 
     def __init__(self, message):
         """Initialize error message."""

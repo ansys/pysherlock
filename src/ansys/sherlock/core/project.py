@@ -32,7 +32,7 @@ class Project(GrpcStub):
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
     def delete_project(self, project):
-        """Delete a project from Sherlock.
+        """Delete a Sherlock project.
 
         Parameters
         ----------
@@ -80,7 +80,7 @@ class Project(GrpcStub):
         project=None,
         cca_name=None,
     ):
-        """Import an ODB++ archive.
+        """Import an ODB++ archive file.
 
         Parameters
         ----------
@@ -96,10 +96,10 @@ class Project(GrpcStub):
             Whether to guess part properties.
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which
-            case the filename is used for the project name.
+            case the name of the ODB++ archive file is used for the project name.
         cca_name : str, optional
-            Name of the CCA name. The default is ``None``, in which case
-            the filename is used for the CCA name.
+            Name of the CCA name. The default is ``None``, in which case the
+            name of the ODB++ archive file is used for the CCA name.
 
         Examples
         --------
@@ -112,11 +112,11 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportODBError(message="Archive file path is required.")
+                raise SherlockImportODBError(message="Archive filepath is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportODBError("File path is invalid.")
+                raise SherlockImportODBError("Filepath is invalid.")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
@@ -155,22 +155,22 @@ class Project(GrpcStub):
     def import_ipc2581_archive(
         self, archive_file, include_other_layers, guess_part_properties, project=None, cca_name=None
     ):
-        """Import an IPC2581 archive.
+        """Import an IPC-2581 archive file.
 
         Parameters
         ----------
         archive_file : str
-            Full path to the ODB++ archive file.
+            Full path to the IPC-2581 archive file.
         include_other_layers : bool
             Whether to include other layers.
         guess_part_properties: bool
             Whether to guess part properties
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which case
-            the filename is used for the project name.
+            the name of the IPC-2581 archive file is used for the project name.
         cca_name : str, optional
-            Name of the CCA. The default is ``None``, in which case the filename
-            is be used for the CCA name.
+            Name of the CCA. The default is ``None``, in which case the name of
+            the IPC-2581 archive file is used for the CCA name.
 
         Examples
         --------
@@ -182,11 +182,11 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportIpc2581Error(message="Archive file path is required.")
+                raise SherlockImportIpc2581Error(message="Archive filepath is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportIpc2581Error("File path is invalid.")
+                raise SherlockImportIpc2581Error("Filepath is invalid.")
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
@@ -232,7 +232,7 @@ class Project(GrpcStub):
         company : str
             Name of the author's company.
         export_file: str
-            Full path to where the report is to be written.
+            Full path to where to export the report to.
 
         Examples
         --------
@@ -257,7 +257,7 @@ class Project(GrpcStub):
             if company == "":
                 raise SherlockGenerateProjectReportError(message="Company name is invalid.")
             if export_file == "":
-                raise SherlockGenerateProjectReportError(message="Export file path is required.")
+                raise SherlockGenerateProjectReportError(message="Export filepath is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path
@@ -295,12 +295,12 @@ class Project(GrpcStub):
             raise e
 
     def list_ccas(self, project, cca_names=None):
-        """Get a list of CCAs and subassembly CCAs assigned to each CCA or requested CCAs.
+        """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
 
         Parameters
         ----------
         project: str
-            Name of the Sherlock project to provide strain maps for.
+            Name of the Sherlock project.
         cca_name : List of str, optional
             List of CCA names. The default is ``None``, in which case all CCAs
             in the project are returned.
@@ -346,29 +346,30 @@ class Project(GrpcStub):
         return response.ccas
 
     def add_strain_maps(self, project, strain_maps):
-        """Add CSV files with strain maps to the CCAs.
+        """Add a CSV file with strain maps to the CCAs.
 
         Parameters
         ----------
         project: str
             Name of the Sherlock project to add strain maps to.
-        strain_maps : List of (strain_map_file, file_comment, header_row_count, \
-            reference_id_column, strain_column, strain_units, ccas) required
-            strain_map_file : str
-                Full path to the strain map file to add to the project.
-            file_comment : str
-                File comment to associate with the strain map file.
-            header_row_count : int
+        strain_maps : list
+            List of strain maps consisting of these properties:
+
+            - strain_map_file : str
+                Full path to the CSV file with the strain maps.
+            - file_comment : str
+                Comment to associate with the file.
+            - header_row_count : int
                 Number of rows before the file's column header.
-            reference_id_column : str
-                Name of the column in the file with the reference IDs.
-            strain_column : str
-                Name of the column in the file with the strain values.
-            strain_units : str
-                Strain units: Options are ``µε`` and ``ε``.
-            ccas : List of (cca_name), optional
-                List of CCA names to assign the strain map file to. When no list is
-                specified, the strain  map is assigned to all CCAs in the project.
+            - reference_id_column : str
+                Name of the column in the file with reference IDs.
+            - strain_column : str
+                Name of the column in the file with strain values.
+            - strain_units : str
+                Strain units. Options are ``µε`` and ``ε``.
+            - ccas : list, optional
+                List of CCA names to assign the file to. When no list is
+                specified, the file is assigned to all CCAs in the project.
 
         Examples
         --------
@@ -395,10 +396,10 @@ class Project(GrpcStub):
             for i, strain_map in enumerate(strain_maps):
                 if len(strain_map) < 6 or len(strain_map) > 7:
                     raise SherlockAddStrainMapsError(
-                        f"Number of arguments ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
+                        f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
                     )
                 elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(f"File path is required for strain map {i}.")
+                    raise SherlockAddStrainMapsError(f"Filepath is required for strain map {i}.")
                 elif not isinstance(strain_map[2], int) or strain_map[2] == "":
                     raise SherlockAddStrainMapsError(
                         f"Header row count is required for strain map {i}."
@@ -478,7 +479,7 @@ class Project(GrpcStub):
             raise e
 
     def list_strain_maps(self, project, cca_names=None):
-        """Get the strain maps assigned to each CCA or the requested CCAs.
+        """List the strain maps assigned to each CCA or given CCAs.
 
         Parameters
         ----------

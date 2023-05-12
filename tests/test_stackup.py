@@ -814,7 +814,7 @@ def helper_test_update_laminate_layer(stackup):
         assert False
     except SherlockUpdateLaminateLayerError as e:
         assert (
-            str(e) == "Update laminate layer error: Invalid layer 0: Number of arguments "
+            str(e) == "Update laminate layer error: Invalid layer 0: Number of elements "
             "is wrong."
         )
 

@@ -142,28 +142,37 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        analyses : (str, phases) list
-            List of analysis types to run. Options are:
+        analyses : list of ``elements``
 
-            - ``"UNKNOWN"``
-            - ``"NATURALFREQ"``
-            - ``"HARMONICVIBE"``
-            - ``"ICTANALYSIS"``
-            - ``"MECHANICALSHOCK"``
-            - ``"RANDOMVIBE"``
-            - ``"COMPONENTFAILUREMODE"``
-            - ``"DFMEAMODULE"``
-            - ``"PTHFATIGUE"``
-            - ``"PARTVALIDATION"``
-            - ``"SEMICONDUCTORWEAROUT"``
-            - ``"SOLDERJOINTFATIGUE"``
-            - ``"THERMALDERATING"``
-            - ``"THERMALMECH"``
+            - elements: list
+                List of tuples (``type``, ``event``)
 
-        phases : (str, events) list
-            List of phase names.
-        events : (str) list
-            List of event names
+                - type : str
+                    Type of analysis to run. Options are:
+
+                    - ``"COMPONENTFAILUREMODE"``
+                    - ``"DFMEAMODULE"``
+                    - ``"HARMONICVIBE"``
+                    - ``"ICTANALYSIS"``
+                    - ``"MECHANICALSHOCK"``
+                    - ``"NATURALFREQ"``
+                    - ``"PARTVALIDATION"``
+                    - ``"PTHFATIGUE"``
+                    - ``"RANDOMVIBE"``
+                    - ``"SEMICONDUCTORWEAROUT"``
+                    - ``"SOLDERJOINTFATIGUE"``
+                    - ``"THERMALDERATING"``
+                    - ``"THERMALMECH"``
+                    - ``"UNKNOWN"``
+
+                - event : list
+                    List of tuples (``phase_name``, ``event_name``)
+
+                    - phase_name : str
+                        Name of the life cycle phase.
+                    - event_name : str
+                        Name of the life cycle event.
+
 
         Examples
         --------
@@ -229,11 +238,12 @@ class Analysis(GrpcStub):
         Parameters
         ----------
         model_source : str, optional
-            Model source to get random vibe property fields from. The default is
+            Model source to get the random vibe property fields from. The default is
             ``None``, in which case the ``"GENERATED"`` input form is used. Options
             are ``"GENERATED"`` and ``"STRAIN_MAP"``.
 
         Returns
+        -------
         list
             List of random vibe property fields based on the user configuration.
 
@@ -310,38 +320,46 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the CCA.
         random_vibe_damping: str, optional
-            One or more modal damping ratios. Separate multiple float values with commas.
+            One or more modal damping ratios. The default is ``None``.
+            Separate multiple float values with commas.
         natural_freq_min: double, optional
-            Minimum frequency. This parameter is for NX Nastran analysis only.
+            Minimum frequency. The default is ``None``.
+            This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
-            Minimum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
+            Minimum frequency units. The default is ``None``.
+            Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
         natural_freq_max: double, optional
-            Maximum frequency. This parameter is for NX Nastran analysis only.
+            Maximum frequency. The default is ``None``.
+            This parameter is for NX Nastran analysis only.
         natural_freq_max_units: str, optional
-            Maximum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
+            Maximum frequency units. The default is ``None``.
+            Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
         analysis_temp: double, optional
-            Temperature.
+            Temperature. The default is ``None``.
         analysis_temp_units: str, optional
-            Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.
+            Temperature units. The default is ``None``.
+            Options are ``"C"``, ``"F"``, and ``"K"``.
         part_validation_enabled: bool, optional
-            Whether to enable part validation.
+            Whether to enable part validation. The default is ``None``.
         force_model_rebuild: str, optional
-            How to handle rebuilding of the model. Options are ``"FORCE"`` and ``"AUTO"``.
+            How to handle rebuilding of the model. The default is ``None``.
+            Options are ``"FORCE"`` and ``"AUTO"``.
         reuse_modal_analysis: bool, optional
-            Whether to reuse the natural frequency for modal analysis. This parameter is
-            for NX Nastran analysis only.
+            Whether to reuse the natural frequency for modal analysis. The
+            default is ``None``. This parameter is for NX Nastran analysis only.
         perform_nf_freq_range_check: bool, optional
-            Whether to perform a frequency range check. This parameter is for NX Nastran
-            analysis only.
+            Whether to perform a frequency range check. The default is ``None``.
+            This parameter is for NX Nastran analysis only.
         require_material_assignment_enabled: bool, optional
-            Whether to require material assignment.
-        model_source: str for strain map analysis
-            Model source. Options are ``"GENERATED"`` and ``"STRAIN_MAP"``.
-        strain_map_natural_freqs, str
-            Comma-separated list of natural frequencies. This parameter is
-            required for strain map analysis.
+            Whether to require material assignment. The default is ``None``.
+        model_source: str
+            Model source. The default is ``None``. Options are ``"GENERATED"``
+            and ``"STRAIN_MAP"``. This parameter is required for strain map analysis.
+        strain_map_natural_freqs : list, optional
+            List of natural frequencies. The default is ``None``.
+            This parameter is required for strain map analysis.
 
         Examples
         --------
@@ -633,30 +651,33 @@ class Analysis(GrpcStub):
         cca_name,
         strain_map_analyses,
     ):
-        """Run one or more Sherlock strain map analyses.
+        """Run one or more strain map analyses.
 
         Parameters
         ----------
         project : str
             Name of the Sherlock project.
         cca_name : str
-            Name of main CCA for the analysis.
-        analyses : list of (analysis_type, event_strain_maps)
-            analysis_type : str
-                Type of the analysis to perform. Option is ``"RANDOMVIBE"``.
-            event_strain_maps : list of (phase_name, event_name, pcb_side, strain_map, \
-            sub_assembly_name)
-                Strain maps assigned to the desired life cycle events for a given PCB side.
-            phase_name : str
-                Life cycle phase name for the strain map assignment.
-            event_name : str
-                Life cycle event name for the strain map assignment.
-            pcb_side : str
-                PCB side for the strain map. Options are``"TOP"`` and ``"BOTTOM"``.
-            strain_map : str
-                Name of the strain map assigned to the life cycle event.
-            sub_assembly_name : str, optional
-                Name of the subassembly CCA to assign the strain map.
+            Name of the main CCA for the analysis.
+        strain_map_analyses : list
+            List of analyses consisting of these properties:
+
+            - analysis_type : str
+                Type of analysis to run. The only option is ``"RANDOMVIBE"``.
+            - event_strain_maps : list
+                List of the strain maps assigned to the desired life cycle events for
+                a given PCB side. The list consists of these properties:
+
+              - phase_name : str
+                  Life cycle phase name for the strain map assignment.
+              - event_name : str
+                  Life cycle event name for the strain map assignment.
+              - pcb_side : str
+                  PCB side for the strain map. Options are ``"TOP"`` and ``"BOTTOM"``.
+              - strain_map : str
+                  Name of the strain map assigned to the life cycle event.
+              - sub_assembly_name : str, optional
+                  Name of the subassembly CCA to assign the strain map to.
 
         Examples
         --------
@@ -699,7 +720,7 @@ class Analysis(GrpcStub):
 
                 if len(analysis) != 2:
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Number of arguments ({str(len(analysis))}) is wrong for "
+                        f"Number of elements ({str(len(analysis))}) is wrong for "
                         f"strain map analysis {i}."
                     )
 
@@ -732,7 +753,7 @@ class Analysis(GrpcStub):
                         )
                     elif len(event_strain_map) < 4:
                         raise SherlockRunStrainMapAnalysisError(
-                            f"Number of arguments ({str(len(event_strain_map))}) is wrong for "
+                            f"Number of elements ({str(len(event_strain_map))}) is wrong for "
                             f"event strain map {j} for strain map analysis {i}."
                         )
                     elif event_strain_map[0] == "":

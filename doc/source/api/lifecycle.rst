@@ -4,7 +4,7 @@
 Lifecycle
 =========
 
-The ``lifecycle`` module contains all lifecycle management capabilities.
+The ``lifecycle`` module contains all life cycle management capabilities.
 
 .. currentmodule:: ansys.sherlock.core.lifecycle
 
