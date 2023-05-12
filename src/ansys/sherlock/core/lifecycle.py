@@ -1963,7 +1963,7 @@ class Lifecycle(GrpcStub):
                 LOG.error("Not connected to a gRPC service.")
                 return
 
-            request = SherlockLifeCycleService_pb2.LoadShockProfilePulsesRequest(
+            request = SherlockLifeCycleService_pb2.LoadShockProfileDatasetRequest(
                 project=project,
                 phaseName=phase_name,
                 eventName=event_name,
