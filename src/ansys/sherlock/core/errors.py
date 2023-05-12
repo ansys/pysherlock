@@ -596,7 +596,7 @@ class SherlockUpdateRandomVibePropsError(Exception):
 
 
 class SherlockLoadShockProfileDatasetError(Exception):
-    """Raised when loading shock profile dataset results in an error."""
+    """Contains the error raised when loading shock profile dataset results in an error."""
 
     def __init__(self, message):
         """Initialize error message."""
