@@ -371,16 +371,16 @@ class SherlockLoadHarmonicProfileError(Exception):
         return f"Load Harmonic profile error: {self.message}"
 
 
-class SherlockLoadRandomVibeProfileError(Exception):
-    """Raised when loading random vibe properties results in an error."""
+class SherlockLoadHarmonicProfileError(Exception):
+    """Raised when loading a harmonic profile results in an error."""
 
     def __init__(self, message):
-        """Initialize Error Message."""
+        """Initialize error message."""
         self.message = message
 
     def __str__(self):
         """Format Error Message."""
-        return f"Get load random vibe profile error: {self.message}"
+        return f"Load Harmonic profile error: {self.message}"
 
 
 class SherlockUpdateMountPointsByFileError(Exception):
@@ -593,6 +593,18 @@ class SherlockUpdateRandomVibePropsError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Update random vibe properties error: {self.message}"
+
+
+class SherlockLoadShockProfileDatasetError(Exception):
+    """Contains the error raised when loading shock profile dataset results in an error."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Initialize error message."""
+        return f"Load shock profile dataset error: {self.message}"
 
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
