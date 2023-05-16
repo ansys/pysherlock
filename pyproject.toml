@@ -48,9 +48,9 @@ doc = [
 
 [project.urls]
 Documentation = "https://sherlock.docs.pyansys.com"
-Homepage = "https://github.com/pyansys/pysherlock"
-Source = "https://github.com/pyansys/pysherlock"
-Tracker = "https://github.com/pyansys/pysherlock/issues"
+Homepage = "https://github.com/ansys/pysherlock"
+Source = "https://github.com/ansys/pysherlock"
+Tracker = "https://github.com/ansys/pysherlock/issues"
 
 [tool.flit.module]
 name = "ansys.sherlock.core"

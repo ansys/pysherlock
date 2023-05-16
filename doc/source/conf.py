@@ -33,7 +33,7 @@ html_favicon = ansys_favicon
 
 # specify the location of your github repo
 html_context = {
-    "github_user": "pyansys",
+    "github_user": "ansys",
     "github_repo": "pysherlock",
     "github_version": "main",
     "doc_path": "doc/source",
@@ -44,7 +44,7 @@ html_theme_options = {
         "version_match": switcher_version,
     },
     "check_switcher": False,
-    "github_url": "https://github.com/pyansys/pysherlock",
+    "github_url": "https://github.com/ansys/pysherlock",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "collapse_navigation": True,
@@ -55,7 +55,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "Support",
-            "url": "https://github.com/pyansys/pysherlock/discussions",
+            "url": "https://github.com/ansys/pysherlock/discussions",
             "icon": "fa fa-comment fa-fw",
         },
     ],
