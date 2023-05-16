@@ -13,7 +13,7 @@ The following contribution information is specific to PySherlock.
 Post issues
 -----------
 
-Use the `PySherlock Issues <https://github.com/pyansys/pysherlock/issues>`_
+Use the `PySherlock Issues <https://github.com/ansys/pysherlock/issues>`_
 page to submit questions, report bugs, and request new features. When possible, you
 should use these issue templates:
 
@@ -94,7 +94,7 @@ To install PySherlock in developer mode, run these commands:
 
 .. code:: bash
 
-   git clone https://github.com/pyansys/python-installer-qt-gui
+   git clone https://github.com/ansys/python-installer-qt-gui
    cd python-installer-qt-gui
    pip install pip -U
    pip install -e .
@@ -117,7 +117,7 @@ guide <https://dev.docs.pyansys.com/>`_. You must follow these steps:
 
    .. code:: bash
 
-      git clone https://github.com/pyansys/pysherlock
+      git clone https://github.com/ansys/pysherlock
 
 #. Create a fresh-clean Python environment and activate it:
 
@@ -167,7 +167,7 @@ Install in offline mode
 
 If you lack an internet connection on your installation machine (or you do not have access to the
 private Ansys PyPI packages repository), you should install PySherlock by downloading the wheelhouse
-archive from the `Releases Page <https://github.com/pyansys/pysherlock/releases>`_ for your
+archive from the `Releases Page <https://github.com/ansys/pysherlock/releases>`_ for your
 corresponding machine architecture.
 
 Each wheelhouse archive contains all the Python wheels necessary to install PySherlock from scratch on Windows,
