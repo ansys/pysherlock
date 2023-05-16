@@ -16,7 +16,6 @@ from ansys.sherlock.core.errors import (
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadThermalProfileError,
-
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 
@@ -1742,6 +1741,7 @@ def helper_test_add_shock_profiles(lifecycle):
 
 def helper_test_load_random_vibe_profile(lifecycle):
     """Test load_random_vibe_profile."""
+
     try:
         lifecycle.load_random_vibe_profile(
             "",
@@ -1752,8 +1752,6 @@ def helper_test_load_random_vibe_profile(lifecycle):
         assert False
     except SherlockLoadRandomVibeProfileError as e:
         assert str(e) == "Load random vibe profile error: Project name is invalid."
-
-
     try:
         lifecycle.load_random_vibe_profile(
             "Test",
