@@ -1,7 +1,7 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 import grpc
-
+from ansys.sherlock.core import launcher
 from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCommonServiceError
 
@@ -11,8 +11,12 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     common = Common(channel)
-
+    helper_test_check_no_connection(common)
+    launcher.launch_sherlock()
+    # Everything after the above line requires a connection to sherlock.
+    helper_test_check_connected(common)
     helper_test_list_units(common)
+    common.exit(close_sherlock_client=True)
 
 
 def helper_test_list_units(common):
@@ -25,7 +29,7 @@ def helper_test_list_units(common):
         common.list_units("NOTHING")
         assert False
     except SherlockCommonServiceError as e:
-        assert str(e) == "Sherlock common service error: Unit type 'NOTHING' is missing."
+        assert str(e) == "Sherlock common service error: Unit type 'NOTHING' is invalid."
 
     units = common.list_units("ACCEL_DENSITY")
     assert len(units) == 5 and "G2/Hz" in units
@@ -83,6 +87,17 @@ def helper_test_list_units(common):
     assert len(units) == 6 and "cc" in units
     units = common.list_units("WEIGHT")
     assert len(units) == 5 and "mg" in units
+
+
+def helper_test_check_no_connection(common):
+    check = common.check()
+    assert not check
+
+
+def helper_test_check_connected(common):
+
+    check = common.check()
+    assert check
 
 
 if __name__ == "__main__":
