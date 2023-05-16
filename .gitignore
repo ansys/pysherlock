@@ -51,3 +51,5 @@ test-output.xml
 /.project
 /.pydevproject
 .idea/
+PySherlock.log.*
+doc/build/

@@ -1792,25 +1792,25 @@ def helper_test_load_harmonic_profile(lifcycle):
         lifcycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Project name is invalid."
+        assert str(e) == "Load Harmonic profile error: Project name is invalid."
 
     try:
         lifcycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Phase name is invalid."
+        assert str(e) == "Load Harmonic profile error: Phase name is invalid."
 
     try:
         lifcycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: Event name is invalid."
+        assert str(e) == "Load Harmonic profile error: Event name is invalid."
 
     try:
         lifcycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
         assert False
     except SherlockLoadHarmonicProfileError as e:
-        assert "Load Harmonic profile error: File name is invalid."
+        assert str(e) == "Load Harmonic profile error: File name is invalid."
 
 
 def helper_test_load_thermal_profile(lifecycle):
