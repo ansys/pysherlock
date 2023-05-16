@@ -14,12 +14,12 @@ PySherlock
    :target: https://pypi.org/project/ansys-sherlock-core
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-sherlock-core/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/pysherlock
+.. |codecov| image:: https://codecov.io/gh/ansys/ansys-sherlock-core/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/pysherlock
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/pysherlock/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/pyansys/pysherlock/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/pysherlock/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/pysherlock/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -66,7 +66,7 @@ Documentation and issues
 For comprehensive information on PySherlock, see the latest release
 `documentation <https://sherlock.docs.pyansys.com/>`_.
 
-On the `PySherlock Issues <https://github.com/pyansys/pysherlock/issues>`_ page,
+On the `PySherlock Issues <https://github.com/ansys/pysherlock/issues>`_ page,
 you can create issues to submit questions, report bugs, and request new features.
 This is the best place to post questions and code.
 
