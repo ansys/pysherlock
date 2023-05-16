@@ -1998,7 +1998,7 @@ class Lifecycle(GrpcStub):
         event_name : str
             Name of the random vibe event.
         file_path : str
-            File path for thermal profile .dat or .csv file
+            Path for thermal profile .dat or .csv file
 
         Example
         -------
