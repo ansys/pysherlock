@@ -106,7 +106,7 @@ class SherlockListLaminateLayersError(Exception):
 
 
 class SherlockGetStackupPropsError(Exception):
-    """Raised when getting stackup properties results in an error."""
+    """Contains the error raised when getting stackup properties."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -118,7 +118,7 @@ class SherlockGetStackupPropsError(Exception):
 
 
 class SherlockGetLayerCountError(Exception):
-    """Raised when getting layer count results in an error."""
+    """Contains the error raised when getting layer count."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -130,7 +130,7 @@ class SherlockGetLayerCountError(Exception):
 
 
 class SherlockGetLayerCountError(Exception):
-    """Raised when getting layer count results in an error."""
+    """Contains the error raised when getting layer count."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -142,7 +142,7 @@ class SherlockGetLayerCountError(Exception):
 
 
 class SherlockGetTotalConductorThicknessError(Exception):
-    """Raised when getting total conductor thickness results in an error."""
+    """Contains the error raised when getting total conductor thickness."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -171,7 +171,7 @@ class SherlockAddStrainMapsError(Exception):
 
 
 class SherlockListStrainMapsError(Exception):
-    """Provides the error raised when strain maps for a project cannot be listed."""
+    """Contains the error raised when strain maps for a project cannot be listed."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -348,7 +348,7 @@ class SherlockAddShockProfilesError(Exception):
 
 
 class SherlockLoadRandomVibeProfileError(Exception):
-    """Raised when loading random vibe properties results in an error."""
+    """Contains the error raised when loading random vibe properties."""
 
     def __init__(self, message):
         """Initialize Error Message."""
@@ -360,7 +360,7 @@ class SherlockLoadRandomVibeProfileError(Exception):
 
 
 class SherlockLoadHarmonicProfileError(Exception):
-    """Raised when loading a harmonic profile results in an error."""
+    """Contains the error raised when loading a harmonic profile."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -372,7 +372,7 @@ class SherlockLoadHarmonicProfileError(Exception):
 
 
 class SherlockLoadHarmonicProfileError(Exception):
-    """Raised when loading a harmonic profile results in an error."""
+    """Contains the error raised when loading a harmonic profile."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -536,7 +536,7 @@ class SherlockGetPartLocationError(Exception):
 
 
 class SherlockLoadThermalProfileError(Exception):
-    """Raised when loading thermal profile results in an error."""
+    """Contains the error raised when loading thermal profile."""
 
     def __init__(self, message):
         """Initialize error message."""
@@ -776,7 +776,7 @@ class SherlockInvalidGlassConstructionError(Exception):
 
 
 class SherlockLoadShockProfilePulsesError(Exception):
-    """Raised when loading shock profile pulses results in an error."""
+    """Contains the error raised when loading shock profile pulses."""
 
     def __init__(self, message):
         """Initialize error message."""
