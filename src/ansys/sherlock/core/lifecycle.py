@@ -26,10 +26,10 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
-    SherlockLoadRandomVibeProfileError,
-    SherlockLoadThermalProfileError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
+    SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -1813,60 +1813,6 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
-        """Load shock profile dataset from a .csv or .dat file.
-
-        Parameters
-        ----------
-        project : str
-            Name of the Sherlock project
-        phase_name : str
-            Name of the lifecycle phase to add this event to.
-        event_name : str
-            Name of the random vibe event.
-        file_path : str
-            File path for thermal profile .dat or .csv file
-
-        Example
-        -------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-
-        """
-        try:
-            if project == "":
-                raise SherlockLoadShockProfileDatasetError(message="Project name is invalid.")
-            if phase_name == "":
-                raise SherlockLoadShockProfileDatasetError(message="Phase name is invalid.")
-            if event_name == "":
-                raise SherlockLoadShockProfileDatasetError(message="Event name is invalid.")
-            if file_path == "":
-                raise SherlockLoadShockProfileDatasetError(message="File path is invalid.")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
-
-            request = SherlockLifeCycleService_pb2.LoadShockProfilePulsesRequest(
-                project=project,
-                phaseName=phase_name,
-                eventName=event_name,
-                filePath=file_path,
-            )
-            response = self.stub.loadShockProfileDataset(request)
-            return response
-        except SherlockLoadShockProfileDatasetError as e:
-            LOG.error(str(e))
-            raise e
-
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
         """Load a thermal profile from a .dat or .csv file.
 
@@ -1923,5 +1869,118 @@ class Lifecycle(GrpcStub):
             response = self.stub.loadThermalProfile(request)
             return response
         except SherlockLoadThermalProfileError as e:
+            LOG.error(str(e))
+            raise e
+
+    def load_harmonic_profile(self, project, phase_name, event_name, file_path):
+        """Load a harmonic profile from a DAT or CSV file to a life cycle phase.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project
+        phase_name : str
+            Name of the life cycle phase to add the harmonic profile to.
+        event_name : str
+            Name of the harmonic event.
+        file_path : str
+            Path for DAT or CSV file with the harmonic profile.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+
+        >>> loaded = sherlock.lifecycle.load_harmonic_profile(
+                project="Tutorial",
+                phase_name="Phase 1",
+                event_name="Harmonic Event",
+                file_path="Test_Profile.dat"
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockLoadHarmonicProfileError(message="Project name is invalid.")
+            if phase_name == "":
+                raise SherlockLoadHarmonicProfileError(message="Phase name is invalid.")
+            if event_name == "":
+                raise SherlockLoadHarmonicProfileError(message="Event name is invalid.")
+            if file_path == "":
+                raise SherlockLoadHarmonicProfileError(message="File name is invalid.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+            request = SherlockLifeCycleService_pb2.LoadHarmonicProfileRequest(
+                project=project,
+                phaseName=phase_name,
+                eventName=event_name,
+                filePath=file_path,
+            )
+            response = self.stub.loadHarmonicProfile(request)
+            return response
+        except SherlockLoadHarmonicProfileError as e:
+            LOG.error(str(e))
+            raise e
+
+    def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
+        """Load shock profile dataset from a .csv or .dat file.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project
+        phase_name : str
+            Name of the lifecycle phase to add this event to.
+        event_name : str
+            Name of the random vibe event.
+        file_path : str
+            File path for thermal profile .dat or .csv file
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+
+        """
+        try:
+            if project == "":
+                raise SherlockLoadShockProfileDatasetError(message="Project name is invalid.")
+            if phase_name == "":
+                raise SherlockLoadShockProfileDatasetError(message="Phase name is invalid.")
+            if event_name == "":
+                raise SherlockLoadShockProfileDatasetError(message="Event name is invalid.")
+            if file_path == "":
+                raise SherlockLoadShockProfileDatasetError(message="File path is invalid.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockLifeCycleService_pb2.LoadShockProfilePulsesRequest(
+                project=project,
+                phaseName=phase_name,
+                eventName=event_name,
+                filePath=file_path,
+            )
+            response = self.stub.loadShockProfileDataset(request)
+            return response
+        except SherlockLoadShockProfileDatasetError as e:
             LOG.error(str(e))
             raise e
