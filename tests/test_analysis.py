@@ -1,6 +1,7 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 import grpc
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.common import Common
