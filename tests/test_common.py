@@ -1,6 +1,7 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 import grpc
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCommonServiceError
@@ -90,11 +91,14 @@ def helper_test_list_units(common):
 
 
 def helper_test_check_no_connection(common):
+    """Tests for no connection in the check method."""
+
     check = common.check()
     assert not check
 
 
 def helper_test_check_connected(common):
+    """Tests for connection in the check method."""
 
     check = common.check()
     assert check

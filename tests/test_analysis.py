@@ -29,8 +29,10 @@ def test_all():
     helper_test_update_natural_frequency_props(analysis)
     common.exit(close_sherlock_client=True)
 
+
 def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
+
     if analysis._is_connection_up():
         try:
             analysis.run_analysis(
@@ -140,7 +142,12 @@ def helper_test_run_strain_map_analysis(analysis):
                         [
                             ["Phase 1", "Random Event", "TOP", "TutorialStrainMap-TOP"],
                             ["Phase 1", "Random Event", "BOTTOM", "TutorialStrainMap-BOT"],
-                            ["Phase 1", "Random Event", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                            ["Phase 1",
+                             "Random Event",
+                             "TOP",
+                             "MemoryCard1Strain",
+                             "Memory Card 1",
+                            ],
                         ],
                     ]
                 ],
@@ -546,9 +553,7 @@ def helper_test_update_random_vibe_props(analysis):
         )
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert (
-            str(e) == "Update random vibe properties error: Natural frequencies are invalid."
-        )
+        assert str(e) == "Update random vibe properties error: Natural frequencies are invalid."
 
     if analysis._is_connection_up():
         try:
