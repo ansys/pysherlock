@@ -406,7 +406,7 @@ class Analysis(GrpcStub):
                 and (natural_freq_min_units not in self.FREQ_UNIT_LIST)
             ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Minimum natural frequency unit is invalid: " + natural_freq_min_units
+                    message="Minimum natural frequency units are invalid: " + natural_freq_min_units
                 )
 
             if (
@@ -415,7 +415,7 @@ class Analysis(GrpcStub):
                 and (natural_freq_max_units not in self.FREQ_UNIT_LIST)
             ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Maximum natural frequency unit is invalid: " + natural_freq_max_units
+                    message="Maximum natural frequency units are invalid: " + natural_freq_max_units
                 )
 
             if (
@@ -424,7 +424,7 @@ class Analysis(GrpcStub):
                 and (analysis_temp_units not in self.TEMP_UNIT_LIST)
             ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Analysis temperature unit is invalid: " + analysis_temp_units
+                    message="Analysis temperature units are invalid: " + analysis_temp_units
                 )
 
             if model_source is None or model_source == "GENERATED":
@@ -440,7 +440,7 @@ class Analysis(GrpcStub):
                 strain_map_natural_freqs is None or strain_map_natural_freqs == ""
             ):
                 raise SherlockUpdateRandomVibePropsError(
-                    message=f"No natural frequenices are defined for strain map analysis."
+                    message="Natural frequencies are invalid."
                 )
 
         except SherlockUpdateRandomVibePropsError as e:
@@ -597,19 +597,19 @@ class Analysis(GrpcStub):
                 natural_freq_min_units not in self.FREQ_UNIT_LIST
             ):
                 raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Minimum natural frequency unit is invalid: " + natural_freq_min_units
+                    message="Minimum natural frequency units are invalid: " + natural_freq_min_units
                 )
             if (self.FREQ_UNIT_LIST is not None) and (
                 natural_freq_max_units not in self.FREQ_UNIT_LIST
             ):
                 raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Maximum natural frequency unit is invalid: " + natural_freq_max_units
+                    message="Maximum natural frequency units are invalid: " + natural_freq_max_units
                 )
             if (self.TEMP_UNIT_LIST is not None) and (
                 analysis_temp_units not in self.TEMP_UNIT_LIST
             ):
                 raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Analysis temperature unit is invalid: " + analysis_temp_units
+                    message="Analysis temperature units are invalid: " + analysis_temp_units
                 )
         except SherlockUpdateNaturalFrequencyPropsError as e:
             LOG.error(str(e))
