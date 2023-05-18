@@ -36,9 +36,7 @@ def helper_test_run_analysis(analysis):
     if analysis._is_connection_up():
         try:
             analysis.run_analysis(
-                "Tutorial",
-                "Main Board",
-                [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])]
+                "Tutorial", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])]
             )
             assert True
         except SherlockRunAnalysisError as e:
@@ -137,11 +135,11 @@ def helper_test_run_strain_map_analysis(analysis):
                             ["Phase 1", "Random Event", "TOP", "TutorialStrainMap-TOP"],
                             ["Phase 1", "Random Event", "BOTTOM", "TutorialStrainMap-BOT"],
                             [
-                                 "Phase 1",
-                                 "Random Event",
-                                 "TOP",
-                                 "MemoryCard1Strain",
-                                 "Memory Card 1",
+                                "Phase 1",
+                                "Random Event",
+                                "TOP",
+                                "MemoryCard1Strain",
+                                "Memory Card 1",
                             ],
                         ],
                     ]
