@@ -2,9 +2,8 @@
 
 import grpc
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.common import Common
-
 from ansys.sherlock.core.analysis import Analysis
+from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import (
     SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,

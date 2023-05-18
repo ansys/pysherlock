@@ -439,9 +439,7 @@ class Analysis(GrpcStub):
             if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP and (
                 strain_map_natural_freqs is None or strain_map_natural_freqs == ""
             ):
-                raise SherlockUpdateRandomVibePropsError(
-                    message="Natural frequencies are invalid."
-                )
+                raise SherlockUpdateRandomVibePropsError(message="Natural frequencies are invalid.")
 
         except SherlockUpdateRandomVibePropsError as e:
             LOG.error(str(e))
