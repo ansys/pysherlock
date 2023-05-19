@@ -24,13 +24,16 @@ def test_all():
     helper_test_update_random_vibe_props(analysis)
     helper_test_update_natural_frequency_props(analysis)
 
+
 def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
 
     if analysis._is_connection_up():
         try:
             analysis.run_analysis(
-                "AssemblyTutorial", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+                "AssemblyTutorial",
+                "Main Board",
+                [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
             )
         except SherlockRunAnalysisError as e:
             print(str(e))
