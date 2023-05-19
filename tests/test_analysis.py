@@ -438,7 +438,19 @@ def helper_test_get_random_vibe_input_fields(analysis):
             assert "part_validation_enabled" in fields
             assert "random_vibe_damping" in fields
             assert "require_material_assignment_enabled" in fields
-        except SherlockGetRandomVibeInputFieldsError as e:
+        except Exception as e:
+            print(str(e))
+            assert False
+
+        try:
+            fields = analysis.get_random_vibe_input_fields("GENERATED")
+            assert "analysis_temp" in fields
+            assert "analysis_temp_units" in fields
+            assert "model_source" in fields
+            assert "part_validation_enabled" in fields
+            assert "random_vibe_damping" in fields
+            assert "require_material_assignment_enabled" in fields
+        except Exception as e:
             print(str(e))
             assert False
 
@@ -449,7 +461,7 @@ def helper_test_get_random_vibe_input_fields(analysis):
             assert "random_vibe_damping" in fields
             assert "require_material_assignment_enabled" in fields
             assert "strain_map_natural_freqs" in fields
-        except SherlockGetRandomVibeInputFieldsError as e:
+        except Exception as e:
             print(str(e))
             assert False
 
@@ -593,18 +605,19 @@ def helper_test_update_random_vibe_props(analysis):
             )
 
         try:
-            analysis.update_random_vibe_props(
+            result = analysis.update_random_vibe_props(
                 "Tutorial Project",
                 "Main Board",
                 random_vibe_damping="0.01, 0.02",
                 model_source="STRAIN_MAP",
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
-                strain_map_natural_freqs="BAD, FREQS",
+                strain_map_natural_freqs="101, 201, 501, 1001",
             )
-            assert False
+            assert result == 0
         except Exception as e:
-            assert type(e) == SherlockUpdateRandomVibePropsError
+            print(str(e))
+            assert False
 
         try:
             analysis.update_random_vibe_props(
@@ -614,11 +627,11 @@ def helper_test_update_random_vibe_props(analysis):
                 model_source="STRAIN_MAP",
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
-                strain_map_natural_freqs="101, 201, 501, 1001",
+                strain_map_natural_freqs="BAD, FREQS", #invalid parameter
             )
-        except Exception as e:
-            print(str(e))
             assert False
+        except Exception as e:
+            assert type(e) == SherlockUpdateRandomVibePropsError
 
 
 def helper_test_update_natural_frequency_props(analysis):
@@ -713,6 +726,43 @@ def helper_test_update_natural_frequency_props(analysis):
                 str(e) == "Update natural frequency properties error: Analysis "
                 "temperature units are invalid: foo"
             )
+
+        try:
+            result = analysis.update_natural_frequency_props(
+                "AssemblyTutorial",
+                "Main Board",
+                natural_freq_count=2,
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                analysis_temp=25,
+                analysis_temp_units="C",
+            )
+            assert result == 0
+        except Exception as e:
+            print(str(e))
+            assert False
+
+        try:
+            result = analysis.update_natural_frequency_props(
+                "AssemblyTutorial",
+                "Main Board",
+                natural_freq_count=-1, #invalid parameter
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                analysis_temp=25,
+                analysis_temp_units="C",
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockUpdateNaturalFrequencyPropsError
 
 
 if __name__ == "__main__":

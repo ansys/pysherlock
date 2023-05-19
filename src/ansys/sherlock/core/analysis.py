@@ -477,7 +477,7 @@ class Analysis(GrpcStub):
                 raise SherlockUpdateRandomVibePropsError(response.message)
             else:
                 LOG.info(response.message)
-                return
+                return response.value
         except SherlockUpdateRandomVibePropsError as e:
             LOG.error(str(e))
             raise e
@@ -638,7 +638,7 @@ class Analysis(GrpcStub):
                 raise SherlockUpdateNaturalFrequencyPropsError(response.message)
             else:
                 LOG.info(response.message)
-                return
+                return response.value
         except SherlockUpdateNaturalFrequencyPropsError as e:
             LOG.error(str(e))
             raise e
