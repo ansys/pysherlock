@@ -620,6 +620,7 @@ def helper_test_update_random_vibe_props(analysis):
             assert False
 
         try:
+            invalid_strain_map_natural_freqs = "BAD, FREQS"
             analysis.update_random_vibe_props(
                 "Tutorial Project",
                 "Main Board",
@@ -627,7 +628,7 @@ def helper_test_update_random_vibe_props(analysis):
                 model_source="STRAIN_MAP",
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
-                strain_map_natural_freqs="BAD, FREQS", #invalid parameter
+                strain_map_natural_freqs=invalid_strain_map_natural_freqs,
             )
             assert False
         except Exception as e:
@@ -747,10 +748,11 @@ def helper_test_update_natural_frequency_props(analysis):
             assert False
 
         try:
+            invalid_natural_freq_count = -1
             result = analysis.update_natural_frequency_props(
                 "AssemblyTutorial",
                 "Main Board",
-                natural_freq_count=-1, #invalid parameter
+                natural_freq_count=invalid_natural_freq_count,
                 natural_freq_min=10,
                 natural_freq_min_units="HZ",
                 natural_freq_max=100,
