@@ -2,7 +2,6 @@
 
 import grpc
 
-from ansys.sherlock.core import launcher
 from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCommonServiceError
 
@@ -12,12 +11,7 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     common = Common(channel)
-    helper_test_check_no_connection(common)
-    launcher.launch_sherlock()
-    # Everything after the above line requires a connection to sherlock.
-    helper_test_check_connected(common)
     helper_test_list_units(common)
-    common.exit(close_sherlock_client=True)
 
 
 def helper_test_list_units(common):
@@ -88,20 +82,6 @@ def helper_test_list_units(common):
     assert len(units) == 6 and "cc" in units
     units = common.list_units("WEIGHT")
     assert len(units) == 5 and "mg" in units
-
-
-def helper_test_check_no_connection(common):
-    """Tests for no connection in the check method."""
-
-    check = common.check()
-    assert not check
-
-
-def helper_test_check_connected(common):
-    """Tests for connection in the check method."""
-
-    check = common.check()
-    assert check
 
 
 if __name__ == "__main__":

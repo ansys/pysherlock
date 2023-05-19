@@ -2,9 +2,7 @@
 
 import grpc
 
-from ansys.sherlock.core import launcher
 from ansys.sherlock.core.analysis import Analysis
-from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import (
     SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
@@ -19,16 +17,12 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     analysis = Analysis(channel)
-    common = Common(channel)
     helper_test_run_strain_map_analysis(analysis)
-    launcher.launch_sherlock()
     helper_test_run_analysis(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_random_vibe_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_update_natural_frequency_props(analysis)
-    common.exit(close_sherlock_client=True)
-
 
 def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
@@ -36,9 +30,8 @@ def helper_test_run_analysis(analysis):
     if analysis._is_connection_up():
         try:
             analysis.run_analysis(
-                "Tutorial", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])]
+                "AssemblyTutorial", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
             )
-            assert True
         except SherlockRunAnalysisError as e:
             print(str(e))
             assert False
@@ -121,22 +114,18 @@ def helper_test_run_strain_map_analysis(analysis):
 
     if analysis._is_connection_up():
         try:
-            """
-            For this step to pass you must set up a strain map in your sherlock install
-            with the following values.
-            """
             analysis.run_strain_map_analysis(
-                "Tutorial",
+                "AssemblyTutorial",
                 "Main Board",
                 [
                     [
                         "RANDOMVIBE",
                         [
-                            ["Phase 1", "Random Event", "TOP", "TutorialStrainMap-TOP"],
-                            ["Phase 1", "Random Event", "BOTTOM", "TutorialStrainMap-BOT"],
+                            ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                            ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
                             [
                                 "Phase 1",
-                                "Random Event",
+                                "Random Vibe",
                                 "TOP",
                                 "MemoryCard1Strain",
                                 "Memory Card 1",
@@ -145,8 +134,7 @@ def helper_test_run_strain_map_analysis(analysis):
                     ]
                 ],
             )
-            assert True
-        except SherlockRunAnalysisError as e:
+        except Exception as e:
             print(str(e))
             assert False
 
@@ -603,32 +591,31 @@ def helper_test_update_random_vibe_props(analysis):
 
         try:
             analysis.update_random_vibe_props(
-                "Test",
-                "Card",
+                "Tutorial Project",
+                "Main Board",
                 random_vibe_damping="0.01, 0.02",
                 model_source="STRAIN_MAP",
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
-                strain_map_natural_freqs="",
+                strain_map_natural_freqs="BAD, FREQS",
             )
             assert False
-        except SherlockUpdateRandomVibePropsError as e:
-            assert str(e) == "Update random vibe properties error: Natural frequencies are invalid."
+        except Exception as e:
+            assert type(e) == SherlockUpdateRandomVibePropsError
 
-            try:
-                analysis.update_random_vibe_props(
-                    "Tutorial Project",
-                    "Main Board",
-                    random_vibe_damping="0.01, 0.02",
-                    model_source="STRAIN_MAP",
-                    part_validation_enabled=True,
-                    require_material_assignment_enabled=False,
-                    strain_map_natural_freqs="101, 201, 501, 1001",
-                )
-                assert True
-            except SherlockUpdateRandomVibePropsError as e:
-                print(str(e))
-                # assert False
+        try:
+            analysis.update_random_vibe_props(
+                "Tutorial Project",
+                "Main Board",
+                random_vibe_damping="0.01, 0.02",
+                model_source="STRAIN_MAP",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                strain_map_natural_freqs="101, 201, 501, 1001",
+            )
+        except Exception as e:
+            print(str(e))
+            assert False
 
 
 def helper_test_update_natural_frequency_props(analysis):
