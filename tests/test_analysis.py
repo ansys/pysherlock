@@ -33,7 +33,7 @@ def helper_test_run_analysis(analysis):
             analysis.run_analysis(
                 "AssemblyTutorial",
                 "Main Board",
-                [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+                [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
             )
         except SherlockRunAnalysisError as e:
             print(str(e))
