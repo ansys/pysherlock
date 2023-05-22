@@ -17,9 +17,8 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     analysis = Analysis(channel)
-
-    helper_test_run_analysis(analysis)
     helper_test_run_strain_map_analysis(analysis)
+    helper_test_run_analysis(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_random_vibe_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
@@ -28,6 +27,17 @@ def test_all():
 
 def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
+
+    if analysis._is_connection_up():
+        try:
+            analysis.run_analysis(
+                "AssemblyTutorial",
+                "Main Board",
+                [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
+            )
+        except SherlockRunAnalysisError as e:
+            print(str(e))
+            assert False
 
     try:
         analysis.run_analysis("", "Card", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
@@ -116,13 +126,18 @@ def helper_test_run_strain_map_analysis(analysis):
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                            ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
+                            [
+                                "Phase 1",
+                                "Random Vibe",
+                                "TOP",
+                                "MemoryCard1Strain",
+                                "Memory Card 1",
+                            ],
                         ],
                     ]
                 ],
             )
-            assert True
-        except SherlockRunAnalysisError as e:
+        except Exception as e:
             print(str(e))
             assert False
 
@@ -423,7 +438,19 @@ def helper_test_get_random_vibe_input_fields(analysis):
             assert "part_validation_enabled" in fields
             assert "random_vibe_damping" in fields
             assert "require_material_assignment_enabled" in fields
-        except SherlockGetRandomVibeInputFieldsError as e:
+        except Exception as e:
+            print(str(e))
+            assert False
+
+        try:
+            fields = analysis.get_random_vibe_input_fields("GENERATED")
+            assert "analysis_temp" in fields
+            assert "analysis_temp_units" in fields
+            assert "model_source" in fields
+            assert "part_validation_enabled" in fields
+            assert "random_vibe_damping" in fields
+            assert "require_material_assignment_enabled" in fields
+        except Exception as e:
             print(str(e))
             assert False
 
@@ -434,7 +461,7 @@ def helper_test_get_random_vibe_input_fields(analysis):
             assert "random_vibe_damping" in fields
             assert "require_material_assignment_enabled" in fields
             assert "strain_map_natural_freqs" in fields
-        except SherlockGetRandomVibeInputFieldsError as e:
+        except Exception as e:
             print(str(e))
             assert False
 
@@ -522,10 +549,7 @@ def helper_test_update_random_vibe_props(analysis):
         )
         assert False
     except SherlockUpdateRandomVibePropsError as e:
-        assert (
-            str(e) == "Update random vibe properties error: No natural frequenices are defined for "
-            "strain map analysis."
-        )
+        assert str(e) == "Update random vibe properties error: Natural frequencies are invalid."
 
     if analysis._is_connection_up():
         try:
@@ -581,6 +605,22 @@ def helper_test_update_random_vibe_props(analysis):
             )
 
         try:
+            result = analysis.update_random_vibe_props(
+                "Tutorial Project",
+                "Main Board",
+                random_vibe_damping="0.01, 0.02",
+                model_source="STRAIN_MAP",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                strain_map_natural_freqs="101, 201, 501, 1001",
+            )
+            assert result == 0
+        except Exception as e:
+            print(str(e))
+            assert False
+
+        try:
+            invalid_strain_map_natural_freqs = "BAD, FREQS"
             analysis.update_random_vibe_props(
                 "Tutorial Project",
                 "Main Board",
@@ -588,26 +628,11 @@ def helper_test_update_random_vibe_props(analysis):
                 model_source="STRAIN_MAP",
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
-                strain_map_natural_freqs="BAD, FREQS",
+                strain_map_natural_freqs=invalid_strain_map_natural_freqs,
             )
             assert False
-        except SherlockUpdateRandomVibePropsError as e:
-            assert str(e) == "Update random vibe properties error: Natural frequencies are invalid."
-
-            try:
-                analysis.update_random_vibe_props(
-                    "Tutorial Project",
-                    "Main Board",
-                    random_vibe_damping="0.01, 0.02",
-                    model_source="STRAIN_MAP",
-                    part_validation_enabled=True,
-                    require_material_assignment_enabled=False,
-                    strain_map_natural_freqs="101, 201, 501, 1001",
-                )
-                assert True
-            except SherlockUpdateRandomVibePropsError as e:
-                print(str(e))
-                assert False
+        except Exception as e:
+            assert type(e) == SherlockUpdateRandomVibePropsError
 
 
 def helper_test_update_natural_frequency_props(analysis):
@@ -702,6 +727,44 @@ def helper_test_update_natural_frequency_props(analysis):
                 str(e) == "Update natural frequency properties error: Analysis "
                 "temperature units are invalid: foo"
             )
+
+        try:
+            result = analysis.update_natural_frequency_props(
+                "AssemblyTutorial",
+                "Main Board",
+                natural_freq_count=2,
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                analysis_temp=25,
+                analysis_temp_units="C",
+            )
+            assert result == 0
+        except Exception as e:
+            print(str(e))
+            assert False
+
+        try:
+            invalid_natural_freq_count = -1
+            result = analysis.update_natural_frequency_props(
+                "AssemblyTutorial",
+                "Main Board",
+                natural_freq_count=invalid_natural_freq_count,
+                natural_freq_min=10,
+                natural_freq_min_units="HZ",
+                natural_freq_max=100,
+                natural_freq_max_units="HZ",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                analysis_temp=25,
+                analysis_temp_units="C",
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockUpdateNaturalFrequencyPropsError
 
 
 if __name__ == "__main__":

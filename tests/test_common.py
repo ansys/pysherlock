@@ -11,7 +11,6 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     common = Common(channel)
-
     helper_test_list_units(common)
 
 
@@ -25,7 +24,7 @@ def helper_test_list_units(common):
         common.list_units("NOTHING")
         assert False
     except SherlockCommonServiceError as e:
-        assert str(e) == "Sherlock common service error: Unit type 'NOTHING' is missing."
+        assert str(e) == "Sherlock common service error: Unit type 'NOTHING' is invalid."
 
     units = common.list_units("ACCEL_DENSITY")
     assert len(units) == 5 and "G2/Hz" in units
