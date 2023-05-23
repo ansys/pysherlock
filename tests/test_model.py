@@ -28,9 +28,7 @@ class TestModel(unittest.TestCase):
 
             try:
                 invalid_cca = "Invalid CCA"
-                model.export_trace_reinforcement_model(
-                    "Tutorial Project", invalid_cca, path
-                )
+                model.export_trace_reinforcement_model("Tutorial Project", invalid_cca, path)
                 assert False
             except Exception as e:
                 assert type(e) == SherlockModelServiceError
@@ -42,17 +40,13 @@ class TestModel(unittest.TestCase):
             assert str(e) == "Model service error: Project name is invalid."
 
         try:
-            model.export_trace_reinforcement_model(
-                "Tutorial Project", "", path
-            )
+            model.export_trace_reinforcement_model("Tutorial Project", "", path)
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: CCA name is invalid."
 
         try:
-            model.export_trace_reinforcement_model(
-                "Tutorial Project", "Main Board", export_file=""
-            )
+            model.export_trace_reinforcement_model("Tutorial Project", "Main Board", export_file="")
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Export file path is invalid."

@@ -37,21 +37,27 @@ def helper_test_run_analysis(analysis):
         assert result == 0
 
     try:
-        analysis.run_analysis("", "Card", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
+        analysis.run_analysis(
+            "",
+            "Main Board",
+            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]),
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Project name is invalid."
 
     try:
-        analysis.run_analysis("Test", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
+        analysis.run_analysis(
+            "AssemblyTutorial",
+            "",
+            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]),
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: CCA name is invalid."
 
     try:
         analysis.run_analysis(
-            "Test",
-            "Card",
+            "AssemblyTutorial",
+            "Main Board",
             "Invalid",
         )
         assert False
@@ -742,7 +748,7 @@ def helper_test_update_natural_frequency_props(analysis):
 
         try:
             invalid_natural_freq_count = -1
-            result = analysis.update_natural_frequency_props(
+            analysis.update_natural_frequency_props(
                 "AssemblyTutorial",
                 "Main Board",
                 natural_freq_count=invalid_natural_freq_count,
