@@ -19,6 +19,7 @@ class Model(GrpcStub):
     """Contains all model generation capabilities."""
 
     def __init__(self, channel):
+        """Initialize a gRPC stub for the Sherlock Model service."""
         super().__init__(channel)
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 

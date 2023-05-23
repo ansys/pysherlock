@@ -29,6 +29,7 @@ class Analysis(GrpcStub):
     """Contains all analysis capabilities."""
 
     def __init__(self, channel):
+        """Initialize a gRPC stub for the Sherlock Analysis service."""
         super().__init__(channel)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
         self.lifecycle = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
