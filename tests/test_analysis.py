@@ -29,44 +29,37 @@ def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
 
     if analysis._is_connection_up():
-        try:
-            analysis.run_analysis(
-                "AssemblyTutorial",
-                "Main Board",
-                [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
-            )
-        except SherlockRunAnalysisError as e:
-            print(str(e))
-            assert False
+        result = analysis.run_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
+        )
+        assert result == 0
 
     try:
-        analysis.run_analysis("", "Card", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
+        analysis.run_analysis(
+            "", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+        ),
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Project name is invalid."
 
     try:
-        analysis.run_analysis("Test", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
+        analysis.run_analysis(
+            "AssemblyTutorial", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+        ),
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: CCA name is invalid."
 
     try:
-        analysis.run_analysis(
-            "Test",
-            "Card",
-            "Invalid",
-        )
+        analysis.run_analysis("AssemblyTutorial", "Main Board", "Invalid")
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Analyses argument is invalid."
 
     try:
-        analysis.run_analysis(
-            "Test",
-            "Card",
-            [],
-        )
+        analysis.run_analysis("Test", "Card", [])
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: One or more analyses are missing."
@@ -604,20 +597,16 @@ def helper_test_update_random_vibe_props(analysis):
                 "temperature units are invalid: foo"
             )
 
-        try:
-            result = analysis.update_random_vibe_props(
-                "Tutorial Project",
-                "Main Board",
-                random_vibe_damping="0.01, 0.02",
-                model_source="STRAIN_MAP",
-                part_validation_enabled=True,
-                require_material_assignment_enabled=False,
-                strain_map_natural_freqs="101, 201, 501, 1001",
-            )
-            assert result == 0
-        except Exception as e:
-            print(str(e))
-            assert False
+        result = analysis.update_random_vibe_props(
+            "Tutorial Project",
+            "Main Board",
+            random_vibe_damping="0.01, 0.02",
+            model_source="STRAIN_MAP",
+            part_validation_enabled=True,
+            require_material_assignment_enabled=False,
+            strain_map_natural_freqs="101, 201, 501, 1001",
+        )
+        assert result == 0
 
         try:
             invalid_strain_map_natural_freqs = "BAD, FREQS"
@@ -749,7 +738,7 @@ def helper_test_update_natural_frequency_props(analysis):
 
         try:
             invalid_natural_freq_count = -1
-            result = analysis.update_natural_frequency_props(
+            analysis.update_natural_frequency_props(
                 "AssemblyTutorial",
                 "Main Board",
                 natural_freq_count=invalid_natural_freq_count,

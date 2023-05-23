@@ -24,5 +24,3 @@ class GrpcStub:
             return True
         except grpc.RpcError:
             return False
-
-        return False

@@ -129,18 +129,6 @@ class SherlockGetLayerCountError(Exception):
         return f"Get layer count error: {self.message}"
 
 
-class SherlockGetLayerCountError(Exception):
-    """Contains the error raised when getting layer count."""
-
-    def __init__(self, message):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return f"Get layer count error: {self.message}"
-
-
 class SherlockGetTotalConductorThicknessError(Exception):
     """Contains the error raised when getting total conductor thickness."""
 
@@ -357,18 +345,6 @@ class SherlockLoadRandomVibeProfileError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Load random vibe profile error: {self.message}"
-
-
-class SherlockLoadHarmonicProfileError(Exception):
-    """Contains the error raised when loading a harmonic profile."""
-
-    def __init__(self, message):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format Error Message."""
-        return f"Load Harmonic profile error: {self.message}"
 
 
 class SherlockLoadHarmonicProfileError(Exception):
@@ -640,7 +616,7 @@ class SherlockModelServiceError(Exception):
 
     def __str__(self):
         """Format error message."""
-        return f"Sherlock model service error: {self.message}"
+        return f"Model service error: {self.message}"
 
 
 class SherlockInvalidLoadDirectionError(Exception):
