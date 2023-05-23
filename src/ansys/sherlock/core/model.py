@@ -125,23 +125,15 @@ class Model(GrpcStub):
         """
         try:
             if not project_name:
-                raise SherlockModelServiceError("Project name is required")
+                raise SherlockModelServiceError("Project name is invalid.")
             if not cca_name:
-                raise SherlockModelServiceError("CCA name is required")
+                raise SherlockModelServiceError("CCA name is invalid.")
             if export_file == "":
-                raise SherlockModelServiceError(message="Export filepath required")
-            if len(export_file) <= 1 or export_file[1] != ":":
-                if platform.system() == "Windows":
-                    export_file = f"{os.getcwd()}\\{export_file}"
-                else:
-                    export_file = f"{os.getcwd()}/{export_file}"
-            else:  # For locally rooted path
+                raise SherlockModelServiceError(message="Export file path is invalid.")
+            else:
                 if not os.path.exists(os.path.dirname(export_file)):
                     raise SherlockModelServiceError(
-                        message=(
-                            f"Export file directory ({os.path.dirname(export_file)})"
-                            " does not exist"
-                        )
+                        message=f"Export file directory \"{export_file}\" does not exist."
                     )
         except Exception as e:
             LOG.error(str(e))
@@ -252,19 +244,23 @@ class Model(GrpcStub):
         """
         try:
             if not project_name:
-                raise SherlockModelServiceError("Project name is required.")
-            if not max_arc_segment:
+                raise SherlockModelServiceError("Project name is invalid.")
+            if not cca_name:
+                raise SherlockModelServiceError("CCA name is invalid.")
+            if not copper_layer_name:
+                raise SherlockModelServiceError("Copper layer name is required.")
+            if max_arc_segment is None:
                 raise SherlockModelServiceError("Maximum arc segment is required.")
             if not max_arc_segment_units:
                 raise SherlockModelServiceError("Maximum arc segment units are required.")
-            if not min_trace_area:
+            if min_trace_area is None:
                 raise SherlockModelServiceError("Minimum trace area is required.")
             if not min_trace_area_units:
                 raise SherlockModelServiceError("Minimum trace area units are required.")
-            if not min_hole_area:
+            if min_hole_area is None:
                 raise SherlockModelServiceError("Minimum hole area is required.")
             if not min_hole_area_units:
-                raise SherlockModelServiceError("Mininim hole area units are required.")
+                raise SherlockModelServiceError("Minimum hole area units are required.")
         except Exception as e:
             LOG.error(str(e))
             raise
@@ -290,7 +286,7 @@ class Model(GrpcStub):
             if return_code.value != 0:
                 raise SherlockModelServiceError(return_code.message)
 
-            return return_code.value, return_code.message
+            return return_code.value
         except Exception as e:
             LOG.error(str(e))
             raise

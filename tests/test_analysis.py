@@ -29,15 +29,12 @@ def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
 
     if analysis._is_connection_up():
-        try:
-            analysis.run_analysis(
-                "AssemblyTutorial",
-                "Main Board",
-                [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
-            )
-        except SherlockRunAnalysisError as e:
-            print(str(e))
-            assert False
+        result = analysis.run_analysis(
+            "AssemblyTutorial",
+            "Main Board",
+            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
+        )
+        assert result == 0
 
     try:
         analysis.run_analysis("", "Card", [("NATURALFREQ", [("Phase 1", ["Harmonic Event"])])])
@@ -604,20 +601,16 @@ def helper_test_update_random_vibe_props(analysis):
                 "temperature units are invalid: foo"
             )
 
-        try:
-            result = analysis.update_random_vibe_props(
-                "Tutorial Project",
-                "Main Board",
-                random_vibe_damping="0.01, 0.02",
-                model_source="STRAIN_MAP",
-                part_validation_enabled=True,
-                require_material_assignment_enabled=False,
-                strain_map_natural_freqs="101, 201, 501, 1001",
-            )
-            assert result == 0
-        except Exception as e:
-            print(str(e))
-            assert False
+        result = analysis.update_random_vibe_props(
+            "Tutorial Project",
+            "Main Board",
+            random_vibe_damping="0.01, 0.02",
+            model_source="STRAIN_MAP",
+            part_validation_enabled=True,
+            require_material_assignment_enabled=False,
+            strain_map_natural_freqs="101, 201, 501, 1001",
+        )
+        assert result == 0
 
         try:
             invalid_strain_map_natural_freqs = "BAD, FREQS"

@@ -640,7 +640,7 @@ class SherlockModelServiceError(Exception):
 
     def __str__(self):
         """Format error message."""
-        return f"Sherlock model service error: {self.message}"
+        return f"Model service error: {self.message}"
 
 
 class SherlockInvalidLoadDirectionError(Exception):

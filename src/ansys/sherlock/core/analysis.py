@@ -227,7 +227,7 @@ class Analysis(GrpcStub):
                 raise SherlockRunAnalysisError(response.message)
             else:
                 LOG.info(response.message)
-                return
+                return response.value
         except SherlockRunAnalysisError as e:
             LOG.error(str(e))
             raise e
