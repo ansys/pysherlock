@@ -524,9 +524,7 @@ class Parts(GrpcStub):
                 raise SherlockExportPartsListError(message="CCA name is invalid.")
             if export_file == "":
                 raise SherlockExportPartsListError(message="Export filepath is required.")
-            if len(export_file) <= 1 or export_file[1] != ":":
-                export_file = f"{os.getcwd()}\\{export_file}"
-            else:  # For locally rooted path
+            else:
                 if not os.path.exists(os.path.dirname(export_file)):
                     raise SherlockExportPartsListError(
                         message="Export file directory does not exist."

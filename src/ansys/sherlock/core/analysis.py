@@ -30,7 +30,7 @@ class Analysis(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for the Sherlock Analysis service."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
         self.lifecycle = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.ANALYSIS_HOME = SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis
@@ -227,7 +227,7 @@ class Analysis(GrpcStub):
                 raise SherlockRunAnalysisError(response.message)
             else:
                 LOG.info(response.message)
-                return
+                return response.value
         except SherlockRunAnalysisError as e:
             LOG.error(str(e))
             raise e
@@ -547,6 +547,8 @@ class Analysis(GrpcStub):
         natural_freq_max_units: str, optional
             Maximum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
+        part_validation_enabled: bool
+            Whether part validation is enabled.
         require_material_assignment_enabled: bool
             Whether to require material assignment.
         analysis_temp: double, optional
@@ -791,10 +793,7 @@ class Analysis(GrpcStub):
             response = self.stub.runStrainMapAnalysis(request)
 
             if response.value == -1:
-                if response.message == "":
-                    raise SherlockRunStrainMapAnalysisError(error_array=response.errors)
-
-                raise SherlockRunStrainMapAnalysisError(message=response.message)
+                raise SherlockRunStrainMapAnalysisError(response.message)
 
         except SherlockRunStrainMapAnalysisError as e:
             LOG.error(str(e))

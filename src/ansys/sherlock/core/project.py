@@ -112,11 +112,9 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportODBError(message="Archive filepath is required.")
-            if len(archive_file) <= 1 or archive_file[1] != ":":
-                archive_file = f"{os.getcwd()}\\{archive_file}"
+                raise SherlockImportODBError(message="Archive path is required.")
             if not os.path.exists(archive_file):
-                raise SherlockImportODBError("Filepath is invalid.")
+                raise SherlockImportODBError("Path is invalid.")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
@@ -182,11 +180,11 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportIpc2581Error(message="Archive filepath is required.")
+                raise SherlockImportIpc2581Error(message="Archive path is required.")
             if len(archive_file) <= 1 or archive_file[1] != ":":
                 archive_file = f"{os.getcwd()}\\{archive_file}"
             if not os.path.exists(archive_file):
-                raise SherlockImportIpc2581Error("Filepath is invalid.")
+                raise SherlockImportIpc2581Error("Path is invalid.")
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
@@ -257,7 +255,7 @@ class Project(GrpcStub):
             if company == "":
                 raise SherlockGenerateProjectReportError(message="Company name is invalid.")
             if export_file == "":
-                raise SherlockGenerateProjectReportError(message="Export filepath is required.")
+                raise SherlockGenerateProjectReportError(message="Export path is required.")
             if len(export_file) <= 1 or export_file[1] != ":":
                 export_file = f"{os.getcwd()}\\{export_file}"
             else:  # For locally rooted path
@@ -399,7 +397,7 @@ class Project(GrpcStub):
                         f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
                     )
                 elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(f"Filepath is required for strain map {i}.")
+                    raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
                 elif not isinstance(strain_map[2], int) or strain_map[2] == "":
                     raise SherlockAddStrainMapsError(
                         f"Header row count is required for strain map {i}."
