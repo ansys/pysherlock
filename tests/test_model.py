@@ -22,15 +22,13 @@ class TestModel(unittest.TestCase):
             temp_dir = os.environ.get("TEMP", "/tmp")
         path = os.path.join(temp_dir, "export.wbjn")
 
-        if (model._is_connection_up()):
-            result = model.export_trace_reinforcement_model(
-                "Tutorial Project", "Main Board", path
-            )
+        if model._is_connection_up():
+            result = model.export_trace_reinforcement_model("Tutorial Project", "Main Board", path)
             assert result[0] == 0
 
             try:
                 invalid_cca = "Invalid CCA"
-                result = model.export_trace_reinforcement_model(
+                model.export_trace_reinforcement_model(
                     "Tutorial Project", invalid_cca, path
                 )
                 assert False
@@ -38,15 +36,13 @@ class TestModel(unittest.TestCase):
                 assert type(e) == SherlockModelServiceError
 
         try:
-            result = model.export_trace_reinforcement_model(
-                "", "Main Board", path
-            )
+            model.export_trace_reinforcement_model("", "Main Board", path)
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Project name is invalid."
 
         try:
-            result = model.export_trace_reinforcement_model(
+            model.export_trace_reinforcement_model(
                 "Tutorial Project", "", path
             )
             assert False
@@ -54,7 +50,7 @@ class TestModel(unittest.TestCase):
             assert str(e) == "Model service error: CCA name is invalid."
 
         try:
-            result = model.export_trace_reinforcement_model(
+            model.export_trace_reinforcement_model(
                 "Tutorial Project", "Main Board", export_file=""
             )
             assert False
@@ -63,14 +59,14 @@ class TestModel(unittest.TestCase):
 
         missing_file_path = "missing\\file\\path\\"
         try:
-            result = model.export_trace_reinforcement_model(
+            model.export_trace_reinforcement_model(
                 "Tutorial Project", "Main Board", missing_file_path
             )
             assert False
         except SherlockModelServiceError as e:
             assert (
                 str(e) == "Model service error: Export file directory"
-                " \"" + missing_file_path + "\" does not exist."
+                ' "' + missing_file_path + '" does not exist.'
             )
 
     def test_model_generate_trace_model(self):
@@ -83,7 +79,7 @@ class TestModel(unittest.TestCase):
         copper_layer_name = "copper-03.odb"
         max_arc_segment = 5
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name="",
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
@@ -94,7 +90,7 @@ class TestModel(unittest.TestCase):
             assert str(e) == "Model service error: Project name is invalid."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name="",
                 copper_layer_name=copper_layer_name,
@@ -105,7 +101,7 @@ class TestModel(unittest.TestCase):
             assert str(e) == "Model service error: CCA name is invalid."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name="",
@@ -116,7 +112,7 @@ class TestModel(unittest.TestCase):
             assert str(e) == "Model service error: Copper layer name is required."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
@@ -127,66 +123,66 @@ class TestModel(unittest.TestCase):
             assert str(e) == "Model service error: Maximum arc segment is required."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
-                max_arc_segment_units=""
+                max_arc_segment_units="",
             )
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Maximum arc segment units are required."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
-                min_trace_area=None
+                min_trace_area=None,
             )
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum trace area is required."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
-                min_trace_area_units=""
+                min_trace_area_units="",
             )
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum trace area units are required."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
-                min_hole_area=None
+                min_hole_area=None,
             )
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum hole area is required."
 
         try:
-            result = model.generate_trace_model(
+            model.generate_trace_model(
                 project_name=project_name,
                 cca_name=cca_name,
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
-                min_hole_area_units=""
+                min_hole_area_units="",
             )
             assert False
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum hole area units are required."
 
-        if (model._is_connection_up()):
+        if model._is_connection_up():
             result = model.generate_trace_model(
                 project_name,
                 cca_name,
@@ -197,7 +193,7 @@ class TestModel(unittest.TestCase):
 
             try:
                 invalid_cca_name = "Invalid CCA"
-                result = model.generate_trace_model(
+                model.generate_trace_model(
                     project_name=project_name,
                     cca_name=invalid_cca_name,
                     copper_layer_name=copper_layer_name,
@@ -206,6 +202,7 @@ class TestModel(unittest.TestCase):
                 assert False
             except Exception as e:
                 assert type(e) == SherlockModelServiceError
+
 
 if __name__ == "__main__":
     unittest.main()

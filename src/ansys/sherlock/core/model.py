@@ -133,7 +133,7 @@ class Model(GrpcStub):
             else:
                 if not os.path.exists(os.path.dirname(export_file)):
                     raise SherlockModelServiceError(
-                        message=f"Export file directory \"{export_file}\" does not exist."
+                        message=f'Export file directory "{export_file}" does not exist.'
                     )
         except Exception as e:
             LOG.error(str(e))
