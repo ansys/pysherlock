@@ -38,38 +38,26 @@ def helper_test_run_analysis(analysis):
 
     try:
         analysis.run_analysis(
-            "",
-            "Main Board",
-            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]),
+            "", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]),
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Project name is invalid."
 
     try:
         analysis.run_analysis(
-            "AssemblyTutorial",
-            "",
-            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]),
+            "AssemblyTutorial", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]),
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: CCA name is invalid."
 
     try:
-        analysis.run_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            "Invalid",
-        )
+        analysis.run_analysis("AssemblyTutorial", "Main Board", "Invalid")
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Analyses argument is invalid."
 
     try:
-        analysis.run_analysis(
-            "Test",
-            "Card",
-            [],
-        )
+        analysis.run_analysis("Test", "Card", [])
         assert False
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: One or more analyses are missing."
