@@ -2,7 +2,6 @@
 
 """Module containing all model generation capabilities."""
 import os.path
-import platform
 
 try:
     import SherlockModelService_pb2
