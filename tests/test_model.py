@@ -6,7 +6,6 @@ import unittest
 
 import grpc
 from ansys.sherlock.core.errors import SherlockModelServiceError
-
 from ansys.sherlock.core.model import Model
 
 
