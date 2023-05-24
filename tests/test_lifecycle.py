@@ -118,18 +118,19 @@ def helper_test_add_random_vibe_event(lifecycle):
             print(str(e))
             assert True
 
-        try: lifecycle.add_random_vibe_event(
-            "Tutorial Project",
-            "Example",
-            "Event 1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            "45,45",
-            "Uniaxial",
-            "2,4,5",
-        )
+        try:
+            lifecycle.add_random_vibe_event(
+                "Tutorial Project",
+                "Example",
+                "Event 1",
+                1.5,
+                "sec",
+                4.0,
+                "PER MIN",
+                "45,45",
+                "Uniaxial",
+                "2,4,5",
+            )
         except Exception as e:
             print(str(e))
             assert True
@@ -544,19 +545,21 @@ def helper_test_add_thermal_profiles(lifecycle):
     if lifecycle._is_connection_up():
         try:
             lifecycle.add_thermal_profiles(
-            "Tutorial Project",
-            [(
-                "Example",
-                "Event1",
-                "Profile1",
-                "sec",
-                "F",
+                "Tutorial Project",
                 [
-                    ("Steady1", "HOLD", 40, 40),
-                    ("Steady", "HOLD", 20, 20),
-                    ("Back", "RAMP", 20, 40),
+                    (
+                        "Example",
+                        "Event1",
+                        "Profile1",
+                        "sec",
+                        "F",
+                        [
+                            ("Steady1", "HOLD", 40, 40),
+                            ("Steady", "HOLD", 20, 20),
+                            ("Back", "RAMP", 20, 40),
+                        ],
+                    )
                 ],
-            )]
             )
         except Exception as e:
             print(str(e))
@@ -1038,18 +1041,20 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
         try:
             lifecycle.add_harmonic_vibe_profiles(
                 "Tutorial Project",
-                [(
-                    "Example",
-                    "Event 1",
-                    "Profile 1",
-                    "HZ",
-                    "G",
-                    [
-                        (10, 1),
-                        (1000, 1),
-                    ],
-                    "z",
-                )]
+                [
+                    (
+                        "Example",
+                        "Event 1",
+                        "Profile 1",
+                        "HZ",
+                        "G",
+                        [
+                            (10, 1),
+                            (1000, 1),
+                        ],
+                        "z",
+                    )
+                ],
             )
         except Exception as e:
             print(str(e))
@@ -1471,18 +1476,20 @@ def helper_test_add_shock_profiles(lifecycle):
         try:
             lifecycle.add_shock_profiles(
                 "Tutorial Project",
-                [(
-                    "Example",
-                    "Event 1",
-                    "Profile 1",
-                    10.0,
-                    "ms",
-                    0.1,
-                    "ms",
-                    "G",
-                    "HZ",
-                    [("HalfSine", 100.0, 100.0, 0)],
-                )]
+                [
+                    (
+                        "Example",
+                        "Event 1",
+                        "Profile 1",
+                        10.0,
+                        "ms",
+                        0.1,
+                        "ms",
+                        "G",
+                        "HZ",
+                        [("HalfSine", 100.0, 100.0, 0)],
+                    )
+                ],
             )
         except Exception as e:
             print(str(e))
@@ -2067,6 +2074,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         assert False
     except SherlockLoadShockProfileDatasetError as e:
         assert str(e) == "Load shock profile dataset error: File path is invalid."
+
 
 def helper_test_load_shock_profile_pulses(lifecycle):
     if lifecycle._is_connection_up():
