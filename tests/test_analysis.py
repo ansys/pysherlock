@@ -500,7 +500,7 @@ def helper_test_translate_field_names(analysis):
             "randomVibeDamping",
             "requireMaterialAssignmentEnabled",
             "reuseModalAnalysis",
-            "strainMapNaturalFreqs"
+            "strainMapNaturalFreqs",
         ]
     )
 
