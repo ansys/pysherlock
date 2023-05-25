@@ -118,7 +118,6 @@ def helper_test_update_parts_locations(parts):
                     ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
                     ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
                 ],
-
             )
         except Exception as e:
             print(str(e))
