@@ -32,6 +32,19 @@ def test_all():
 def helper_test_update_parts_list(parts):
     """Test update_parts_list API."""
 
+    if parts._is_connection_up():
+        try:
+            parts.update_parts_list(
+                "Tutorial Project",
+                "Main Board",
+                "Sherlock Part Library",
+                "Both",
+                "Error",
+            )
+        except Exception as e:
+            print(str(e))
+            assert False
+
     try:
         parts.update_parts_list(
             "",
@@ -95,6 +108,20 @@ def helper_test_update_parts_list(parts):
 
 def helper_test_update_parts_locations(parts):
     """Test update_parts_locations API."""
+
+    if parts._is_connection_up():
+        try:
+            parts.update_parts_locations(
+                "Tutorial Project",
+                "Main Board",
+                [
+                    ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+                    ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
+                ],
+
+            )
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.update_parts_locations(
@@ -320,6 +347,16 @@ def helper_test_update_parts_locations(parts):
 def helper_test_update_parts_locations_by_file(parts):
     """Test update_parts_locations_by_file API."""
 
+    if parts._is_connection_up():
+        try:
+            parts.update_parts_locations_by_file(
+                "Tutorial Project",
+                "Main Board",
+                "Parts Locations.csv",
+            )
+        except Exception as e:
+            print(str(e))
+
     try:
         parts.update_parts_locations_by_file(
             "",
@@ -353,6 +390,17 @@ def helper_test_update_parts_locations_by_file(parts):
 
 def helper_test_import_parts_list(parts):
     """Tests import_parts_list API."""
+    if parts._is_connection_up():
+        try:
+            parts.import_parts_list(
+                "Tutorial Project",
+                "Main Board",
+                "C:\\Documents\\git\\sherlock_unit_test_data\\Parts List\\PartsList-Tutorial.csv",
+                False,
+            )
+        except Exception as e:
+            print(str(e))
+
     try:
         parts.import_parts_list(
             "",
@@ -389,6 +437,16 @@ def helper_test_import_parts_list(parts):
 
 def helper_test_export_parts_list(parts):
     """Tests export_parts_list API."""
+    if parts._is_connection_up():
+        try:
+            parts.export_parts_list(
+                "Test",
+                "Card",
+                "C:\\Parts List.csv",
+            )
+        except Exception as e:
+            print(str(e))
+
     try:
         parts.export_parts_list(
             "",
@@ -422,6 +480,14 @@ def helper_test_export_parts_list(parts):
 
 def helper_test_enable_lead_modeling(parts):
     """Test enable_lead_modelign API."""
+    if parts._is_connection_up():
+        try:
+            parts.enable_lead_modeling(
+                "Test",
+                "Card",
+            )
+        except Exception as e:
+            print(str(e))
     try:
         parts.enable_lead_modeling(
             "",
@@ -443,6 +509,18 @@ def helper_test_enable_lead_modeling(parts):
 
 def helper_test_get_part_location(parts):
     """Test get_part_location API"""
+
+    if parts._is_connection_up():
+        try:
+            parts.get_part_location(
+                "Tutorial Project",
+                "Main Board",
+                "C1",
+                "in",
+            )
+        except Exception as e:
+            print(str(e))
+
     try:
         parts.get_part_location(
             "",
