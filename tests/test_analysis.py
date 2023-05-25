@@ -19,7 +19,9 @@ def test_all():
     analysis = Analysis(channel)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_run_analysis(analysis)
+    helper_test_get_harmonic_vibe_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
+    helper_test_translate_harmonic_vibe_field_names(analysis)
     helper_test_translate_random_vibe_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_update_natural_frequency_props(analysis)
@@ -415,13 +417,64 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
 
-def helper_test_get_random_vibe_input_fields(analysis):
-    try:
-        analysis.get_random_vibe_input_fields("BADTYPE")
-        assert False
-    except SherlockGetRandomVibeInputFieldsError as e:
-        assert str(e) == "Get random vibe input fields error: Model source BADTYPE is invalid."
+def helper_test_get_harmonic_vibe_input_fields(analysis):
+    if analysis._is_connection_up():
+        try:
+            fields = analysis.get_harmonic_vibe_input_fields()
+            assert "analysis_temp" in fields
+            assert "analysis_temp_units" in fields
+            assert "harmonic_vibe_count" in fields
+            assert "harmonic_vibe_damping" in fields
+            assert "model_source" in fields
+            assert "part_validation_enabled" in fields
+            assert "require_material_assignment_enabled" in fields
+        except Exception as e:
+            print(str(e))
+            assert False
 
+
+def helper_test_translate_harmonic_vibe_field_names(analysis):
+    """Test translating the harmonic vibe field names."""
+
+    results = analysis._translate_field_names(
+        [
+            "harmonicVibeCount",
+            "harmonicVibeDamping",
+            "naturalFreqMin",
+            "naturalFreqMinUnits",
+            "naturalFreqMax",
+            "naturalFreqMaxUnits",
+            "analysisTemp",
+            "analysisTempUnits",
+            "partValidationEnabled",
+            "forceModelRebuild",
+            "reuseModalAnalysis",
+            "filterByEventFrequency",
+            "requireMaterialAssignmentEnabled",
+            "modelSource",
+        ]
+    )
+
+    expected = """
+harmonic_vibe_count
+harmonic_vibe_damping
+natural_freq_min
+natural_freq_min_units
+natural_freq_max
+natural_freq_max_units
+analysis_temp
+analysis_temp_units
+part_validation_enabled
+force_model_rebuild
+reuse_modal_analysis
+filter_by_event_frequency
+require_material_assignment_enabled
+model_source"""
+
+    assert results == expected
+
+
+def helper_test_get_random_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         try:
             fields = analysis.get_random_vibe_input_fields()
