@@ -4,7 +4,6 @@ import grpc
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import (
-    SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
