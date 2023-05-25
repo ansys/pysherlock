@@ -4,6 +4,7 @@ import grpc
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import (
+    SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
@@ -474,6 +475,12 @@ model_source"""
 
 
 def helper_test_get_random_vibe_input_fields(analysis):
+    try:
+        analysis.get_random_vibe_input_fields("BADTYPE")
+        assert False
+    except SherlockGetRandomVibeInputFieldsError as e:
+        assert str(e) == "Get random vibe input fields error: Model source BADTYPE is invalid."
+
     if analysis._is_connection_up():
         try:
             fields = analysis.get_random_vibe_input_fields()
