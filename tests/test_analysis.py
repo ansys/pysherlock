@@ -19,8 +19,9 @@ def test_all():
     analysis = Analysis(channel)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_run_analysis(analysis)
+    helper_test_get_harmonic_vibe_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
-    helper_test_translate_random_vibe_field_names(analysis)
+    helper_test_translate_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_update_natural_frequency_props(analysis)
 
@@ -415,6 +416,22 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
 
+def helper_test_get_harmonic_vibe_input_fields(analysis):
+    if analysis._is_connection_up():
+        try:
+            fields = analysis.get_harmonic_vibe_input_fields()
+            assert "analysis_temp" in fields
+            assert "analysis_temp_units" in fields
+            assert "harmonic_vibe_count" in fields
+            assert "harmonic_vibe_damping" in fields
+            assert "model_source" in fields
+            assert "part_validation_enabled" in fields
+            assert "require_material_assignment_enabled" in fields
+        except Exception as e:
+            print(str(e))
+            assert False
+
+
 def helper_test_get_random_vibe_input_fields(analysis):
     try:
         analysis.get_random_vibe_input_fields("BADTYPE")
@@ -459,44 +476,54 @@ def helper_test_get_random_vibe_input_fields(analysis):
             assert False
 
 
-def helper_test_translate_random_vibe_field_names(analysis):
-    """Test translating the random vibe field names."""
+def helper_test_translate_field_names(analysis):
+    """Test translating the analysis field names."""
 
     results = analysis._translate_field_names(
         [
-            "randomVibeDamping",
+            "analysisTemp",
+            "analysisTemp (optional)",
+            "analysisTempUnits",
+            "analysisTempUnits (optional)",
+            "filterByEventFrequency",
+            "forceModelRebuild",
+            "harmonicVibeDamping",
+            "harmonicVibeCount",
+            "modelSource",
             "naturalFreqCount",
             "naturalFreqMin",
             "naturalFreqMinUnits",
             "naturalFreqMax",
             "naturalFreqMaxUnits",
-            "analysisTemp",
-            "analysisTempUnits",
             "partValidationEnabled",
-            "forceModelRebuild",
-            "reuseModalAnalysis",
             "performNFFreqRangeCheck",
+            "randomVibeDamping",
             "requireMaterialAssignmentEnabled",
-            "modelSource",
+            "reuseModalAnalysis",
             "strainMapNaturalFreqs",
         ]
     )
 
     expected = """
-random_vibe_damping
+analysis_temp
+analysis_temp
+analysis_temp_units
+analysis_temp_units
+filter_by_event_frequency
+force_model_rebuild
+harmonic_vibe_damping
+harmonic_vibe_count
+model_source
 natural_freq_count
 natural_freq_min
 natural_freq_min_units
 natural_freq_max
 natural_freq_max_units
-analysis_temp
-analysis_temp_units
 part_validation_enabled
-force_model_rebuild
-reuse_modal_analysis
 perform_nf_freq_range_check
+random_vibe_damping
 require_material_assignment_enabled
-model_source
+reuse_modal_analysis
 strain_map_natural_freqs"""
 
     assert results == expected
