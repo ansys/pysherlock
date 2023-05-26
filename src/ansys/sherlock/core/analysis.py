@@ -53,22 +53,25 @@ class Analysis(GrpcStub):
         self.TEMP_UNIT_LIST = None
         self.FREQ_UNIT_LIST = None
         self.FIELD_NAMES = {
-            "naturalFreqCount": "natural_freq_count",
-            "randomVibeDamping": "random_vibe_damping",
-            "naturalFreqMin": "natural_freq_min",
-            "naturalFreqMinUnits": "natural_freq_min_units",
-            "naturalFreqMax": "natural_freq_max",
-            "naturalFreqMaxUnits": "natural_freq_max_units",
             "analysisTemp": "analysis_temp",
             "analysisTemp (optional)": "analysis_temp",
             "analysisTempUnits": "analysis_temp_units",
             "analysisTempUnits (optional)": "analysis_temp_units",
-            "partValidationEnabled": "part_validation_enabled",
+            "filterByEventFrequency": "filter_by_event_frequency",
             "forceModelRebuild": "force_model_rebuild",
-            "reuseModalAnalysis": "reuse_modal_analysis",
-            "performNFFreqRangeCheck": "perform_nf_freq_range_check",
-            "requireMaterialAssignmentEnabled": "require_material_assignment_enabled",
+            "harmonicVibeDamping": "harmonic_vibe_damping",
+            "harmonicVibeCount": "harmonic_vibe_count",
             "modelSource": "model_source",
+            "naturalFreqCount": "natural_freq_count",
+            "naturalFreqMin": "natural_freq_min",
+            "naturalFreqMinUnits": "natural_freq_min_units",
+            "naturalFreqMax": "natural_freq_max",
+            "naturalFreqMaxUnits": "natural_freq_max_units",
+            "partValidationEnabled": "part_validation_enabled",
+            "performNFFreqRangeCheck": "perform_nf_freq_range_check",
+            "randomVibeDamping": "random_vibe_damping",
+            "requireMaterialAssignmentEnabled": "require_material_assignment_enabled",
+            "reuseModalAnalysis": "reuse_modal_analysis",
             "strainMapNaturalFreqs": "strain_map_natural_freqs",
         }
 
@@ -231,6 +234,43 @@ class Analysis(GrpcStub):
         except SherlockRunAnalysisError as e:
             LOG.error(str(e))
             raise e
+
+    def get_harmonic_vibe_input_fields(self):
+        """Get harmonic vibe property fields based on the user configuration.
+
+        Returns
+        -------
+        list
+            List of harmonic vibe property fields based on the user configuration.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.get_harmonic_vibe_input_fields()
+        """
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        message = SherlockAnalysisService_pb2.GetHarmonicVibeInputFieldsRequest(
+            modelSource="GENERATED"
+        )
+        response = self.stub.getHarmonicVibeInputFields(message)
+
+        fields = self._translate_field_names(response.fieldName)
+        LOG.info(fields)
+
+        return fields
 
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.

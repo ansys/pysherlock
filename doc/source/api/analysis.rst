@@ -10,6 +10,7 @@ The ``analysis`` module contains all analysis capabilities.
 .. autosummary::
      :toctree: _autosummary
 
+     ansys.sherlock.core.analysis.Analysis.get_harmonic_vibe_input_fields
      ansys.sherlock.core.analysis.Analysis.get_random_vibe_input_fields
      ansys.sherlock.core.analysis.Analysis.run_analysis
      ansys.sherlock.core.analysis.Analysis.run_strain_map_analysis
