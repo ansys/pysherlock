@@ -22,7 +22,6 @@ from ansys.sherlock.core.errors import (
 from ansys.sherlock.core.lifecycle import Lifecycle
 
 
-
 def test_all():
     """Test all life cycle APIs"""
     channel_param = "127.0.0.1:9090"
