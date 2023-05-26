@@ -33,7 +33,6 @@ def helper_test_update_parts_list(parts):
     """Test update_parts_list API."""
 
     if parts._is_connection_up():
-        try:
             parts.update_parts_list(
                 "Tutorial Project",
                 "Main Board",
@@ -41,9 +40,6 @@ def helper_test_update_parts_list(parts):
                 "Both",
                 "Error",
             )
-        except Exception as e:
-            print(str(e))
-            assert False
 
     try:
         parts.update_parts_list(
@@ -110,17 +106,14 @@ def helper_test_update_parts_locations(parts):
     """Test update_parts_locations API."""
 
     if parts._is_connection_up():
-        try:
-            parts.update_parts_locations(
-                "Tutorial Project",
-                "Main Board",
-                [
-                    ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-                    ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
-                ],
-            )
-        except Exception as e:
-            print(str(e))
+        parts.update_parts_locations(
+            "Tutorial Project",
+            "Main Board",
+            [
+                ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+                ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
+            ],
+        )
 
     try:
         parts.update_parts_locations(
