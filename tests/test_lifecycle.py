@@ -1,4 +1,5 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+import uuid
 
 import grpc
 
@@ -19,7 +20,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
-import uuid
+
 
 
 def test_all():
@@ -558,7 +559,7 @@ def helper_test_add_thermal_profiles(lifecycle):
             "Tutorial Project",
             [
                 (
-                    phase ,
+                    phase,
                     event,
                     profile,
                     "sec",
@@ -1916,7 +1917,6 @@ def helper_test_load_random_vibe_profile(lifecycle):
             "Random Event",
             "TestProfile.dat",
         )
-
 
     try:
         lifecycle.load_random_vibe_profile(
