@@ -1063,7 +1063,6 @@ def helper_test_add_harmonic_event(lifecycle):
 def helper_test_add_harmonic_vibe_profiles(lifecycle):
     """Test add_harmonic_profiles API."""
 
-
     try:
         lifecycle.add_harmonic_vibe_profiles(
             "",
@@ -1996,6 +1995,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         except Exception as e:
             print(str(e))
 
+
 def helper_test_load_harmonic_profile(lifecycle):
     """Test load_harmonic_profile API."""
 
@@ -2156,7 +2156,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
 
 
 def helper_test_load_shock_profile_pulses(lifecycle):
-
+    """Test load_shock_profile_pulses API"""
     try:
         lifecycle.load_shock_profile_pulses(
             "",
