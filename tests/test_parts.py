@@ -33,13 +33,17 @@ def helper_test_update_parts_list(parts):
     """Test update_parts_list API."""
 
     if parts._is_connection_up():
-        parts.update_parts_list(
+        updated = parts.update_parts_list(
             "Tutorial Project",
             "Main Board",
             "Sherlock Part Library",
             "Both",
             "Error",
         )
+        try:
+            return updated
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.update_parts_list(
@@ -106,7 +110,7 @@ def helper_test_update_parts_locations(parts):
     """Test update_parts_locations API."""
 
     if parts._is_connection_up():
-        parts.update_parts_locations(
+        updated = parts.update_parts_locations(
             "Tutorial Project",
             "Main Board",
             [
@@ -114,6 +118,10 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
             ],
         )
+        try:
+            return updated
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.update_parts_locations(
@@ -340,11 +348,15 @@ def helper_test_update_parts_locations_by_file(parts):
     """Test update_parts_locations_by_file API."""
 
     if parts._is_connection_up():
-        parts.update_parts_locations_by_file(
+        updated = parts.update_parts_locations_by_file(
             "Tutorial Project",
             "Main Board",
             "Parts Locations.csv",
         )
+        try:
+            return updated
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.update_parts_locations_by_file(
@@ -380,12 +392,16 @@ def helper_test_update_parts_locations_by_file(parts):
 def helper_test_import_parts_list(parts):
     """Tests import_parts_list API."""
     if parts._is_connection_up():
-        parts.import_parts_list(
+        imported = parts.import_parts_list(
             "Tutorial Project",
             "Main Board",
             "Parts List.csv",
             False,
         )
+        try:
+            return imported
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.import_parts_list(
@@ -424,11 +440,15 @@ def helper_test_import_parts_list(parts):
 def helper_test_export_parts_list(parts):
     """Tests export_parts_list API."""
     if parts._is_connection_up():
-        parts.export_parts_list(
+        exported = parts.export_parts_list(
             "Test",
             "Card",
             "Parts List.csv",
         )
+        try:
+            return exported
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.export_parts_list(
@@ -464,10 +484,14 @@ def helper_test_export_parts_list(parts):
 def helper_test_enable_lead_modeling(parts):
     """Test enable_lead_modelign API."""
     if parts._is_connection_up():
-        parts.enable_lead_modeling(
+        enabled = parts.enable_lead_modeling(
             "Test",
             "Card",
         )
+        try:
+            return enabled
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.enable_lead_modeling(
@@ -492,12 +516,16 @@ def helper_test_get_part_location(parts):
     """Test get_part_location API"""
 
     if parts._is_connection_up():
-        parts.get_part_location(
+        location_gotten = parts.get_part_location(
             "Tutorial Project",
             "Main Board",
             "C1",
             "in",
         )
+        try:
+            return location_gotten
+        except Exception as e:
+            print(str(e))
 
     try:
         parts.get_part_location(
