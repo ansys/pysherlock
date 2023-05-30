@@ -429,7 +429,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockCreateLifePhaseError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockCreateLifePhaseError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -558,6 +558,10 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
         request = SherlockLifeCycleService_pb2.AddRandomVibeEventRequest(
             project=project,
             phaseName=phase_name,
@@ -573,9 +577,7 @@ class Lifecycle(GrpcStub):
         )
 
         response = self.stub.addRandomVibeEvent(request)
-
         return_code = response.returnCode
-
         try:
             if return_code.value == -1:
                 if return_code.message == "":
@@ -584,7 +586,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddRandomVibeEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddRandomVibeEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -872,7 +874,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddThermalEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddThermalEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -1054,7 +1056,7 @@ class Lifecycle(GrpcStub):
                     raise SherlockAddThermalProfilesError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddThermalProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -1214,7 +1216,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddHarmonicEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddHarmonicEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -1397,7 +1399,7 @@ class Lifecycle(GrpcStub):
                     raise SherlockAddHarmonicVibeProfilesError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddHarmonicVibeProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -1533,7 +1535,7 @@ class Lifecycle(GrpcStub):
                 raise SherlockAddShockEventError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddShockEventError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -1749,7 +1751,7 @@ class Lifecycle(GrpcStub):
                     raise SherlockAddShockProfilesError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddShockProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
