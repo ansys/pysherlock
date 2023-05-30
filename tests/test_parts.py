@@ -33,13 +33,13 @@ def helper_test_update_parts_list(parts):
     """Test update_parts_list API."""
 
     if parts._is_connection_up():
-            parts.update_parts_list(
-                "Tutorial Project",
-                "Main Board",
-                "Sherlock Part Library",
-                "Both",
-                "Error",
-            )
+        parts.update_parts_list(
+            "Tutorial Project",
+            "Main Board",
+            "Sherlock Part Library",
+            "Both",
+            "Error",
+        )
 
     try:
         parts.update_parts_list(
@@ -340,13 +340,11 @@ def helper_test_update_parts_locations_by_file(parts):
     """Test update_parts_locations_by_file API."""
 
     if parts._is_connection_up():
-
         parts.update_parts_locations_by_file(
             "Tutorial Project",
             "Main Board",
             "Parts Locations.csv",
         )
-
 
     try:
         parts.update_parts_locations_by_file(
@@ -382,12 +380,12 @@ def helper_test_update_parts_locations_by_file(parts):
 def helper_test_import_parts_list(parts):
     """Tests import_parts_list API."""
     if parts._is_connection_up():
-            parts.import_parts_list(
-                "Tutorial Project",
-                "Main Board",
-                "Parts List.csv",
-                False,
-            )
+        parts.import_parts_list(
+            "Tutorial Project",
+            "Main Board",
+            "Parts List.csv",
+            False,
+        )
 
     try:
         parts.import_parts_list(
@@ -426,11 +424,11 @@ def helper_test_import_parts_list(parts):
 def helper_test_export_parts_list(parts):
     """Tests export_parts_list API."""
     if parts._is_connection_up():
-            parts.export_parts_list(
-                "Test",
-                "Card",
-                "Parts List.csv",
-            )
+        parts.export_parts_list(
+            "Test",
+            "Card",
+            "Parts List.csv",
+        )
 
     try:
         parts.export_parts_list(
@@ -466,10 +464,10 @@ def helper_test_export_parts_list(parts):
 def helper_test_enable_lead_modeling(parts):
     """Test enable_lead_modelign API."""
     if parts._is_connection_up():
-            parts.enable_lead_modeling(
-                "Test",
-                "Card",
-            )
+        parts.enable_lead_modeling(
+            "Test",
+            "Card",
+        )
 
     try:
         parts.enable_lead_modeling(
