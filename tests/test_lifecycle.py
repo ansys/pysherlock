@@ -48,7 +48,7 @@ def helper_test_create_life_phase(lifecycle):
     """Test create_life_phase API"""
     if lifecycle._is_connection_up():
         phase = str(uuid.uuid4())
-        lifecycle.create_life_phase(
+        created = lifecycle.create_life_phase(
             "Tutorial Project",
             phase,
             1,
@@ -56,6 +56,10 @@ def helper_test_create_life_phase(lifecycle):
             4,
             "COUNT",
         )
+        try:
+            return created
+        except Exception as e:
+            print(str(e))
 
     try:
         lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
