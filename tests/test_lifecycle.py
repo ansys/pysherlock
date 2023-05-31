@@ -300,8 +300,23 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
             "Uniaxial",
             "2,4,5",
         )
-
         assert result == 0
+
+        try:
+            lifecycle.add_random_vibe_event(
+                "Missing Project",
+                phase_name,
+                event_name,
+                1,
+                "sec",
+                4.0,
+                "PER MIN",
+                "45,45",
+                "Uniaxial",
+                "2,4,5",
+            )
+        except Exception as e:
+            assert type(e) == SherlockAddRandomVibeEventError
 
         return event_name
 
@@ -415,13 +430,13 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
 
         try:
             lifecycle.add_random_vibe_profiles(
-                "Tutorial Project",
+                "Missing Project",
                 [
                     (
                         "Example",
                         "Event1",
                         "Profile1",
-                        "per sec",
+                        "HZ",
                         "G2/Hz",
                         [(1, 2), (3, 4)],
                     )
@@ -488,18 +503,6 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
         assert e.str_itr()[0] == "Add thermal event error: Number of cycles must be greater than 0."
 
     if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_thermal_event(
-                "Tutorial Project",
-                "Example",
-                "Event 1",
-                -1,
-                "PER 0.5MIN",
-                "STORAGE",
-            )
-        except Exception as e:
-            assert type(e) == SherlockAddThermalEventError
-
         event_name = "Thermal Event " + str(uuid.uuid4())
         result = lifecycle.add_thermal_event(
             "Tutorial Project",
@@ -510,6 +513,18 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
             cycle_state="OPERATING",
         )
         assert result == 0
+
+        try:
+            lifecycle.add_thermal_event(
+                "Missing Project",
+                phase_name,
+                event_name,
+                num_of_cycles=1,
+                cycle_type="COUNT",
+                cycle_state="OPERATING",
+            )
+        except Exception as e:
+            assert type(e) == SherlockAddThermalEventError
 
         return event_name
 
