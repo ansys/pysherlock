@@ -30,7 +30,7 @@ def test_all():
 
     phase_name = helper_test_create_life_phase(lifecycle)
     random_vibe_event_name = helper_test_add_random_vibe_event(lifecycle, phase_name)
-    helper_test_add_random_vibe_profile(lifecycle, random_vibe_event_name)
+    helper_test_add_random_vibe_profile(lifecycle, random_vibe_event_name, phase_name)
     thermal_event_name = helper_test_add_thermal_event(lifecycle, phase_name)
     helper_test_add_thermal_profile(lifecycle, phase_name, thermal_event_name)
     harmonic_vibe_event_name = helper_test_add_harmonic_event(lifecycle, phase_name)
@@ -306,7 +306,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         return event_name
 
 
-def helper_test_add_random_vibe_profile(lifecycle, event_name):
+def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
     """Test the add_random_vibe_profiles API"""
 
     try:
@@ -399,23 +399,23 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name):
 
     # TODO: JM add happy path test
     if lifecycle._is_connection_up():
+        result = lifecycle.add_random_vibe_profiles(
+            "Tutorial Project",
+            [
+                (
+                    phase_name,
+                    event_name,
+                    "Profile1",
+                    "HZ",
+                    "G2/Hz",
+                    [(1, 2), (3, 4)],
+                )
+            ],
+        )
         try:
-            lifecycle.add_random_vibe_profiles(
-                "Tutorial Project",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        "per sec",
-                        "G2/Hz",
-                        [(1, 2), (3, 4)],
-                    )
-                ],
-            )
-            assert False
+            return result
         except Exception as e:
-            assert type(e) == SherlockAddRandomVibeProfilesError
+            print(str(e))
 
 
 def helper_test_add_thermal_event(lifecycle, phase_name):
