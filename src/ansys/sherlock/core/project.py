@@ -28,7 +28,7 @@ class Project(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for Sherlock Project service."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
     def delete_project(self, project):
@@ -65,7 +65,7 @@ class Project(GrpcStub):
                 raise SherlockDeleteProjectError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockDeleteProjectError as e:
             LOG.error(str(e))
             raise e
@@ -113,8 +113,6 @@ class Project(GrpcStub):
         try:
             if archive_file == "":
                 raise SherlockImportODBError(message="Archive path is required.")
-            if not os.path.exists(archive_file):
-                raise SherlockImportODBError("Path is invalid.")
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
@@ -180,11 +178,7 @@ class Project(GrpcStub):
         """
         try:
             if archive_file == "":
-                raise SherlockImportIpc2581Error(message="Archive path is required.")
-            if len(archive_file) <= 1 or archive_file[1] != ":":
-                archive_file = f"{os.getcwd()}\\{archive_file}"
-            if not os.path.exists(archive_file):
-                raise SherlockImportIpc2581Error("Path is invalid.")
+                raise SherlockImportIpc2581Error(message="Archive file path is required.")
         except SherlockImportIpc2581Error as e:
             LOG.error(str(e))
             raise e
@@ -214,11 +208,11 @@ class Project(GrpcStub):
 
             LOG.info(response.message)
             return
-        except SherlockImportIpc2581Error as e:
+        except Exception as e:
             LOG.error(str(e))
             raise e
 
-    def generate_project_report(self, project, author, company, export_file):
+    def generate_project_report(self, project, author, company, report_file):
         """Generate a project report.
 
         Parameters
@@ -229,8 +223,8 @@ class Project(GrpcStub):
             Name of the author who is generating the report.
         company : str
             Name of the author's company.
-        export_file: str
-            Full path to where to export the report to.
+        report_file: str
+            Full path to where to create the report.
 
         Examples
         --------
@@ -244,7 +238,7 @@ class Project(GrpcStub):
             "Tutorial",
             "John Doe",
             "Example",
-            "example.pdf",
+            "Project Report.pdf",
         )
         """
         try:
@@ -254,15 +248,8 @@ class Project(GrpcStub):
                 raise SherlockGenerateProjectReportError(message="Author name is invalid.")
             if company == "":
                 raise SherlockGenerateProjectReportError(message="Company name is invalid.")
-            if export_file == "":
-                raise SherlockGenerateProjectReportError(message="Export path is required.")
-            if len(export_file) <= 1 or export_file[1] != ":":
-                export_file = f"{os.getcwd()}\\{export_file}"
-            else:  # For locally rooted path
-                if not os.path.exists(os.path.dirname(export_file)):
-                    raise SherlockGenerateProjectReportError(
-                        message=("Export file directory does not exist.")
-                    )
+            if report_file == "":
+                raise SherlockGenerateProjectReportError(message="Report path is required.")
         except SherlockGenerateProjectReportError as e:
             LOG.error(str(e))
             raise e
@@ -278,7 +265,8 @@ class Project(GrpcStub):
         )
 
         try:
-            with open(export_file, "wb") as dest:
+            with open(report_file, "wb") as dest:
+                # TODO: JM why is this done this way?
                 for response in self.stub.genReport(request):
                     if response.returnCode.value == -1:
                         raise SherlockGenerateProjectReportError(
@@ -288,9 +276,11 @@ class Project(GrpcStub):
                         dest.write(response.content)
                 else:
                     LOG.info(response.returnCode.message)
-        except SherlockGenerateProjectReportError as e:
+
+                return response.returnCode.value
+        except Exception as e:
             LOG.error(str(e))
-            raise e
+            raise SherlockGenerateProjectReportError(str(e))
 
     def list_ccas(self, project, cca_names=None):
         """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
@@ -299,7 +289,7 @@ class Project(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        cca_name : List of str, optional
+        cca_names : List of str, optional
             List of CCA names. The default is ``None``, in which case all CCAs
             in the project are returned.
 
@@ -420,22 +410,15 @@ class Project(GrpcStub):
                     )
                 elif strain_map[5] != "µε" and strain_map[5] != "ε":
                     raise SherlockAddStrainMapsError(
-                        f"Strain units '{strain_map[5]}' are invalid for strain map {i}."
+                        f'Strain units "{strain_map[5]}" are invalid for strain map {i}.'
                     )
                 elif (
-                    len(strain_maps) == 7
+                    len(strain_map) == 7
                     and strain_map[6] is not None
                     and type(strain_map[6]) is not list
                 ):
                     raise SherlockAddStrainMapsError(
-                        message="cca_names is not a list for strain map {i}."
-                    )
-
-                strain_map_file = strain_map[0]
-
-                if not os.path.exists(strain_map_file):
-                    raise SherlockAddStrainMapsError(
-                        message=f"File '{strain_map_file}' doesn't exist for strain map {i}."
+                        message=f"cca_names is not a list for strain map {i}."
                     )
 
             if not self._is_connection_up():
@@ -483,7 +466,7 @@ class Project(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        cca_name : List of str, optional
+        cca_names : List of str, optional
             List of CCA names to provide strain maps for. The default is ``None``,
             in which case all CCAs in the project are returned.
 
@@ -521,7 +504,7 @@ class Project(GrpcStub):
 
                 raise SherlockListStrainMapsError(message=return_code.message)
 
-        except SherlockListStrainMapsError as e:
+        except Exception as e:
             LOG.error(str(e))
             raise e
 
