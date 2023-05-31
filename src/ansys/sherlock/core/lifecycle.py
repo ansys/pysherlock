@@ -762,7 +762,7 @@ class Lifecycle(GrpcStub):
                     raise SherlockAddRandomVibeProfilesError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockAddRandomVibeProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)

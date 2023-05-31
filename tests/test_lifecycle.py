@@ -397,7 +397,6 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
             " Frequencies must be greater than 0 for random vibe profile 0."
         )
 
-    # TODO: JM add happy path test
     if lifecycle._is_connection_up():
         result = lifecycle.add_random_vibe_profiles(
             "Tutorial Project",
@@ -412,10 +411,25 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
                 )
             ],
         )
+        assert result == 0
+
         try:
-            return result
+            lifecycle.add_random_vibe_profiles(
+                "Tutorial Project",
+                [
+                    (
+                        "Example",
+                        "Event1",
+                        "Profile1",
+                        "per sec",
+                        "G2/Hz",
+                        [(1, 2), (3, 4)],
+                    )
+                ],
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockAddRandomVibeProfilesError
 
 
 def helper_test_add_thermal_event(lifecycle, phase_name):
