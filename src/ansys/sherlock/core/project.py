@@ -266,7 +266,6 @@ class Project(GrpcStub):
 
         try:
             with open(report_file, "wb") as dest:
-                # TODO: JM why is this done this way?
                 for response in self.stub.genReport(request):
                     if response.returnCode.value == -1:
                         raise SherlockGenerateProjectReportError(

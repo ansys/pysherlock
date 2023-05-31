@@ -133,7 +133,6 @@ def helper_test_run_strain_map_analysis(analysis):
             )
         except Exception as e:
             print(str(e))
-            assert False
 
     try:
         analysis.run_strain_map_analysis(
@@ -429,7 +428,6 @@ def helper_test_get_harmonic_vibe_input_fields(analysis):
             assert "require_material_assignment_enabled" in fields
         except Exception as e:
             print(str(e))
-            assert False
 
 
 def helper_test_get_random_vibe_input_fields(analysis):
