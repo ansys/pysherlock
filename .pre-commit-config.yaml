@@ -4,6 +4,7 @@ repos:
   rev: 23.3.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY AS WELL!!
   hooks:
   - id: black
+    args: ["--verbose"]
 
 - repo: https://github.com/adamchainz/blacken-docs
   rev: 1.13.0
