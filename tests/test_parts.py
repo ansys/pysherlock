@@ -1,5 +1,8 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
+import os
+import platform
+
 import grpc
 
 from ansys.sherlock.core.errors import (
@@ -12,6 +15,8 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
+
+# import time
 
 
 def test_all():
@@ -33,17 +38,29 @@ def helper_test_update_parts_list(parts):
     """Test update_parts_list API."""
 
     if parts._is_connection_up():
-        updated = parts.update_parts_list(
-            "Tutorial Project",
-            "Main Board",
-            "Sherlock Part Library",
-            "Both",
-            "Error",
-        )
         try:
-            return updated
+            result = parts.update_parts_list(
+                "Tutorial Project",
+                "Main Board",
+                "Sherlock Part Library",
+                "Both",
+                "Error",
+            )
+            assert result == 0
         except Exception as e:
-            print(str(e))
+            assert False, e.message
+
+        try:
+            parts.update_parts_list(
+                "Tutorial Project",
+                "Invalid CCA",
+                "Sherlock Part Library",
+                "Both",
+                "Error",
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockUpdatePartsListError
 
     try:
         parts.update_parts_list(
@@ -110,18 +127,36 @@ def helper_test_update_parts_locations(parts):
     """Test update_parts_locations API."""
 
     if parts._is_connection_up():
-        updated = parts.update_parts_locations(
-            "Tutorial Project",
-            "Main Board",
-            [
-                ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-                ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
-            ],
-        )
+        # commenting this out because it causes the following in Sherlock:
+        # java.lang.NullPointerException: Cannot invoke "sherlock.partslist.PartMap.getFile()"
+        #         because the return value of "sherlock.ui.CCA.CCA.getPartMap()" is null
+        # 	at sherlock.grpc.Service.SherlockPartsService.
+        # 	updatePartsLocations(SherlockPartsService.java:394)
+        # try:
+        #     result = parts.update_parts_locations(
+        #         "Tutorial Project",
+        #         "Main Board",
+        #         [
+        #             ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+        #             ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
+        #         ],
+        #     )
+        #     assert result == 0
+        # except Exception as e:
+        #     assert False, e.message
+
         try:
-            return updated
+            parts.update_parts_locations(
+                "Tutorial Project",
+                "Invalid CCA",
+                [
+                    ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+                    ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
+                ],
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockUpdatePartsLocationsError
 
     try:
         parts.update_parts_locations(
@@ -348,15 +383,16 @@ def helper_test_update_parts_locations_by_file(parts):
     """Test update_parts_locations_by_file API."""
 
     if parts._is_connection_up():
-        updated = parts.update_parts_locations_by_file(
-            "Tutorial Project",
-            "Main Board",
-            "Parts Locations.csv",
-        )
+        # happy path test missing because needs valid file
         try:
-            return updated
+            parts.update_parts_locations_by_file(
+                "Tutorial Project",
+                "Main Board",
+                "Invalid file path",
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockUpdatePartsLocationsByFileError
 
     try:
         parts.update_parts_locations_by_file(
@@ -378,30 +414,21 @@ def helper_test_update_parts_locations_by_file(parts):
     except SherlockUpdatePartsLocationsByFileError as e:
         assert e.str_itr()[0] == "Update parts locations by file error: CCA name is invalid."
 
-    try:
-        parts.update_parts_locations_by_file(
-            "Test",
-            "Card",
-            "Invalid",
-        )
-        assert False
-    except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: Filepath is invalid."
-
 
 def helper_test_import_parts_list(parts):
     """Tests import_parts_list API."""
     if parts._is_connection_up():
-        imported = parts.import_parts_list(
-            "Tutorial Project",
-            "Main Board",
-            "Parts List.csv",
-            False,
-        )
+        # happy path test missing because needs valid file
         try:
-            return imported
+            parts.import_parts_list(
+                "Tutorial Project",
+                "Main Board",
+                "Invalid file path",
+                False,
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockImportPartsListError
 
     try:
         parts.import_parts_list(
@@ -425,30 +452,49 @@ def helper_test_import_parts_list(parts):
     except SherlockImportPartsListError as e:
         assert str(e) == "Import parts list error: CCA name is invalid."
 
-    try:
-        parts.import_parts_list(
-            "Test",
-            "Card",
-            "Invalid",
-            True,
-        )
-        assert False
-    except SherlockImportPartsListError as e:
-        assert str(e) == "Import parts list error: Filepath is invalid."
-
 
 def helper_test_export_parts_list(parts):
     """Tests export_parts_list API."""
     if parts._is_connection_up():
-        exported = parts.export_parts_list(
-            "Test",
-            "Card",
-            "Parts List.csv",
-        )
+        if platform.system() == "Windows":
+            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
+        else:
+            temp_dir = os.environ.get("TEMP", "/tmp")
+        parts_list_file = os.path.join(temp_dir, "PySherlock unit test exported parts.csv")
+
+        # commented out because an exception in Sherlock occurs the 2nd time it runs.
+        # java.lang.NullPointerException: Cannot invoke "sherlock.partslist.PartMap.getParts()"
+        #   because "pm" is null
+        # at sherlock.grpc.Service.SherlockPartsService.
+        # exportPartsList(SherlockPartsService.java:285)
+        # try:
+        #     result = parts.export_parts_list(
+        #         "Tutorial Project",
+        #         "Main Board",
+        #         parts_list_file,
+        #     )
+        #     assert os.path.exists(parts_list_file)
+        #     # wait for a bit because the response may be returned
+        #     # before Sherlock finishes writing the file
+        #     time.sleep(5)
+        #     assert result == 0
+        # except Exception as e:
+        #     assert False, e.message
+        # finally:
+        #     try:
+        #         os.remove(parts_list_file)
+        #     except Exception as e:
+        #         print(str(e))
+
         try:
-            return exported
+            parts.export_parts_list(
+                "Tutorial Project",
+                "Invalid CCA",
+                parts_list_file,
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockExportPartsListError
 
     try:
         parts.export_parts_list(
@@ -484,14 +530,25 @@ def helper_test_export_parts_list(parts):
 def helper_test_enable_lead_modeling(parts):
     """Test enable_lead_modelign API."""
     if parts._is_connection_up():
-        enabled = parts.enable_lead_modeling(
-            "Test",
-            "Card",
-        )
+        # commenting out because of this error:
+        # Cannot invoke "sherlock.partslist.PartMap.values()" because "pm" is null
+        # try:
+        #     result = parts.enable_lead_modeling(
+        #         "Tutorial Project",
+        #         "Main Board",
+        #     )
+        #     assert result == 0
+        # except Exception as e:
+        #     assert False, e.message
+
         try:
-            return enabled
+            parts.enable_lead_modeling(
+                "Tutorial Project",
+                "Invalid CCA",
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockEnableLeadModelingError
 
     try:
         parts.enable_lead_modeling(
@@ -516,16 +573,33 @@ def helper_test_get_part_location(parts):
     """Test get_part_location API"""
 
     if parts._is_connection_up():
-        location_gotten = parts.get_part_location(
-            "Tutorial Project",
-            "Main Board",
-            "C1",
-            "in",
-        )
+        # commented out because Sherlock has this exception:
+        # java.lang.NullPointerException: Cannot invoke "sherlock.partslist.PartMap.getPart(String)"
+        #          because "pm" is null
+        # at sherlock.grpc.Service.SherlockPartsService.
+        # getPartLocation(SherlockPartsService.java:614)
+
+        # try:
+        #     result = parts.get_part_location(
+        #         "Tutorial Project",
+        #         "Main Board",
+        #         "C1",
+        #         "in",
+        #     )
+        #     assert result == 0
+        # except Exception as e:
+        #     assert False, e.message
+
         try:
-            return location_gotten
+            parts.get_part_location(
+                "Tutorial Project",
+                "Invalid CCA",
+                "C1",
+                "in",
+            )
+            assert False
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockGetPartLocationError
 
     try:
         parts.get_part_location(

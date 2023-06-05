@@ -231,7 +231,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsListError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdatePartsListError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -326,7 +326,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdatePartsLocationsError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -375,10 +375,6 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsByFileError(message="CCA name is invalid.")
             if file_path == "":
                 raise SherlockUpdatePartsLocationsByFileError(message="Filepath is required.")
-            if len(file_path) <= 1 or file_path[1] != ":":
-                file_path = f"{os.getcwd()}\\{file_path}"
-            if not os.path.exists(file_path):
-                raise SherlockUpdatePartsLocationsByFileError("Filepath is invalid.")
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -407,7 +403,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsByFileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -455,10 +451,6 @@ class Parts(GrpcStub):
                 raise SherlockImportPartsListError(message="CCA name is invalid.")
             if import_file == "":
                 raise SherlockImportPartsListError(message="Import filepath is required.")
-            if len(import_file) <= 1 or import_file[1] != ":":
-                import_file = f"{os.getcwd()}\\{import_file}"
-            if not os.path.exists(import_file):
-                raise SherlockImportPartsListError("Filepath is invalid.")
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -548,7 +540,7 @@ class Parts(GrpcStub):
                 raise SherlockExportPartsListError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -602,7 +594,7 @@ class Parts(GrpcStub):
                 raise SherlockEnableLeadModelingError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockEnableLeadModelingError as e:
             LOG.error(str(e))
             raise e
@@ -663,8 +655,11 @@ class Parts(GrpcStub):
                 locationUnits=location_units,
             )
             response = self.stub.getPartLocation(request)
+            return_code = response.returnCode
 
-            return response
+            if return_code.value == -1:
+                raise SherlockGetPartLocationError(return_code.message)
+            return return_code.value
         except SherlockGetPartLocationError as e:
             LOG.error(str(e))
             raise e
