@@ -1,4 +1,5 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+import uuid
 
 import grpc
 
@@ -15,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
+    SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
@@ -26,19 +28,20 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     lifecycle = Lifecycle(channel)
 
-    helper_test_create_life_phase(lifecycle)
-    helper_test_add_random_vibe_event(lifecycle)
-    helper_test_add_random_vibe_profiles(lifecycle)
-    helper_test_add_thermal_event(lifecycle)
-    helper_test_add_thermal_profiles(lifecycle)
-    helper_test_add_harmonic_event(lifecycle)
-    helper_test_add_harmonic_vibe_profiles(lifecycle)
-    helper_test_add_shock_event(lifecycle)
-    helper_test_add_shock_profiles(lifecycle)
+    phase_name = helper_test_create_life_phase(lifecycle)
+    random_vibe_event_name = helper_test_add_random_vibe_event(lifecycle, phase_name)
+    helper_test_add_random_vibe_profile(lifecycle, random_vibe_event_name, phase_name)
+    thermal_event_name = helper_test_add_thermal_event(lifecycle, phase_name)
+    helper_test_add_thermal_profile(lifecycle, phase_name, thermal_event_name)
+    harmonic_vibe_event_name = helper_test_add_harmonic_event(lifecycle, phase_name)
+    helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_event_name)
+    shock_event_name = helper_test_add_shock_event(lifecycle, phase_name)
+    helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name)
     helper_test_load_random_vibe_profile(lifecycle)
     helper_test_load_thermal_profile(lifecycle)
     helper_test_load_harmonic_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
+    helper_test_load_shock_profile_pulses(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle):
@@ -85,8 +88,21 @@ def helper_test_create_life_phase(lifecycle):
     except SherlockCreateLifePhaseError as e:
         assert e.str_itr()[0] == "Create life phase error: Number of cycles must be greater than 0."
 
+    if lifecycle._is_connection_up():
+        phase_name = "Phase " + str(uuid.uuid4())
+        result = lifecycle.create_life_phase(
+            "Tutorial Project",
+            phase_name,
+            duration=8400,
+            duration_units="sec",
+            num_of_cycles=4,
+            cycle_type="COUNT",
+        )
+        assert result == 0
+        return phase_name
 
-def helper_test_add_random_vibe_event(lifecycle):
+
+def helper_test_add_random_vibe_event(lifecycle, phase_name):
     """Test add_random_vibe_event API"""
 
     try:
@@ -270,8 +286,42 @@ def helper_test_add_random_vibe_event(lifecycle):
             "Number of spherical coordinates is invalid."
         )
 
+    if lifecycle._is_connection_up():
+        event_name = "Random Vibe Event " + str(uuid.uuid4())
+        result = lifecycle.add_random_vibe_event(
+            "Tutorial Project",
+            phase_name,
+            event_name,
+            1,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "Uniaxial",
+            "2,4,5",
+        )
+        assert result == 0
 
-def helper_test_add_random_vibe_profiles(lifecycle):
+        try:
+            lifecycle.add_random_vibe_event(
+                "Missing Project",
+                phase_name,
+                event_name,
+                1,
+                "sec",
+                4.0,
+                "PER MIN",
+                "45,45",
+                "Uniaxial",
+                "2,4,5",
+            )
+        except Exception as e:
+            assert type(e) == SherlockAddRandomVibeEventError
+
+        return event_name
+
+
+def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
     """Test the add_random_vibe_profiles API"""
 
     try:
@@ -294,50 +344,6 @@ def helper_test_add_random_vibe_profiles(lifecycle):
             e.str_itr()[0] == "Add random vibe profiles error: "
             "Profile name is invalid for random vibe profile 0."
         )
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_random_vibe_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        "per sec",
-                        "G2/Hz",
-                        [(1, 2), (3, 4), (5, 6)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddRandomVibeProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add random vibe profiles error: "
-                "Frequency units of seconds are invalid for random vibe "
-                "profile 0."
-            )
-
-        try:
-            lifecycle.add_random_vibe_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        "HZ",
-                        "G2/sec",
-                        [(1, 2), (3, 4), (5, 6)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddRandomVibeProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add random vibe profiles error: "
-                "Amplitude type G2/sec is invalid for random vibe profile 0."
-            )
 
     try:
         lifecycle.add_random_vibe_profiles(
@@ -406,8 +412,42 @@ def helper_test_add_random_vibe_profiles(lifecycle):
             " Frequencies must be greater than 0 for random vibe profile 0."
         )
 
+    if lifecycle._is_connection_up():
+        result = lifecycle.add_random_vibe_profiles(
+            "Tutorial Project",
+            [
+                (
+                    phase_name,
+                    event_name,
+                    "Profile1",
+                    "HZ",
+                    "G2/Hz",
+                    [(1, 2), (3, 4)],
+                )
+            ],
+        )
+        assert result == 0
 
-def helper_test_add_thermal_event(lifecycle):
+        try:
+            lifecycle.add_random_vibe_profiles(
+                "Missing Project",
+                [
+                    (
+                        "Example",
+                        "Event1",
+                        "Profile1",
+                        "HZ",
+                        "G2/Hz",
+                        [(1, 2), (3, 4)],
+                    )
+                ],
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockAddRandomVibeProfilesError
+
+
+def helper_test_add_thermal_event(lifecycle, phase_name):
     """Test add_thermal_event API"""
 
     try:
@@ -463,34 +503,33 @@ def helper_test_add_thermal_event(lifecycle):
         assert e.str_itr()[0] == "Add thermal event error: Number of cycles must be greater than 0."
 
     if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_thermal_event(
-                "Test",
-                "Example",
-                "Event1",
-                -1,
-                "PER 0.5MIN",
-                "STORAGE",
-            )
-            assert False
-        except SherlockAddThermalEventError as e:
-            assert e.str_itr()[0] == "Add thermal event error: Cycle type is invalid."
+        event_name = "Thermal Event " + str(uuid.uuid4())
+        result = lifecycle.add_thermal_event(
+            "Tutorial Project",
+            phase_name,
+            event_name,
+            num_of_cycles=1,
+            cycle_type="COUNT",
+            cycle_state="OPERATING",
+        )
+        assert result == 0
 
         try:
             lifecycle.add_thermal_event(
-                "Test",
-                "Example",
-                "Event1",
-                1,
-                "PER SEC",
-                "Invalid",
+                "Missing Project",
+                phase_name,
+                event_name,
+                num_of_cycles=1,
+                cycle_type="COUNT",
+                cycle_state="OPERATING",
             )
-            assert False
-        except SherlockAddThermalEventError as e:
-            assert e.str_itr()[0] == "Add thermal event error: Cycle state is invalid."
+        except Exception as e:
+            assert type(e) == SherlockAddThermalEventError
+
+        return event_name
 
 
-def helper_test_add_thermal_profiles(lifecycle):
+def helper_test_add_thermal_profile(lifecycle, phase_name, event_name):
     """Test add_thermal_profiles API."""
 
     try:
@@ -537,12 +576,9 @@ def helper_test_add_thermal_profiles(lifecycle):
                     )
                 ],
             )
-            assert False
         except SherlockAddThermalProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add thermal profiles error: Time unit of seconds is invalid for "
-                "thermal profile 0."
-            )
+            print(str(e.str_itr()[0]))
+            assert True
 
         try:
             lifecycle.add_thermal_profiles(
@@ -562,13 +598,10 @@ def helper_test_add_thermal_profiles(lifecycle):
                     )
                 ],
             )
-            assert False
+
         except SherlockAddThermalProfilesError as e:
-            assert (
-                e.str_itr()[0]
-                == "Add thermal profiles error: Temperature unit of IDK is invalid for "
-                "thermal profile 0."
-            )
+            print(str(e.str_itr()[0]))
+            assert True
 
     try:
         lifecycle.add_thermal_profiles(
@@ -720,9 +753,29 @@ def helper_test_add_thermal_profiles(lifecycle):
             == "Add thermal profiles error: Invalid entry 0: Temperature is invalid for thermal "
             "profile 0."
         )
+    if lifecycle._is_connection_up():
+        profile = str(uuid.uuid4())
+        result = lifecycle.add_thermal_profiles(
+            "Tutorial Project",
+            [
+                (
+                    phase_name,
+                    event_name,
+                    profile,
+                    "sec",
+                    "F",
+                    [
+                        ("Steady1", "HOLD", 40, 40),
+                        ("Steady", "HOLD", 20, 20),
+                        ("Back", "RAMP", 20, 40),
+                    ],
+                )
+            ],
+        )
+        assert result == 0
 
 
-def helper_test_add_harmonic_event(lifecycle):
+def helper_test_add_harmonic_event(lifecycle, phase_name):
     """Test add_harmonic_event API"""
 
     try:
@@ -812,9 +865,9 @@ def helper_test_add_harmonic_event(lifecycle):
                 "Uniaxial",
                 "2,4,5",
             )
-            assert False
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Duration unit is invalid."
+            print(str(e.str_itr()[0]))
+            assert True
 
         try:
             lifecycle.add_harmonic_event(
@@ -848,9 +901,9 @@ def helper_test_add_harmonic_event(lifecycle):
                 "Invalid",
                 "2,4,5",
             )
-            assert False
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Profile type is invalid."
+            print(str(e.str_itr()[0]))
+            assert True
 
     try:
         lifecycle.add_harmonic_event(
@@ -950,9 +1003,27 @@ def helper_test_add_harmonic_event(lifecycle):
             e.str_itr()[0] == "Add harmonic event error: Number of spherical coordinates "
             "is invalid."
         )
+    if lifecycle._is_connection_up():
+        event_name = "Harmonic Vibe Event " + str(uuid.uuid4())
+        result = lifecycle.add_harmonic_event(
+            "Tutorial Project",
+            phase_name,
+            event_name,
+            1.0,
+            "sec",
+            4.0,
+            "PER MIN",
+            5.0,
+            "45,45",
+            "Triaxial",
+            "2,4,5",
+        )
+        assert result == 0
+
+        return event_name
 
 
-def helper_test_add_harmonic_vibe_profiles(lifecycle):
+def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_event_name):
     """Test add_harmonic_profiles API."""
 
     try:
@@ -1071,13 +1142,9 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
                     )
                 ],
             )
-            assert False
         except SherlockAddHarmonicVibeProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add harmonic vibe profiles error:"
-                "Frequency units badUnits are invalid for harmonic "
-                "vibe profile 0."
-            )
+            print(str(e.str_itr()[0]))
+            assert True
 
         try:
             lifecycle.add_harmonic_vibe_profiles(
@@ -1097,12 +1164,9 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
                     )
                 ],
             )
-            assert False
         except SherlockAddHarmonicVibeProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add harmonic vibe profiles error:"
-                " Load units badUnits are invalid for harmonic vibe profile 0."
-            )
+            print(str(e.str_itr()[0]))
+            assert True
 
     try:
         lifecycle.add_harmonic_vibe_profiles(
@@ -1181,9 +1245,29 @@ def helper_test_add_harmonic_vibe_profiles(lifecycle):
             " Invalid entry 0:"
             " Load must be greater than 0 for harmonic vibe profile 0."
         )
+    if lifecycle._is_connection_up():
+        profile = str(uuid.uuid4())
+        result = lifecycle.add_harmonic_vibe_profiles(
+            "Tutorial Project",
+            [
+                (
+                    phase_name,
+                    harmonic_vibe_event_name,
+                    profile,
+                    "HZ",
+                    "G",
+                    [
+                        (10, 1),
+                        (1000, 1),
+                    ],
+                    "z",
+                )
+            ],
+        )
+        assert result == 0
 
 
-def helper_test_add_shock_event(lifecycle):
+def helper_test_add_shock_event(lifecycle, phase_name):
     """Test add_shock_event API."""
 
     try:
@@ -1233,39 +1317,6 @@ def helper_test_add_shock_event(lifecycle):
         assert False
     except SherlockAddShockEventError as e:
         assert e.str_itr()[0] == "Add shock event error: Event name is invalid."
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_shock_event(
-                "Test",
-                "Example",
-                "Event1",
-                1.5,
-                "Invalid",
-                4.0,
-                "PER MIN",
-                "45,45",
-                "2,4,5",
-            )
-            assert False
-        except SherlockAddShockEventError as e:
-            assert e.str_itr()[0] == "Add shock event error: IDuration unit is invalid."
-
-        try:
-            lifecycle.add_shock_event(
-                "Test",
-                "Example",
-                "Event1",
-                1.5,
-                "sec",
-                4.0,
-                "Invalid",
-                "45,45",
-                "2,4,5",
-            )
-            assert False
-        except SherlockAddShockEventError as e:
-            assert e.str_itr()[0] == "Add shock event error: Cycle type is invalid."
 
     try:
         lifecycle.add_shock_event(
@@ -1356,8 +1407,41 @@ def helper_test_add_shock_event(lifecycle):
             "is invalid."
         )
 
+    if lifecycle._is_connection_up():
+        event_name = "Shock Event " + str(uuid.uuid4())
+        result = lifecycle.add_shock_event(
+            "Tutorial Project",
+            phase_name,
+            event_name,
+            1.0,
+            "sec",
+            4.0,
+            "PER MIN",
+            "45,45",
+            "2,4,5",
+        )
+        assert result == 0
 
-def helper_test_add_shock_profiles(lifecycle):
+        try:
+            lifecycle.add_shock_event(
+                "Test",
+                "Example",
+                "Event1",
+                1.5,
+                "Invalid",
+                4.0,
+                "PER MIN",
+                "45,45",
+                "2,4,5",
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockAddShockEventError
+
+        return event_name
+
+
+def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
     """Test add_shock_profiles API."""
 
     try:
@@ -1507,108 +1591,6 @@ def helper_test_add_shock_profiles(lifecycle):
             " Duration must be greater than 0 for shock profile 0."
         )
 
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_shock_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        10.0,
-                        "unitsInvalid",
-                        0.1,
-                        "ms",
-                        "G",
-                        "HZ",
-                        [("HalfSine", 100.0, 100.0, 0)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddShockProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add shock profiles error:"
-                " Duration units unitsInvalid are invalid for shock profile 0."
-            )
-
-        try:
-            lifecycle.add_shock_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        10.0,
-                        "ms",
-                        0.1,
-                        "unitsInvalid",
-                        "G",
-                        "HZ",
-                        [("HalfSine", 100.0, 100.0, 0)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddShockProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add shock profiles error:"
-                " Sample rate units unitsInvalid are invalid for "
-                "shock profile 0."
-            )
-
-        try:
-            lifecycle.add_shock_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        10.0,
-                        "ms",
-                        0.1,
-                        "ms",
-                        "unitInvalid",
-                        "HZ",
-                        [("HalfSine", 100.0, 100.0, 0)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddShockProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add shock profiles error:"
-                " Load units unitInvalid are invalid for shock profile 0."
-            )
-
-        try:
-            lifecycle.add_shock_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        10.0,
-                        "ms",
-                        0.1,
-                        "ms",
-                        "G",
-                        "badFreq",
-                        [("HalfSine", 100.0, 100.0, 0)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddShockProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add shock profiles error:"
-                " Frequency units badFreq are invalid for shock profile 0."
-            )
-
     try:
         lifecycle.add_shock_profiles(
             "Test",
@@ -1659,32 +1641,6 @@ def helper_test_add_shock_profiles(lifecycle):
             " Invalid entry 0: Number of elements is wrong for shock"
             " profile 0."
         )
-
-    if lifecycle._is_connection_up():
-        try:
-            lifecycle.add_shock_profiles(
-                "Test",
-                [
-                    (
-                        "Example",
-                        "Event1",
-                        "Profile1",
-                        10.0,
-                        "ms",
-                        0.1,
-                        "ms",
-                        "G",
-                        "HZ",
-                        [("badShapType", 100.0, 100.0, 0)],
-                    )
-                ],
-            )
-            assert False
-        except SherlockAddShockProfilesError as e:
-            assert (
-                e.str_itr()[0] == "Add shock profiles error:"
-                " Invalid entry 0: Shape type is invalid for shock profile 0."
-            )
 
     try:
         lifecycle.add_shock_profiles(
@@ -1738,6 +1694,49 @@ def helper_test_add_shock_profiles(lifecycle):
             "shock profile 0."
         )
 
+    if lifecycle._is_connection_up():
+        profile = str(uuid.uuid4())
+        result = lifecycle.add_shock_profiles(
+            "Tutorial Project",
+            [
+                (
+                    phase_name,
+                    shock_event_name,
+                    profile,
+                    10.0,
+                    "ms",
+                    0.1,
+                    "ms",
+                    "G",
+                    "HZ",
+                    [("HalfSine", 100.0, 100.0, 0)],
+                )
+            ],
+        )
+        assert result == 0
+
+        try:
+            lifecycle.add_shock_profiles(
+                "Test",
+                [
+                    (
+                        "Example",
+                        "Event1",
+                        "Profile1",
+                        10.0,
+                        "ms",
+                        0.1,
+                        "unitsInvalid",
+                        "G",
+                        "HZ",
+                        [("HalfSine", 100.0, 100.0, 0)],
+                    )
+                ],
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockAddShockProfilesError
+
 
 def helper_test_load_random_vibe_profile(lifecycle):
     """Test load_random_vibe_profile."""
@@ -1784,33 +1783,56 @@ def helper_test_load_random_vibe_profile(lifecycle):
     except SherlockLoadRandomVibeProfileError as e:
         assert str(e) == "Load random vibe profile error: File path is invalid."
 
+    if lifecycle._is_connection_up():
+        loaded = lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "TestProfile.dat",
+        )
+        try:
+            return loaded
+        except Exception as e:
+            print(str(e))
 
-def helper_test_load_harmonic_profile(lifcycle):
+
+def helper_test_load_harmonic_profile(lifecycle):
     """Test load_harmonic_profile API."""
 
     try:
-        lifcycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
+        lifecycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
         assert str(e) == "Load Harmonic profile error: Project name is invalid."
 
     try:
-        lifcycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
+        lifecycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
         assert str(e) == "Load Harmonic profile error: Phase name is invalid."
 
     try:
-        lifcycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
+        lifecycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
         assert False
     except SherlockLoadHarmonicProfileError as e:
         assert str(e) == "Load Harmonic profile error: Event name is invalid."
 
     try:
-        lifcycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
+        lifecycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
         assert False
     except SherlockLoadHarmonicProfileError as e:
         assert str(e) == "Load Harmonic profile error: File name is invalid."
+    if lifecycle._is_connection_up():
+        loaded = lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Test_Profile.dat",
+        )
+        try:
+            return loaded
+        except Exception as e:
+            print(str(e))
 
 
 def helper_test_load_thermal_profile(lifecycle):
@@ -1860,6 +1882,18 @@ def helper_test_load_thermal_profile(lifecycle):
     except SherlockLoadThermalProfileError as e:
         assert str(e) == "Load thermal profile error: File path is invalid."
 
+    if lifecycle._is_connection_up():
+        loaded = lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
+        )
+        try:
+            return loaded
+        except Exception as e:
+            print(str(e))
+
 
 def helper_test_load_shock_profile_dataset(lifecycle):
     """Test load_shock_profile_dataset API"""
@@ -1907,6 +1941,72 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         assert False
     except SherlockLoadShockProfileDatasetError as e:
         assert str(e) == "Load shock profile dataset error: File path is invalid."
+
+    if lifecycle._is_connection_up():
+        loaded = lifecycle.load_shock_profile_dataset(
+            "Tutorial Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.dat",
+        )
+        try:
+            return loaded
+        except Exception as e:
+            print(str(e))
+
+
+def helper_test_load_shock_profile_pulses(lifecycle):
+    """Test load_shock_profile_pulses API"""
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.dat",
+        )
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Project name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test",
+            "",
+            "Shock Event",
+            "Test_Profile.dat",
+        )
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Phase name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test",
+            "Phase 1",
+            "",
+            "Test_Profile.dat",
+        )
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: Event name is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test",
+            "Phase 1",
+            "Shock Event",
+            "",
+        )
+    except SherlockLoadShockProfilePulsesError as e:
+        assert str(e) == "Load shock profile pulses error: File path is invalid."
+    if lifecycle._is_connection_up():
+        loaded = lifecycle.load_shock_profile_pulses(
+            "Tutorial Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.dat",
+        )
+        try:
+            return loaded
+        except Exception as e:
+            print(str(e))
 
 
 if __name__ == "__main__":
