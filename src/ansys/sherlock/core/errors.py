@@ -784,6 +784,7 @@ class SherlockInvalidPhaseError(Exception):
         """Format error message."""
         return self.message
 
+
 class SherlockUpdateHarmonicVibePropsError(Exception):
     """Contains the error raised when properties for harmonic vibe analysis cannot be updated."""
 
