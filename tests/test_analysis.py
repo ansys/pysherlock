@@ -7,8 +7,8 @@ from ansys.sherlock.core.errors import (
     SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
-    SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdateHarmonicVibePropsError,
+    SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdateRandomVibePropsError,
 )
 
@@ -533,17 +533,18 @@ def helper_test_update_harmonic_vibe_props(analysis):
     try:
         analysis.update_harmonic_vibe_props(
             "",
-            [{
-                'cca_name': 'Card',
-                'harmonic_vibe_count': 2,
-                'harmonic_vibe_damping': '0.01, 0.05',
-                'part_validation_enabled': False,
-                'require_material_assignment_enabled': False,
-                'analysis_temp': 20,
-                'analysis_temp_units': 'C',
-                'filter_by_event_frequency': False,
-            },
-            ]
+            [
+                {
+                    "cca_name": "Card",
+                    "harmonic_vibe_count": 2,
+                    "harmonic_vibe_damping": "0.01, 0.05",
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "C",
+                    "filter_by_event_frequency": False,
+                },
+            ],
         )
         assert False
     except SherlockUpdateHarmonicVibePropsError as e:
@@ -553,121 +554,135 @@ def helper_test_update_harmonic_vibe_props(analysis):
         analysis.update_harmonic_vibe_props("Test", "Card")
         assert False
     except SherlockUpdateHarmonicVibePropsError as e:
-        assert str(e) == "Update harmonic vibe properties error: " \
-                         "Harmonic vibe properties argument is invalid."
+        assert (
+            str(e) == "Update harmonic vibe properties error: "
+            "Harmonic vibe properties argument is invalid."
+        )
 
     try:
         analysis.update_harmonic_vibe_props("Test", [])
         assert False
     except SherlockUpdateHarmonicVibePropsError as e:
-        assert str(e) == "Update harmonic vibe properties error: " \
-                         "One or more harmonic vibe properties are required."
+        assert (
+            str(e) == "Update harmonic vibe properties error: "
+            "One or more harmonic vibe properties are required."
+        )
 
     try:
         analysis.update_harmonic_vibe_props("Test", ["Card"])
         assert False
     except SherlockUpdateHarmonicVibePropsError as e:
-        assert str(e) == "Update harmonic vibe properties error: " \
-                         "Harmonic vibe props argument is invalid for harmonic vibe properties 0."
-
-    try:
-        analysis.update_harmonic_vibe_props(
-            "Test",
-            [{
-                'harmonic_vibe_count': 2,
-                'harmonic_vibe_damping': '0.01, 0.05',
-                'part_validation_enabled': False,
-                'require_material_assignment_enabled': False,
-                'analysis_temp': 20,
-                'analysis_temp_units': 'C',
-                'filter_by_event_frequency': False,
-            },
-            ]
+        assert (
+            str(e) == "Update harmonic vibe properties error: "
+            "Harmonic vibe props argument is invalid for harmonic vibe properties 0."
         )
-        assert False
-    except SherlockUpdateHarmonicVibePropsError as e:
-        assert str(e) == "Update harmonic vibe properties error: " \
-                         "CCA name is invalid for harmonic vibe properties 0."
 
     try:
         analysis.update_harmonic_vibe_props(
             "Test",
-            [{
-                'cca_name': '',
-                'harmonic_vibe_count': 2,
-                'harmonic_vibe_damping': '0.01, 0.05',
-                'part_validation_enabled': False,
-                'require_material_assignment_enabled': False,
-                'analysis_temp': 20,
-                'analysis_temp_units': 'C',
-                'filter_by_event_frequency': False,
-            },
-            ]
-        )
-        assert False
-    except SherlockUpdateHarmonicVibePropsError as e:
-        assert str(e) == "Update harmonic vibe properties error: " \
-                         "CCA name is invalid for harmonic vibe properties 0."
-
-    try:
-        analysis.update_harmonic_vibe_props(
-            "Test",
-            [{
-                'cca_name': 'Card',
-                'harmonic_vibe_count': 2,
-                'harmonic_vibe_damping': '0.01, foo',
-                'part_validation_enabled': False,
-                'require_material_assignment_enabled': False,
-                'analysis_temp': 20,
-                'analysis_temp_units': 'C',
-                'filter_by_event_frequency': False,
-            },
-            ]
+            [
+                {
+                    "harmonic_vibe_count": 2,
+                    "harmonic_vibe_damping": "0.01, 0.05",
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "C",
+                    "filter_by_event_frequency": False,
+                },
+            ],
         )
         assert False
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
-            str(e)
-            == "Update harmonic vibe properties error: "
-               "Harmonic vibe damping value is invalid for harmonic vibe properties 0: foo"
+            str(e) == "Update harmonic vibe properties error: "
+            "CCA name is invalid for harmonic vibe properties 0."
+        )
+
+    try:
+        analysis.update_harmonic_vibe_props(
+            "Test",
+            [
+                {
+                    "cca_name": "",
+                    "harmonic_vibe_count": 2,
+                    "harmonic_vibe_damping": "0.01, 0.05",
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "C",
+                    "filter_by_event_frequency": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateHarmonicVibePropsError as e:
+        assert (
+            str(e) == "Update harmonic vibe properties error: "
+            "CCA name is invalid for harmonic vibe properties 0."
+        )
+
+    try:
+        analysis.update_harmonic_vibe_props(
+            "Test",
+            [
+                {
+                    "cca_name": "Card",
+                    "harmonic_vibe_count": 2,
+                    "harmonic_vibe_damping": "0.01, foo",
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "C",
+                    "filter_by_event_frequency": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateHarmonicVibePropsError as e:
+        assert (
+            str(e) == "Update harmonic vibe properties error: "
+            "Harmonic vibe damping value is invalid for harmonic vibe properties 0: foo"
         )
 
     if analysis._is_connection_up():
         try:
             analysis.update_harmonic_vibe_props(
                 "Test",
-                [{
-                    'cca_name': 'Main Board',
-                    'harmonic_vibe_count': 2,
-                    'harmonic_vibe_damping': '0.01, 0.02',
-                    'part_validation_enabled': False,
-                    'require_material_assignment_enabled': False,
-                    'analysis_temp': 20,
-                    'analysis_temp_units': 'foo',
-                    'filter_by_event_frequency': False,
-                },
-                ]
+                [
+                    {
+                        "cca_name": "Main Board",
+                        "harmonic_vibe_count": 2,
+                        "harmonic_vibe_damping": "0.01, 0.02",
+                        "part_validation_enabled": False,
+                        "require_material_assignment_enabled": False,
+                        "analysis_temp": 20,
+                        "analysis_temp_units": "foo",
+                        "filter_by_event_frequency": False,
+                    },
+                ],
             )
             assert False
         except SherlockUpdateHarmonicVibePropsError as e:
             assert (
-                str(e)
-                == "Update harmonic vibe properties error: "
-                   "Analysis temperature units are invalid for harmonic vibe properties 0: foo"
+                str(e) == "Update harmonic vibe properties error: "
+                "Analysis temperature units are invalid for harmonic vibe properties 0: foo"
             )
 
         result = analysis.update_harmonic_vibe_props(
-                "Test",
-                [{
-                    'cca_name': 'Main Board',
-                    'harmonic_vibe_count': 2,
-                    'harmonic_vibe_damping': '0.01, 0.02',
-                    'part_validation_enabled': False,
-                    'require_material_assignment_enabled': False,
-                    'analysis_temp': 20,
-                    'analysis_temp_units': 'C',
-                    'filter_by_event_frequency': False,
-                },]
+            "Test",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "harmonic_vibe_count": 2,
+                    "harmonic_vibe_damping": "0.01, 0.02",
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "C",
+                    "filter_by_event_frequency": False,
+                },
+            ],
         )
         assert result == 0
 
