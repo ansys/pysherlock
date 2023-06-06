@@ -8,8 +8,8 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
-    SherlockUpdateRandomVibePropsError,
     SherlockUpdatePcbModelingPropsError,
+    SherlockUpdateRandomVibePropsError,
 )
 
 
@@ -802,7 +802,6 @@ def helper_test_update_pcb_modeling_props(analysis):
                     3,
                     "mm",
                     True,
-
                 )
             ],
         )
@@ -825,7 +824,6 @@ def helper_test_update_pcb_modeling_props(analysis):
                     3,
                     "mm",
                     True,
-
                 )
             ],
         )
@@ -847,7 +845,6 @@ def helper_test_update_pcb_modeling_props(analysis):
                     "mm",
                     3,
                     "mm",
-
                 )
             ],
         )
@@ -918,9 +915,10 @@ def helper_test_update_pcb_modeling_props(analysis):
             ],
         )
     except SherlockUpdatePcbModelingPropsError as e:
-        assert str(e) == \
-               "Update PCB Modeling Error: Input for 'Model Region Enabled' must be a boolean."
-
+        assert(
+            str(e)
+            == "Update PCB Modeling Error: Input for 'Model Region Enabled' must be a boolean."
+        )
     try:
         analysis.update_pcb_modeling_props(
             "Tutorial Project",
@@ -1049,7 +1047,6 @@ def helper_test_update_pcb_modeling_props(analysis):
                     True,
                 )
             ],
-
         )
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: PCB Max Materials input is invalid."
@@ -1072,7 +1069,6 @@ def helper_test_update_pcb_modeling_props(analysis):
                     True,
                 )
             ],
-
         )
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: Element order is invalid."
@@ -1162,10 +1158,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                         3,
                         "mm",
                         True,
-
                     )
                 ],
-
             )
         except Exception as e:
             assert False, e.message
@@ -1189,7 +1183,6 @@ def helper_test_update_pcb_modeling_props(analysis):
                         True,
                     )
                 ],
-
             )
         except Exception as e:
             assert False, e.message

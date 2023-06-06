@@ -20,7 +20,8 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
-    SherlockUpdateRandomVibePropsError, SherlockUpdatePcbModelingPropsError,
+    SherlockUpdateRandomVibePropsError,
+    SherlockUpdatePcbModelingPropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -49,9 +50,6 @@ class Analysis(GrpcStub):
             "SOLDERJOINTFATIGUE": self.ANALYSIS_HOME.SolderJointFatigue,
             "THERMALDERATING": self.ANALYSIS_HOME.ThermalDerating,
             "THERMALMECH": self.ANALYSIS_HOME.ThermalMech,
-        }
-        self.PCB_MODEL_TYPE = {
-            "UNKNOWN"
         }
         self.TEMP_UNIT_LIST = None
         self.FREQ_UNIT_LIST = None
@@ -929,14 +927,11 @@ class Analysis(GrpcStub):
                         message=f"Number of elements ({str(len(element))}) is invalid."
                     )
                 elif not isinstance(element[0], int) or element[0] is None:
-                    raise SherlockUpdatePcbModelingPropsError(
-                        message=f"Analysis type is invalid."
-                    )
+                    raise SherlockUpdatePcbModelingPropsError(message=f"Analysis type is invalid.")
 
-                if not isinstance(element[1], int) or element[1] is None:
-                    raise SherlockUpdatePcbModelingPropsError(
-                        message="Model type is invalid."
-                    )
+                elif not isinstance(element[1], int) or element[1] is None:
+                    raise SherlockUpdatePcbModelingPropsError(message="Model type is invalid.")
+
                 elif not isinstance(element[2], bool) or element[2] is None:
                     raise SherlockUpdatePcbModelingPropsError(
                         message="Input for 'Model Region Enabled' must be a boolean."
