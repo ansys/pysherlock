@@ -20,8 +20,8 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
-    SherlockUpdateRandomVibePropsError,
     SherlockUpdatePcbModelingPropsError,
+    SherlockUpdateRandomVibePropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 

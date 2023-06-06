@@ -915,7 +915,7 @@ def helper_test_update_pcb_modeling_props(analysis):
             ],
         )
     except SherlockUpdatePcbModelingPropsError as e:
-        assert(
+        assert (
             str(e)
             == "Update PCB Modeling Error: Input for 'Model Region Enabled' must be a boolean."
         )
