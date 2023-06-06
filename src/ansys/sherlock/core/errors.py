@@ -786,7 +786,7 @@ class SherlockInvalidPhaseError(Exception):
 
 
 class SherlockUpdatePcbModelingPropsError(Exception):
-    """Conatins the error raised when updating pcb modeling properties results in an error."""
+    """Contains the error raised when updating pcb modeling properties results in an error."""
 
     def __init__(self, message):
         """Initialize error message."""
