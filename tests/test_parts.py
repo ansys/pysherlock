@@ -460,15 +460,16 @@ def helper_test_export_parts_list(parts):
         parts_list_file = os.path.join(temp_dir, "PySherlock unit test exported parts.csv")
 
         try:
+            # use a CCA with not many parts so it finishes faster
             result = parts.export_parts_list(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
                 parts_list_file,
             )
             assert os.path.exists(parts_list_file)
-            # wait for a bit because the response may be returned
+            # may need to wait for a bit because the response may be returned
             # before Sherlock finishes writing the file
-            time.sleep(5)
+            time.sleep(0.5)
             assert result == 0
         except Exception as e:
             pytest.fail(e.message)
