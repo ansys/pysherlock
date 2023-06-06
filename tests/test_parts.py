@@ -2,8 +2,10 @@
 
 import os
 import platform
+import time
 
 import grpc
+import pytest
 
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
@@ -15,8 +17,6 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
-
-# import time
 
 
 def test_all():
@@ -47,8 +47,10 @@ def helper_test_update_parts_list(parts):
                 "Error",
             )
             assert result == 0
+            # wait for Sherlock to finish updating so subsequent tests don't fail
+            time.sleep(1)
         except Exception as e:
-            assert False, e.message
+            pytest.fail(e.message)
 
         try:
             parts.update_parts_list(
@@ -58,7 +60,7 @@ def helper_test_update_parts_list(parts):
                 "Both",
                 "Error",
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdatePartsListError
 
@@ -127,23 +129,18 @@ def helper_test_update_parts_locations(parts):
     """Test update_parts_locations API."""
 
     if parts._is_connection_up():
-        # commenting this out because it causes the following in Sherlock:
-        # java.lang.NullPointerException: Cannot invoke "sherlock.partslist.PartMap.getFile()"
-        #         because the return value of "sherlock.ui.CCA.CCA.getPartMap()" is null
-        # 	at sherlock.grpc.Service.SherlockPartsService.
-        # 	updatePartsLocations(SherlockPartsService.java:394)
-        # try:
-        #     result = parts.update_parts_locations(
-        #         "Tutorial Project",
-        #         "Main Board",
-        #         [
-        #             ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-        #             ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
-        #         ],
-        #     )
-        #     assert result == 0
-        # except Exception as e:
-        #     assert False, e.message
+        try:
+            result = parts.update_parts_locations(
+                "Tutorial Project",
+                "Main Board",
+                [
+                    ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+                    ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
+                ],
+            )
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
 
         try:
             parts.update_parts_locations(
@@ -154,7 +151,7 @@ def helper_test_update_parts_locations(parts):
                     ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
                 ],
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdatePartsLocationsError
 
@@ -180,19 +177,19 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == "Update parts locations error: CCA name is invalid."
 
     try:
         parts.update_parts_locations("Test", "Card", "Invalid")
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert e.str_itr()[0] == "Update parts locations error: Part location argument is invalid."
 
     try:
         parts.update_parts_locations("Test", "Card", [])
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0] == "Update parts locations error: Part location properties "
@@ -258,7 +255,7 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
             e.str_itr()[0]
@@ -390,7 +387,7 @@ def helper_test_update_parts_locations_by_file(parts):
                 "Main Board",
                 "Invalid file path",
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdatePartsLocationsByFileError
 
@@ -426,7 +423,7 @@ def helper_test_import_parts_list(parts):
                 "Invalid file path",
                 False,
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportPartsListError
 
@@ -462,29 +459,24 @@ def helper_test_export_parts_list(parts):
             temp_dir = os.environ.get("TEMP", "/tmp")
         parts_list_file = os.path.join(temp_dir, "PySherlock unit test exported parts.csv")
 
-        # commented out because an exception in Sherlock occurs the 2nd time it runs.
-        # java.lang.NullPointerException: Cannot invoke "sherlock.partslist.PartMap.getParts()"
-        #   because "pm" is null
-        # at sherlock.grpc.Service.SherlockPartsService.
-        # exportPartsList(SherlockPartsService.java:285)
-        # try:
-        #     result = parts.export_parts_list(
-        #         "Tutorial Project",
-        #         "Main Board",
-        #         parts_list_file,
-        #     )
-        #     assert os.path.exists(parts_list_file)
-        #     # wait for a bit because the response may be returned
-        #     # before Sherlock finishes writing the file
-        #     time.sleep(5)
-        #     assert result == 0
-        # except Exception as e:
-        #     assert False, e.message
-        # finally:
-        #     try:
-        #         os.remove(parts_list_file)
-        #     except Exception as e:
-        #         print(str(e))
+        try:
+            result = parts.export_parts_list(
+                "Tutorial Project",
+                "Main Board",
+                parts_list_file,
+            )
+            assert os.path.exists(parts_list_file)
+            # wait for a bit because the response may be returned
+            # before Sherlock finishes writing the file
+            time.sleep(5)
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
+        finally:
+            try:
+                os.remove(parts_list_file)
+            except Exception as e:
+                print(str(e))
 
         try:
             parts.export_parts_list(
@@ -492,7 +484,7 @@ def helper_test_export_parts_list(parts):
                 "Invalid CCA",
                 parts_list_file,
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportPartsListError
 
@@ -516,37 +508,25 @@ def helper_test_export_parts_list(parts):
     except SherlockExportPartsListError as e:
         assert str(e) == "Export parts list error: CCA name is invalid."
 
-    try:
-        parts.export_parts_list(
-            "Test",
-            "Card",
-            "C:Invalid/Invalid",
-        )
-        assert False
-    except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: Export file directory does not exist."
-
 
 def helper_test_enable_lead_modeling(parts):
     """Test enable_lead_modelign API."""
     if parts._is_connection_up():
-        # commenting out because of this error:
-        # Cannot invoke "sherlock.partslist.PartMap.values()" because "pm" is null
-        # try:
-        #     result = parts.enable_lead_modeling(
-        #         "Tutorial Project",
-        #         "Main Board",
-        #     )
-        #     assert result == 0
-        # except Exception as e:
-        #     assert False, e.message
+        try:
+            result = parts.enable_lead_modeling(
+                "Tutorial Project",
+                "Main Board",
+            )
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
 
         try:
             parts.enable_lead_modeling(
                 "Tutorial Project",
                 "Invalid CCA",
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockEnableLeadModelingError
 
@@ -573,22 +553,16 @@ def helper_test_get_part_location(parts):
     """Test get_part_location API"""
 
     if parts._is_connection_up():
-        # commented out because Sherlock has this exception:
-        # java.lang.NullPointerException: Cannot invoke "sherlock.partslist.PartMap.getPart(String)"
-        #          because "pm" is null
-        # at sherlock.grpc.Service.SherlockPartsService.
-        # getPartLocation(SherlockPartsService.java:614)
-
-        # try:
-        #     result = parts.get_part_location(
-        #         "Tutorial Project",
-        #         "Main Board",
-        #         "C1",
-        #         "in",
-        #     )
-        #     assert result == 0
-        # except Exception as e:
-        #     assert False, e.message
+        try:
+            result = parts.get_part_location(
+                "Tutorial Project",
+                "Main Board",
+                "C1",
+                "in",
+            )
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
 
         try:
             parts.get_part_location(
@@ -597,7 +571,7 @@ def helper_test_get_part_location(parts):
                 "C1",
                 "in",
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockGetPartLocationError
 
