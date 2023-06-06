@@ -894,14 +894,14 @@ class Analysis(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        analysisType = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.NaturalFreq
+        Type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Natural-Freq
         modelType = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Bonded
         sherlock.analysis.update_pcb_modeling_props(
             "Tutorial Project",
             ["Main Board"],
             [
                 (
-                    analysisType,
+                    Type,
                     modelType,
                     True,
                     "Uniform",
@@ -921,7 +921,7 @@ class Analysis(GrpcStub):
         try:
             if project == "":
                 raise SherlockUpdatePcbModelingPropsError(message="Project name is invalid.")
-            if cca_names == "":
+            if not cca_names:
                 raise SherlockUpdatePcbModelingPropsError(message="CCA name is invalid.")
             for i, element in enumerate(elements):
                 if len(element) < 10 or len(element) > 11:
@@ -964,6 +964,10 @@ class Analysis(GrpcStub):
                             message="Input for quads preferred must be a boolean."
                         )
                 else:
+                    if not isinstance(element[4], int) or element[4] is None:
+                        raise SherlockUpdatePcbModelingPropsError(
+                            message="PCB Max Materials input is invalid."
+                        )
                     if not isinstance(element[5], str) or element[5] == "":
                         raise SherlockUpdatePcbModelingPropsError(
                             message="Element order is invalid."

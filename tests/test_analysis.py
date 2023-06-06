@@ -1,5 +1,5 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
-
+import SherlockAnalysisService_pb2
 import grpc
 
 from ansys.sherlock.core.analysis import Analysis
@@ -9,6 +9,7 @@ from ansys.sherlock.core.errors import (
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdateRandomVibePropsError,
+    SherlockUpdatePcbModelingPropsError,
 )
 
 
@@ -24,6 +25,7 @@ def test_all():
     helper_test_translate_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_update_natural_frequency_props(analysis)
+    helper_test_update_pcb_modeling_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -779,6 +781,418 @@ def helper_test_update_natural_frequency_props(analysis):
             assert False
         except Exception as e:
             assert type(e) == SherlockUpdateNaturalFrequencyPropsError
+
+
+def helper_test_update_pcb_modeling_props(analysis):
+    type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.NaturalFreq
+    model_type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Bonded
+    try:
+        analysis.update_pcb_modeling_props(
+            "",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Project name is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            [],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: CCA name is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Number of elements (9) is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    "",
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Analysis type is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    "",
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Model type is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    "True",
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == \
+               "Update PCB Modeling Error: Input for 'Model Region Enabled' must be a boolean."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: PCB material model is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Element order is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: PBC max edge length unit is invalid."
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: PBC max vertical unit is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    "True",
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Input for quads preferred must be a boolean."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "UniformElements",
+                    "94",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: PCB Max Materials input is invalid."
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "UniformElements",
+                    94,
+                    "",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Element order is invalid."
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    94,
+                    "SolidShell",
+                    6,
+                    "",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: PBC max edge length unit is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    94,
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: PBC max vertical unit is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    type,
+                    model_type,
+                    True,
+                    "Uniform",
+                    94,
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    "True",
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Input for quads preferred must be a boolean."
+
+    if analysis._is_connection_up():
+        try:
+            analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        type,
+                        model_type,
+                        True,
+                        "Uniform",
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+
+                    )
+                ],
+
+            )
+        except Exception as e:
+            assert False, e.message
+
+        try:
+            analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        type,
+                        model_type,
+                        True,
+                        "UniformElements",
+                        94,
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+
+            )
+        except Exception as e:
+            assert False, e.message
 
 
 if __name__ == "__main__":
