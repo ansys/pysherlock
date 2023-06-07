@@ -1,5 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 import grpc
+import pytest
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import (
@@ -112,7 +113,7 @@ def helper_test_run_strain_map_analysis(analysis):
 
     if analysis._is_connection_up():
         try:
-            analysis.run_strain_map_analysis(
+            result = analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
                 [
@@ -132,8 +133,9 @@ def helper_test_run_strain_map_analysis(analysis):
                     ]
                 ],
             )
+            assert result == 0
         except Exception as e:
-            print(str(e))
+            pytest.fail(e.message)
 
     try:
         analysis.run_strain_map_analysis(
@@ -418,17 +420,14 @@ def helper_test_run_strain_map_analysis(analysis):
 
 def helper_test_get_harmonic_vibe_input_fields(analysis):
     if analysis._is_connection_up():
-        try:
-            fields = analysis.get_harmonic_vibe_input_fields()
-            assert "analysis_temp" in fields
-            assert "analysis_temp_units" in fields
-            assert "harmonic_vibe_count" in fields
-            assert "harmonic_vibe_damping" in fields
-            assert "model_source" in fields
-            assert "part_validation_enabled" in fields
-            assert "require_material_assignment_enabled" in fields
-        except Exception as e:
-            print(str(e))
+        fields = analysis.get_harmonic_vibe_input_fields()
+        assert "analysis_temp" in fields
+        assert "analysis_temp_units" in fields
+        assert "harmonic_vibe_count" in fields
+        assert "harmonic_vibe_damping" in fields
+        assert "model_source" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
 
 
 def helper_test_get_random_vibe_input_fields(analysis):

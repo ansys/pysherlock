@@ -835,7 +835,9 @@ class Analysis(GrpcStub):
 
             if response.value == -1:
                 raise SherlockRunStrainMapAnalysisError(response.message)
-
+            else:
+                LOG.info(response.message)
+                return response.value
         except SherlockRunStrainMapAnalysisError as e:
             LOG.error(str(e))
             raise e
