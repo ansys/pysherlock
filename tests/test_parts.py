@@ -130,6 +130,19 @@ def helper_test_update_parts_locations(parts):
 
     if parts._is_connection_up():
         try:
+            result = parts.update_parts_locations(
+                "Tutorial Project",
+                "Main Board",
+                [
+                    ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+                    ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
+                ],
+            )
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
+
+        try:
             parts.update_parts_locations(
                 "Tutorial Project",
                 "Invalid CCA",
@@ -141,19 +154,6 @@ def helper_test_update_parts_locations(parts):
             pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdatePartsLocationsError
-
-        try:
-            result = parts.update_parts_locations(
-                "Tutorial Project",
-                "Main Board",
-                [
-                    ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-                    ("J1", "-3.55", "1", "90", "in", "TOP", "False"),
-                ],
-            )
-            assert result == 0
-        except SherlockUpdatePartsLocationsError as e:
-            pytest.fail(e.message)
 
     try:
         parts.update_parts_locations(
@@ -262,14 +262,12 @@ def helper_test_update_parts_locations(parts):
             == "Update parts locations error: Invalid part location 0: Location units are missing."
         )
 
-    # TODO: remove the following parameter validations
     try:
-        part_location = "Invalid"
         parts.update_parts_locations(
             "Test",
             "Card",
             [
-                ("C1", part_location, "-1.65", "0", "in", "TOP", "False"),
+                ("C1", "Invalid", "-1.65", "0", "in", "TOP", "False"),
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
@@ -281,13 +279,12 @@ def helper_test_update_parts_locations(parts):
         )
 
     try:
-        y_location = "Invalid"
         parts.update_parts_locations(
             "Test",
             "Card",
             [
                 ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-                ("J1", "-3.55", y_location, "90", "in", "TOP", "False"),
+                ("J1", "-3.55", "Invalid", "90", "in", "TOP", "False"),
             ],
         )
         assert False
@@ -298,13 +295,12 @@ def helper_test_update_parts_locations(parts):
         )
 
     try:
-        location_units = ""
         parts.update_parts_locations(
             "Test",
             "Card",
             [
                 ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-                ("J1", "-3.55", "-2.220446049250313E-16", "90", location_units, "TOP", "False"),
+                ("J1", "", "-2.220446049250313E-16", "90", "", "TOP", "False"),
             ],
         )
         assert False
@@ -346,22 +342,22 @@ def helper_test_update_parts_locations(parts):
             "Location rotation is invalid."
         )
 
-    try:
-        board_side = "Invalid"
-        parts.update_parts_locations(
-            "Test",
-            "Card",
-            [
-                ("C1", "-2.7", "-1.65", "0", "in", board_side, "False"),
-                ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
-            ],
-        )
-        assert False
-    except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == (
-            "Update parts locations error: Invalid part location 0: "
-            "Location board side is invalid."
-        )
+    if parts._is_connection_up():
+        try:
+            parts.update_parts_locations(
+                "Test",
+                "Card",
+                [
+                    ("C1", "-2.7", "-1.65", "0", "in", "Invalid", "False"),
+                    ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
+                ],
+            )
+            assert False
+        except SherlockUpdatePartsLocationsError as e:
+            assert e.str_itr()[0] == (
+                "Update parts locations error: Invalid part location 0: "
+                "Location board side is invalid."
+            )
 
     try:
         parts.update_parts_locations(
