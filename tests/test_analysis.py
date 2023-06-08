@@ -1,9 +1,4 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
-try:
-    import SherlockAnalysisService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
-
 import grpc
 
 from ansys.sherlock.core.analysis import Analysis
