@@ -5,17 +5,12 @@
 try:
     import SherlockAnalysisService_pb2
     import SherlockAnalysisService_pb2_grpc
-    import SherlockLifeCycleService_pb2
-    import SherlockLifeCycleService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2_grpc
-    from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2
-    from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
-    SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
@@ -32,9 +27,6 @@ class Analysis(GrpcStub):
         """Initialize a gRPC stub for the Sherlock Analysis service."""
         super().__init__(channel)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
-        self.lifecycle = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
-        self.TEMP_UNIT_LIST = None
-        self.FREQ_UNIT_LIST = None
         self.FIELD_NAMES = {
             "analysisTemp": "analysis_temp",
             "analysisTemp (optional)": "analysis_temp",
@@ -57,22 +49,6 @@ class Analysis(GrpcStub):
             "reuseModalAnalysis": "reuse_modal_analysis",
             "strainMapNaturalFreqs": "strain_map_natural_freqs",
         }
-
-    def _init_freq_units(self):
-        """Initialize the list of frequency units."""
-        if self._is_connection_up():
-            freq_unit_request = SherlockLifeCycleService_pb2.ListFreqUnitsRequest()
-            freq_type_response = self.lifecycle.listFreqUnits(freq_unit_request)
-            if freq_type_response.returnCode.value == 0:
-                self.FREQ_UNIT_LIST = freq_type_response.freqUnits
-
-    def _init_temp_units(self):
-        """Initialize the list of temperature units."""
-        if self._is_connection_up():
-            temp_unit_request = SherlockLifeCycleService_pb2.ListTempUnitsRequest()
-            temp_unit_response = self.lifecycle.listTempUnits(temp_unit_request)
-            if temp_unit_response.returnCode.value == 0:
-                self.TEMP_UNIT_LIST = temp_unit_response.tempUnits
 
     @staticmethod
     def _add_analyses(request, analyses):
@@ -221,10 +197,8 @@ class Analysis(GrpcStub):
 
         Parameters
         ----------
-        model_source : str, optional
-            Model source to get the random vibe property fields from. The default is
-            ``None``, in which case the ``"GENERATED"`` input form is used. Options
-            are ``"GENERATED"`` and ``"STRAIN_MAP"``.
+        model_source : ModelSource, optional
+            Model source to get the random vibe property fields from.
 
         Returns
         -------
@@ -244,17 +218,10 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_random_vibe_input_fields()
+        >>> sherlock.analysis.get_random_vibe_input_fields(
+            model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
+        )
         """
-        if model_source is None or model_source == "GENERATED":
-            model_source = SherlockAnalysisService_pb2.ModelSource.GENERATED
-        elif model_source == "STRAIN_MAP":
-            model_source = SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
-        else:
-            msg = f"Model source {model_source} is invalid."
-            LOG.error(msg)
-            raise SherlockGetRandomVibeInputFieldsError(message=msg)
-
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
@@ -338,9 +305,9 @@ class Analysis(GrpcStub):
             This parameter is for NX Nastran analysis only.
         require_material_assignment_enabled: bool, optional
             Whether to require material assignment. The default is ``None``.
-        model_source: str
-            Model source. The default is ``None``. Options are ``"GENERATED"``
-            and ``"STRAIN_MAP"``. This parameter is required for strain map analysis.
+        model_source: ModelSource, optional
+            Model source.
+            This parameter is required for strain map analysis.
         strain_map_natural_freqs : list, optional
             List of natural frequencies. The default is ``None``.
             This parameter is required for strain map analysis.
@@ -363,63 +330,20 @@ class Analysis(GrpcStub):
             "Card",
             random_vibe_damping="0.01, 0.05",
             analysis_temp=20,
-            analysis_temp_units="C"
+            analysis_temp_units="C",
+            model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
         )
 
         """
-        if self.FREQ_UNIT_LIST is None:
-            self._init_freq_units()
-        if self.TEMP_UNIT_LIST is None:
-            self._init_temp_units()
         try:
             if project == "":
                 raise SherlockUpdateRandomVibePropsError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockUpdateRandomVibePropsError(message="CCA name is invalid.")
-            if random_vibe_damping is not None:
-                for value in random_vibe_damping.split(","):
-                    try:
-                        float(value.strip())
-                    except ValueError:
-                        raise SherlockUpdateRandomVibePropsError(
-                            message="Random vibe damping value is invalid: " + value.strip()
-                        )
-            if (
-                (self.FREQ_UNIT_LIST is not None)
-                and (natural_freq_min_units is not None)
-                and (natural_freq_min_units not in self.FREQ_UNIT_LIST)
-            ):
+            if random_vibe_damping == "":
                 raise SherlockUpdateRandomVibePropsError(
-                    message="Minimum natural frequency units are invalid: " + natural_freq_min_units
+                    message="Random vibe damping value is invalid."
                 )
-
-            if (
-                (self.FREQ_UNIT_LIST is not None)
-                and (natural_freq_max_units is not None)
-                and (natural_freq_max_units not in self.FREQ_UNIT_LIST)
-            ):
-                raise SherlockUpdateRandomVibePropsError(
-                    message="Maximum natural frequency units are invalid: " + natural_freq_max_units
-                )
-
-            if (
-                (self.TEMP_UNIT_LIST is not None)
-                and (analysis_temp_units is not None)
-                and (analysis_temp_units not in self.TEMP_UNIT_LIST)
-            ):
-                raise SherlockUpdateRandomVibePropsError(
-                    message="Analysis temperature units are invalid: " + analysis_temp_units
-                )
-
-            if model_source is None or model_source == "GENERATED":
-                model_source = SherlockAnalysisService_pb2.ModelSource.GENERATED
-            elif model_source == "STRAIN_MAP":
-                model_source = SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
-            else:
-                raise SherlockUpdateRandomVibePropsError(
-                    message=f"Model source {model_source} is invalid."
-                )
-
             if model_source == SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP and (
                 strain_map_natural_freqs is None or strain_map_natural_freqs == ""
             ):
@@ -495,7 +419,11 @@ class Analysis(GrpcStub):
 
         message = SherlockAnalysisService_pb2.GetNaturalFrequencyInputFieldsRequest()
         response = self.stub.getNaturalFrequencyInputFields(message)
-        LOG.info(self._translate_field_names(response.fieldName))
+
+        fields = self._translate_field_names(response.fieldName)
+        LOG.info(fields)
+
+        return fields
 
     def update_natural_frequency_props(
         self,
@@ -568,33 +496,11 @@ class Analysis(GrpcStub):
         )
 
         """
-        if self.FREQ_UNIT_LIST is None:
-            self._init_freq_units()
-        if self.TEMP_UNIT_LIST is None:
-            self._init_temp_units()
         try:
             if project == "":
                 raise SherlockUpdateNaturalFrequencyPropsError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockUpdateNaturalFrequencyPropsError(message="CCA name is invalid.")
-            if (self.FREQ_UNIT_LIST is not None) and (
-                natural_freq_min_units not in self.FREQ_UNIT_LIST
-            ):
-                raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Minimum natural frequency units are invalid: " + natural_freq_min_units
-                )
-            if (self.FREQ_UNIT_LIST is not None) and (
-                natural_freq_max_units not in self.FREQ_UNIT_LIST
-            ):
-                raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Maximum natural frequency units are invalid: " + natural_freq_max_units
-                )
-            if (self.TEMP_UNIT_LIST is not None) and (
-                analysis_temp_units not in self.TEMP_UNIT_LIST
-            ):
-                raise SherlockUpdateNaturalFrequencyPropsError(
-                    message="Analysis temperature units are invalid: " + analysis_temp_units
-                )
         except SherlockUpdateNaturalFrequencyPropsError as e:
             LOG.error(str(e))
             raise e
@@ -667,12 +573,12 @@ class Analysis(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
+        >>> analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
         >>> analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
                 [[
-                    request.StrainMapAnalysis.AnalysisType.RandomVibe,
+                    analysis_request.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                      ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
                      ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
