@@ -20,6 +20,7 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
@@ -150,7 +151,7 @@ class Analysis(GrpcStub):
             - elements: list
                 List of tuples (``type``, ``event``)
 
-                - type : str
+                - analysis_type : str
                     Type of analysis to run. Options are:
 
                     - ``"COMPONENTFAILUREMODE"``
@@ -836,5 +837,122 @@ class Analysis(GrpcStub):
                 raise SherlockRunStrainMapAnalysisError(response.message)
 
         except SherlockRunStrainMapAnalysisError as e:
+            LOG.error(str(e))
+            raise e
+
+    def update_pcb_modeling_props(self, project, cca_names, analyses):
+        """Update FEA PCB Modeling properties for one or more CCAs.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_names : list
+            Names of the CCAs to be used for the analysis.
+        analyses : list
+            List of elements consisting of the following properties:
+
+            - analysis_type : str
+                Type of analysis applied. Options are ``"UnknownAnalysisType"``, ``"HarmonicVibe"``,
+                 ``"ICTAnalysis"``, ``"MechanicalShock"``, ``"NaturalFreq"``, ``"RandomVibe"``, and
+                 ``"ThermalMech"``.
+
+            - model_type : str
+                The PCB modeling mesh type.Options are ``"UnknownMeshType"`` or ``"Bonded"``.
+            - modeling_region_enabled : bool
+                Indicates if modeling regions are enabled.
+            - pcb_material_model : str
+                The PCB modeling PCB model type. Options are ``"Layered"``, ``"Uniform"``,
+                ``"Layered Element"``, and ``"Uniform Element"``.
+            - pcb_max_materials : int
+                The number of PCB materials for Uniform Elements and Layered Elements PCB model
+                types. Not applicable if PCB model is Uniform or Layered.
+            - pcb_elem_order : str
+                The element order for PCB elements.
+            - pcb_max_edge_length : float
+                The maximum mesh size for PCB elements.
+            - pcb_max_edge_length_units : str
+                The length units for the maximum mesh size.
+            - pcb_max_vertical : float
+                The maximum vertical mesh size for PCB elements.
+            - pcb_max_vertical_units : str
+                The length units for the maximum vertical mesh size.
+            - quads_preferred : bool
+                Indicates that the meshing engine should attempt to generate quad-shaped elements
+                when creating the mesh.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        sherlock.analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [
+                (
+                    "NaturalFreq",
+                    "Bonded",
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+
+                )
+            ],
+
+
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockUpdatePcbModelingPropsError(message="Project name is invalid.")
+            if not cca_names:
+                raise SherlockUpdatePcbModelingPropsError(message="CCA names are invalid.")
+            if not analyses:
+                raise SherlockUpdatePcbModelingPropsError(message="Analysis input(s) are invalid.")
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest(
+                project=project,
+                ccaNames=cca_names,
+            )
+
+            """Add PCB Modeling Props to Request"""
+            uniform = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Uniform
+            layered = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Layered
+            for a in analyses:
+                analysis = request.analyses.add()
+                analysis.type = a[0]
+                analysis.modelType = a[1]
+                analysis.modelingRegionEnabled = a[2]
+                analysis.pcbMaterialModel = a[3]
+                if analysis.pcbMaterialModel == uniform or analysis.pcbMaterialModel == layered:
+                    analysis.pcbElemOrder = a[4]
+                    analysis.pcbMaxEdgeLength = a[5]
+                    analysis.pcbMaxEdgeLengthUnits = a[6]
+                    analysis.pcbMaxVertical = a[7]
+                    analysis.pcbMaxVerticalUnits = a[8]
+                    analysis.quadsPreferred = a[9]
+                else:
+                    analysis.pcbMaxMaterials = a[4]
+                    analysis.pcbElemOrder = a[5]
+                    analysis.pcbMaxEdgeLength = a[6]
+                    analysis.pcbMaxEdgeLengthUnits = a[7]
+                    analysis.pcbMaxVertical = a[8]
+                    analysis.pcbMaxVerticalUnits = a[9]
+                    analysis.quadsPreferred = a[10]
+
+            response = self.stub.updatePcbModelingProps(request)
+
+            if response.value == -1:
+                raise SherlockUpdatePcbModelingPropsError(response.message)
+            return response.value
+        except SherlockUpdatePcbModelingPropsError as e:
             LOG.error(str(e))
             raise e

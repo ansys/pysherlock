@@ -1,5 +1,4 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
-
 import grpc
 
 from ansys.sherlock.core.analysis import Analysis
@@ -8,6 +7,7 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
 )
 
@@ -24,6 +24,7 @@ def test_all():
     helper_test_translate_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_update_natural_frequency_props(analysis)
+    helper_test_update_pcb_modeling_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -779,6 +780,199 @@ def helper_test_update_natural_frequency_props(analysis):
             assert False
         except Exception as e:
             assert type(e) == SherlockUpdateNaturalFrequencyPropsError
+
+
+def helper_test_update_pcb_modeling_props(analysis):
+    try:
+        analysis.update_pcb_modeling_props(
+            "",
+            ["Main Board"],
+            [
+                (
+                    "NaturalFreq",
+                    "Bonded",
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Project name is invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            [],
+            [
+                (
+                    "NaturalFreq",
+                    "Bonded",
+                    True,
+                    "Uniform",
+                    "SolidShell",
+                    6,
+                    "mm",
+                    3,
+                    "mm",
+                    True,
+                )
+            ],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: CCA names are invalid."
+
+    try:
+        analysis.update_pcb_modeling_props(
+            "Tutorial Project",
+            ["Main Board"],
+            [],
+        )
+    except SherlockUpdatePcbModelingPropsError as e:
+        assert str(e) == "Update PCB Modeling Error: Analysis input(s) are invalid."
+
+    if analysis._is_connection_up():
+        try:
+            result1 = analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        "NaturalFreq",
+                        "Bonded",
+                        True,
+                        "Uniform",
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            assert result1 == 0
+        except Exception as e:
+            assert False, e.message
+        try:
+            result1 = analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        "NaturalFreq",
+                        "Bonded",
+                        True,
+                        "Uniform",
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            assert result1 == 0
+        except Exception as e:
+            assert False, e.message
+
+        try:
+            result2 = analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        "NaturalFreq",
+                        "Bonded",
+                        True,
+                        "Layered",
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            assert result2 == 0
+        except Exception as e:
+            assert False, e.message
+
+        try:
+            result3 = analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        "NaturalFreq",
+                        "Bonded",
+                        True,
+                        "UniformElements",
+                        94,
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            assert result3 == 0
+        except Exception as e:
+            assert False, e.message
+        try:
+            result4 = analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Main Board"],
+                [
+                    (
+                        "NaturalFreq",
+                        "Bonded",
+                        True,
+                        "LayeredElements",
+                        94,
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            assert result4 == 0
+        except Exception as e:
+            assert False, e.message
+        try:
+            analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Invalid CCA"],
+                [
+                    (
+                        "NaturalFreq",
+                        "Bonded",
+                        True,
+                        "Layered",
+                        "SolidShell",
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            assert False
+        except Exception as e:
+            assert type(e) == SherlockUpdatePcbModelingPropsError
 
 
 if __name__ == "__main__":
