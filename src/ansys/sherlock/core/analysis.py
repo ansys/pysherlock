@@ -16,7 +16,6 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockGetRandomVibeInputFieldsError,
-    SherlockInvalidPhaseError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
@@ -34,23 +33,6 @@ class Analysis(GrpcStub):
         super().__init__(channel)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
         self.lifecycle = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
-        self.ANALYSIS_HOME = SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis
-        self.ANALYSIS_TYPES = {
-            "UNKNOWN": self.ANALYSIS_HOME.UNKNOWN,
-            "NATURALFREQ": self.ANALYSIS_HOME.NaturalFreq,
-            "HARMONICVIBE": self.ANALYSIS_HOME.HarmonicVibe,
-            "ICTANALYSIS": self.ANALYSIS_HOME.ICTAnalysis,
-            "MECHANICALSHOCK": self.ANALYSIS_HOME.MechanicalShock,
-            "RANDOMVIBE": self.ANALYSIS_HOME.RandomVibe,
-            "COMPONENTFAILUREMODE": self.ANALYSIS_HOME.ComponentFailureMode,
-            "DFMEAMODULE": self.ANALYSIS_HOME.DFMEAModule,
-            "PTHFATIGUE": self.ANALYSIS_HOME.PTHFatigue,
-            "PARTVALIDATION": self.ANALYSIS_HOME.PartValidation,
-            "SEMICONDUCTORWEAROUT": self.ANALYSIS_HOME.SemiconductorWearout,
-            "SOLDERJOINTFATIGUE": self.ANALYSIS_HOME.SolderJointFatigue,
-            "THERMALDERATING": self.ANALYSIS_HOME.ThermalDerating,
-            "THERMALMECH": self.ANALYSIS_HOME.ThermalMech,
-        }
         self.TEMP_UNIT_LIST = None
         self.FREQ_UNIT_LIST = None
         self.FIELD_NAMES = {
@@ -92,45 +74,18 @@ class Analysis(GrpcStub):
             if temp_unit_response.returnCode.value == 0:
                 self.TEMP_UNIT_LIST = temp_unit_response.tempUnits
 
-    def _add_analyses(self, request, analyses):
+    @staticmethod
+    def _add_analyses(request, analyses):
         """Add analyses."""
         for a in analyses:
             analysis = request.analyses.add()
-            analysis.type = self.ANALYSIS_TYPES[a[0].upper()]
+            analysis.type = a[0]
             for p in a[1]:
                 phase = analysis.phases.add()
                 phase.name = p[0]
                 for e in p[1]:
                     event = phase.events.add()
                     event.name = e
-
-    def _check_analyses(self, input):
-        """Check the input array for a valid analyses argument."""
-        if not isinstance(input, list):
-            raise SherlockRunAnalysisError("Analyses argument is invalid.")
-        if len(input) == 0:
-            raise SherlockRunAnalysisError("One or more analyses are missing.")
-        for i, analysis in enumerate(input):
-            try:
-                if analysis[0].upper() not in self.ANALYSIS_TYPES:
-                    raise SherlockRunAnalysisError(f"Invalid analysis {i}: Analysis is invalid.")
-                self._check_phases(analysis[1])
-            except SherlockInvalidPhaseError as e:
-                raise SherlockRunAnalysisError(f"Invalid analysis {i}: {str(e)}")
-
-    def _check_phases(self, input):
-        """Check the input array for a valid phases argument."""
-        if not isinstance(input, list):
-            raise SherlockInvalidPhaseError("Phases argument is invalid.")
-        for i, phase in enumerate(input):
-            if phase[0] == "":
-                raise SherlockInvalidPhaseError(f"Invalid phase {i}: Phase name is invalid.")
-            if not isinstance(phase[1], list):
-                raise SherlockInvalidPhaseError(f"Invalid phase {i}: Events argument is invalid.")
-            if "" in phase[1]:
-                raise SherlockInvalidPhaseError(
-                    f"Invalid phase {i}: One or more event names " f"are invalid."
-                )
 
     def run_analysis(
         self,
@@ -151,23 +106,8 @@ class Analysis(GrpcStub):
             - elements: list
                 List of tuples (``type``, ``event``)
 
-                - analysis_type : str
-                    Type of analysis to run. Options are:
-
-                    - ``"COMPONENTFAILUREMODE"``
-                    - ``"DFMEAMODULE"``
-                    - ``"HARMONICVIBE"``
-                    - ``"ICTANALYSIS"``
-                    - ``"MECHANICALSHOCK"``
-                    - ``"NATURALFREQ"``
-                    - ``"PARTVALIDATION"``
-                    - ``"PTHFATIGUE"``
-                    - ``"RANDOMVIBE"``
-                    - ``"SEMICONDUCTORWEAROUT"``
-                    - ``"SOLDERJOINTFATIGUE"``
-                    - ``"THERMALDERATING"``
-                    - ``"THERMALMECH"``
-                    - ``"UNKNOWN"``
+                - analysis_type : RunAnalysisRequest.Analysis.AnalysisType
+                    Type of analysis to run.
 
                 - event : list
                     List of tuples (``phase_name``, ``event_name``)
@@ -195,7 +135,7 @@ class Analysis(GrpcStub):
             "Test",
             "Card",
             [
-                ("NATURALFREQ",
+                (SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.NaturalFreq,
                 [
                     ("Phase 1", ["Harmonic Event"])
                 ]
@@ -208,7 +148,10 @@ class Analysis(GrpcStub):
                 raise SherlockRunAnalysisError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockRunAnalysisError(message="CCA name is invalid.")
-            self._check_analyses(analyses)
+            if not isinstance(analyses, list):
+                raise SherlockRunAnalysisError("Analyses argument is invalid.")
+            if len(analyses) == 0:
+                raise SherlockRunAnalysisError("One or more analyses are missing.")
         except SherlockRunAnalysisError as e:
             LOG.error(str(e))
             raise e
@@ -703,8 +646,8 @@ class Analysis(GrpcStub):
         strain_map_analyses : list
             List of analyses consisting of these properties:
 
-            - analysis_type : str
-                Type of analysis to run. The only option is ``"RANDOMVIBE"``.
+            - analysis_type : RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
+                Type of analysis to run.
             - event_strain_maps : list
                 List of the strain maps assigned to the desired life cycle events for
                 a given PCB side. The list consists of these properties:
@@ -724,11 +667,12 @@ class Analysis(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
+        >>> request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
         >>> analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
                 [[
-                    "RANDOMVIBE",
+                    request.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                      ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
                      ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
@@ -756,7 +700,7 @@ class Analysis(GrpcStub):
             for i, analysis in enumerate(strain_map_analyses):
                 if not isinstance(analysis, list):
                     raise SherlockRunStrainMapAnalysisError(
-                        f"Analysis argument is invalid for strain map analysis {i}."
+                        f"Analyses argument is invalid for strain map analysis {i}."
                     )
 
                 if len(analysis) != 2:
@@ -765,18 +709,10 @@ class Analysis(GrpcStub):
                         f"strain map analysis {i}."
                     )
 
-                analysis_type = analysis[0].upper()
+                analysis_type = analysis[0]
                 if analysis_type == "":
                     raise SherlockRunStrainMapAnalysisError(
                         f"Analysis type is missing for strain map analysis {i}."
-                    )
-                elif analysis_type == "RANDOMVIBE":
-                    analysis_type = (
-                        SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe  # noqa: E501
-                    )
-                else:
-                    raise SherlockRunStrainMapAnalysisError(
-                        f"Analysis type {analysis_type} is invalid for " f"strain map analysis {i}."
                     )
 
                 strain_map_analysis_request = request.strainMapAnalyses.add()
@@ -790,7 +726,7 @@ class Analysis(GrpcStub):
                 for j, event_strain_map in enumerate(analysis[1]):
                     if not isinstance(event_strain_map, list):
                         raise SherlockRunStrainMapAnalysisError(
-                            f"Event strain map argument is invalid for strain map analysis {i}."
+                            f"Event strain maps argument is invalid for strain map analysis {i}."
                         )
                     elif len(event_strain_map) < 4:
                         raise SherlockRunStrainMapAnalysisError(

@@ -1,4 +1,7 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+import time
+
+import SherlockAnalysisService_pb2
 import grpc
 import pytest
 
@@ -18,8 +21,9 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     analysis = Analysis(channel)
-    helper_test_run_strain_map_analysis(analysis)
     helper_test_run_analysis(analysis)
+    time.sleep(1)
+    helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
@@ -30,95 +34,85 @@ def test_all():
 
 def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
+    analysis_request = SherlockAnalysisService_pb2.RunAnalysisRequest
+    natural_frequency_analysis_type = analysis_request.Analysis.AnalysisType.NaturalFreq
 
     if analysis._is_connection_up():
         result = analysis.run_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
+            [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])],
         )
         assert result == 0
 
     try:
         analysis.run_analysis(
-            "", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+            "", "Main Board", [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])]
         ),
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Project name is invalid."
 
     try:
         analysis.run_analysis(
-            "AssemblyTutorial", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+            "AssemblyTutorial",
+            "",
+            [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])],
         ),
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: CCA name is invalid."
 
     try:
-        analysis.run_analysis("AssemblyTutorial", "Main Board", "Invalid")
-        assert False
+        analysis.run_analysis("AssemblyTutorial", "Main Board", "Not a list")
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Analyses argument is invalid."
 
     try:
         analysis.run_analysis("Test", "Card", [])
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: One or more analyses are missing."
-
-    try:
-        analysis.run_analysis("Test", "Card", [("Invalid", [("Phase 1", ["Harmonic Event"])])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Analysis is invalid."
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("", ["Harmonic Event"])])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Phase name is invalid."
-        )
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", "Invalid")])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Phases argument is invalid."
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("Phase 1", "Invalid")])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == (
-            "Run analysis error: Invalid analysis 0:"
-            " Invalid phase 0: Events argument "
-            "is invalid."
-        )
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("Phase 1", [""])])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == (
-            "Run analysis error: Invalid analysis 0:"
-            " Invalid phase 0: One or more event "
-            "names are invalid."
-        )
 
 
 def helper_test_run_strain_map_analysis(analysis):
     """Test run_strain_map_analysis API."""
-
+    analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
+    random_vibe_analysis_type = analysis_request.StrainMapAnalysis.AnalysisType.RandomVibe
     if analysis._is_connection_up():
+        try:
+            analysis.run_strain_map_analysis(
+                "AssemblyTutorial",
+                "Invalid CCA",
+                [
+                    [
+                        random_vibe_analysis_type,
+                        [
+                            ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                            ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                            [
+                                "Phase 1",
+                                "Random Vibe",
+                                "TOP",
+                                "MemoryCard1Strain",
+                                "Memory Card 1",
+                            ],
+                        ],
+                    ]
+                ],
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockRunStrainMapAnalysisError
+
         try:
             result = analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
                 [
                     [
-                        "RANDOMVIBE",
+                        random_vibe_analysis_type,
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -134,7 +128,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ],
             )
             assert result == 0
-        except Exception as e:
+        except SherlockRunStrainMapAnalysisError as e:
             pytest.fail(e.message)
 
     try:
@@ -143,7 +137,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -152,7 +146,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: Project name is invalid."
 
@@ -162,7 +156,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -171,7 +165,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: CCA name is invalid."
 
@@ -179,38 +173,41 @@ def helper_test_run_strain_map_analysis(analysis):
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            "Invalid",
+            "Invalid analyses",
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: Analyses argument is invalid."
 
     try:
-        analysis.run_strain_map_analysis("AssemblyTutorial", "Main Board", [])
-        assert False
+        analyses = []
+        analysis.run_strain_map_analysis("AssemblyTutorial", "Main Board", analyses)
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: One or more analyses are missing."
 
     try:
+        analyses = ["INVALID"]
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            ["INVALID"],
+            analyses,
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
-            str(e) == "Run strain map analysis error: Analysis argument is invalid for strain "
+            str(e) == "Run strain map analysis error: Analyses argument is invalid for strain "
             "map analysis 0."
         )
 
     try:
+        analyses = [["INVALID"]]
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [["INVALID"]],
+            analyses,
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e)
@@ -219,12 +216,13 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
     try:
+        analysis_type = ""
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
             [
                 [
-                    "",
+                    analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -233,7 +231,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Analysis type is missing for strain map "
@@ -241,39 +239,18 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
     try:
+        event_strain_maps = []
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
             [
                 [
-                    "NOTREAL",
-                    [
-                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
-                    ],
+                    random_vibe_analysis_type,
+                    event_strain_maps,
                 ]
             ],
         )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert (
-            str(e) == "Run strain map analysis error: Analysis type NOTREAL is invalid for "
-            "strain map analysis 0."
-        )
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [
-                [
-                    "RANDOMVIBE",
-                    [],
-                ]
-            ],
-        )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: One or more event strain maps are "
@@ -281,20 +258,21 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
     try:
+        event_strain_maps = ["INVALID"]
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
-                    ["INVALID"],
+                    random_vibe_analysis_type,
+                    event_strain_maps,
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
-            str(e) == "Run strain map analysis error: Event strain map argument is invalid for "
+            str(e) == "Run strain map analysis error: Event strain maps argument is invalid for "
             "strain map analysis 0."
         )
 
@@ -304,7 +282,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM"],
@@ -313,7 +291,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Number of elements (3) is wrong for event "
@@ -326,7 +304,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -335,7 +313,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Life phase is missing for event strain map 1 "
@@ -348,7 +326,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -357,7 +335,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Event name is missing for event strain map 2 "
@@ -370,7 +348,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -378,7 +356,7 @@ def helper_test_run_strain_map_analysis(analysis):
                     ],
                 ],
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -387,7 +365,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ],
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e)
@@ -401,7 +379,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -410,7 +388,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Strain map name is missing for event strain "
