@@ -788,7 +788,6 @@ def helper_test_update_natural_frequency_props(analysis):
 
 
 def helper_test_update_pcb_modeling_props(analysis):
-
     try:
         analysis.update_pcb_modeling_props(
             "",
@@ -842,11 +841,7 @@ def helper_test_update_pcb_modeling_props(analysis):
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: Analysis input(s) are invalid."
 
-
-
-
     if analysis._is_connection_up():
-
         try:
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
