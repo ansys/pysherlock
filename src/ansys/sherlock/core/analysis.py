@@ -151,7 +151,7 @@ class Analysis(GrpcStub):
             - elements: list
                 List of tuples (``type``, ``event``)
 
-                - type : str
+                - analysis_type : str
                     Type of analysis to run. Options are:
 
                     - ``"COMPONENTFAILUREMODE"``
@@ -848,7 +848,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         cca_names : list
-            Name of the main CCA for the analysis.
+            Names of the CCAs to be used for the analysis.
         analyses : list
             List of elements consisting of the following properties:
 
@@ -890,7 +890,7 @@ class Analysis(GrpcStub):
             ["Main Board"],
             [
                 (
-                    "Natural-Freq",
+                    "NaturalFreq",
                     "Bonded",
                     True,
                     "Uniform",
