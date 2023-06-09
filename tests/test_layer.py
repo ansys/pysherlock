@@ -1,6 +1,7 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 import grpc
+import pytest
 
 from ansys.sherlock.core.errors import SherlockUpdateMountPointsByFileError
 from ansys.sherlock.core.layer import Layer
@@ -23,7 +24,7 @@ def helper_test_update_mount_points_by_file(layer):
             "Card",
             "MountPointImport.csv",
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateMountPointsByFileError as e:
         assert e.str_itr()[0] == "Update mount points by file error: Project name is invalid."
 
@@ -33,7 +34,7 @@ def helper_test_update_mount_points_by_file(layer):
             "",
             "MountPointImport.csv",
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateMountPointsByFileError as e:
         assert e.str_itr()[0] == "Update mount points by file error: CCA name is invalid."
 
@@ -41,11 +42,22 @@ def helper_test_update_mount_points_by_file(layer):
         layer.update_mount_points_by_file(
             "Test",
             "Card",
-            "Invalid",
+            "",
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateMountPointsByFileError as e:
-        assert e.str_itr()[0] == "Update mount points by file error: Filepath is invalid."
+        assert e.str_itr()[0] == "Update mount points by file error: File path is required."
+
+    if layer._is_connection_up():
+        try:
+            layer.update_mount_points_by_file(
+                "Tutorial Project",
+                "Invalid CCA",
+                "MountPointImport.csv",
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockUpdateMountPointsByFileError
 
 
 if __name__ == "__main__":
