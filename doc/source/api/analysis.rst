@@ -15,4 +15,5 @@ The ``analysis`` module contains all analysis capabilities.
      ansys.sherlock.core.analysis.Analysis.run_analysis
      ansys.sherlock.core.analysis.Analysis.run_strain_map_analysis
      ansys.sherlock.core.analysis.Analysis.update_natural_frequency_props
+     ansys.sherlock.core.analysis.Analysis.update_pcb_modeling_props
      ansys.sherlock.core.analysis.Analysis.update_random_vibe_props

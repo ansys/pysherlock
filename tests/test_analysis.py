@@ -714,17 +714,47 @@ def helper_test_update_pcb_modeling_props(analysis):
         assert str(e) == "Update PCB Modeling Error: Analysis input(s) are invalid."
 
     if analysis._is_connection_up():
+        request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest
+        analysis_type = request.Analysis.AnalysisType
+        pcb_model_type = request.Analysis.PcbModelType
+        pcb_material_model = request.Analysis.PcbMaterialModel
+        element_order = SherlockAnalysisService_pb2.ElementOrder
+
+        try:
+            analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Invalid CCA"],
+                [
+                    (
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
+                        True,
+                        pcb_material_model.Layered,
+                        element_order.SolidShell,
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            print(str(e))
+            assert type(e) == SherlockUpdatePcbModelingPropsError
+
         try:
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "Uniform",
-                        "SolidShell",
+                        pcb_material_model.Uniform,
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -734,19 +764,20 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result1 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
+
         try:
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "Uniform",
-                        "SolidShell",
+                        pcb_material_model.Uniform,
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -756,8 +787,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result1 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
 
         try:
             result2 = analysis.update_pcb_modeling_props(
@@ -765,11 +796,11 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "Layered",
-                        "SolidShell",
+                        pcb_material_model.Layered,
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -779,8 +810,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result2 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
 
         try:
             result3 = analysis.update_pcb_modeling_props(
@@ -788,12 +819,12 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "UniformElements",
+                        pcb_material_model.UniformElements,
                         94,
-                        "SolidShell",
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -803,20 +834,21 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result3 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
+
         try:
             result4 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "LayeredElements",
+                        pcb_material_model.LayeredElements,
                         94,
-                        "SolidShell",
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -826,30 +858,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result4 == 0
-        except Exception as e:
-            assert False, e.message
-        try:
-            analysis.update_pcb_modeling_props(
-                "Tutorial Project",
-                ["Invalid CCA"],
-                [
-                    (
-                        "NaturalFreq",
-                        "Bonded",
-                        True,
-                        "Layered",
-                        "SolidShell",
-                        6,
-                        "mm",
-                        3,
-                        "mm",
-                        True,
-                    )
-                ],
-            )
-            assert False
-        except Exception as e:
-            assert type(e) == SherlockUpdatePcbModelingPropsError
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
 
 
 if __name__ == "__main__":

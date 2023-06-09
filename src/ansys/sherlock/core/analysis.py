@@ -696,22 +696,18 @@ class Analysis(GrpcStub):
         analyses : list
             List of elements consisting of the following properties:
 
-            - analysis_type : str
-                Type of analysis applied. Options are ``"UnknownAnalysisType"``, ``"HarmonicVibe"``,
-                 ``"ICTAnalysis"``, ``"MechanicalShock"``, ``"NaturalFreq"``, ``"RandomVibe"``, and
-                 ``"ThermalMech"``.
-
-            - model_type : str
-                The PCB modeling mesh type.Options are ``"UnknownMeshType"`` or ``"Bonded"``.
+            - analysis_type : UpdatePcbModelingPropsRequest.Analysis.AnalysisType
+                Type of analysis applied.
+            - pcb_model_type : UpdatePcbModelingPropsRequest.Analysis.PcbModelType
+                The PCB modeling mesh type.
             - modeling_region_enabled : bool
                 Indicates if modeling regions are enabled.
-            - pcb_material_model : str
-                The PCB modeling PCB model type. Options are ``"Layered"``, ``"Uniform"``,
-                ``"Layered Element"``, and ``"Uniform Element"``.
+            - pcb_material_model : UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
+                The PCB modeling PCB model type.
             - pcb_max_materials : int
                 The number of PCB materials for Uniform Elements and Layered Elements PCB model
                 types. Not applicable if PCB model is Uniform or Layered.
-            - pcb_elem_order : str
+            - pcb_elem_order : ElementOrder
                 The element order for PCB elements.
             - pcb_max_edge_length : float
                 The maximum mesh size for PCB elements.
@@ -729,26 +725,24 @@ class Analysis(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        sherlock.analysis.update_pcb_modeling_props(
+        >>> update_request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest
+        >>> sherlock.analysis.update_pcb_modeling_props(
             "Tutorial Project",
             ["Main Board"],
             [
                 (
-                    "NaturalFreq",
-                    "Bonded",
+                    update_request.Analysis.AnalysisType.NaturalFreq,
+                    update_request.Analysis.PcbModelType.Bonded,
                     True,
-                    "Uniform",
-                    "SolidShell",
+                    update_request.Analysis.PcbMaterialModel.Uniform,
+                    SherlockAnalysisService_pb2.ElementOrder.SolidShell,
                     6,
                     "mm",
                     3,
                     "mm",
                     True,
-
                 )
             ],
-
-
         )
         """
         try:
