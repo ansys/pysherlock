@@ -679,6 +679,7 @@ def helper_test_update_pcb_modeling_props(analysis):
                 )
             ],
         )
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: Project name is invalid."
 
@@ -701,6 +702,7 @@ def helper_test_update_pcb_modeling_props(analysis):
                 )
             ],
         )
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: CCA names are invalid."
 
@@ -710,6 +712,7 @@ def helper_test_update_pcb_modeling_props(analysis):
             ["Main Board"],
             [],
         )
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: Analysis input(s) are invalid."
 
