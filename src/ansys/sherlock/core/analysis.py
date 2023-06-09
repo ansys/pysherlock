@@ -93,6 +93,10 @@ class Analysis(GrpcStub):
                     - event_name : str
                         Name of the life cycle event.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -312,6 +316,11 @@ class Analysis(GrpcStub):
             List of natural frequencies. The default is ``None``.
             This parameter is required for strain map analysis.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -468,6 +477,11 @@ class Analysis(GrpcStub):
         analysis_temp_units: str, optional
             Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -568,6 +582,11 @@ class Analysis(GrpcStub):
                   Name of the strain map assigned to the life cycle event.
               - sub_assembly_name : str, optional
                   Name of the subassembly CCA to assign the strain map to.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -720,6 +739,11 @@ class Analysis(GrpcStub):
             - quads_preferred : bool
                 Indicates that the meshing engine should attempt to generate quad-shaped elements
                 when creating the mesh.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
