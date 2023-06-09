@@ -21,7 +21,7 @@ class Layer(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockLayerService."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
     def update_mount_points_by_file(

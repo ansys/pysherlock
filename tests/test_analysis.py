@@ -1,9 +1,16 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+import time
+
+try:
+    import SherlockAnalysisService_pb2
+except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+
 import grpc
+import pytest
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import (
-    SherlockGetRandomVibeInputFieldsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateNaturalFrequencyPropsError,
@@ -17,107 +24,87 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     analysis = Analysis(channel)
-    helper_test_run_strain_map_analysis(analysis)
     helper_test_run_analysis(analysis)
+    time.sleep(1)
+    helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_random_vibe_props(analysis)
+    helper_test_get_natural_frequency_input_fields(analysis)
     helper_test_update_natural_frequency_props(analysis)
     helper_test_update_pcb_modeling_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
     """Test run_analysis API."""
+    analysis_request = SherlockAnalysisService_pb2.RunAnalysisRequest
+    natural_frequency_analysis_type = analysis_request.Analysis.AnalysisType.NaturalFreq
 
     if analysis._is_connection_up():
-        result = analysis.run_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])],
-        )
-        assert result == 0
+        try:
+            analysis.run_analysis(
+                "AssemblyTutorial",
+                "Invalid CCA",
+                [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])],
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockRunAnalysisError
+
+        try:
+            result = analysis.run_analysis(
+                "AssemblyTutorial",
+                "Main Board",
+                [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])],
+            )
+            assert result == 0
+        except SherlockRunAnalysisError as e:
+            pytest.fail(e.message)
 
     try:
         analysis.run_analysis(
-            "", "Main Board", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+            "", "Main Board", [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])]
         ),
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Project name is invalid."
 
     try:
         analysis.run_analysis(
-            "AssemblyTutorial", "", [("NATURALFREQ", [("Phase 1", ["Harmonic Vibe"])])]
+            "AssemblyTutorial",
+            "",
+            [(natural_frequency_analysis_type, [("Phase 1", ["Harmonic Vibe"])])],
         ),
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: CCA name is invalid."
 
     try:
-        analysis.run_analysis("AssemblyTutorial", "Main Board", "Invalid")
-        assert False
+        analysis.run_analysis("AssemblyTutorial", "Main Board", "Not a list")
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: Analyses argument is invalid."
 
     try:
         analysis.run_analysis("Test", "Card", [])
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunAnalysisError as e:
         assert str(e) == "Run analysis error: One or more analyses are missing."
-
-    try:
-        analysis.run_analysis("Test", "Card", [("Invalid", [("Phase 1", ["Harmonic Event"])])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Analysis is invalid."
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("", ["Harmonic Event"])])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == (
-            "Run analysis error: Invalid analysis 0:" " Invalid phase 0: Phase name is invalid."
-        )
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", "Invalid")])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == "Run analysis error: Invalid analysis 0: Phases argument is invalid."
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("Phase 1", "Invalid")])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == (
-            "Run analysis error: Invalid analysis 0:"
-            " Invalid phase 0: Events argument "
-            "is invalid."
-        )
-
-    try:
-        analysis.run_analysis("Test", "Card", [("NATURALFREQ", [("Phase 1", [""])])])
-        assert False
-    except SherlockRunAnalysisError as e:
-        assert str(e) == (
-            "Run analysis error: Invalid analysis 0:"
-            " Invalid phase 0: One or more event "
-            "names are invalid."
-        )
 
 
 def helper_test_run_strain_map_analysis(analysis):
     """Test run_strain_map_analysis API."""
-
+    analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
+    random_vibe_analysis_type = analysis_request.StrainMapAnalysis.AnalysisType.RandomVibe
     if analysis._is_connection_up():
         try:
             analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
-                "Main Board",
+                "Invalid CCA",
                 [
                     [
-                        "RANDOMVIBE",
+                        random_vibe_analysis_type,
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -132,8 +119,34 @@ def helper_test_run_strain_map_analysis(analysis):
                     ]
                 ],
             )
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
-            print(str(e))
+            assert type(e) == SherlockRunStrainMapAnalysisError
+
+        try:
+            result = analysis.run_strain_map_analysis(
+                "AssemblyTutorial",
+                "Main Board",
+                [
+                    [
+                        random_vibe_analysis_type,
+                        [
+                            ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+                            ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                            [
+                                "Phase 1",
+                                "Random Vibe",
+                                "TOP",
+                                "MemoryCard1Strain",
+                                "Memory Card 1",
+                            ],
+                        ],
+                    ]
+                ],
+            )
+            assert result == 0
+        except SherlockRunStrainMapAnalysisError as e:
+            pytest.fail(e.message)
 
     try:
         analysis.run_strain_map_analysis(
@@ -141,7 +154,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -150,7 +163,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: Project name is invalid."
 
@@ -160,7 +173,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -169,7 +182,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: CCA name is invalid."
 
@@ -177,38 +190,41 @@ def helper_test_run_strain_map_analysis(analysis):
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            "Invalid",
+            "Invalid analyses",
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: Analyses argument is invalid."
 
     try:
-        analysis.run_strain_map_analysis("AssemblyTutorial", "Main Board", [])
-        assert False
+        analyses = []
+        analysis.run_strain_map_analysis("AssemblyTutorial", "Main Board", analyses)
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert str(e) == "Run strain map analysis error: One or more analyses are missing."
 
     try:
+        analyses = ["INVALID"]
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            ["INVALID"],
+            analyses,
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
-            str(e) == "Run strain map analysis error: Analysis argument is invalid for strain "
+            str(e) == "Run strain map analysis error: Analyses argument is invalid for strain "
             "map analysis 0."
         )
 
     try:
+        analyses = [["INVALID"]]
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [["INVALID"]],
+            analyses,
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e)
@@ -217,12 +233,13 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
     try:
+        analysis_type = ""
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
             [
                 [
-                    "",
+                    analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -231,7 +248,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Analysis type is missing for strain map "
@@ -239,39 +256,18 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
     try:
+        event_strain_maps = []
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
             [
                 [
-                    "NOTREAL",
-                    [
-                        ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                        ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                        ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"],
-                    ],
+                    random_vibe_analysis_type,
+                    event_strain_maps,
                 ]
             ],
         )
-        assert False
-    except SherlockRunStrainMapAnalysisError as e:
-        assert (
-            str(e) == "Run strain map analysis error: Analysis type NOTREAL is invalid for "
-            "strain map analysis 0."
-        )
-
-    try:
-        analysis.run_strain_map_analysis(
-            "AssemblyTutorial",
-            "Main Board",
-            [
-                [
-                    "RANDOMVIBE",
-                    [],
-                ]
-            ],
-        )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: One or more event strain maps are "
@@ -279,20 +275,21 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
     try:
+        event_strain_maps = ["INVALID"]
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
-                    ["INVALID"],
+                    random_vibe_analysis_type,
+                    event_strain_maps,
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
-            str(e) == "Run strain map analysis error: Event strain map argument is invalid for "
+            str(e) == "Run strain map analysis error: Event strain maps argument is invalid for "
             "strain map analysis 0."
         )
 
@@ -302,7 +299,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM"],
@@ -311,7 +308,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Number of elements (3) is wrong for event "
@@ -324,7 +321,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -333,7 +330,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Life phase is missing for event strain map 1 "
@@ -346,7 +343,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -355,7 +352,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Event name is missing for event strain map 2 "
@@ -368,7 +365,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -376,7 +373,7 @@ def helper_test_run_strain_map_analysis(analysis):
                     ],
                 ],
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -385,7 +382,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ],
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e)
@@ -399,7 +396,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    "RANDOMVIBE",
+                    random_vibe_analysis_type,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -408,7 +405,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 ]
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
         assert (
             str(e) == "Run strain map analysis error: Strain map name is missing for event strain "
@@ -418,61 +415,43 @@ def helper_test_run_strain_map_analysis(analysis):
 
 def helper_test_get_harmonic_vibe_input_fields(analysis):
     if analysis._is_connection_up():
-        try:
-            fields = analysis.get_harmonic_vibe_input_fields()
-            assert "analysis_temp" in fields
-            assert "analysis_temp_units" in fields
-            assert "harmonic_vibe_count" in fields
-            assert "harmonic_vibe_damping" in fields
-            assert "model_source" in fields
-            assert "part_validation_enabled" in fields
-            assert "require_material_assignment_enabled" in fields
-        except Exception as e:
-            print(str(e))
+        fields = analysis.get_harmonic_vibe_input_fields()
+        assert "analysis_temp" in fields
+        assert "analysis_temp_units" in fields
+        assert "harmonic_vibe_count" in fields
+        assert "harmonic_vibe_damping" in fields
+        assert "model_source" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
 
 
 def helper_test_get_random_vibe_input_fields(analysis):
-    try:
-        analysis.get_random_vibe_input_fields("BADTYPE")
-        assert False
-    except SherlockGetRandomVibeInputFieldsError as e:
-        assert str(e) == "Get random vibe input fields error: Model source BADTYPE is invalid."
-
     if analysis._is_connection_up():
-        try:
-            fields = analysis.get_random_vibe_input_fields()
-            assert "analysis_temp" in fields
-            assert "analysis_temp_units" in fields
-            assert "model_source" in fields
-            assert "part_validation_enabled" in fields
-            assert "random_vibe_damping" in fields
-            assert "require_material_assignment_enabled" in fields
-        except Exception as e:
-            print(str(e))
-            assert False
+        fields = analysis.get_random_vibe_input_fields()
+        assert "analysis_temp" in fields
+        assert "analysis_temp_units" in fields
+        assert "part_validation_enabled" in fields
+        assert "random_vibe_damping" in fields
+        assert "require_material_assignment_enabled" in fields
 
-        try:
-            fields = analysis.get_random_vibe_input_fields("GENERATED")
-            assert "analysis_temp" in fields
-            assert "analysis_temp_units" in fields
-            assert "model_source" in fields
-            assert "part_validation_enabled" in fields
-            assert "random_vibe_damping" in fields
-            assert "require_material_assignment_enabled" in fields
-        except Exception as e:
-            print(str(e))
-            assert False
+        fields = analysis.get_random_vibe_input_fields(
+            SherlockAnalysisService_pb2.ModelSource.GENERATED
+        )
+        assert "analysis_temp" in fields
+        assert "analysis_temp_units" in fields
+        assert "model_source" in fields
+        assert "part_validation_enabled" in fields
+        assert "random_vibe_damping" in fields
+        assert "require_material_assignment_enabled" in fields
 
-        try:
-            fields = analysis.get_random_vibe_input_fields("STRAIN_MAP")
-            assert "model_source" in fields
-            assert "part_validation_enabled" in fields
-            assert "random_vibe_damping" in fields
-            assert "require_material_assignment_enabled" in fields
-            assert "strain_map_natural_freqs" in fields
-        except Exception as e:
-            print(str(e))
-            assert False
+        fields = analysis.get_random_vibe_input_fields(
+            SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
+        )
+        assert "model_source" in fields
+        assert "part_validation_enabled" in fields
+        assert "random_vibe_damping" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "strain_map_natural_freqs" in fields
 
 
 def helper_test_translate_field_names(analysis):
@@ -533,7 +512,7 @@ def helper_test_update_random_vibe_props(analysis):
         analysis.update_random_vibe_props(
             "", "Card", random_vibe_damping="0.01, 0.05", analysis_temp=20, analysis_temp_units="C"
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == "Update random vibe properties error: Project name is invalid."
 
@@ -541,113 +520,71 @@ def helper_test_update_random_vibe_props(analysis):
         analysis.update_random_vibe_props(
             "Test", "", random_vibe_damping="0.01, 0.05", analysis_temp=20, analysis_temp_units="C"
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == "Update random vibe properties error: CCA name is invalid."
 
     try:
-        analysis.update_random_vibe_props("Test", "Card", random_vibe_damping="0.01, foo")
-        assert False
+        analysis.update_random_vibe_props("Tutorial Project", "Main Board", random_vibe_damping="")
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateRandomVibePropsError as e:
         assert (
-            str(e)
-            == "Update random vibe properties error: Random vibe damping value is invalid: foo"
+            str(e) == "Update random vibe properties error: Random vibe damping value is invalid."
         )
 
     try:
         analysis.update_random_vibe_props(
-            "Test", "Card", random_vibe_damping="0.01, 0.02", model_source="BAD_SOURCE"
+            "Test",
+            "Card",
+            random_vibe_damping="0.01, 0.02",
+            model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
+            strain_map_natural_freqs=None,
         )
-        assert False
-    except SherlockUpdateRandomVibePropsError as e:
-        assert str(e) == "Update random vibe properties error: Model source BAD_SOURCE is invalid."
-
-    try:
-        analysis.update_random_vibe_props(
-            "Test", "Card", random_vibe_damping="0.01, 0.02", model_source="STRAIN_MAP"
-        )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateRandomVibePropsError as e:
         assert str(e) == "Update random vibe properties error: Natural frequencies are invalid."
 
     if analysis._is_connection_up():
-        try:
-            analysis.update_random_vibe_props(
-                "Test",
-                "Card",
-                random_vibe_damping="0.01, 0.02",
-                natural_freq_min=10,
-                natural_freq_min_units="foo",
-                natural_freq_max=100,
-                natural_freq_max_units="HZ",
-            )
-            assert False
-        except SherlockUpdateRandomVibePropsError as e:
-            assert (
-                str(e) == "Update random vibe properties error: Minimum "
-                "natural frequency units are invalid: foo"
-            )
-
-        try:
-            analysis.update_random_vibe_props(
-                "Test",
-                "Card",
-                random_vibe_damping="0.01, 0.02",
-                natural_freq_min=10,
-                natural_freq_min_units="HZ",
-                natural_freq_max=100,
-                natural_freq_max_units="foo",
-            )
-            assert False
-        except SherlockUpdateRandomVibePropsError as e:
-            assert (
-                str(e) == "Update random vibe properties error: Maximum "
-                "natural frequency units are invalid: foo"
-            )
-
-        try:
-            analysis.update_random_vibe_props(
-                "Test",
-                "Card",
-                random_vibe_damping="0.01, 0.02",
-                natural_freq_min=10,
-                natural_freq_min_units="HZ",
-                natural_freq_max=100,
-                natural_freq_max_units="HZ",
-                analysis_temp_units="foo",
-            )
-            assert False
-        except SherlockUpdateRandomVibePropsError as e:
-            assert (
-                str(e) == "Update random vibe properties error: Analysis "
-                "temperature units are invalid: foo"
-            )
-
-        result = analysis.update_random_vibe_props(
-            "Tutorial Project",
-            "Main Board",
-            random_vibe_damping="0.01, 0.02",
-            model_source="STRAIN_MAP",
-            part_validation_enabled=True,
-            require_material_assignment_enabled=False,
-            strain_map_natural_freqs="101, 201, 501, 1001",
-        )
-        assert result == 0
-
         try:
             invalid_strain_map_natural_freqs = "BAD, FREQS"
             analysis.update_random_vibe_props(
                 "Tutorial Project",
                 "Main Board",
                 random_vibe_damping="0.01, 0.02",
-                model_source="STRAIN_MAP",
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
+                model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
                 strain_map_natural_freqs=invalid_strain_map_natural_freqs,
             )
-            assert False
+            pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdateRandomVibePropsError
+
+        try:
+            result = analysis.update_random_vibe_props(
+                "Tutorial Project",
+                "Main Board",
+                random_vibe_damping="0.01, 0.02",
+                part_validation_enabled=True,
+                require_material_assignment_enabled=False,
+                model_source=SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                strain_map_natural_freqs="101, 201, 501, 1001",
+            )
+            assert result == 0
+        except SherlockUpdateRandomVibePropsError as e:
+            pytest.fail(e.message)
+
+
+def helper_test_get_natural_frequency_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_natural_frequency_input_fields()
+        assert "natural_freq_count" in fields
+        assert "natural_freq_max" in fields
+        assert "natural_freq_max_units" in fields
+        assert "natural_freq_min" in fields
+        assert "natural_freq_min_units" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
 
 
 def helper_test_update_natural_frequency_props(analysis):
@@ -663,7 +600,7 @@ def helper_test_update_natural_frequency_props(analysis):
             part_validation_enabled=True,
             require_material_assignment_enabled=False,
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateNaturalFrequencyPropsError as e:
         assert str(e) == "Update natural frequency properties error: Project name is invalid."
 
@@ -679,54 +616,17 @@ def helper_test_update_natural_frequency_props(analysis):
             part_validation_enabled=True,
             require_material_assignment_enabled=False,
         )
-        assert False
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdateNaturalFrequencyPropsError as e:
         assert str(e) == "Update natural frequency properties error: CCA name is invalid."
 
     if analysis._is_connection_up():
         try:
+            invalid_natural_freq_count = -1
             analysis.update_natural_frequency_props(
-                "Test",
-                "Card",
-                natural_freq_count=2,
-                natural_freq_min=10,
-                natural_freq_min_units="foo",
-                natural_freq_max=100,
-                natural_freq_max_units="HZ",
-                part_validation_enabled=True,
-                require_material_assignment_enabled=False,
-            )
-            assert False
-        except SherlockUpdateNaturalFrequencyPropsError as e:
-            assert (
-                str(e) == "Update natural frequency properties error: Minimum "
-                "natural frequency units are invalid: foo"
-            )
-
-        try:
-            analysis.update_natural_frequency_props(
-                "Test",
-                "Card",
-                natural_freq_count=2,
-                natural_freq_min=10,
-                natural_freq_min_units="HZ",
-                natural_freq_max=100,
-                natural_freq_max_units="foo",
-                part_validation_enabled=True,
-                require_material_assignment_enabled=False,
-            )
-            assert False
-        except SherlockUpdateNaturalFrequencyPropsError as e:
-            assert (
-                str(e) == "Update natural frequency properties error: Maximum "
-                "natural frequency units are invalid: foo"
-            )
-
-        try:
-            analysis.update_natural_frequency_props(
-                "Test",
-                "Card",
-                natural_freq_count=2,
+                "AssemblyTutorial",
+                "Main Board",
+                natural_freq_count=invalid_natural_freq_count,
                 natural_freq_min=10,
                 natural_freq_min_units="HZ",
                 natural_freq_max=100,
@@ -734,14 +634,11 @@ def helper_test_update_natural_frequency_props(analysis):
                 part_validation_enabled=True,
                 require_material_assignment_enabled=False,
                 analysis_temp=25,
-                analysis_temp_units="foo",
+                analysis_temp_units="C",
             )
-            assert False
-        except SherlockUpdateNaturalFrequencyPropsError as e:
-            assert (
-                str(e) == "Update natural frequency properties error: Analysis "
-                "temperature units are invalid: foo"
-            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockUpdateNaturalFrequencyPropsError
 
         try:
             result = analysis.update_natural_frequency_props(
@@ -758,28 +655,8 @@ def helper_test_update_natural_frequency_props(analysis):
                 analysis_temp_units="C",
             )
             assert result == 0
-        except Exception as e:
-            print(str(e))
-            assert False
-
-        try:
-            invalid_natural_freq_count = -1
-            analysis.update_natural_frequency_props(
-                "AssemblyTutorial",
-                "Main Board",
-                natural_freq_count=invalid_natural_freq_count,
-                natural_freq_min=10,
-                natural_freq_min_units="HZ",
-                natural_freq_max=100,
-                natural_freq_max_units="HZ",
-                part_validation_enabled=True,
-                require_material_assignment_enabled=False,
-                analysis_temp=25,
-                analysis_temp_units="C",
-            )
-            assert False
-        except Exception as e:
-            assert type(e) == SherlockUpdateNaturalFrequencyPropsError
+        except SherlockUpdateNaturalFrequencyPropsError as e:
+            pytest.fail(e.message)
 
 
 def helper_test_update_pcb_modeling_props(analysis):
@@ -802,6 +679,7 @@ def helper_test_update_pcb_modeling_props(analysis):
                 )
             ],
         )
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: Project name is invalid."
 
@@ -824,6 +702,7 @@ def helper_test_update_pcb_modeling_props(analysis):
                 )
             ],
         )
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: CCA names are invalid."
 
@@ -833,21 +712,52 @@ def helper_test_update_pcb_modeling_props(analysis):
             ["Main Board"],
             [],
         )
+        pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockUpdatePcbModelingPropsError as e:
         assert str(e) == "Update PCB Modeling Error: Analysis input(s) are invalid."
 
     if analysis._is_connection_up():
+        request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest
+        analysis_type = request.Analysis.AnalysisType
+        pcb_model_type = request.Analysis.PcbModelType
+        pcb_material_model = request.Analysis.PcbMaterialModel
+        element_order = SherlockAnalysisService_pb2.ElementOrder
+
+        try:
+            analysis.update_pcb_modeling_props(
+                "Tutorial Project",
+                ["Invalid CCA"],
+                [
+                    (
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
+                        True,
+                        pcb_material_model.Layered,
+                        element_order.SolidShell,
+                        6,
+                        "mm",
+                        3,
+                        "mm",
+                        True,
+                    )
+                ],
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            print(str(e))
+            assert type(e) == SherlockUpdatePcbModelingPropsError
+
         try:
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "Uniform",
-                        "SolidShell",
+                        pcb_material_model.Uniform,
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -857,19 +767,20 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result1 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
+
         try:
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "Uniform",
-                        "SolidShell",
+                        pcb_material_model.Uniform,
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -879,8 +790,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result1 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
 
         try:
             result2 = analysis.update_pcb_modeling_props(
@@ -888,11 +799,11 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "Layered",
-                        "SolidShell",
+                        pcb_material_model.Layered,
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -902,8 +813,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result2 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
 
         try:
             result3 = analysis.update_pcb_modeling_props(
@@ -911,12 +822,12 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "UniformElements",
+                        pcb_material_model.UniformElements,
                         94,
-                        "SolidShell",
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -926,20 +837,21 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result3 == 0
-        except Exception as e:
-            assert False, e.message
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
+
         try:
             result4 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
                 [
                     (
-                        "NaturalFreq",
-                        "Bonded",
+                        analysis_type.NaturalFreq,
+                        pcb_model_type.Bonded,
                         True,
-                        "LayeredElements",
+                        pcb_material_model.LayeredElements,
                         94,
-                        "SolidShell",
+                        element_order.SolidShell,
                         6,
                         "mm",
                         3,
@@ -949,30 +861,8 @@ def helper_test_update_pcb_modeling_props(analysis):
                 ],
             )
             assert result4 == 0
-        except Exception as e:
-            assert False, e.message
-        try:
-            analysis.update_pcb_modeling_props(
-                "Tutorial Project",
-                ["Invalid CCA"],
-                [
-                    (
-                        "NaturalFreq",
-                        "Bonded",
-                        True,
-                        "Layered",
-                        "SolidShell",
-                        6,
-                        "mm",
-                        3,
-                        "mm",
-                        True,
-                    )
-                ],
-            )
-            assert False
-        except Exception as e:
-            assert type(e) == SherlockUpdatePcbModelingPropsError
+        except SherlockUpdatePcbModelingPropsError as e:
+            assert pytest.fail(e.message)
 
 
 if __name__ == "__main__":
