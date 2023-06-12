@@ -5,6 +5,7 @@ import platform
 import unittest
 
 import grpc
+import pytest
 
 from ansys.sherlock.core.errors import SherlockModelServiceError
 from ansys.sherlock.core.model import Model
@@ -29,25 +30,25 @@ class TestModel(unittest.TestCase):
             try:
                 invalid_cca = "Invalid CCA"
                 model.export_trace_reinforcement_model("Tutorial Project", invalid_cca, path)
-                assert False
+                pytest.fail("No exception raised when using an invalid parameter")
             except Exception as e:
                 assert type(e) == SherlockModelServiceError
 
         try:
             model.export_trace_reinforcement_model("", "Main Board", path)
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Project name is invalid."
 
         try:
             model.export_trace_reinforcement_model("Tutorial Project", "", path)
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: CCA name is invalid."
 
         try:
             model.export_trace_reinforcement_model("Tutorial Project", "Main Board", export_file="")
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Export file path is invalid."
 
@@ -56,7 +57,7 @@ class TestModel(unittest.TestCase):
             model.export_trace_reinforcement_model(
                 "Tutorial Project", "Main Board", missing_file_path
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert (
                 str(e) == "Model service error: Export file directory"
@@ -79,7 +80,7 @@ class TestModel(unittest.TestCase):
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Project name is invalid."
 
@@ -90,7 +91,7 @@ class TestModel(unittest.TestCase):
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=max_arc_segment,
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: CCA name is invalid."
 
@@ -101,7 +102,7 @@ class TestModel(unittest.TestCase):
                 copper_layer_name="",
                 max_arc_segment=max_arc_segment,
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Copper layer name is required."
 
@@ -112,7 +113,7 @@ class TestModel(unittest.TestCase):
                 copper_layer_name=copper_layer_name,
                 max_arc_segment=None,
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Maximum arc segment is required."
 
@@ -124,7 +125,7 @@ class TestModel(unittest.TestCase):
                 max_arc_segment=max_arc_segment,
                 max_arc_segment_units="",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Maximum arc segment units are required."
 
@@ -136,7 +137,7 @@ class TestModel(unittest.TestCase):
                 max_arc_segment=max_arc_segment,
                 min_trace_area=None,
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum trace area is required."
 
@@ -148,7 +149,7 @@ class TestModel(unittest.TestCase):
                 max_arc_segment=max_arc_segment,
                 min_trace_area_units="",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum trace area units are required."
 
@@ -160,7 +161,7 @@ class TestModel(unittest.TestCase):
                 max_arc_segment=max_arc_segment,
                 min_hole_area=None,
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum hole area is required."
 
@@ -172,19 +173,11 @@ class TestModel(unittest.TestCase):
                 max_arc_segment=max_arc_segment,
                 min_hole_area_units="",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Minimum hole area units are required."
 
         if model._is_connection_up():
-            result = model.generate_trace_model(
-                project_name,
-                cca_name,
-                copper_layer_name,
-                max_arc_segment,
-            )
-            assert result == 0
-
             try:
                 invalid_cca_name = "Invalid CCA"
                 model.generate_trace_model(
@@ -193,9 +186,20 @@ class TestModel(unittest.TestCase):
                     copper_layer_name=copper_layer_name,
                     max_arc_segment=max_arc_segment,
                 )
-                assert False
+                pytest.fail("No exception raised when using an invalid parameter")
             except Exception as e:
                 assert type(e) == SherlockModelServiceError
+
+            try:
+                result = model.generate_trace_model(
+                    project_name,
+                    cca_name,
+                    copper_layer_name,
+                    max_arc_segment,
+                )
+                assert result == 0
+            except SherlockModelServiceError as e:
+                pytest.fail(str(e))
 
 
 if __name__ == "__main__":

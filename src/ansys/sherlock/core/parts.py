@@ -142,7 +142,7 @@ class Parts(GrpcStub):
                 self.PART_LOCATION_UNITS = part_location_response.units
 
     def _init_board_sides(self):
-        """Initialize boad sides."""
+        """Initialize board sides."""
         if self._is_connection_up():
             board_sides_request = SherlockPartsService_pb2.GetBoardSidesRequest()
             board_sides_response = self.stub.getBoardSides(board_sides_request)

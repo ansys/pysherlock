@@ -83,7 +83,7 @@ class Analysis(GrpcStub):
             - elements: list
                 List of tuples (``type``, ``event``)
 
-                - analysis_type : RunAnalysisRequest.Analysis.AnalysisType
+                - analysis_type : RunAnalysisRequestAnalysisType
                     Type of analysis to run.
 
                 - event : list
@@ -116,7 +116,7 @@ class Analysis(GrpcStub):
             "Test",
             "Card",
             [
-                (SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.NaturalFreq,
+                (RunAnalysisRequestAnalysisType.NATURAL_FREQ,
                 [
                     ("Phase 1", ["Harmonic Event"])
                 ]
@@ -512,7 +512,7 @@ class Analysis(GrpcStub):
             cca_name="Card",
         )
         >>> sherlock.analysis.get_random_vibe_input_fields(
-            model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
+            model_source=ModelSource.STRAIN_MAP
         )
         """
         if not self._is_connection_up():
@@ -629,7 +629,7 @@ class Analysis(GrpcStub):
             random_vibe_damping="0.01, 0.05",
             analysis_temp=20,
             analysis_temp_units="C",
-            model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
+            model_source=ModelSource.STRAIN_MAP,
         )
 
         """
@@ -1004,13 +1004,13 @@ class Analysis(GrpcStub):
         analyses : list
             List of elements consisting of the following properties:
 
-            - analysis_type : UpdatePcbModelingPropsRequest.Analysis.AnalysisType
+            - analysis_type : UpdatePcbModelingPropsRequestAnalysisType
                 Type of analysis applied.
-            - pcb_model_type : UpdatePcbModelingPropsRequest.Analysis.PcbModelType
+            - pcb_model_type : UpdatePcbModelingPropsRequestPcbModelType
                 The PCB modeling mesh type.
             - modeling_region_enabled : bool
                 Indicates if modeling regions are enabled.
-            - pcb_material_model : UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
+            - pcb_material_model : UpdatePcbModelingPropsRequestPcbMaterialModel
                 The PCB modeling PCB model type.
             - pcb_max_materials : int
                 The number of PCB materials for Uniform Elements and Layered Elements PCB model
@@ -1044,11 +1044,11 @@ class Analysis(GrpcStub):
             ["Main Board"],
             [
                 (
-                    update_request.Analysis.AnalysisType.NaturalFreq,
-                    update_request.Analysis.PcbModelType.Bonded,
+                    UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
+                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
                     True,
-                    update_request.Analysis.PcbMaterialModel.Uniform,
-                    SherlockAnalysisService_pb2.ElementOrder.SolidShell,
+                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
+                    ElementOrder.SOLID_SHELL,
                     6,
                     "mm",
                     3,
