@@ -33,7 +33,7 @@ class Stackup(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for Sherlock Stackup service."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockStackupService_pb2_grpc.SherlockStackupServiceStub(channel)
         self.LAMINATE_THICKNESS_UNIT_LIST = None
         self.LAMINATE_MATERIAL_MANUFACTURER_LIST = None
@@ -379,7 +379,7 @@ class Stackup(GrpcStub):
         layer : str
             Layer ID associated with the conductor layer.
         type : str, optional
-            Layer type. The default is ``""1``. For example,
+            Layer type. The default is ``""``. For example,
             ``"SIGNAL"``, ``"POWER"``, or ``"SUBSTRATE"``.
         material : str, optional
             Conductor material. The default is ``""``.

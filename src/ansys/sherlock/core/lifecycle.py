@@ -40,7 +40,7 @@ class Lifecycle(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for the Sherlock Life Cycle service."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.TIME_UNIT_LIST = None
         self.CYCLE_TYPE_LIST = None

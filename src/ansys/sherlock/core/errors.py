@@ -557,18 +557,6 @@ class SherlockRunStrainMapAnalysisError(Exception):
         return f"Run strain map analysis error: {self.message}"
 
 
-class SherlockGetRandomVibeInputFieldsError(Exception):
-    """Contains the error raised when random vibe input fields cannot be returned."""
-
-    def __init__(self, message):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return f"Get random vibe input fields error: {self.message}"
-
-
 class SherlockUpdateRandomVibePropsError(Exception):
     """Contains the error raised when properties for random vibe results cannot be updated."""
 
@@ -773,17 +761,17 @@ class SherlockLoadShockProfilePulsesError(Exception):
         return f"Load shock profile pulses error: {self.message}"
 
 
-class SherlockInvalidPhaseError(Exception):
-    """Contains the error raised when the phase is invalid."""
+class SherlockUpdatePcbModelingPropsError(Exception):
+    """Contains the error raised when updating pcb modeling properties results in an error."""
 
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
 
     def __str__(self):
-        """Format error message."""
-        return self.message
-
+              """Initialize error message."""
+        return f"Update PCB Modeling Error: {self.message}"
+      
 
 class SherlockUpdateHarmonicVibePropsError(Exception):
     """Contains the error raised when properties for harmonic vibe analysis cannot be updated."""

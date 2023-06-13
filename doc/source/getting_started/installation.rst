@@ -4,7 +4,7 @@
 Install packages
 ================
 
-The ``ansy-sherlock`` package supports Python 3.7 through Python 3.10 on Windows.
+The ``ansys-sherlock`` package supports Python 3.7 through Python 3.10 on Windows.
 
 To use PySherlock, you must download and install both the ``ansys-api-sherlock``
 and ``ansys-sherlock`` packages.

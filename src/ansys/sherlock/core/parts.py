@@ -1,7 +1,6 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
-import os
 
 try:
     import SherlockPartsService_pb2
@@ -28,14 +27,15 @@ class Parts(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for the Sherlock Parts service."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockPartsService_pb2_grpc.SherlockPartsServiceStub(channel)
         self.PART_LOCATION_UNITS = None
         self.BOARD_SIDES = None
         self.MATCHING_ARGS = ["Both", "Part"]
         self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
 
-    def _add_matching_duplication(self, request, matching, duplication):
+    @staticmethod
+    def _add_matching_duplication(request, matching, duplication):
         """Add matching and duplication properties to the request."""
         if matching == "Both":
             request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Both
@@ -49,7 +49,8 @@ class Parts(GrpcStub):
         elif duplication == "Ignore":
             request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.Ignore
 
-    def _add_part_loc_request(self, request, parts):
+    @staticmethod
+    def _add_part_loc_request(request, parts):
         """Add part locations to the request."""
         for p in parts:
             part = request.partLoc.add()
@@ -61,14 +62,14 @@ class Parts(GrpcStub):
             part.boardSide = p[5]
             part.mirrored = p[6]
 
-    def _check_part_loc_validity(self, input):
+    def _check_part_loc_validity(self, part_locations):
         """Check input to see if it is a valid part location list."""
-        if not isinstance(input, list):
+        if not isinstance(part_locations, list):
             raise SherlockUpdatePartsLocationsError(message="Part location argument is invalid.")
 
-        if len(input) == 0:
+        if len(part_locations) == 0:
             raise SherlockUpdatePartsLocationsError(message="Part location properties are missing.")
-        for i, part in enumerate(input):
+        for i, part in enumerate(part_locations):
             if len(part) != 7:
                 raise SherlockUpdatePartsLocationsError(
                     message=f"Invalid part location {i}: Number of fields is invalid."
@@ -231,7 +232,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsListError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdatePartsListError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -326,7 +327,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdatePartsLocationsError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -375,10 +376,6 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsByFileError(message="CCA name is invalid.")
             if file_path == "":
                 raise SherlockUpdatePartsLocationsByFileError(message="Filepath is required.")
-            if len(file_path) <= 1 or file_path[1] != ":":
-                file_path = f"{os.getcwd()}\\{file_path}"
-            if not os.path.exists(file_path):
-                raise SherlockUpdatePartsLocationsByFileError("Filepath is invalid.")
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -407,7 +404,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsLocationsByFileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdatePartsLocationsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -455,10 +452,6 @@ class Parts(GrpcStub):
                 raise SherlockImportPartsListError(message="CCA name is invalid.")
             if import_file == "":
                 raise SherlockImportPartsListError(message="Import filepath is required.")
-            if len(import_file) <= 1 or import_file[1] != ":":
-                import_file = f"{os.getcwd()}\\{import_file}"
-            if not os.path.exists(import_file):
-                raise SherlockImportPartsListError("Filepath is invalid.")
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -524,11 +517,6 @@ class Parts(GrpcStub):
                 raise SherlockExportPartsListError(message="CCA name is invalid.")
             if export_file == "":
                 raise SherlockExportPartsListError(message="Export filepath is required.")
-            else:
-                if not os.path.exists(os.path.dirname(export_file)):
-                    raise SherlockExportPartsListError(
-                        message="Export file directory does not exist."
-                    )
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -548,7 +536,7 @@ class Parts(GrpcStub):
                 raise SherlockExportPartsListError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockExportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -602,7 +590,7 @@ class Parts(GrpcStub):
                 raise SherlockEnableLeadModelingError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockEnableLeadModelingError as e:
             LOG.error(str(e))
             raise e
@@ -663,8 +651,11 @@ class Parts(GrpcStub):
                 locationUnits=location_units,
             )
             response = self.stub.getPartLocation(request)
+            return_code = response.returnCode
 
-            return response
+            if return_code.value == -1:
+                raise SherlockGetPartLocationError(return_code.message)
+            return return_code.value
         except SherlockGetPartLocationError as e:
             LOG.error(str(e))
             raise e

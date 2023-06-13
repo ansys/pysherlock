@@ -2,8 +2,6 @@
 
 """Module containing all layer management capabilities."""
 
-import os
-
 try:
     import SherlockLayerService_pb2
     import SherlockLayerService_pb2_grpc
@@ -21,7 +19,7 @@ class Layer(GrpcStub):
 
     def __init__(self, channel):
         """Initialize a gRPC stub for SherlockLayerService."""
-        self.channel = channel
+        super().__init__(channel)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
     def update_mount_points_by_file(
@@ -40,6 +38,11 @@ class Layer(GrpcStub):
             Name of the CCA.
         file_path : str
             Path for the CSV file with the mount point properties.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -65,16 +68,8 @@ class Layer(GrpcStub):
                 raise SherlockUpdateMountPointsByFileError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockUpdateMountPointsByFileError(message="CCA name is invalid.")
-        except SherlockUpdateMountPointsByFileError as e:
-            for error in e.str_itr():
-                LOG.error(error)
-            raise e
-
-        try:
             if file_path == "":
-                raise SherlockUpdateMountPointsByFileError(message="Filepath is required.")
-            if not os.path.exists(file_path):
-                raise SherlockUpdateMountPointsByFileError("Filepath is invalid.")
+                raise SherlockUpdateMountPointsByFileError(message="File path is required.")
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -102,7 +97,7 @@ class Layer(GrpcStub):
                 raise SherlockUpdateMountPointsByFileError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
-                return
+                return return_code.value
         except SherlockUpdateMountPointsByFileError as e:
             for error in e.str_itr():
                 LOG.error(error)
