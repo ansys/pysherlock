@@ -167,11 +167,10 @@ class Parts(GrpcStub):
             Name of the CCA.
         part_library : str
             Name of the parts library.
-        matching : str
-            Matching mode for updates. Options are ``"Both"`` and ``"Part"``.
-        duplication : str
+        matching : UpdatesPartsListRequestMatchingMode
+            Matching mode for updates.
+        duplication : UpdatesPartsListRequestDuplicationMode
             How to handle duplication during the update.
-            Options are ``"First"``, ``"Error"``, and ``"Ignore"``.
 
         Examples
         --------
@@ -190,8 +189,8 @@ class Parts(GrpcStub):
             "Test",
             "Card",
             "Sherlock Part Library",
-            "Both",
-            "Error",
+            UpdatesPartsListRequestMatchingMode.BOTH,
+            UpdatesPartsListRequestDuplicationMode.ERROR,
         )
         """
         try:
@@ -201,10 +200,6 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsListError(message="CCA name is invalid.")
             if part_library == "":
                 raise SherlockUpdatePartsListError(message="Parts library is invalid.")
-            if matching not in self.MATCHING_ARGS:
-                raise SherlockUpdatePartsListError(message="Matching argument is invalid.")
-            if duplication not in self.DUPLICATION_ARGS:
-                raise SherlockUpdatePartsListError(message="Duplication argument is invalid.")
         except SherlockUpdatePartsListError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -226,9 +221,6 @@ class Parts(GrpcStub):
 
         try:
             if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockUpdatePartsListError(error_array=response.updateError)
-
                 raise SherlockUpdatePartsListError(message=return_code.message)
             else:
                 LOG.info(return_code.message)

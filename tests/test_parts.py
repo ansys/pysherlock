@@ -17,6 +17,10 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
+from ansys.sherlock.types.parts_types import (
+    UpdatesPartsListRequestDuplicationMode,
+    UpdatesPartsListRequestMatchingMode,
+)
 
 
 def test_all():
@@ -43,8 +47,8 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Main Board",
                 "Sherlock Part Library",
-                "Both",
-                "Error",
+                UpdatesPartsListRequestMatchingMode.BOTH,
+                UpdatesPartsListRequestDuplicationMode.ERROR,
             )
             assert result == 0
             # wait for Sherlock to finish updating so subsequent tests don't fail
@@ -57,8 +61,8 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Invalid CCA",
                 "Sherlock Part Library",
-                "Both",
-                "Error",
+                UpdatesPartsListRequestMatchingMode.BOTH,
+                UpdatesPartsListRequestDuplicationMode.ERROR,
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
@@ -69,8 +73,8 @@ def helper_test_update_parts_list(parts):
             "",
             "Card",
             "Sherlock Part Library",
-            "Both",
-            "Error",
+            UpdatesPartsListRequestMatchingMode.BOTH,
+            UpdatesPartsListRequestDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -81,8 +85,8 @@ def helper_test_update_parts_list(parts):
             "Test",
             "",
             "Sherlock Part Library",
-            "Both",
-            "Error",
+            UpdatesPartsListRequestMatchingMode.BOTH,
+            UpdatesPartsListRequestDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -93,36 +97,12 @@ def helper_test_update_parts_list(parts):
             "Test",
             "Card",
             "",
-            "Both",
-            "Error",
+            UpdatesPartsListRequestMatchingMode.BOTH,
+            UpdatesPartsListRequestDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
         assert e.str_itr()[0] == "Update parts list error: Parts library is invalid."
-
-    try:
-        parts.update_parts_list(
-            "Test",
-            "Card",
-            "Sherlock Part Library",
-            "Invalid",
-            "Error",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Matching argument is invalid."
-
-    try:
-        parts.update_parts_list(
-            "Test",
-            "Card",
-            "Sherlock Part Library",
-            "Both",
-            "Invalid",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Duplication argument is invalid."
 
 
 def helper_test_update_parts_locations(parts):
