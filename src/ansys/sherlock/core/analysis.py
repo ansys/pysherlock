@@ -13,6 +13,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
+    SherlockUpdateHarmonicVibePropsError,
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
@@ -195,6 +196,294 @@ class Analysis(GrpcStub):
         LOG.info(fields)
 
         return fields
+
+    def update_harmonic_vibe_props(
+        self,
+        project,
+        harmonic_vibe_properties,
+    ):
+        """Update properties for a harmonic vibe analysis.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        harmonic_vibe_properties : list
+            List of harmonic vibe properties for a CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - harmonic_vibe_count : int
+                Number of harmonic vibe result layers to generate.
+            - harmonic_vibe_damping: str
+                One or more modal damping ratios. The default is ``None``.
+                Separate multiple float values with commas.
+            - part_validation_enabled: bool
+                Whether to enable part validation. The default is ``None``.
+            - require_material_assignment_enabled: bool
+                Whether to require material assignment. The default is ``None``.
+            - analysis_temp: double
+                Temperature. The default is ``None``.
+            - analysis_temp_units: str
+                Temperature units. The default is ``None``.
+                Options are ``"C"``, ``"F"``, and ``"K"``.
+            - force_model_rebuild: str
+                How to handle rebuilding of the model. The default is ``None``.
+                Options are ``"FORCE"`` and ``"AUTO"``.
+            - filter_by_event_frequency: bool
+                Indicates if harmonic results outside analysis event range are included.
+                This parameter is not used for NX Nastran analysis.
+            - natural_freq_min: double
+                Minimum frequency. The default is ``None``.
+                This parameter is for NX Nastran analysis only.
+            - natural_freq_min_units: str
+                Minimum frequency units. The default is ``None``.
+                Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
+                This parameter is for NX Nastran analysis only.
+            - natural_freq_max: double
+                Maximum frequency. The default is ``None``.
+                This parameter is for NX Nastran analysis only.
+            - natural_freq_max_units: str
+                Maximum frequency units. The default is ``None``.
+                Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
+                This parameter is for NX Nastran analysis only.
+            - reuse_modal_analysis: bool
+                Whether to reuse the natural frequency for modal analysis. The
+                default is ``None``. This parameter is for NX Nastran analysis only.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_harmonic_vibe_props(
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'harmonic_vibe_count': 2,
+                'harmonic_vibe_damping': '0.01, 0.05',
+                'part_validation_enabled': False,
+                'require_material_assignment_enabled': False,
+                'analysis_temp': 20,
+                'analysis_temp_units': 'C',
+                'filter_by_event_frequency': False,
+            },
+            ]
+        )
+
+        """
+        if self.FREQ_UNIT_LIST is None:
+            self._init_freq_units()
+        if self.TEMP_UNIT_LIST is None:
+            self._init_temp_units()
+        try:
+            if project == "":
+                raise SherlockUpdateHarmonicVibePropsError(message="Project name is invalid.")
+
+            if not isinstance(harmonic_vibe_properties, list):
+                raise SherlockUpdateHarmonicVibePropsError(
+                    message="Harmonic vibe properties argument is invalid."
+                )
+
+            if len(harmonic_vibe_properties) == 0:
+                raise SherlockUpdateHarmonicVibePropsError(
+                    message="One or more harmonic vibe properties are required."
+                )
+
+            request = SherlockAnalysisService_pb2.UpdateHarmonicVibePropsRequest(project=project)
+
+            for i, harmonic_vibe_props in enumerate(harmonic_vibe_properties):
+                if not isinstance(harmonic_vibe_props, dict):
+                    raise SherlockUpdateHarmonicVibePropsError(
+                        f"Harmonic vibe props argument is invalid for harmonic vibe properties {i}."
+                    )
+
+                if "cca_name" not in harmonic_vibe_props.keys():
+                    raise SherlockUpdateHarmonicVibePropsError(
+                        message=f"CCA name is invalid for harmonic vibe properties {i}."
+                    )
+
+                cca_name = harmonic_vibe_props["cca_name"]
+                if cca_name == "":
+                    raise SherlockUpdateHarmonicVibePropsError(
+                        message=f"CCA name is invalid for harmonic vibe properties {i}."
+                    )
+
+                if "harmonic_vibe_count" in harmonic_vibe_props.keys():
+                    harmonic_vibe_count = harmonic_vibe_props["harmonic_vibe_count"]
+                else:
+                    harmonic_vibe_count = None
+
+                if "harmonic_vibe_damping" in harmonic_vibe_props.keys():
+                    harmonic_vibe_damping = harmonic_vibe_props["harmonic_vibe_damping"]
+                    if harmonic_vibe_damping is not None:
+                        for value in harmonic_vibe_damping.split(","):
+                            try:
+                                float(value.strip())
+                            except ValueError:
+                                raise SherlockUpdateHarmonicVibePropsError(
+                                    message=f"Harmonic vibe damping value is invalid"
+                                    f" for harmonic vibe properties {i}: " + value.strip()
+                                )
+                else:
+                    harmonic_vibe_damping = None
+
+                if "part_validation_enabled" in harmonic_vibe_props.keys():
+                    part_validation_enabled = harmonic_vibe_props["part_validation_enabled"]
+                else:
+                    part_validation_enabled = None
+
+                if "require_material_assignment_enabled" in harmonic_vibe_props.keys():
+                    require_material_assignment_enabled = harmonic_vibe_props[
+                        "require_material_assignment_enabled"
+                    ]
+                else:
+                    require_material_assignment_enabled = None
+
+                if "analysis_temp" in harmonic_vibe_props.keys():
+                    analysis_temp = harmonic_vibe_props["analysis_temp"]
+                else:
+                    analysis_temp = None
+
+                if "analysis_temp_units" in harmonic_vibe_props.keys():
+                    analysis_temp_units = harmonic_vibe_props["analysis_temp_units"]
+                    if (
+                        (self.TEMP_UNIT_LIST is not None)
+                        and (analysis_temp_units is not None)
+                        and (analysis_temp_units not in self.TEMP_UNIT_LIST)
+                    ):
+                        raise SherlockUpdateHarmonicVibePropsError(
+                            message=f"Analysis temperature units are invalid for "
+                            f"harmonic vibe properties {i}: " + analysis_temp_units
+                        )
+                else:
+                    analysis_temp_units = None
+
+                if "force_model_rebuild" in harmonic_vibe_props.keys():
+                    force_model_rebuild = harmonic_vibe_props["force_model_rebuild"]
+                else:
+                    force_model_rebuild = None
+
+                if "filter_by_event_frequency" in harmonic_vibe_props.keys():
+                    filter_by_event_frequency = harmonic_vibe_props["filter_by_event_frequency"]
+                else:
+                    filter_by_event_frequency = None
+
+                if "natural_freq_min" in harmonic_vibe_props.keys():
+                    natural_freq_min = harmonic_vibe_props["natural_freq_min"]
+                else:
+                    natural_freq_min = None
+
+                if "natural_freq_min_units" in harmonic_vibe_props.keys():
+                    natural_freq_min_units = harmonic_vibe_props["natural_freq_min_units"]
+                    if (
+                        (self.FREQ_UNIT_LIST is not None)
+                        and (natural_freq_min_units is not None)
+                        and (natural_freq_min_units not in self.FREQ_UNIT_LIST)
+                    ):
+                        raise SherlockUpdateHarmonicVibePropsError(
+                            message=f"Minimum natural frequency units are invalid for "
+                            f"harmonic vibe properties {i}: " + natural_freq_min_units
+                        )
+                else:
+                    natural_freq_min_units = None
+
+                if "natural_freq_max" in harmonic_vibe_props.keys():
+                    natural_freq_max = harmonic_vibe_props["natural_freq_max"]
+                else:
+                    natural_freq_max = None
+
+                if "natural_freq_max_units" in harmonic_vibe_props.keys():
+                    natural_freq_max_units = harmonic_vibe_props["natural_freq_max_units"]
+                    if (
+                        (self.FREQ_UNIT_LIST is not None)
+                        and (natural_freq_max_units is not None)
+                        and (natural_freq_max_units not in self.FREQ_UNIT_LIST)
+                    ):
+                        raise SherlockUpdateHarmonicVibePropsError(
+                            message=f"Maximum natural frequency units are invalid for "
+                            f"harmonic vibe properties {i}: " + natural_freq_max_units
+                        )
+                else:
+                    natural_freq_max_units = None
+
+                if "reuse_modal_analysis" in harmonic_vibe_props.keys():
+                    reuse_modal_analysis = harmonic_vibe_props["reuse_modal_analysis"]
+                else:
+                    reuse_modal_analysis = None
+
+                props_request = request.harmonicVibeProperties.add()
+                props_request.ccaName = cca_name
+                props_request.modelSource = SherlockAnalysisService_pb2.ModelSource.GENERATED
+
+                if harmonic_vibe_count is not None:
+                    props_request.harmonicVibeCount = harmonic_vibe_count
+
+                if harmonic_vibe_damping is not None:
+                    props_request.harmonicVibeDamping = harmonic_vibe_damping
+
+                if part_validation_enabled is not None:
+                    props_request.partValidationEnabled = part_validation_enabled
+
+                if require_material_assignment_enabled is not None:
+                    props_request.requireMaterialAssignmentEnabled = (
+                        require_material_assignment_enabled
+                    )
+
+                if analysis_temp is not None:
+                    props_request.analysisTemp = analysis_temp
+
+                if analysis_temp_units is not None:
+                    props_request.analysisTempUnits = analysis_temp_units
+
+                if force_model_rebuild is not None:
+                    props_request.forceModelRebuild = force_model_rebuild
+
+                if filter_by_event_frequency is not None:
+                    props_request.filterByEventFrequency = filter_by_event_frequency
+
+                if natural_freq_min is not None:
+                    props_request.naturalFreqMin = natural_freq_min
+
+                if natural_freq_min_units is not None:
+                    props_request.naturalFreqMinUnits = natural_freq_min_units
+
+                if natural_freq_max is not None:
+                    props_request.naturalFreqMax = natural_freq_max
+
+                if natural_freq_max_units is not None:
+                    props_request.naturalFreqMaxUnits = natural_freq_max_units
+
+                if reuse_modal_analysis is not None:
+                    props_request.reuseModalAnalysis = reuse_modal_analysis
+
+        except SherlockUpdateHarmonicVibePropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updateHarmonicVibeProps(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdateHarmonicVibePropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdateHarmonicVibePropsError as e:
+            LOG.error(str(e))
+            raise e
 
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.

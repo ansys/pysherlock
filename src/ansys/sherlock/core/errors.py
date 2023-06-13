@@ -771,3 +771,15 @@ class SherlockUpdatePcbModelingPropsError(Exception):
     def __str__(self):
         """Initialize error message."""
         return f"Update PCB Modeling Error: {self.message}"
+
+
+class SherlockUpdateHarmonicVibePropsError(Exception):
+    """Contains the error raised when properties for harmonic vibe analysis cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update harmonic vibe properties error: {self.message}"
