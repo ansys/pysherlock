@@ -769,7 +769,7 @@ class SherlockUpdatePcbModelingPropsError(Exception):
         self.message = message
 
     def __str__(self):
-              """Initialize error message."""
+        """Initialize error message."""
         return f"Update PCB Modeling Error: {self.message}"
       
 
