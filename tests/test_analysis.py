@@ -626,7 +626,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
     if analysis._is_connection_up():
         try:
             analysis.update_harmonic_vibe_props(
-                "Test",
+                "Tutorial Project",
                 [
                     {
                         "cca_name": "Main Board",
@@ -640,29 +640,29 @@ def helper_test_update_harmonic_vibe_props(analysis):
                     },
                 ],
             )
-            assert False
-        except SherlockUpdateHarmonicVibePropsError as e:
-            assert (
-                str(e) == "Update harmonic vibe properties error: "
-                "Analysis temperature units are invalid for harmonic vibe properties 0: foo"
-            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockUpdateHarmonicVibePropsError
 
-        result = analysis.update_harmonic_vibe_props(
-            "Test",
-            [
-                {
-                    "cca_name": "Main Board",
-                    "harmonic_vibe_count": 2,
-                    "harmonic_vibe_damping": "0.01, 0.02",
-                    "part_validation_enabled": False,
-                    "require_material_assignment_enabled": False,
-                    "analysis_temp": 20,
-                    "analysis_temp_units": "C",
-                    "filter_by_event_frequency": False,
-                },
-            ],
-        )
-        assert result == 0
+        try:
+            result = analysis.update_harmonic_vibe_props(
+                "Tutorial Project",
+                [
+                    {
+                        "cca_name": "Main Board",
+                        "harmonic_vibe_count": 2,
+                        "harmonic_vibe_damping": "0.01, 0.02",
+                        "part_validation_enabled": False,
+                        "require_material_assignment_enabled": False,
+                        "analysis_temp": 20,
+                        "analysis_temp_units": "C",
+                        "filter_by_event_frequency": False,
+                    },
+                ],
+            )
+            assert result == 0
+        except SherlockUpdateHarmonicVibePropsError as e:
+            pytest.fail(str(e))
 
 
 def helper_test_update_random_vibe_props(analysis):

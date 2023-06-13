@@ -280,10 +280,6 @@ class Analysis(GrpcStub):
         )
 
         """
-        if self.FREQ_UNIT_LIST is None:
-            self._init_freq_units()
-        if self.TEMP_UNIT_LIST is None:
-            self._init_temp_units()
         try:
             if project == "":
                 raise SherlockUpdateHarmonicVibePropsError(message="Project name is invalid.")
@@ -355,15 +351,6 @@ class Analysis(GrpcStub):
 
                 if "analysis_temp_units" in harmonic_vibe_props.keys():
                     analysis_temp_units = harmonic_vibe_props["analysis_temp_units"]
-                    if (
-                        (self.TEMP_UNIT_LIST is not None)
-                        and (analysis_temp_units is not None)
-                        and (analysis_temp_units not in self.TEMP_UNIT_LIST)
-                    ):
-                        raise SherlockUpdateHarmonicVibePropsError(
-                            message=f"Analysis temperature units are invalid for "
-                            f"harmonic vibe properties {i}: " + analysis_temp_units
-                        )
                 else:
                     analysis_temp_units = None
 
@@ -384,15 +371,6 @@ class Analysis(GrpcStub):
 
                 if "natural_freq_min_units" in harmonic_vibe_props.keys():
                     natural_freq_min_units = harmonic_vibe_props["natural_freq_min_units"]
-                    if (
-                        (self.FREQ_UNIT_LIST is not None)
-                        and (natural_freq_min_units is not None)
-                        and (natural_freq_min_units not in self.FREQ_UNIT_LIST)
-                    ):
-                        raise SherlockUpdateHarmonicVibePropsError(
-                            message=f"Minimum natural frequency units are invalid for "
-                            f"harmonic vibe properties {i}: " + natural_freq_min_units
-                        )
                 else:
                     natural_freq_min_units = None
 
@@ -403,15 +381,6 @@ class Analysis(GrpcStub):
 
                 if "natural_freq_max_units" in harmonic_vibe_props.keys():
                     natural_freq_max_units = harmonic_vibe_props["natural_freq_max_units"]
-                    if (
-                        (self.FREQ_UNIT_LIST is not None)
-                        and (natural_freq_max_units is not None)
-                        and (natural_freq_max_units not in self.FREQ_UNIT_LIST)
-                    ):
-                        raise SherlockUpdateHarmonicVibePropsError(
-                            message=f"Maximum natural frequency units are invalid for "
-                            f"harmonic vibe properties {i}: " + natural_freq_max_units
-                        )
                 else:
                     natural_freq_max_units = None
 
