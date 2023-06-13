@@ -4,7 +4,7 @@ import grpc
 import pytest
 
 from ansys.sherlock.core.common import Common
-from ansys.sherlock.types.common_types import ListUnitsRequestUnitType
+from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
 
 
 def test_all():

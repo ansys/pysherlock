@@ -13,7 +13,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
 )
-from ansys.sherlock.types.analysis_types import (
+from ansys.sherlock.core.types.analysis_types import (
     ElementOrder,
     ModelSource,
     RunAnalysisRequestAnalysisType,

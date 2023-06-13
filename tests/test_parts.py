@@ -17,7 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
-from ansys.sherlock.types.parts_types import (
+from ansys.sherlock.core.types.parts_types import (
     UpdatesPartsListRequestDuplicationMode,
     UpdatesPartsListRequestMatchingMode,
 )
