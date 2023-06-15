@@ -288,7 +288,7 @@ class SherlockAddHarmonicEventError(Exception):
     def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Create life phase error: {error}" for error in self.error_array]
+            return [f"Add harmonic event error: {error}" for error in self.error_array]
 
         assert self.error_array is None
         return [f"Add harmonic event error: {self.message}"]
@@ -348,13 +348,18 @@ class SherlockAddShockProfilesError(Exception):
 class SherlockLoadRandomVibeProfileError(Exception):
     """Contains the error raised when loading random vibe properties."""
 
-    def __init__(self, message):
-        """Initialize Error Message."""
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Format error message."""
-        return f"Load random vibe profile error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Load random vibe profile error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Load random vibe profile error: {self.message}"]
 
 
 class SherlockLoadHarmonicProfileError(Exception):
