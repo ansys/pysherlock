@@ -4,6 +4,7 @@ import grpc
 import pytest
 
 from ansys.sherlock.core.common import Common
+from ansys.sherlock.core.errors import SherlockCommonServiceError
 from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
 
 
@@ -18,14 +19,18 @@ def test_all():
 def helper_test_list_units(common):
     """Test list_units API"""
 
-    if not common._is_connection_up():
-        return
+    if common._is_connection_up():
+        try:
+            common.list_units(ListUnitsRequestUnitType.WEIGHT + 10000)
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockCommonServiceError
 
-    try:
-        units = common.list_units(ListUnitsRequestUnitType.ACCEL_DENSITY)
-        assert len(units) != 0
-    except Exception as e:
-        pytest.fail(str(e))
+        try:
+            units = common.list_units(ListUnitsRequestUnitType.ACCEL_DENSITY)
+            assert len(units) != 0
+        except SherlockCommonServiceError as e:
+            pytest.fail(str(e))
 
 
 if __name__ == "__main__":

@@ -205,7 +205,8 @@ class Lifecycle(GrpcStub):
         except TypeError:
             raise SherlockInvalidThermalProfileEntriesError(f"Invalid entry {i}: Time is invalid")
 
-    def _check_harmonic_profile_entries_validity(self, input):
+    @staticmethod
+    def _check_harmonic_profile_entries_validity(input):
         """Check input array if all elements are valid for harmonic entries."""
         if not isinstance(input, list):
             raise SherlockInvalidHarmonicProfileEntriesError(message="Entries argument is invalid.")
@@ -1805,8 +1806,12 @@ class Lifecycle(GrpcStub):
             )
             response = self.stub.loadHarmonicProfile(request)
             return_code = response.returnCode
+
             if return_code.value == -1:
-                raise SherlockLoadHarmonicProfileError(return_code.message)
+                if return_code.message == "":
+                    raise SherlockLoadHarmonicProfileError(error_array=response.errors)
+
+                raise SherlockLoadHarmonicProfileError(message=return_code.message)
 
             return return_code.value
         except SherlockLoadHarmonicProfileError as e:

@@ -31,7 +31,7 @@ def test_all():
 
     phase_name = helper_test_create_life_phase(lifecycle)
     random_vibe_event_name = helper_test_add_random_vibe_event(lifecycle, phase_name)
-    helper_test_add_random_vibe_profile(lifecycle, random_vibe_event_name, phase_name)
+    helper_test_add_random_vibe_profiles(lifecycle, random_vibe_event_name, phase_name)
     thermal_event_name = helper_test_add_thermal_event(lifecycle, phase_name)
     helper_test_add_thermal_profiles(lifecycle, phase_name, thermal_event_name)
     harmonic_vibe_event_name = helper_test_add_harmonic_event(lifecycle, phase_name)
@@ -52,19 +52,19 @@ def helper_test_create_life_phase(lifecycle):
         lifecycle.create_life_phase("", "", 1, "sec", 1, "PER SEC", description="Test1")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Project name is invalid."
+        assert str(e.str_itr()) == "['Create life phase error: Project name is invalid.']"
 
     try:
         lifecycle.create_life_phase("Test", "", 1, "sec", 1, "PER SEC", description="Test1")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Create life phase error: Phase name is invalid.']"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 0, "sec", 1, "PER SEC", description="Test1")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Duration must be greater than 0."
+        assert str(e.str_itr()) == "['Create life phase error: Duration must be greater than 0.']"
 
     if lifecycle._is_connection_up():
         try:
@@ -73,13 +73,16 @@ def helper_test_create_life_phase(lifecycle):
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except SherlockCreateLifePhaseError as e:
-            assert e.str_itr()[0] == "Create life phase error: Cycle type is invalid."
+            assert str(e.str_itr()) == "['Create life phase error: Cycle type is invalid.']"
 
     try:
         lifecycle.create_life_phase("Test", "Example", 5, "sec", 0, "PER SEC", description="Test1")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockCreateLifePhaseError as e:
-        assert e.str_itr()[0] == "Create life phase error: Number of cycles must be greater than 0."
+        assert (
+            str(e.str_itr())
+            == "['Create life phase error: Number of cycles must be greater than 0.']"
+        )
 
     if lifecycle._is_connection_up():
         phase_name = "Phase " + str(uuid.uuid4())
@@ -121,7 +124,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Project name is invalid."
+        assert str(e.str_itr()) == "['Add random vibe event error: Project name is invalid.']"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -139,7 +142,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Add random vibe event error: Phase name is invalid.']"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -157,7 +160,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Event name is invalid."
+        assert str(e.str_itr()) == "['Add random vibe event error: Event name is invalid.']"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -175,7 +178,9 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Duration must be greater than 0."
+        assert (
+            str(e.str_itr()) == "['Add random vibe event error: Duration must be greater than 0.']"
+        )
 
     if lifecycle._is_connection_up():
         try:
@@ -194,7 +199,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except SherlockAddRandomVibeEventError as e:
-            assert e.str_itr()[0] == "Add random vibe event error: Cycle type is invalid."
+            assert str(e.str_itr()) == "['Add random vibe event error: Cycle type is invalid.']"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -213,8 +218,8 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe event error: "
-            "Number of cycles must be greater than 0."
+            str(e.str_itr())
+            == "['Add random vibe event error: Number of cycles must be greater than 0.']"
         )
 
     try:
@@ -233,7 +238,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
-        assert e.str_itr()[0] == "Add random vibe event error: Elevation value is invalid."
+        assert str(e.str_itr()) == "['Add random vibe event error: Elevation value is invalid.']"
 
     try:
         lifecycle.add_random_vibe_event(
@@ -252,11 +257,9 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0]
-            == "Add random vibe event error: At least one direction coordinate must be "
-            "non-zero."
+            str(e.str_itr()) == "['Add random vibe event error: "
+            "At least one direction coordinate must be non-zero.']"
         )
-
     try:
         lifecycle.add_random_vibe_event(
             "Test",
@@ -274,8 +277,8 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeEventError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe event error: "
-            "Number of spherical coordinates is invalid."
+            str(e.str_itr())
+            == "['Add random vibe event error: Number of spherical coordinates is invalid.']"
         )
 
     if lifecycle._is_connection_up():
@@ -314,7 +317,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         return event_name
 
 
-def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
+def helper_test_add_random_vibe_profiles(lifecycle, event_name, phase_name):
     """Test the add_random_vibe_profiles API"""
 
     try:
@@ -333,7 +336,7 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeProfilesError as e:
-        assert e.str_itr()[0] == "Add random vibe profiles error: " "Project name is invalid."
+        assert str(e.str_itr()) == "['Add random vibe profiles error: " "Project name is invalid.']"
 
     try:
         lifecycle.add_random_vibe_profiles(
@@ -352,8 +355,8 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe profiles error: "
-            "Profile name is invalid for random vibe profile 0."
+            str(e.str_itr()) == "['Add random vibe profiles error: "
+            "Profile name is invalid for random vibe profile 0.']"
         )
 
     try:
@@ -373,10 +376,9 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe profiles error: "
+            str(e.str_itr()) == "['Add random vibe profiles error: "
             "Invalid entry 0: "
-            "Number of elements is wrong for random vibe "
-            "profile 0."
+            "Number of elements is wrong for random vibe profile 0.']"
         )
 
     try:
@@ -396,9 +398,9 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe profiles error:"
+            str(e.str_itr()) == "['Add random vibe profiles error:"
             " Invalid entry 1:"
-            " Frequency or amplitude is invalid for random vibe profile 0."
+            " Frequency or amplitude is invalid for random vibe profile 0.']"
         )
 
     try:
@@ -418,9 +420,9 @@ def helper_test_add_random_vibe_profile(lifecycle, event_name, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddRandomVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add random vibe profiles error:"
+            str(e.str_itr()) == "['Add random vibe profiles error:"
             " Invalid entry 2:"
-            " Frequencies must be greater than 0 for random vibe profile 0."
+            " Frequencies must be greater than 0 for random vibe profile 0.']"
         )
 
     if lifecycle._is_connection_up():
@@ -475,7 +477,7 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Project name is invalid."
+        assert str(e.str_itr()) == "['Add thermal event error: Project name is invalid.']"
 
     try:
         lifecycle.add_thermal_event(
@@ -488,7 +490,7 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Add thermal event error: Phase name is invalid.']"
 
     try:
         lifecycle.add_thermal_event(
@@ -501,7 +503,7 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Event name is invalid."
+        assert str(e.str_itr()) == "['Add thermal event error: Event name is invalid.']"
 
     try:
         lifecycle.add_thermal_event(
@@ -514,7 +516,10 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalEventError as e:
-        assert e.str_itr()[0] == "Add thermal event error: Number of cycles must be greater than 0."
+        assert (
+            str(e.str_itr()) == "['Add thermal event error: "
+            "Number of cycles must be greater than 0.']"
+        )
 
     if lifecycle._is_connection_up():
         event_name = "Thermal Event " + str(uuid.uuid4())
@@ -568,8 +573,8 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0]
-            == "Add thermal profiles error: Profile name is invalid for thermal profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Profile name is invalid for thermal profile 0.']"
         )
 
     try:
@@ -593,8 +598,9 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add thermal profiles error: Invalid entry 0: "
-            "Number of elements is wrong for thermal profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Invalid entry 0: "
+            "Number of elements is wrong for thermal profile 0.']"
         )
 
     try:
@@ -618,8 +624,9 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add thermal profiles error: Invalid entry 1: "
-            "Step name is invalid for thermal profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Invalid entry 1: "
+            "Step name is invalid for thermal profile 0.']"
         )
 
     try:
@@ -643,8 +650,9 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add thermal profiles error: Invalid entry 2: "
-            "Step type is invalid for thermal profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Invalid entry 2: "
+            "Step type is invalid for thermal profile 0.']"
         )
 
     try:
@@ -668,8 +676,9 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add thermal profiles error: Invalid entry 1: "
-            "Time must be greater than 0 for thermal profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Invalid entry 1: "
+            "Time must be greater than 0 for thermal profile 0.']"
         )
 
     try:
@@ -693,8 +702,9 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0]
-            == "Add thermal profiles error: Invalid entry 1: Time is invalid for thermal profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Invalid entry 1: "
+            "Time is invalid for thermal profile 0.']"
         )
 
     try:
@@ -718,9 +728,8 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
         assert False
     except SherlockAddThermalProfilesError as e:
         assert (
-            e.str_itr()[0]
-            == "Add thermal profiles error: Invalid entry 0: Temperature is invalid for thermal "
-            "profile 0."
+            str(e.str_itr()) == "['Add thermal profiles error: "
+            "Invalid entry 0: Temperature is invalid for thermal profile 0.']"
         )
 
     if lifecycle._is_connection_up():
@@ -789,7 +798,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Project name is invalid."
+        assert str(e.str_itr()) == "['Add harmonic event error: Project name is invalid.']"
 
     try:
         lifecycle.add_harmonic_event(
@@ -807,7 +816,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Add harmonic event error: Phase name is invalid.']"
 
     try:
         lifecycle.add_harmonic_event(
@@ -825,7 +834,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Event name is invalid."
+        assert str(e.str_itr()) == "['Add harmonic event error: Event name is invalid.']"
 
     try:
         lifecycle.add_harmonic_event(
@@ -843,7 +852,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Duration must be greater than 0."
+        assert str(e.str_itr()) == "['Add harmonic event error: Duration must be greater than 0.']"
 
     if lifecycle._is_connection_up():
         try:
@@ -862,7 +871,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Cycle type is invalid."
+            assert str(e.str_itr()) == "['Add harmonic event error: Cycle type is invalid.']"
 
         try:
             lifecycle.add_harmonic_event(
@@ -880,7 +889,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except SherlockAddHarmonicEventError as e:
-            assert e.str_itr()[0] == "Add harmonic event error: Profile type is invalid."
+            assert str(e.str_itr()) == "['Add harmonic event error: Profile type is invalid.']"
 
     try:
         lifecycle.add_harmonic_event(
@@ -899,8 +908,8 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic event error: Number of cycles must be "
-            "greater than 0."
+            str(e.str_itr()) == "['Add harmonic event error: "
+            "Number of cycles must be greater than 0.']"
         )
 
     try:
@@ -919,7 +928,10 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Sweep rate must be greater than 0."
+        assert (
+            str(e.str_itr()) == "['Add harmonic event error: "
+            "Sweep rate must be greater than 0.']"
+        )
 
     try:
         lifecycle.add_harmonic_event(
@@ -937,7 +949,7 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
-        assert e.str_itr()[0] == "Add harmonic event error: Azimuth value is invalid."
+        assert str(e.str_itr()) == "['Add harmonic event error: Azimuth value is invalid.']"
 
     try:
         lifecycle.add_harmonic_event(
@@ -956,8 +968,8 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
         assert (
-            e.str_itr()[0]
-            == "Add harmonic event error: At least one direction coordinate must be non-zero."
+            str(e.str_itr()) == "['Add harmonic event error: "
+            "At least one direction coordinate must be non-zero.']"
         )
 
     try:
@@ -977,8 +989,8 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicEventError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic event error: Number of spherical coordinates "
-            "is invalid."
+            str(e.str_itr()) == "['Add harmonic event error: "
+            "Number of spherical coordinates is invalid.']"
         )
     if lifecycle._is_connection_up():
         event_name = "Harmonic Vibe Event " + str(uuid.uuid4())
@@ -1044,7 +1056,7 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
-        assert e.str_itr()[0] == "Add harmonic vibe profiles error: Project name is invalid."
+        assert str(e.str_itr()) == "['Add harmonic vibe profiles error: Project name is invalid.']"
 
     try:
         lifecycle.add_harmonic_vibe_profiles(
@@ -1067,8 +1079,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error:"
-            " Phase name is invalid for harmonic vibe profile 0."
+            str(e.str_itr()) == "['Add harmonic vibe profiles error:"
+            " Phase name is invalid for harmonic vibe profile 0.']"
         )
 
     try:
@@ -1092,8 +1104,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error:"
-            " Event name is invalid for harmonic vibe profile 0."
+            str(e.str_itr()) == "['Add harmonic vibe profiles error:"
+            " Event name is invalid for harmonic vibe profile 0.']"
         )
 
     try:
@@ -1117,8 +1129,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error:"
-            " Profile name is invalid for harmonic vibe profile 0."
+            str(e.str_itr()) == "['Add harmonic vibe profiles error:"
+            " Profile name is invalid for harmonic vibe profile 0.']"
         )
 
     if lifecycle._is_connection_up():
@@ -1143,8 +1155,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
             pytest.fail("No exception raised when using an invalid parameter")
         except SherlockAddHarmonicVibeProfilesError as e:
             assert (
-                e.str_itr()[0] == "Add harmonic vibe profiles error: "
-                "Load units InvalidLoadUnits are invalid for harmonic vibe profile 0."
+                str(e.str_itr()) == "['Add harmonic vibe profiles error: "
+                "Load units InvalidLoadUnits are invalid for harmonic vibe profile 0.']"
             )
 
     try:
@@ -1168,9 +1180,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error:"
-            " Invalid entry 0:"
-            " Number of elements is wrong for harmonic vibe profile 0."
+            str(e.str_itr()) == "['Add harmonic vibe profiles error:"
+            " Invalid entry 0: Number of elements is wrong for harmonic vibe profile 0.']"
         )
 
     try:
@@ -1194,9 +1205,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error: "
-            "Invalid entry 1: Frequency or load is invalid for "
-            "harmonic vibe profile 0."
+            str(e.str_itr()) == "['Add harmonic vibe profiles error: "
+            "Invalid entry 1: Frequency or load is invalid for harmonic vibe profile 0.']"
         )
 
     try:
@@ -1220,9 +1230,8 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddHarmonicVibeProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add harmonic vibe profiles error:"
-            " Invalid entry 0:"
-            " Load must be greater than 0 for harmonic vibe profile 0."
+            str(e.str_itr()) == "['Add harmonic vibe profiles error:"
+            " Invalid entry 0: Load must be greater than 0 for harmonic vibe profile 0.']"
         )
     if lifecycle._is_connection_up():
         profile = str(uuid.uuid4())
@@ -1288,7 +1297,7 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Project name is invalid."
+        assert str(e.str_itr()) == "['Add shock event error: Project name is invalid.']"
 
     try:
         lifecycle.add_shock_event(
@@ -1304,7 +1313,7 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Add shock event error: Phase name is invalid.']"
 
     try:
         lifecycle.add_shock_event(
@@ -1320,7 +1329,7 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Event name is invalid."
+        assert str(e.str_itr()) == "['Add shock event error: Event name is invalid.']"
 
     try:
         lifecycle.add_shock_event(
@@ -1336,7 +1345,7 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Duration must be greater than 0."
+        assert str(e.str_itr()) == "['Add shock event error: Duration must be greater than 0.']"
 
     try:
         lifecycle.add_shock_event(
@@ -1352,7 +1361,10 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Number of cycles must be greater than 0."
+        assert (
+            str(e.str_itr()) == "['Add shock event error: "
+            "Number of cycles must be greater than 0.']"
+        )
 
     try:
         lifecycle.add_shock_event(
@@ -1369,7 +1381,7 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
-        assert e.str_itr()[0] == "Add shock event error: Elevation value is invalid."
+        assert str(e.str_itr()) == "['Add shock event error: Elevation value is invalid.']"
 
     try:
         lifecycle.add_shock_event(
@@ -1387,8 +1399,8 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
         assert (
-            e.str_itr()[0] == "Add shock event error: At least one direction coordinate must be "
-            "non-zero."
+            str(e.str_itr()) == "['Add shock event error: "
+            "At least one direction coordinate must be non-zero.']"
         )
 
     try:
@@ -1407,8 +1419,8 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockEventError as e:
         assert (
-            e.str_itr()[0] == "Add shock event error: Number of spherical coordinates "
-            "is invalid."
+            str(e.str_itr()) == "['Add shock event error: "
+            "Number of spherical coordinates is invalid.']"
         )
 
     if lifecycle._is_connection_up():
@@ -1471,7 +1483,7 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
-        assert e.str_itr()[0] == "Add shock profiles error: Project name is invalid."
+        assert str(e.str_itr()) == "['Add shock profiles error: Project name is invalid.']"
 
     try:
         lifecycle.add_shock_profiles(
@@ -1494,8 +1506,8 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error: Phase name is invalid for "
-            "shock profile 0."
+            str(e.str_itr()) == "['Add shock profiles error: Phase name is invalid for "
+            "shock profile 0.']"
         )
 
     try:
@@ -1519,8 +1531,8 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error: Event name is invalid for "
-            "shock profile 0."
+            str(e.str_itr()) == "['Add shock profiles error: Event name is invalid for "
+            "shock profile 0.']"
         )
 
     try:
@@ -1544,8 +1556,8 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
-            " Profile name is invalid for shock profile 0."
+            str(e.str_itr()) == "['Add shock profiles error:"
+            " Profile name is invalid for shock profile 0.']"
         )
 
     try:
@@ -1569,8 +1581,8 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
-            " Duration must be greater than 0 for shock profile 0."
+            str(e.str_itr()) == "['Add shock profiles error:"
+            " Duration must be greater than 0 for shock profile 0.']"
         )
 
     try:
@@ -1594,8 +1606,8 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
-            " Duration must be greater than 0 for shock profile 0."
+            str(e.str_itr()) == "['Add shock profiles error:"
+            " Duration must be greater than 0 for shock profile 0.']"
         )
 
     try:
@@ -1619,8 +1631,8 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
-            " Sample rate must be greater than 0 for shock profile 0."
+            str(e.str_itr()) == "['Add shock profiles error:"
+            " Sample rate must be greater than 0 for shock profile 0.']"
         )
 
     try:
@@ -1644,9 +1656,9 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
+            str(e.str_itr()) == "['Add shock profiles error:"
             " Invalid entry 0: Number of elements is wrong for shock"
-            " profile 0."
+            " profile 0.']"
         )
 
     try:
@@ -1670,9 +1682,9 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
+            str(e.str_itr()) == "['Add shock profiles error:"
             " Invalid entry 0: Load must be "
-            "greater than 0 for shock profile 0."
+            "greater than 0 for shock profile 0.']"
         )
 
     try:
@@ -1696,9 +1708,9 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddShockProfilesError as e:
         assert (
-            e.str_itr()[0] == "Add shock profiles error:"
+            str(e.str_itr()) == "['Add shock profiles error:"
             " Invalid entry 0: Decay must be non-negative for "
-            "shock profile 0."
+            "shock profile 0.']"
         )
 
     if lifecycle._is_connection_up():
@@ -1796,6 +1808,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
         assert str(e.str_itr()) == "['Load random vibe profile error: File path is invalid.']"
 
     if lifecycle._is_connection_up():
+        # happy path test missing because needs valid file
         try:
             lifecycle.load_random_vibe_profile(
                 "Invalid Project",
@@ -1805,7 +1818,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
-            type(e) == SherlockLoadRandomVibeProfileError
+            assert type(e) == SherlockLoadRandomVibeProfileError
 
 
 def helper_test_load_harmonic_profile(lifecycle):
@@ -1815,26 +1828,28 @@ def helper_test_load_harmonic_profile(lifecycle):
         lifecycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e) == "Load Harmonic profile error: Project name is invalid."
+        assert str(e.str_itr()) == "['Load harmonic profile error: Project name is invalid.']"
 
     try:
         lifecycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e) == "Load Harmonic profile error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Load harmonic profile error: Phase name is invalid.']"
 
     try:
         lifecycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e) == "Load Harmonic profile error: Event name is invalid."
+        assert str(e.str_itr()) == "['Load harmonic profile error: Event name is invalid.']"
 
     try:
         lifecycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e) == "Load Harmonic profile error: File name is invalid."
+        assert str(e.str_itr()) == "['Load harmonic profile error: File name is invalid.']"
+
     if lifecycle._is_connection_up():
+        # happy path test missing because needs valid file
         try:
             lifecycle.load_harmonic_profile(
                 "Invalid Project",
@@ -1859,7 +1874,7 @@ def helper_test_load_thermal_profile(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: Project name is invalid."
+        assert str(e.str_itr()) == "['Load thermal profile error: Project name is invalid.']"
 
     try:
         lifecycle.load_thermal_profile(
@@ -1870,7 +1885,7 @@ def helper_test_load_thermal_profile(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Load thermal profile error: Phase name is invalid.']"
 
     try:
         lifecycle.load_thermal_profile(
@@ -1881,7 +1896,7 @@ def helper_test_load_thermal_profile(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: Event name is invalid."
+        assert str(e.str_itr()) == "['Load thermal profile error: Event name is invalid.']"
 
     try:
         lifecycle.load_thermal_profile(
@@ -1892,9 +1907,10 @@ def helper_test_load_thermal_profile(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e) == "Load thermal profile error: File path is invalid."
+        assert str(e.str_itr()) == "['Load thermal profile error: File path is invalid.']"
 
     if lifecycle._is_connection_up():
+        # happy path test missing because needs valid file
         try:
             lifecycle.load_thermal_profile(
                 "Test Project",
@@ -1919,7 +1935,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Project name is invalid."
+        assert str(e.str_itr()) == "['Load shock profile dataset error: Project name is invalid.']"
 
     try:
         lifecycle.load_shock_profile_dataset(
@@ -1930,7 +1946,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Load shock profile dataset error: Phase name is invalid.']"
 
     try:
         lifecycle.load_shock_profile_dataset(
@@ -1941,7 +1957,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: Event name is invalid."
+        assert str(e.str_itr()) == "['Load shock profile dataset error: Event name is invalid.']"
 
     try:
         lifecycle.load_shock_profile_dataset(
@@ -1952,9 +1968,10 @@ def helper_test_load_shock_profile_dataset(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e) == "Load shock profile dataset error: File path is invalid."
+        assert str(e.str_itr()) == "['Load shock profile dataset error: File path is invalid.']"
 
     if lifecycle._is_connection_up():
+        # happy path test missing because needs valid file
         try:
             lifecycle.load_shock_profile_dataset(
                 "Tutorial Project",
@@ -1978,7 +1995,7 @@ def helper_test_load_shock_profile_pulses(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e) == "Load shock profile pulses error: Project name is invalid."
+        assert str(e.str_itr()) == "['Load shock profile pulses error: Project name is invalid.']"
 
     try:
         lifecycle.load_shock_profile_pulses(
@@ -1989,7 +2006,7 @@ def helper_test_load_shock_profile_pulses(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e) == "Load shock profile pulses error: Phase name is invalid."
+        assert str(e.str_itr()) == "['Load shock profile pulses error: Phase name is invalid.']"
 
     try:
         lifecycle.load_shock_profile_pulses(
@@ -2000,7 +2017,7 @@ def helper_test_load_shock_profile_pulses(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e) == "Load shock profile pulses error: Event name is invalid."
+        assert str(e.str_itr()) == "['Load shock profile pulses error: Event name is invalid.']"
 
     try:
         lifecycle.load_shock_profile_pulses(
@@ -2011,9 +2028,10 @@ def helper_test_load_shock_profile_pulses(lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e) == "Load shock profile pulses error: File path is invalid."
+        assert str(e.str_itr()) == "['Load shock profile pulses error: File path is invalid.']"
 
     if lifecycle._is_connection_up():
+        # happy path test missing because needs valid file
         try:
             lifecycle.load_shock_profile_pulses(
                 "Tutorial Project",

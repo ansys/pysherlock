@@ -78,7 +78,7 @@ def helper_test_update_parts_list(parts):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Project name is invalid."
+        assert str(e.str_itr()) == "['Update parts list error: Project name is invalid.']"
 
     try:
         parts.update_parts_list(
@@ -90,7 +90,7 @@ def helper_test_update_parts_list(parts):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: CCA name is invalid."
+        assert str(e.str_itr()) == "['Update parts list error: CCA name is invalid.']"
 
     try:
         parts.update_parts_list(
@@ -102,7 +102,7 @@ def helper_test_update_parts_list(parts):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
-        assert e.str_itr()[0] == "Update parts list error: Parts library is invalid."
+        assert str(e.str_itr()) == "['Update parts list error: Parts library is invalid.']"
 
 
 def helper_test_update_parts_locations(parts):
@@ -146,7 +146,7 @@ def helper_test_update_parts_locations(parts):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Project name is invalid."
+        assert str(e.str_itr()) == "['Update parts locations error: Project name is invalid.']"
 
     try:
         parts.update_parts_locations(
@@ -159,21 +159,24 @@ def helper_test_update_parts_locations(parts):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: CCA name is invalid."
+        assert str(e.str_itr()) == "['Update parts locations error: CCA name is invalid.']"
 
     try:
         parts.update_parts_locations("Test", "Card", "Invalid")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == "Update parts locations error: Part location argument is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Part location argument is invalid.']"
+        )
 
     try:
         parts.update_parts_locations("Test", "Card", [])
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
-            e.str_itr()[0] == "Update parts locations error: Part location properties "
-            "are missing."
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Part location properties are missing.']"
         )
 
     try:
@@ -185,11 +188,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
-            e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 0: Number of fields is invalid."
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 0: Number of fields is invalid.']"
         )
 
     try:
@@ -201,12 +204,11 @@ def helper_test_update_parts_locations(parts):
                 ("", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
-            e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 1: Reference designator "
-            "is missing."
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 1: Reference designator is missing.']"
         )
 
     if parts._is_connection_up():
@@ -219,11 +221,11 @@ def helper_test_update_parts_locations(parts):
                     ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
                 ],
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdatePartsLocationsError as e:
-            assert e.str_itr()[0] == (
-                "Update parts locations error: "
-                "Invalid part location 0: Location units are invalid."
+            assert (
+                str(e.str_itr()) == "['Update parts locations error: "
+                "Invalid part location 0: Location units are invalid.']"
             )
 
     try:
@@ -238,8 +240,8 @@ def helper_test_update_parts_locations(parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
-            e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 0: Location units are missing."
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 0: Location units are missing.']"
         )
 
     try:
@@ -251,11 +253,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == (
-            "Update parts locations error: Invalid part location 0: "
-            "Location X coordinate is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 0: Location X coordinate is invalid.']"
         )
 
     try:
@@ -267,11 +269,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "Invalid", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == (
-            "Update parts locations error: Invalid part location 1: "
-            "Location Y coordinate is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 1: Location Y coordinate is invalid.']"
         )
 
     try:
@@ -283,11 +285,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "", "-2.220446049250313E-16", "90", "", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
         assert (
-            e.str_itr()[0]
-            == "Update parts locations error: Invalid part location 1: Location units are missing."
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 1: Location units are missing.']"
         )
 
     try:
@@ -299,11 +301,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == (
-            "Update parts locations error: Invalid part location 0: "
-            "Location rotation is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 0: Location rotation is invalid.']"
         )
 
     try:
@@ -315,11 +317,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "400", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == (
-            "Update parts locations error: Invalid part location 1: "
-            "Location rotation is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 1: Location rotation is invalid.']"
         )
 
     if parts._is_connection_up():
@@ -332,11 +334,11 @@ def helper_test_update_parts_locations(parts):
                     ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
                 ],
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdatePartsLocationsError as e:
-            assert e.str_itr()[0] == (
-                "Update parts locations error: Invalid part location 0: "
-                "Location board side is invalid."
+            assert (
+                str(e.str_itr()) == "['Update parts locations error: "
+                "Invalid part location 0: Location board side is invalid.']"
             )
 
     try:
@@ -348,11 +350,11 @@ def helper_test_update_parts_locations(parts):
                 ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsError as e:
-        assert e.str_itr()[0] == (
-            "Update parts locations error: Invalid part location 0: "
-            "Location mirrored is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations error: "
+            "Invalid part location 0: Location mirrored is invalid.']"
         )
 
 
@@ -377,9 +379,11 @@ def helper_test_update_parts_locations_by_file(parts):
             "Card",
             "Parts Locations.csv",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: Project name is invalid."
+        assert (
+            str(e.str_itr()) == "['Update parts locations by file error: Project name is invalid.']"
+        )
 
     try:
         parts.update_parts_locations_by_file(
@@ -387,9 +391,9 @@ def helper_test_update_parts_locations_by_file(parts):
             "",
             "Parts Locations.csv",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsLocationsByFileError as e:
-        assert e.str_itr()[0] == "Update parts locations by file error: CCA name is invalid."
+        assert str(e.str_itr()) == "['Update parts locations by file error: CCA name is invalid.']"
 
 
 def helper_test_import_parts_list(parts):
@@ -414,7 +418,7 @@ def helper_test_import_parts_list(parts):
             "Parts List.csv",
             True,
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportPartsListError as e:
         assert str(e) == "Import parts list error: Project name is invalid."
 
@@ -425,7 +429,7 @@ def helper_test_import_parts_list(parts):
             "Parts List.csv",
             True,
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportPartsListError as e:
         assert str(e) == "Import parts list error: CCA name is invalid."
 

@@ -1,6 +1,7 @@
 # Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
 
 import grpc
+import pytest
 
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
@@ -50,7 +51,7 @@ def helper_test_gen_stackup(stackup):
             1.0,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert str(e) == "Generate stackup error: Project name is invalid."
 
@@ -72,7 +73,7 @@ def helper_test_gen_stackup(stackup):
             1.0,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert str(e) == "Generate stackup error: CCA name is invalid."
 
@@ -94,7 +95,7 @@ def helper_test_gen_stackup(stackup):
             1.0,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert str(e) == "Generate stackup error: Board thickness is invalid."
 
@@ -116,7 +117,7 @@ def helper_test_gen_stackup(stackup):
             1.0,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert (
             str(e) == "Generate stackup error: Number of conductor layers must be greater than 1."
@@ -140,7 +141,7 @@ def helper_test_gen_stackup(stackup):
             1.0,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert str(e) == "Generate stackup error: Conductor thickness is invalid."
 
@@ -162,7 +163,7 @@ def helper_test_gen_stackup(stackup):
             1.0,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert str(e) == "Generate stackup error: Laminate thickness is invalid."
 
@@ -184,7 +185,7 @@ def helper_test_gen_stackup(stackup):
             -1,
             "mil",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGenStackupError as e:
         assert str(e) == "Generate stackup error: Power thickness is invalid."
 
@@ -207,7 +208,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Board thickness units are invalid."
 
@@ -229,7 +230,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Laminate manufacturer is invalid."
 
@@ -251,7 +252,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Laminate grade is invalid."
 
@@ -273,7 +274,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Laminate material is invalid."
 
@@ -295,7 +296,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Laminate material is invalid."
 
@@ -317,7 +318,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Conductor thickness units are invalid."
 
@@ -339,7 +340,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "mil",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Laminate thickness units are invalid."
 
@@ -361,7 +362,7 @@ def helper_test_gen_stackup(stackup):
                 1.0,
                 "Invalid",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockGenStackupError as e:
             assert str(e) == "Generate stackup error: Power thickness units are invalid."
 
@@ -380,7 +381,7 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
         assert str(e) == "Update conductor layer error: Project name is invalid."
 
@@ -396,7 +397,7 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
         assert str(e) == "Update conductor layer error: CCA name is invalid."
 
@@ -412,7 +413,7 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
         assert str(e) == "Update conductor layer error: Layer ID conductor is missing."
 
@@ -428,10 +429,10 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == (
-            "Update conductor layer error: "
+        assert (
+            str(e) == "Update conductor layer error: "
             "Layer ID is invalid. It must be an integer greater than 0."
         )
 
@@ -447,7 +448,7 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
         assert (
             str(e) == "Update conductor layer error: Layer ID is invalid. "
@@ -466,10 +467,10 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == (
-            "Update conductor layer error: "
+        assert (
+            str(e) == "Update conductor layer error: "
             'Conductor type is invalid. Options are "SIGNAL", "POWER", and "SUBSTRATE".'
         )
 
@@ -486,7 +487,7 @@ def helper_test_update_conductor_layer(stackup):
                 "94.2",
                 "Generic FR-4 Generic FR-4",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateConductorLayerError as e:
             assert str(e) == "Update conductor layer error: Conductor material is invalid."
 
@@ -502,7 +503,7 @@ def helper_test_update_conductor_layer(stackup):
             "94.2",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
         assert str(e) == "Update conductor layer error: Conductor thickness is invalid."
 
@@ -519,7 +520,7 @@ def helper_test_update_conductor_layer(stackup):
                 "94.2",
                 "Generic FR-4 Generic FR-4",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateConductorLayerError as e:
             assert str(e) == "Update conductor layer error: Conductor thickness units are invalid."
 
@@ -535,10 +536,10 @@ def helper_test_update_conductor_layer(stackup):
             "105",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
-        assert str(e) == (
-            "Update conductor layer error: "
+        assert (
+            str(e) == "Update conductor layer error: "
             "Conductor percent is invalid. It must be between 0 and 100."
         )
 
@@ -554,11 +555,11 @@ def helper_test_update_conductor_layer(stackup):
             "Invalid",
             "Generic FR-4 Generic FR-4",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateConductorLayerError as e:
         assert (
-            str(e) == "Update conductor layer error: Conductor percent is invalid. "
-            "It must be between 0 and 100."
+            str(e) == "Update conductor layer error: "
+            "Conductor percent is invalid. It must be between 0 and 100."
         )
 
 
@@ -581,7 +582,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == "Update laminate layer error: Project name is invalid."
 
@@ -601,7 +602,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == "Update laminate layer error: CCA name is invalid."
 
@@ -621,7 +622,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == "Update laminate layer error: Layer ID laminate is missing."
 
@@ -641,10 +642,10 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
-        assert str(e) == (
-            "Update laminate layer error: Layer ID is invalid. "
+        assert (
+            str(e) == "Update laminate layer error: Layer ID is invalid. "
             "It must be an integer greater than 0."
         )
 
@@ -664,7 +665,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert (
             str(e) == "Update laminate layer error: Layer ID is invalid. "
@@ -688,7 +689,7 @@ def helper_test_update_laminate_layer(stackup):
                 "COPPER",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert str(e) == "Update laminate layer error: Laminate manufacturer is invalid."
 
@@ -709,7 +710,7 @@ def helper_test_update_laminate_layer(stackup):
                 "COPPER",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert str(e) == "Update laminate layer error: Laminate grade is invalid."
 
@@ -730,7 +731,7 @@ def helper_test_update_laminate_layer(stackup):
                 "COPPER",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert str(e) == "Update laminate layer error: Laminate material is invalid."
 
@@ -750,7 +751,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == "Update laminate layer error: Laminate thickness is invalid."
 
@@ -771,7 +772,7 @@ def helper_test_update_laminate_layer(stackup):
                 "COPPER",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert str(e) == "Update laminate layer error: Laminate thickness units are invalid."
 
@@ -791,7 +792,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == "Update laminate layer error: glass_construction argument is invalid."
 
@@ -811,11 +812,11 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert (
-            str(e) == "Update laminate layer error: Invalid layer 0: Number of elements "
-            "is wrong."
+            str(e) == "Update laminate layer error: "
+            "Invalid layer 0: Number of elements is wrong."
         )
 
     try:
@@ -834,7 +835,7 @@ def helper_test_update_laminate_layer(stackup):
             "COPPER",
             "0.0",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == "Update laminate layer error: Invalid layer 0: Thickness is invalid."
 
@@ -855,11 +856,11 @@ def helper_test_update_laminate_layer(stackup):
                 "COPPER",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert (
-                str(e)
-                == "Update laminate layer error: Invalid layer 0: Thickness units are invalid."
+                str(e) == "Update laminate layer error: "
+                "Invalid layer 0: Thickness units are invalid."
             )
 
     if stackup._is_connection_up():
@@ -879,7 +880,7 @@ def helper_test_update_laminate_layer(stackup):
                 "COPPER",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert str(e) == "Update laminate layer error: Fiber material is invalid."
 
@@ -900,7 +901,7 @@ def helper_test_update_laminate_layer(stackup):
                 "Invalid",
                 "0.0",
             )
-            assert False
+            pytest.fail("No exception raised when using an invalid parameter")
         except SherlockUpdateLaminateLayerError as e:
             assert str(e) == "Update laminate layer error: Conductor material is invalid."
 
@@ -920,11 +921,11 @@ def helper_test_update_laminate_layer(stackup):
             "",
             "101",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
         assert str(e) == (
-            "Update laminate layer error: Conductor percent is invalid."
-            " It must be between 0 and 100."
+            "Update laminate layer error: "
+            "Conductor percent is invalid. It must be between 0 and 100."
         )
 
 
@@ -932,7 +933,7 @@ def helper_test_list_conductor_layers(stackup):
     """Test list_conductor_layers API"""
     try:
         stackup.list_conductor_layers("")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockListConductorLayersError as e:
         assert str(e) == "List conductor layer error: Project name is invalid."
 
@@ -941,7 +942,7 @@ def helper_test_list_laminate_layers(stackup):
     """Test list_laminate_layers API"""
     try:
         stackup.list_laminate_layers("")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockListLaminateLayersError as e:
         assert str(e) == "List laminate layer error: Project name is invalid."
 
@@ -953,7 +954,7 @@ def helper_test_get_stackup_props(stackup):
             "",
             "Card",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetStackupPropsError as e:
         assert str(e) == "Get stackup prop error: Project name is invalid."
     try:
@@ -961,7 +962,7 @@ def helper_test_get_stackup_props(stackup):
             "Test",
             "",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetStackupPropsError as e:
         assert str(e) == "Get stackup prop error: CCA name is invalid."
 
@@ -970,13 +971,13 @@ def helper_test_get_layer_count(stackup):
     """Test get_layer_count API"""
     try:
         stackup.get_layer_count(project="", cca_name="Card")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: Project name is invalid."
 
     try:
         stackup.get_layer_count(project="Test", cca_name="")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: CCA name is invalid."
 
@@ -986,7 +987,7 @@ def helper_test_get_layer_count(stackup):
             "",
             "Card",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: Project name is invalid."
 
@@ -995,7 +996,7 @@ def helper_test_get_layer_count(stackup):
             "Test",
             "",
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetLayerCountError as e:
         assert str(e) == "Get layer count error: CCA name is invalid."
 
@@ -1003,19 +1004,19 @@ def helper_test_get_layer_count(stackup):
 def helper_test_get_total_conductor_thickness(stackup):
     try:
         stackup.get_total_conductor_thickness(project="", cca_name="Card", thickness_unit="oz")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetTotalConductorThicknessError as e:
         assert str(e) == "Get total conductor thickness error: Invalid project name"
 
     try:
         stackup.get_total_conductor_thickness(project="Test", cca_name="", thickness_unit="oz")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetTotalConductorThicknessError as e:
         assert str(e) == "Get total conductor thickness error: Invalid CCA name"
 
     try:
         stackup.get_total_conductor_thickness(project="Test", cca_name="Card", thickness_unit="")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetTotalConductorThicknessError as e:
         assert str(e) == "Get total conductor thickness error: Invalid thickness unit"
 
