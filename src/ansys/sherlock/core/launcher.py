@@ -1,4 +1,4 @@
-# Copyright (c) 2023 ANSYS, Inc. and/or its affiliates.
+# © 2023 ANSYS, Inc. All rights reserved
 
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
