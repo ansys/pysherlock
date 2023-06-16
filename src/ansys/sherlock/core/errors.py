@@ -288,7 +288,7 @@ class SherlockAddHarmonicEventError(Exception):
     def str_itr(self):
         """Create list of error messages."""
         if self.message is None:
-            return [f"Create life phase error: {error}" for error in self.error_array]
+            return [f"Add harmonic event error: {error}" for error in self.error_array]
 
         assert self.error_array is None
         return [f"Add harmonic event error: {self.message}"]
@@ -348,25 +348,35 @@ class SherlockAddShockProfilesError(Exception):
 class SherlockLoadRandomVibeProfileError(Exception):
     """Contains the error raised when loading random vibe properties."""
 
-    def __init__(self, message):
-        """Initialize Error Message."""
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Format error message."""
-        return f"Load random vibe profile error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Load random vibe profile error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Load random vibe profile error: {self.message}"]
 
 
 class SherlockLoadHarmonicProfileError(Exception):
     """Contains the error raised when loading a harmonic profile."""
 
-    def __init__(self, message):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Format Error Message."""
-        return f"Load Harmonic profile error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Load harmonic profile error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Load harmonic profile error: {self.message}"]
 
 
 class SherlockUpdateMountPointsByFileError(Exception):
@@ -524,13 +534,18 @@ class SherlockGetPartLocationError(Exception):
 class SherlockLoadThermalProfileError(Exception):
     """Contains the error raised when loading thermal profile."""
 
-    def __init__(self, message):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Format error message."""
-        return f"Load thermal profile error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Load thermal profile error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Load thermal profile error: {self.message}"]
 
 
 class SherlockRunAnalysisError(Exception):
@@ -572,13 +587,18 @@ class SherlockUpdateRandomVibePropsError(Exception):
 class SherlockLoadShockProfileDatasetError(Exception):
     """Contains the error raised when loading shock profile dataset results in an error."""
 
-    def __init__(self, message):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Initialize error message."""
-        return f"Load shock profile dataset error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Load shock profile dataset error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Load shock profile dataset error: {self.message}"]
 
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
@@ -752,13 +772,18 @@ class SherlockInvalidGlassConstructionError(Exception):
 class SherlockLoadShockProfilePulsesError(Exception):
     """Contains the error raised when loading shock profile pulses."""
 
-    def __init__(self, message):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Format error message."""
-        return f"Load shock profile pulses error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Load shock profile pulses error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Load shock profile pulses error: {self.message}"]
 
 
 class SherlockUpdatePcbModelingPropsError(Exception):
