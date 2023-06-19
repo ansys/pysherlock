@@ -237,14 +237,14 @@ class Analysis(GrpcStub):
             - filter_by_event_frequency: bool
                 Indicates if harmonic results outside analysis event range are included.
                 This parameter is not used for NX Nastran analysis.
-            - natural_freq_min: double
+            - natural_freq_min: int
                 Minimum frequency. The default is ``None``.
                 This parameter is for NX Nastran analysis only.
             - natural_freq_min_units: str
                 Minimum frequency units. The default is ``None``.
                 Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
                 This parameter is for NX Nastran analysis only.
-            - natural_freq_max: double
+            - natural_freq_max: int
                 Maximum frequency. The default is ``None``.
                 This parameter is for NX Nastran analysis only.
             - natural_freq_max_units: str
