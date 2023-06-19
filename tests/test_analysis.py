@@ -33,6 +33,7 @@ def test_all():
     time.sleep(1)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
+    helper_test_get_mechanical_shock_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_harmonic_vibe_props(analysis)
@@ -427,6 +428,22 @@ def helper_test_get_harmonic_vibe_input_fields(analysis):
         assert "model_source" in fields
         assert "part_validation_enabled" in fields
         assert "require_material_assignment_enabled" in fields
+
+
+def helper_test_get_mechanical_shock_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_mechanical_shock_input_fields()
+        assert "shock_result_count" in fields
+        assert "critical_strain_shock" in fields
+        assert "critical_strain_shock_units" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "analysis_temp" in fields
+        assert "analysis_temp_units" in fields
+        assert "natural_freq_min" in fields
+        assert "natural_freq_min_units" in fields
+        assert "natural_freq_max" in fields
+        assert "natural_freq_max_units" in fields
 
 
 def helper_test_get_random_vibe_input_fields(analysis):

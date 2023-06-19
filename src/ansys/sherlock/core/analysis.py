@@ -33,6 +33,8 @@ class Analysis(GrpcStub):
             "analysisTemp (optional)": "analysis_temp",
             "analysisTempUnits": "analysis_temp_units",
             "analysisTempUnits (optional)": "analysis_temp_units",
+            "criticalStrainShock": "critical_strain_shock",
+            "criticalStrainShockUnits": "critical_strain_shock_units",
             "filterByEventFrequency": "filter_by_event_frequency",
             "forceModelRebuild": "force_model_rebuild",
             "harmonicVibeDamping": "harmonic_vibe_damping",
@@ -48,6 +50,7 @@ class Analysis(GrpcStub):
             "randomVibeDamping": "random_vibe_damping",
             "requireMaterialAssignmentEnabled": "require_material_assignment_enabled",
             "reuseModalAnalysis": "reuse_modal_analysis",
+            "shockResultCount": "shock_result_count",
             "strainMapNaturalFreqs": "strain_map_natural_freqs",
         }
 
@@ -453,6 +456,43 @@ class Analysis(GrpcStub):
         except SherlockUpdateHarmonicVibePropsError as e:
             LOG.error(str(e))
             raise e
+
+    def get_mechanical_shock_input_fields(self):
+        """Get mechanical shock property fields based on the user configuration.
+
+        Returns
+        -------
+        list
+            List of mechanical shock property fields based on the user configuration.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.get_mechanical_shock_input_fields()
+        """
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        message = SherlockAnalysisService_pb2.GetMechanicalShockInputFieldsRequest(
+            modelSource="GENERATED"
+        )
+        response = self.stub.getMechanicalShockInputFields(message)
+
+        fields = self._translate_field_names(response.fieldName)
+        LOG.info(fields)
+
+        return fields
 
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.
