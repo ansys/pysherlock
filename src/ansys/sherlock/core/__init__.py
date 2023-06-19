@@ -1,8 +1,22 @@
 # © 2023 ANSYS, Inc. All rights reserved.
 
 """PySherlock client library."""
-from ansys.sherlock.core._version import __version__
+
+# Version
+# ------------------------------------------------------------------------------
+
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:  # pragma: no cover
+    import importlib_metadata  # type: ignore
+
+__version__ = importlib_metadata.version(__name__.replace(".", "-"))
+"""PySherlock version."""
+
+# Ease import statements
+# ------------------------------------------------------------------------------
+
 from ansys.sherlock.core.logging import Logger
 
 LOG = Logger("sherlock")
-SHERLOCK = None
+"""PySherlock logger."""
