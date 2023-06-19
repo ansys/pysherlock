@@ -351,7 +351,7 @@ class Stackup(GrpcStub):
                 raise SherlockGenStackupError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockGenStackupError as e:
             LOG.error(str(e))
             raise e
@@ -483,7 +483,7 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateConductorLayerError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockUpdateConductorLayerError as e:
             LOG.error(str(e))
             raise e
@@ -665,7 +665,7 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateLaminateLayerError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockUpdateLaminateLayerError as e:
             LOG.error(str(e))
             raise e
@@ -712,8 +712,10 @@ class Stackup(GrpcStub):
 
             request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
             response = self.stub.listConductorLayers(request)
-            layers = response.ccaConductorLayerProps
-            return layers
+            if response.returnCode.value == -1:
+                raise SherlockListConductorLayersError(response.returnCode.message)
+
+            return response.ccaConductorLayerProps
 
         except SherlockListConductorLayersError as e:
             LOG.error(str(e))
@@ -766,8 +768,10 @@ class Stackup(GrpcStub):
 
             request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
             response = self.stub.listLaminates(request)
-            layers = response.ccaLaminateProps
-            return layers
+            if response.returnCode.value == -1:
+                raise SherlockListLaminateLayersError(response.returnCode.message)
+
+            return response.ccaLaminateProps
 
         except SherlockListLaminateLayersError as e:
             LOG.error(str(e))
@@ -814,8 +818,10 @@ class Stackup(GrpcStub):
                 project=project, ccaName=cca_name
             )
             response = self.stub.getLayerCount(request)
-            return response
+            if response.returnCode.value == -1:
+                raise SherlockGetLayerCountError(response.returnCode.message)
 
+            return response.count
         except SherlockGetLayerCountError as e:
             LOG.error(str(e))
             raise e
@@ -862,6 +868,9 @@ class Stackup(GrpcStub):
                 project=project, ccaName=cca_name
             )
             response = self.stub.getStackupProps(request)
+            if response.returnCode.value == -1:
+                raise SherlockGetLayerCountError(response.returnCode.message)
+
             return response
         except SherlockGetStackupPropsError as e:
             LOG.error(str(e))
@@ -912,8 +921,10 @@ class Stackup(GrpcStub):
                 project=project, ccaName=cca_name, thicknessUnit=thickness_unit
             )
             response = self.stub.getTotalConductorThickness(request)
-            return response
+            if response.returnCode.value == -1:
+                raise SherlockGetTotalConductorThicknessError(response.returnCode.message)
 
+            return response.totalThickness
         except SherlockGetTotalConductorThicknessError as e:
             LOG.error(str(e))
             raise e
