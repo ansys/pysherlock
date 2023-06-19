@@ -14,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
+    SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
@@ -493,6 +494,201 @@ class Analysis(GrpcStub):
         LOG.info(fields)
 
         return fields
+
+    def update_mechanical_shock_props(
+        self,
+        project,
+        mechanical_shock_properties,
+    ):
+        """Update properties for a mechanical shock analysis.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        mechanical_shock_properties : list
+            List of mechanical shock properties for a CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - shock_result_count : int
+                Number of mechanical shock result layers to generate.
+            - critical_shock_strain: float
+                Critical shock strain. The default is ``None``.
+            - critical_shock_strain_units: str
+                Critical shock strain units. The default is ``None``.
+                Options are ``"strain"``, ``"ε"``, and ``"µε"``.
+            - part_validation_enabled: bool
+                Whether to enable part validation. The default is ``None``.
+            - require_material_assignment_enabled: bool
+                Whether to require material assignment. The default is ``None``.
+            - force_model_rebuild: str
+                How to handle rebuilding of the model. The default is ``None``.
+                Options are ``"FORCE"`` and ``"AUTO"``.
+            - natural_freq_min: double
+                Minimum frequency. The default is ``None``.
+            - natural_freq_min_units: str
+                Minimum frequency units. The default is ``None``.
+                Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
+            - natural_freq_max: double
+                Maximum frequency. The default is ``None``.
+            - natural_freq_max_units: str
+                Maximum frequency units. The default is ``None``.
+                Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
+            - analysis_temp: double
+                Temperature. The default is ``None``.
+            - analysis_temp_units: str
+                Temperature units. The default is ``None``.
+                Options are ``"C"``, ``"F"``, and ``"K"``.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_mechanical_shock_props(
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'shock_result_count': 2,
+                'critical_shock_strain': 10,
+                'critical_shock_strain_units': 'strain',
+                'part_validation_enabled': True,
+                'require_material_assignment_enabled': False,
+                'force_model_rebuild': 'AUTO',
+                'natural_freq_min': 10,
+                'natural_freq_min_units': 'Hz',
+                'natural_freq_max': 100,
+                'natural_freq_max_units': 'KHz',
+                'analysis_temp': 20,
+                'analysis_temp_units': 'F',
+            },
+            ]
+        )
+
+        """
+        try:
+            if project == "":
+                raise SherlockUpdateMechanicalShockPropsError(message="Project name is invalid.")
+
+            if not isinstance(mechanical_shock_properties, list):
+                raise SherlockUpdateMechanicalShockPropsError(
+                    message="Mechanical shock properties argument is invalid."
+                )
+
+            if len(mechanical_shock_properties) == 0:
+                raise SherlockUpdateMechanicalShockPropsError(
+                    message="One or more mechanical shock properties are required."
+                )
+
+            request = SherlockAnalysisService_pb2.UpdateMechanicalShockPropsRequest(project=project)
+
+            for i, mechanical_shock_props in enumerate(mechanical_shock_properties):
+                if not isinstance(mechanical_shock_props, dict):
+                    raise SherlockUpdateMechanicalShockPropsError(
+                        f"Mechanical shock props argument is "
+                        f"invalid for mechanical shock properties {i}."
+                    )
+
+                if "cca_name" not in mechanical_shock_props.keys():
+                    raise SherlockUpdateMechanicalShockPropsError(
+                        message=f"CCA name is invalid for mechanical shock properties {i}."
+                    )
+
+                cca_name = mechanical_shock_props["cca_name"]
+                if cca_name == "":
+                    raise SherlockUpdateMechanicalShockPropsError(
+                        message=f"CCA name is invalid for mechanical shock properties {i}."
+                    )
+
+                shock_result_count = mechanical_shock_props.get("shock_result_count", None)
+                critical_shock_strain = mechanical_shock_props.get("critical_shock_strain", None)
+                critical_shock_strain_units = mechanical_shock_props.get(
+                    "critical_shock_strain_units", None
+                )
+                part_validation_enabled = mechanical_shock_props.get(
+                    "part_validation_enabled", None
+                )
+                require_material_assignment_enabled = mechanical_shock_props.get(
+                    "require_material_assignment_enabled", None
+                )
+                force_model_rebuild = mechanical_shock_props.get("force_model_rebuild", None)
+                natural_freq_min = mechanical_shock_props.get("natural_freq_min", None)
+                natural_freq_min_units = mechanical_shock_props.get("natural_freq_min_units", None)
+                natural_freq_max = mechanical_shock_props.get("natural_freq_max", None)
+                natural_freq_max_units = mechanical_shock_props.get("natural_freq_max_units", None)
+                analysis_temp = mechanical_shock_props.get("analysis_temp", None)
+                analysis_temp_units = mechanical_shock_props.get("analysis_temp_units", None)
+
+                props_request = request.mechanicalShockProperties.add()
+                props_request.ccaName = cca_name
+                props_request.modelSource = SherlockAnalysisService_pb2.ModelSource.GENERATED
+
+                if shock_result_count is not None:
+                    props_request.shockResultCount = shock_result_count
+
+                if critical_shock_strain is not None:
+                    props_request.criticalShockStrain = critical_shock_strain
+
+                if critical_shock_strain_units is not None:
+                    props_request.criticalShockStrainUnits = critical_shock_strain_units
+
+                if part_validation_enabled is not None:
+                    props_request.partValidationEnabled = part_validation_enabled
+
+                if require_material_assignment_enabled is not None:
+                    props_request.requireMaterialAssignmentEnabled = (
+                        require_material_assignment_enabled
+                    )
+
+                if force_model_rebuild is not None:
+                    props_request.forceModelRebuild = force_model_rebuild
+
+                if natural_freq_min is not None:
+                    props_request.naturalFreqMin = natural_freq_min
+
+                if natural_freq_min_units is not None:
+                    props_request.naturalFreqMinUnits = natural_freq_min_units
+
+                if natural_freq_max is not None:
+                    props_request.naturalFreqMax = natural_freq_max
+
+                if natural_freq_max_units is not None:
+                    props_request.naturalFreqMaxUnits = natural_freq_max_units
+
+                if analysis_temp is not None:
+                    props_request.analysisTemp = analysis_temp
+
+                if analysis_temp_units is not None:
+                    props_request.analysisTempUnits = analysis_temp_units
+
+        except SherlockUpdateMechanicalShockPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updateMechanicalShockProps(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdateMechanicalShockPropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdateMechanicalShockPropsError as e:
+            LOG.error(str(e))
+            raise e
 
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.
