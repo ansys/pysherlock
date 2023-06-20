@@ -511,6 +511,8 @@ class Analysis(GrpcStub):
 
             - cca_name : str
                 Name of the CCA.
+            - model_source: ModelSource
+                Model source. The default is ``GENERATED``.
             - shock_result_count : int
                 Number of mechanical shock result layers to generate.
             - critical_shock_strain: float
@@ -525,12 +527,12 @@ class Analysis(GrpcStub):
             - force_model_rebuild: str
                 How to handle rebuilding of the model. The default is ``None``.
                 Options are ``"FORCE"`` and ``"AUTO"``.
-            - natural_freq_min: double
+            - natural_freq_min: int
                 Minimum frequency. The default is ``None``.
             - natural_freq_min_units: str
                 Minimum frequency units. The default is ``None``.
                 Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            - natural_freq_max: double
+            - natural_freq_max: int
                 Maximum frequency. The default is ``None``.
             - natural_freq_max_units: str
                 Maximum frequency units. The default is ``None``.
@@ -609,6 +611,9 @@ class Analysis(GrpcStub):
                         message=f"CCA name is invalid for mechanical shock properties {i}."
                     )
 
+                model_source = mechanical_shock_props.get(
+                    "model_source", SherlockAnalysisService_pb2.ModelSource.GENERATED
+                )
                 shock_result_count = mechanical_shock_props.get("shock_result_count", None)
                 critical_shock_strain = mechanical_shock_props.get("critical_shock_strain", None)
                 critical_shock_strain_units = mechanical_shock_props.get(
@@ -630,7 +635,7 @@ class Analysis(GrpcStub):
 
                 props_request = request.mechanicalShockProperties.add()
                 props_request.ccaName = cca_name
-                props_request.modelSource = SherlockAnalysisService_pb2.ModelSource.GENERATED
+                props_request.modelSource = model_source
 
                 if shock_result_count is not None:
                     props_request.shockResultCount = shock_result_count

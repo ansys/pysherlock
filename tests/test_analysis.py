@@ -1,6 +1,7 @@
 # © 2023 ANSYS, Inc. All rights reserved
 import time
 
+import SherlockAnalysisService_pb2
 import grpc
 import pytest
 
@@ -801,6 +802,7 @@ def helper_test_update_mechanical_shock_props(analysis):
             [
                 {
                     "cca_name": "Main Board",
+                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
                     "shock_result_count": 2,
                     "critical_shock_strain": 10,
                     "critical_shock_strain_units": "INVALID",
@@ -826,6 +828,7 @@ def helper_test_update_mechanical_shock_props(analysis):
             [
                 {
                     "cca_name": "Main Board",
+                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
                     "shock_result_count": 2,
                     "critical_shock_strain": 10,
                     "critical_shock_strain_units": "strain",
