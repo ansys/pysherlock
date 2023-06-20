@@ -11,3 +11,4 @@
 * [Paul Walters](https://github.com/ansys-pwalters)
 * [Roberto Pastor](https://github.com/RobPasMue)
 * [Ryan Giannamore](https://github.com/Ansys-rgiannam)
+* [Ethan Ermovick](https://github.com/ansys-eermovic)
