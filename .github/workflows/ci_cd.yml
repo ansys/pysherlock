@@ -101,9 +101,9 @@ jobs:
           path: .cov
           retention-days: 7
 
-      # - name: Upload coverage to Codecov
-      #   if: env.MAIN_PYTHON_VERSION == matrix.python-version
-      #   uses: codecov/codecov-action@v3
+      - name: Upload coverage to Codecov
+        if: env.MAIN_PYTHON_VERSION == matrix.python-version
+        uses: codecov/codecov-action@v3
 
   docs:
     name: Documentation
