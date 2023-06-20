@@ -458,8 +458,15 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_mechanical_shock_input_fields(self):
+    def get_mechanical_shock_input_fields(
+        self, model_source=SherlockAnalysisService_pb2.ModelSource.GENERATED
+    ):
         """Get mechanical shock property fields based on the user configuration.
+
+        Parameters
+        ----------
+        model_source : ModelSource
+            Model source to get the random vibe property fields from. Default is ``GENERATED``.
 
         Returns
         -------
@@ -486,7 +493,7 @@ class Analysis(GrpcStub):
             return
 
         message = SherlockAnalysisService_pb2.GetMechanicalShockInputFieldsRequest(
-            modelSource="GENERATED"
+            modelSource=model_source
         )
         response = self.stub.getMechanicalShockInputFields(message)
 
