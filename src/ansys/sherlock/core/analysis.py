@@ -226,7 +226,7 @@ class Analysis(GrpcStub):
                 Whether to enable part validation. The default is ``None``.
             - require_material_assignment_enabled: bool
                 Whether to require material assignment. The default is ``None``.
-            - analysis_temp: double
+            - analysis_temp: float
                 Temperature. The default is ``None``.
             - analysis_temp_units: str
                 Temperature units. The default is ``None``.
@@ -782,21 +782,21 @@ class Analysis(GrpcStub):
         random_vibe_damping: str, optional
             One or more modal damping ratios. The default is ``None``.
             Separate multiple float values with commas.
-        natural_freq_min: double, optional
+        natural_freq_min: float, optional
             Minimum frequency. The default is ``None``.
             This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
             Minimum frequency units. The default is ``None``.
             Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        natural_freq_max: double, optional
+        natural_freq_max: float, optional
             Maximum frequency. The default is ``None``.
             This parameter is for NX Nastran analysis only.
         natural_freq_max_units: str, optional
             Maximum frequency units. The default is ``None``.
             Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        analysis_temp: double, optional
+        analysis_temp: float, optional
             Temperature. The default is ``None``.
         analysis_temp_units: str, optional
             Temperature units. The default is ``None``.
@@ -963,12 +963,12 @@ class Analysis(GrpcStub):
             Name of the CCA.
         natural_freq_count: int
             Natural frequecy result count.
-        natural_freq_min: double, optional
+        natural_freq_min: float, optional
             Minimum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
             Minimum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        natural_freq_max: double, optional
+        natural_freq_max: float, optional
             Maximum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_max_units: str, optional
             Maximum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
@@ -977,7 +977,7 @@ class Analysis(GrpcStub):
             Whether part validation is enabled.
         require_material_assignment_enabled: bool
             Whether to require material assignment.
-        analysis_temp: double, optional
+        analysis_temp: float, optional
             Temperature.
         analysis_temp_units: str, optional
             Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.
