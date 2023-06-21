@@ -519,7 +519,7 @@ class Analysis(GrpcStub):
             - cca_name : str
                 Name of the CCA.
             - model_source: ModelSource
-                Model source. The default is ``GENERATED``.
+                Model source. The default is ``ModelSource.GENERATED``.
             - shock_result_count : int
                 Number of mechanical shock result layers to generate.
             - critical_shock_strain: float
@@ -567,6 +567,7 @@ class Analysis(GrpcStub):
             "Test",
             [{
                 'cca_name': 'Card',
+                'model_source': ModelSource.GENERATED,
                 'shock_result_count': 2,
                 'critical_shock_strain': 10,
                 'critical_shock_strain_units': 'strain',
@@ -618,9 +619,7 @@ class Analysis(GrpcStub):
                         message=f"CCA name is invalid for mechanical shock properties {i}."
                     )
 
-                model_source = mechanical_shock_props.get(
-                    "model_source", SherlockAnalysisService_pb2.ModelSource.GENERATED
-                )
+                model_source = mechanical_shock_props.get("model_source", None)
                 shock_result_count = mechanical_shock_props.get("shock_result_count", None)
                 critical_shock_strain = mechanical_shock_props.get("critical_shock_strain", None)
                 critical_shock_strain_units = mechanical_shock_props.get(
