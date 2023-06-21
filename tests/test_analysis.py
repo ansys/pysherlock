@@ -428,8 +428,13 @@ def helper_test_run_strain_map_analysis(analysis):
 def helper_test_get_harmonic_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_harmonic_vibe_input_fields()
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
+        assert "harmonic_vibe_count" in fields
+        assert "harmonic_vibe_damping" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "model_source" not in fields
+
+        fields = analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
         assert "harmonic_vibe_count" in fields
         assert "harmonic_vibe_damping" in fields
         assert "model_source" in fields
@@ -445,8 +450,19 @@ def helper_test_get_mechanical_shock_input_fields(analysis):
         assert "critical_strain_shock_units" in fields
         assert "part_validation_enabled" in fields
         assert "require_material_assignment_enabled" in fields
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
+        assert "natural_freq_min" in fields
+        assert "natural_freq_min_units" in fields
+        assert "natural_freq_max" in fields
+        assert "natural_freq_max_units" in fields
+        assert "model_source" not in fields
+
+        fields = analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
+        assert "shock_result_count" in fields
+        assert "critical_strain_shock" in fields
+        assert "critical_strain_shock_units" in fields
+        assert "model_source" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
         assert "natural_freq_min" in fields
         assert "natural_freq_min_units" in fields
         assert "natural_freq_max" in fields
@@ -456,15 +472,12 @@ def helper_test_get_mechanical_shock_input_fields(analysis):
 def helper_test_get_random_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_random_vibe_input_fields()
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
         assert "part_validation_enabled" in fields
         assert "random_vibe_damping" in fields
         assert "require_material_assignment_enabled" in fields
+        assert "model_source" not in fields
 
         fields = analysis.get_random_vibe_input_fields(ModelSource.GENERATED)
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
         assert "model_source" in fields
         assert "part_validation_enabled" in fields
         assert "random_vibe_damping" in fields
@@ -506,27 +519,28 @@ def helper_test_translate_field_names(analysis):
         ]
     )
 
-    expected = """
-analysis_temp
-analysis_temp
-analysis_temp_units
-analysis_temp_units
-filter_by_event_frequency
-force_model_rebuild
-harmonic_vibe_damping
-harmonic_vibe_count
-model_source
-natural_freq_count
-natural_freq_min
-natural_freq_min_units
-natural_freq_max
-natural_freq_max_units
-part_validation_enabled
-perform_nf_freq_range_check
-random_vibe_damping
-require_material_assignment_enabled
-reuse_modal_analysis
-strain_map_natural_freqs"""
+    expected = [
+        "analysis_temp",
+        "analysis_temp",
+        "analysis_temp_units",
+        "analysis_temp_units",
+        "filter_by_event_frequency",
+        "force_model_rebuild",
+        "harmonic_vibe_damping",
+        "harmonic_vibe_count",
+        "model_source",
+        "natural_freq_count",
+        "natural_freq_min",
+        "natural_freq_min_units",
+        "natural_freq_max",
+        "natural_freq_max_units",
+        "part_validation_enabled",
+        "perform_nf_freq_range_check",
+        "random_vibe_damping",
+        "require_material_assignment_enabled",
+        "reuse_modal_analysis",
+        "strain_map_natural_freqs",
+    ]
 
     assert results == expected
 

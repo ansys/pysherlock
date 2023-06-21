@@ -164,8 +164,15 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_harmonic_vibe_input_fields(self):
+    def get_harmonic_vibe_input_fields(self, model_source=None):
         """Get harmonic vibe property fields based on the user configuration.
+
+        Parameters
+        ----------
+        model_source : ModelSource, optional
+            Model source to get the harmonic vibe property fields from.
+            Only ModelSource.GENERATED is supported.
+            The default is ``None``.
 
         Returns
         -------
@@ -185,14 +192,14 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_harmonic_vibe_input_fields()
+        >>> sherlock.analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
 
         message = SherlockAnalysisService_pb2.GetHarmonicVibeInputFieldsRequest(
-            modelSource="GENERATED"
+            modelSource=model_source
         )
         response = self.stub.getHarmonicVibeInputFields(message)
 
@@ -458,15 +465,15 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_mechanical_shock_input_fields(
-        self, model_source=SherlockAnalysisService_pb2.ModelSource.GENERATED
-    ):
+    def get_mechanical_shock_input_fields(self, model_source=None):
         """Get mechanical shock property fields based on the user configuration.
 
         Parameters
         ----------
-        model_source : ModelSource
-            Model source to get the random vibe property fields from. Default is ``GENERATED``.
+        model_source : ModelSource, optional
+            Model source to get the random vibe property fields from.
+            Only ModelSource.GENERATED is supported.
+            Default is ``None``.
 
         Returns
         -------
@@ -486,7 +493,7 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_mechanical_shock_input_fields()
+        >>> sherlock.analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
@@ -708,6 +715,7 @@ class Analysis(GrpcStub):
         ----------
         model_source : ModelSource, optional
             Model source to get the random vibe property fields from.
+            The default is ``None``.
 
         Returns
         -------
@@ -727,9 +735,7 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_random_vibe_input_fields(
-            model_source=ModelSource.STRAIN_MAP
-        )
+        >>> sherlock.analysis.get_random_vibe_input_fields(ModelSource.STRAIN_MAP)
         """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
@@ -746,9 +752,9 @@ class Analysis(GrpcStub):
         return fields
 
     def _translate_field_names(self, names_list):
-        names = ""
+        names = []
         for name in list(names_list):
-            names = names + "\n" + self.FIELD_NAMES.get(name)
+            names.append(self.FIELD_NAMES.get(name))
 
         return names
 
@@ -815,7 +821,7 @@ class Analysis(GrpcStub):
         require_material_assignment_enabled: bool, optional
             Whether to require material assignment. The default is ``None``.
         model_source: ModelSource, optional
-            Model source.
+            Model source. The default is ``None``.
             This parameter is required for strain map analysis.
         strain_map_natural_freqs : list, optional
             List of natural frequencies. The default is ``None``.
