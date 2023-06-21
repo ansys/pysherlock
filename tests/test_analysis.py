@@ -1,6 +1,11 @@
 # © 2023 ANSYS, Inc. All rights reserved
 import time
 
+try:
+    import SherlockAnalysisService_pb2
+except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+
 import grpc
 import pytest
 
@@ -9,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
+    SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
@@ -33,9 +39,11 @@ def test_all():
     time.sleep(1)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
+    helper_test_get_mechanical_shock_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_harmonic_vibe_props(analysis)
+    helper_test_update_mechanical_shock_props(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_get_natural_frequency_input_fields(analysis)
     helper_test_update_natural_frequency_props(analysis)
@@ -429,6 +437,22 @@ def helper_test_get_harmonic_vibe_input_fields(analysis):
         assert "require_material_assignment_enabled" in fields
 
 
+def helper_test_get_mechanical_shock_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_mechanical_shock_input_fields()
+        assert "shock_result_count" in fields
+        assert "critical_strain_shock" in fields
+        assert "critical_strain_shock_units" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "analysis_temp" in fields
+        assert "analysis_temp_units" in fields
+        assert "natural_freq_min" in fields
+        assert "natural_freq_min_units" in fields
+        assert "natural_freq_max" in fields
+        assert "natural_freq_max_units" in fields
+
+
 def helper_test_get_random_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_random_vibe_input_fields()
@@ -663,6 +687,170 @@ def helper_test_update_harmonic_vibe_props(analysis):
             assert result == 0
         except SherlockUpdateHarmonicVibePropsError as e:
             pytest.fail(str(e))
+
+
+def helper_test_update_mechanical_shock_props(analysis):
+    try:
+        analysis.update_mechanical_shock_props(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert str(e) == "Update mechanical shock properties error: Project name is invalid."
+
+    try:
+        analysis.update_mechanical_shock_props("Test", "INVALID_TYPE")
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "Mechanical shock properties argument is invalid."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props("Test", [])
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "One or more mechanical shock properties are required."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props("Test", ["INVALID"])
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "Mechanical shock props argument is invalid for mechanical shock properties 0."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "CCA name is invalid for mechanical shock properties 0."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "",
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "CCA name is invalid for mechanical shock properties 0."
+        )
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "INVALID",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdateMechanicalShockPropsError
+
+    try:
+        result = analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockUpdateMechanicalShockPropsError as e:
+        pytest.fail(str(e))
 
 
 def helper_test_update_random_vibe_props(analysis):
