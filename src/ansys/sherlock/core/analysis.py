@@ -518,8 +518,8 @@ class Analysis(GrpcStub):
 
             - cca_name : str
                 Name of the CCA.
-            - model_source: ModelSource
-                Model source. The default is ``ModelSource.GENERATED``.
+            - model_source: ModelSource, optional
+                Model source. The default is ``None``.
             - shock_result_count : int
                 Number of mechanical shock result layers to generate.
             - critical_shock_strain: float
