@@ -22,7 +22,14 @@ class Common(GrpcStub):
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
     def check(self):
-        """Perform a health check on the gRPC connection."""
+        """Perform a health check on the gRPC connection.
+
+        Returns
+        -------
+        bool
+            Whether the Sherlock client is connected via gRPC.
+
+        """
         if not self._is_connection_up():
             LOG.error("Health check failed.")
             return False
