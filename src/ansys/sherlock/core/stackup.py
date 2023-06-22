@@ -199,6 +199,11 @@ class Stackup(GrpcStub):
         power_layer_thickness_unit : str
             Units for the power layer thickness.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -330,6 +335,11 @@ class Stackup(GrpcStub):
         Note
         ----
         Using the default value for a property causes no changes for that property.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -487,6 +497,11 @@ class Stackup(GrpcStub):
         ----
         Using the default value for a property causes no changes for that property.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -606,6 +621,11 @@ class Stackup(GrpcStub):
         project : str
             Name of the Sherlock project.
 
+        Returns
+        -------
+        list
+            The conductor layers of all CCAs in the project.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -656,6 +676,11 @@ class Stackup(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
+
+        Returns
+        -------
+        list
+            The laminate layers of all CCAs in the project.
 
         Example
         -------
@@ -715,6 +740,11 @@ class Stackup(GrpcStub):
         cca_name : str, required
             Name of the CCA.
 
+        Returns
+        -------
+        int
+            The number of layers of the CCA in the project.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -763,6 +793,11 @@ class Stackup(GrpcStub):
             Name of the Sherlock project.
         cca_name : str, required
             Name of the CCA.
+
+        Returns
+        -------
+        list
+            The stackup properties of the CCA in the project.
 
         Example
         -------
@@ -815,6 +850,11 @@ class Stackup(GrpcStub):
             The CCA name.
         thickness_unit : str, optional
             Units for laminate thickness.
+
+        Returns
+        -------
+        float
+            The conductor thickness of the CCA in the specified units.
 
         Example
         -------

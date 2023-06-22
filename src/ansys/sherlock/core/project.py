@@ -383,6 +383,11 @@ class Project(GrpcStub):
                 List of CCA names to assign the file to. When no list is
                 specified, the file is assigned to all CCAs in the project.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -478,6 +483,7 @@ class Project(GrpcStub):
 
                 raise SherlockAddStrainMapsError(message=return_code.message)
 
+            return return_code.value
         except SherlockAddStrainMapsError as e:
             for error in e.str_itr():
                 LOG.error(error)
@@ -493,6 +499,11 @@ class Project(GrpcStub):
         cca_names : List of str, optional
             List of CCA names to provide strain maps for. The default is ``None``,
             in which case all CCAs in the project are returned.
+
+        Returns
+        -------
+        list
+            All strain maps or strain maps for the specified CCAs.
 
         Examples
         --------
