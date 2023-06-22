@@ -26,6 +26,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.stackup_types import StackupProperties
 
 
 class Stackup(GrpcStub):
@@ -796,8 +797,8 @@ class Stackup(GrpcStub):
 
         Returns
         -------
-        list
-            The stackup properties of the CCA in the project.
+        StackupProperties
+            Object containing the properties of the stackup.
 
         Example
         -------
@@ -834,7 +835,7 @@ class Stackup(GrpcStub):
             if response.returnCode.value == -1:
                 raise SherlockGetLayerCountError(response.returnCode.message)
 
-            return response
+            return StackupProperties(response)
         except SherlockGetStackupPropsError as e:
             LOG.error(str(e))
             raise e

@@ -614,7 +614,14 @@ def helper_test_get_stackup_props(stackup):
                 "Tutorial Project",
                 "Main Board",
             )
-            assert stackup_properties.conductorLayersCnt == "6"
+            assert stackup_properties.board_dimension == "190.32 x 114.31 mm  [7.4928 x 4.5003 in]"
+            assert stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
+            assert stackup_properties.density == "2.0340 g/cc"
+            assert stackup_properties.conductor_layers_cnt == "6"
+            assert stackup_properties.ctexy == "18.348 ppm/C"
+            assert stackup_properties.ctez == "64.217 ppm/C"
+            assert stackup_properties.exy == "27,182 MPa"
+            assert stackup_properties.ez == "6,943 MPa"
         except SherlockGetLayerCountError as e:
             pytest.fail(str(e))
 

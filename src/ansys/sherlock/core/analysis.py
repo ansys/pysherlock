@@ -55,6 +55,13 @@ class Analysis(GrpcStub):
             "strainMapNaturalFreqs": "strain_map_natural_freqs",
         }
 
+    def _translate_field_names(self, names_list):
+        names = []
+        for name in list(names_list):
+            names.append(self.FIELD_NAMES.get(name))
+
+        return names
+
     @staticmethod
     def _add_analyses(request, analyses):
         """Add analyses."""
@@ -760,13 +767,6 @@ class Analysis(GrpcStub):
         LOG.info(fields)
 
         return fields
-
-    def _translate_field_names(self, names_list):
-        names = []
-        for name in list(names_list):
-            names.append(self.FIELD_NAMES.get(name))
-
-        return names
 
     def update_random_vibe_props(
         self,

@@ -11,7 +11,7 @@ analysis_service = SherlockAnalysisService_pb2
 
 
 class ElementOrder:
-    """Values for Element Order."""
+    """Constants for Element Order."""
 
     LINEAR = analysis_service.ElementOrder.Linear
     QUADRATIC = analysis_service.ElementOrder.Quadratic
@@ -19,14 +19,14 @@ class ElementOrder:
 
 
 class ModelSource:
-    """Values for Model Source."""
+    """Constants for Model Source."""
 
     GENERATED = analysis_service.ModelSource.GENERATED
     STRAIN_MAP = analysis_service.ModelSource.STRAIN_MAP
 
 
 class RunAnalysisRequestAnalysisType:
-    """Values for type of analysis in the Run Analysis request."""
+    """Constants for type of analysis in the Run Analysis request."""
 
     __analysis_type = analysis_service.RunAnalysisRequest.Analysis.AnalysisType
     NATURAL_FREQ = __analysis_type.NaturalFreq
@@ -45,14 +45,14 @@ class RunAnalysisRequestAnalysisType:
 
 
 class RunStrainMapAnalysisRequestAnalysisType:
-    """Values for type of analysis in the Run Strain Map Analysis request."""
+    """Constants for type of analysis in the Run Strain Map Analysis request."""
 
     __analysis_type = analysis_service.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
     RANDOM_VIBE = __analysis_type.RandomVibe
 
 
 class UpdatePcbModelingPropsRequestAnalysisType:
-    """Values for type of analysis in the Update PCB Modeling Properties Analysis request."""
+    """Constants for type of analysis in the Update PCB Modeling Properties Analysis request."""
 
     __analysis_type = analysis_service.UpdatePcbModelingPropsRequest.Analysis.AnalysisType
     HARMONIC_VIBE = __analysis_type.HarmonicVibe
@@ -64,7 +64,7 @@ class UpdatePcbModelingPropsRequestAnalysisType:
 
 
 class UpdatePcbModelingPropsRequestPcbMaterialModel:
-    """Values for PCB Material Model in the Update PCB Modeling Properties Analysis request."""
+    """Constants for PCB Material Model in the Update PCB Modeling Properties Analysis request."""
 
     __material_model = analysis_service.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
     UNIFORM = __material_model.Uniform
@@ -74,7 +74,7 @@ class UpdatePcbModelingPropsRequestPcbMaterialModel:
 
 
 class UpdatePcbModelingPropsRequestPcbModelType:
-    """Values for PCB Model Type in the Update PCB Modeling Properties Analysis request."""
+    """Constants for PCB Model Type in the Update PCB Modeling Properties Analysis request."""
 
     __model_type = analysis_service.UpdatePcbModelingPropsRequest.Analysis.PcbModelType
     BONDED = __model_type.Bonded
