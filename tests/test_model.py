@@ -24,15 +24,20 @@ class TestModel(unittest.TestCase):
         path = os.path.join(temp_dir, "export.wbjn")
 
         if model._is_connection_up():
-            result = model.export_trace_reinforcement_model("Tutorial Project", "Main Board", path)
-            assert result[0] == 0
-
             try:
                 invalid_cca = "Invalid CCA"
                 model.export_trace_reinforcement_model("Tutorial Project", invalid_cca, path)
                 pytest.fail("No exception raised when using an invalid parameter")
             except Exception as e:
                 assert type(e) == SherlockModelServiceError
+
+            try:
+                result = model.export_trace_reinforcement_model(
+                    "Tutorial Project", "Main Board", path
+                )
+                assert result == 0
+            except SherlockModelServiceError as e:
+                pytest.fail(str(e))
 
         try:
             model.export_trace_reinforcement_model("", "Main Board", path)

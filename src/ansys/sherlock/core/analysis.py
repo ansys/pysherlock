@@ -262,6 +262,11 @@ class Analysis(GrpcStub):
                 Whether to reuse the natural frequency for modal analysis. The
                 default is ``None``. This parameter is for NX Nastran analysis only.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -556,6 +561,11 @@ class Analysis(GrpcStub):
             - analysis_temp_units: str
                 Temperature units. The default is ``None``.
                 Options are ``"C"``, ``"F"``, and ``"K"``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------

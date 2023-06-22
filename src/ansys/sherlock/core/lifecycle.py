@@ -298,6 +298,11 @@ class Lifecycle(GrpcStub):
         description : str, optional
             Description of the life phase. The default is ``""``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -418,6 +423,11 @@ class Lifecycle(GrpcStub):
             Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
             Description of the random vibe event. The default is ``""``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -558,6 +568,11 @@ class Lifecycle(GrpcStub):
                     Frequency of the profile entry expressed in frequency units.
                 - amplitude : double
                     Amplitude of the profile entry expressed in amplitude units.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -722,6 +737,11 @@ class Lifecycle(GrpcStub):
         description : str, optional
             Description of the thermal event. The default is ``""``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -841,6 +861,10 @@ class Lifecycle(GrpcStub):
                 - temperature : float
                     Temperature of the step expressed in temperature units.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1013,6 +1037,11 @@ class Lifecycle(GrpcStub):
         description : str, optional
             Description of the harmonic event. The default is ``""``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1159,6 +1188,11 @@ class Lifecycle(GrpcStub):
                     Axis that this profile should be assigned to if the harmonic
                     profile type is ``"Triaxial"``. Options are: ``"x"``, ``"y"``,
                     and ``"z"``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1336,6 +1370,11 @@ class Lifecycle(GrpcStub):
         description : str, optional
             Description of the shock event. The default is ``""``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1474,6 +1513,11 @@ class Lifecycle(GrpcStub):
                     Frequency of the profile entry expressed in frequency units.
                 - decay : float
                     Decay value of the profile entry.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1636,6 +1680,11 @@ class Lifecycle(GrpcStub):
         file_path : str
             File path for thermal profile .dat or .csv file
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1702,6 +1751,11 @@ class Lifecycle(GrpcStub):
         file_path : str
             File path for thermal profile .dat or .csv file
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1764,6 +1818,11 @@ class Lifecycle(GrpcStub):
             Name of the harmonic event.
         file_path : str
             Path for DAT or CSV file with the harmonic profile.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -1832,6 +1891,11 @@ class Lifecycle(GrpcStub):
         file_path : str
             File path for thermal profile .dat or .csv file
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1889,6 +1953,11 @@ class Lifecycle(GrpcStub):
             Name of the random vibe event.
         file_path : str
             Path for thermal profile .dat or .csv file
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------

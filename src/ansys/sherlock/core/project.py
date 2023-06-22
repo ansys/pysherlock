@@ -39,6 +39,11 @@ class Project(GrpcStub):
         project : str
             Name of the Sherlock project.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -101,6 +106,11 @@ class Project(GrpcStub):
             Name of the CCA name. The default is ``None``, in which case the
             name of the ODB++ archive file is used for the CCA name.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -143,7 +153,7 @@ class Project(GrpcStub):
                 raise SherlockImportODBError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockImportODBError as e:
             LOG.error(str(e))
             raise e
@@ -167,6 +177,11 @@ class Project(GrpcStub):
         cca_name : str, optional
             Name of the CCA. The default is ``None``, in which case the name of
             the IPC-2581 archive file is used for the CCA name.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -207,7 +222,7 @@ class Project(GrpcStub):
                 raise SherlockImportIpc2581Error(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except Exception as e:
             LOG.error(str(e))
             raise e
@@ -225,6 +240,11 @@ class Project(GrpcStub):
             Name of the author's company.
         report_file: str
             Full path to where to create the report.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -291,6 +311,11 @@ class Project(GrpcStub):
         cca_names : List of str, optional
             List of CCA names. The default is ``None``, in which case all CCAs
             in the project are returned.
+
+        Returns
+        -------
+        list
+            CCAs and subassembly CCAs.
 
         Examples
         --------

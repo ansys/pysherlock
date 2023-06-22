@@ -31,7 +31,14 @@ class Common(GrpcStub):
             return True
 
     def is_sherlock_client_loading(self):
-        """Check if the Sherlock client is opened and still initializing."""
+        """Check if the Sherlock client is opened and done initializing.
+
+        Returns
+        -------
+        bool
+            Whether the Sherlock client is opened and done initializing.
+
+        """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
