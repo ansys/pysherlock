@@ -172,7 +172,7 @@ class Stackup(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        board_thickness : double
+        board_thickness : float
             Board thickness.
         board_thickness_unit : str
             Units for the board thickness.
@@ -184,20 +184,25 @@ class Stackup(GrpcStub):
             Material for the PCB.
         conductor_layers_cnt : int32
             Number of conductor layers.
-        signal_layer_thickness : double
+        signal_layer_thickness : float
             Signal layer thickness.
         signal_layer_thickness_unit : str
             Units for the signal layer thickness.
-        min_laminate_thickness : double
+        min_laminate_thickness : float
             Minimum thickness of laminate layers.
         min_laminate_thickness_unit : str
             Units for the minimum thickness of laminate layers.
         maintain_symmetry : bool
             Whether to maintain symmetry.
-        power_layer_thickness : double
+        power_layer_thickness : float
             Power layer thickness.
         power_layer_thickness_unit : str
             Units for the power layer thickness.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -317,7 +322,7 @@ class Stackup(GrpcStub):
             ``"SIGNAL"``, ``"POWER"``, or ``"SUBSTRATE"``.
         material : str, optional
             Conductor material. The default is ``""``.
-        thickness : double, optional
+        thickness : float, optional
             Conductor layer thickness. The default is ``0``.
         thickness_unit : str, optional
             Units for the conductor layer thickness. The
@@ -330,6 +335,11 @@ class Stackup(GrpcStub):
         Note
         ----
         Using the default value for a property causes no changes for that property.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -456,7 +466,7 @@ class Stackup(GrpcStub):
             Material grade. The default is ``""``.
         material : str, optional
             Material name. The default is ``""``.
-        thickness : double, optional
+        thickness : float, optional
             Laminate thickness. The default is ``0``.
         thickness_unit : str, optional
             Units for the laminate thickness. The default is ``""``.
@@ -468,9 +478,9 @@ class Stackup(GrpcStub):
 
            - style : str
                Style of the glass construction.
-           - resinPercentage : double
+           - resinPercentage : float
                Resin percentage.
-           - thickness: double
+           - thickness: float
                Thickness.
            - thicknessUnit: str
                Units for the thickness.
@@ -486,6 +496,11 @@ class Stackup(GrpcStub):
         Note
         ----
         Using the default value for a property causes no changes for that property.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -606,6 +621,11 @@ class Stackup(GrpcStub):
         project : str
             Name of the Sherlock project.
 
+        Returns
+        -------
+        list
+            The conductor layers of all CCAs in the project.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -656,6 +676,11 @@ class Stackup(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
+
+        Returns
+        -------
+        list
+            The laminate layers of all CCAs in the project.
 
         Example
         -------
@@ -715,6 +740,11 @@ class Stackup(GrpcStub):
         cca_name : str, required
             Name of the CCA.
 
+        Returns
+        -------
+        int
+            The number of layers of the CCA in the project.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -763,6 +793,11 @@ class Stackup(GrpcStub):
             Name of the Sherlock project.
         cca_name : str, required
             Name of the CCA.
+
+        Returns
+        -------
+        list
+            The stackup properties of the CCA in the project.
 
         Example
         -------
@@ -815,6 +850,11 @@ class Stackup(GrpcStub):
             The CCA name.
         thickness_unit : str, optional
             Units for laminate thickness.
+
+        Returns
+        -------
+        float
+            The conductor thickness of the CCA in the specified units.
 
         Example
         -------

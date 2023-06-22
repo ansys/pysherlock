@@ -172,6 +172,11 @@ class Parts(GrpcStub):
         duplication : UpdatesPartsListRequestDuplicationMode
             How to handle duplication during the update.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -258,6 +263,11 @@ class Parts(GrpcStub):
             - mirrored : str
                 Mirrored.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -342,6 +352,11 @@ class Parts(GrpcStub):
             ``"English (United States)"`` is the numeric format. This
             indicates that points are used as decimal markers.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -417,6 +432,11 @@ class Parts(GrpcStub):
             Whether to set the data source of the properties to ``"User"``.
             Otherwise, the data source is set to the name of the CSV file.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -466,7 +486,7 @@ class Parts(GrpcStub):
                 raise SherlockImportPartsListError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -482,6 +502,11 @@ class Parts(GrpcStub):
             Name of the CCA.
         export_file : str
             Full path for the CSV file to export the parts list to.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -542,6 +567,11 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------

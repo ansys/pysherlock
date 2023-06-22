@@ -298,6 +298,11 @@ class Lifecycle(GrpcStub):
         description : str, optional
             Description of the life phase. The default is ``""``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -418,6 +423,11 @@ class Lifecycle(GrpcStub):
             Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
             Description of the random vibe event. The default is ``""``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -558,6 +568,11 @@ class Lifecycle(GrpcStub):
                     Frequency of the profile entry expressed in frequency units.
                 - amplitude : double
                     Amplitude of the profile entry expressed in amplitude units.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -712,7 +727,7 @@ class Lifecycle(GrpcStub):
             Name of the life cycle phase to add the thermal event to.
         event_name : str
             Name of the thermal event.
-        num_of_cycles : double
+        num_of_cycles : float
             Number of cycles for the thermal event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
@@ -721,6 +736,11 @@ class Lifecycle(GrpcStub):
             Life cycle state. Options are ``"OPERATING"`` and ``"STORAGE"``.
         description : str, optional
             Description of the thermal event. The default is ``""``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -836,11 +856,15 @@ class Lifecycle(GrpcStub):
                     Name of the thermal step.
                 - type : str
                     Type of the thermal step. Options are ``"HOLD"`` and ``"RAMP"``.
-                - time : double
+                - time : float
                     Duration of the thermal step expressed in time units.
-                - temperature : double
+                - temperature : float
                     Temperature of the step expressed in temperature units.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -991,17 +1015,17 @@ class Lifecycle(GrpcStub):
             Name of the life cycle phase to add the harmonic event to.
         event_name : str
             Name of the harmonic event.
-        duration : double
+        duration : float
             Event duration length.
         duration_units : str
             Event duration units. Options are ``"ms"``, ``"sec"``, ``"min"``,
             ``"hr"``, ``"day"``, and ``"year"``.
-        num_of_cycles : double
+        num_of_cycles : float
             Number of cycles for the harmonic event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
             ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
-        sweep_rate : double
+        sweep_rate : float
             Sweep rate for the harmonic event.
         orientation : str
             PCB orientation in the format of ``"azimuth, elevation"``. For example,
@@ -1012,6 +1036,11 @@ class Lifecycle(GrpcStub):
             Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
             Description of the harmonic event. The default is ``""``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1151,14 +1180,19 @@ class Lifecycle(GrpcStub):
             - harmonic_profile_entries : list
                 List of harmonic profile entries consisting of these properties:
 
-                - frequency : double
+                - frequency : float
                     Frequency of the harmonic profile expressed in frequency units.
-                - load : double
+                - load : float
                     Load of the harmonic profile expressed in load units.
                 - triaxial_axis : str
                     Axis that this profile should be assigned to if the harmonic
                     profile type is ``"Triaxial"``. Options are: ``"x"``, ``"y"``,
                     and ``"z"``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1318,12 +1352,12 @@ class Lifecycle(GrpcStub):
             Name of the life cycle phase to add this shock event to.
         event_name : str
             Name of the shock event.
-        duration : double
+        duration : float
             Event duration length.
         duration_units : str
             Event duration units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
             ``"day"``, and ``"year"``.
-        num_of_cycles : double
+        num_of_cycles : float
             Number of cycles for the shock event.
         cycle_type : str
             Cycle type. Options are ``"COUNT"``, ``"DUTY CYCLE"``,
@@ -1335,6 +1369,11 @@ class Lifecycle(GrpcStub):
             Load direction in the format of ``"x,y,z"``. For example, ``"0,0,1"``.
         description : str, optional
             Description of the shock event. The default is ``""``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1446,12 +1485,12 @@ class Lifecycle(GrpcStub):
                 Name of the shock event.
             - profile_name : str
                 Name of the shock profile.
-            - duration : double
+            - duration : float
                 Pulse duration.
             - duration_units : str
                 Pulse duration units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
                 ``"day"``, and ``"year"``.
-            - sample_rate : double
+            - sample_rate : float
                 Sample rate.
             - sample_rate_units : str
                 Sample rate units. Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``,
@@ -1468,12 +1507,17 @@ class Lifecycle(GrpcStub):
                     Shape of the shock profile entry. Options are ``"FullSine"``,
                     ``"HalfSine"``, ``"Haversine"``, ``"Triangle"``, ``"Sawtooth"``,
                     ``"FullSquare"``, and ``"HalfSquare"``.
-                - load : double
+                - load : float
                     Load of the profile entry expressed in load units.
-                - freq : double
+                - freq : float
                     Frequency of the profile entry expressed in frequency units.
-                - decay : double
+                - decay : float
                     Decay value of the profile entry.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -1636,6 +1680,11 @@ class Lifecycle(GrpcStub):
         file_path : str
             File path for thermal profile .dat or .csv file
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1702,6 +1751,11 @@ class Lifecycle(GrpcStub):
         file_path : str
             File path for thermal profile .dat or .csv file
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1764,6 +1818,11 @@ class Lifecycle(GrpcStub):
             Name of the harmonic event.
         file_path : str
             Path for DAT or CSV file with the harmonic profile.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -1832,6 +1891,11 @@ class Lifecycle(GrpcStub):
         file_path : str
             File path for thermal profile .dat or .csv file
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1889,6 +1953,11 @@ class Lifecycle(GrpcStub):
             Name of the random vibe event.
         file_path : str
             Path for thermal profile .dat or .csv file
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------

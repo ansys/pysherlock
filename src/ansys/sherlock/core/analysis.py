@@ -164,8 +164,15 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_harmonic_vibe_input_fields(self):
+    def get_harmonic_vibe_input_fields(self, model_source=None):
         """Get harmonic vibe property fields based on the user configuration.
+
+        Parameters
+        ----------
+        model_source : ModelSource, optional
+            Model source to get the harmonic vibe property fields from.
+            Only ModelSource.GENERATED is supported.
+            The default is ``None``.
 
         Returns
         -------
@@ -185,14 +192,14 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_harmonic_vibe_input_fields()
+        >>> sherlock.analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
 
         message = SherlockAnalysisService_pb2.GetHarmonicVibeInputFieldsRequest(
-            modelSource="GENERATED"
+            modelSource=model_source
         )
         response = self.stub.getHarmonicVibeInputFields(message)
 
@@ -226,7 +233,7 @@ class Analysis(GrpcStub):
                 Whether to enable part validation. The default is ``None``.
             - require_material_assignment_enabled: bool
                 Whether to require material assignment. The default is ``None``.
-            - analysis_temp: double
+            - analysis_temp: float
                 Temperature. The default is ``None``.
             - analysis_temp_units: str
                 Temperature units. The default is ``None``.
@@ -254,6 +261,11 @@ class Analysis(GrpcStub):
             - reuse_modal_analysis: bool
                 Whether to reuse the natural frequency for modal analysis. The
                 default is ``None``. This parameter is for NX Nastran analysis only.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -458,15 +470,15 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def get_mechanical_shock_input_fields(
-        self, model_source=SherlockAnalysisService_pb2.ModelSource.GENERATED
-    ):
+    def get_mechanical_shock_input_fields(self, model_source=None):
         """Get mechanical shock property fields based on the user configuration.
 
         Parameters
         ----------
-        model_source : ModelSource
-            Model source to get the random vibe property fields from. Default is ``GENERATED``.
+        model_source : ModelSource, optional
+            Model source to get the random vibe property fields from.
+            Only ModelSource.GENERATED is supported.
+            Default is ``None``.
 
         Returns
         -------
@@ -486,7 +498,7 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_mechanical_shock_input_fields()
+        >>> sherlock.analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
@@ -549,6 +561,11 @@ class Analysis(GrpcStub):
             - analysis_temp_units: str
                 Temperature units. The default is ``None``.
                 Options are ``"C"``, ``"F"``, and ``"K"``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -708,6 +725,7 @@ class Analysis(GrpcStub):
         ----------
         model_source : ModelSource, optional
             Model source to get the random vibe property fields from.
+            The default is ``None``.
 
         Returns
         -------
@@ -727,9 +745,7 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.get_random_vibe_input_fields(
-            model_source=ModelSource.STRAIN_MAP
-        )
+        >>> sherlock.analysis.get_random_vibe_input_fields(ModelSource.STRAIN_MAP)
         """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
@@ -746,9 +762,9 @@ class Analysis(GrpcStub):
         return fields
 
     def _translate_field_names(self, names_list):
-        names = ""
+        names = []
         for name in list(names_list):
-            names = names + "\n" + self.FIELD_NAMES.get(name)
+            names.append(self.FIELD_NAMES.get(name))
 
         return names
 
@@ -782,21 +798,21 @@ class Analysis(GrpcStub):
         random_vibe_damping: str, optional
             One or more modal damping ratios. The default is ``None``.
             Separate multiple float values with commas.
-        natural_freq_min: double, optional
+        natural_freq_min: float, optional
             Minimum frequency. The default is ``None``.
             This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
             Minimum frequency units. The default is ``None``.
             Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        natural_freq_max: double, optional
+        natural_freq_max: float, optional
             Maximum frequency. The default is ``None``.
             This parameter is for NX Nastran analysis only.
         natural_freq_max_units: str, optional
             Maximum frequency units. The default is ``None``.
             Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        analysis_temp: double, optional
+        analysis_temp: float, optional
             Temperature. The default is ``None``.
         analysis_temp_units: str, optional
             Temperature units. The default is ``None``.
@@ -815,7 +831,7 @@ class Analysis(GrpcStub):
         require_material_assignment_enabled: bool, optional
             Whether to require material assignment. The default is ``None``.
         model_source: ModelSource, optional
-            Model source.
+            Model source. The default is ``None``.
             This parameter is required for strain map analysis.
         strain_map_natural_freqs : list, optional
             List of natural frequencies. The default is ``None``.
@@ -963,12 +979,12 @@ class Analysis(GrpcStub):
             Name of the CCA.
         natural_freq_count: int
             Natural frequecy result count.
-        natural_freq_min: double, optional
+        natural_freq_min: float, optional
             Minimum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
             Minimum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        natural_freq_max: double, optional
+        natural_freq_max: float, optional
             Maximum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_max_units: str, optional
             Maximum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
@@ -977,7 +993,7 @@ class Analysis(GrpcStub):
             Whether part validation is enabled.
         require_material_assignment_enabled: bool
             Whether to require material assignment.
-        analysis_temp: double, optional
+        analysis_temp: float, optional
             Temperature.
         analysis_temp_units: str, optional
             Temperature units. Options are ``"C"``, ``"F"``, and ``"K"``.

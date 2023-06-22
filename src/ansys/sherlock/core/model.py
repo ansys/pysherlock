@@ -106,6 +106,11 @@ class Model(GrpcStub):
             Units associated with the maximum segment for representing round drill holes
             by a polygon. The default is ``"mm"``.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
@@ -172,7 +177,7 @@ class Model(GrpcStub):
             if return_code.value != 0:
                 raise SherlockModelServiceError(return_code.message)
 
-            return return_code.value, return_code.message
+            return return_code.value
         except Exception as e:
             LOG.error(str(e))
             raise
@@ -230,6 +235,11 @@ class Model(GrpcStub):
             the layer exists, the snapshot image is used. Otherwise, an image is created
             in the same way as a snapshot image is created.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
@@ -238,7 +248,6 @@ class Model(GrpcStub):
         >>> sherlock.model.generate_trace_model(
             'Tutorial Project', 'Main Board', 0.05, 'mm'
             0.0, 'mm2', 0.0, 'mm2')
-
 
         """
         try:

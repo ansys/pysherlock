@@ -50,6 +50,11 @@ def launch_sherlock(
     sherlock_cmd_args : str, optional
         Additional command arguments for launching Sherlock. The default is ``""``.
 
+    Returns
+    -------
+    Sherlock
+        The instance of sherlock.
+
     Examples
     --------
     >>> from ansys.sherlock.core import launcher
@@ -105,7 +110,12 @@ def launch_sherlock(
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """Create a gRPC connection to a specified port and return the ``sherlock``connection object.
 
-    The ``sherlock``connecton object is used to invoke the APIs from their respective services.
+    The ``sherlock``connection object is used to invoke the APIs from their respective services.
+
+    Returns
+    -------
+    Sherlock
+        The instance of sherlock.
     """
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
