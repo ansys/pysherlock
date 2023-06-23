@@ -18,7 +18,6 @@ class Sherlock:
         """Initialize Sherlock gRPC connection object."""
         self.common = Common(channel)
         self.model = Model(channel)
-        self.lifecycle = Lifecycle(channel)
         self.project = Project(channel)
         self.lifecycle = Lifecycle(channel)
         self.layer = Layer(channel)

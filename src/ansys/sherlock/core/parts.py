@@ -20,6 +20,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.parts_types import PartLocation
 
 
 class Parts(GrpcStub):
@@ -630,7 +631,11 @@ class Parts(GrpcStub):
             Reference designator for specific part.
         location_units: str
             Valid units for a part's location.
-        ----------
+
+        Returns
+        -------
+        list
+            List of PartLocation objects.
 
         Examples
         --------
@@ -645,13 +650,13 @@ class Parts(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> part_location = sherlock.parts.get_part_location(
+        >>> part_locations = sherlock.parts.get_part_location(
             project="Tutorial",
             cca_name="Main Board",
-            ref_des="C1",
+            ref_des="C1,C2",
             location_units="in",
         )
-        >>> print(f"{part_location}")
+        >>> print(f"{part_locations}")
         """
         try:
             if project == "":
@@ -677,7 +682,11 @@ class Parts(GrpcStub):
 
             if return_code.value == -1:
                 raise SherlockGetPartLocationError(return_code.message)
-            return return_code.value
+
+            locations = []
+            for location in response.locationData:
+                locations.append(PartLocation(location))
+            return locations
         except SherlockGetPartLocationError as e:
             LOG.error(str(e))
             raise e

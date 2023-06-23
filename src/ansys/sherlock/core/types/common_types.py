@@ -9,7 +9,7 @@ except ModuleNotFoundError:
 
 
 class ListUnitsRequestUnitType:
-    """Values for Unit Type in the List Units request."""
+    """Constants for Unit Type in the List Units request."""
 
     ACCEL_DENSITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.ACCEL_DENSITY
     ACCELERATION = SherlockCommonService_pb2.ListUnitsRequest.UnitType.ACCELERATION
