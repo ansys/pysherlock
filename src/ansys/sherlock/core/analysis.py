@@ -18,6 +18,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
+    SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -722,6 +723,143 @@ class Analysis(GrpcStub):
                 LOG.info(response.message)
                 return response.value
         except SherlockUpdateMechanicalShockPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+    def update_solder_fatigue_props(
+        self,
+        project,
+        solder_fatigue_properties,
+    ):
+        """Update properties for a solder fatigue analysis.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        solder_fatigue_properties : list
+            List of mechanical shock properties for a CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - solder_material: str
+                Solder material. The default is ``None``.
+            - part_temp : float
+                Part temperature. The default is ``None``.
+            - part_temp_units: str
+                Part temperature units. The default is ``None``.
+            - min_temp_rise_enabled: bool
+                whether to apply min temp rise. The default is ``None``.
+            - part_validation_enabled: bool
+                Whether to enable part validation. The default is ``None``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_solder_fatigue_props()
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'solder_material': '63SN37PB',
+                'part_temp': 70,
+                'part_temp_units': 'F',
+                'min_temp_rise_enabled': True,
+                'part_validation_enabled': True
+            },
+            ]
+        )
+
+        """
+        try:
+            if project == "":
+                raise SherlockUpdateSolderFatiguePropsError(message="Project name is invalid.")
+
+            if not isinstance(solder_fatigue_properties, list):
+                raise SherlockUpdateSolderFatiguePropsError(
+                    message="Solder fatigue properties argument is invalid."
+                )
+
+            if len(solder_fatigue_properties) == 0:
+                raise SherlockUpdateSolderFatiguePropsError(
+                    message="One or more solder fatigue properties are required."
+                )
+
+            request = SherlockAnalysisService_pb2.UpdateSolderFatiguePropsRequest(project=project)
+
+            for i, solder_fatigue_props in enumerate(solder_fatigue_properties):
+                if not isinstance(solder_fatigue_props, dict):
+                    raise SherlockUpdateSolderFatiguePropsError(
+                        f"Solder fatigue props argument is invalid "
+                        f"for solder fatigue properties {i}."
+                    )
+
+                if "cca_name" not in solder_fatigue_props.keys():
+                    raise SherlockUpdateSolderFatiguePropsError(
+                        message=f"CCA name is invalid for solder fatigue properties {i}."
+                    )
+
+                cca_name = solder_fatigue_props["cca_name"]
+                if cca_name == "":
+                    raise SherlockUpdateSolderFatiguePropsError(
+                        message=f"CCA name is invalid for solder fatigue properties {i}."
+                    )
+
+                solder_material = solder_fatigue_props.get("solder_material", None)
+                part_temp = solder_fatigue_props.get("part_temp", None)
+                part_temp_units = solder_fatigue_props.get("part_temp_units", None)
+                min_temp_rise_enabled = solder_fatigue_props.get("min_temp_rise_enabled", None)
+                part_validation_enabled = solder_fatigue_props.get("part_validation_enabled", None)
+
+                props_request = request.solderFatigueProperties.add()
+                props_request.ccaName = cca_name
+
+                if solder_material is not None:
+                    props_request.solderMaterial = solder_material
+
+                if part_temp is not None:
+                    props_request.partTemp = part_temp
+
+                if part_temp_units is not None:
+                    props_request.partTempUnits = part_temp_units
+
+                if min_temp_rise_enabled is not None:
+                    props_request.partTempRiseMinEnabled = min_temp_rise_enabled
+
+                if part_validation_enabled is not None:
+                    props_request.partValidationEnabled = part_validation_enabled
+
+        except SherlockUpdateSolderFatiguePropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updateSolderFatigueProps(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdateSolderFatiguePropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdateSolderFatiguePropsError as e:
             LOG.error(str(e))
             raise e
 
