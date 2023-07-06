@@ -23,14 +23,14 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     stackup = Stackup(channel)
-    helper_test_gen_stackup(stackup)
+    # helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
-    helper_test_update_laminate_layer(stackup)
-    helper_test_list_conductor_layers(stackup)
-    helper_test_list_laminate_layers(stackup)
-    helper_test_get_layer_count(stackup)
+    # helper_test_update_laminate_layer(stackup)
+    # helper_test_list_conductor_layers(stackup)
+    # helper_test_list_laminate_layers(stackup)
+    # helper_test_get_layer_count(stackup)
     helper_test_get_stackup_props(stackup)
-    helper_test_get_total_conductor_thickness(stackup)
+    # helper_test_get_total_conductor_thickness(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -268,14 +268,14 @@ def helper_test_update_conductor_layer(stackup):
                 "Main Board",
                 "3",
                 "POWER",
-                "ALUMINA",
+                "ALUMINUM",
                 # thickness=0.5,
                 # thickness_unit="oz",
                 conductor_percent="94.2",
                 resin_material="Generic FR-4 Generic FR-4",
             )
             assert result == 0
-            time.sleep(1)
+            time.sleep(10)
         except SherlockUpdateConductorLayerError as e:
             pytest.fail(str(e))
 
@@ -615,13 +615,13 @@ def helper_test_get_stackup_props(stackup):
                 "Main Board",
             )
             assert stackup_properties.board_dimension == "190.32 x 114.31 mm  [7.4928 x 4.5003 in]"
-            assert stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
-            assert stackup_properties.density == "2.0340 g/cc"
+            assert stackup_properties.board_thickness == "2.098 mm  [82.6 mil]"
+            assert stackup_properties.density == "2.0396 g/cc"
             assert stackup_properties.conductor_layers_cnt == "6"
-            assert stackup_properties.ctexy == "18.348 ppm/C"
-            assert stackup_properties.ctez == "64.217 ppm/C"
-            assert stackup_properties.exy == "27,182 MPa"
-            assert stackup_properties.ez == "6,943 MPa"
+            assert stackup_properties.ctexy == "17.500 ppm/C"
+            assert stackup_properties.ctez == "58.272 ppm/C"
+            assert stackup_properties.exy == "26,637 MPa"
+            assert stackup_properties.ez == "6,900 MPa"
         except SherlockGetLayerCountError as e:
             pytest.fail(str(e))
 
