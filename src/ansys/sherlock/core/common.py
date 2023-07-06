@@ -113,3 +113,20 @@ class Common(GrpcStub):
             raise e
 
         return response.units
+
+    def get_solders(self):
+        """List valid solders.
+
+        Returns
+        -------
+        list
+            List of valid solder names.
+        """
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return []
+
+        request = SherlockCommonService_pb2.GetSoldersRequest()
+        response = self.stub.getSolders(request)
+
+        return response.solderName

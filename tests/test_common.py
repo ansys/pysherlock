@@ -14,6 +14,7 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     common = Common(channel)
     helper_test_list_units(common)
+    helper_test_get_solders(common)
 
 
 def helper_test_list_units(common):
@@ -29,6 +30,17 @@ def helper_test_list_units(common):
         try:
             units = common.list_units(ListUnitsRequestUnitType.ACCEL_DENSITY)
             assert len(units) != 0
+        except SherlockCommonServiceError as e:
+            pytest.fail(str(e))
+
+
+def helper_test_get_solders(common):
+    """Test get_solders API"""
+
+    if common._is_connection_up():
+        try:
+            solders = common.get_solders()
+            assert len(solders) != 0
         except SherlockCommonServiceError as e:
             pytest.fail(str(e))
 
