@@ -47,13 +47,17 @@ class Analysis(GrpcStub):
             "naturalFreqMinUnits": "natural_freq_min_units",
             "naturalFreqMax": "natural_freq_max",
             "naturalFreqMaxUnits": "natural_freq_max_units",
+            "partTemp": "part_temp",
+            "partTempUnits": "part_temp_units",
             "partValidationEnabled": "part_validation_enabled",
             "performNFFreqRangeCheck": "perform_nf_freq_range_check",
             "randomVibeDamping": "random_vibe_damping",
             "requireMaterialAssignmentEnabled": "require_material_assignment_enabled",
             "reuseModalAnalysis": "reuse_modal_analysis",
             "shockResultCount": "shock_result_count",
+            "solderMaterial": "solder_material",
             "strainMapNaturalFreqs": "strain_map_natural_freqs",
+            "usePartTempRiseMin": "min_temp_rise_enabled",
         }
 
     def _translate_field_names(self, names_list):
@@ -725,6 +729,41 @@ class Analysis(GrpcStub):
         except SherlockUpdateMechanicalShockPropsError as e:
             LOG.error(str(e))
             raise e
+
+    def get_solder_fatigue_input_fields(self):
+        """Get solder fatigue property fields based on the user configuration.
+
+        Returns
+        -------
+        list
+            List of solder fatigue property fields based on the user configuration.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.get_solder_fatigue_input_fields()
+        """
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        message = SherlockAnalysisService_pb2.GetSolderFatigueInputFieldsRequest()
+        response = self.stub.getSolderFatigueInputFields(message)
+
+        fields = self._translate_field_names(response.fieldName)
+        LOG.info(fields)
+
+        return fields
 
     def update_solder_fatigue_props(
         self,
