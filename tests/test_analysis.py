@@ -478,7 +478,7 @@ def helper_test_get_solder_fatigue_input_fields(analysis):
         assert "solder_material" in fields
         assert "part_temp" in fields
         assert "part_temp_units" in fields
-        assert "min_temp_rise_enabled" in fields
+        assert "use_part_temp_rise_min" in fields
         assert "part_validation_enabled" in fields
 
 
@@ -890,7 +890,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                     "solder_material": "63SN37PB",
                     "part_temp": 70,
                     "part_temp_units": "F",
-                    "min_temp_rise_enabled": True,
+                    "use_part_temp_rise_min": True,
                     "part_validation_enabled": True,
                 },
             ],
@@ -934,7 +934,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                     "solder_material": "63SN37PB",
                     "part_temp": 70,
                     "part_temp_units": "F",
-                    "min_temp_rise_enabled": True,
+                    "use_part_temp_rise_min": True,
                     "part_validation_enabled": True,
                 },
             ],
@@ -955,7 +955,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                     "solder_material": "63SN37PB",
                     "part_temp": 70,
                     "part_temp_units": "F",
-                    "min_temp_rise_enabled": True,
+                    "use_part_temp_rise_min": True,
                     "part_validation_enabled": True,
                 },
             ],
@@ -979,7 +979,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                     "solder_material": "63SN37PB",
                     "part_temp": 70,
                     "part_temp_units": "INVALID",
-                    "min_temp_rise_enabled": True,
+                    "use_part_temp_rise_min": True,
                     "part_validation_enabled": True,
                 },
             ],
@@ -997,7 +997,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                     "solder_material": "63SN37PB",
                     "part_temp": 70,
                     "part_temp_units": "F",
-                    "min_temp_rise_enabled": True,
+                    "use_part_temp_rise_min": True,
                     "part_validation_enabled": True,
                 },
             ],

@@ -57,7 +57,7 @@ class Analysis(GrpcStub):
             "shockResultCount": "shock_result_count",
             "solderMaterial": "solder_material",
             "strainMapNaturalFreqs": "strain_map_natural_freqs",
-            "usePartTempRiseMin": "min_temp_rise_enabled",
+            "usePartTempRiseMin": "use_part_temp_rise_min",
         }
 
     def _translate_field_names(self, names_list):
@@ -787,7 +787,7 @@ class Analysis(GrpcStub):
                 Part temperature. The default is ``None``.
             - part_temp_units: str
                 Part temperature units. The default is ``None``.
-            - min_temp_rise_enabled: bool
+            - use_part_temp_rise_min: bool
                 whether to apply min temp rise. The default is ``None``.
             - part_validation_enabled: bool
                 Whether to enable part validation. The default is ``None``.
@@ -817,7 +817,7 @@ class Analysis(GrpcStub):
                 'solder_material': '63SN37PB',
                 'part_temp': 70,
                 'part_temp_units': 'F',
-                'min_temp_rise_enabled': True,
+                'use_part_temp_rise_min': True,
                 'part_validation_enabled': True
             },
             ]
@@ -861,14 +861,13 @@ class Analysis(GrpcStub):
                 solder_material = solder_fatigue_props.get("solder_material", None)
                 part_temp = solder_fatigue_props.get("part_temp", None)
                 part_temp_units = solder_fatigue_props.get("part_temp_units", None)
-                min_temp_rise_enabled = solder_fatigue_props.get("min_temp_rise_enabled", None)
+                use_part_temp_rise_min = solder_fatigue_props.get("use_part_temp_rise_min", None)
                 part_validation_enabled = solder_fatigue_props.get("part_validation_enabled", None)
 
                 props_request = request.solderFatigueProperties.add()
                 props_request.ccaName = cca_name
 
-                if solder_material is not None:
-                    props_request.solderMaterial = solder_material
+                props_request.solderMaterial = solder_material
 
                 if part_temp is not None:
                     props_request.partTemp = part_temp
@@ -876,8 +875,8 @@ class Analysis(GrpcStub):
                 if part_temp_units is not None:
                     props_request.partTempUnits = part_temp_units
 
-                if min_temp_rise_enabled is not None:
-                    props_request.partTempRiseMinEnabled = min_temp_rise_enabled
+                if use_part_temp_rise_min is not None:
+                    props_request.partTempRiseMinEnabled = use_part_temp_rise_min
 
                 if part_validation_enabled is not None:
                     props_request.partValidationEnabled = part_validation_enabled
