@@ -898,6 +898,7 @@ def helper_test_update_solder_fatigue_props(analysis):
         assert False
     except SherlockUpdateSolderFatiguePropsError as e:
         assert str(e) == "Update solder fatigue properties error: Project name is invalid."
+
     try:
         analysis.update_solder_fatigue_props("Test", "INVALID_TYPE")
         assert False

@@ -124,7 +124,7 @@ class Common(GrpcStub):
         """
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
-            return []
+            return
 
         request = SherlockCommonService_pb2.GetSoldersRequest()
         response = self.stub.getSolders(request)

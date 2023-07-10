@@ -23,14 +23,14 @@ def test_all():
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
     stackup = Stackup(channel)
-    # helper_test_gen_stackup(stackup)
+    helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
-    # helper_test_update_laminate_layer(stackup)
-    # helper_test_list_conductor_layers(stackup)
-    # helper_test_list_laminate_layers(stackup)
-    # helper_test_get_layer_count(stackup)
+    helper_test_update_laminate_layer(stackup)
+    helper_test_list_conductor_layers(stackup)
+    helper_test_list_laminate_layers(stackup)
+    helper_test_get_layer_count(stackup)
     helper_test_get_stackup_props(stackup)
-    # helper_test_get_total_conductor_thickness(stackup)
+    helper_test_get_total_conductor_thickness(stackup)
 
 
 def helper_test_gen_stackup(stackup):
@@ -275,7 +275,7 @@ def helper_test_update_conductor_layer(stackup):
                 resin_material="Generic FR-4 Generic FR-4",
             )
             assert result == 0
-            time.sleep(10)
+            time.sleep(1)
         except SherlockUpdateConductorLayerError as e:
             pytest.fail(str(e))
 
