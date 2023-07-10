@@ -639,7 +639,7 @@ class Analysis(GrpcStub):
 
                 if "cca_name" not in mechanical_shock_props.keys():
                     raise SherlockUpdateMechanicalShockPropsError(
-                        message=f"CCA name is invalid for mechanical shock properties {i}."
+                        message=f"CCA name is missing for mechanical shock properties {i}."
                     )
 
                 cca_name = mechanical_shock_props["cca_name"]
@@ -810,7 +810,7 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.update_solder_fatigue_props()
+        >>> sherlock.analysis.update_solder_fatigue_props(
             "Test",
             [{
                 'cca_name': 'Card',
@@ -849,7 +849,7 @@ class Analysis(GrpcStub):
 
                 if "cca_name" not in solder_fatigue_props.keys():
                     raise SherlockUpdateSolderFatiguePropsError(
-                        message=f"CCA name is invalid for solder fatigue properties {i}."
+                        message=f"CCA name is missing for solder fatigue properties {i}."
                     )
 
                 cca_name = solder_fatigue_props["cca_name"]

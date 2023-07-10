@@ -39,7 +39,7 @@ def helper_test_get_solders(common):
 
     if common._is_connection_up():
         try:
-            solders = common.get_solders()
+            solders = common.list_solder_materials()
             assert len(solders) != 0
         except SherlockCommonServiceError as e:
             pytest.fail(str(e))

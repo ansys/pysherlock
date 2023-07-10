@@ -114,13 +114,19 @@ class Common(GrpcStub):
 
         return response.units
 
-    def get_solders(self):
+    def list_solder_materials(self):
         """List valid solders.
 
         Returns
         -------
         list
             List of valid solder names.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.common.list_solder_materials()
         """
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")

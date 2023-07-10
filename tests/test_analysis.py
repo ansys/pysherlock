@@ -793,7 +793,7 @@ def helper_test_update_mechanical_shock_props(analysis):
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
-            "CCA name is invalid for mechanical shock properties 0."
+            "CCA name is missing for mechanical shock properties 0."
         )
 
     try:
@@ -943,7 +943,7 @@ def helper_test_update_solder_fatigue_props(analysis):
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
-            "CCA name is invalid for solder fatigue properties 0."
+            "CCA name is missing for solder fatigue properties 0."
         )
 
     try:
