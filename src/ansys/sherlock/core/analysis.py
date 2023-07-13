@@ -867,7 +867,8 @@ class Analysis(GrpcStub):
                 props_request = request.solderFatigueProperties.add()
                 props_request.ccaName = cca_name
 
-                props_request.solderMaterial = solder_material
+                if solder_material is not None:
+                    props_request.solderMaterial = solder_material
 
                 if part_temp is not None:
                     props_request.partTemp = part_temp
