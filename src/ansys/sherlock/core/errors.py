@@ -820,3 +820,15 @@ class SherlockUpdateMechanicalShockPropsError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Update mechanical shock properties error: {self.message}"
+
+
+class SherlockUpdateSolderFatiguePropsError(Exception):
+    """Contains the error raised when properties for solder fatigue analysis cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update solder fatigue properties error: {self.message}"
