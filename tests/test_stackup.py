@@ -268,7 +268,7 @@ def helper_test_update_conductor_layer(stackup):
                 "Main Board",
                 "3",
                 "POWER",
-                "ALUMINA",
+                "ALUMINUM",
                 # thickness=0.5,
                 # thickness_unit="oz",
                 conductor_percent="94.2",
@@ -616,12 +616,12 @@ def helper_test_get_stackup_props(stackup):
             )
             assert stackup_properties.board_dimension == "190.32 x 114.31 mm  [7.4928 x 4.5003 in]"
             assert stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
-            assert stackup_properties.density == "2.0340 g/cc"
+            assert stackup_properties.density == "2.0264 g/cc"
             assert stackup_properties.conductor_layers_cnt == "6"
-            assert stackup_properties.ctexy == "18.348 ppm/C"
-            assert stackup_properties.ctez == "64.217 ppm/C"
-            assert stackup_properties.exy == "27,182 MPa"
-            assert stackup_properties.ez == "6,943 MPa"
+            assert stackup_properties.ctexy == "18.618 ppm/C"
+            assert stackup_properties.ctez == "64.355 ppm/C"
+            assert stackup_properties.exy == "25,420 MPa"
+            assert stackup_properties.ez == "6,939 MPa"
         except SherlockGetLayerCountError as e:
             pytest.fail(str(e))
 

@@ -18,6 +18,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
+    SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.types.analysis_types import (
     ElementOrder,
@@ -40,10 +41,12 @@ def test_all():
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
     helper_test_get_mechanical_shock_input_fields(analysis)
+    helper_test_get_solder_fatigue_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_harmonic_vibe_props(analysis)
     helper_test_update_mechanical_shock_props(analysis)
+    helper_test_update_solder_fatigue_props(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_get_natural_frequency_input_fields(analysis)
     helper_test_update_natural_frequency_props(analysis)
@@ -469,6 +472,16 @@ def helper_test_get_mechanical_shock_input_fields(analysis):
         assert "natural_freq_max_units" in fields
 
 
+def helper_test_get_solder_fatigue_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_solder_fatigue_input_fields()
+        assert "solder_material" in fields
+        assert "part_temp" in fields
+        assert "part_temp_units" in fields
+        assert "use_part_temp_rise_min" in fields
+        assert "part_validation_enabled" in fields
+
+
 def helper_test_get_random_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_random_vibe_input_fields()
@@ -780,7 +793,7 @@ def helper_test_update_mechanical_shock_props(analysis):
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
-            "CCA name is invalid for mechanical shock properties 0."
+            "CCA name is missing for mechanical shock properties 0."
         )
 
     try:
@@ -864,6 +877,133 @@ def helper_test_update_mechanical_shock_props(analysis):
         )
         assert result == 0
     except SherlockUpdateMechanicalShockPropsError as e:
+        pytest.fail(str(e))
+
+
+def helper_test_update_solder_fatigue_props(analysis):
+    try:
+        analysis.update_solder_fatigue_props(
+            "",
+            [
+                {
+                    "cca_name": "Card",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert str(e) == "Update solder fatigue properties error: Project name is invalid."
+
+    try:
+        analysis.update_solder_fatigue_props("Test", "INVALID_TYPE")
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "Solder fatigue properties argument is invalid."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props("Test", [])
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "One or more solder fatigue properties are required."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props("Test", ["INVALID"])
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "Solder fatigue props argument is invalid for solder fatigue properties 0."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "CCA name is missing for solder fatigue properties 0."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "CCA name is invalid for solder fatigue properties 0."
+        )
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "INVALID",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdateSolderFatiguePropsError
+
+    try:
+        result = analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockUpdateSolderFatiguePropsError as e:
         pytest.fail(str(e))
 
 
