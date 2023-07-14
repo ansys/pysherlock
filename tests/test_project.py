@@ -2,6 +2,7 @@
 
 import os
 import platform
+import uuid
 
 import grpc
 import pytest
@@ -274,6 +275,27 @@ def helper_test_add_cca(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert type(e) == SherlockAddCCAError
+
+    cca_name = "Test Card " + str(uuid.uuid4())
+    try:
+        result = project.add_cca(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": cca_name,
+                    "description": "Second CCA",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockAddCCAError as e:
+        pytest.fail(str(e))
 
 
 def helper_test_add_strain_maps(project):
