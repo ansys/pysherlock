@@ -369,21 +369,21 @@ class Project(GrpcStub):
             List of CCA properties to be added:
 
             - cca_name : str
-                Name of the CCA.
+                Name of the CCA. The default is ``None``.
             - description : str
                 Description of the CCA. The default is ``None``.
             - default_solder_type: str
                 The default solder type. The default is ``None``.
-            - default_stencil_thickness: bool
+            - default_stencil_thickness: float
                 The default stencil thickness. The default is ``None``.
-            - default_stencil_thickness_units: bool
+            - default_stencil_thickness_units: str
                 Units for default stencil thickness. The default is ``None``.
             - default_part_temp_rise: float
                 Default part temp rise. The default is ``None``.
             - default_part_temp_rise_units: str
                 Units for default part temp rise. The default is ``None``.
                 Options are ``"C"``, ``"F"``, and ``"K"``.
-            - guess_part_properties_enabled: str
+            - guess_part_properties_enabled: bool
                 Whether to enable guess part properties. The default is ``None``.
 
         Returns
