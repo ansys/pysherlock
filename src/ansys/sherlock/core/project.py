@@ -366,10 +366,10 @@ class Project(GrpcStub):
         project : str
             Name of the Sherlock project.
         cca_properties : list
-            List of CCA properties to be added:
+            List of CCAs to be added consisting of these properties:
 
             - cca_name : str
-                Name of the CCA. The default is ``None``.
+                Name of the CCA.
             - description : str
                 Description of the CCA. The default is ``None``.
             - default_solder_type: str
