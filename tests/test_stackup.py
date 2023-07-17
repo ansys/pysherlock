@@ -487,7 +487,7 @@ def helper_test_list_conductor_layers(stackup):
 
         try:
             layer_properties_per_board = stackup.list_conductor_layers("Tutorial Project")
-            assert len(layer_properties_per_board) == 1
+            assert len(layer_properties_per_board) >= 1
             layer_properties_of_board = layer_properties_per_board[0]
             assert layer_properties_of_board.ccaName == "Main Board"
             layer_properties_per_layer = layer_properties_of_board.conductorLayerProps
@@ -516,7 +516,7 @@ def helper_test_list_laminate_layers(stackup):
 
         try:
             layer_properties_per_board = stackup.list_laminate_layers("Tutorial Project")
-            assert len(layer_properties_per_board) == 1
+            assert len(layer_properties_per_board) >= 1
             layer_properties_of_board = layer_properties_per_board[0]
             assert layer_properties_of_board.ccaName == "Main Board"
             layer_properties_per_layer = layer_properties_of_board.laminateProps

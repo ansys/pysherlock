@@ -2,6 +2,7 @@
 
 import os
 import platform
+import time
 import uuid
 
 import grpc
@@ -294,6 +295,7 @@ def helper_test_add_cca(project):
             ],
         )
         assert result == 0
+        time.sleep(5)
     except SherlockAddCCAError as e:
         pytest.fail(str(e))
 
