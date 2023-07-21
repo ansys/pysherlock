@@ -2,7 +2,6 @@
 
 import os
 import platform
-import time
 import uuid
 
 import grpc
@@ -274,7 +273,7 @@ def helper_test_add_cca(project):
             ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockAddCCAError as e:
+    except Exception as e:
         assert type(e) == SherlockAddCCAError
 
     cca_name = "Test Card " + str(uuid.uuid4())
@@ -295,7 +294,6 @@ def helper_test_add_cca(project):
             ],
         )
         assert result == 0
-        time.sleep(5)
     except SherlockAddCCAError as e:
         pytest.fail(str(e))
 
