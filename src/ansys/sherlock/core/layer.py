@@ -149,7 +149,7 @@ class Layer(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.analysis.update_mechanical_shock_props(
+        >>> sherlock.layer.add_potting_region(
             "Test",
             [{
                 'cca_name': 'Card',
@@ -239,8 +239,6 @@ class Layer(GrpcStub):
 
                 match shape_type.lower():
                     case "polygonal":
-                        polygonal_shape = SherlockLayerService_pb2.PolygonalShape()
-
                         if "points" in shape.keys():
                             points = shape["points"]
                             if not isinstance(points, list):
@@ -248,8 +246,8 @@ class Layer(GrpcStub):
                                     message=f"Invalid points list for potting region {i}."
                                 )
 
-                            for j, point in points:
-                                point_message = polygonal_shape.points.add()
+                            for j, point in enumerate(points):
+                                point_message = region_request.polygonalShape.points.add()
 
                                 if not isinstance(point, tuple) or len(point) != 2:
                                     raise SherlockAddPottingRegionError(
@@ -258,9 +256,8 @@ class Layer(GrpcStub):
                                 point_message.x = point[0]
                                 point_message.y = point[1]
                         if "rotation" in shape.keys():
-                            polygonal_shape.rotation = shape["rotation"]
+                            region_request.polygonalShape.rotation = shape["rotation"]
 
-                        region_request.polygonalShape = polygonal_shape
                     case "rectangular":
                         pass
                     case "slot":
