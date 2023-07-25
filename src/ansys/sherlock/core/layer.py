@@ -22,6 +22,155 @@ class Layer(GrpcStub):
         super().__init__(channel)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
+    def add_potting_region(
+        self,
+        project,
+        potting_regions,
+    ):
+        """Add one or more potting regions to a given project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        potting_regions : list
+            List of potting region properties consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - potting_id: str
+                Potting ID. The default is ``None``.
+            - side: str
+                The side to add the potting region to. The default is ``None``.
+                Options are ``"TOP"``, ``"BOTTOM"``, and ``"BOT"``.
+            - material: str
+                The potting material. The default is ``None``.
+            - potting_units: str
+                The potting region units. The default is ``None``.
+            - thickness: float
+                The potting thickness. The default is ``None``.
+            - standoff: float
+                The potting standoff. The default is ``None``.
+            - shape: dict
+                The shape of the potting region. Must be one of the following:
+
+                    polygonal : dict
+                        Dict of properties for a polygonal potting region consisting of these
+                        properties:
+
+                        - shape_type : str
+                            The shape_type. Must be ``"polygonal"``.
+                        - points : list
+                            List of 3 or more points for a polygonal potting region consisting of
+                            the following:
+
+                                point : Tuple
+                                    Tuple representing a point consisting of the following elements:
+
+                                    - x : float
+                                        The x coordinate of the point.
+                                    - y : float
+                                        The y coordinate of the point.
+                        - rotation : float
+                            The rotation of the shape, in degrees.
+                    rectangular : dict
+                        Dict of properties for a rectangular potting region consisting of these
+                        properties:
+
+                            - shape_type : str
+                                The shape_type. Must be ``"rectangular"``.
+                            - length : float
+                                The length of the rectangle.
+                            - width : float
+                                The width of the rectangle.
+                            - center_x : float
+                                The x coordinate of the center of the rectangle.
+                            - center_y : float
+                                The y coordinate of the center of the rectangle.
+                            - rotation : float
+                                The rotation of the shape, in degrees.
+                    slot : dict
+                        Dict of properties for a slot potting region consisting of these properties:
+
+                            - shape_type : str
+                                The shape_type. Must be ``"slot"``.
+                            - length : float
+                                The length of the slot.
+                            - width : float
+                                The width of the slot.
+                            - node_count : int
+                                The number of nodes.
+                            - center_x : float
+                                The x coordinate of the center of the slot.
+                            - center_y : float
+                                The y coordinate of the center of the slot.
+                            - rotation : float
+                                The rotation of the shape, in degrees.
+                    circular : dict
+                        Dict of properties for a circular potting region consisting of these
+                        properties:
+
+                            - shape_type : str
+                                The shape_type. Must be ``"circular"``.
+                            - diameter : float
+                                The diameter of the circle.
+                            - node_count : int
+                                The number of nodes.
+                            - center_x : float
+                                The x coordinate of the center of the circle.
+                            - center_y : float
+                                The y coordinate of the center of the circule.
+                            - rotation : float
+                                The rotation of the shape, in degrees.
+                    pcb : dict
+                        Dict of properties for a PCB potting region consisting of these properties:
+
+                            - shape_type : str
+                                The shape_type. Must be ``"PCB"``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_mechanical_shock_props(
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'potting_id': 'Test Region',
+                'side': 'TOP',
+                'material': 'epoxyencapsulant',
+                'potting_units': 'in',
+                'thickness': 0.1,
+                'standoff': 0.2,
+                'shape': {
+                    'shape_type': 'polygonal',
+                    'points': [
+                        (0, 0),
+                        (0, 6.35),
+                        (9.77, 0)
+                    ],
+                    'rotation': 44.5
+                }
+            },
+            ]
+        )
+
+        """
+
     def update_mount_points_by_file(
         self,
         project,
