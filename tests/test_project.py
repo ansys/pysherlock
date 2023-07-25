@@ -2,11 +2,13 @@
 
 import os
 import platform
+import time
 
 import grpc
 import pytest
 
 from ansys.sherlock.core.errors import (
+    SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockDeleteProjectError,
     SherlockGenerateProjectReportError,
@@ -16,6 +18,8 @@ from ansys.sherlock.core.errors import (
     SherlockListStrainMapsError,
 )
 from ansys.sherlock.core.project import Project
+
+PROJECT_ADD_NAME = "Delete This After Add"
 
 
 def test_all():
@@ -31,7 +35,11 @@ def test_all():
     helper_test_generate_project_report(project)
     helper_test_list_ccas(project)
     helper_test_list_strain_maps(project)
-
+    project_name = None
+    try:
+        project_name = helper_test_add_project(project)
+    finally:
+        clean_up_after_add(project, project_name)
 
 def helper_test_delete_project(project):
     """Test delete_project API"""
@@ -434,6 +442,35 @@ def helper_test_list_strain_maps(project):
         except SherlockListStrainMapsError as e:
             pytest.fail(str(e.str_itr()))
 
+def helper_test_add_project(project):
+    """Test add_project API"""
+
+    try:
+        project.add_project("", "", "")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddProjectError as e:
+        assert str(e) == "Add project error: Project name cannot be blank"
+
+    if project._is_connection_up():
+
+         try:
+             project.add_project("Tutorial Project", "", "")
+             pytest.fail("No exception raised when creating a duplicate test")
+         except Exception as e:
+             assert type(e) == SherlockAddProjectError
+
+         try:
+            project.add_project(PROJECT_ADD_NAME, "", "")
+            # Fix issue where api does not finish before returning
+            time.sleep(5)
+            return PROJECT_ADD_NAME
+         except SherlockAddProjectError as e:
+             pytest.fail(str(e))
+
+
+def clean_up_after_add(project, project_name):
+    if project_name is not None:
+        project.delete_project(project_name)
 
 if __name__ == "__main__":
     test_all()
