@@ -589,7 +589,8 @@ def helper_test_add_project(project):
             assert type(e) == SherlockAddProjectError
 
         try:
-            project.add_project(PROJECT_ADD_NAME, "", "")
+            return_code = project.add_project(PROJECT_ADD_NAME, "", "")
+            assert return_code == 0
             # Fix issue where api does not finish before returning
             time.sleep(5)
             return PROJECT_ADD_NAME

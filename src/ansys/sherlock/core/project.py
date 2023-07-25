@@ -692,8 +692,8 @@ class Project(GrpcStub):
         Returns
         -------
         ReturnCode
-            int - 0 for success otherwise error
-            message - message that describes what failed
+        int
+            0 for success otherwise error
 
         Examples
         --------
@@ -717,7 +717,7 @@ class Project(GrpcStub):
 
         return_code = self.stub.addProject(request)
 
-        if return_code.value == -1:
+        if return_code.value != 0:
             raise SherlockAddProjectError(return_code.message)
 
-        return return_code
+        return return_code.value
