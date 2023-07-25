@@ -297,7 +297,7 @@ class Layer(GrpcStub):
                         region_request.pCBShape.CopyFrom(SherlockLayerService_pb2.PCBShape())
                     case _:
                         raise SherlockAddPottingRegionError(
-                            message="fInvalid shape type for potting region {i}."
+                            message=f"Shape type invalid for potting region {i}."
                         )
 
         except SherlockAddPottingRegionError as e:
