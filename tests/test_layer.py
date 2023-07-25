@@ -275,12 +275,120 @@ def helper_test_add_potting_region(layer):
 
     potting_id2 = f"Test Region {uuid.uuid4()}"
     try:
-        result = layer.add_potting_region(
+        layer.add_potting_region(
             "Tutorial Project",
             [
                 {
                     "cca_name": "Main Board",
                     "potting_id": potting_id2,
+                    "side": "BOT",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "invalid",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "rectangular",
+                        "length": 10,
+                        "width": 44.4,
+                        "center_x": 55.5,
+                        "center_y": 12.3,
+                        "rotation": 55.5,
+                    },
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockAddPottingRegionError
+
+    potting_id3 = f"Test Region {uuid.uuid4()}"
+    try:
+        layer.add_potting_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "potting_id": potting_id3,
+                    "side": "BOT",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "invalid",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "slot",
+                        "length": 10,
+                        "width": 25.5,
+                        "node_count": 11,
+                        "center_x": 55.5,
+                        "center_y": 12.3,
+                        "rotation": 55.5,
+                    },
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockAddPottingRegionError
+
+    potting_id4 = f"Test Region {uuid.uuid4()}"
+    try:
+        layer.add_potting_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "potting_id": potting_id4,
+                    "side": "BOT",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "invalid",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "circular",
+                        "diameter": 10,
+                        "node_count": 11,
+                        "center_x": 55.5,
+                        "center_y": 12.3,
+                        "rotation": 55.5,
+                    },
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockAddPottingRegionError
+
+    potting_id5 = f"Test Region {uuid.uuid4()}"
+    try:
+        layer.add_potting_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "potting_id": potting_id5,
+                    "side": "BOT",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "invalid",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "PCB",
+                    },
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockAddPottingRegionError
+
+    potting_id6 = f"Test Region {uuid.uuid4()}"
+    try:
+        result = layer.add_potting_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "potting_id": potting_id6,
                     "side": "TOP",
                     "material": "epoxyencapsulant",
                     "potting_units": "in",

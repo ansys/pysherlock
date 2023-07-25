@@ -275,7 +275,7 @@ class Layer(GrpcStub):
                         if "width" in shape.keys():
                             region_request.slotShape.width = shape["width"]
                         if "node_count" in shape.keys():
-                            region_request.slotShape.node_count = shape["node_count"]
+                            region_request.slotShape.nodeCount = int(shape["node_count"])
                         if "center_x" in shape.keys():
                             region_request.slotShape.centerX = shape["center_x"]
                         if "center_y" in shape.keys():
@@ -284,9 +284,9 @@ class Layer(GrpcStub):
                             region_request.slotShape.rotation = shape["rotation"]
                     case "circular":
                         if "diameter" in shape.keys():
-                            region_request.circularShape.length = shape["diameter"]
+                            region_request.circularShape.diameter = shape["diameter"]
                         if "node_count" in shape.keys():
-                            region_request.circularShape.node_count = shape["node_count"]
+                            region_request.circularShape.nodeCount = int(shape["node_count"])
                         if "center_x" in shape.keys():
                             region_request.circularShape.centerX = shape["center_x"]
                         if "center_y" in shape.keys():
