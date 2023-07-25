@@ -842,3 +842,14 @@ class SherlockAddProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Add project error: {self.message}"
+
+class SherlockAddCCAError(Exception):
+    """Contains the error raised when CCA cannot be added."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Add CCA error: {self.message}"

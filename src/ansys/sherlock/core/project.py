@@ -12,6 +12,7 @@ except ModuleNotFoundError:
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockAddCCAError,
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockDeleteProjectError,
@@ -357,6 +358,136 @@ class Project(GrpcStub):
             raise e
 
         return response.ccas
+
+    def add_cca(self, project, cca_properties):
+        """Add one or more CCAs to a project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_properties : list
+            List of CCAs to be added consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - description : str
+                Description of the CCA. The default is ``None``.
+            - default_solder_type: str
+                The default solder type. The default is ``None``.
+            - default_stencil_thickness: float
+                The default stencil thickness. The default is ``None``.
+            - default_stencil_thickness_units: str
+                Units for default stencil thickness. The default is ``None``.
+            - default_part_temp_rise: float
+                Default part temp rise. The default is ``None``.
+            - default_part_temp_rise_units: str
+                Units for default part temp rise. The default is ``None``.
+                Options are ``"C"``, ``"F"``, and ``"K"``.
+            - guess_part_properties_enabled: bool
+                Whether to enable guess part properties. The default is ``None``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.project.add_cca(
+            "Test",
+            [{
+                'cca_name': 'Card 2',
+                'description': 'Second CCA',
+                'default_solder_type': 'SAC305',
+                'default_stencil_thickness': 10,
+                'default_stencil_thickness_units': 'mm',
+                'default_part_temp_rise': 20,
+                'default_part_temp_rise_units': 'C',
+                'guess_part_properties_enabled': False,
+            },
+            ]
+        )
+
+        """
+        try:
+            if project == "":
+                raise SherlockAddCCAError(message="Project name is invalid.")
+
+            if not isinstance(cca_properties, list):
+                raise SherlockAddCCAError(message="CCA properties argument is invalid.")
+
+            if len(cca_properties) == 0:
+                raise SherlockAddCCAError(message="One or more CCAs are required.")
+
+            request = SherlockProjectService_pb2.AddCcaRequest(project=project)
+
+            for i, cca in enumerate(cca_properties):
+                if not isinstance(cca, dict):
+                    raise SherlockAddCCAError(message=f"CCA properties are invalid for CCA {i}.")
+
+                if "cca_name" not in cca.keys():
+                    raise SherlockAddCCAError(message=f"CCA name is missing for CCA {i}.")
+
+                cca_request = request.CCAs.add()
+                cca_request.ccaName = cca["cca_name"]
+
+                if cca_request.ccaName == "":
+                    raise SherlockAddCCAError(message=f"CCA name is invalid for CCA {i}.")
+
+                if "description" in cca.keys():
+                    cca_request.description = cca["description"]
+
+                if "default_solder_type" in cca.keys():
+                    cca_request.defaultSolderType = cca["default_solder_type"]
+
+                if "default_stencil_thickness" in cca.keys():
+                    cca_request.defaultStencilThickness = cca["default_stencil_thickness"]
+
+                if "default_stencil_thickness_units" in cca.keys():
+                    cca_request.defaultStencilThicknessUnits = cca[
+                        "default_stencil_thickness_units"
+                    ]
+
+                if "default_part_temp_rise" in cca.keys():
+                    cca_request.defaultPartTempRise = cca["default_part_temp_rise"]
+
+                if "default_part_temp_rise_units" in cca.keys():
+                    cca_request.defaultPartTempRiseUnits = cca["default_part_temp_rise_units"]
+
+                if "guess_part_properties_enabled" in cca.keys():
+                    cca_request.guessPartPropertiesEnabled = cca["guess_part_properties_enabled"]
+
+        except SherlockAddCCAError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.addCCA(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockAddCCAError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockAddCCAError as e:
+            LOG.error(str(e))
+            raise e
 
     def add_strain_maps(self, project, strain_maps):
         """Add a CSV file with strain maps to the CCAs.
