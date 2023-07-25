@@ -676,9 +676,9 @@ class Project(GrpcStub):
             raise e
 
         return response.ccaStrainMaps
-    
-    def add_project(self, project_name : str, project_category : str, project_description : str):
-        """Add a sherlock project to sherlock
+
+    def add_project(self, project_name: str, project_category: str, project_description: str):
+        """Add a sherlock project to sherlock.
 
         Parameters
         ----------
@@ -699,21 +699,25 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> code = sherlock.add_project("project_name", "project_category", "project_description")
+        >>> code = sherlock.project.add_project(
+            "project_name",
+            "project_category",
+            "project_description")
         """
-
-        if project_name is None or project_name  == "":
+        if project_name is None or project_name == "":
             raise SherlockAddProjectError("Project name cannot be blank")
 
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
 
-        request = SherlockProjectService_pb2.AddProjectRequest(project=project_name, category=project_category, description=project_description)
+        request = SherlockProjectService_pb2.AddProjectRequest(
+            project=project_name, category=project_category, description=project_description
+        )
 
         return_code = self.stub.addProject(request)
 
         if return_code.value == -1:
             raise SherlockAddProjectError(return_code.message)
-        
+
         return return_code
