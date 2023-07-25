@@ -243,7 +243,7 @@ class Layer(GrpcStub):
                             points = shape["points"]
                             if not isinstance(points, list):
                                 raise SherlockAddPottingRegionError(
-                                    message=f"Invalid points list for potting region {i}."
+                                    message=f"Invalid points argument for potting region {i}."
                                 )
 
                             for j, point in enumerate(points):

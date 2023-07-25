@@ -1,4 +1,5 @@
 # © 2023 ANSYS, Inc. All rights reserved
+import uuid
 
 import grpc
 import pytest
@@ -181,25 +182,121 @@ def helper_test_add_potting_region(layer):
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape type invalid for potting region 0."
 
+    try:
+        layer.add_potting_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Test Card",
+                    "potting_id": "Test Region",
+                    "side": "TOP",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "in",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {"shape_type": "POLYGONAL", "points": "INVALID"},
+                },
+            ],
+        )
+        assert False
+    except SherlockAddPottingRegionError as e:
+        assert str(e) == "Add potting region error: Invalid points argument for potting region 0."
+
+    try:
+        layer.add_potting_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Test Card",
+                    "potting_id": "Test Region",
+                    "side": "TOP",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "in",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {"shape_type": "POLYGONAL", "points": [(1, 2), (4.4, 5.5), "INVALID"]},
+                },
+            ],
+        )
+        assert False
+    except SherlockAddPottingRegionError as e:
+        assert str(e) == "Add potting region error: Point 2 invalid for potting region 0."
+
+    try:
+        layer.add_potting_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Test Card",
+                    "potting_id": "Test Region",
+                    "side": "TOP",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "in",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "POLYGONAL",
+                        "points": [(1, 2), (4.4, 5.5, 9.9), (4.4, 5.5)],
+                    },
+                },
+            ],
+        )
+        assert False
+    except SherlockAddPottingRegionError as e:
+        assert str(e) == "Add potting region error: Point 1 invalid for potting region 0."
+
     if not layer._is_connection_up():
         return
 
-    # layer.add_potting_region(
-    #     "Tutorial Project",
-    #     [{
-    #         'cca_name': 'Main Board',
-    #         'potting_id': 'Test Region',
-    #         'side': 'TOP',
-    #         'material': 'epoxyencapsulant',
-    #         'potting_units': 'in',
-    #         'thickness': 0.1,
-    #         'standoff': 0.2,
-    #         'shape': {
-    #             'shape_type': 'pcb'
-    #         }
-    #     },
-    #     ]
-    # )
+    potting_id1 = f"Test Region {uuid.uuid4()}"
+    try:
+        layer.add_potting_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "potting_id": potting_id1,
+                    "side": "INVALID",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "in",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "POLYGONAL",
+                        "points": [(1, 2), (4.4, 5.5), (10, 5.5)],
+                        "rotation": 16.7,
+                    },
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockAddPottingRegionError
+
+    potting_id2 = f"Test Region {uuid.uuid4()}"
+    try:
+        result = layer.add_potting_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "potting_id": potting_id2,
+                    "side": "TOP",
+                    "material": "epoxyencapsulant",
+                    "potting_units": "in",
+                    "thickness": 0.1,
+                    "standoff": 0.2,
+                    "shape": {
+                        "shape_type": "POLYGONAL",
+                        "points": [(1, 2), (4.4, 5.5), (10, 5.5)],
+                        "rotation": 16.7,
+                    },
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockAddPottingRegionError as e:
+        pytest.fail(str(e))
 
 
 def helper_test_update_mount_points_by_file(layer):
