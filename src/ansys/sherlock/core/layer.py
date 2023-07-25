@@ -39,7 +39,7 @@ class Layer(GrpcStub):
         potting_regions : list
             List of potting region properties consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
             - potting_id: str
                 Potting ID. The default is ``None``.
@@ -62,7 +62,7 @@ class Layer(GrpcStub):
                         properties:
 
                         - shape_type : str
-                            The shape_type. Must be ``"polygonal"``.
+                            The shape type. Must be ``"polygonal"``.
                         - points : list
                             List of 3 or more points for a polygonal potting region consisting of
                             the following:
@@ -81,7 +81,7 @@ class Layer(GrpcStub):
                         properties:
 
                             - shape_type : str
-                                The shape_type. Must be ``"rectangular"``.
+                                The shape type. Must be ``"rectangular"``.
                             - length : float
                                 The length of the rectangle.
                             - width : float
@@ -96,7 +96,7 @@ class Layer(GrpcStub):
                         Dict of properties for a slot potting region consisting of these properties:
 
                             - shape_type : str
-                                The shape_type. Must be ``"slot"``.
+                                The shape type. Must be ``"slot"``.
                             - length : float
                                 The length of the slot.
                             - width : float
@@ -114,7 +114,7 @@ class Layer(GrpcStub):
                         properties:
 
                             - shape_type : str
-                                The shape_type. Must be ``"circular"``.
+                                The shape type. Must be ``"circular"``.
                             - diameter : float
                                 The diameter of the circle.
                             - node_count : int
