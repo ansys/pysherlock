@@ -198,14 +198,13 @@ class Layer(GrpcStub):
                         message=f"CCA name is missing for potting region {i}."
                     )
 
-                cca_name = potting_region["cca_name"]
-                if cca_name == "":
+                region_request = request.pottingRegions.add()
+                region_request.ccaName = potting_region["cca_name"]
+
+                if region_request.ccaName == "":
                     raise SherlockAddPottingRegionError(
                         message=f"CCA name is invalid for potting region {i}."
                     )
-
-                region_request = request.pottingRegions.add()
-                region_request.ccaName = cca_name
 
                 if "potting_id" in potting_region.keys():
                     region_request.pottingID = potting_region["potting_id"]
