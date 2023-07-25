@@ -844,3 +844,15 @@ class SherlockAddCCAError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Add CCA error: {self.message}"
+
+
+class SherlockAddPottingRegionError(Exception):
+    """Contains the error raised when a potting region cannot be added."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Add potting region error: {self.message}"
