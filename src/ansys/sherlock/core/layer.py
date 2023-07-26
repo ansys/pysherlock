@@ -1,6 +1,13 @@
 # © 2023 ANSYS, Inc. All rights reserved
 
 """Module containing all layer management capabilities."""
+from ansys.sherlock.core.types.layer_types import (
+    CircularShape,
+    PCBShape,
+    PolygonalShape,
+    RectangularShape,
+    SlotShape,
+)
 
 try:
     import SherlockLayerService_pb2
@@ -66,6 +73,7 @@ class Layer(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
             "ODB++ Tutorial.tgz",
@@ -76,6 +84,11 @@ class Layer(GrpcStub):
             project="Test",
             cca_name="Card",
         )
+        >>> polygonal_shape = PolygonalShape(points=[
+                        (0, 0),
+                        (0, 6.35),
+                        (9.77, 0)
+                    ], rotation=87.8)
         >>> sherlock.layer.add_potting_region(
             "Test",
             [{
@@ -86,15 +99,7 @@ class Layer(GrpcStub):
                 'potting_units': 'in',
                 'thickness': 0.1,
                 'standoff': 0.2,
-                'shape': {
-                    'shape_type': 'polygonal',
-                    'points': [
-                        (0, 0),
-                        (0, 6.35),
-                        (9.77, 0)
-                    ],
-                    'rotation': 44.5
-                }
+                'shape': polygonal_shape
             },
             ]
         )
@@ -152,76 +157,46 @@ class Layer(GrpcStub):
 
                 shape = potting_region["shape"]
 
-                if not isinstance(shape, dict):
-                    raise SherlockAddPottingRegionError(
-                        message=f"Shape invalid for potting region {i}."
-                    )
-                if "shape_type" not in shape.keys():
-                    raise SherlockAddPottingRegionError(
-                        message=f"Shape type missing for potting region {i}."
-                    )
+                if isinstance(shape, PolygonalShape):
+                    if not isinstance(shape.points, list):
+                        raise SherlockAddPottingRegionError(
+                            message=f"Invalid points argument for potting region {i}."
+                        )
 
-                shape_type = shape["shape_type"].lower()
+                    for j, point in enumerate(shape.points):
+                        point_message = region_request.polygonalShape.points.add()
 
-                if shape_type == "polygonal":
-                    if "points" in shape.keys():
-                        points = shape["points"]
-                        if not isinstance(points, list):
+                        if not isinstance(point, tuple) or len(point) != 2:
                             raise SherlockAddPottingRegionError(
-                                message=f"Invalid points argument for potting region {i}."
+                                message=f"Point {j} invalid for potting region {i}."
                             )
-
-                        for j, point in enumerate(points):
-                            point_message = region_request.polygonalShape.points.add()
-
-                            if not isinstance(point, tuple) or len(point) != 2:
-                                raise SherlockAddPottingRegionError(
-                                    message=f"Point {j} invalid for potting region {i}."
-                                )
-                            point_message.x = point[0]
-                            point_message.y = point[1]
-                    if "rotation" in shape.keys():
-                        region_request.polygonalShape.rotation = shape["rotation"]
-                elif shape_type == "rectangular":
-                    if "length" in shape.keys():
-                        region_request.rectangularShape.length = shape["length"]
-                    if "width" in shape.keys():
-                        region_request.rectangularShape.width = shape["width"]
-                    if "center_x" in shape.keys():
-                        region_request.rectangularShape.centerX = shape["center_x"]
-                    if "center_y" in shape.keys():
-                        region_request.rectangularShape.centerY = shape["center_y"]
-                    if "rotation" in shape.keys():
-                        region_request.rectangularShape.rotation = shape["rotation"]
-                elif shape_type == "slot":
-                    if "length" in shape.keys():
-                        region_request.slotShape.length = shape["length"]
-                    if "width" in shape.keys():
-                        region_request.slotShape.width = shape["width"]
-                    if "node_count" in shape.keys():
-                        region_request.slotShape.nodeCount = int(shape["node_count"])
-                    if "center_x" in shape.keys():
-                        region_request.slotShape.centerX = shape["center_x"]
-                    if "center_y" in shape.keys():
-                        region_request.slotShape.centerY = shape["center_y"]
-                    if "rotation" in shape.keys():
-                        region_request.slotShape.rotation = shape["rotation"]
-                elif shape_type == "circular":
-                    if "diameter" in shape.keys():
-                        region_request.circularShape.diameter = shape["diameter"]
-                    if "node_count" in shape.keys():
-                        region_request.circularShape.nodeCount = int(shape["node_count"])
-                    if "center_x" in shape.keys():
-                        region_request.circularShape.centerX = shape["center_x"]
-                    if "center_y" in shape.keys():
-                        region_request.circularShape.centerY = shape["center_y"]
-                    if "rotation" in shape.keys():
-                        region_request.circularShape.rotation = shape["rotation"]
-                elif shape_type == "pcb":
+                        point_message.x = point[0]
+                        point_message.y = point[1]
+                    region_request.polygonalShape.rotation = shape.rotation
+                elif isinstance(shape, RectangularShape):
+                    region_request.rectangularShape.length = shape.length
+                    region_request.rectangularShape.width = shape.width
+                    region_request.rectangularShape.centerX = shape.center_x
+                    region_request.rectangularShape.centerY = shape.center_y
+                    region_request.rectangularShape.rotation = shape.rotation
+                elif isinstance(shape, SlotShape):
+                    region_request.slotShape.length = shape.length
+                    region_request.slotShape.width = shape.width
+                    region_request.slotShape.nodeCount = int(shape.node_count)
+                    region_request.slotShape.centerX = shape.center_x
+                    region_request.slotShape.centerY = shape.center_y
+                    region_request.slotShape.rotation = shape.rotation
+                elif isinstance(shape, CircularShape):
+                    region_request.circularShape.diameter = shape.diameter
+                    region_request.circularShape.nodeCount = int(shape.node_count)
+                    region_request.circularShape.centerX = shape.center_x
+                    region_request.circularShape.centerY = shape.center_y
+                    region_request.circularShape.rotation = shape.rotation
+                elif isinstance(shape, PCBShape):
                     region_request.pCBShape.CopyFrom(SherlockLayerService_pb2.PCBShape())
                 else:
                     raise SherlockAddPottingRegionError(
-                        message=f"Shape type invalid for potting region {i}."
+                        message=f"Shape invalid for potting region {i}."
                     )
 
         except SherlockAddPottingRegionError as e:
