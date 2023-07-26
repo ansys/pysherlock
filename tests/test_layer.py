@@ -39,25 +39,25 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when using invalid project name.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Project name is invalid."
 
     try:
         layer.add_potting_region("Test", "")
-        assert False
+        pytest.fail("No exception thrown when using invalid potting regions list.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Potting regions argument is invalid."
 
     try:
         layer.add_potting_region("Test", [])
-        assert False
+        pytest.fail("No exception thrown when using empty potting regions list.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: One or more potting regions are required."
 
     try:
         layer.add_potting_region("Test", ["test"])
-        assert False
+        pytest.fail("No exception thrown when using invalid element in potting regions list.")
     except SherlockAddPottingRegionError as e:
         assert (
             str(e) == "Add potting region error: "
@@ -79,7 +79,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when cca name missing.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: CCA name is missing for potting region 0."
 
@@ -99,7 +99,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when cca name is invalid.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: CCA name is invalid for potting region 0."
 
@@ -118,7 +118,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when shape missing.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape missing for potting region 0."
 
@@ -138,7 +138,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when shape is invalid.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape invalid for potting region 0."
 
@@ -158,7 +158,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when shape doesn't contain shape type.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape type missing for potting region 0."
 
@@ -178,7 +178,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when shape type is invalid.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape type invalid for potting region 0."
 
@@ -198,7 +198,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when polygonal points list is invalid.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Invalid points argument for potting region 0."
 
@@ -218,7 +218,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when polygonal points list element is incorrect type.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Point 2 invalid for potting region 0."
 
@@ -241,7 +241,7 @@ def helper_test_add_potting_region(layer):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception thrown when polygonal points list element is incorrect length.")
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Point 1 invalid for potting region 0."
 
