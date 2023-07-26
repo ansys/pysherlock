@@ -9,7 +9,9 @@ class PolygonalShape:
     def __init__(self, points, rotation):
         """Initialize the shape properties."""
         self.points = points
+        """points (length 2 tuples) : list"""
         self.rotation = rotation
+        """rotation (in degrees) : float"""
 
 
 class RectangularShape:
@@ -18,10 +20,15 @@ class RectangularShape:
     def __init__(self, length, width, center_x, center_y, rotation):
         """Initialize the shape properties."""
         self.length = length
+        """length : float"""
         self.width = width
+        """width : float"""
         self.center_x = center_x
+        """x coordinate of center : float"""
         self.center_y = center_y
+        """y coordinate of center : float"""
         self.rotation = rotation
+        """rotation (in degrees) : float"""
 
 
 class SlotShape:
@@ -30,11 +37,17 @@ class SlotShape:
     def __init__(self, length, width, node_count, center_x, center_y, rotation):
         """Initialize the shape properties."""
         self.length = length
+        """length : float"""
         self.width = width
+        """width : float"""
         self.node_count = node_count
+        """node count : int"""
         self.center_x = center_x
+        """x coordinate of center : float"""
         self.center_y = center_y
+        """y coordinate of center : float"""
         self.rotation = rotation
+        """rotation (in degrees) : float"""
 
 
 class CircularShape:
@@ -43,10 +56,15 @@ class CircularShape:
     def __init__(self, diameter, node_count, center_x, center_y, rotation):
         """Initialize the shape properties."""
         self.diameter = diameter
+        """diameter : float"""
         self.node_count = node_count
+        """node count : int"""
         self.center_x = center_x
+        """x coordinate of center : float"""
         self.center_y = center_y
+        """y coordinate of center : float"""
         self.rotation = rotation
+        """rotation (in degrees) : float"""
 
 
 class PCBShape:
