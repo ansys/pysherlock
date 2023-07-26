@@ -1,0 +1,13 @@
+Checklist:
+- [] Run unit tests and make sure they all pass
+- [] Check and fix style errors
+		- pre-commit command line check
+		- Problems tab in PyCharm
+- [] Bench test new/modified APIs by using and modifying the code in the example for the API method
+- [] Add new methods to rst file for updated API script(<pysherlock>\doc\source\api)
+- [] Generate documentation
+- [] Verify the HTML. It gets generated at: <pysherlock>\doc\build\html.
+		- Open index.html
+		- Click on "API Reference" at the top.
+		- Verify HTML for API changes.
+- [] Check that test code coverage is at least 80% when Sherlock is running and can be connected to using gRPC
