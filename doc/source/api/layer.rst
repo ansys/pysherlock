@@ -12,3 +12,4 @@ The ``layer`` module contains all layer management capabilities.
      :toctree: _autosummary
 
      ansys.sherlock.core.layer.Layer.update_mount_points_by_file
+     ansys.sherlock.core.layer.Layer.add_potting_region
