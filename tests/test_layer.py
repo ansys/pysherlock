@@ -9,6 +9,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateMountPointsByFileError,
 )
 from ansys.sherlock.core.layer import Layer
+from ansys.sherlock.core.types.layer_types import PCBShape, PolygonalShape
 
 
 def test_all():
@@ -24,6 +25,7 @@ def test_all():
 def helper_test_add_potting_region(layer):
     """Test add_potting_region API."""
     try:
+        shape = PCBShape()
         layer.add_potting_region(
             "",
             [
@@ -35,7 +37,7 @@ def helper_test_add_potting_region(layer):
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {"shape_type": "pcb"},
+                    "shape": shape,
                 },
             ],
         )
@@ -65,6 +67,7 @@ def helper_test_add_potting_region(layer):
         )
 
     try:
+        shape = PCBShape()
         layer.add_potting_region(
             "Test",
             [
@@ -75,7 +78,7 @@ def helper_test_add_potting_region(layer):
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {"shape_type": "pcb"},
+                    "shape": shape,
                 },
             ],
         )
@@ -84,6 +87,7 @@ def helper_test_add_potting_region(layer):
         assert str(e) == "Add potting region error: CCA name is missing for potting region 0."
 
     try:
+        shape = PCBShape()
         layer.add_potting_region(
             "Test",
             [
@@ -95,7 +99,7 @@ def helper_test_add_potting_region(layer):
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {"shape_type": "pcb"},
+                    "shape": shape,
                 },
             ],
         )
@@ -143,6 +147,7 @@ def helper_test_add_potting_region(layer):
         assert str(e) == "Add potting region error: Shape invalid for potting region 0."
 
     try:
+        shape = PolygonalShape(points="INVALID", rotation=123.4)
         layer.add_potting_region(
             "Test",
             [
@@ -154,47 +159,7 @@ def helper_test_add_potting_region(layer):
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {},
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when shape doesn't contain shape type.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Shape type missing for potting region 0."
-
-    try:
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": {"shape_type": "INVALID"},
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when shape type is invalid.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Shape type invalid for potting region 0."
-
-    try:
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": {"shape_type": "POLYGONAL", "points": "INVALID"},
+                    "shape": shape,
                 },
             ],
         )
@@ -203,6 +168,7 @@ def helper_test_add_potting_region(layer):
         assert str(e) == "Add potting region error: Invalid points argument for potting region 0."
 
     try:
+        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), "INVALID"], rotation=123.4)
         layer.add_potting_region(
             "Test",
             [
@@ -214,7 +180,7 @@ def helper_test_add_potting_region(layer):
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {"shape_type": "POLYGONAL", "points": [(1, 2), (4.4, 5.5), "INVALID"]},
+                    "shape": shape,
                 },
             ],
         )
@@ -223,6 +189,7 @@ def helper_test_add_potting_region(layer):
         assert str(e) == "Add potting region error: Point 2 invalid for potting region 0."
 
     try:
+        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5, 10), (1, 6)], rotation=123.4)
         layer.add_potting_region(
             "Test",
             [
@@ -234,10 +201,7 @@ def helper_test_add_potting_region(layer):
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {
-                        "shape_type": "POLYGONAL",
-                        "points": [(1, 2), (4.4, 5.5, 9.9), (4.4, 5.5)],
-                    },
+                    "shape": shape,
                 },
             ],
         )
@@ -248,24 +212,21 @@ def helper_test_add_potting_region(layer):
     if not layer._is_connection_up():
         return
 
-    potting_id1 = f"Test Region {uuid.uuid4()}"
     try:
+        potting_id = f"Test Region {uuid.uuid4()}"
+        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=123.4)
         layer.add_potting_region(
             "Tutorial Project",
             [
                 {
                     "cca_name": "Main Board",
-                    "potting_id": potting_id1,
+                    "potting_id": potting_id,
                     "side": "INVALID",
                     "material": "epoxyencapsulant",
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {
-                        "shape_type": "POLYGONAL",
-                        "points": [(1, 2), (4.4, 5.5), (10, 5.5)],
-                        "rotation": 16.7,
-                    },
+                    "shape": shape,
                 },
             ],
         )
@@ -273,24 +234,21 @@ def helper_test_add_potting_region(layer):
     except Exception as e:
         assert type(e) == SherlockAddPottingRegionError
 
-    potting_id2 = f"Test Region {uuid.uuid4()}"
     try:
+        potting_id = f"Test Region {uuid.uuid4()}"
+        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=123.4)
         result = layer.add_potting_region(
             "Tutorial Project",
             [
                 {
                     "cca_name": "Main Board",
-                    "potting_id": potting_id2,
+                    "potting_id": potting_id,
                     "side": "TOP",
                     "material": "epoxyencapsulant",
                     "potting_units": "in",
                     "thickness": 0.1,
                     "standoff": 0.2,
-                    "shape": {
-                        "shape_type": "POLYGONAL",
-                        "points": [(1, 2), (4.4, 5.5), (10, 5.5)],
-                        "rotation": 16.7,
-                    },
+                    "shape": shape,
                 },
             ],
         )
