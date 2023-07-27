@@ -168,7 +168,8 @@ def helper_test_add_potting_region(layer):
         assert str(e) == "Add potting region error: Invalid points argument for potting region 0."
 
     try:
-        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), "INVALID"], rotation=123.4)
+        invalid_point = "INVALID"
+        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), invalid_point], rotation=123.4)
         layer.add_potting_region(
             "Test",
             [
@@ -189,7 +190,8 @@ def helper_test_add_potting_region(layer):
         assert str(e) == "Add potting region error: Point 2 invalid for potting region 0."
 
     try:
-        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5, 10), (1, 6)], rotation=123.4)
+        invalid_point = (4.4, 5.5, 10)
+        shape = PolygonalShape(points=[(1, 2), invalid_point, (1, 6)], rotation=123.4)
         layer.add_potting_region(
             "Test",
             [
