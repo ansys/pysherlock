@@ -834,7 +834,7 @@ class SherlockUpdateSolderFatiguePropsError(Exception):
         return f"Update solder fatigue properties error: {self.message}"
 
 class SherlockAddProjectError(Exception):
-    """Contains the error raised when properties for adding a project are incorrect"""
+    """Contains the error raised when properties for adding a project are incorrect."""
     def __init__(self, message):
         """Initialize error message."""
         self.message = message
