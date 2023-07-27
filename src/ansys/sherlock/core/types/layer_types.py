@@ -9,7 +9,7 @@ class PolygonalShape:
     def __init__(self, points, rotation):
         """Initialize the shape properties."""
         self.points = points
-        """points (length 2 tuples) : list"""
+        """points (length two tuples of the form (x, y)) : list[tuple[float, float]]"""
         self.rotation = rotation
         """rotation (in degrees) : float"""
 
