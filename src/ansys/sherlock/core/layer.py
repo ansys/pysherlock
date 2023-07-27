@@ -182,13 +182,13 @@ class Layer(GrpcStub):
                 elif isinstance(shape, SlotShape):
                     region_request.slotShape.length = shape.length
                     region_request.slotShape.width = shape.width
-                    region_request.slotShape.nodeCount = int(shape.node_count)
+                    region_request.slotShape.nodeCount = shape.node_count
                     region_request.slotShape.centerX = shape.center_x
                     region_request.slotShape.centerY = shape.center_y
                     region_request.slotShape.rotation = shape.rotation
                 elif isinstance(shape, CircularShape):
                     region_request.circularShape.diameter = shape.diameter
-                    region_request.circularShape.nodeCount = int(shape.node_count)
+                    region_request.circularShape.nodeCount = shape.node_count
                     region_request.circularShape.centerX = shape.center_x
                     region_request.circularShape.centerY = shape.center_y
                     region_request.circularShape.rotation = shape.rotation
