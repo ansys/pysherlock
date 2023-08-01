@@ -691,7 +691,6 @@ class Project(GrpcStub):
 
         Returns
         -------
-        ReturnCode
         int
             0 for success otherwise error
 
@@ -700,9 +699,9 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> code = sherlock.project.add_project(
-            "project_name",
-            "project_category",
-            "project_description")
+            "project name example",
+            "project category example",
+            "project description example")
         """
         if project_name is None or project_name == "":
             raise SherlockAddProjectError("Project name cannot be blank")
@@ -717,7 +716,7 @@ class Project(GrpcStub):
 
         return_code = self.stub.addProject(request)
 
-        if return_code.value != 0:
+        if return_code.value == -1:
             raise SherlockAddProjectError(return_code.message)
 
         return return_code.value

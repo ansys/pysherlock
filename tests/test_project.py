@@ -584,7 +584,7 @@ def helper_test_add_project(project):
     if project._is_connection_up():
         try:
             project.add_project("Tutorial Project", "", "")
-            pytest.fail("No exception raised when creating a duplicate test")
+            pytest.fail("No exception raised when creating a duplicate project")
         except Exception as e:
             assert type(e) == SherlockAddProjectError
 
@@ -592,7 +592,7 @@ def helper_test_add_project(project):
             return_code = project.add_project(PROJECT_ADD_NAME, "", "")
             assert return_code == 0
             # Fix issue where api does not finish before returning
-            time.sleep(5)
+            time.sleep(1)
             return PROJECT_ADD_NAME
         except SherlockAddProjectError as e:
             pytest.fail(str(e))
