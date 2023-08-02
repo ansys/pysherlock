@@ -18,3 +18,4 @@ The ``project`` module contains all project management capabilities.
      ansys.sherlock.core.project.Project.import_ipc2581_archive
      ansys.sherlock.core.project.Project.list_ccas
      ansys.sherlock.core.project.Project.list_strain_maps
+     ansys.sherlock.core.project.Project.add_project

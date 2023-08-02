@@ -13,6 +13,7 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddCCAError,
+    SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockDeleteProjectError,
     SherlockGenerateProjectReportError,
@@ -675,3 +676,47 @@ class Project(GrpcStub):
             raise e
 
         return response.ccaStrainMaps
+
+    def add_project(self, project_name: str, project_category: str, project_description: str):
+        """Add a sherlock project to sherlock.
+
+        Parameters
+        ----------
+        project_name: str
+            Name of the Sherlock project.
+        project_category: str
+            Category of the Sherlock project
+        project_description: str
+            Description of the Sherlock project
+
+        Returns
+        -------
+        int
+            0 for success otherwise error
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> code = sherlock.project.add_project(
+            "project name example",
+            "project category example",
+            "project description example")
+        """
+        if project_name is None or project_name == "":
+            raise SherlockAddProjectError("Project name cannot be blank")
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        request = SherlockProjectService_pb2.AddProjectRequest(
+            project=project_name, category=project_category, description=project_description
+        )
+
+        return_code = self.stub.addProject(request)
+
+        if return_code.value == -1:
+            raise SherlockAddProjectError(return_code.message)
+
+        return return_code.value

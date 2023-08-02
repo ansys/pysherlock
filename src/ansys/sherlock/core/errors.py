@@ -834,6 +834,18 @@ class SherlockUpdateSolderFatiguePropsError(Exception):
         return f"Update solder fatigue properties error: {self.message}"
 
 
+class SherlockAddProjectError(Exception):
+    """Contains the error raised when Project cannot be added."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Add project error: {self.message}"
+
+
 class SherlockAddCCAError(Exception):
     """Contains the error raised when CCA cannot be added."""
 
