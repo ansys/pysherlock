@@ -1468,7 +1468,7 @@ def helper_test_update_part_modeling_props(analysis):
                 "part_results_filtered": True,
             },
         )
-        pytest.fail("No exception raised when part enabled and missing part results filtered.")
+        pytest.fail("No exception raised when using an invalid parameter.")
     except Exception as e:
         assert type(e) == SherlockUpdatePartModelingPropsError
 
