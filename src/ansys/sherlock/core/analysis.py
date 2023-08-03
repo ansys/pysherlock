@@ -1109,8 +1109,8 @@ class Analysis(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock.project.import_odb_archive(
         >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
                 "ODB++ Tutorial.tgz",
                 True,
                 True,
@@ -1292,7 +1292,7 @@ class Analysis(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
-        >>> analysis.run_strain_map_analysis(
+        >>> sherlock.analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
                 [[
