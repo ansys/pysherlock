@@ -1546,7 +1546,7 @@ class Analysis(GrpcStub):
                 Part max edge length units.
             - part_max_vertical : float, optional
                 Part max vertical.
-            - part_max_vertical_units : bool, optional
+            - part_max_vertical_units : str, optional
                 Part max vertical units.
             - part_results_filtered : bool, optional
                 Whether to enable filtered part results.
