@@ -1516,3 +1516,72 @@ class Analysis(GrpcStub):
         except SherlockUpdatePcbModelingPropsError as e:
             LOG.error(str(e))
             raise e
+
+    def update_part_modeling_props(self, project, part_modeling_props):
+        """Update part modeling properties for a given project's CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        part_modeling_props : dict
+            Dict of part modeling properties for a CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - part_enabled : bool
+                Whether to enable part modeling. All other fields are ignored if disabled.
+            - part_min_size : float, optional
+                Minimum part size.
+            - part_min_size_units : str, optional
+                Minimum part size units.
+            - part_elem_order : str, optional
+                Part element order.
+                Options are ``"First Order (Linear)"``, ``"Second Order (Quadratic)"``,
+                or ``"Solid Shell"``.
+            - part_max_edge_length : float, optional
+                Part max edge length.
+            - part_max_edge_length_units : str, optional
+                Part max edge length units.
+            - part_max_vertical : float, optional
+                Part max vertical.
+            - part_max_vertical_units : bool, optional
+                Part max vertical units.
+            - part_results_filtered : bool, optional
+                Whether to enable filtered part results.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_part_modeling_props(
+            "Test",
+            {
+                'cca_name': 'Card',
+                'part_enabled': True,
+                'part_min_size': 1,
+                'part_min_size_units': 'in',
+                'part_elem_order': 'First Order (Linear)',
+                'part_max_edge_length': 1,
+                'part_max_edge_length_units': 'in',
+                'part_max_vertical': 1,
+                'part_max_vertical': 'in',
+                'part_results_filtered': True
+            }
+        )
+
+        """
