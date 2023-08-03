@@ -1628,7 +1628,7 @@ class Analysis(GrpcStub):
                 if "part_results_filtered" in part_modeling_props.keys():
                     request.partResultsFiltered = part_modeling_props["part_results_filtered"]
 
-        except SherlockUpdateSolderFatiguePropsError as e:
+        except SherlockUpdatePartModelingPropsError as e:
             LOG.error(str(e))
             raise e
 

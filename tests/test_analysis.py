@@ -1383,6 +1383,26 @@ def helper_test_update_part_modeling_props(analysis):
         assert str(e) == "Update part modeling props error: Project name is invalid."
 
     try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
+                "cca_name": "",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when cca name is the empty string.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: CCA name is invalid."
+
+    try:
         analysis.update_part_modeling_props("Test", "INVALID")
         pytest.fail("No exception thrown when part modeling props is incorrect type.")
     except SherlockUpdatePartModelingPropsError as e:
@@ -1440,11 +1460,12 @@ def helper_test_update_part_modeling_props(analysis):
                 "part_enabled": True,
                 "part_min_size": 1,
                 "part_min_size_units": "in",
-                "part_elem_order": "First Order (Linear)",
+                "part_elem_order": "INVALID",
                 "part_max_edge_length": 1,
                 "part_max_edge_length_units": "in",
                 "part_max_vertical": 1,
                 "part_max_vertical_units": "in",
+                "part_results_filtered": True,
             },
         )
         pytest.fail("No exception raised when part enabled and missing part results filtered.")
@@ -1459,11 +1480,11 @@ def helper_test_update_part_modeling_props(analysis):
                 "part_enabled": False,
                 "part_min_size": 1,
                 "part_min_size_units": "in",
-                "part_elem_order": "First Order (Linear)",
                 "part_max_edge_length": 1,
                 "part_max_edge_length_units": "in",
                 "part_max_vertical": 1,
                 "part_max_vertical_units": "in",
+                "part_results_filtered": True,
             },
         )
         assert result == 0
