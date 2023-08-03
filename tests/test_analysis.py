@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateHarmonicVibePropsError,
     SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePartModelingPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
     SherlockUpdateSolderFatiguePropsError,
@@ -51,6 +52,7 @@ def test_all():
     helper_test_get_natural_frequency_input_fields(analysis)
     helper_test_update_natural_frequency_props(analysis)
     helper_test_update_pcb_modeling_props(analysis)
+    helper_test_update_part_modeling_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -1357,6 +1359,116 @@ def helper_test_update_pcb_modeling_props(analysis):
             assert result4 == 0
         except SherlockUpdatePcbModelingPropsError as e:
             assert pytest.fail(e.message)
+
+
+def helper_test_update_part_modeling_props(analysis):
+    try:
+        analysis.update_part_modeling_props(
+            "",
+            {
+                "cca_name": "Card",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when project is the empty string.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: Project name is invalid."
+
+    try:
+        analysis.update_part_modeling_props("Test", "INVALID")
+        pytest.fail("No exception thrown when part modeling props is incorrect type.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert (
+            str(e) == "Update part modeling props error: "
+            "Part modeling props argument is invalid."
+        )
+
+    try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when CCA name is missing.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: CCA name is missing."
+
+    try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
+                "cca_name": "Card",
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when part enabled is missing.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: Part enabled is missing."
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_part_modeling_props(
+            "Tutorial Project",
+            {
+                "cca_name": "Main Board",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+            },
+        )
+        pytest.fail("No exception raised when part enabled and missing part results filtered.")
+    except Exception as e:
+        assert type(e) == SherlockUpdatePartModelingPropsError
+
+    try:
+        result = analysis.update_part_modeling_props(
+            "Tutorial Project",
+            {
+                "cca_name": "Main Board",
+                "part_enabled": False,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+            },
+        )
+        assert result == 0
+    except SherlockUpdatePartModelingPropsError as e:
+        pytest.fail(str(e))
 
 
 if __name__ == "__main__":
