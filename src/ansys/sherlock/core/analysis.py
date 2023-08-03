@@ -1580,7 +1580,7 @@ class Analysis(GrpcStub):
                 'part_max_edge_length': 1,
                 'part_max_edge_length_units': 'in',
                 'part_max_vertical': 1,
-                'part_max_vertical': 'in',
+                'part_max_vertical_units': 'in',
                 'part_results_filtered': True
             }
         )
@@ -1588,11 +1588,11 @@ class Analysis(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockUpdatePartModelingPropsError(message="Project name is invalid")
+                raise SherlockUpdatePartModelingPropsError(message="Project name is invalid.")
 
             if not isinstance(part_modeling_props, dict):
                 raise SherlockUpdatePartModelingPropsError(
-                    message="Part modeling props argument is invalid"
+                    message="Part modeling props argument is invalid."
                 )
 
             if "cca_name" not in part_modeling_props.keys():
