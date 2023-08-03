@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateHarmonicVibePropsError,
     SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePartModelingPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
     SherlockUpdateSolderFatiguePropsError,
@@ -1585,3 +1586,64 @@ class Analysis(GrpcStub):
         )
 
         """
+        try:
+            if project == "":
+                raise SherlockUpdatePartModelingPropsError(message="Project name is invalid")
+
+            if not isinstance(part_modeling_props, dict):
+                raise SherlockUpdatePartModelingPropsError(
+                    message="Part modeling props argument is invalid"
+                )
+
+            if "cca_name" not in part_modeling_props.keys():
+                raise SherlockUpdatePartModelingPropsError(message="CCA name is missing.")
+            if "part_enabled" not in part_modeling_props.keys():
+                raise SherlockUpdatePartModelingPropsError(message="Part enabled is missing.")
+
+            request = SherlockAnalysisService_pb2.UpdatePartModelingRequest(project=project)
+            request.ccaName = part_modeling_props["cca_name"]
+
+            if request.ccaName == "":
+                raise SherlockUpdatePartModelingPropsError(message="CCA name is invalid.")
+
+            request.partEnabled = part_modeling_props["part_enabled"]
+
+            if request.partEnabled:
+                if "part_min_size" in part_modeling_props.keys():
+                    request.partMinSize = part_modeling_props["part_min_size"]
+                if "part_min_size_units" in part_modeling_props.keys():
+                    request.partMinSizeUnits = part_modeling_props["part_min_size_units"]
+                if "part_elem_order" in part_modeling_props.keys():
+                    request.partElemOrder = part_modeling_props["part_elem_order"]
+                if "part_max_edge_length" in part_modeling_props.keys():
+                    request.partMaxEdgeLength = part_modeling_props["part_max_edge_length"]
+                if "part_max_edge_length_units" in part_modeling_props.keys():
+                    request.partMaxEdgeLengthUnits = part_modeling_props[
+                        "part_max_edge_length_units"
+                    ]
+                if "part_max_vertical" in part_modeling_props.keys():
+                    request.partMaxVertical = part_modeling_props["part_max_vertical"]
+                if "part_max_vertical_units" in part_modeling_props.keys():
+                    request.partMaxVerticalUnits = part_modeling_props["part_max_vertical_units"]
+                if "part_results_filtered" in part_modeling_props.keys():
+                    request.partResultsFiltered = part_modeling_props["part_results_filtered"]
+
+        except SherlockUpdateSolderFatiguePropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updatePartModelingProperties(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdatePartModelingPropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdatePartModelingPropsError as e:
+            LOG.error(str(e))
+            raise e

@@ -868,3 +868,15 @@ class SherlockAddPottingRegionError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Add potting region error: {self.message}"
+
+
+class SherlockUpdatePartModelingPropsError(Exception):
+    """Contains the error raised when part modeling properties cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update part modeling props error: {self.message}"
