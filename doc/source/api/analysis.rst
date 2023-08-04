@@ -19,6 +19,7 @@ The ``analysis`` module contains all analysis capabilities.
      ansys.sherlock.core.analysis.Analysis.update_harmonic_vibe_props
      ansys.sherlock.core.analysis.Analysis.update_mechanical_shock_props
      ansys.sherlock.core.analysis.Analysis.update_natural_frequency_props
+     ansys.sherlock.core.analysis.Analysis.update_part_modeling_props
      ansys.sherlock.core.analysis.Analysis.update_pcb_modeling_props
      ansys.sherlock.core.analysis.Analysis.update_random_vibe_props
      ansys.sherlock.core.analysis.Analysis.update_solder_fatigue_props

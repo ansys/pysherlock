@@ -524,7 +524,7 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> project.add_strain_maps("Tutorial Project",
+        >>> sherlock.project.add_strain_maps("Tutorial Project",
             [("StrainMap.csv",
             "This is the strain map file for the project",
             0,
@@ -641,7 +641,10 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> strain_maps = project.list_strain_maps("AssemblyTutorial",["Main Board","Power Module"])
+        >>> strain_maps = sherlock.project.list_strain_maps(
+            "AssemblyTutorial",
+            ["Main Board","Power Module"]
+        )
         """
         try:
             if project == "":

@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateHarmonicVibePropsError,
     SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePartModelingPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
     SherlockUpdateSolderFatiguePropsError,
@@ -1108,8 +1109,8 @@ class Analysis(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock.project.import_odb_archive(
         >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
                 "ODB++ Tutorial.tgz",
                 True,
                 True,
@@ -1291,7 +1292,7 @@ class Analysis(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
-        >>> analysis.run_strain_map_analysis(
+        >>> sherlock.analysis.run_strain_map_analysis(
                 "AssemblyTutorial",
                 "Main Board",
                 [[
@@ -1514,5 +1515,135 @@ class Analysis(GrpcStub):
                 raise SherlockUpdatePcbModelingPropsError(response.message)
             return response.value
         except SherlockUpdatePcbModelingPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+    def update_part_modeling_props(self, project, part_modeling_props):
+        """Update part modeling properties for a given project's CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        part_modeling_props : dict
+            Dict of part modeling properties for a CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - part_enabled : bool
+                Whether to enable part modeling. All other fields are ignored if disabled.
+            - part_min_size : float, optional
+                Minimum part size.
+            - part_min_size_units : str, optional
+                Minimum part size units.
+            - part_elem_order : str, optional
+                Part element order.
+                Options are ``"First Order (Linear)"``, ``"Second Order (Quadratic)"``,
+                or ``"Solid Shell"``.
+            - part_max_edge_length : float, optional
+                Part max edge length.
+            - part_max_edge_length_units : str, optional
+                Part max edge length units.
+            - part_max_vertical : float, optional
+                Part max vertical.
+            - part_max_vertical_units : str, optional
+                Part max vertical units.
+            - part_results_filtered : bool, optional
+                Whether to enable filtered part results.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_part_modeling_props(
+            "Test",
+            {
+                'cca_name': 'Card',
+                'part_enabled': True,
+                'part_min_size': 1,
+                'part_min_size_units': 'in',
+                'part_elem_order': 'First Order (Linear)',
+                'part_max_edge_length': 1,
+                'part_max_edge_length_units': 'in',
+                'part_max_vertical': 1,
+                'part_max_vertical_units': 'in',
+                'part_results_filtered': True
+            }
+        )
+
+        """
+        try:
+            if project == "":
+                raise SherlockUpdatePartModelingPropsError(message="Project name is invalid.")
+
+            if not isinstance(part_modeling_props, dict):
+                raise SherlockUpdatePartModelingPropsError(
+                    message="Part modeling props argument is invalid."
+                )
+
+            if "cca_name" not in part_modeling_props.keys():
+                raise SherlockUpdatePartModelingPropsError(message="CCA name is missing.")
+            if "part_enabled" not in part_modeling_props.keys():
+                raise SherlockUpdatePartModelingPropsError(message="Part enabled is missing.")
+
+            request = SherlockAnalysisService_pb2.UpdatePartModelingRequest(project=project)
+            request.ccaName = part_modeling_props["cca_name"]
+
+            if request.ccaName == "":
+                raise SherlockUpdatePartModelingPropsError(message="CCA name is invalid.")
+
+            request.partEnabled = part_modeling_props["part_enabled"]
+
+            if request.partEnabled:
+                if "part_min_size" in part_modeling_props.keys():
+                    request.partMinSize = part_modeling_props["part_min_size"]
+                if "part_min_size_units" in part_modeling_props.keys():
+                    request.partMinSizeUnits = part_modeling_props["part_min_size_units"]
+                if "part_elem_order" in part_modeling_props.keys():
+                    request.partElemOrder = part_modeling_props["part_elem_order"]
+                if "part_max_edge_length" in part_modeling_props.keys():
+                    request.partMaxEdgeLength = part_modeling_props["part_max_edge_length"]
+                if "part_max_edge_length_units" in part_modeling_props.keys():
+                    request.partMaxEdgeLengthUnits = part_modeling_props[
+                        "part_max_edge_length_units"
+                    ]
+                if "part_max_vertical" in part_modeling_props.keys():
+                    request.partMaxVertical = part_modeling_props["part_max_vertical"]
+                if "part_max_vertical_units" in part_modeling_props.keys():
+                    request.partMaxVerticalUnits = part_modeling_props["part_max_vertical_units"]
+                if "part_results_filtered" in part_modeling_props.keys():
+                    request.partResultsFiltered = part_modeling_props["part_results_filtered"]
+
+        except SherlockUpdatePartModelingPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updatePartModelingProperties(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdatePartModelingPropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdatePartModelingPropsError as e:
             LOG.error(str(e))
             raise e
