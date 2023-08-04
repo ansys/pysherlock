@@ -1478,13 +1478,6 @@ def helper_test_update_part_modeling_props(analysis):
             {
                 "cca_name": "Main Board",
                 "part_enabled": False,
-                "part_min_size": 1,
-                "part_min_size_units": "in",
-                "part_max_edge_length": 1,
-                "part_max_edge_length_units": "in",
-                "part_max_vertical": 1,
-                "part_max_vertical_units": "in",
-                "part_results_filtered": True,
             },
         )
         assert result == 0
