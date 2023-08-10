@@ -1265,7 +1265,7 @@ class Analysis(GrpcStub):
         strain_map_analyses : list
             List of analyses consisting of these properties:
 
-            - analysis_type : RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
+            - analysis_type : RunStrainMapAnalysisRequestAnalysisType
                 Type of analysis to run.
             - event_strain_maps : list
                 List of the strain maps assigned to the desired life cycle events for
@@ -1296,7 +1296,7 @@ class Analysis(GrpcStub):
                 "AssemblyTutorial",
                 "Main Board",
                 [[
-                    analysis_request.StrainMapAnalysis.AnalysisType.RandomVibe,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                      ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
                      ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
