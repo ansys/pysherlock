@@ -26,6 +26,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.stackup_types import StackupProperties
 
 
 class Stackup(GrpcStub):
@@ -120,65 +121,8 @@ class Stackup(GrpcStub):
                 else:
                     raise SherlockInvalidMaterialError("Laminate grade is invalid.")
 
-    def _check_thickness(self, thickness, thickness_unit, spec=None):
-        """Check thickness arguments to see if they are valid."""
-        if thickness < 0:
-            if spec is not None:
-                raise SherlockInvalidThicknessArgumentError(
-                    message=f"{str(spec).capitalize()} thickness is invalid."
-                )
-
-            raise SherlockInvalidThicknessArgumentError(message="Thickness is invalid.")
-        if thickness > 0:
-            if spec == "conductor" or spec == "power":
-                if thickness_unit == "oz":
-                    return
-            if (self.LAMINATE_THICKNESS_UNIT_LIST is not None) and (
-                thickness_unit not in self.LAMINATE_THICKNESS_UNIT_LIST
-            ):
-                if spec is not None:
-                    raise SherlockInvalidThicknessArgumentError(
-                        message=f"{str(spec).capitalize()} thickness units are invalid."
-                    )
-
-                raise SherlockInvalidThicknessArgumentError(message="Thickness units are invalid.")
-
-    def _check_layer_id(self, layerid, spec=None):
-        """Check layer argument to see if it is valid."""
-        if layerid == "":
-            if spec is not None:
-                raise SherlockInvalidLayerIDError(message=f"Layer ID {spec} is missing.")
-
-            raise SherlockInvalidLayerIDError(message="Layer ID is missing.")
-
-        try:
-            id = int(layerid)
-            if id < 0:
-                raise SherlockInvalidLayerIDError(
-                    message="Layer ID is invalid. It must be an integer greater than 0."
-                )
-        except ValueError:
-            raise SherlockInvalidLayerIDError(
-                message="Layer ID is invalid. It must be an integer greater than 0."
-            )
-
-    def _check_conductor_percent(self, input):
-        """Check input string to see if it is a valid conductor percent."""
-        if input == "":
-            return
-
-        try:
-            percent = float(input)
-            if percent < 0 or percent > 100:
-                raise SherlockInvalidConductorPercentError(
-                    message="Conductor percent is invalid. It must be between 0 and 100."
-                )
-        except ValueError:
-            raise SherlockInvalidConductorPercentError(
-                message="Conductor percent is invalid. It must be between 0 and 100."
-            )
-
-    def _check_glass_construction_validity(self, input):
+    @staticmethod
+    def _check_glass_construction_validity(input):
         """Check input to see if it is a valid glass construction argument."""
         if not isinstance(input, list):
             raise SherlockInvalidGlassConstructionError(
@@ -191,7 +135,6 @@ class Stackup(GrpcStub):
                     raise SherlockInvalidGlassConstructionError(
                         message=f"Invalid layer {i}: Number of elements is wrong."
                     )
-                self._check_thickness(layer[2], layer[3])
         except SherlockInvalidThicknessArgumentError as e:
             raise SherlockInvalidGlassConstructionError(message=f"Invalid layer {i}: {str(e)}")
 
@@ -230,7 +173,7 @@ class Stackup(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        board_thickness : double
+        board_thickness : float
             Board thickness.
         board_thickness_unit : str
             Units for the board thickness.
@@ -242,20 +185,25 @@ class Stackup(GrpcStub):
             Material for the PCB.
         conductor_layers_cnt : int32
             Number of conductor layers.
-        signal_layer_thickness : double
+        signal_layer_thickness : float
             Signal layer thickness.
         signal_layer_thickness_unit : str
             Units for the signal layer thickness.
-        min_laminate_thickness : double
+        min_laminate_thickness : float
             Minimum thickness of laminate layers.
         min_laminate_thickness_unit : str
             Units for the minimum thickness of laminate layers.
         maintain_symmetry : bool
             Whether to maintain symmetry.
-        power_layer_thickness : double
+        power_layer_thickness : float
             Power layer thickness.
         power_layer_thickness_unit : str
             Units for the power layer thickness.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -298,7 +246,6 @@ class Stackup(GrpcStub):
                 raise SherlockGenStackupError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockGenStackupError(message="CCA name is invalid.")
-            self._check_thickness(board_thickness, board_thickness_unit, spec="board")
             self._check_pcb_material_validity(
                 pcb_material_manufacturer, pcb_material_grade, pcb_material
             )
@@ -308,13 +255,6 @@ class Stackup(GrpcStub):
                 )
             if signal_layer_thickness < 0:
                 raise SherlockGenStackupError(message="Conductor thickness is invalid.")
-            self._check_thickness(
-                signal_layer_thickness, signal_layer_thickness_unit, spec="conductor"
-            )
-            self._check_thickness(
-                min_laminate_thickness, min_laminate_thickness_unit, spec="laminate"
-            )
-            self._check_thickness(power_layer_thickness, power_layer_thickness_unit, spec="power")
         except SherlockGenStackupError as e:
             LOG.error(str(e))
             raise e
@@ -351,7 +291,7 @@ class Stackup(GrpcStub):
                 raise SherlockGenStackupError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockGenStackupError as e:
             LOG.error(str(e))
             raise e
@@ -383,7 +323,7 @@ class Stackup(GrpcStub):
             ``"SIGNAL"``, ``"POWER"``, or ``"SUBSTRATE"``.
         material : str, optional
             Conductor material. The default is ``""``.
-        thickness : double, optional
+        thickness : float, optional
             Conductor layer thickness. The default is ``0``.
         thickness_unit : str, optional
             Units for the conductor layer thickness. The
@@ -396,6 +336,11 @@ class Stackup(GrpcStub):
         Note
         ----
         Using the default value for a property causes no changes for that property.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -432,7 +377,6 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateConductorLayerError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockUpdateConductorLayerError(message="CCA name is invalid.")
-            self._check_layer_id(layer, spec="conductor")
             if (type != "") and type not in self.LAYER_TYPE_LIST:
                 raise SherlockUpdateConductorLayerError(
                     message=(
@@ -447,8 +391,6 @@ class Stackup(GrpcStub):
                     raise SherlockUpdateConductorLayerError(
                         message="Conductor material is invalid."
                     )
-            self._check_thickness(thickness, thickness_unit, spec="conductor")
-            self._check_conductor_percent(conductor_percent)
         except SherlockUpdateConductorLayerError as e:
             LOG.error(str(e))
             raise e
@@ -483,7 +425,7 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateConductorLayerError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockUpdateConductorLayerError as e:
             LOG.error(str(e))
             raise e
@@ -525,7 +467,7 @@ class Stackup(GrpcStub):
             Material grade. The default is ``""``.
         material : str, optional
             Material name. The default is ``""``.
-        thickness : double, optional
+        thickness : float, optional
             Laminate thickness. The default is ``0``.
         thickness_unit : str, optional
             Units for the laminate thickness. The default is ``""``.
@@ -537,9 +479,9 @@ class Stackup(GrpcStub):
 
            - style : str
                Style of the glass construction.
-           - resinPercentage : double
+           - resinPercentage : float
                Resin percentage.
-           - thickness: double
+           - thickness: float
                Thickness.
            - thicknessUnit: str
                Units for the thickness.
@@ -555,6 +497,11 @@ class Stackup(GrpcStub):
         Note
         ----
         Using the default value for a property causes no changes for that property.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Example
         -------
@@ -603,10 +550,8 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateLaminateLayerError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockUpdateLaminateLayerError(message="CCA name is invalid.")
-            self._check_layer_id(layer, spec="laminate")
             if manufacturer != "":
                 self._check_pcb_material_validity(manufacturer, grade, material)
-            self._check_thickness(thickness, thickness_unit, spec="laminate")
             if construction_style != "":
                 if (self.CONSTRUCTION_STYLE_LIST is not None) and (
                     construction_style not in self.CONSTRUCTION_STYLE_LIST
@@ -623,7 +568,6 @@ class Stackup(GrpcStub):
                     conductor_material not in self.CONDUCTOR_MATERIAL_LIST
                 ):
                     raise SherlockUpdateLaminateLayerError(message="Conductor material is invalid.")
-            self._check_conductor_percent(conductor_percent)
         except SherlockUpdateLaminateLayerError as e:
             LOG.error(str(e))
             raise e
@@ -665,7 +609,7 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateLaminateLayerError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockUpdateLaminateLayerError as e:
             LOG.error(str(e))
             raise e
@@ -677,6 +621,11 @@ class Stackup(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
+
+        Returns
+        -------
+        list
+            The conductor layers of all CCAs in the project.
 
         Example
         -------
@@ -712,8 +661,10 @@ class Stackup(GrpcStub):
 
             request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
             response = self.stub.listConductorLayers(request)
-            layers = response.ccaConductorLayerProps
-            return layers
+            if response.returnCode.value == -1:
+                raise SherlockListConductorLayersError(response.returnCode.message)
+
+            return response.ccaConductorLayerProps
 
         except SherlockListConductorLayersError as e:
             LOG.error(str(e))
@@ -726,6 +677,11 @@ class Stackup(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
+
+        Returns
+        -------
+        list
+            The laminate layers of all CCAs in the project.
 
         Example
         -------
@@ -766,8 +722,10 @@ class Stackup(GrpcStub):
 
             request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
             response = self.stub.listLaminates(request)
-            layers = response.ccaLaminateProps
-            return layers
+            if response.returnCode.value == -1:
+                raise SherlockListLaminateLayersError(response.returnCode.message)
+
+            return response.ccaLaminateProps
 
         except SherlockListLaminateLayersError as e:
             LOG.error(str(e))
@@ -782,6 +740,11 @@ class Stackup(GrpcStub):
             Name of the Sherlock project.
         cca_name : str, required
             Name of the CCA.
+
+        Returns
+        -------
+        int
+            The number of layers of the CCA in the project.
 
         Example
         -------
@@ -814,8 +777,10 @@ class Stackup(GrpcStub):
                 project=project, ccaName=cca_name
             )
             response = self.stub.getLayerCount(request)
-            return response
+            if response.returnCode.value == -1:
+                raise SherlockGetLayerCountError(response.returnCode.message)
 
+            return response.count
         except SherlockGetLayerCountError as e:
             LOG.error(str(e))
             raise e
@@ -829,6 +794,11 @@ class Stackup(GrpcStub):
             Name of the Sherlock project.
         cca_name : str, required
             Name of the CCA.
+
+        Returns
+        -------
+        StackupProperties
+            Object containing the properties of the stackup.
 
         Example
         -------
@@ -862,7 +832,10 @@ class Stackup(GrpcStub):
                 project=project, ccaName=cca_name
             )
             response = self.stub.getStackupProps(request)
-            return response
+            if response.returnCode.value == -1:
+                raise SherlockGetLayerCountError(response.returnCode.message)
+
+            return StackupProperties(response)
         except SherlockGetStackupPropsError as e:
             LOG.error(str(e))
             raise e
@@ -878,6 +851,11 @@ class Stackup(GrpcStub):
             The CCA name.
         thickness_unit : str, optional
             Units for laminate thickness.
+
+        Returns
+        -------
+        float
+            The conductor thickness of the CCA in the specified units.
 
         Example
         -------
@@ -912,8 +890,10 @@ class Stackup(GrpcStub):
                 project=project, ccaName=cca_name, thicknessUnit=thickness_unit
             )
             response = self.stub.getTotalConductorThickness(request)
-            return response
+            if response.returnCode.value == -1:
+                raise SherlockGetTotalConductorThicknessError(response.returnCode.message)
 
+            return response.totalThickness
         except SherlockGetTotalConductorThicknessError as e:
             LOG.error(str(e))
             raise e

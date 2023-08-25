@@ -22,7 +22,14 @@ class Common(GrpcStub):
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
     def check(self):
-        """Perform a health check on the gRPC connection."""
+        """Perform a health check on the gRPC connection.
+
+        Returns
+        -------
+        bool
+            Whether the Sherlock client is connected via gRPC.
+
+        """
         if not self._is_connection_up():
             LOG.error("Health check failed.")
             return False
@@ -31,7 +38,14 @@ class Common(GrpcStub):
             return True
 
     def is_sherlock_client_loading(self):
-        """Check if the Sherlock client is opened and still initializing."""
+        """Check if the Sherlock client is opened and done initializing.
+
+        Returns
+        -------
+        bool
+            Whether the Sherlock client is opened and done initializing.
+
+        """
         if not self._is_connection_up():
             LOG.error("There is no connection to a gRPC service.")
             return
@@ -99,3 +113,26 @@ class Common(GrpcStub):
             raise e
 
         return response.units
+
+    def list_solder_materials(self):
+        """List valid solders.
+
+        Returns
+        -------
+        list
+            List of valid solder names.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.common.list_solder_materials()
+        """
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            return
+
+        request = SherlockCommonService_pb2.GetSoldersRequest()
+        response = self.stub.getSolders(request)
+
+        return response.solderName

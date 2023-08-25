@@ -9,15 +9,36 @@ except ModuleNotFoundError:
 
 
 class UpdatesPartsListRequestMatchingMode:
-    """Values for Matching Mode in the Update Parts List request."""
+    """Constants for Matching Mode in the Update Parts List request."""
 
     BOTH = SherlockPartsService_pb2.UpdatePartsListRequest.MatchingMode.Both
     PART = SherlockPartsService_pb2.UpdatePartsListRequest.MatchingMode.Part
 
 
 class UpdatesPartsListRequestDuplicationMode:
-    """Values for Duplication Mode in the Update Parts List request."""
+    """Constants for Duplication Mode in the Update Parts List request."""
 
     FIRST = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.First
     ERROR = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.Error
     IGNORE = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.Ignore
+
+
+class PartLocation:
+    """Part Location property values."""
+
+    def __init__(self, location):
+        """Initialize members from the location."""
+        self.x = location.x
+        """x coordinate"""
+        self.y = location.y
+        """y coordinate"""
+        self.rotation = location.rotation
+        """rotation (in degrees)"""
+        self.location_units = location.locationUnits
+        """units for location coordinates"""
+        self.board_side = location.boardSide
+        """board side - ``"TOP"`` or ``"BOTTOM"`` """
+        self.mirrored = location.mirrored
+        """mirrored - ``True`` or ``False`` """
+        self.ref_des = location.refDes
+        """reference designator"""

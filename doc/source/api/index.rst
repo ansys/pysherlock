@@ -17,6 +17,8 @@ Use the search feature or click links to view API documentation.
    lifecycle
    model
    parts
+   layer_types
+   parts_types
    project
    stackup
 
@@ -29,5 +31,7 @@ Use the search feature or click links to view API documentation.
    ansys.sherlock.core.lifecycle
    ansys.sherlock.core.model
    ansys.sherlock.core.parts
+   ansys.sherlock.core.types.layer_types
+   ansys.sherlock.core.types.parts_types
    ansys.sherlock.core.project
    ansys.sherlock.core.stackup

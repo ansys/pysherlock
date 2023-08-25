@@ -539,17 +539,6 @@ def helper_test_get_part_location(parts):
 
     if parts._is_connection_up():
         try:
-            result = parts.get_part_location(
-                "Tutorial Project",
-                "Main Board",
-                "C1",
-                "in",
-            )
-            assert result == 0
-        except Exception as e:
-            pytest.fail(e.message)
-
-        try:
             parts.get_part_location(
                 "Tutorial Project",
                 "Invalid CCA",
@@ -559,6 +548,36 @@ def helper_test_get_part_location(parts):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockGetPartLocationError
+
+        try:
+            locations = parts.get_part_location(
+                "Tutorial Project",
+                "Main Board",
+                "C1, C3",
+                "in",
+            )
+
+            assert len(locations) == 2, "Incorrect number of locations"
+            location_c1 = locations[0]
+            assert location_c1.ref_des == "C1", "Incorrect refDes"
+            assert location_c1.x == -2.7, "Incorrect X coordinate for C1"
+            assert location_c1.y == -1.65, "Incorrect Y coordinate for C1"
+            assert location_c1.rotation == 0, "Incorrect rotation for C1"
+            assert location_c1.location_units == "in", "Incorrect location units for C1"
+            assert location_c1.board_side == "TOP", "Incorrect board side for C1"
+            assert location_c1.mirrored is False, "Incorrect mirrored for C1"
+
+            location_c3 = locations[1]
+            assert location_c3.ref_des == "C3", "Incorrect refDes"
+            assert location_c3.x == -2.4, "Incorrect X coordinate for C3"
+            assert location_c3.y == -1.9, "Incorrect Y coordinate for C3"
+            assert location_c3.rotation == 180, "Incorrect rotation for C3"
+            assert location_c3.location_units == "in", "Incorrect location units for C3"
+            assert location_c3.board_side == "TOP", "Incorrect board side for C3"
+            assert location_c3.mirrored is False, "Incorrect mirrored for C3"
+
+        except SherlockGetPartLocationError as e:
+            pytest.fail(e.message)
 
     try:
         parts.get_part_location(

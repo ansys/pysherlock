@@ -1,6 +1,11 @@
 # © 2023 ANSYS, Inc. All rights reserved
 import time
 
+try:
+    import SherlockAnalysisService_pb2
+except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+
 import grpc
 import pytest
 
@@ -9,9 +14,12 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
+    SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePartModelingPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
+    SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.types.analysis_types import (
     ElementOrder,
@@ -33,13 +41,18 @@ def test_all():
     time.sleep(1)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
+    helper_test_get_mechanical_shock_input_fields(analysis)
+    helper_test_get_solder_fatigue_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_harmonic_vibe_props(analysis)
+    helper_test_update_mechanical_shock_props(analysis)
+    helper_test_update_solder_fatigue_props(analysis)
     helper_test_update_random_vibe_props(analysis)
     helper_test_get_natural_frequency_input_fields(analysis)
     helper_test_update_natural_frequency_props(analysis)
     helper_test_update_pcb_modeling_props(analysis)
+    helper_test_update_part_modeling_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -420,8 +433,13 @@ def helper_test_run_strain_map_analysis(analysis):
 def helper_test_get_harmonic_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_harmonic_vibe_input_fields()
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
+        assert "harmonic_vibe_count" in fields
+        assert "harmonic_vibe_damping" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "model_source" not in fields
+
+        fields = analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
         assert "harmonic_vibe_count" in fields
         assert "harmonic_vibe_damping" in fields
         assert "model_source" in fields
@@ -429,18 +447,52 @@ def helper_test_get_harmonic_vibe_input_fields(analysis):
         assert "require_material_assignment_enabled" in fields
 
 
+def helper_test_get_mechanical_shock_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_mechanical_shock_input_fields()
+        assert "shock_result_count" in fields
+        assert "critical_strain_shock" in fields
+        assert "critical_strain_shock_units" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "natural_freq_min" in fields
+        assert "natural_freq_min_units" in fields
+        assert "natural_freq_max" in fields
+        assert "natural_freq_max_units" in fields
+        assert "model_source" not in fields
+
+        fields = analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
+        assert "shock_result_count" in fields
+        assert "critical_strain_shock" in fields
+        assert "critical_strain_shock_units" in fields
+        assert "model_source" in fields
+        assert "part_validation_enabled" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "natural_freq_min" in fields
+        assert "natural_freq_min_units" in fields
+        assert "natural_freq_max" in fields
+        assert "natural_freq_max_units" in fields
+
+
+def helper_test_get_solder_fatigue_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_solder_fatigue_input_fields()
+        assert "solder_material" in fields
+        assert "part_temp" in fields
+        assert "part_temp_units" in fields
+        assert "use_part_temp_rise_min" in fields
+        assert "part_validation_enabled" in fields
+
+
 def helper_test_get_random_vibe_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_random_vibe_input_fields()
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
         assert "part_validation_enabled" in fields
         assert "random_vibe_damping" in fields
         assert "require_material_assignment_enabled" in fields
+        assert "model_source" not in fields
 
         fields = analysis.get_random_vibe_input_fields(ModelSource.GENERATED)
-        assert "analysis_temp" in fields
-        assert "analysis_temp_units" in fields
         assert "model_source" in fields
         assert "part_validation_enabled" in fields
         assert "random_vibe_damping" in fields
@@ -482,27 +534,28 @@ def helper_test_translate_field_names(analysis):
         ]
     )
 
-    expected = """
-analysis_temp
-analysis_temp
-analysis_temp_units
-analysis_temp_units
-filter_by_event_frequency
-force_model_rebuild
-harmonic_vibe_damping
-harmonic_vibe_count
-model_source
-natural_freq_count
-natural_freq_min
-natural_freq_min_units
-natural_freq_max
-natural_freq_max_units
-part_validation_enabled
-perform_nf_freq_range_check
-random_vibe_damping
-require_material_assignment_enabled
-reuse_modal_analysis
-strain_map_natural_freqs"""
+    expected = [
+        "analysis_temp",
+        "analysis_temp",
+        "analysis_temp_units",
+        "analysis_temp_units",
+        "filter_by_event_frequency",
+        "force_model_rebuild",
+        "harmonic_vibe_damping",
+        "harmonic_vibe_count",
+        "model_source",
+        "natural_freq_count",
+        "natural_freq_min",
+        "natural_freq_min_units",
+        "natural_freq_max",
+        "natural_freq_max_units",
+        "part_validation_enabled",
+        "perform_nf_freq_range_check",
+        "random_vibe_damping",
+        "require_material_assignment_enabled",
+        "reuse_modal_analysis",
+        "strain_map_natural_freqs",
+    ]
 
     assert results == expected
 
@@ -663,6 +716,297 @@ def helper_test_update_harmonic_vibe_props(analysis):
             assert result == 0
         except SherlockUpdateHarmonicVibePropsError as e:
             pytest.fail(str(e))
+
+
+def helper_test_update_mechanical_shock_props(analysis):
+    try:
+        analysis.update_mechanical_shock_props(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert str(e) == "Update mechanical shock properties error: Project name is invalid."
+
+    try:
+        analysis.update_mechanical_shock_props("Test", "INVALID_TYPE")
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "Mechanical shock properties argument is invalid."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props("Test", [])
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "One or more mechanical shock properties are required."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props("Test", ["INVALID"])
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "Mechanical shock props argument is invalid for mechanical shock properties 0."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "CCA name is missing for mechanical shock properties 0."
+        )
+
+    try:
+        analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "",
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateMechanicalShockPropsError as e:
+        assert (
+            str(e) == "Update mechanical shock properties error: "
+            "CCA name is invalid for mechanical shock properties 0."
+        )
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "INVALID",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdateMechanicalShockPropsError
+
+    try:
+        result = analysis.update_mechanical_shock_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                    "shock_result_count": 2,
+                    "critical_shock_strain": 10,
+                    "critical_shock_strain_units": "strain",
+                    "part_validation_enabled": True,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 100,
+                    "natural_freq_max_units": "KHz",
+                    "analysis_temp": 20,
+                    "analysis_temp_units": "F",
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockUpdateMechanicalShockPropsError as e:
+        pytest.fail(str(e))
+
+
+def helper_test_update_solder_fatigue_props(analysis):
+    try:
+        analysis.update_solder_fatigue_props(
+            "",
+            [
+                {
+                    "cca_name": "Card",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert str(e) == "Update solder fatigue properties error: Project name is invalid."
+
+    try:
+        analysis.update_solder_fatigue_props("Test", "INVALID_TYPE")
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "Solder fatigue properties argument is invalid."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props("Test", [])
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "One or more solder fatigue properties are required."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props("Test", ["INVALID"])
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "Solder fatigue props argument is invalid for solder fatigue properties 0."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "CCA name is missing for solder fatigue properties 0."
+        )
+
+    try:
+        analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateSolderFatiguePropsError as e:
+        assert (
+            str(e) == "Update solder fatigue properties error: "
+            "CCA name is invalid for solder fatigue properties 0."
+        )
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "INVALID",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdateSolderFatiguePropsError
+
+    try:
+        result = analysis.update_solder_fatigue_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "solder_material": "63SN37PB",
+                    "part_temp": 70,
+                    "part_temp_units": "F",
+                    "use_part_temp_rise_min": True,
+                    "part_validation_enabled": True,
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockUpdateSolderFatiguePropsError as e:
+        pytest.fail(str(e))
 
 
 def helper_test_update_random_vibe_props(analysis):
@@ -1015,6 +1359,130 @@ def helper_test_update_pcb_modeling_props(analysis):
             assert result4 == 0
         except SherlockUpdatePcbModelingPropsError as e:
             assert pytest.fail(e.message)
+
+
+def helper_test_update_part_modeling_props(analysis):
+    try:
+        analysis.update_part_modeling_props(
+            "",
+            {
+                "cca_name": "Card",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when project is the empty string.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: Project name is invalid."
+
+    try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
+                "cca_name": "",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when cca name is the empty string.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: CCA name is invalid."
+
+    try:
+        analysis.update_part_modeling_props("Test", "INVALID")
+        pytest.fail("No exception thrown when part modeling props is incorrect type.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert (
+            str(e) == "Update part modeling props error: "
+            "Part modeling props argument is invalid."
+        )
+
+    try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when CCA name is missing.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: CCA name is missing."
+
+    try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
+                "cca_name": "Card",
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when part enabled is missing.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: Part enabled is missing."
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_part_modeling_props(
+            "Tutorial Project",
+            {
+                "cca_name": "Main Board",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "INVALID",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception raised when using an invalid parameter.")
+    except Exception as e:
+        assert type(e) == SherlockUpdatePartModelingPropsError
+
+    try:
+        result = analysis.update_part_modeling_props(
+            "Tutorial Project",
+            {
+                "cca_name": "Main Board",
+                "part_enabled": False,
+            },
+        )
+        assert result == 0
+    except SherlockUpdatePartModelingPropsError as e:
+        pytest.fail(str(e))
 
 
 if __name__ == "__main__":

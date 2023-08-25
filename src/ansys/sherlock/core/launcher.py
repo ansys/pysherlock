@@ -42,13 +42,16 @@ def launch_sherlock(
         IP address to start gRPC on. The default is ``"127.0.0.1"``, which
         is the IP address for the local host.
     port : int, optional
-        Port number for the connection. If no port is specified, ``9090``
-        is used.
+        Port number for the connection.
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
-        The default is ``""``.
     sherlock_cmd_args : str, optional
-        Additional command arguments for launching Sherlock. The default is ``""``.
+        Additional command arguments for launching Sherlock.
+
+    Returns
+    -------
+    Sherlock
+        The instance of sherlock.
 
     Examples
     --------
@@ -70,7 +73,7 @@ def launch_sherlock(
         return None
 
     try:
-        args = _get_sherlock_exe_path() + " " + "-grpcPort=" + str(port)
+        args = _get_sherlock_exe_path() + " -grpcPort=" + str(port)
         if single_project_path != "":
             args = f'{args} -singleProject "{single_project_path}"'
         if sherlock_cmd_args != "":
@@ -103,9 +106,21 @@ def launch_sherlock(
 
 
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
-    """Create a gRPC connection to a specified port and return the ``sherlock``connection object.
+    """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 
-    The ``sherlock``connecton object is used to invoke the APIs from their respective services.
+    The ``Sherlock`` connection object is used to invoke the APIs from their respective services.
+    This can be used to connect to the Sherlock instance that is already running with the specified
+    port.
+
+    Parameters
+    ----------
+    port : int, optional
+        Port number for the connection.
+
+    Returns
+    -------
+    Sherlock
+        The instance of sherlock.
     """
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)

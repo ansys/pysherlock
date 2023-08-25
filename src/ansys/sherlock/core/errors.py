@@ -808,3 +808,75 @@ class SherlockUpdateHarmonicVibePropsError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Update harmonic vibe properties error: {self.message}"
+
+
+class SherlockUpdateMechanicalShockPropsError(Exception):
+    """Contains the error raised when properties for mechanical shock analysis cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update mechanical shock properties error: {self.message}"
+
+
+class SherlockUpdateSolderFatiguePropsError(Exception):
+    """Contains the error raised when properties for solder fatigue analysis cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update solder fatigue properties error: {self.message}"
+
+
+class SherlockAddProjectError(Exception):
+    """Contains the error raised when Project cannot be added."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Add project error: {self.message}"
+
+
+class SherlockAddCCAError(Exception):
+    """Contains the error raised when CCA cannot be added."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Add CCA error: {self.message}"
+
+
+class SherlockAddPottingRegionError(Exception):
+    """Contains the error raised when a potting region cannot be added."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Add potting region error: {self.message}"
+
+
+class SherlockUpdatePartModelingPropsError(Exception):
+    """Contains the error raised when part modeling properties cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update part modeling props error: {self.message}"

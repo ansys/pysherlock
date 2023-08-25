@@ -2,11 +2,15 @@
 
 import os
 import platform
+import time
+import uuid
 
 import grpc
 import pytest
 
 from ansys.sherlock.core.errors import (
+    SherlockAddCCAError,
+    SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockDeleteProjectError,
     SherlockGenerateProjectReportError,
@@ -16,6 +20,8 @@ from ansys.sherlock.core.errors import (
     SherlockListStrainMapsError,
 )
 from ansys.sherlock.core.project import Project
+
+PROJECT_ADD_NAME = "Delete This After Add"
 
 
 def test_all():
@@ -30,7 +36,13 @@ def test_all():
     helper_test_import_ipc2581_archive(project)
     helper_test_generate_project_report(project)
     helper_test_list_ccas(project)
+    helper_test_add_cca(project)
     helper_test_list_strain_maps(project)
+    project_name = None
+    try:
+        project_name = helper_test_add_project(project)
+    finally:
+        clean_up_after_add(project, project_name)
 
 
 def helper_test_delete_project(project):
@@ -168,6 +180,131 @@ def helper_test_list_ccas(project):
             assert ccas[0].ccaName == "Memory Card 2"
         except SherlockListCCAsError as e:
             pytest.fail(str(e.str_itr()))
+
+
+def helper_test_add_cca(project):
+    """Test add_cca API"""
+
+    try:
+        project.add_cca(
+            "",
+            [
+                {
+                    "cca_name": "Card 2",
+                    "description": "Second CCA",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockAddCCAError as e:
+        assert str(e) == "Add CCA error: Project name is invalid."
+
+    try:
+        project.add_cca("Test", "")
+        assert False
+    except SherlockAddCCAError as e:
+        assert str(e) == "Add CCA error: CCA properties argument is invalid."
+
+    try:
+        project.add_cca("Test", [])
+        assert False
+    except SherlockAddCCAError as e:
+        assert str(e) == "Add CCA error: One or more CCAs are required."
+
+    try:
+        project.add_cca("Test", [""])
+        assert False
+    except SherlockAddCCAError as e:
+        assert str(e) == "Add CCA error: CCA properties are invalid for CCA 0."
+
+    try:
+        project.add_cca(
+            "Test",
+            [
+                {
+                    "description": "Second CCA",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockAddCCAError as e:
+        assert str(e) == "Add CCA error: CCA name is missing for CCA 0."
+
+    try:
+        project.add_cca(
+            "Test",
+            [
+                {
+                    "cca_name": "",
+                    "description": "Second CCA",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockAddCCAError as e:
+        assert str(e) == "Add CCA error: CCA name is invalid for CCA 0."
+
+    if not project._is_connection_up():
+        return
+
+    try:
+        project.add_cca(
+            "Test",
+            [
+                {
+                    "cca_name": "Name",
+                    "description": "Second CCA",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "INVALID",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockAddCCAError
+
+    cca_name = "Test Card " + str(uuid.uuid4())
+    try:
+        result = project.add_cca(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": cca_name,
+                    "description": "Second CCA",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockAddCCAError as e:
+        pytest.fail(str(e))
 
 
 def helper_test_add_strain_maps(project):
@@ -433,6 +570,37 @@ def helper_test_list_strain_maps(project):
             assert "PowerModuleStrain - Top" in strain_map.strainMaps
         except SherlockListStrainMapsError as e:
             pytest.fail(str(e.str_itr()))
+
+
+def helper_test_add_project(project):
+    """Test add_project API"""
+
+    try:
+        project.add_project("", "", "")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddProjectError as e:
+        assert str(e) == "Add project error: Project name cannot be blank"
+
+    if project._is_connection_up():
+        try:
+            project.add_project("Tutorial Project", "", "")
+            pytest.fail("No exception raised when creating a duplicate project")
+        except Exception as e:
+            assert type(e) == SherlockAddProjectError
+
+        try:
+            return_code = project.add_project(PROJECT_ADD_NAME, "", "")
+            assert return_code == 0
+            # Fix issue where api does not finish before returning
+            time.sleep(1)
+            return PROJECT_ADD_NAME
+        except SherlockAddProjectError as e:
+            pytest.fail(str(e))
+
+
+def clean_up_after_add(project, project_name):
+    if project_name is not None:
+        project.delete_project(project_name)
 
 
 if __name__ == "__main__":

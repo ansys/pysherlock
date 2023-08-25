@@ -12,3 +12,5 @@ The ``launcher`` module launches the Sherlock gRPC server and a Sherlock client.
      :toctree: _autosummary
 
      ansys.sherlock.core.launcher.launch_sherlock
+     ansys.sherlock.core.launcher.connect_grpc_channel
+

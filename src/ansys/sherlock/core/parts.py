@@ -20,6 +20,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.parts_types import PartLocation
 
 
 class Parts(GrpcStub):
@@ -172,6 +173,11 @@ class Parts(GrpcStub):
         duplication : UpdatesPartsListRequestDuplicationMode
             How to handle duplication during the update.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -258,6 +264,11 @@ class Parts(GrpcStub):
             - mirrored : str
                 Mirrored.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -342,6 +353,11 @@ class Parts(GrpcStub):
             ``"English (United States)"`` is the numeric format. This
             indicates that points are used as decimal markers.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -417,6 +433,11 @@ class Parts(GrpcStub):
             Whether to set the data source of the properties to ``"User"``.
             Otherwise, the data source is set to the name of the CSV file.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -466,7 +487,7 @@ class Parts(GrpcStub):
                 raise SherlockImportPartsListError(response.message)
 
             LOG.info(response.message)
-            return
+            return response.value
         except SherlockImportPartsListError as e:
             LOG.error(str(e))
             raise e
@@ -482,6 +503,11 @@ class Parts(GrpcStub):
             Name of the CCA.
         export_file : str
             Full path for the CSV file to export the parts list to.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
 
         Examples
         --------
@@ -543,6 +569,11 @@ class Parts(GrpcStub):
         cca_name : str
             Name of the CCA.
 
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -600,7 +631,11 @@ class Parts(GrpcStub):
             Reference designator for specific part.
         location_units: str
             Valid units for a part's location.
-        ----------
+
+        Returns
+        -------
+        list
+            List of PartLocation objects.
 
         Examples
         --------
@@ -615,13 +650,13 @@ class Parts(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> part_location = sherlock.parts.get_part_location(
+        >>> part_locations = sherlock.parts.get_part_location(
             project="Tutorial",
             cca_name="Main Board",
-            ref_des="C1",
+            ref_des="C1,C2",
             location_units="in",
         )
-        >>> print(f"{part_location}")
+        >>> print(f"{part_locations}")
         """
         try:
             if project == "":
@@ -647,7 +682,11 @@ class Parts(GrpcStub):
 
             if return_code.value == -1:
                 raise SherlockGetPartLocationError(return_code.message)
-            return return_code.value
+
+            locations = []
+            for location in response.locationData:
+                locations.append(PartLocation(location))
+            return locations
         except SherlockGetPartLocationError as e:
             LOG.error(str(e))
             raise e
