@@ -9,18 +9,33 @@ except ModuleNotFoundError:
 
 
 class UpdatesPartsListRequestMatchingMode:
-    """Constants for Matching Mode in the Update Parts List request."""
+    """Constants for Matching Mode in the Update Parts List and Update Parts from AVL request."""
 
-    BOTH = SherlockPartsService_pb2.UpdatePartsListRequest.MatchingMode.Both
-    PART = SherlockPartsService_pb2.UpdatePartsListRequest.MatchingMode.Part
+    BOTH = SherlockPartsService_pb2.MatchingMode.Both
+    PART = SherlockPartsService_pb2.MatchingMode.Part
 
 
 class UpdatesPartsListRequestDuplicationMode:
-    """Constants for Duplication Mode in the Update Parts List request."""
+    """Constants for Duplication Mode in the Update Parts List and Update Parts from AVL request."""
 
-    FIRST = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.First
-    ERROR = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.Error
-    IGNORE = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.Ignore
+    FIRST = SherlockPartsService_pb2.DuplicationMode.First
+    ERROR = SherlockPartsService_pb2.DuplicationMode.Error
+    IGNORE = SherlockPartsService_pb2.DuplicationMode.Ignore
+
+
+class AVLPartNum:
+    """Constants for AVLPartNum in the Update Parts List from AVL request."""
+
+    AssignInternalPartNum = SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum
+    AssignVendorAndPartNum = SherlockPartsService_pb2.AVLPartNum.AssignVendorAndPartNum
+    DoNotChangeVendorOrPartNum = SherlockPartsService_pb2.AVLPartNum.DoNotChangeVendorOrPartNum
+
+
+class AVLDescription:
+    """Constants for AVLDescription in the Update Parts List from AVL request."""
+
+    AssignApprovedDescription = SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription
+    DoNotChangeDescription = SherlockPartsService_pb2.AVLDescription.DoNotChangeDescription
 
 
 class PartLocation:

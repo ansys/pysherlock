@@ -10,6 +10,7 @@ import pytest
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
+    SherlockGetPartAVLError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
@@ -18,6 +19,8 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.parts import Parts
 from ansys.sherlock.core.types.parts_types import (
+    AVLDescription,
+    AVLPartNum,
     UpdatesPartsListRequestDuplicationMode,
     UpdatesPartsListRequestMatchingMode,
 )
@@ -30,6 +33,7 @@ def test_all():
     parts = Parts(channel)
 
     helper_test_update_parts_list(parts)
+    helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
     helper_test_import_parts_list(parts)
@@ -103,6 +107,87 @@ def helper_test_update_parts_list(parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
         assert str(e.str_itr()) == "['Update parts list error: Parts library is invalid.']"
+
+
+def helper_test_update_parts_from_AVL(parts):
+    if parts._is_connection_up():
+        try:
+            response = parts.update_parts_from_AVL(
+                project="",
+                cca_name="Main Board",
+                matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+                duplication=UpdatesPartsListRequestDuplicationMode.FIRST,
+                avl_part_num=AVLPartNum.AssignInternalPartNum,
+                avl_description=AVLDescription.AssignApprovedDescription,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except SherlockGetPartAVLError as e:
+            assert e.message == "Project name is invalid."
+
+        try:
+            response = parts.update_parts_from_AVL(
+                project="Tutorial Project",
+                cca_name="",
+                matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+                duplication=UpdatesPartsListRequestDuplicationMode.FIRST,
+                avl_part_num=AVLPartNum.AssignInternalPartNum,
+                avl_description=AVLDescription.AssignApprovedDescription,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except SherlockGetPartAVLError as e:
+            assert e.message == "CCA name is invalid."
+
+        try:
+            response = parts.update_parts_from_AVL(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                matching_mode="BOTH",
+                duplication=UpdatesPartsListRequestDuplicationMode.ERROR,
+                avl_part_num=AVLPartNum.AssignInternalPartNum,
+                avl_description=AVLDescription.AssignApprovedDescription,
+            )
+        except Exception as e:
+            # The matching_mode should not be a string
+            assert type(e) == ValueError
+
+        try:
+            response = parts.update_parts_from_AVL(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+                duplication="ERROR",
+                avl_part_num=AVLPartNum.AssignInternalPartNum,
+                avl_description=AVLDescription.AssignApprovedDescription,
+            )
+        except Exception as e:
+            # The duplication should not be a string
+            assert type(e) == ValueError
+
+        try:
+            response = parts.update_parts_from_AVL(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+                duplication=UpdatesPartsListRequestDuplicationMode.ERROR,
+                avl_part_num="AssignInternalPartNum",
+                avl_description=AVLDescription.AssignApprovedDescription,
+            )
+        except Exception as e:
+            # The avl_part_num should not be a string
+            assert type(e) == ValueError
+
+        try:
+            response = parts.update_parts_from_AVL(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+                duplication=UpdatesPartsListRequestDuplicationMode.ERROR,
+                avl_part_num=AVLPartNum.AssignInternalPartNum,
+                avl_description="AssignApprovedDescription",
+            )
+        except Exception as e:
+            # The avl_description should not be a string
+            assert type(e) == ValueError
 
 
 def helper_test_update_parts_locations(parts):

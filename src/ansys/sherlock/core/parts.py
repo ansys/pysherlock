@@ -13,6 +13,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
+    SherlockGetPartAVLError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockUpdatePartsListError,
@@ -20,7 +21,13 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
-from ansys.sherlock.core.types.parts_types import PartLocation
+from ansys.sherlock.core.types.parts_types import (
+    AVLDescription,
+    AVLPartNum,
+    PartLocation,
+    UpdatesPartsListRequestDuplicationMode,
+    UpdatesPartsListRequestMatchingMode,
+)
 
 
 class Parts(GrpcStub):
@@ -34,6 +41,12 @@ class Parts(GrpcStub):
         self.BOARD_SIDES = None
         self.MATCHING_ARGS = ["Both", "Part"]
         self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
+        self.AVL_PART_NUM_ARGS = [
+            "AssignInternalPartNum",
+            "AssignVendorAndPartNum",
+            "DoNotChangeVendorOrPartNum",
+        ]
+        self.AVL_DESCRIPTION_ARGS = ["AssignApprovedDescription", "DoNotChangeDescription"]
 
     @staticmethod
     def _add_matching_duplication(request, matching, duplication):
@@ -688,5 +701,97 @@ class Parts(GrpcStub):
                 locations.append(PartLocation(location))
             return locations
         except SherlockGetPartLocationError as e:
+            LOG.error(str(e))
+            raise e
+
+    def update_parts_from_AVL(
+        self,
+        project: str,
+        cca_name: str,
+        matching_mode: UpdatesPartsListRequestMatchingMode,
+        duplication: UpdatesPartsListRequestDuplicationMode,
+        avl_part_num: AVLPartNum,
+        avl_description: AVLDescription,
+    ) -> SherlockPartsService_pb2.UpdatePartsListFromAVLResponse:
+        """Update the parts list from the Approved Vendor List (AVL).
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        matching_mode: enumerate
+            Determines how parts are matched against the AVL
+        duplication: enumerate
+            Determines how duplicate part matches are handled when found
+        avl_part_num: enumerate
+            Determines what part number info in the parts list is updated from the AVL
+        avl_description: enumerate
+            Determines if the part description is updated or not
+
+        Returns
+        -------
+        UpdatePartsListFromAVLResponse
+        - returnCode : ReturnCode
+            - value : int
+                integer representing success. Current convention is 0 for success -1 for failure
+            - message : str
+                message that indicates errors
+        - numPartsUpdated : int
+            Number of parts updated
+        - updateErrors : list<str>
+            Errors found when updating part
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.update_parts_from_AVL(
+            project="Tutorial",
+            cca_name = "Main Board",
+            matching_mode = UpdatesPartsListRequestMatchingMode.BOTH,
+            duplication = UpdatesPartsListRequestDuplicationMode.FIRST,
+            avl_part_num = AVLPartNum.AssignInternalPartNum,
+            avl_description = AVLDescription.AssignApprovedDescription
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockGetPartAVLError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockGetPartAVLError(message="CCA name is invalid.")
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
+
+            request = SherlockPartsService_pb2.UpdatePartsListFromAVLRequest(
+                project=project,
+                ccaName=cca_name,
+                matching=matching_mode,
+                duplication=duplication,
+                avlPartNum=avl_part_num,
+                avlDesc=avl_description,
+            )
+
+            # Call method on server
+            response = self.stub.updatePartsListFromAVL(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                raise SherlockGetPartAVLError(return_code.message)
+
+            return response
+        except SherlockGetPartAVLError as e:
             LOG.error(str(e))
             raise e
