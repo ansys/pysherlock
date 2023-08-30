@@ -733,15 +733,15 @@ class Parts(GrpcStub):
         Returns
         -------
         UpdatePartsListFromAVLResponse
-        - returnCode : ReturnCode
-            - value : int
-                integer representing success. Current convention is 0 for success -1 for failure
-            - message : str
-                message that indicates errors
-        - numPartsUpdated : int
-            Number of parts updated
-        - updateErrors : list<str>
-            Errors found when updating part
+            - returnCode : ReturnCode
+                - value : int
+                    integer representing success. Current convention is 0 for success -1 for failure
+                - message : str
+                    message that indicates errors
+            - numPartsUpdated : int
+                Number of parts updated
+            - updateErrors : list<str>
+                Errors found when updating part
 
         Examples
         --------
