@@ -765,11 +765,11 @@ class Parts(GrpcStub):
         )
         >>> sherlock.parts.update_parts_from_AVL(
             project="Test",
-            cca_name = "Card",
-            matching_mode = UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication = UpdatesPartsListRequestDuplicationMode.FIRST,
-            avl_part_num = AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
-            avl_description = AVLDescription.ASSIGN_APPROVED_DESCRIPTION+
+            cca_name="Card",
+            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+            duplication=UpdatesPartsListRequestDuplicationMode.FIRST,
+            avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
+            avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION
         )
         """
         try:

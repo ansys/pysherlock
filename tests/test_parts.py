@@ -32,14 +32,14 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     parts = Parts(channel)
 
-    # helper_test_update_parts_list(parts)
+    helper_test_update_parts_list(parts)
     helper_test_update_parts_from_AVL(parts)
-    # helper_test_update_parts_locations(parts)
-    # helper_test_update_parts_locations_by_file(parts)
-    # helper_test_import_parts_list(parts)
-    # helper_test_export_parts_list(parts)
-    # helper_test_enable_lead_modeling(parts)
-    # helper_test_get_part_location(parts)
+    helper_test_update_parts_locations(parts)
+    helper_test_update_parts_locations_by_file(parts)
+    helper_test_import_parts_list(parts)
+    helper_test_export_parts_list(parts)
+    helper_test_enable_lead_modeling(parts)
+    helper_test_get_part_location(parts)
 
 
 def helper_test_update_parts_list(parts):
