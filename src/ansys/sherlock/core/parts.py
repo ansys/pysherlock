@@ -777,9 +777,6 @@ class Parts(GrpcStub):
                 raise SherlockGetPartAVLError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockGetPartAVLError(message="CCA name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
 
             request = SherlockPartsService_pb2.UpdatePartsListFromAVLRequest(
                 project=project,
@@ -789,6 +786,10 @@ class Parts(GrpcStub):
                 avlPartNum=avl_part_num,
                 avlDesc=avl_description,
             )
+
+            if not self._is_connection_up():
+                LOG.error("Not connected to a gRPC service.")
+                return
 
             # Call method on server
             response = self.stub.updatePartsListFromAVL(request)
