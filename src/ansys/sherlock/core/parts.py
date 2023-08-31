@@ -709,61 +709,68 @@ class Parts(GrpcStub):
         project: str,
         cca_name: str,
         matching_mode: UpdatesPartsListRequestMatchingMode,
-        duplication: UpdatesPartsListRequestDuplicationMode,
+        duplication_mode: UpdatesPartsListRequestDuplicationMode,
         avl_part_num: AVLPartNum,
         avl_description: AVLDescription,
     ) -> SherlockPartsService_pb2.UpdatePartsListFromAVLResponse:
-        """Update the parts list from the Approved Vendor List (AVL).
+        r"""Update the parts list from the Approved Vendor List (AVL).
 
-        Parameters
-        ----------
-        project : str
-            Name of the Sherlock project.
-        cca_name : str
-            Name of the CCA.
-        matching_mode: enumerate
-            Determines how parts are matched against the AVL
-        duplication: enumerate
-            Determines how duplicate part matches are handled when found
-        avl_part_num: enumerate
-            Determines what part number info in the parts list is updated from the AVL
-        avl_description: enumerate
-            Determines if the part description is updated or not
+                Parameters
+                ----------
+                project : str
+                    Name of the Sherlock project.
+                cca_name : str
+                    Name of the CCA.
+                matching_mode: UpdatesPartsListRequestMatchingMode
+                    Determines how parts are matched against the AVL
+                duplication: UpdatesPartsListRequestDuplicationMode
+                    Determines how duplicate part matches are handled when found
+                avl_part_num: AVLPartNum
+                    Determines what part number info in the parts list is updated from the AVL
+                avl_description: AVLDescription
+                    Determines if the part description is updated or not
 
-        Returns
-        -------
-        UpdatePartsListFromAVLResponse
-            - returnCode : ReturnCode
-                - value : int
-                    integer representing success. Current convention is 0 for success -1 for failure
-                - message : str
-                    message that indicates errors
-            - numPartsUpdated : int
-                Number of parts updated
-            - updateErrors : list<str>
-                Errors found when updating part
+                Returns
+                -------
+                UpdatePartsListFromAVLResponse
+                    - returnCode : ReturnCode
+                        - value : int
+                            integer representing success.
+                            Current convention is 0 for success -1 for failure.
+                        - message : str
+                            indicates general errors that occurred while attempting to update parts
+                    - numPartsUpdated : int
+                        Number of parts updated
+                    - updateErrors : list<str>
+                        Errors found when updating part
 
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
+                Examples
+                --------
+                >>> from ansys.sherlock.core.launcher import launch_sherlock
+                >>> from ansys.sherlock.core.types.parts_types import (
+                AVLDescription,
+                AVLPartNum,
+                UpdatesPartsListRequestDuplicationMode,
+                UpdatesPartsListRequestMatchingMode)
         )
-        >>> sherlock.parts.update_parts_from_AVL(
-            project="Tutorial",
-            cca_name = "Main Board",
-            matching_mode = UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication = UpdatesPartsListRequestDuplicationMode.FIRST,
-            avl_part_num = AVLPartNum.AssignInternalPartNum,
-            avl_description = AVLDescription.AssignApprovedDescription
-        )
+                >>> sherlock = launch_sherlock()
+                >>> sherlock.project.import_odb_archive(
+                    "C:\\Program Files\\ANSYS Inc\\v241\\sherlock\\tutorial\\ODB++ Tutorial.tgz",
+                    True,
+                    True,
+                    True,
+                    True,
+                    project="Test",
+                    cca_name="Card",
+                )
+                >>> sherlock.parts.update_parts_from_AVL(
+                    project="Test",
+                    cca_name = "Card",
+                    matching_mode = UpdatesPartsListRequestMatchingMode.BOTH,
+                    duplication = UpdatesPartsListRequestDuplicationMode.FIRST,
+                    avl_part_num = AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
+                    avl_description = AVLDescription.ASSIGN_APPROVED_DESCRIPTION+
+                )
         """
         try:
             if project == "":
@@ -778,7 +785,7 @@ class Parts(GrpcStub):
                 project=project,
                 ccaName=cca_name,
                 matching=matching_mode,
-                duplication=duplication,
+                duplication=duplication_mode,
                 avlPartNum=avl_part_num,
                 avlDesc=avl_description,
             )

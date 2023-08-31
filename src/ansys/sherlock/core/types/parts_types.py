@@ -26,16 +26,18 @@ class UpdatesPartsListRequestDuplicationMode:
 class AVLPartNum:
     """Constants for AVLPartNum in the Update Parts List from AVL request."""
 
-    AssignInternalPartNum = SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum
-    AssignVendorAndPartNum = SherlockPartsService_pb2.AVLPartNum.AssignVendorAndPartNum
-    DoNotChangeVendorOrPartNum = SherlockPartsService_pb2.AVLPartNum.DoNotChangeVendorOrPartNum
+    ASSIGN_INTERNAL_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum
+    ASSIGN_VENDOR_AND_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignVendorAndPartNum
+    DO_NOT_CHANGE_VENDOR_OR_PART_NUM = (
+        SherlockPartsService_pb2.AVLPartNum.DoNotChangeVendorOrPartNum
+    )
 
 
 class AVLDescription:
     """Constants for AVLDescription in the Update Parts List from AVL request."""
 
-    AssignApprovedDescription = SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription
-    DoNotChangeDescription = SherlockPartsService_pb2.AVLDescription.DoNotChangeDescription
+    ASSIGN_APPROVED_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription
+    DO_NOT_CHANGE_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.DoNotChangeDescription
 
 
 class PartLocation:
