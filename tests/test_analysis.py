@@ -14,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
+    SherlockUpdateICTAnalysisPropsError,
     SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
     SherlockUpdatePartModelingPropsError,
@@ -41,11 +42,13 @@ def test_all():
     time.sleep(1)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
+    helper_test_get_ict_analysis_input_fields(analysis)
     helper_test_get_mechanical_shock_input_fields(analysis)
     helper_test_get_solder_fatigue_input_fields(analysis)
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_harmonic_vibe_props(analysis)
+    helper_test_update_ict_analysis_props(analysis)
     helper_test_update_mechanical_shock_props(analysis)
     helper_test_update_solder_fatigue_props(analysis)
     helper_test_update_random_vibe_props(analysis)
@@ -447,6 +450,16 @@ def helper_test_get_harmonic_vibe_input_fields(analysis):
         assert "require_material_assignment_enabled" in fields
 
 
+def helper_test_get_ict_analysis_input_fields(analysis):
+    if analysis._is_connection_up():
+        fields = analysis.get_ict_analysis_input_fields()
+        assert "ict_application_time" in fields
+        assert "ict_application_time_units" in fields
+        assert "ict_number_of_events" in fields
+        assert "require_material_assignment_enabled" in fields
+        assert "model_source" not in fields
+
+
 def helper_test_get_mechanical_shock_input_fields(analysis):
     if analysis._is_connection_up():
         fields = analysis.get_mechanical_shock_input_fields()
@@ -519,6 +532,10 @@ def helper_test_translate_field_names(analysis):
             "forceModelRebuild",
             "harmonicVibeDamping",
             "harmonicVibeCount",
+            "ictApplicationTime",
+            "ictApplicationTimeUnits",
+            "ictNumberOfEvents",
+            "ictResultCount",
             "modelSource",
             "naturalFreqCount",
             "naturalFreqMin",
@@ -543,6 +560,10 @@ def helper_test_translate_field_names(analysis):
         "force_model_rebuild",
         "harmonic_vibe_damping",
         "harmonic_vibe_count",
+        "ict_application_time",
+        "ict_application_time_units",
+        "ict_number_of_events",
+        "ict_result_count",
         "model_source",
         "natural_freq_count",
         "natural_freq_min",
@@ -715,6 +736,135 @@ def helper_test_update_harmonic_vibe_props(analysis):
             )
             assert result == 0
         except SherlockUpdateHarmonicVibePropsError as e:
+            pytest.fail(str(e))
+
+
+def helper_test_update_ict_analysis_props(analysis):
+    try:
+        analysis.update_ict_analysis_props(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "application_time": 0.22,
+                    "application_time_units": "min",
+                    "ict_number_of_events": 19,
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateICTAnalysisPropsError as e:
+        assert str(e) == "Update ICT analysis properties error: Project name is invalid."
+
+    try:
+        analysis.update_ict_analysis_props("Tutorial Project", "Main Board")
+        assert False
+    except SherlockUpdateICTAnalysisPropsError as e:
+        assert (
+            str(e) == "Update ICT analysis properties error: "
+            "ICT analysis properties argument is invalid."
+        )
+
+    try:
+        analysis.update_ict_analysis_props("Tutorial Project", [])
+        assert False
+    except SherlockUpdateICTAnalysisPropsError as e:
+        assert (
+            str(e) == "Update ICT analysis properties error: "
+            "One or more ICT analysis properties are required."
+        )
+
+    try:
+        analysis.update_ict_analysis_props("Tutorial Project", ["INVALID"])
+        assert False
+    except SherlockUpdateICTAnalysisPropsError as e:
+        assert (
+            str(e) == "Update ICT analysis properties error: "
+            "ICT analysis props argument is invalid for ICT analysis properties 0."
+        )
+
+    try:
+        analysis.update_ict_analysis_props(
+            "Tutorial Project",
+            [
+                {
+                    "ict_application_time": 2,
+                    "ict_application_time_units": "sec",
+                    "ict_number_of_events": 5,
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateICTAnalysisPropsError as e:
+        assert (
+            str(e) == "Update ICT analysis properties error: "
+            "CCA name is invalid for ICT analysis properties 0."
+        )
+
+    try:
+        analysis.update_ict_analysis_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "",
+                    "ict_application_time": 2,
+                    "ict_application_time_units": "sec",
+                    "ict_number_of_events": 5,
+                    "part_validation_enabled": False,
+                    "require_material_assignment_enabled": False,
+                    "force_model_rebuild": "AUTO",
+                },
+            ],
+        )
+        assert False
+    except SherlockUpdateICTAnalysisPropsError as e:
+        assert (
+            str(e) == "Update ICT analysis properties error: "
+            "CCA name is invalid for ICT analysis properties 0."
+        )
+
+    if analysis._is_connection_up():
+        try:
+            analysis.update_ict_analysis_props(
+                "Tutorial Project",
+                [
+                    {
+                        "cca_name": "Main Board",
+                        "ict_application_time": -2,
+                        "ict_application_time_units": "sec",
+                        "ict_number_of_events": 5,
+                        "part_validation_enabled": False,
+                        "require_material_assignment_enabled": False,
+                        "force_model_rebuild": "AUTO",
+                    },
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockUpdateICTAnalysisPropsError
+
+        try:
+            result = analysis.update_ict_analysis_props(
+                "Tutorial Project",
+                [
+                    {
+                        "cca_name": "Main Board",
+                        "ict_application_time": 2,
+                        "ict_application_time_units": "sec",
+                        "ict_number_of_events": 5,
+                        "part_validation_enabled": False,
+                        "require_material_assignment_enabled": False,
+                        "force_model_rebuild": "AUTO",
+                    },
+                ],
+            )
+            assert result == 0
+        except SherlockUpdateICTAnalysisPropsError as e:
             pytest.fail(str(e))
 
 
