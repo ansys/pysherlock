@@ -625,13 +625,17 @@ class Analysis(GrpcStub):
                     props_request.applicationTime = ict_analysis_props["ict_application_time"]
 
                 if "ict_application_time_units" in ict_analysis_props.keys():
-                    props_request.applicationTimeUnits = ict_analysis_props["ict_application_time_units"]
+                    props_request.applicationTimeUnits = ict_analysis_props[
+                        "ict_application_time_units"
+                    ]
 
                 if "ict_number_of_events" in ict_analysis_props.keys():
                     props_request.numberOfEvents = ict_analysis_props["ict_number_of_events"]
 
                 if "part_validation_enabled" in ict_analysis_props.keys():
-                    props_request.partValidationEnabled = ict_analysis_props["part_validation_enabled"]
+                    props_request.partValidationEnabled = ict_analysis_props[
+                        "part_validation_enabled"
+                    ]
 
                 if "require_material_assignment_enabled" in ict_analysis_props.keys():
                     props_request.requireMaterialAssignmentEnabled = ict_analysis_props[
