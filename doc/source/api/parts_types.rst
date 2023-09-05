@@ -11,7 +11,7 @@ Constants and classes used for the Parts API.
      :toctree: _autosummary
 
      PartLocation
-     UpdatesPartsListRequestMatchingMode
-     UpdatesPartsListRequestDuplicationMode
+     PartsListSearchMatchingMode
+     PartsListSearchDuplicationMode
      AVLPartNum
      AVLDescription
