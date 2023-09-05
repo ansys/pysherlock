@@ -8,14 +8,14 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
 
 
-class UpdatesPartsListRequestMatchingMode:
+class PartsListSearchMatchingMode:
     """Constants for Matching Mode in the Update Parts List and Update Parts from AVL request."""
 
     BOTH = SherlockPartsService_pb2.MatchingMode.Both
     PART = SherlockPartsService_pb2.MatchingMode.Part
 
 
-class UpdatesPartsListRequestDuplicationMode:
+class PartsListSearchDuplicationMode:
     """Constants for Duplication Mode in the Update Parts List and Update Parts from AVL request."""
 
     FIRST = SherlockPartsService_pb2.DuplicationMode.First

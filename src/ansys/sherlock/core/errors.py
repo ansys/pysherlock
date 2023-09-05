@@ -882,13 +882,18 @@ class SherlockUpdatePartModelingPropsError(Exception):
         return f"Update part modeling props error: {self.message}"
 
 
-class SherlockGetPartAVLError(Exception):
+class SherlockUpdatePartsFromAVLError(Exception):
     """Contains the error raised when parts list cannot be updated by AVL."""
 
-    def __init__(self, message):
+    def __init__(self, message=None, error_array=None):
         """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
-    def __str__(self):
-        """Format error message."""
-        return f"Update part from AVL error: {self.message}"
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Update part from AVL error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update part from AVL error: {self.message}"]

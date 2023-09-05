@@ -13,9 +13,9 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
-    SherlockGetPartAVLError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
+    SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
@@ -25,8 +25,8 @@ from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
     PartLocation,
-    UpdatesPartsListRequestDuplicationMode,
-    UpdatesPartsListRequestMatchingMode,
+    PartsListSearchDuplicationMode,
+    PartsListSearchMatchingMode,
 )
 
 
@@ -181,9 +181,9 @@ class Parts(GrpcStub):
             Name of the CCA.
         part_library : str
             Name of the parts library.
-        matching : UpdatesPartsListRequestMatchingMode
+        matching : PartsListSearchMatchingMode
             Matching mode for updates.
-        duplication : UpdatesPartsListRequestDuplicationMode
+        duplication : PartsListSearchDuplicationMode
             How to handle duplication during the update.
 
         Returns
@@ -708,8 +708,8 @@ class Parts(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        matching_mode: UpdatesPartsListRequestMatchingMode,
-        duplication_mode: UpdatesPartsListRequestDuplicationMode,
+        matching_mode: PartsListSearchMatchingMode,
+        duplication_mode: PartsListSearchDuplicationMode,
         avl_part_num: AVLPartNum,
         avl_description: AVLDescription,
     ) -> SherlockPartsService_pb2.UpdatePartsListFromAVLResponse:
@@ -721,9 +721,9 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        matching_mode: UpdatesPartsListRequestMatchingMode
+        matching_mode: PartsListSearchMatchingMode
             Determines how parts are matched against the AVL
-        duplication: UpdatesPartsListRequestDuplicationMode
+        duplication: PartsListSearchDuplicationMode
             Determines how duplicate part matches are handled when found
         avl_part_num: AVLPartNum
             Determines what part number info in the parts list is updated from the AVL
@@ -735,8 +735,7 @@ class Parts(GrpcStub):
         UpdatePartsListFromAVLResponse
             - returnCode : ReturnCode
                 - value : int
-                    integer representing success.
-                    Current convention is 0 for success -1 for failure.
+                    Status code of the response. 0 for success.
                 - message : str
                     indicates general errors that occurred while attempting to update parts
             - numPartsUpdated : int
@@ -774,9 +773,9 @@ class Parts(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockGetPartAVLError(message="Project name is invalid.")
+                raise SherlockUpdatePartsFromAVLError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockGetPartAVLError(message="CCA name is invalid.")
+                raise SherlockUpdatePartsFromAVLError(message="CCA name is invalid.")
 
             request = SherlockPartsService_pb2.UpdatePartsListFromAVLRequest(
                 project=project,
@@ -797,9 +796,11 @@ class Parts(GrpcStub):
             return_code = response.returnCode
 
             if return_code.value == -1:
-                raise SherlockGetPartAVLError(return_code.message)
+                if return_code.message == "":
+                    raise SherlockUpdatePartsFromAVLError(response.updateErrors)
+                raise SherlockUpdatePartsFromAVLError(return_code.message)
 
             return response
-        except SherlockGetPartAVLError as e:
+        except SherlockUpdatePartsFromAVLError as e:
             LOG.error(str(e))
             raise e

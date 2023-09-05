@@ -10,9 +10,9 @@ import pytest
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportPartsListError,
-    SherlockGetPartAVLError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
+    SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
@@ -21,8 +21,8 @@ from ansys.sherlock.core.parts import Parts
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
-    UpdatesPartsListRequestDuplicationMode,
-    UpdatesPartsListRequestMatchingMode,
+    PartsListSearchDuplicationMode,
+    PartsListSearchMatchingMode,
 )
 
 
@@ -51,8 +51,8 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Main Board",
                 "Sherlock Part Library",
-                UpdatesPartsListRequestMatchingMode.BOTH,
-                UpdatesPartsListRequestDuplicationMode.ERROR,
+                PartsListSearchMatchingMode.BOTH,
+                PartsListSearchDuplicationMode.ERROR,
             )
             assert result == 0
             # wait for Sherlock to finish updating so subsequent tests don't fail
@@ -65,8 +65,8 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Invalid CCA",
                 "Sherlock Part Library",
-                UpdatesPartsListRequestMatchingMode.BOTH,
-                UpdatesPartsListRequestDuplicationMode.ERROR,
+                PartsListSearchMatchingMode.BOTH,
+                PartsListSearchDuplicationMode.ERROR,
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
@@ -77,8 +77,8 @@ def helper_test_update_parts_list(parts):
             "",
             "Card",
             "Sherlock Part Library",
-            UpdatesPartsListRequestMatchingMode.BOTH,
-            UpdatesPartsListRequestDuplicationMode.ERROR,
+            PartsListSearchMatchingMode.BOTH,
+            PartsListSearchDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -89,8 +89,8 @@ def helper_test_update_parts_list(parts):
             "Test",
             "",
             "Sherlock Part Library",
-            UpdatesPartsListRequestMatchingMode.BOTH,
-            UpdatesPartsListRequestDuplicationMode.ERROR,
+            PartsListSearchMatchingMode.BOTH,
+            PartsListSearchDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -101,8 +101,8 @@ def helper_test_update_parts_list(parts):
             "Test",
             "Card",
             "",
-            UpdatesPartsListRequestMatchingMode.BOTH,
-            UpdatesPartsListRequestDuplicationMode.ERROR,
+            PartsListSearchMatchingMode.BOTH,
+            PartsListSearchDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -114,26 +114,26 @@ def helper_test_update_parts_from_AVL(parts):
         response = parts.update_parts_from_AVL(
             project="",
             cca_name="Main Board",
-            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication_mode=UpdatesPartsListRequestDuplicationMode.FIRST,
+            matching_mode=PartsListSearchMatchingMode.BOTH,
+            duplication_mode=PartsListSearchDuplicationMode.FIRST,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
         )
         pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockGetPartAVLError as e:
+    except SherlockUpdatePartsFromAVLError as e:
         assert e.message == "Project name is invalid."
 
     try:
         response = parts.update_parts_from_AVL(
             project="Tutorial Project",
             cca_name="",
-            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication_mode=UpdatesPartsListRequestDuplicationMode.FIRST,
+            matching_mode=PartsListSearchMatchingMode.BOTH,
+            duplication_mode=PartsListSearchDuplicationMode.FIRST,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
         )
         pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockGetPartAVLError as e:
+    except SherlockUpdatePartsFromAVLError as e:
         assert e.message == "CCA name is invalid."
 
     try:
@@ -141,7 +141,7 @@ def helper_test_update_parts_from_AVL(parts):
             project="Tutorial Project",
             cca_name="Main Board",
             matching_mode="BOTH",
-            duplication_mode=UpdatesPartsListRequestDuplicationMode.ERROR,
+            duplication_mode=PartsListSearchDuplicationMode.ERROR,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
         )
@@ -153,7 +153,7 @@ def helper_test_update_parts_from_AVL(parts):
         response = parts.update_parts_from_AVL(
             project="Tutorial Project",
             cca_name="Main Board",
-            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
+            matching_mode=PartsListSearchMatchingMode.BOTH,
             duplication_mode="ERROR",
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
@@ -166,8 +166,8 @@ def helper_test_update_parts_from_AVL(parts):
         response = parts.update_parts_from_AVL(
             project="Tutorial Project",
             cca_name="Main Board",
-            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication_mode=UpdatesPartsListRequestDuplicationMode.ERROR,
+            matching_mode=PartsListSearchMatchingMode.BOTH,
+            duplication_mode=PartsListSearchDuplicationMode.ERROR,
             avl_part_num="AssignInternalPartNum",
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
         )
@@ -179,8 +179,8 @@ def helper_test_update_parts_from_AVL(parts):
         response = parts.update_parts_from_AVL(
             project="Tutorial Project",
             cca_name="Main Board",
-            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication_mode=UpdatesPartsListRequestDuplicationMode.ERROR,
+            matching_mode=PartsListSearchMatchingMode.BOTH,
+            duplication_mode=PartsListSearchDuplicationMode.ERROR,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description="AssignApprovedDescription",
         )
@@ -193,14 +193,14 @@ def helper_test_update_parts_from_AVL(parts):
             response = parts.update_parts_from_AVL(
                 project="Tutorial Project",
                 cca_name="Main Board",
-                matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
-                duplication_mode=UpdatesPartsListRequestDuplicationMode.FIRST,
+                matching_mode=PartsListSearchMatchingMode.BOTH,
+                duplication_mode=PartsListSearchDuplicationMode.FIRST,
                 avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
                 avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
             )
 
             assert response.returnCode.value == 0
-        except SherlockGetPartAVLError as e:
+        except SherlockUpdatePartsFromAVLError as e:
             pytest.fail(e.message)
 
 
