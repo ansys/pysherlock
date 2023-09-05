@@ -648,7 +648,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
-            "CCA name is invalid for harmonic vibe properties 0."
+            "CCA name is missing for harmonic vibe properties 0."
         )
 
     try:
@@ -803,7 +803,7 @@ def helper_test_update_ict_analysis_props(analysis):
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
-            "CCA name is invalid for ICT analysis properties 0."
+            "CCA name is missing for ICT analysis properties 0."
         )
 
     try:

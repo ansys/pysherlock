@@ -338,7 +338,7 @@ class Analysis(GrpcStub):
 
                 if "cca_name" not in harmonic_vibe_props.keys():
                     raise SherlockUpdateHarmonicVibePropsError(
-                        message=f"CCA name is invalid for harmonic vibe properties {i}."
+                        message=f"CCA name is missing for harmonic vibe properties {i}."
                     )
 
                 cca_name = harmonic_vibe_props["cca_name"]
@@ -504,15 +504,6 @@ class Analysis(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
         >>> sherlock.analysis.get_ict_analysis_input_fields()
         """
         if not self._is_connection_up():
@@ -532,7 +523,7 @@ class Analysis(GrpcStub):
         project,
         ict_analysis_properties,
     ):
-        """Update properties for a ICT analysis.
+        """Update properties for an ICT analysis.
 
         Parameters
         ----------
@@ -615,7 +606,7 @@ class Analysis(GrpcStub):
 
                 if "cca_name" not in ict_analysis_props.keys():
                     raise SherlockUpdateICTAnalysisPropsError(
-                        message=f"CCA name is invalid for ICT analysis properties {i}."
+                        message=f"CCA name is missing for ICT analysis properties {i}."
                     )
 
                 cca_name = ict_analysis_props["cca_name"]
@@ -624,68 +615,31 @@ class Analysis(GrpcStub):
                         message=f"CCA name is invalid for ICT analysis properties {i}."
                     )
 
-                if "ict_analysis_count" in ict_analysis_props.keys():
-                    ict_analysis_count = ict_analysis_props["ict_analysis_count"]
-                else:
-                    ict_analysis_count = None
-
-                if "ict_application_time" in ict_analysis_props.keys():
-                    ict_application_time = ict_analysis_props["ict_application_time"]
-                else:
-                    ict_application_time = None
-
-                if "ict_application_time_units" in ict_analysis_props.keys():
-                    ict_application_time_units = ict_analysis_props["ict_application_time_units"]
-                else:
-                    ict_application_time_units = None
-
-                if "ict_number_of_events" in ict_analysis_props.keys():
-                    ict_number_of_events = ict_analysis_props["ict_number_of_events"]
-                else:
-                    ict_number_of_events = None
-
-                if "part_validation_enabled" in ict_analysis_props.keys():
-                    part_validation_enabled = ict_analysis_props["part_validation_enabled"]
-                else:
-                    part_validation_enabled = None
-
-                if "require_material_assignment_enabled" in ict_analysis_props.keys():
-                    require_material_assignment_enabled = ict_analysis_props[
-                        "require_material_assignment_enabled"
-                    ]
-                else:
-                    require_material_assignment_enabled = None
-
-                if "force_model_rebuild" in ict_analysis_props.keys():
-                    force_model_rebuild = ict_analysis_props["force_model_rebuild"]
-                else:
-                    force_model_rebuild = None
-
                 props_request = request.ictAnalysisProperties.add()
                 props_request.ccaName = cca_name
 
-                if ict_analysis_count is not None:
-                    props_request.ictAnalysisCount = ict_analysis_count
+                if "ict_analysis_count" in ict_analysis_props.keys():
+                    props_request.ictAnalysisCount = ict_analysis_props["ict_analysis_count"]
 
-                if ict_application_time is not None:
-                    props_request.applicationTime = ict_application_time
+                if "ict_application_time" in ict_analysis_props.keys():
+                    props_request.applicationTime = ict_analysis_props["ict_application_time"]
 
-                if ict_application_time_units is not None:
-                    props_request.applicationTimeUnits = ict_application_time_units
+                if "ict_application_time_units" in ict_analysis_props.keys():
+                    props_request.applicationTimeUnits = ict_analysis_props["ict_application_time_units"]
 
-                if ict_application_time_units is not None:
-                    props_request.numberOfEvents = ict_number_of_events
+                if "ict_number_of_events" in ict_analysis_props.keys():
+                    props_request.numberOfEvents = ict_analysis_props["ict_number_of_events"]
 
-                if part_validation_enabled is not None:
-                    props_request.partValidationEnabled = part_validation_enabled
+                if "part_validation_enabled" in ict_analysis_props.keys():
+                    props_request.partValidationEnabled = ict_analysis_props["part_validation_enabled"]
 
-                if require_material_assignment_enabled is not None:
-                    props_request.requireMaterialAssignmentEnabled = (
-                        require_material_assignment_enabled
-                    )
+                if "require_material_assignment_enabled" in ict_analysis_props.keys():
+                    props_request.requireMaterialAssignmentEnabled = ict_analysis_props[
+                        "require_material_assignment_enabled"
+                    ]
 
-                if force_model_rebuild is not None:
-                    props_request.forceModelRebuild = force_model_rebuild
+                if "force_model_rebuild" in ict_analysis_props.keys():
+                    props_request.forceModelRebuild = ict_analysis_props["force_model_rebuild"]
 
         except SherlockUpdateICTAnalysisPropsError as e:
             LOG.error(str(e))
