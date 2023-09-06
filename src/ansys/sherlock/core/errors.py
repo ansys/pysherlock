@@ -810,6 +810,18 @@ class SherlockUpdateHarmonicVibePropsError(Exception):
         return f"Update harmonic vibe properties error: {self.message}"
 
 
+class SherlockUpdateICTAnalysisPropsError(Exception):
+    """Contains the error raised when properties for ICT analysis cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update ICT analysis properties error: {self.message}"
+
+
 class SherlockUpdateMechanicalShockPropsError(Exception):
     """Contains the error raised when properties for mechanical shock analysis cannot be updated."""
 
