@@ -168,8 +168,8 @@ class Parts(GrpcStub):
         project,
         cca_name,
         part_library,
-        matching,
-        duplication,
+        matching_mode,
+        duplication_mode,
     ):
         """Update a parts list based on matching and duplication preferences.
 
@@ -181,9 +181,9 @@ class Parts(GrpcStub):
             Name of the CCA.
         part_library : str
             Name of the parts library.
-        matching : PartsListSearchMatchingMode
+        matching_mode : PartsListSearchMatchingMode
             Matching mode for updates.
-        duplication : PartsListSearchDuplicationMode
+        duplication_mode : PartsListSearchDuplicationMode
             How to handle duplication during the update.
 
         Returns
@@ -232,7 +232,7 @@ class Parts(GrpcStub):
             project=project, ccaName=cca_name, partLibrary=part_library
         )
 
-        self._add_matching_duplication(request, matching, duplication)
+        self._add_matching_duplication(request, matching_mode, duplication_mode)
 
         response = self.stub.updatePartsList(request)
 
@@ -723,7 +723,7 @@ class Parts(GrpcStub):
             Name of the CCA.
         matching_mode: PartsListSearchMatchingMode
             Determines how parts are matched against the AVL
-        duplication: PartsListSearchDuplicationMode
+        duplication_mode: PartsListSearchDuplicationMode
             Determines how duplicate part matches are handled when found
         avl_part_num: AVLPartNum
             Determines what part number info in the parts list is updated from the AVL
@@ -797,8 +797,8 @@ class Parts(GrpcStub):
 
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockUpdatePartsFromAVLError(response.updateErrors)
-                raise SherlockUpdatePartsFromAVLError(return_code.message)
+                    raise SherlockUpdatePartsFromAVLError(error_array=response.updateErrors)
+                raise SherlockUpdatePartsFromAVLError(message=return_code.message)
 
             return response
         except SherlockUpdatePartsFromAVLError as e:
