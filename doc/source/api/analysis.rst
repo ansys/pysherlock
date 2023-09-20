@@ -11,12 +11,14 @@ The ``analysis`` module contains all analysis capabilities.
      :toctree: _autosummary
 
      ansys.sherlock.core.analysis.Analysis.get_harmonic_vibe_input_fields
+     ansys.sherlock.core.analysis.Analysis.get_ict_analysis_input_fields
      ansys.sherlock.core.analysis.Analysis.get_mechanical_shock_input_fields
      ansys.sherlock.core.analysis.Analysis.get_random_vibe_input_fields
      ansys.sherlock.core.analysis.Analysis.get_solder_fatigue_input_fields
      ansys.sherlock.core.analysis.Analysis.run_analysis
      ansys.sherlock.core.analysis.Analysis.run_strain_map_analysis
      ansys.sherlock.core.analysis.Analysis.update_harmonic_vibe_props
+     ansys.sherlock.core.analysis.Analysis.update_ict_analysis_props
      ansys.sherlock.core.analysis.Analysis.update_mechanical_shock_props
      ansys.sherlock.core.analysis.Analysis.update_natural_frequency_props
      ansys.sherlock.core.analysis.Analysis.update_part_modeling_props

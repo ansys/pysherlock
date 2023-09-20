@@ -8,19 +8,36 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
 
 
-class UpdatesPartsListRequestMatchingMode:
-    """Constants for Matching Mode in the Update Parts List request."""
+class PartsListSearchMatchingMode:
+    """Constants for Matching Mode in the Update Parts List and Update Parts from AVL request."""
 
-    BOTH = SherlockPartsService_pb2.UpdatePartsListRequest.MatchingMode.Both
-    PART = SherlockPartsService_pb2.UpdatePartsListRequest.MatchingMode.Part
+    BOTH = SherlockPartsService_pb2.MatchingMode.Both
+    PART = SherlockPartsService_pb2.MatchingMode.Part
 
 
-class UpdatesPartsListRequestDuplicationMode:
-    """Constants for Duplication Mode in the Update Parts List request."""
+class PartsListSearchDuplicationMode:
+    """Constants for Duplication Mode in the Update Parts List and Update Parts from AVL request."""
 
-    FIRST = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.First
-    ERROR = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.Error
-    IGNORE = SherlockPartsService_pb2.UpdatePartsListRequest.DuplicationMode.Ignore
+    FIRST = SherlockPartsService_pb2.DuplicationMode.First
+    ERROR = SherlockPartsService_pb2.DuplicationMode.Error
+    IGNORE = SherlockPartsService_pb2.DuplicationMode.Ignore
+
+
+class AVLPartNum:
+    """Constants for AVLPartNum in the Update Parts List from AVL request."""
+
+    ASSIGN_INTERNAL_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum
+    ASSIGN_VENDOR_AND_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignVendorAndPartNum
+    DO_NOT_CHANGE_VENDOR_OR_PART_NUM = (
+        SherlockPartsService_pb2.AVLPartNum.DoNotChangeVendorOrPartNum
+    )
+
+
+class AVLDescription:
+    """Constants for AVLDescription in the Update Parts List from AVL request."""
+
+    ASSIGN_APPROVED_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription
+    DO_NOT_CHANGE_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.DoNotChangeDescription
 
 
 class PartLocation:

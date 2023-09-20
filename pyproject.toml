@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==0.1.20",
+    "ansys-api-sherlock==0.1.21",
     "grpcio>=1.17",
     "importlib-metadata>=4.0,<5; python_version<='3.8'",
     "protobuf~=3.20",
@@ -32,13 +32,13 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.57.0",
+    "grpcio==1.58.0",
     "protobuf==3.20.3",
-    "pytest==7.4.0",
+    "pytest==7.4.2",
     "pytest-cov==4.1.0",
 ]
 doc = [
-    "ansys-sphinx-theme==0.10.4",
+    "ansys-sphinx-theme==0.11.2",
     "numpydoc==1.5.0",
     "Sphinx==6.2.1", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
     "sphinx-copybutton==0.5.2",
