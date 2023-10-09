@@ -614,7 +614,9 @@ def helper_test_get_stackup_props(stackup):
                 "Tutorial Project",
                 "Main Board",
             )
-            assert stackup_properties.board_dimension == "190.32 x 114.31 mm  [7.4928 x 4.5003 in]"
+            assert (
+                stackup_properties.board_dimension == "190.3171 x 114.3076 mm  [7.4928 x 4.5003 in]"
+            )
             assert stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
             assert stackup_properties.density == "2.0264 g/cc"
             assert stackup_properties.conductor_layers_cnt == "6"
