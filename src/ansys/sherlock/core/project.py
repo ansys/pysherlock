@@ -122,7 +122,7 @@ class Project(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
                                 True, True,
-                                ims_stackup=True
+                                ims_stackup=True,
                                 project="Tutorial",
                                 cca_name="Card")
         """
