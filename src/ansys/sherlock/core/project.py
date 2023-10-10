@@ -84,6 +84,7 @@ class Project(GrpcStub):
         include_other_layers,
         process_cutout_file,
         guess_part_properties,
+        ims_stackup=False,
         project=None,
         cca_name=None,
     ):
@@ -101,6 +102,8 @@ class Project(GrpcStub):
             Whether to process cutouts.
         guess_part_properties: bool
             Whether to guess part properties.
+        ims_stackup: bool, optional
+            Whether to generate an IMS stackup
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which
             case the name of the ODB++ archive file is used for the project name.
@@ -144,6 +147,7 @@ class Project(GrpcStub):
             includeOtherLayers=include_other_layers,
             processCutoutFile=process_cutout_file,
             guessPartProperties=guess_part_properties,
+            imsStackup=ims_stackup,
             project=project,
             ccaName=cca_name,
         )
