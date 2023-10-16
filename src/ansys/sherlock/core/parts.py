@@ -208,8 +208,8 @@ class Parts(GrpcStub):
             "Test",
             "Card",
             "Sherlock Part Library",
-            UpdatesPartsListRequestMatchingMode.BOTH,
-            UpdatesPartsListRequestDuplicationMode.ERROR,
+            PartsListSearchMatchingMode.BOTH,
+            PartsListSearchDuplicationMode.ERROR,
         )
         """
         try:
@@ -749,8 +749,8 @@ class Parts(GrpcStub):
         >>> from ansys.sherlock.core.types.parts_types import (
             AVLDescription,
             AVLPartNum,
-            UpdatesPartsListRequestDuplicationMode,
-            UpdatesPartsListRequestMatchingMode
+            PartsListSearchDuplicationMode,
+            PartsListSearchMatchingMode
         )
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -765,8 +765,8 @@ class Parts(GrpcStub):
         >>> sherlock.parts.update_parts_from_AVL(
             project="Test",
             cca_name="Card",
-            matching_mode=UpdatesPartsListRequestMatchingMode.BOTH,
-            duplication=UpdatesPartsListRequestDuplicationMode.FIRST,
+            matching_mode=PartsListSearchMatchingMode.BOTH,
+            duplication=PartsListSearchDuplicationMode.FIRST,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION
         )
