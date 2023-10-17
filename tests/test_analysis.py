@@ -1146,7 +1146,7 @@ def helper_test_update_solder_fatigue_props(analysis):
             [
                 {
                     "cca_name": "Main Board",
-                    "solder_material": "63SN37PB",
+                    "solder_material": "TIN-LEAD (63SN37PB)",
                     "part_temp": 70,
                     "part_temp_units": "F",
                     "use_part_temp_rise_min": True,
