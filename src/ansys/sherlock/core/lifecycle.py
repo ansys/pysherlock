@@ -1227,7 +1227,7 @@ class Lifecycle(GrpcStub):
             "Uniaxial",
             "2,4,5",
         )
-        >>> sherlock.lifecycle.add_harmonic_profiles(
+        >>> sherlock.lifecycle.add_harmonic_vibe_profiles(
             "Test",
             [(
                 "Example",
