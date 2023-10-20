@@ -4,7 +4,7 @@ Checklist:
 		- pre-commit command line check
 		- Problems tab in PyCharm
 - [] Bench test new/modified APIs by using and modifying the code in the example for the API method
-- [] Add new methods to rst file for updated API script(<pysherlock>\doc\source\api)
+- [] Add new classes to rst files, located at: <pysherlock>\doc\source\api
 - [] Generate documentation
 - [] Verify the HTML. It gets generated at: <pysherlock>\doc\build\html.
 		- Open index.html
