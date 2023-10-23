@@ -82,8 +82,8 @@ This code uses the Sherlock Part Library to update the parts list:
             "Tutorial",
             "Main Board",
             "Sherlock Part Library",
-            UpdatesPartsListRequestMatchingMode.BOTH,
-            UpdatesPartsListRequestDuplicationMode.ERROR
+            PartsListSearchMatchingMode.BOTH,
+            PartsListSearchDuplicationMode.ERROR,
     )
 
 For information on the ``parts`` module and its methods, see :ref:`ref_parts_module`.

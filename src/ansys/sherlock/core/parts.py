@@ -209,7 +209,7 @@ class Parts(GrpcStub):
             "Card",
             "Sherlock Part Library",
             PartsListSearchMatchingMode.BOTH,
-            PartsListSearchDuplicationMode.ERROR
+            PartsListSearchDuplicationMode.ERROR,
         )
         """
         try:
