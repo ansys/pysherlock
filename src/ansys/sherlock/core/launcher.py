@@ -56,14 +56,14 @@ def launch_sherlock(
     Examples
     --------
     >>> from ansys.sherlock.core import launcher
-    >>> launch_sherlock()
+    >>> launcher.launch_sherlock()
 
     >>> from ansys.sherlock.core import launcher
-    >>> launch_sherlock(port=9092)
+    >>> launcher.launch_sherlock(port=9092)
 
     >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
-    >>> launch_sherlock(port=9092, single_project_path=project)
+    >>> launcher.launch_sherlock(port=9092, single_project_path=project)
 
     """
     try:
