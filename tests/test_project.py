@@ -18,6 +18,7 @@ from ansys.sherlock.core.errors import (
     SherlockImportODBError,
     SherlockListCCAsError,
     SherlockListStrainMapsError,
+    SherlockListThermalMapsError,
 )
 from ansys.sherlock.core.project import Project
 
@@ -38,6 +39,7 @@ def test_all():
     helper_test_list_ccas(project)
     helper_test_add_cca(project)
     helper_test_list_strain_maps(project)
+    helper_test_list_thermal_maps(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
@@ -596,6 +598,42 @@ def helper_test_add_project(project):
             return PROJECT_ADD_NAME
         except SherlockAddProjectError as e:
             pytest.fail(str(e))
+
+def helper_test_list_thermal_maps(project):
+    """Test list_thermal_maps API"""
+
+    try:
+        project.list_thermal_maps("")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockListThermalMapsError as e:
+        assert str(e.str_itr()) == "['List thermal maps error: Project name is invalid.']"
+
+    try:
+        project.list_thermal_maps("Tutorial Project", "Not a list")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockListThermalMapsError as e:
+        assert str(e.str_itr()) == "['List thermal maps error: cca_names is not a list.']"
+
+    if project._is_connection_up():
+        try:
+            project.list_thermal_maps("AssemblyTutorial", ["CCA name that doesn't exist"])
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockListThermalMapsError
+
+        try:
+            thermal_maps = project.list_thermal_maps(
+                "Assembly Tutorial", ["Main Board"]
+            )
+            assert len(thermal_maps) == 1
+            thermal_map = thermal_maps[0]
+            assert thermal_map.ccaName == "Main Board"
+            assert len(thermal_map.thermalMaps) == 1
+            thermal_map_info = thermal_map.thermalMaps[0]
+            assert "Thermal Map.csv" == thermal_map_info.fileName
+            assert "Thermal Map (CSV)" == thermal_map_info.fileType
+        except SherlockListThermalMapsError as e:
+            pytest.fail(str(e.str_itr()))
 
 
 def clean_up_after_add(project, project_name):
