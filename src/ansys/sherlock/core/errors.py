@@ -909,3 +909,19 @@ class SherlockUpdatePartsFromAVLError(Exception):
 
         assert self.error_array is None
         return [f"Update part from AVL error: {self.message}"]
+
+class SherlockListThermalMapsError(Exception):
+    """Contains the errors raised when thermal map files for a project cannot be listed."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"List thermal maps error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"List thermal maps error: {self.message}"]
