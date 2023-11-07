@@ -599,6 +599,7 @@ def helper_test_add_project(project):
         except SherlockAddProjectError as e:
             pytest.fail(str(e))
 
+
 def helper_test_list_thermal_maps(project):
     """Test list_thermal_maps API"""
 
@@ -622,9 +623,7 @@ def helper_test_list_thermal_maps(project):
             assert type(e) == SherlockListThermalMapsError
 
         try:
-            thermal_maps = project.list_thermal_maps(
-                "Assembly Tutorial", ["Main Board"]
-            )
+            thermal_maps = project.list_thermal_maps("Assembly Tutorial", ["Main Board"])
             assert len(thermal_maps) == 1
             thermal_map = thermal_maps[0]
             assert thermal_map.ccaName == "Main Board"
