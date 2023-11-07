@@ -910,6 +910,7 @@ class SherlockUpdatePartsFromAVLError(Exception):
         assert self.error_array is None
         return [f"Update part from AVL error: {self.message}"]
 
+
 class SherlockListThermalMapsError(Exception):
     """Contains the errors raised when thermal map files for a project cannot be listed."""
 

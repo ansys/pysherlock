@@ -731,7 +731,7 @@ class Project(GrpcStub):
         return return_code.value
 
     def list_thermal_maps(self, project, cca_names=None):
-        """List the thermal map files and their type assigned to each CCA of given CCAs
+        """List the thermal map files and their type assigned to each CCA of given CCAs.
 
         Parameters
         ----------
