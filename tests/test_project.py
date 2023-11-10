@@ -603,6 +603,20 @@ def helper_test_add_project(project):
 def helper_test_list_thermal_maps(project):
     """Test list_thermal_maps API"""
 
+    expected_cca_name = "Main Board"
+    expected_file_names = [
+        "Thermal Map.xlsx",
+        "Thermal Map.tmap",
+        "Thermal Image.jpg",
+        "Thermal Map.csv",
+    ]
+    expected_file_types = [
+        "Thermal Map (Excel)",
+        "Icepak Thermal Map (TMAP)",
+        "Thermal Map (Image)",
+        "Thermal Map (CSV)",
+    ]
+
     try:
         project.list_thermal_maps("")
         pytest.fail("No exception raised when using an invalid parameter")
@@ -623,41 +637,39 @@ def helper_test_list_thermal_maps(project):
             assert type(e) == SherlockListThermalMapsError
 
         try:
-            thermal_maps = project.list_thermal_maps("Assembly Tutorial", ["Main Board"])
+            thermal_maps = project.list_thermal_maps("Assembly Tutorial", [expected_cca_name])
             assert len(thermal_maps) == 1
             thermal_map = thermal_maps[0]
-            assert thermal_map.ccaName == "Main Board"
-            assert len(thermal_map.thermalMaps) == 1
-            thermal_map_info = thermal_map.thermalMaps[0]
-            assert "Thermal Map.csv" == thermal_map_info.fileName
-            assert "Thermal Map (CSV)" == thermal_map_info.fileType
+            assert thermal_map.ccaName == expected_cca_name
+            assert len(thermal_map.thermalMaps) == len(expected_file_names)
+
+            for i, thermal_map_info in enumerate(thermal_map.thermalMaps):
+                assert expected_file_names[i] == thermal_map_info.fileName
+                assert expected_file_types[i] == thermal_map_info.fileType
         except SherlockListThermalMapsError as e:
             pytest.fail(str(e.str_itr()))
 
         try:
             thermal_maps = project.list_thermal_maps("Assembly Tutorial")
-            assert len(thermal_maps) == 4
-            for thermal_map in thermal_maps:
-                assert hasattr(thermal_map, "ccaName")  # Check if ccaName attribute exists
-                assert hasattr(thermal_map, "thermalMaps")  # Check if thermalMaps attribute exists
+            assert len(thermal_maps) == len(expected_file_names)
 
-                # If thermalMaps is not None, check its elements
+            for thermal_map in thermal_maps:
+                assert hasattr(thermal_map, "ccaName") and hasattr(thermal_map, "thermalMaps")
+
                 if thermal_map.thermalMaps:
-                    for thermal_map_info in thermal_map.thermalMaps:
-                        assert hasattr(
-                            thermal_map_info, "fileName"
-                        )  # Check if fileName attribute exists
-                        assert hasattr(
+                    for i, thermal_map_info in enumerate(thermal_map.thermalMaps):
+                        assert hasattr(thermal_map_info, "fileName") and hasattr(
                             thermal_map_info, "fileType"
-                        )  # Check if fileType attribute exists
+                        )
 
                         # Perform specific checks for fileName and fileType
-                        if thermal_map.ccaName == "Main Board":
-                            assert thermal_map_info.fileName == "Thermal Map.csv"
-                            assert thermal_map_info.fileType == "Thermal Map (CSV)"
+                        if thermal_map.ccaName == expected_cca_name:
+                            assert expected_file_names[i] == thermal_map_info.fileName
+                            assert expected_file_types[i] == thermal_map_info.fileType
                         elif thermal_map.ccaName == "TestAnalysisPropsUpdate":
                             assert thermal_map_info.fileName == "Thermal Map.csv"
                             assert thermal_map_info.fileType == "Thermal Map (CSV)"
+
         except SherlockListThermalMapsError as e:
             pytest.fail(str(e.str_itr()))
 
