@@ -768,7 +768,6 @@ class Project(GrpcStub):
 
             request = SherlockProjectService_pb2.ListThermalMapsRequest(project=project)
 
-            """Add the CCA names to the request."""
             if cca_names is not None:
                 for cca_name in cca_names:
                     request.cca.append(cca_name)
@@ -783,7 +782,7 @@ class Project(GrpcStub):
 
                 raise SherlockListThermalMapsError(message=return_code.message)
 
-        except Exception as e:
+        except SherlockListThermalMapsError as e:
             LOG.error(str(e))
             raise e
 

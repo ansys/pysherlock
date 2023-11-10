@@ -634,6 +634,33 @@ def helper_test_list_thermal_maps(project):
         except SherlockListThermalMapsError as e:
             pytest.fail(str(e.str_itr()))
 
+        try:
+            thermal_maps = project.list_thermal_maps("Assembly Tutorial")
+            assert len(thermal_maps) == 4
+            for thermal_map in thermal_maps:
+                assert hasattr(thermal_map, "ccaName")  # Check if ccaName attribute exists
+                assert hasattr(thermal_map, "thermalMaps")  # Check if thermalMaps attribute exists
+
+                # If thermalMaps is not None, check its elements
+                if thermal_map.thermalMaps:
+                    for thermal_map_info in thermal_map.thermalMaps:
+                        assert hasattr(
+                            thermal_map_info, "fileName"
+                        )  # Check if fileName attribute exists
+                        assert hasattr(
+                            thermal_map_info, "fileType"
+                        )  # Check if fileType attribute exists
+
+                        # Perform specific checks for fileName and fileType
+                        if thermal_map.ccaName == "Main Board":
+                            assert thermal_map_info.fileName == "Thermal Map.csv"
+                            assert thermal_map_info.fileType == "Thermal Map (CSV)"
+                        elif thermal_map.ccaName == "TestAnalysisPropsUpdate":
+                            assert thermal_map_info.fileName == "Thermal Map.csv"
+                            assert thermal_map_info.fileType == "Thermal Map (CSV)"
+        except SherlockListThermalMapsError as e:
+            pytest.fail(str(e.str_itr()))
+
 
 def clean_up_after_add(project, project_name):
     if project_name is not None:
