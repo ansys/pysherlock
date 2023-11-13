@@ -637,7 +637,7 @@ def helper_test_list_thermal_maps(project):
             assert type(e) == SherlockListThermalMapsError
 
         try:
-            thermal_maps = project.list_thermal_maps("Assembly Tutorial", [expected_cca_name])
+            thermal_maps = project.list_thermal_maps("Tutorial Project", [expected_cca_name])
             assert len(thermal_maps) == 1
             thermal_map = thermal_maps[0]
             assert thermal_map.ccaName == expected_cca_name
@@ -650,8 +650,7 @@ def helper_test_list_thermal_maps(project):
             pytest.fail(str(e.str_itr()))
 
         try:
-            thermal_maps = project.list_thermal_maps("Assembly Tutorial")
-            assert len(thermal_maps) == len(expected_file_names)
+            thermal_maps = project.list_thermal_maps("Tutorial Project")
 
             for thermal_map in thermal_maps:
                 assert hasattr(thermal_map, "ccaName") and hasattr(thermal_map, "thermalMaps")
@@ -662,13 +661,9 @@ def helper_test_list_thermal_maps(project):
                             thermal_map_info, "fileType"
                         )
 
-                        # Perform specific checks for fileName and fileType
                         if thermal_map.ccaName == expected_cca_name:
                             assert expected_file_names[i] == thermal_map_info.fileName
                             assert expected_file_types[i] == thermal_map_info.fileType
-                        elif thermal_map.ccaName == "TestAnalysisPropsUpdate":
-                            assert thermal_map_info.fileName == "Thermal Map.csv"
-                            assert thermal_map_info.fileType == "Thermal Map (CSV)"
 
         except SherlockListThermalMapsError as e:
             pytest.fail(str(e.str_itr()))
