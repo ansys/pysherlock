@@ -89,7 +89,7 @@ class Project(GrpcStub):
         cca_name=None,
         polyline_simplification=False,
         polyline_tolerance=0.1,
-        polyline_tolerance_units="mm"
+        polyline_tolerance_units="mm",
     ):
         """Import an ODB++ archive file.
 
@@ -162,7 +162,7 @@ class Project(GrpcStub):
             ccaName=cca_name,
             polylineSimplification=polyline_simplification,
             polylineTolerance=polyline_tolerance,
-            polylineToleranceUnits=polyline_tolerance_units
+            polylineToleranceUnits=polyline_tolerance_units,
         )
 
         response = self.stub.importODBArchive(request)
@@ -186,7 +186,7 @@ class Project(GrpcStub):
         cca_name=None,
         polyline_simplification=False,
         polyline_tolerance=0.1,
-        polyline_tolerance_units="mm"
+        polyline_tolerance_units="mm",
     ):
         """Import an IPC-2581 archive file.
 
@@ -248,7 +248,7 @@ class Project(GrpcStub):
             ccaName=cca_name,
             polylineSimplification=polyline_simplification,
             polylineTolerance=polyline_tolerance,
-            polylineToleranceUnits=polyline_tolerance_units
+            polylineToleranceUnits=polyline_tolerance_units,
         )
 
         response = self.stub.importIPC2581Archive(request)
