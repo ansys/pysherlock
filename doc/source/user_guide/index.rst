@@ -82,8 +82,8 @@ This code uses the Sherlock Part Library to update the parts list:
             "Tutorial",
             "Main Board",
             "Sherlock Part Library",
-            "Both",
-            "Error"
+            PartsListSearchMatchingMode.BOTH,
+            PartsListSearchDuplicationMode.ERROR,
     )
 
 For information on the ``parts`` module and its methods, see :ref:`ref_parts_module`.
@@ -117,14 +117,16 @@ method to add a random vibe profile:
 
 .. code::
 
-    sherlock.lifecycle.add_random_vibe_profile(
+    sherlock.lifecycle.add_random_vibe_profiles(
             "Tutorial",
-            "Phase 1",
-            "RVEvent 1",
-            "Profile 1",
-            "HZ",
-            "G2/Hz",
-            [(30.4, 7.61e-5), (204, 0.1), (296, 0.06), (385, 0.06), (454, 0.03), (497, 0.06)]
+            [(
+                "Phase 1",
+                "RVEvent 1",
+                "Profile 1",
+                "HZ",
+                "G2/Hz",
+                [(30.4, 7.61e-5), (204, 0.1), (296, 0.06), (385, 0.06), (454, 0.03), (497, 0.06)],
+            )]
     )
 
 For information on the ``lifecycle`` module and its methods, see :ref:`ref_lifecycle_module`.
@@ -140,7 +142,7 @@ to run a random vibe analysis:
             "Tutorial",
             "Main Board",
             [
-                ("RANDOMVIBE",
+                (RunAnalysisRequestAnalysisType.RANDOM_VIBE,
                 [
                     ("Phase 1", ["RVEvent 1"])
                 ]

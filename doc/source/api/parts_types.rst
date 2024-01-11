@@ -2,12 +2,17 @@
 
 Parts Types
 ===========
-
-Constants and classes used for the Parts API.
-
+.. automodule:: ansys.sherlock.core.types.parts_types
 .. currentmodule:: ansys.sherlock.core.types.parts_types
 
-.. autosummary::
-     :toctree: _autosummary
+Constants
+---------
+.. autoclass:: PartsListSearchDuplicationMode
+     :members:
+.. autoclass:: PartsListSearchMatchingMode
+     :members:
 
-     PartLocation
+Classes
+-------
+.. autoclass:: PartLocation
+     :members:
