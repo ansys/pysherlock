@@ -133,7 +133,10 @@ class Project(GrpcStub):
                                 True, True,
                                 ims_stackup=True,
                                 project="Tutorial",
-                                cca_name="Card")
+                                cca_name="Card",
+                                polyline_simplification=True,
+                                polyline_tolerance=0.1,
+                                polyline_tolerance_units="mm")
         """
         try:
             if archive_file == "":
@@ -222,7 +225,10 @@ class Project(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
                                 project="Tutorial",
-                                cca_name="Card")
+                                cca_name="Card",
+                                polyline_simplification=True,
+                                polyline_tolerance=0.1,
+                                polyline_tolerance_units="mm")
         """
         try:
             if archive_file == "":
