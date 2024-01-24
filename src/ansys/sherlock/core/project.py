@@ -88,6 +88,9 @@ class Project(GrpcStub):
         ims_stackup=False,
         project=None,
         cca_name=None,
+        polyline_simplification=False,
+        polyline_tolerance=0.1,
+        polyline_tolerance_units="mm",
     ):
         """Import an ODB++ archive file.
 
@@ -111,6 +114,12 @@ class Project(GrpcStub):
         cca_name : str, optional
             Name of the CCA name. The default is ``None``, in which case the
             name of the ODB++ archive file is used for the CCA name.
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
 
         Returns
         -------
@@ -125,7 +134,10 @@ class Project(GrpcStub):
                                 True, True,
                                 ims_stackup=True,
                                 project="Tutorial",
-                                cca_name="Card")
+                                cca_name="Card",
+                                polyline_simplification=True,
+                                polyline_tolerance=0.1,
+                                polyline_tolerance_units="mm")
         """
         try:
             if archive_file == "":
@@ -152,6 +164,9 @@ class Project(GrpcStub):
             imsStackup=ims_stackup,
             project=project,
             ccaName=cca_name,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
         )
 
         response = self.stub.importODBArchive(request)
@@ -167,7 +182,15 @@ class Project(GrpcStub):
             raise e
 
     def import_ipc2581_archive(
-        self, archive_file, include_other_layers, guess_part_properties, project=None, cca_name=None
+        self,
+        archive_file,
+        include_other_layers,
+        guess_part_properties,
+        project=None,
+        cca_name=None,
+        polyline_simplification=False,
+        polyline_tolerance=0.1,
+        polyline_tolerance_units="mm",
     ):
         """Import an IPC-2581 archive file.
 
@@ -185,6 +208,12 @@ class Project(GrpcStub):
         cca_name : str, optional
             Name of the CCA. The default is ``None``, in which case the name of
             the IPC-2581 archive file is used for the CCA name.
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
 
         Returns
         -------
@@ -197,7 +226,10 @@ class Project(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
                                 project="Tutorial",
-                                cca_name="Card")
+                                cca_name="Card",
+                                polyline_simplification=True,
+                                polyline_tolerance=0.1,
+                                polyline_tolerance_units="mm")
         """
         try:
             if archive_file == "":
@@ -221,6 +253,9 @@ class Project(GrpcStub):
             guessPartProperties=guess_part_properties,
             project=project,
             ccaName=cca_name,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
         )
 
         response = self.stub.importIPC2581Archive(request)

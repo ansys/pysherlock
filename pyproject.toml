@@ -32,18 +32,18 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.59.3",
+    "grpcio==1.60.0",
     "protobuf==3.20.3",
-    "pytest==7.4.3",
+    "pytest==7.4.4",
     "pytest-cov==4.1.0",
 ]
 doc = [
-    "ansys-sphinx-theme==0.12.5",
+    "ansys-sphinx-theme==0.13.1",
     "numpydoc==1.6.0",
     "Sphinx==6.2.1", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
     "sphinx-copybutton==0.5.2",
     "sphinx_design==0.5.0",
-    "sphinx-gallery==0.14.0",
+    "sphinx-gallery==0.15.0",
 ]
 
 [project.urls]
