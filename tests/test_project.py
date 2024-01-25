@@ -631,20 +631,20 @@ def helper_test_list_thermal_maps(project):
         assert str(e.str_itr()) == "['List thermal maps error: Project name is invalid.']"
 
     try:
-        project.list_thermal_maps("Tutorial Project", "Not a list")
+        project.list_thermal_maps("Assembly Tutorial", "Not a list")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockListThermalMapsError as e:
         assert str(e.str_itr()) == "['List thermal maps error: cca_names is not a list.']"
 
     if project._is_connection_up():
         try:
-            project.list_thermal_maps("Tutorial Project", ["CCA name that doesn't exist"])
+            project.list_thermal_maps("Assembly Tutorial", ["CCA name that doesn't exist"])
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockListThermalMapsError
 
         try:
-            thermal_maps = project.list_thermal_maps("Tutorial Project", [expected_cca_name])
+            thermal_maps = project.list_thermal_maps("Assembly Tutorial", [expected_cca_name])
             assert len(thermal_maps) == 1
             thermal_map = thermal_maps[0]
             assert thermal_map.ccaName == expected_cca_name
@@ -657,7 +657,7 @@ def helper_test_list_thermal_maps(project):
             pytest.fail(str(e.str_itr()))
 
         try:
-            thermal_maps = project.list_thermal_maps("Tutorial Project")
+            thermal_maps = project.list_thermal_maps("Assembly Tutorial")
 
             for thermal_map in thermal_maps:
                 assert hasattr(thermal_map, "ccaName") and hasattr(thermal_map, "thermalMaps")
@@ -715,7 +715,7 @@ def helper_test_update_thermal_maps(project):
         )
         thermal_map = []
 
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -740,7 +740,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -767,7 +767,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -794,7 +794,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -815,7 +815,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -842,7 +842,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -869,7 +869,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": "Main Board",
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -896,7 +896,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -923,7 +923,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -950,7 +950,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -977,7 +977,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1004,7 +1004,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1035,7 +1035,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1068,7 +1068,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1101,7 +1101,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1134,7 +1134,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1167,7 +1167,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1200,7 +1200,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1233,7 +1233,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1266,7 +1266,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1299,7 +1299,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        project.update_thermal_maps("Tutorial Project", thermal_map)
+        project.update_thermal_maps("Assembly Tutorial", thermal_map)
         pytest.fail("No exception raised when using an invalid parameter")
 
     except SherlockUpdateThermalMapsError as e:
@@ -1326,7 +1326,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        result = project.update_thermal_maps("Tutorial Project", thermal_map)
+        result = project.update_thermal_maps("Assembly Tutorial", thermal_map)
         assert result == 0
 
     except SherlockListThermalMapsError as e:
@@ -1351,7 +1351,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        result = project.update_thermal_maps("Tutorial Project", thermal_map)
+        result = project.update_thermal_maps("Assembly Tutorial", thermal_map)
         assert result == 0
 
     except SherlockListThermalMapsError as e:
@@ -1370,7 +1370,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        result = project.update_thermal_maps("Tutorial Project", thermal_map)
+        result = project.update_thermal_maps("Assembly Tutorial", thermal_map)
         assert result == 0
 
     except SherlockListThermalMapsError as e:
@@ -1401,7 +1401,7 @@ def helper_test_update_thermal_maps(project):
                 "cca_names": ["Main Board"],
             }
         ]
-        result = project.update_thermal_maps("Tutorial Project", thermal_map)
+        result = project.update_thermal_maps("Assembly Tutorial", thermal_map)
         assert result == 0
 
     except SherlockListThermalMapsError as e:
