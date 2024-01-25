@@ -21,6 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockImportODBError,
     SherlockListCCAsError,
     SherlockListStrainMapsError,
+    SherlockListThermalMapsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -763,3 +764,61 @@ class Project(GrpcStub):
             raise SherlockAddProjectError(return_code.message)
 
         return return_code.value
+
+    def list_thermal_maps(self, project, cca_names=None):
+        """List the thermal map files and their type assigned to each CCA of given CCAs.
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        cca_names : List of str, optional
+            List of CCA names to provide thermal maps for. The default is ``None``,
+            in which case all CCAs in the project are returned.
+
+        Returns
+        -------
+        list
+            All thermal map files or thermal map files and their type for the specified CCAs.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> thermal_maps = sherlock.project.list_thermal_maps(
+            "AssemblyTutorial",
+            ["Main Board","Power Module"]
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockListThermalMapsError(message="Project name is invalid.")
+
+            if cca_names is not None and type(cca_names) is not list:
+                raise SherlockListThermalMapsError(message="cca_names is not a list.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ListThermalMapsRequest(project=project)
+
+            if cca_names is not None:
+                for cca_name in cca_names:
+                    request.cca.append(cca_name)
+
+            response = self.stub.listThermalMaps(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockListThermalMapsError(error_array=response.errors)
+
+                raise SherlockListThermalMapsError(message=return_code.message)
+
+        except SherlockListThermalMapsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.ccaThermalMaps
