@@ -706,13 +706,6 @@ def helper_test_update_thermal_maps(project):
         assert str(e.str_itr()) == "['Update thermal maps error: Project name is invalid.']"
 
     try:
-        file_data = CsvExcelFile(
-            header_row_count=0,
-            numeric_format="French",
-            reference_id_column="RefDes",
-            temperature_column="Temp",
-            temperature_units="C",
-        )
         thermal_map = []
 
         project.update_thermal_maps("Tutorial Project", thermal_map)
