@@ -832,7 +832,7 @@ class Project(GrpcStub):
 
         return response.ccaThermalMaps
 
-    def update_thermal_maps(self, project, thermal_maps):
+    def update_thermal_maps(self, project, thermal_map_files):
         """
         Update thermal map files to a Sherlock project.
 
@@ -840,8 +840,8 @@ class Project(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project to update thermal maps to.
-        thermal_maps : list
-            List of thermal maps consisting of these properties:
+        thermal_map_files : list
+            List of thermal map files consisting of these properties:
 
             - file_name : str
                 Name of the thermal file to update.
@@ -892,9 +892,9 @@ class Project(GrpcStub):
             min_temperature=20.0,
             min_temperature_units="C"
         )
-        >>> thermal_maps = [
+        >>> thermal_map_files = [
             {
-                "file_name": "thermal_map.jpg",
+                "file_name": "thermal_map_file.jpg",
                 "file_type": ThermalMapsFileType.IMAGE,
                 "file_comment": "Update thermal map",
                 "thermal_board_side": ThermalBoardSide.TOP,
@@ -903,52 +903,53 @@ class Project(GrpcStub):
                 "cca_names": ["CCA1", "CCA2"]
             },
         ]
-        >>> sherlock.project.update_thermal_maps("Tutorial Project", thermal_maps)
+        >>> sherlock.project.update_thermal_maps("Tutorial Project", thermal_map_files)
         """
         try:
             if project == "":
                 raise SherlockUpdateThermalMapsError(message="Project name is invalid.")
 
-            if len(thermal_maps) == 0:
+            if len(thermal_map_files) == 0:
                 raise SherlockUpdateThermalMapsError(message="Thermal maps are missing.")
 
             # Validate first
-            for i, thermal_map in enumerate(thermal_maps):
-                if len(thermal_map) < 6 or len(thermal_map) > 7:
+            for i, thermal_map_file in enumerate(thermal_map_files):
+                if len(thermal_map_file) < 6 or len(thermal_map_file) > 7:
                     raise SherlockUpdateThermalMapsError(
-                        f"Number of elements ({str(len(thermal_maps))}) "
-                        f"is wrong for thermal map {i}."  # noqa: E501
+                        f"Number of elements ({str(len(thermal_map_file))}) "
+                        f"is wrong for thermal map {i}."
                     )
                 elif (
-                    not isinstance(thermal_map["file_name"], str) or thermal_map["file_name"] == ""
+                    not isinstance(thermal_map_file["file_name"], str)
+                    or thermal_map_file["file_name"] == ""
                 ):
                     raise SherlockUpdateThermalMapsError(
                         f"File name is required for thermal map {i}."
                     )
-                elif not isinstance(thermal_map["file_type"], int):
+                elif not isinstance(thermal_map_file["file_type"], int):
                     raise SherlockUpdateThermalMapsError(f"Invalid file type for thermal map {i}.")
-                elif not isinstance(thermal_map["file_comment"], (str, type(None))):
+                elif not isinstance(thermal_map_file["file_comment"], (str, type(None))):
                     raise SherlockUpdateThermalMapsError(
                         f"Invalid file comment for thermal map {i}."
                     )
-                elif not isinstance(thermal_map["thermal_board_side"], int):
+                elif not isinstance(thermal_map_file["thermal_board_side"], int):
                     raise SherlockUpdateThermalMapsError(
                         f"Invalid thermal board side for thermal map {i}."
                     )
-                elif not isinstance(thermal_map["thermal_profiles"], list):
+                elif not isinstance(thermal_map_file["thermal_profiles"], list):
                     raise SherlockUpdateThermalMapsError(
                         f"Invalid temperature profiles for thermal map {i}."
                     )
-                elif not isinstance(thermal_map["cca_names"], list):
+                elif not isinstance(thermal_map_file["cca_names"], list):
                     raise SherlockUpdateThermalMapsError(
                         f"cca_names is not a list for thermal map {i}."
                     )
                 elif not isinstance(
-                    thermal_map["file_data"], (IcepakFile, ImageFile, CsvExcelFile)
+                    thermal_map_file["file_data"], (IcepakFile, ImageFile, CsvExcelFile)
                 ):
                     raise SherlockUpdateThermalMapsError(f"Invalid properties for thermal map {i}.")
-                if isinstance(thermal_map["file_data"], ImageFile):
-                    file_data = thermal_map["file_data"]
+                if isinstance(thermal_map_file["file_data"], ImageFile):
+                    file_data = thermal_map_file["file_data"]
 
                     if not isinstance(file_data.board_bounds, BoardBounds):
                         raise SherlockUpdateThermalMapsError(
@@ -987,8 +988,8 @@ class Project(GrpcStub):
                             f"Invalid minimum temperature units for thermal map {i}."
                         )
 
-                elif isinstance(thermal_map["file_data"], CsvExcelFile):
-                    file_data = thermal_map["file_data"]
+                elif isinstance(thermal_map_file["file_data"], CsvExcelFile):
+                    file_data = thermal_map_file["file_data"]
 
                     if not isinstance(file_data.header_row_count, int):
                         raise SherlockUpdateThermalMapsError(
@@ -1018,53 +1019,86 @@ class Project(GrpcStub):
             request = SherlockProjectService_pb2.UpdateThermalMapRequest(project=project)
 
             # Add the thermal maps to the request
-            for s in thermal_maps:
-                thermal_map = request.thermalMapFiles.add()
-                thermal_map.fileName = s["file_name"]
-                thermal_map.fileType = s["file_type"]
-                thermal_map.fileComment = s["file_comment"]
-                thermal_map.thermalBoardSide = s["thermal_board_side"]
+            for thermal_map in thermal_map_files:
+                thermal_map_file = request.thermalMapFiles.add()
+                thermal_map_file.fileName = thermal_map["file_name"]
+                thermal_map_file.fileType = thermal_map["file_type"]
+                thermal_map_file.fileComment = thermal_map["file_comment"]
+                thermal_map_file.thermalBoardSide = thermal_map["thermal_board_side"]
 
-                if isinstance(s["file_data"], CsvExcelFile):
-                    thermal_map.csvExcelFile.headerRowCount = s["file_data"].header_row_count
-                    thermal_map.csvExcelFile.numericFormat = s["file_data"].numeric_format
-                    thermal_map.csvExcelFile.referenceIDColumn = s["file_data"].reference_id_column
-                    thermal_map.csvExcelFile.temperatureColumn = s["file_data"].temperature_column
-                    thermal_map.csvExcelFile.temperatureUnits = s["file_data"].temperature_units
-                if isinstance(s["file_data"], ImageFile):
-                    thermal_map.imageFile.coordinateUnits = s["file_data"].coordinate_units
-                    for vertex in s["file_data"].board_bounds.bounds:
-                        node_coordinate = thermal_map.imageFile.boardBounds.add()
+                if isinstance(thermal_map["file_data"], CsvExcelFile):
+                    thermal_map_file.csvExcelFile.headerRowCount = thermal_map[
+                        "file_data"
+                    ].header_row_count
+                    thermal_map_file.csvExcelFile.numericFormat = thermal_map[
+                        "file_data"
+                    ].numeric_format
+                    thermal_map_file.csvExcelFile.referenceIDColumn = thermal_map[
+                        "file_data"
+                    ].reference_id_column
+                    thermal_map_file.csvExcelFile.temperatureColumn = thermal_map[
+                        "file_data"
+                    ].temperature_column
+                    thermal_map_file.csvExcelFile.temperatureUnits = thermal_map[
+                        "file_data"
+                    ].temperature_units
+                if isinstance(thermal_map["file_data"], ImageFile):
+                    thermal_map_file.imageFile.coordinateUnits = thermal_map[
+                        "file_data"
+                    ].coordinate_units
+                    for vertex in thermal_map["file_data"].board_bounds.bounds:
+                        node_coordinate = thermal_map_file.imageFile.boardBounds.add()
                         node_coordinate.vertexX = vertex[0]
                         node_coordinate.vertexY = vertex[1]
-                    thermal_map.imageFile.imageBounds.imageX = s["file_data"].image_bounds.image_x
-                    thermal_map.imageFile.imageBounds.imageY = s["file_data"].image_bounds.image_y
-                    thermal_map.imageFile.imageBounds.imageH = s["file_data"].image_bounds.height
-                    thermal_map.imageFile.imageBounds.imageW = s["file_data"].image_bounds.width
-                    thermal_map.imageFile.legendBounds.legendX = s[
+                    thermal_map_file.imageFile.imageBounds.imageX = thermal_map[
+                        "file_data"
+                    ].image_bounds.image_x
+                    thermal_map_file.imageFile.imageBounds.imageY = thermal_map[
+                        "file_data"
+                    ].image_bounds.image_y
+                    thermal_map_file.imageFile.imageBounds.imageH = thermal_map[
+                        "file_data"
+                    ].image_bounds.height
+                    thermal_map_file.imageFile.imageBounds.imageW = thermal_map[
+                        "file_data"
+                    ].image_bounds.width
+                    thermal_map_file.imageFile.legendBounds.legendX = thermal_map[
                         "file_data"
                     ].legend_bounds.legend_x
-                    thermal_map.imageFile.legendBounds.legendY = s[
+                    thermal_map_file.imageFile.legendBounds.legendY = thermal_map[
                         "file_data"
                     ].legend_bounds.legend_y
-                    thermal_map.imageFile.legendBounds.legendH = s["file_data"].legend_bounds.height
-                    thermal_map.imageFile.legendBounds.legendW = s["file_data"].legend_bounds.width
-                    thermal_map.imageFile.legendOrientation = s["file_data"].legend_orientation
-                    thermal_map.imageFile.minTemperature = s["file_data"].min_temperature
-                    thermal_map.imageFile.minTemperatureUnits = s["file_data"].min_temperature_units
-                    thermal_map.imageFile.maxTemperature = s["file_data"].max_temperature
-                    thermal_map.imageFile.maxTemperatureUnits = s["file_data"].max_temperature_units
+                    thermal_map_file.imageFile.legendBounds.legendH = thermal_map[
+                        "file_data"
+                    ].legend_bounds.height
+                    thermal_map_file.imageFile.legendBounds.legendW = thermal_map[
+                        "file_data"
+                    ].legend_bounds.width
+                    thermal_map_file.imageFile.legendOrientation = thermal_map[
+                        "file_data"
+                    ].legend_orientation
+                    thermal_map_file.imageFile.minTemperature = thermal_map[
+                        "file_data"
+                    ].min_temperature
+                    thermal_map_file.imageFile.minTemperatureUnits = thermal_map[
+                        "file_data"
+                    ].min_temperature_units
+                    thermal_map_file.imageFile.maxTemperature = thermal_map[
+                        "file_data"
+                    ].max_temperature
+                    thermal_map_file.imageFile.maxTemperatureUnits = thermal_map[
+                        "file_data"
+                    ].max_temperature_units
 
-                thermal_profiles = s["thermal_profiles"]
+                thermal_profiles = thermal_map["thermal_profiles"]
                 for thermal_profile in thermal_profiles:
-                    thermal_map.thermalProfiles.append(thermal_profile)
+                    thermal_map_file.thermalProfiles.append(thermal_profile)
 
                 """Add the CCA names to the request."""
-                if len(s) == 7:
-                    cca_names = s["cca_names"]
-                    if cca_names is not None:
-                        for cca_name in cca_names:
-                            thermal_map.cca.append(cca_name)
+                cca_names = thermal_map["cca_names"]
+                if cca_names is not None:
+                    for cca_name in cca_names:
+                        thermal_map_file.cca.append(cca_name)
 
             response = self.stub.updateThermalMaps(request)
 
