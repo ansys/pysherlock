@@ -7,6 +7,10 @@ Parts Types
 
 Constants
 ---------
+.. autoclass:: AVLDescription
+     :members:
+.. autoclass:: AVLPartNum
+     :members:
 .. autoclass:: PartsListSearchDuplicationMode
      :members:
 .. autoclass:: PartsListSearchMatchingMode
