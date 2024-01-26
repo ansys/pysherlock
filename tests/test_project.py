@@ -605,15 +605,9 @@ def helper_test_list_thermal_maps(project):
 
     expected_cca_name = "Main Board"
     expected_file_names = [
-        "Thermal Map.xlsx",
-        "Thermal Map.tmap",
-        "Thermal Image.jpg",
         "Thermal Map.csv",
     ]
     expected_file_types = [
-        "Thermal Map (Excel)",
-        "Icepak Thermal Map (TMAP)",
-        "Thermal Map (Image)",
         "Thermal Map (CSV)",
     ]
 

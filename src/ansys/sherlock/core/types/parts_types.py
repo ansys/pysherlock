@@ -32,17 +32,22 @@ class AVLPartNum:
     """Constants for AVLPartNum in the Update Parts List from AVL request."""
 
     ASSIGN_INTERNAL_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum
+    """AssignInternalPartNum"""
     ASSIGN_VENDOR_AND_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignVendorAndPartNum
+    """AssignVendorAndPartNum"""
     DO_NOT_CHANGE_VENDOR_OR_PART_NUM = (
         SherlockPartsService_pb2.AVLPartNum.DoNotChangeVendorOrPartNum
     )
+    """DoNotChangeVendorOrPartNum"""
 
 
 class AVLDescription:
     """Constants for AVLDescription in the Update Parts List from AVL request."""
 
     ASSIGN_APPROVED_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription
+    """AssignApprovedDescription"""
     DO_NOT_CHANGE_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.DoNotChangeDescription
+    """DoNotChangeDescription"""
 
 
 class PartLocation:
