@@ -1,14 +1,12 @@
 documentation:
-- doc/**/*
-- README.rst
-- CONTRIBUTING.md
+- changed-files:
+  - any-glob-to-any-file: ['doc/**/*', 'README.rst', 'CONTRIBUTING.md']
 maintenance:
-- .github/**/*
-- .flake8
-- pyproject.toml
-- tox.ini
-- .gitignore
+- changed-files:
+  - any-glob-to-any-file: ['.github/**/*', '.flake8' , 'pyproject.toml', 'tox.ini', '.gitignore']
 dependencies:
-- pyproject.toml
+- changed-files:
+  - any-glob-to-any-file: ['pyproject.toml']
 testing:
-- tests/*
+- changed-files:
+  - any-glob-to-any-file: ['tests/*']
