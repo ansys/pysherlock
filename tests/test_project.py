@@ -1359,80 +1359,54 @@ def helper_test_update_thermal_maps(project):
     if not project._is_connection_up():
         return
 
-    # try:
-    #     missing_project_name = "Name of project that should not exist"
-    #     file_data = CsvExcelFile(
-    #             header_row_count=0,
-    #             numeric_format="French",
-    #             reference_id_column="RefDes",
-    #             temperature_column="Temp",
-    #             temperature_units="C",
-    #             )
-    #     thermal_map_files = [
-    #         {
-    #             "file_name": "Thermal Map.csv",
-    #             "file_type": ThermalMapsFileType.CSV,
-    #             "file_comment": "Update",
-    #             "thermal_board_side": ThermalBoardSide.BOTH,
-    #             "file_data": file_data,
-    #             "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-    #             "cca_names": ["Main Board"],
-    #         }
-    #     ]
-    #     project.delete_project(missing_project_name, thermal_map_files)
-    #     pytest.fail("No exception raised when using an invalid parameter")
-    # except Exception as e:
-    #     assert type(e) == SherlockUpdateThermalMapsError
-    #
-    # try:
-    #     file_data = CsvExcelFile(
-    #         header_row_count=0,
-    #         numeric_format="French",
-    #         reference_id_column="RefDes",
-    #         temperature_column="Temp",
-    #         temperature_units="C",
-    #     )
-    #     thermal_map_files = [
-    #         {
-    #             "file_name": "Thermal Map.csv",
-    #             "file_type": ThermalMapsFileType.CSV,
-    #             "file_comment": "Update",
-    #             "thermal_board_side": ThermalBoardSide.BOTH,
-    #             "file_data": file_data,
-    #             "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-    #             "cca_names": ["Main Board"],
-    #         }
-    #     ]
-    #     result = project.update_thermal_maps("Tutorial Project", thermal_map_files)
-    #     assert result == 0
-    #
-    # except SherlockListThermalMapsError as e:
-    #     pytest.fail(str(e.str_itr()))
-    #
-    # try:
-    #     file_data = CsvExcelFile(
-    #         header_row_count=0,
-    #         numeric_format="French",
-    #         reference_id_column="RefDes",
-    #         temperature_column="Temp",
-    #         temperature_units="C",
-    #     )
-    #     thermal_map_files = [
-    #         {
-    #             "file_name": "Thermal Map.xlsx",
-    #             "file_type": ThermalMapsFileType.EXCEL,
-    #             "file_comment": "Update",
-    #             "thermal_board_side": ThermalBoardSide.BOTTOM,
-    #             "file_data": file_data,
-    #             "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-    #             "cca_names": ["Main Board"],
-    #         }
-    #     ]
-    #     result = project.update_thermal_maps("Tutorial Project", thermal_map_files)
-    #     assert result == 0
-    #
-    # except SherlockListThermalMapsError as e:
-    #     pytest.fail(str(e.str_itr()))
+    try:
+        missing_project_name = "Name of project that should not exist"
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        thermal_map_files = [
+            {
+                "file_name": "Thermal Map.csv",
+                "file_type": ThermalMapsFileType.CSV,
+                "file_comment": "Update",
+                "thermal_board_side": ThermalBoardSide.BOTH,
+                "file_data": file_data,
+                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                "cca_names": ["Main Board"],
+            }
+        ]
+        project.update_thermal_maps(missing_project_name, thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdateThermalMapsError
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        thermal_map_files = [
+            {
+                "file_name": "Thermal Map.csv",
+                "file_type": ThermalMapsFileType.CSV,
+                "file_comment": "Update",
+                "thermal_board_side": ThermalBoardSide.BOTH,
+                "file_data": file_data,
+                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                "cca_names": ["Main Board"],
+            }
+        ]
+        result = project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        assert result == 0
+    except SherlockListThermalMapsError as e:
+        pytest.fail(str(e.str_itr()))
 
 
 def clean_up_after_add(project, project_name):
