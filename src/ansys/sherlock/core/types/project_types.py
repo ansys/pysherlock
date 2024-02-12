@@ -57,9 +57,9 @@ class ImageBounds:
         self.image_y = image_y
         """y coordinate of the upper left corner : float"""
         self.height = height
-        """height of the image"""
+        """height of the image : float"""
         self.width = width
-        """width of the image"""
+        """width of the image : float"""
 
 
 class ImageFile:
@@ -104,13 +104,13 @@ class LegendBounds:
     def __init__(self, legend_x, legend_y, height, width):
         """Initialize the legend bounds properties."""
         self.legend_x = legend_x
-        """x coordinate of the upper left corner"""
+        """x coordinate of the upper left corner : float"""
         self.legend_y = legend_y
-        """y coordinate of the upper left corner"""
+        """y coordinate of the upper left corner : float"""
         self.height = height
-        """height of the legend"""
+        """height of the legend : float"""
         self.width = width
-        """width of the legend"""
+        """width of the legend : float"""
 
 
 class LegendOrientation:
@@ -146,4 +146,4 @@ class ThermalMapsFileType:
     IMAGE = __file_type.Image
     "Image"
     TMAP = __file_type.TMAP
-    "TMAP"
+    "Icepak Thermal Map (.TMAP)"
