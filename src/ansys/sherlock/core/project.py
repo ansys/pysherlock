@@ -850,7 +850,7 @@ class Project(GrpcStub):
                 Thermal maps file type.
             - file_comment : str, optional
                 Comment to associate with the file.
-            - thermal_board_side : ThermalMapsBoardSide
+            - thermal_board_side : ThermalBoardSide
                 Thermal board side.
             - file_data : CsvExcelFile|IcepakFile|ImageFile
                 The properties of the thermal map file to update.
@@ -875,7 +875,6 @@ class Project(GrpcStub):
             LegendBounds,
             LegendOrientation,
             ThermalBoardSide,
-            ThermalMapsBoardSide,
             ThermalMapsFileType,
         )
         >>> sherlock = launch_sherlock()
@@ -1140,7 +1139,7 @@ class Project(GrpcStub):
                             Thermal maps file type.
                         - file_comment : str, optional
                             Comment to associate with the file.
-                        - thermal_board_side : ThermalMapsBoardSide
+                        - thermal_board_side : ThermalBoardSide
                             Thermal board side.
                         - file_data : CsvExcelFile|IcepakFile|ImageFile
                             The properties of the thermal map file to update.
@@ -1165,7 +1164,6 @@ class Project(GrpcStub):
             LegendBounds,
             LegendOrientation,
             ThermalBoardSide,
-            ThermalMapsBoardSide,
             ThermalMapsFileType,
         )
         >>> sherlock = launch_sherlock()
@@ -1178,10 +1176,10 @@ class Project(GrpcStub):
             image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
             legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
             legend_orientation=LegendOrientation.VERTICAL,
-            max_temperature=50.0,
-            max_temperature_units="C",
             min_temperature=20.0,
-            min_temperature_units="C"
+            min_temperature_units="C",
+            max_temperature=50.0,
+            max_temperature_units="C"
         )
         >>> add_thermal_map_files = [
             {
@@ -1199,7 +1197,7 @@ class Project(GrpcStub):
                 ]
             }
         ]
-        >>> sherlock.project.update_thermal_maps("Tutorial Project", add_thermal_map_files)
+        >>> sherlock.project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
         """
         try:
             if project == "":
@@ -1222,7 +1220,7 @@ class Project(GrpcStub):
                     raise SherlockAddThermalMapsError(f"File path is required for thermal map {i}.")
                 elif not isinstance(add_thermal_map_file["thermal_map_file_properties"], list):
                     raise SherlockAddThermalMapsError(
-                        f"thermal_map_file_properties is not " f"a list for thermal map {i}."
+                        f"thermal_map_file_properties is not a list for thermal map {i}."
                     )
 
                 thermal_map_file_properties = add_thermal_map_file["thermal_map_file_properties"]
@@ -1290,14 +1288,6 @@ class Project(GrpcStub):
                             raise SherlockAddThermalMapsError(
                                 f"Invalid legend orientation for thermal map {j}."
                             )
-                        if not isinstance(file_data.max_temperature, float):
-                            raise SherlockAddThermalMapsError(
-                                f"Invalid maximum temperature for thermal map {j}."
-                            )
-                        if not isinstance(file_data.max_temperature_units, str):
-                            raise SherlockAddThermalMapsError(
-                                f"Invalid maximum temperature units for thermal map {j}."
-                            )
                         if not isinstance(file_data.min_temperature, float):
                             raise SherlockAddThermalMapsError(
                                 f"Invalid minimum temperature for thermal map {j}."
@@ -1305,6 +1295,14 @@ class Project(GrpcStub):
                         if not isinstance(file_data.min_temperature_units, str):
                             raise SherlockAddThermalMapsError(
                                 f"Invalid minimum temperature units for thermal map {j}."
+                            )
+                        if not isinstance(file_data.max_temperature, float):
+                            raise SherlockAddThermalMapsError(
+                                f"Invalid maximum temperature for thermal map {j}."
+                            )
+                        if not isinstance(file_data.max_temperature_units, str):
+                            raise SherlockAddThermalMapsError(
+                                f"Invalid maximum temperature units for thermal map {j}."
                             )
 
                     elif isinstance(thermal_map_file_property["file_data"], CsvExcelFile):
