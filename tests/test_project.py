@@ -866,7 +866,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: File name is required " "for thermal map 0.']"
+            "['Add thermal maps error: File name is required for thermal map 0.']"
         )
 
     try:
@@ -898,7 +898,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid file type " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid file type for thermal map 0.']"
         )
 
     try:
@@ -930,7 +930,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid file comment " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid file comment for thermal map 0.']"
         )
 
     try:
@@ -962,7 +962,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid thermal board side " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid thermal board side for thermal map 0.']"
         )
 
     try:
@@ -994,7 +994,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid temperature profiles " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid temperature profiles for thermal map 0.']"
         )
 
     try:
@@ -1026,7 +1026,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: cca_names is not a list " "for thermal map 0.']"
+            "['Add thermal maps error: cca_names is not a list for thermal map 0.']"
         )
 
     try:
@@ -1052,7 +1052,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid properties " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid properties for thermal map 0.']"
         )
 
     try:
@@ -1084,7 +1084,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid header row count " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid header row count for thermal map 0.']"
         )
 
     try:
@@ -1116,7 +1116,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid numeric format " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid numeric format for thermal map 0.']"
         )
 
     try:
@@ -1148,7 +1148,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid reference id column " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid reference id column for thermal map 0.']"
         )
 
     try:
@@ -1180,7 +1180,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid temperature column " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid temperature column for thermal map 0.']"
         )
 
     try:
@@ -1212,7 +1212,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid temperature units " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid temperature units for thermal map 0.']"
         )
 
     try:
@@ -1248,7 +1248,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid board bounds " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid board bounds for thermal map 0.']"
         )
 
     try:
@@ -1286,7 +1286,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid coordinate units " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid coordinate units for thermal map 0.']"
         )
 
     try:
@@ -1324,7 +1324,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid image bounds " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid image bounds for thermal map 0.']"
         )
 
     try:
@@ -1362,7 +1362,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid legend bounds " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid legend bounds for thermal map 0.']"
         )
 
     try:
@@ -1400,7 +1400,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid legend orientation " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid legend orientation for thermal map 0.']"
         )
 
     try:
@@ -1438,7 +1438,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid maximum temperature " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid maximum temperature for thermal map 0.']"
         )
 
     try:
@@ -1476,7 +1476,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid maximum temperature units " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid maximum temperature units for thermal map 0.']"
         )
 
     try:
@@ -1514,7 +1514,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid minimum temperature " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid minimum temperature for thermal map 0.']"
         )
 
     try:
@@ -1552,7 +1552,7 @@ def helper_test_add_thermal_maps(project):
 
     except SherlockAddThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Add thermal maps error: Invalid minimum temperature units " "for thermal map 0.']"
+            "['Add thermal maps error: Invalid minimum temperature units for thermal map 0.']"
         )
 
     if not project._is_connection_up():
@@ -1688,7 +1688,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "File name is required for thermal map 0.']"
+            "['Update thermal maps error: File name is required for thermal map 0.']"
         )
 
     try:
@@ -1715,7 +1715,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid file type for thermal map 0.']"
+            "['Update thermal maps error: Invalid file type for thermal map 0.']"
         )
 
     try:
@@ -1742,7 +1742,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid file comment for thermal map 0.']"
+            "['Update thermal maps error: Invalid file comment for thermal map 0.']"
         )
 
     try:
@@ -1769,7 +1769,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid thermal board side for thermal map 0.']"
+            "['Update thermal maps error: Invalid thermal board side for thermal map 0.']"
         )
 
     try:
@@ -1790,7 +1790,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid properties for thermal map 0.']"
+            "['Update thermal maps error: Invalid properties for thermal map 0.']"
         )
 
     try:
@@ -1817,7 +1817,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid temperature profiles for thermal map 0.']"
+            "['Update thermal maps error: Invalid temperature profiles for thermal map 0.']"
         )
 
     try:
@@ -1844,7 +1844,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "cca_names is not a list for thermal map 0.']"
+            "['Update thermal maps error: cca_names is not a list for thermal map 0.']"
         )
 
     try:
@@ -1871,7 +1871,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid header row count for thermal map 0.']"
+            "['Update thermal maps error: Invalid header row count for thermal map 0.']"
         )
 
     try:
@@ -1898,7 +1898,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid numeric format for thermal map 0.']"
+            "['Update thermal maps error: Invalid numeric format for thermal map 0.']"
         )
 
     try:
@@ -1925,7 +1925,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid reference id column for thermal map 0.']"
+            "['Update thermal maps error: Invalid reference id column for thermal map 0.']"
         )
 
     try:
@@ -1952,7 +1952,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid temperature column for thermal map 0.']"
+            "['Update thermal maps error: Invalid temperature column for thermal map 0.']"
         )
 
     try:
@@ -1979,7 +1979,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid temperature units for thermal map 0.']"
+            "['Update thermal maps error: Invalid temperature units for thermal map 0.']"
         )
 
     try:
@@ -2010,7 +2010,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid board bounds for thermal map 0.']"
+            "['Update thermal maps error: Invalid board bounds for thermal map 0.']"
         )
 
     try:
@@ -2043,7 +2043,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid coordinate units for thermal map 0.']"
+            "['Update thermal maps error: Invalid coordinate units for thermal map 0.']"
         )
 
     try:
@@ -2076,7 +2076,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid image bounds for thermal map 0.']"
+            "['Update thermal maps error: Invalid image bounds for thermal map 0.']"
         )
 
     try:
@@ -2109,7 +2109,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid legend bounds for thermal map 0.']"
+            "['Update thermal maps error: Invalid legend bounds for thermal map 0.']"
         )
 
     try:
@@ -2142,7 +2142,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid legend orientation for thermal map 0.']"
+            "['Update thermal maps error: Invalid legend orientation for thermal map 0.']"
         )
 
     try:
@@ -2175,7 +2175,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid maximum temperature for thermal map 0.']"
+            "['Update thermal maps error: Invalid maximum temperature for thermal map 0.']"
         )
 
     try:
@@ -2208,7 +2208,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid maximum temperature units for thermal map 0.']"
+            "['Update thermal maps error: Invalid maximum temperature units for thermal map 0.']"
         )
 
     try:
@@ -2241,7 +2241,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid minimum temperature for thermal map 0.']"
+            "['Update thermal maps error: Invalid minimum temperature for thermal map 0.']"
         )
 
     try:
@@ -2274,7 +2274,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid minimum temperature units for thermal map 0.']"
+            "['Update thermal maps error: Invalid minimum temperature units for thermal map 0.']"
         )
 
     if not project._is_connection_up():
