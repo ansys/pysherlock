@@ -12,6 +12,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddCCAError,
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
+    SherlockAddThermalMapsError,
     SherlockDeleteProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
@@ -50,8 +51,9 @@ def test_all():
     helper_test_list_ccas(project)
     helper_test_add_cca(project)
     helper_test_list_strain_maps(project)
-    helper_test_list_thermal_maps(project)
+    helper_test_add_thermal_maps(project)
     helper_test_update_thermal_maps(project)
+    helper_test_list_thermal_maps(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
@@ -675,6 +677,925 @@ def helper_test_list_thermal_maps(project):
             pytest.fail(str(e.str_itr()))
 
 
+def helper_test_add_thermal_maps(project):
+    """Test add_thermal_maps API"""
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == "['Add thermal maps error: Project name is invalid.']"
+
+    try:
+        add_thermal_map_files = []
+
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == "['Add thermal maps error: Thermal maps are missing.']"
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "test": "test",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(list(e.str_itr())) == (
+            "['Add thermal maps error: "
+            f"Number of elements ({str(len(add_thermal_map_files[0]))}) "
+            "is wrong for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: File path is required " "for thermal map 0.']"
+        )
+
+    try:
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": "",
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: thermal_map_file_properties "
+            "is not a list for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                        "test": "test",
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        properties_length = len(add_thermal_map_files[0]["thermal_map_file_properties"][0])
+        assert str(list(e.str_itr())) == (
+            "['Add thermal maps error: "
+            f"Number of elements ({str(properties_length)}) is wrong for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: File name is required for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": "",
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid file type for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": 0,
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid file comment for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": "0",
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid thermal board side for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": "Environmental/1 - Temp Cycle - Min",
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature profiles for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": "Main Board",
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: cca_names is not a list for thermal map 0.']"
+        )
+
+    try:
+        file_data = ""
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid properties for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count="0",
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid header row count for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format=0,
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid numeric format for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column=0,
+            temperature_column="Temp",
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid reference id column for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column=0,
+            temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature column for thermal map 0.']"
+        )
+
+    try:
+        file_data = CsvExcelFile(
+            header_row_count=0,
+            numeric_format="French",
+            reference_id_column="RefDes",
+            temperature_column="Temp",
+            temperature_units=0,
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature units for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds="",
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid board bounds for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units=0,
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid coordinate units for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds="",
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid image bounds for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds="",
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid legend bounds for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation="LegendOrientation.VERTICAL",
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid legend orientation for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature="47.0",
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid maximum temperature for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units=0,
+            min_temperature=30.0,
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid maximum temperature units for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature="30.0",
+            min_temperature_units="C",
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid minimum temperature for thermal map 0.']"
+        )
+
+    try:
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units=0,
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid minimum temperature units for thermal map 0.']"
+        )
+
+    if not project._is_connection_up():
+        return
+
+    try:
+        missing_project_name = "Name of project that should not exist"
+        file_data = ImageFile(
+            board_bounds=BoardBounds(
+                [(-3.7464, -2.2515), (3.7464, -2.141), (3.6159, 2.2395), (-3.5724, 2.2487)]
+            ),
+            coordinate_units="in",
+            image_bounds=ImageBounds(-4.2551, -4.4217, 7.0277, 9.2132),
+            legend_bounds=LegendBounds(4.1811, -3.365, 4.7947, 0.3478),
+            legend_orientation=LegendOrientation.VERTICAL,
+            max_temperature=47.0,
+            max_temperature_units="C",
+            min_temperature=30.0,
+            min_temperature_units=0,
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.csv",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.csv",
+                        "file_type": ThermalMapsFileType.CSV,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps(missing_project_name, add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except Exception as e:
+        assert type(e) == SherlockAddThermalMapsError
+
+
 def helper_test_update_thermal_maps(project):
     """Test update_thermal_maps API"""
 
@@ -767,7 +1688,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "File name is required for thermal map 0.']"
+            "['Update thermal maps error: File name is required for thermal map 0.']"
         )
 
     try:
@@ -794,7 +1715,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid file type for thermal map 0.']"
+            "['Update thermal maps error: Invalid file type for thermal map 0.']"
         )
 
     try:
@@ -821,7 +1742,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid file comment for thermal map 0.']"
+            "['Update thermal maps error: Invalid file comment for thermal map 0.']"
         )
 
     try:
@@ -848,7 +1769,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid thermal board side for thermal map 0.']"
+            "['Update thermal maps error: Invalid thermal board side for thermal map 0.']"
         )
 
     try:
@@ -869,7 +1790,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid properties for thermal map 0.']"
+            "['Update thermal maps error: Invalid properties for thermal map 0.']"
         )
 
     try:
@@ -896,7 +1817,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid temperature profiles for thermal map 0.']"
+            "['Update thermal maps error: Invalid temperature profiles for thermal map 0.']"
         )
 
     try:
@@ -923,7 +1844,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "cca_names is not a list for thermal map 0.']"
+            "['Update thermal maps error: cca_names is not a list for thermal map 0.']"
         )
 
     try:
@@ -950,7 +1871,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid header row count for thermal map 0.']"
+            "['Update thermal maps error: Invalid header row count for thermal map 0.']"
         )
 
     try:
@@ -977,7 +1898,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid numeric format for thermal map 0.']"
+            "['Update thermal maps error: Invalid numeric format for thermal map 0.']"
         )
 
     try:
@@ -1004,7 +1925,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid reference id column for thermal map 0.']"
+            "['Update thermal maps error: Invalid reference id column for thermal map 0.']"
         )
 
     try:
@@ -1031,7 +1952,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid temperature column for thermal map 0.']"
+            "['Update thermal maps error: Invalid temperature column for thermal map 0.']"
         )
 
     try:
@@ -1058,7 +1979,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid temperature units for thermal map 0.']"
+            "['Update thermal maps error: Invalid temperature units for thermal map 0.']"
         )
 
     try:
@@ -1089,7 +2010,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid board bounds for thermal map 0.']"
+            "['Update thermal maps error: Invalid board bounds for thermal map 0.']"
         )
 
     try:
@@ -1122,7 +2043,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid coordinate units for thermal map 0.']"
+            "['Update thermal maps error: Invalid coordinate units for thermal map 0.']"
         )
 
     try:
@@ -1155,7 +2076,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid image bounds for thermal map 0.']"
+            "['Update thermal maps error: Invalid image bounds for thermal map 0.']"
         )
 
     try:
@@ -1188,7 +2109,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid legend bounds for thermal map 0.']"
+            "['Update thermal maps error: Invalid legend bounds for thermal map 0.']"
         )
 
     try:
@@ -1221,7 +2142,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid legend orientation for thermal map 0.']"
+            "['Update thermal maps error: Invalid legend orientation for thermal map 0.']"
         )
 
     try:
@@ -1254,7 +2175,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid maximum temperature for thermal map 0.']"
+            "['Update thermal maps error: Invalid maximum temperature for thermal map 0.']"
         )
 
     try:
@@ -1287,7 +2208,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid maximum temperature units for thermal map 0.']"
+            "['Update thermal maps error: Invalid maximum temperature units for thermal map 0.']"
         )
 
     try:
@@ -1320,7 +2241,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid minimum temperature for thermal map 0.']"
+            "['Update thermal maps error: Invalid minimum temperature for thermal map 0.']"
         )
 
     try:
@@ -1353,7 +2274,7 @@ def helper_test_update_thermal_maps(project):
 
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
-            "['Update thermal maps error: " "Invalid minimum temperature units for thermal map 0.']"
+            "['Update thermal maps error: Invalid minimum temperature units for thermal map 0.']"
         )
 
     if not project._is_connection_up():
