@@ -20,6 +20,7 @@ from ansys.sherlock.core.errors import (
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
@@ -1420,6 +1421,64 @@ class Project(GrpcStub):
             return return_code.value
 
         except SherlockAddThermalMapsError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+
+    def import_project_zip_archive(self, project, category, archive_file):
+        """
+        Import a zipped project archive -- multiple project mode.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        category : str
+            Sherlock project category.
+        archive_file : str
+            Full path to the .zip archive file containing the project data.
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive("Tutorial Project", "Demos",
+        "Tutorial Project.zip")
+        """
+        try:
+            if project == "":
+                raise SherlockImportProjectZipArchiveError(message="Project name is required.")
+
+            if category == "":
+                raise SherlockImportProjectZipArchiveError(message="Project category is required.")
+
+            if archive_file == "":
+                raise SherlockImportProjectZipArchiveError(message="Archive file path is required.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ImportProjectZipRequest(
+                project=project, category=category, archiveFile=archive_file
+            )
+
+            response = self.stub.addThermalMaps(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockImportProjectZipArchiveError(response.errors)
+
+                raise SherlockImportProjectZipArchiveError(message=return_code.message)
+
+            return return_code.value
+
+        except SherlockImportProjectZipArchiveError as e:
             for error in e.str_itr():
                 LOG.error(error)
             raise e
