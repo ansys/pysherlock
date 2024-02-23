@@ -104,6 +104,8 @@ jobs:
       - name: Upload coverage to Codecov
         if: env.MAIN_PYTHON_VERSION == matrix.python-version
         uses: codecov/codecov-action@v4
+        with:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   docs:
     name: Documentation
