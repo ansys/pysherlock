@@ -2353,7 +2353,7 @@ def helper_test_import_project_zip_archive(project):
 
     if project._is_connection_up():
         try:
-            project.import_ipc2581_archive("Missing Archive File.zip", True, True)
+            project.import_ipc2581_archive("Tutorial Project", "Demos", "Missing Archive File.zip")
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportProjectZipArchiveError

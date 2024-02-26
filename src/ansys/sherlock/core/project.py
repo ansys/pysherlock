@@ -1450,13 +1450,13 @@ class Project(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockImportProjectZipArchiveError(message="Project name is required.")
+                raise SherlockImportProjectZipArchiveError(message="Project name is invalid.")
 
             if category == "":
-                raise SherlockImportProjectZipArchiveError(message="Project category is required.")
+                raise SherlockImportProjectZipArchiveError(message="Project category is invalid.")
 
             if archive_file == "":
-                raise SherlockImportProjectZipArchiveError(message="Archive file path is required.")
+                raise SherlockImportProjectZipArchiveError(message="Archive file path is invalid.")
 
             if not self._is_connection_up():
                 LOG.error("There is no connection to a gRPC service.")
@@ -1471,9 +1471,6 @@ class Project(GrpcStub):
             return_code = response.returnCode
 
             if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockImportProjectZipArchiveError(response.errors)
-
                 raise SherlockImportProjectZipArchiveError(message=return_code.message)
 
             return return_code.value
