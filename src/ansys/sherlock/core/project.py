@@ -1466,7 +1466,7 @@ class Project(GrpcStub):
                 project=project, category=category, archiveFile=archive_file
             )
 
-            response = self.stub.addThermalMaps(request)
+            response = self.stub.importProjectZipArchive(request)
 
             return_code = response.returnCode
 
