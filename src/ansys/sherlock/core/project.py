@@ -1479,3 +1479,78 @@ class Project(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+    def import_project_zip_archive_single_mode(
+        self, project, category, archive_file, destination_file_directory
+    ):
+        """
+        Import a zipped project archive -- single project mode.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        category : str
+            Sherlock project category.
+        archive_file : str
+            Full path to the .zip archive file containing the project data.
+        destination_file_directory : str
+            Directory in which the Sherlock project folder will be created.
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive_single_mode("Tutorial Project",
+        "Demos",
+        "Tutorial Project.zip",
+        "New Tutorial Project")
+        """
+        try:
+            if project == "":
+                raise SherlockImportProjectZipArchiveSingleModeError(
+                    message="Project name is invalid."
+                )
+
+            if category == "":
+                raise SherlockImportProjectZipArchiveSingleModeError(
+                    message="Project category is invalid."
+                )
+
+            if archive_file == "":
+                raise SherlockImportProjectZipArchiveSingleModeError(
+                    message="Archive file path is invalid."
+                )
+
+            if destination_file_directory == "":
+                raise SherlockImportProjectZipArchiveSingleModeError(
+                    message="Directory of the destination file is invalid."
+                )
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ImportProjectZipSingleModeRequest(
+                project=project,
+                category=category,
+                archiveFile=archive_file,
+                destFileDir=destination_file_directory,
+            )
+
+            response = self.stub.importProjectZipArchiveSingleMode(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                raise SherlockImportProjectZipArchiveSingleModeError(message=return_code.message)
+
+            return return_code.value
+
+        except SherlockImportProjectZipArchiveSingleModeError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
