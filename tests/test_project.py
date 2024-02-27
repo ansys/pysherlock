@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
@@ -2328,6 +2329,34 @@ def helper_test_update_thermal_maps(project):
         assert result == 0
     except SherlockListThermalMapsError as e:
         pytest.fail(str(e.str_itr()))
+
+
+def helper_test_import_project_zip_archive(project):
+    """Test import_project_zip_archive API"""
+    try:
+        project.import_project_zip_archive("", "Demos", "Tutorial Project.zip")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockImportProjectZipArchiveError as e:
+        assert str(e) == "Import zipped project archive error: Project name is required."
+
+    try:
+        project.import_project_zip_archive("Tutorial Project", "", "Tutorial Project.zip")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockImportProjectZipArchiveError as e:
+        assert str(e) == "Import zipped project archive error: Project category is required."
+
+    try:
+        project.import_project_zip_archive("Tutorial Project", "Demos", "")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockImportProjectZipArchiveError as e:
+        assert str(e) == "Import zipped project archive error: Archive file path is required."
+
+    if project._is_connection_up():
+        try:
+            project.import_ipc2581_archive("Tutorial Project", "Demos", "Missing Archive File.zip")
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockImportProjectZipArchiveError
 
 
 def clean_up_after_add(project, project_name):
