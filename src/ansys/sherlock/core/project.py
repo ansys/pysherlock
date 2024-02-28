@@ -21,6 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockImportIpc2581Error,
     SherlockImportODBError,
     SherlockImportProjectZipArchiveError,
+    SherlockImportProjectZipArchiveSingleModeError,
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
@@ -1468,17 +1469,14 @@ class Project(GrpcStub):
 
             response = self.stub.importProjectZipArchive(request)
 
-            return_code = response.returnCode
-
-            if return_code.value == -1:
-                raise SherlockImportProjectZipArchiveError(message=return_code.message)
-
-            return return_code.value
+            if response.value == -1:
+                raise SherlockImportProjectZipArchiveError(message=response.message)
 
         except SherlockImportProjectZipArchiveError as e:
-            for error in e.str_itr():
-                LOG.error(error)
+            LOG.error(str(e))
             raise e
+
+        return response.value
 
     def import_project_zip_archive_single_mode(
         self, project, category, archive_file, destination_file_directory
@@ -1535,22 +1533,22 @@ class Project(GrpcStub):
                 return
 
             request = SherlockProjectService_pb2.ImportProjectZipSingleModeRequest(
-                project=project,
-                category=category,
-                archiveFile=archive_file,
-                destFileDir=destination_file_directory,
+                destFileDir=destination_file_directory
             )
+
+            # Add the other properties to the request
+            projZipProperty = request.projZipRequest
+            projZipProperty.project = project
+            projZipProperty.category = category
+            projZipProperty.archiveFile = archive_file
 
             response = self.stub.importProjectZipArchiveSingleMode(request)
 
-            return_code = response.returnCode
-
-            if return_code.value == -1:
-                raise SherlockImportProjectZipArchiveSingleModeError(message=return_code.message)
-
-            return return_code.value
+            if response.value == -1:
+                raise SherlockImportProjectZipArchiveSingleModeError(message=response.message)
 
         except SherlockImportProjectZipArchiveSingleModeError as e:
-            for error in e.str_itr():
-                LOG.error(error)
+            LOG.error(str(e))
             raise e
+
+        return response.value

@@ -49,6 +49,8 @@ def test_all():
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
     helper_test_import_ipc2581_archive(project)
+    helper_test_import_project_zip_archive(project)
+    helper_test_import_project_zip_archive_single_mode(project)
     helper_test_generate_project_report(project)
     helper_test_list_ccas(project)
     helper_test_add_cca(project)
@@ -2338,23 +2340,25 @@ def helper_test_import_project_zip_archive(project):
         project.import_project_zip_archive("", "Demos", "Tutorial Project.zip")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveError as e:
-        assert str(e) == "Import zipped project archive error: Project name is required."
+        assert str(e) == "Import zipped project archive error: Project name is invalid."
 
     try:
         project.import_project_zip_archive("Tutorial Project", "", "Tutorial Project.zip")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveError as e:
-        assert str(e) == "Import zipped project archive error: Project category is required."
+        assert str(e) == "Import zipped project archive error: Project category is invalid."
 
     try:
         project.import_project_zip_archive("Tutorial Project", "Demos", "")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveError as e:
-        assert str(e) == "Import zipped project archive error: Archive file path is required."
+        assert str(e) == "Import zipped project archive error: Archive file path is invalid."
 
     if project._is_connection_up():
         try:
-            project.import_ipc2581_archive("Tutorial Project", "Demos", "Missing Archive File.zip")
+            project.import_project_zip_archive(
+                "Tutorial Project", "Demos", "Missing Archive File.zip"
+            )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportProjectZipArchiveError
@@ -2364,19 +2368,19 @@ def helper_test_import_project_zip_archive_single_mode(project):
     """Test import_project_zip_archive_single_mode API"""
     try:
         project.import_project_zip_archive_single_mode(
-            "", "Demos", "Tutorial Project.zip" "New Tutorial Project"
+            "", "Demos", "Tutorial Project.zip", "New Tutorial Project"
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveSingleModeError as e:
-        assert str(e) == "Import zipped project archive error: Project name is required."
+        assert str(e) == "Import zipped project archive error: Project name is invalid."
 
     try:
         project.import_project_zip_archive_single_mode(
-            "Tutorial Project", "", "Tutorial Project.zip" "New Tutorial Project"
+            "Tutorial Project", "", "Tutorial Project.zip", "New Tutorial Project"
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveSingleModeError as e:
-        assert str(e) == "Import zipped project archive error: Project category is required."
+        assert str(e) == "Import zipped project archive error: Project category is invalid."
 
     try:
         project.import_project_zip_archive_single_mode(
@@ -2384,20 +2388,20 @@ def helper_test_import_project_zip_archive_single_mode(project):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveSingleModeError as e:
-        assert str(e) == "Import zipped project archive error: Archive file path is required."
+        assert str(e) == "Import zipped project archive error: Archive file path is invalid."
 
     try:
         project.import_project_zip_archive_single_mode("Tutorial Project", "Demos", "File.zip", "")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportProjectZipArchiveSingleModeError as e:
         assert str(e) == (
-            "Import zipped project archive error: Directory of the " "destination file is invalid."
+            "Import zipped project archive error: Directory of the destination file is invalid."
         )
 
     if project._is_connection_up():
         try:
             project.import_project_zip_archive_single_mode(
-                "Tutorial Project", "Demos", "Missing Archive File.zip" "New Tutorial Project"
+                "Tutorial Project", "Demos", "Missing Archive File.zip", "New Tutorial Project"
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
