@@ -972,3 +972,15 @@ class SherlockImportProjectZipArchiveError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Import zipped project archive error: {self.message}"
+
+
+class SherlockImportProjectZipArchiveSingleModeError(Exception):
+    """Contains the error raised when a .zip project archive cannot be imported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Import zipped project archive error: {self.message}"
