@@ -14,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockImportPartsListError,
     SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
+    SherlockUpdatePartsListPropertiesError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
 )
@@ -33,6 +34,8 @@ def test_all():
     parts = Parts(channel)
 
     helper_test_update_parts_list(parts)
+    time.sleep(1)
+    helper_test_update_part_lists_properties(parts)
     time.sleep(1)
     helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
@@ -670,6 +673,140 @@ def helper_test_get_part_location(parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetPartLocationError as e:
         assert str(e) == "Get part location error: Location unit is invalid."
+
+
+def helper_test_update_part_lists_properties(parts):
+    """Test update_part_lists_properties API"""
+    try:
+        parts.update_part_lists_properties(
+            "",
+            "CCA_Name",
+            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: Project name is invalid.']"
+        )
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "",
+            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == "['Update parts list properties error: CCA name is invalid.']"
+
+    try:
+        parts.update_part_lists_properties("Test", "CCA_Name", [])
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: Part properties are missing.']"
+        )
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "CCA_name",
+            [
+                {
+                    "ref_des": ["C1"],
+                    "properties": [{"name": "partType", "value": "RESISTOR"}],
+                    "test": "test",
+                }
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: Number of elements (3) "
+            "is wrong for part list property 0.']"
+        )
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "CCA_name",
+            [{"ref_des": "C1", "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: ref_des is not a list "
+            "for parts list property 0.']"
+        )
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "CCA_name",
+            [
+                {
+                    "ref_des": ["C1"],
+                    "properties": [{"name": "partType", "value": "RESISTOR", "test": "test"}],
+                }
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: Number of elements (3) "
+            "is wrong for property 0.']"
+        )
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "CCA_name",
+            [{"ref_des": ["C1"], "properties": [{"name": "", "value": "RESISTOR"}]}],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: Name is required for property 0.']"
+        )
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "CCA_name",
+            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": ""}]}],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartsListPropertiesError as e:
+        assert str(e.str_itr()) == (
+            "['Update parts list properties error: Value is required for property 0.']"
+        )
+
+    if not parts._is_connection_up():
+        return
+
+    try:
+        parts.update_part_lists_properties(
+            "Test",
+            "CCA_name",
+            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdatePartsListPropertiesError
+
+    if parts._is_connection_up():
+        try:
+            result = parts.update_part_lists_properties(
+                "Tutorial Project",
+                "Main Board",
+                [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+            )
+
+            assert result == 0
+            time.sleep(1)
+
+        except Exception as e:
+            pytest.fail(e.message)
 
 
 if __name__ == "__main__":
