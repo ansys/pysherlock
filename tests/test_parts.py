@@ -36,7 +36,6 @@ def test_all():
     helper_test_update_parts_list(parts)
     time.sleep(1)
     helper_test_update_parts_list_properties(parts)
-    time.sleep(1)
     helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
@@ -681,7 +680,12 @@ def helper_test_update_parts_list_properties(parts):
         parts.update_parts_list_properties(
             "",
             "CCA_Name",
-            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+            [
+                {
+                    "reference_designators": ["C1"],
+                    "properties": [{"name": "partType", "value": "RESISTOR"}],
+                }
+            ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
@@ -693,7 +697,12 @@ def helper_test_update_parts_list_properties(parts):
         parts.update_parts_list_properties(
             "Test",
             "",
-            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+            [
+                {
+                    "reference_designators": ["C1"],
+                    "properties": [{"name": "partType", "value": "RESISTOR"}],
+                }
+            ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
@@ -713,7 +722,7 @@ def helper_test_update_parts_list_properties(parts):
             "CCA_name",
             [
                 {
-                    "ref_des": ["C1"],
+                    "reference_designators": ["C1"],
                     "properties": [{"name": "partType", "value": "RESISTOR"}],
                     "test": "test",
                 }
@@ -730,12 +739,17 @@ def helper_test_update_parts_list_properties(parts):
         parts.update_parts_list_properties(
             "Test",
             "CCA_name",
-            [{"ref_des": "C1", "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+            [
+                {
+                    "reference_designators": "C1",
+                    "properties": [{"name": "partType", "value": "RESISTOR"}],
+                }
+            ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
         assert str(e.str_itr()) == (
-            "['Update parts list properties error: ref_des is not a list "
+            "['Update parts list properties error: reference_designators is not a list "
             "for parts list property 0.']"
         )
 
@@ -745,7 +759,7 @@ def helper_test_update_parts_list_properties(parts):
             "CCA_name",
             [
                 {
-                    "ref_des": ["C1"],
+                    "reference_designators": ["C1"],
                     "properties": [{"name": "partType", "value": "RESISTOR", "test": "test"}],
                 }
             ],
@@ -761,7 +775,7 @@ def helper_test_update_parts_list_properties(parts):
         parts.update_parts_list_properties(
             "Test",
             "CCA_name",
-            [{"ref_des": ["C1"], "properties": [{"name": "", "value": "RESISTOR"}]}],
+            [{"reference_designators": ["C1"], "properties": [{"name": "", "value": "RESISTOR"}]}],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
@@ -773,7 +787,7 @@ def helper_test_update_parts_list_properties(parts):
         parts.update_parts_list_properties(
             "Test",
             "CCA_name",
-            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": ""}]}],
+            [{"reference_designators": ["C1"], "properties": [{"name": "partType", "value": 0}]}],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
@@ -781,14 +795,16 @@ def helper_test_update_parts_list_properties(parts):
             "['Update parts list properties error: Value is required for property 0.']"
         )
 
-    if not parts._is_connection_up():
-        return
-
     try:
         parts.update_parts_list_properties(
-            "Test",
+            "Invalid project",
             "CCA_name",
-            [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+            [
+                {
+                    "reference_designators": ["C1"],
+                    "properties": [{"name": "partType", "value": "RESISTOR"}],
+                }
+            ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except Exception as e:
@@ -799,7 +815,12 @@ def helper_test_update_parts_list_properties(parts):
             result = parts.update_parts_list_properties(
                 "Tutorial Project",
                 "Main Board",
-                [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
+                [
+                    {
+                        "reference_designators": ["C1"],
+                        "properties": [{"name": "partType", "value": "RESISTOR"}],
+                    }
+                ],
             )
 
             assert result == 0

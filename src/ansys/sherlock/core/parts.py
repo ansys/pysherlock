@@ -819,7 +819,7 @@ class Parts(GrpcStub):
         part_properties : list
             List of part properties consisting of these properties:
 
-                - ref_des : List of str, optional
+                - reference_designators : List of str, optional
                     List of the reference designator for each part to be updated. If not included,
                     update properties for all parts in the CCA.
                 - properties : list
@@ -844,13 +844,13 @@ class Parts(GrpcStub):
                 "Card",
                 [
                     {
-                        "ref_des": ["C1"],
+                        "reference_designators": ["C1"],
                         "properties": [
                             {"name": "partType", "value": "RESISTOR"}
                         ]
                     },
                     {
-                        "ref_des": ["C2"],
+                        "reference_designators": ["C2"],
                         "properties": [
                             {"name": "locX", "value": "1"}
                         ]
@@ -869,26 +869,25 @@ class Parts(GrpcStub):
             for i, part_property in enumerate(part_properties):
                 if len(part_property) < 1 or len(part_property) > 2:
                     raise SherlockUpdatePartsListPropertiesError(
-                        f"Number of elements ({str(len(part_property))}) "
+                        f"Number of elements ({len(part_property)}) "
                         f"is wrong for part list property {i}."
                     )
-                elif not isinstance(part_property["ref_des"], list):
+                elif not isinstance(part_property["reference_designators"], list):
                     raise SherlockUpdatePartsListPropertiesError(
-                        f"ref_des is not a list " f"for parts list property {i}."
+                        f"reference_designators is not a list " f"for parts list property {i}."
                     )
 
                 properties = part_property["properties"]
                 for j, property in enumerate(properties):
                     if len(property) < 1 or len(property) > 2:
                         raise SherlockUpdatePartsListPropertiesError(
-                            f"Number of elements ({str(len(property))}) "
-                            f"is wrong for property {j}."
+                            f"Number of elements ({len(property)}) " f"is wrong for property {j}."
                         )
                     elif not isinstance(property["name"], str) or property["name"] == "":
                         raise SherlockUpdatePartsListPropertiesError(
                             f"Name is required " f"for property {j}."
                         )
-                    elif not isinstance(property["value"], str) or property["value"] == "":
+                    elif not isinstance(property["value"], str):
                         raise SherlockUpdatePartsListPropertiesError(
                             f"Value is required " f"for property {j}."
                         )
@@ -904,10 +903,10 @@ class Parts(GrpcStub):
             # Add part properties to the request
             for part_prop in part_properties:
                 prop = request.partProperties.add()
-                ref_des_props = part_prop["ref_des"]
-                if ref_des_props is not None:
-                    for ref_des_prop in ref_des_props:
-                        prop.refDes.append(ref_des_prop)
+                ref_des = part_prop["reference_designators"]
+                if ref_des is not None:
+                    for reference_designators_prop in ref_des:
+                        prop.refDes.append(reference_designators_prop)
 
                 props = part_prop["properties"]
                 if props is not None:
