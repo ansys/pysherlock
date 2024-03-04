@@ -806,7 +806,7 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def update_part_lists_properties(self, project, cca_name, part_properties):
+    def update_parts_list_properties(self, project, cca_name, part_properties):
         """
         Update one or more properties of one or more parts in a parts list.
 
@@ -839,7 +839,7 @@ class Parts(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> sherlock.parts.update_part_lists_properties(
+        >>> sherlock.parts.update_parts_list_properties(
                 "Test",
                 "Card",
                 [

@@ -35,7 +35,7 @@ def test_all():
 
     helper_test_update_parts_list(parts)
     time.sleep(1)
-    helper_test_update_part_lists_properties(parts)
+    helper_test_update_parts_list_properties(parts)
     time.sleep(1)
     helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
@@ -675,10 +675,10 @@ def helper_test_get_part_location(parts):
         assert str(e) == "Get part location error: Location unit is invalid."
 
 
-def helper_test_update_part_lists_properties(parts):
-    """Test update_part_lists_properties API"""
+def helper_test_update_parts_list_properties(parts):
+    """Test update_parts_list_properties API"""
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "",
             "CCA_Name",
             [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
@@ -690,7 +690,7 @@ def helper_test_update_part_lists_properties(parts):
         )
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "",
             [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
@@ -700,7 +700,7 @@ def helper_test_update_part_lists_properties(parts):
         assert str(e.str_itr()) == "['Update parts list properties error: CCA name is invalid.']"
 
     try:
-        parts.update_part_lists_properties("Test", "CCA_Name", [])
+        parts.update_parts_list_properties("Test", "CCA_Name", [])
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
         assert str(e.str_itr()) == (
@@ -708,7 +708,7 @@ def helper_test_update_part_lists_properties(parts):
         )
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "CCA_name",
             [
@@ -727,7 +727,7 @@ def helper_test_update_part_lists_properties(parts):
         )
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "CCA_name",
             [{"ref_des": "C1", "properties": [{"name": "partType", "value": "RESISTOR"}]}],
@@ -740,7 +740,7 @@ def helper_test_update_part_lists_properties(parts):
         )
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "CCA_name",
             [
@@ -758,7 +758,7 @@ def helper_test_update_part_lists_properties(parts):
         )
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "CCA_name",
             [{"ref_des": ["C1"], "properties": [{"name": "", "value": "RESISTOR"}]}],
@@ -770,7 +770,7 @@ def helper_test_update_part_lists_properties(parts):
         )
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "CCA_name",
             [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": ""}]}],
@@ -785,7 +785,7 @@ def helper_test_update_part_lists_properties(parts):
         return
 
     try:
-        parts.update_part_lists_properties(
+        parts.update_parts_list_properties(
             "Test",
             "CCA_name",
             [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
@@ -796,7 +796,7 @@ def helper_test_update_part_lists_properties(parts):
 
     if parts._is_connection_up():
         try:
-            result = parts.update_part_lists_properties(
+            result = parts.update_parts_list_properties(
                 "Tutorial Project",
                 "Main Board",
                 [{"ref_des": ["C1"], "properties": [{"name": "partType", "value": "RESISTOR"}]}],
