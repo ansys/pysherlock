@@ -36,6 +36,7 @@ def test_all():
     helper_test_update_parts_list(parts)
     time.sleep(1)
     helper_test_update_parts_list_properties(parts)
+    time.sleep(1)
     helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
@@ -791,9 +792,10 @@ def helper_test_update_parts_list_properties(parts):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
-        assert str(e.str_itr()) == (
-            "['Update parts list properties error: Value is required for property 0.']"
-        )
+        assert str(e.str_itr()) == ("['Update parts list properties error: Value is invalid.']")
+
+    if not parts._is_connection_up():
+        return
 
     try:
         parts.update_parts_list_properties(
@@ -810,24 +812,23 @@ def helper_test_update_parts_list_properties(parts):
     except Exception as e:
         assert type(e) == SherlockUpdatePartsListPropertiesError
 
-    if parts._is_connection_up():
-        try:
-            result = parts.update_parts_list_properties(
-                "Tutorial Project",
-                "Main Board",
-                [
-                    {
-                        "reference_designators": ["C1"],
-                        "properties": [{"name": "partType", "value": "RESISTOR"}],
-                    }
-                ],
-            )
+    try:
+        result = parts.update_parts_list_properties(
+            "Tutorial Project",
+            "Main Board",
+            [
+                {
+                    "reference_designators": ["C1"],
+                    "properties": [{"name": "partType", "value": "RESISTOR"}],
+                }
+            ],
+        )
 
-            assert result == 0
-            time.sleep(1)
+        assert result == 0
+        time.sleep(1)
 
-        except Exception as e:
-            pytest.fail(e.message)
+    except Exception as e:
+        pytest.fail(e.message)
 
 
 if __name__ == "__main__":

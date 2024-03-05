@@ -888,9 +888,7 @@ class Parts(GrpcStub):
                             f"Name is required " f"for property {j}."
                         )
                     elif not isinstance(property["value"], str):
-                        raise SherlockUpdatePartsListPropertiesError(
-                            f"Value is required " f"for property {j}."
-                        )
+                        raise SherlockUpdatePartsListPropertiesError(message="Value is invalid.")
 
             if not self._is_connection_up():
                 LOG.error("There is no connection to a gRPC service.")
@@ -903,10 +901,10 @@ class Parts(GrpcStub):
             # Add part properties to the request
             for part_prop in part_properties:
                 prop = request.partProperties.add()
-                ref_des = part_prop["reference_designators"]
-                if ref_des is not None:
-                    for reference_designators_prop in ref_des:
-                        prop.refDes.append(reference_designators_prop)
+                reference_designators = part_prop["reference_designators"]
+                if reference_designators is not None:
+                    for ref_des in reference_designators:
+                        prop.refDes.append(ref_des)
 
                 props = part_prop["properties"]
                 if props is not None:
