@@ -984,3 +984,20 @@ class SherlockImportProjectZipArchiveSingleModeError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Import zipped project archive error: {self.message}"
+
+
+class SherlockUpdatePartsListPropertiesError(Exception):
+    """Contains the errors raised when a parts list properties cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Update parts list properties error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update parts list properties error: {self.message}"]

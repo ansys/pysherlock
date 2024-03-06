@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockImportPartsListError,
     SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
+    SherlockUpdatePartsListPropertiesError,
     SherlockUpdatePartsLocationsByFileError,
     SherlockUpdatePartsLocationsError,
 )
@@ -803,4 +804,128 @@ class Parts(GrpcStub):
             return response
         except SherlockUpdatePartsFromAVLError as e:
             LOG.error(str(e))
+            raise e
+
+    def update_parts_list_properties(self, project, cca_name, part_properties):
+        """
+        Update one or more properties of one or more parts in a parts list.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        part_properties : list
+            List of part properties consisting of these properties:
+
+                - reference_designators : List of str, optional
+                    List of the reference designator for each part to be updated. If not included,
+                    update properties for all parts in the CCA.
+                - properties : list
+                    List of properties consisting of these properties:
+
+                        - name : str
+                            Name of property to be updated.
+                        - value : str
+                            Value to be applied to the chosen part property.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.parts.update_parts_list_properties(
+                "Test",
+                "Card",
+                [
+                    {
+                        "reference_designators": ["C1"],
+                        "properties": [
+                            {"name": "partType", "value": "RESISTOR"}
+                        ]
+                    },
+                    {
+                        "reference_designators": ["C2"],
+                        "properties": [
+                            {"name": "locX", "value": "1"}
+                        ]
+                    }
+                ]
+            )
+        """
+        try:
+            if project == "":
+                raise SherlockUpdatePartsListPropertiesError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockUpdatePartsListPropertiesError(message="CCA name is invalid.")
+            if len(part_properties) == 0:
+                raise SherlockUpdatePartsListPropertiesError(message="Part properties are missing.")
+
+            for i, part_property in enumerate(part_properties):
+                if len(part_property) < 1 or len(part_property) > 2:
+                    raise SherlockUpdatePartsListPropertiesError(
+                        f"Number of elements ({len(part_property)}) "
+                        f"is wrong for part list property {i}."
+                    )
+                elif not isinstance(part_property["reference_designators"], list):
+                    raise SherlockUpdatePartsListPropertiesError(
+                        f"reference_designators is not a list " f"for parts list property {i}."
+                    )
+
+                properties = part_property["properties"]
+                for j, property in enumerate(properties):
+                    if len(property) < 1 or len(property) > 2:
+                        raise SherlockUpdatePartsListPropertiesError(
+                            f"Number of elements ({len(property)}) " f"is wrong for property {j}."
+                        )
+                    elif not isinstance(property["name"], str) or property["name"] == "":
+                        raise SherlockUpdatePartsListPropertiesError(
+                            f"Name is required " f"for property {j}."
+                        )
+                    elif not isinstance(property["value"], str):
+                        raise SherlockUpdatePartsListPropertiesError(message="Value is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockPartsService_pb2.UpdatePartsListPropertiesRequest(
+                project=project, ccaName=cca_name
+            )
+
+            # Add part properties to the request
+            for part_prop in part_properties:
+                prop = request.partProperties.add()
+                reference_designators = part_prop["reference_designators"]
+                if reference_designators is not None:
+                    for ref_des in reference_designators:
+                        prop.refDes.append(ref_des)
+
+                props = part_prop["properties"]
+                if props is not None:
+                    for prop_dict in props:
+                        property_obj = prop.properties.add()
+                        property_obj.name = prop_dict["name"]
+                        property_obj.value = prop_dict["value"]
+
+            response = self.stub.updatePartsListProperties(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockUpdatePartsListPropertiesError(error_array=response.errors)
+
+                raise SherlockUpdatePartsListPropertiesError(message=return_code.message)
+
+            return return_code.value
+
+        except SherlockUpdatePartsListPropertiesError as e:
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
