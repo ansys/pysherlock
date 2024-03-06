@@ -824,6 +824,8 @@ def helper_test_update_parts_list_properties(parts):
             ],
         )
 
+        assert result == 0
+
     except Exception as e:
         pytest.fail(e.message)
 
