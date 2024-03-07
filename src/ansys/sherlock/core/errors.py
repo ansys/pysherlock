@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2024 ANSYS, Inc. All rights reserved
 
 """pysherlock specific errors."""
 
@@ -909,3 +909,95 @@ class SherlockUpdatePartsFromAVLError(Exception):
 
         assert self.error_array is None
         return [f"Update part from AVL error: {self.message}"]
+
+
+class SherlockListThermalMapsError(Exception):
+    """Contains the errors raised when thermal map files for a project cannot be listed."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"List thermal maps error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"List thermal maps error: {self.message}"]
+
+
+class SherlockUpdateThermalMapsError(Exception):
+    """Contains the errors raised when thermal map files for a project cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Update thermal maps error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update thermal maps error: {self.message}"]
+
+
+class SherlockAddThermalMapsError(Exception):
+    """Contains the errors raised when thermal map files for a project cannot be added."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Add thermal maps error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Add thermal maps error: {self.message}"]
+
+
+class SherlockImportProjectZipArchiveError(Exception):
+    """Contains the error raised when a .zip project archive cannot be imported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Import zipped project archive error: {self.message}"
+
+
+class SherlockImportProjectZipArchiveSingleModeError(Exception):
+    """Contains the error raised when a .zip project archive cannot be imported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Import zipped project archive error: {self.message}"
+
+
+class SherlockUpdatePartsListPropertiesError(Exception):
+    """Contains the errors raised when a parts list properties cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Update parts list properties error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update parts list properties error: {self.message}"]

@@ -20,6 +20,7 @@ Use the search feature or click links to view API documentation.
    layer_types
    parts_types
    project
+   project_types
    stackup
 
 .. autosummary::
@@ -34,4 +35,5 @@ Use the search feature or click links to view API documentation.
    ansys.sherlock.core.types.layer_types
    ansys.sherlock.core.types.parts_types
    ansys.sherlock.core.project
+   ansys.sherlock.core.types.project_types
    ansys.sherlock.core.stackup
