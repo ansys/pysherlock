@@ -7,10 +7,7 @@ import unittest
 import grpc
 import pytest
 
-from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
-    SherlockModelServiceError,
-)
+from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockModelServiceError
 from ansys.sherlock.core.model import Model
 
 

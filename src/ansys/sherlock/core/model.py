@@ -11,10 +11,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
-    SherlockModelServiceError,
-)
+from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockModelServiceError
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -301,7 +298,6 @@ class Model(GrpcStub):
         except Exception as e:
             LOG.error(str(e))
             raise
-
 
     def export_aedb(
         self,
