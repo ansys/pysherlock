@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2023-2024 ANSYS, Inc. All rights reserved
 
 """Module containing all model generation capabilities."""
 import os.path
@@ -11,7 +11,10 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockModelServiceError
+from ansys.sherlock.core.errors import (
+    SherlockExportAEDBError,
+    SherlockModelServiceError,
+)
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
 
@@ -293,6 +296,78 @@ class Model(GrpcStub):
             return_code = self.stub.generateTraceModel(gen_request)
             if return_code.value != 0:
                 raise SherlockModelServiceError(return_code.message)
+
+            return return_code.value
+        except Exception as e:
+            LOG.error(str(e))
+            raise
+
+
+    def export_aedb(
+        self,
+        project_name,
+        cca_name,
+        export_file,
+        overwrite=True,
+        display_model=False,
+    ):
+        r"""Export an Electronics Desktop model.
+
+        Parameters
+        ----------
+        project_name : str
+            Name of the Sherlock project to generate the EDB model for.
+        cca_name : str
+            Name of the CCA to generate the EDB model from.
+        export_file : str
+            Directory for saving exported model to.
+        overwrite : bool, optional
+            Whether to overwrite an existing file having the same file name.
+            The default is ``True``.
+        display_model : bool, optional
+            Whether to launch and display the exported model in Ansys Electronics
+            Desktop once the export finishes. The default is ``False``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.sherlock.core import model
+        >>> sherlock = launcher.launch_sherlock()
+        >>> sherlock.model.export_aedb(
+            'Tutorial Project', 'Main Board', 'c:\Temp\export.aedb',
+            True, False)
+        """
+        try:
+            if not project_name:
+                raise SherlockExportAEDBError("Project name is invalid.")
+            if not cca_name:
+                raise SherlockExportAEDBError("CCA name is invalid.")
+            if export_file == "":
+                raise SherlockExportAEDBError(message="Export filepath is required.")
+        except Exception as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        export_request = SherlockModelService_pb2.ExportAEDBRequest()
+        export_request.project = project_name
+        export_request.ccaName = cca_name
+        export_request.exportFile = export_file
+        export_request.overwrite = overwrite
+        export_request.displayModel = display_model
+
+        try:
+            return_code = self.stub.exportAEDB(export_request)
+            if return_code.value != 0:
+                raise SherlockExportAEDBError(return_code.message)
 
             return return_code.value
         except Exception as e:

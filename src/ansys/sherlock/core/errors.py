@@ -637,6 +637,18 @@ class SherlockModelServiceError(Exception):
         return f"Model service error: {self.message}"
 
 
+class SherlockExportAEDBError(Exception):
+    """Contains the error raised when an Electronics Desktop model cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export AEDB error: {self.message}"
+
+
 class SherlockInvalidLoadDirectionError(Exception):
     """Contains the error raised when the load direction string is invalid."""
 
