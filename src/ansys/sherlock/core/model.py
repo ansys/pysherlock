@@ -166,11 +166,24 @@ class Model(GrpcStub):
         export_request.traceParam.minHoleDiameterForShellOrBeam.unit = (
             trace_param_min_hole_diameter_unit
         )
+
+        # export_request.traceDrillHoleParam is Deprecated
         export_request.traceDrillHoleParam.drillHoleModeling = trace_drill_hole_modeling
         export_request.traceDrillHoleParam.minHoleDiameter.value = trace_drill_hole_min_diameter_val
         export_request.traceDrillHoleParam.minHoleDiameter.unit = trace_drill_hole_min_diameter_unit
         export_request.traceDrillHoleParam.maxEdgeLength.value = trace_drill_hole_max_edge_val
         export_request.traceDrillHoleParam.maxEdgeLength.unit = trace_drill_hole_max_edge_unit
+        # export_request.traceDrillHoleParam is Deprecated
+
+        # New message to replace traceDrillHoleParam below.
+        # Convert ENABLE/ENABLED or DISABLE/DISABLED to boolean
+        export_request.drillHoleModeling.drillHoleModelingEnabled = (
+            trace_drill_hole_modeling.upper().startswith("ENABLE")
+        )
+        export_request.drillHoleModeling.minHoleDiameter.value = trace_drill_hole_min_diameter_val
+        export_request.drillHoleModeling.minHoleDiameter.units = trace_drill_hole_min_diameter_unit
+        export_request.drillHoleModeling.maxEdgeLength.value = trace_drill_hole_max_edge_val
+        export_request.drillHoleModeling.maxEdgeLength.units = trace_drill_hole_max_edge_unit
 
         try:
             return_code = self.stub.exportTraceReinforcementModel(export_request)
@@ -369,3 +382,170 @@ class Model(GrpcStub):
         except Exception as e:
             LOG.error(str(e))
             raise
+
+    def exportTraceModel(self, layer_params: list) -> int:
+        r"""Export a trace model to a specified output file.
+
+        Parameters
+        ----------
+        layer_params : list
+            list of parameters for export a trace model of a single copper layer
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.sherlock.core import model
+        >>> sherlock = launcher.launch_sherlock()
+        >>> list_of_params_for_layers = []
+        >>> list_of_params_for_layers.add(
+                sherlock.model.createExportTraceCopperLayerParams(
+                    "Tutorial Project",
+                    "Main Board",
+                    "outputfile.stp",
+                    "copper-01.odb",
+                    False,
+                    False,
+                    False,
+        use_FEA_model_ID: bool = False,
+        coord_units: str = "mm",
+        # Mesh Type Params
+        mesh_type: MeshType = MeshType.NONE,
+        is_modeling_region_enabled: bool = False,
+        # Trace Params
+        trace_output_type: TraceOutputType = TraceOutputType.ALL_REGIONS,
+        element_order: ElementOrder = ElementOrder.LINEAR,
+        max_mesh_size: float = 1.0,
+        max_holes_per_trace: int = 1,
+        is_drill_hole_modeling_enabled: bool = False,
+        drill_hole_min_diameter: float = 1.0,
+        drill_hole_min_diameter_units = "mm",
+        drill_hole_max_edge_length: float = 1.0,
+        drill_hole_max_edge_length_units: str = "mm",
+                )
+            )
+        >>> sherlock.model.exportTraceModel(list_of_params_for_layers)
+        """
+        try:
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                raise
+
+            request = SherlockModelService_pb2.ExportTraceModelRequest()
+            for layer_param in layer_params:
+                request.traceModelExportParams.add(layer_param)
+
+            returnCode = self.stub.exportTraceModel(request)
+            if return_code.value != 0:
+                # Return error from the server
+                raise SherlockModelServiceError(return_code.message)
+
+            return returnCode.value
+        except Exception as e:
+            LOG.error(str(e))
+            raise
+
+    def createExportTraceCopperLayerParams(
+        self,
+        project_name: str,
+        cca_name: str,
+        output_file_path: str,
+        copper_layer: str,
+        overwrite: bool = False,
+        display_after: bool = False,
+        clear_FEA_database: bool = False,
+        use_FEA_model_ID: bool = False,
+        coord_units: str = "mm",
+        # Mesh Type Params
+        mesh_type: MeshType = MeshType.NONE,
+        is_modeling_region_enabled: bool = False,
+        # Trace Params
+        trace_output_type: TraceOutputType = TraceOutputType.ALL_REGIONS,
+        element_order: ElementOrder = ElementOrder.LINEAR,
+        max_mesh_size: float = 1.0,
+        max_holes_per_trace: int = 1,
+        is_drill_hole_modeling_enabled: bool = False,
+        drill_hole_min_diameter: float = 1.0,
+        drill_hole_min_diameter_units: str = "mm",
+        drill_hole_max_edge_length: float = 1.0,
+        drill_hole_max_edge_length_units: str = "mm",
+    ) -> SherlockModelService_pb2.TraceModelExportParams:
+        r"""Create a set of parameters to be used to export a single copper layer.
+
+        Parameters
+        ----------
+        project_name: str
+        cca_name: str
+        output_file_path: str
+        copper_layer: str
+        overwrite: bool = False
+        display_after: bool = False
+        clear_FEA_database: bool = False
+        use_FEA_model_ID: bool = False
+        coord_units: str = "mm"
+        # Mesh Type Params
+        mesh_type: MeshType = MeshType.NONE
+        is_modeling_region_enabled: bool = False
+        # Trace Params
+        trace_output_type: TraceOutputType = TraceOutputType.ALL_REGIONS
+        element_order: ElementOrder = ElementOrder.LINEAR
+        max_mesh_size: float = 1.0
+        max_holes_per_trace: int = 1
+        is_drill_hole_modeling_enabled: bool = False
+        drill_hole_min_diameter: float = 1.0
+        drill_hole_min_diameter_units = "mm"
+        drill_hole_max_edge_length: float = 1.0
+        drill_hole_max_edge_length_units: str = "mm"
+        """
+        try:
+            if not project_name:
+                raise SherlockModelServiceError("Project name is invalid.")
+            if not cca_name:
+                raise SherlockModelServiceError("CCA name is invalid.")
+            if not output_file_path:
+                raise SherlockModelServiceError("Output File path is required")
+            if not copper_layer:
+                raise SherlockModelServiceError("Copper layer name is required.")
+        except Exception as e:
+            LOG.error(str(e))
+            raise
+
+        ret = SherlockModelService_pb2.TraceModelExportParams()
+
+        ret.project = project_name
+        ret.ccaName = cca_name
+        ret.filePath = output_file_path
+        ret.copperLayerName = copper_layer
+        ret.overwriteExistingFile = overwrite
+        ret.displayModelAfterExport = display_after
+        ret.clearFEADatabase = clear_FEA_database
+        ret.useFEAModelID = use_FEA_model_ID
+        ret.coordUnits = coord_units
+
+        # Mesh Type Params
+        pmp = SherlockModelService_pb2.TraceModelExportParams.PcbMeshPropParam()
+        pmp.meshType = mesh_type
+        pmp.isModelingRegionEnabled = is_modeling_region_enabled
+        ret.pcbMeshPropParam = pmp
+
+        # Trace Params
+        tpp = SherlockModelService_pb2.TraceModelExportParams.TracePropParam()
+        tpp.traceOutputs = trace_output_type
+        tpp.elementOrder = element_order
+        tpp.maxMeshSize = max_mesh_size
+        tpp.maxHolesPerTrace = max_holes_per_trace
+        ret.tracePropParam = tpp
+
+        # Drill Hole Params
+        dhm = SherlockModelService_pb2.DrillHoleModeling()
+        dhm.drillHoleModelingEnabled = is_drill_hole_modeling_enabled
+        dhm.minHoleDiameter.value = drill_hole_min_diameter
+        dhm.minHoleDiameter.units = drill_hole_min_diameter_units
+        dhm.maxEdgeLength.value = drill_hole_max_edge_length
+        dhm.maxEdgeLength.units = drill_hole_max_edge_length_units
+        ret.drillHoleModeling = dhm
+        return ret
