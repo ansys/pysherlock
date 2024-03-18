@@ -850,19 +850,19 @@ def helper_test_export_net_list(parts):
         parts.export_net_list("", "Demos", "Net List.csv")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportNetListError as e:
-        assert str(e) == "Project name is invalid."
+        assert str(e) == "Export net list error: Project name is invalid."
 
     try:
         parts.export_net_list("Test", "", "Net List.csv")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportNetListError as e:
-        assert str(e) == "CCA name is invalid."
+        assert str(e) == "Export net list error: CCA name is invalid."
 
     try:
         parts.export_net_list("Test", "Demos", "")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportNetListError as e:
-        assert str(e) == "Output file path is required."
+        assert str(e) == "Export net list error: Output file path is required."
 
     if parts._is_connection_up():
         try:
