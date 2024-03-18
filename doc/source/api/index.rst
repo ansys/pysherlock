@@ -12,6 +12,7 @@ Use the search feature or click links to view API documentation.
 
    analysis
    common
+   common_types
    launcher
    layer
    lifecycle

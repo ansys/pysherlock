@@ -1,10 +1,9 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2024 ANSYS, Inc. All rights reserved
 
 """Module containing all parts management capabilities."""
 
 try:
     import SherlockPartsService_pb2
-    import SherlockPartsService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2_grpc
@@ -12,6 +11,7 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
+    SherlockExportNetListError,
     SherlockExportPartsListError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
@@ -22,6 +22,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
@@ -929,3 +930,89 @@ class Parts(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+    def export_net_list(
+        self,
+        project,
+        cca_name,
+        output_file,
+        col_delimiter=TableDelimiter.COMMA,
+        overwrite_existing=False,
+        utf8_enabled=False,
+    ):
+        """Export a net list to a delimited output file.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        output_file : str
+            Full path for the output file where the net list will be written.
+        col_delimiter : TableDelimiter, optional
+            The delimiter character to be used. Defaults to TableDelimiter.COMMA.
+        overwrite_existing : bool, optional
+            Flag to determine if existing files should be overwritten if they match the output_file.
+            Defaults to False.
+        utf8_enabled : bool, optional
+            Flag that specifies if UTF-8 will be used. Defaults to False.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.parts.export_net_list(
+            "Test",
+            "Card",
+            "Net List.csv",
+            col_delimiter=TableDelimiter.TAB,
+            overwrite_existing=True,
+            utf8_enabled=True
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockExportNetListError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockExportNetListError(message="CCA name is invalid.")
+            if output_file == "":
+                raise SherlockExportNetListError(message="Output file path is required.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockPartsService_pb2.ExportNetListRequest(
+                project=project,
+                ccaName=cca_name,
+                outputFilePath=output_file,
+                overwriteExisting=overwrite_existing,
+                colDelimiter=col_delimiter,
+                utf8Enabled=utf8_enabled,
+            )
+
+            response = self.stub.exportNetList(request)
+
+            if response.value == -1:
+                raise SherlockExportNetListError(response.message)
+
+        except SherlockExportNetListError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value

@@ -1013,3 +1013,15 @@ class SherlockUpdatePartsListPropertiesError(Exception):
 
         assert self.error_array is None
         return [f"Update parts list properties error: {self.message}"]
+
+
+class SherlockExportNetListError(Exception):
+    """Contains the error raised when a net list cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export net list error: {self.message}"
