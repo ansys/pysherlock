@@ -9,6 +9,7 @@ import pytest
 
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
+    SherlockExportNetListError,
     SherlockExportPartsListError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
@@ -19,6 +20,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
+from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
@@ -42,6 +44,7 @@ def test_all():
     helper_test_update_parts_locations_by_file(parts)
     helper_test_import_parts_list(parts)
     helper_test_export_parts_list(parts)
+    helper_test_export_net_list(parts)
     helper_test_enable_lead_modeling(parts)
     helper_test_get_part_location(parts)
 
@@ -487,6 +490,36 @@ def helper_test_import_parts_list(parts):
 
 def helper_test_export_parts_list(parts):
     """Tests export_parts_list API."""
+    try:
+        parts.export_parts_list(
+            "",
+            "Card",
+            "Parts List.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportPartsListError as e:
+        assert str(e) == "Export parts list error: Project name is invalid."
+
+    try:
+        parts.export_parts_list(
+            "Test",
+            "",
+            "Parts List.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportPartsListError as e:
+        assert str(e) == "Export parts list error: CCA name is invalid."
+
+    try:
+        parts.export_parts_list(
+            "Test",
+            "Card",
+            "",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportPartsListError as e:
+        assert str(e) == "Export parts list error: Export filepath is required."
+
     if parts._is_connection_up():
         if platform.system() == "Windows":
             temp_dir = os.environ.get("TEMP", "C:\\TEMP")
@@ -523,26 +556,6 @@ def helper_test_export_parts_list(parts):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportPartsListError
-
-    try:
-        parts.export_parts_list(
-            "",
-            "Card",
-            "Parts List.csv",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: Project name is invalid."
-
-    try:
-        parts.export_parts_list(
-            "Test",
-            "",
-            "Parts List.csv",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockExportPartsListError as e:
-        assert str(e) == "Export parts list error: CCA name is invalid."
 
 
 def helper_test_enable_lead_modeling(parts):
@@ -828,6 +841,41 @@ def helper_test_update_parts_list_properties(parts):
 
     except Exception as e:
         pytest.fail(e.message)
+
+
+def helper_test_export_net_list(parts):
+    """Test export_net_list API"""
+
+    try:
+        parts.export_net_list("", "Demos", "Net List.csv")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportNetListError as e:
+        assert str(e) == "Export net list error: Project name is invalid."
+
+    try:
+        parts.export_net_list("Test", "", "Net List.csv")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportNetListError as e:
+        assert str(e) == "Export net list error: CCA name is invalid."
+
+    try:
+        parts.export_net_list("Test", "Demos", "")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportNetListError as e:
+        assert str(e) == "Export net list error: Output file path is required."
+
+    if parts._is_connection_up():
+        try:
+            parts.export_net_list(
+                "Test",
+                "Demos",
+                "Missing Net List.csv",
+                col_delimiter=TableDelimiter.TAB,
+                overwrite_existing=True,
+                utf8_enabled=True,
+            )
+        except SherlockExportNetListError as e:
+            assert type(e) == SherlockExportNetListError
 
 
 if __name__ == "__main__":
