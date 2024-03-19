@@ -283,73 +283,79 @@ class TestModel(unittest.TestCase):
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
-        copper_layer_name = "copper-03.odb"
+        output_file_path = ".\\outputFile.stp"
+        copper_layer_name = "copper-01.odb"
 
         try:
             model.exportTraceModel(
                 [
-                    createExportTraceCopperLayerParams(
-                        "",
-                        "cca",
-                        "outputFile",
-                        "copper_layer",
+                    model.createExportTraceCopperLayerParams(
+                        project_name="",
+                        cca_name=cca_name,
+                        output_file_path=output_file_path,
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
                     )
                 ]
             )
         except SherlockModelServiceError as e:
-            assert str(e) == "Project name is invalid."
+            assert str(e) == "Model service error: Project name is invalid."
 
         try:
             model.exportTraceModel(
                 [
-                    createExportTraceCopperLayerParams(
-                        "project",
-                        "",
-                        "outputFile",
-                        "copper_layer",
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name="",
+                        output_file_path=output_file_path,
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
                     )
                 ]
             )
         except SherlockModelServiceError as e:
-            assert str(e) == "CCA name is invalid."
+            assert str(e) == "Model service error: CCA name is invalid."
 
         try:
             model.exportTraceModel(
                 [
-                    createExportTraceCopperLayerParams(
-                        "project",
-                        "cca",
-                        "",
-                        "copper_layer",
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name=cca_name,
+                        output_file_path="",
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
                     )
                 ]
             )
         except SherlockModelServiceError as e:
-            assert str(e) == "Output File path is required"
+            assert str(e) == "Model service error: Output File path is required"
 
         try:
             model.exportTraceModel(
                 [
-                    createExportTraceCopperLayerParams(
-                        "project",
-                        "cca",
-                        "outputFile",
-                        "",
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name=cca_name,
+                        output_file_path=output_file_path,
+                        copper_layer="",
+                        overwrite=True,
                     )
                 ]
             )
         except SherlockModelServiceError as e:
-            assert str(e) == "Copper layer name is required."
+            assert str(e) == "Model service error: Copper layer name is required."
 
         if model._is_connection_up():
             try:
                 result = model.exportTraceModel(
                     [
-                        createExportTraceCopperLayerParams(
-                            project_name,
-                            cca_name,
-                            "outputFile",
-                            copper_layer_name,
+                        model.createExportTraceCopperLayerParams(
+                            project_name=project_name,
+                            cca_name=cca_name,
+                            output_file_path=output_file_path,
+                            copper_layer=copper_layer_name,
+                            overwrite=True,
                         )
                     ]
                 )
