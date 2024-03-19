@@ -953,10 +953,10 @@ class Parts(GrpcStub):
         col_delimiter : TableDelimiter, optional
             The delimiter character to be used. Defaults to TableDelimiter.COMMA.
         overwrite_existing : bool, optional
-            Flag to determine if existing files should be overwritten if they match the output_file.
-            Defaults to False.
+            Flag to determine if existing .CSV files should be overwritten
+            if they match the output_file. Defaults to False.
         utf8_enabled : bool, optional
-            Flag that specifies if UTF-8 will be used. Defaults to False.
+            Flag that specifies if UTF-8 will be used for .CSV files. Defaults to False.
 
         Returns
         -------
