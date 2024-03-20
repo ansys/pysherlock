@@ -4,6 +4,7 @@
 
 try:
     import SherlockPartsService_pb2
+    import SherlockPartsService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2_grpc
