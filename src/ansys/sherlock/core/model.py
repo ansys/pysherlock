@@ -391,7 +391,7 @@ class Model(GrpcStub):
         Parameters
         ----------
         layer_params : list
-            list of parameters for export a trace model of a single copper layer
+            list of parameters for export a trace model of a single copper layer.
 
         Returns
         -------
@@ -482,14 +482,14 @@ class Model(GrpcStub):
         Parameters
         ----------
         project_name: str
-            Name of the sherlock project containing trace layer to export.
+            Name of the Sherlock project containing trace layer to export.
         cca_name: str
             Name of the CCA containing the trace layer to export.
         output_file_path: str
             File path including the file name and extension where the trace layer will be exported.
             Valid file extensions: .py, .bdf, .apdl, .cdb, .wbjn, .stp, .step, .tcl, .stl
             Note: relative paths will be relative to sherlock install directory,
-            not the python script
+            not the python script.
         copper_layer: str
             Name of the copper layer in the given CCA to export.
         overwrite: bool = False
@@ -500,7 +500,7 @@ class Model(GrpcStub):
             Determines if sherlock should clear the database after export.
             Applicable file extensions: .apdl, and .cdb.
         use_FEA_model_ID: bool = False
-            Determines if the FEA model id is used or not
+            Determines if the FEA model id is used or not.
         coord_units: str = "mm"
             Units of the coordinate system. Applicable to .py .wbjn, .stp, .step.
         mesh_type: MeshType = MeshType.NONE
@@ -522,16 +522,16 @@ class Model(GrpcStub):
         drill_hole_min_diameter: float = 1.0
             All drill holes with a diameter < this value will not be modeled.
         drill_hole_min_diameter_units : str = "mm"
-            Units associated with drill_hole_min_diameter
+            Units associated with drill_hole_min_diameter.
         drill_hole_max_edge_length: float = 1.0
             Specifies the length of the line segments used to represent round drill holes.
         drill_hole_max_edge_length_units: str = "mm"
-            Units associated with drill_hole_max_edge_length
+            Units associated with drill_hole_max_edge_length.
 
         Returns
         -------
         TraceModelExportParams
-            Object that holds the data for a single export trace request
+            Object that holds the data for a single export trace request.
 
         Examples
         --------
