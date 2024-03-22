@@ -276,6 +276,93 @@ class TestModel(unittest.TestCase):
             except SherlockExportAEDBError as e:
                 pytest.fail(str(e))
 
+    def test_model_export_trace_model(self):
+        channel_param = "127.0.0.1:9090"
+        channel = grpc.insecure_channel(channel_param)
+        model = Model(channel)
+
+        project_name = "Tutorial Project"
+        cca_name = "Main Board"
+        output_file_path = ".\\outputFile.stp"
+        copper_layer_name = "copper-01.odb"
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name="",
+                        cca_name=cca_name,
+                        output_file_path=output_file_path,
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: Project name is invalid."
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name="",
+                        output_file_path=output_file_path,
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: CCA name is invalid."
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name=cca_name,
+                        output_file_path="",
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: Output File path is required"
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name=cca_name,
+                        output_file_path=output_file_path,
+                        copper_layer="",
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: Copper layer name is required."
+
+        if model._is_connection_up():
+            try:
+                result = model.exportTraceModel(
+                    [
+                        model.createExportTraceCopperLayerParams(
+                            project_name=project_name,
+                            cca_name=cca_name,
+                            output_file_path=output_file_path,
+                            copper_layer=copper_layer_name,
+                            overwrite=True,
+                        )
+                    ]
+                )
+                assert result == 0
+            except SherlockModelServiceError as e:
+                pytest.fail(str(e))
+
 
 if __name__ == "__main__":
     unittest.main()
