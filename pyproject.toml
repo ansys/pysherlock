@@ -35,7 +35,7 @@ tests = [
     "grpcio==1.62.1",
     "protobuf==3.20.3",
     "pytest==8.1.1",
-    "pytest-cov==4.1.0",
+    "pytest-cov==5.0.0",
 ]
 doc = [
     "ansys-sphinx-theme==0.14.1",
