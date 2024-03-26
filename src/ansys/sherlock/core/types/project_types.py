@@ -171,36 +171,3 @@ class StrainMapLegendOrientation:
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
     "Vertical"
-
-
-class StrainMapImageFile:
-    """Contains the properties for a strain map image file."""
-
-    def __init__(
-        self,
-        board_bounds,
-        coordinate_units,
-        image_bounds,
-        legend_bounds,
-        legend_orientation,
-        max_strain,
-        min_strain,
-        strain_units,
-    ):
-        """Initialize the strain map image file properties."""
-        self.board_bounds = board_bounds
-        """board_bounds : BoardBounds"""
-        self.coordinate_units = coordinate_units
-        """coordinate_units : string"""
-        self.image_bounds = image_bounds
-        """image_bounds : ImageBounds"""
-        self.legend_bounds = legend_bounds
-        """legend_bounds : LegendBounds"""
-        self.legend_orientation = legend_orientation
-        """legend_orientation : LegendOrientation"""
-        self.max_strain = max_strain
-        """max_strain : float"""
-        self.min_strain = min_strain
-        """min_strain : float"""
-        self.strain_units = strain_units
-        """strain_units : string"""

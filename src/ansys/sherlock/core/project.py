@@ -589,7 +589,6 @@ class Project(GrpcStub):
             LegendOrientation,
             StrainMapsFileType,
             StrainMapLegendOrientation,
-            StrainMapImageFile,
         )
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.add_strain_maps(
