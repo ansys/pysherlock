@@ -16,7 +16,6 @@ Classes used for the Project API.
      ImageBounds
      ImageFile
      LegendBounds
-     StrainMapImageFile
 
 Constants
 ---------
