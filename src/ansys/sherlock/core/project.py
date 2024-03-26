@@ -35,6 +35,7 @@ from ansys.sherlock.core.types.project_types import (
     ImageBounds,
     ImageFile,
     LegendBounds,
+    StrainMapsFileType,
 )
 
 
