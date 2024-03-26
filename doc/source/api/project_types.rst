@@ -16,10 +16,15 @@ Classes used for the Project API.
      ImageBounds
      ImageFile
      LegendBounds
+     StrainMapImageFile
 
 Constants
 ---------
 .. autoclass:: LegendOrientation
+     :members:
+.. autoclass:: StrainMapsFileType
+     :members:
+.. autoclass:: StrainMapLegendOrientation
      :members:
 .. autoclass:: ThermalBoardSide
      :members:

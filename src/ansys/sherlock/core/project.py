@@ -543,7 +543,7 @@ class Project(GrpcStub):
             raise e
 
     def add_strain_maps(self, project, strain_maps):
-        """Add a CSV file with strain maps to the CCAs.
+        """Add strain map files to CCAs in a Sherlock project.
 
         Parameters
         ----------
@@ -556,6 +556,8 @@ class Project(GrpcStub):
                 Full path to the CSV file with the strain maps.
             - file_comment : str
                 Comment to associate with the file.
+            - file_type : StrainMapsFileType
+                Strain maps file type. Options are CSV, Excel, and Image.
             - header_row_count : int
                 Number of rows before the file's column header.
             - reference_id_column : str
@@ -564,6 +566,8 @@ class Project(GrpcStub):
                 Name of the column in the file with strain values.
             - strain_units : str
                 Strain units. Options are ``µε`` and ``ε``.
+            - image_file : StrainMapImageFile, optional
+                The properties of the strain map file to add.
             - ccas : list, optional
                 List of CCA names to assign the file to. When no list is
                 specified, the file is assigned to all CCAs in the project.
@@ -576,16 +580,59 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.project_types import (
+            BoardBounds,
+            ImageBounds,
+            ImageFile,
+            LegendBounds,
+            LegendOrientation,
+            StrainMapsFileType,
+            StrainMapLegendOrientation,
+            StrainMapImageFile,
+        )
         >>> sherlock = launch_sherlock()
-        >>> sherlock.project.add_strain_maps("Tutorial Project",
-            [("StrainMap.csv",
-            "This is the strain map file for the project",
-            0,
-            "refDes",
-            "strain",
-            "µε"
-            ["Main Board"])
-            )],
+        >>> sherlock.project.add_strain_maps(
+            "Tutorial Project",
+                [
+                    (
+                        "StrainMap.csv",
+                        "This is the strain map file for the project",
+                        StrainMapsFileType.CSV,
+                        0,
+                        "refDes",
+                        "strain",
+                        "µε",
+                        ["Main Board"]
+                    )
+                ]
+            )
+        >>> strain_map_image_properties = (
+                BoardBounds([
+                    (1.0, 2.0),
+                    (3.0, 4.0),
+                    (1.0, 2.0),
+                    (1.0, 2.0)
+                ]),
+                "in",
+                ImageBounds(0.0, 0.0, 10.0, 8.0),
+                LegendBounds(1.0, 2.0, 4.0, 2.0),
+                StrainMapLegendOrientation.VERTICAL,
+                20.0,
+                50.0,
+                "µε"
+            )
+        >>> sherlock.project.add_strain_maps(
+            "Tutorial Project",
+                [
+                    (
+                        "StrainMap.jpg",
+                        "This is the strain map image for the project",
+                        StrainMapsFileType.IMAGE,
+                        strain_map_image_properties,
+                        ["Main Board"]
+                    )
+                ]
+            )
         """
         try:
             if project == "":
@@ -596,44 +643,104 @@ class Project(GrpcStub):
 
             # Validate first
             for i, strain_map in enumerate(strain_maps):
-                if len(strain_map) < 6 or len(strain_map) > 7:
-                    raise SherlockAddStrainMapsError(
-                        f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
-                    )
-                elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
-                elif not isinstance(strain_map[2], int) or strain_map[2] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Header row count is required for strain map {i}."
-                    )
-                elif strain_map[2] < 0:
-                    raise SherlockAddStrainMapsError(
-                        f"Header row count must be greater than or equal to 0 for strain map {i}."
-                    )
-                elif not isinstance(strain_map[3], str) or strain_map[3] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Reference ID column is required for strain map {i}."
-                    )
-                elif not isinstance(strain_map[4], str) or strain_map[4] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Strain column is required for strain map {i}."
-                    )
-                elif not isinstance(strain_map[5], str) or strain_map[5] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Strain units are required for strain map {i}."
-                    )
-                elif strain_map[5] != "µε" and strain_map[5] != "ε":
-                    raise SherlockAddStrainMapsError(
-                        f'Strain units "{strain_map[5]}" are invalid for strain map {i}.'
-                    )
-                elif (
-                    len(strain_map) == 7
-                    and strain_map[6] is not None
-                    and type(strain_map[6]) is not list
+                if (
+                    strain_map[2] == StrainMapsFileType.CSV
+                    or strain_map[2] == StrainMapsFileType.EXCEL
                 ):
-                    raise SherlockAddStrainMapsError(
-                        message=f"cca_names is not a list for strain map {i}."
-                    )
+                    if len(strain_map) < 7 or len(strain_map) > 8:
+                        raise SherlockAddStrainMapsError(
+                            f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
+                        )
+                    elif not isinstance(strain_map[0], str) or strain_map[0] == "":
+                        raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
+                    elif not isinstance(strain_map[3], int) or strain_map[3] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Header row count is required for strain map {i}."
+                        )
+                    elif strain_map[3] < 0:
+                        raise SherlockAddStrainMapsError(
+                            f"Header row count must be greater than or "
+                            f"equal to 0 for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[4], str) or strain_map[4] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Reference ID column is required for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[5], str) or strain_map[5] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Strain column is required for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[6], str) or strain_map[6] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Strain units are required for strain map {i}."
+                        )
+                    elif strain_map[6] != "µε" and strain_map[6] != "ε":
+                        raise SherlockAddStrainMapsError(
+                            f'Strain units "{strain_map[6]}" are invalid for strain map {i}.'
+                        )
+                    elif (
+                        len(strain_map) == 8
+                        and strain_map[7] is not None
+                        and type(strain_map[7]) is not list
+                    ):
+                        raise SherlockAddStrainMapsError(
+                            message=f"cca_names is not a list " f"for strain map {i}."
+                        )
+
+                elif strain_map[2] == StrainMapsFileType.IMAGE:
+                    if len(strain_map) < 4 or len(strain_map) > 5:
+                        raise SherlockAddStrainMapsError(
+                            f"Number of elements ({str(len(strain_maps))}) "
+                            f"is wrong for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[0], str) or strain_map[0] == "":
+                        raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
+                    elif not isinstance(strain_map[3], tuple) or strain_map[3] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"image_file is not a list for strain map {i}."
+                        )
+
+                    image_file_properties = strain_map[3]
+
+                    if not isinstance(image_file_properties[0], BoardBounds):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid board bounds for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[1], (str, type(None))):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid coordinate units for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[2], ImageBounds):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid image bounds for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[3], LegendBounds):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid legend bounds for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[4], int):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid legend orientation for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[5], float):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid minimum strain for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[6], float):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid maximum strain for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[7], str):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid strain units for " f"strain map {i}."
+                        )
 
             if not self._is_connection_up():
                 LOG.error("There is no connection to a gRPC service.")
@@ -646,17 +753,51 @@ class Project(GrpcStub):
                 strain_map = request.strainMapFiles.add()
                 strain_map.strainMapFile = s[0]
                 strain_map.fileComment = s[1]
-                strain_map.headerRowCount = s[2]
-                strain_map.referenceIDColumn = s[3]
-                strain_map.strainColumn = s[4]
-                strain_map.strainUnits = s[5]
+                strain_map.fileType = s[2]
 
-                """Add the CCA names to the request."""
-                if len(s) == 7:
-                    cca_names = s[6]
-                    if cca_names is not None:
-                        for cca_name in cca_names:
-                            strain_map.cca.append(cca_name)
+                if s[2] == StrainMapsFileType.CSV or s[2] == StrainMapsFileType.EXCEL:
+                    strain_map.headerRowCount = s[3]
+                    strain_map.referenceIDColumn = s[4]
+                    strain_map.strainColumn = s[5]
+                    strain_map.strainUnits = s[6]
+
+                    """Add the CCA names to the request."""
+                    if len(s) == 8:
+                        cca_names = s[7]
+                        if cca_names is not None:
+                            for cca_name in cca_names:
+                                strain_map.cca.append(cca_name)
+
+                elif s[2] == StrainMapsFileType.IMAGE:
+                    strain_map_image_properties = s[3]
+                    image_file_properties = strain_map.imageFile
+                    image_properties = strain_map_image_properties
+
+                    for vertex in image_properties[0].bounds:
+                        node_coordinate = strain_map.imageFile.boardBounds.add()
+                        node_coordinate.vertexX = vertex[0]
+                        node_coordinate.vertexY = vertex[1]
+
+                    image_file_properties.coordinateUnits = image_properties[1]
+                    image_file_properties.imageBounds.imageX = image_properties[2].image_x
+                    image_file_properties.imageBounds.imageY = image_properties[2].image_y
+                    image_file_properties.imageBounds.imageH = image_properties[2].height
+                    image_file_properties.imageBounds.imageW = image_properties[2].width
+                    image_file_properties.legendBounds.legendX = image_properties[3].legend_x
+                    image_file_properties.legendBounds.legendY = image_properties[3].legend_y
+                    image_file_properties.legendBounds.legendH = image_properties[3].height
+                    image_file_properties.legendBounds.legendW = image_properties[3].width
+                    image_file_properties.legendOrientation = image_properties[4]
+                    image_file_properties.minStrain = image_properties[5]
+                    image_file_properties.maxStrain = image_properties[6]
+                    image_file_properties.strainUnits = image_properties[7]
+
+                    """Add the CCA names to the request."""
+                    if len(s) == 5:
+                        cca_names = s[4]
+                        if cca_names is not None:
+                            for cca_name in cca_names:
+                                strain_map.cca.append(cca_name)
 
             response = self.stub.addStrainMap(request)
 

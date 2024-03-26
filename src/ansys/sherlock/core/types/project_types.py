@@ -147,3 +147,60 @@ class ThermalMapsFileType:
     "Image"
     TMAP = __file_type.TMAP
     "Icepak Thermal Map (.TMAP)"
+
+
+class StrainMapsFileType:
+    """Constants for File Type in the Add Strain Maps request."""
+
+    __file_type = project_service.AddStrainMapRequest.StrainMapFile.FileType
+    CSV = __file_type.CSV
+    "CSV"
+    EXCEL = __file_type.Excel
+    "Excel"
+    IMAGE = __file_type.Image
+    "Image"
+
+
+class StrainMapLegendOrientation:
+    """Constants for legend orientation in the add strain maps request."""
+
+    __legend_orientation = (
+        project_service.AddStrainMapRequest.StrainMapFile.StrainMapImageFile.LegendOrientation
+    )
+    HORIZONTAL = __legend_orientation.Horizontal
+    "Horizontal"
+    VERTICAL = __legend_orientation.Vertical
+    "Vertical"
+
+
+class StrainMapImageFile:
+    """Contains the properties for a strain map image file."""
+
+    def __init__(
+        self,
+        board_bounds,
+        coordinate_units,
+        image_bounds,
+        legend_bounds,
+        legend_orientation,
+        max_strain,
+        min_strain,
+        strain_units,
+    ):
+        """Initialize the strain map image file properties."""
+        self.board_bounds = board_bounds
+        """board_bounds : BoardBounds"""
+        self.coordinate_units = coordinate_units
+        """coordinate_units : string"""
+        self.image_bounds = image_bounds
+        """image_bounds : ImageBounds"""
+        self.legend_bounds = legend_bounds
+        """legend_bounds : LegendBounds"""
+        self.legend_orientation = legend_orientation
+        """legend_orientation : LegendOrientation"""
+        self.max_strain = max_strain
+        """max_strain : float"""
+        self.min_strain = min_strain
+        """min_strain : float"""
+        self.strain_units = strain_units
+        """strain_units : string"""
