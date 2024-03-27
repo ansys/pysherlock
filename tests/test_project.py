@@ -539,9 +539,9 @@ def helper_test_add_strain_maps(project):
             "",
             [
                 (
-                    "StrainMap.csv",
+                    "StrainMap.xlsx",
                     "",
-                    StrainMapsFileType.CSV,
+                    StrainMapsFileType.EXCEL,
                     0,
                     "SolidID",
                     "PCB Strain",
@@ -561,7 +561,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "",
                     "",
-                    StrainMapsFileType.CSV,
+                    StrainMapsFileType.EXCEL,
                     0,
                     "SolidID",
                     "PCB Strain",
