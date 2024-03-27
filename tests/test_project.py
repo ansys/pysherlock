@@ -849,6 +849,27 @@ def helper_test_add_strain_maps(project):
         except Exception as e:
             assert type(e) == SherlockAddStrainMapsError
 
+        try:
+            strain_map = "Missing strain map.xlsx"
+            project.add_strain_maps(
+                "Tutorial Project",
+                [
+                    (
+                        strain_map,
+                        "File comment",
+                        0,
+                        StrainMapsFileType.EXCEL,
+                        "SolidID",
+                        "PCB Strain",
+                        "µε",
+                        ["Main Board"],
+                    )
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockAddStrainMapsError
+
         # happy path test missing because needs valid file
         try:
             strain_map = "Missing strain map.jpg"
