@@ -21,6 +21,10 @@ Constants
 ---------
 .. autoclass:: LegendOrientation
      :members:
+.. autoclass:: StrainMapsFileType
+     :members:
+.. autoclass:: StrainMapLegendOrientation
+     :members:
 .. autoclass:: ThermalBoardSide
      :members:
 .. autoclass:: ThermalMapsFileType

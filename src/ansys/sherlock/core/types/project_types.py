@@ -147,3 +147,27 @@ class ThermalMapsFileType:
     "Image"
     TMAP = __file_type.TMAP
     "Icepak Thermal Map (.TMAP)"
+
+
+class StrainMapsFileType:
+    """Constants for File Type in the Add Strain Maps request."""
+
+    __file_type = project_service.AddStrainMapRequest.StrainMapFile.FileType
+    CSV = __file_type.CSV
+    "CSV"
+    EXCEL = __file_type.Excel
+    "Excel"
+    IMAGE = __file_type.Image
+    "Image"
+
+
+class StrainMapLegendOrientation:
+    """Constants for legend orientation in the add strain maps request."""
+
+    __legend_orientation = (
+        project_service.AddStrainMapRequest.StrainMapFile.StrainMapImageFile.LegendOrientation
+    )
+    HORIZONTAL = __legend_orientation.Horizontal
+    "Horizontal"
+    VERTICAL = __legend_orientation.Vertical
+    "Vertical"
