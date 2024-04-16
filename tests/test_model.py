@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2023-2024 ANSYS, Inc. All rights reserved
 
 import os
 import platform
@@ -7,7 +7,7 @@ import unittest
 import grpc
 import pytest
 
-from ansys.sherlock.core.errors import SherlockModelServiceError
+from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockModelServiceError
 from ansys.sherlock.core.model import Model
 
 
@@ -201,6 +201,163 @@ class TestModel(unittest.TestCase):
                     cca_name,
                     copper_layer_name,
                     max_arc_segment,
+                )
+                assert result == 0
+            except SherlockModelServiceError as e:
+                pytest.fail(str(e))
+
+    def test_model_export_aedb(self):
+        channel_param = "127.0.0.1:9090"
+        channel = grpc.insecure_channel(channel_param)
+        model = Model(channel)
+
+        project_name = "Tutorial Project"
+        cca_name = "Main Board"
+        export_file = "test_aedb_export"
+        try:
+            model.export_aedb(
+                project_name="",
+                cca_name=cca_name,
+                export_file=export_file,
+                overwrite=True,
+                display_model=False,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except SherlockExportAEDBError as e:
+            assert str(e) == "Export AEDB error: Project name is invalid."
+
+        try:
+            model.export_aedb(
+                project_name=project_name,
+                cca_name="",
+                export_file=export_file,
+                overwrite=True,
+                display_model=False,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except SherlockExportAEDBError as e:
+            assert str(e) == "Export AEDB error: CCA name is invalid."
+
+        try:
+            model.export_aedb(
+                project_name=project_name,
+                cca_name=cca_name,
+                export_file="",
+                overwrite=True,
+                display_model=False,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except SherlockExportAEDBError as e:
+            assert str(e) == "Export AEDB error: Export filepath is required."
+
+        if model._is_connection_up():
+            try:
+                invalid_cca_name = "Invalid CCA"
+                model.export_aedb(
+                    project_name=project_name,
+                    cca_name=invalid_cca_name,
+                    export_file=export_file,
+                    overwrite=True,
+                    display_model=False,
+                )
+                pytest.fail("No exception raised when using an invalid parameter")
+            except Exception as e:
+                assert type(e) == SherlockExportAEDBError
+
+            try:
+                result = model.export_aedb(
+                    project_name=project_name,
+                    cca_name=cca_name,
+                    export_file=export_file,
+                    overwrite=True,
+                    display_model=False,
+                )
+                assert result == 0
+            except SherlockExportAEDBError as e:
+                pytest.fail(str(e))
+
+    def test_model_export_trace_model(self):
+        channel_param = "127.0.0.1:9090"
+        channel = grpc.insecure_channel(channel_param)
+        model = Model(channel)
+
+        project_name = "Tutorial Project"
+        cca_name = "Main Board"
+        output_file_path = ".\\outputFile.stp"
+        copper_layer_name = "copper-01.odb"
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name="",
+                        cca_name=cca_name,
+                        output_file_path=output_file_path,
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: Project name is invalid."
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name="",
+                        output_file_path=output_file_path,
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: CCA name is invalid."
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name=cca_name,
+                        output_file_path="",
+                        copper_layer=copper_layer_name,
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: Output File path is required"
+
+        try:
+            model.exportTraceModel(
+                [
+                    model.createExportTraceCopperLayerParams(
+                        project_name=project_name,
+                        cca_name=cca_name,
+                        output_file_path=output_file_path,
+                        copper_layer="",
+                        overwrite=True,
+                    )
+                ]
+            )
+        except SherlockModelServiceError as e:
+            assert str(e) == "Model service error: Copper layer name is required."
+
+        if model._is_connection_up():
+            try:
+                result = model.exportTraceModel(
+                    [
+                        model.createExportTraceCopperLayerParams(
+                            project_name=project_name,
+                            cca_name=cca_name,
+                            output_file_path=output_file_path,
+                            copper_layer=copper_layer_name,
+                            overwrite=True,
+                        )
+                    ]
                 )
                 assert result == 0
             except SherlockModelServiceError as e:

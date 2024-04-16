@@ -32,6 +32,8 @@ from ansys.sherlock.core.types.project_types import (
     ImageFile,
     LegendBounds,
     LegendOrientation,
+    StrainMapLegendOrientation,
+    StrainMapsFileType,
     ThermalBoardSide,
     ThermalMapsFileType,
 )
@@ -337,6 +339,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "PCB Strain",
@@ -356,6 +359,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "PCB Strain",
@@ -375,6 +379,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     "0",  # Not an integer
                     "SolidID",
                     "PCB Strain",
@@ -397,6 +402,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     -1,
                     "SolidID",
                     "PCB Strain",
@@ -419,6 +425,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "",
                     "PCB Strain",
@@ -441,6 +448,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "",
@@ -463,6 +471,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "Strain",
@@ -485,6 +494,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "Strain",
@@ -508,6 +518,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "refDes",
                     "Strain",
@@ -523,6 +534,500 @@ def helper_test_add_strain_maps(project):
             "cca_names is not a list for strain map 0.']"
         )
 
+    try:
+        project.add_strain_maps(
+            "",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert str(e.str_itr()) == "['Add strain maps error: Project name is invalid.']"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert str(e.str_itr()) == "['Add strain maps error: Path is required for strain map 0.']"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    "0",  # Not an integer
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count is required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    -1,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count must be greater than or equal to 0 for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Reference ID column is required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain column is required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "Strain",
+                    "",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain units are required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "Strain",
+                    "BAD",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == '[\'Add strain maps error: Strain units "BAD" '
+            "are invalid for strain map 0.']"
+        )
+
+    try:
+        cca_names_not_list = "Main Board"
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "refDes",
+                    "Strain",
+                    "µε",
+                    cca_names_not_list,
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "cca_names is not a list for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: " "Path is required for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = "Invalid list"
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "image_file is not a list for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            "BoardBounds",
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid board bounds for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            0,
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid coordinate units for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            "ImageBounds",
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid image bounds for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            "LegendBounds",
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid legend bounds for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            "StrainMapLegendOrientation.VERTICAL",
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid legend orientation for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            "20.0",
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid minimum strain for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            "50.0",
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid maximum strain for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            0,
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid strain units for strain map 0.']"
+        )
+
     if project._is_connection_up():
         # happy path test missing because needs valid file
         try:
@@ -534,9 +1039,60 @@ def helper_test_add_strain_maps(project):
                         strain_map,
                         "File comment",
                         0,
+                        StrainMapsFileType.CSV,
                         "SolidID",
                         "PCB Strain",
                         "µε",
+                        ["Main Board"],
+                    )
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockAddStrainMapsError
+
+        try:
+            strain_map = "Missing strain map.xlsx"
+            project.add_strain_maps(
+                "Tutorial Project",
+                [
+                    (
+                        strain_map,
+                        "File comment",
+                        0,
+                        StrainMapsFileType.EXCEL,
+                        "SolidID",
+                        "PCB Strain",
+                        "µε",
+                        ["Main Board"],
+                    )
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockAddStrainMapsError
+
+        # happy path test missing because needs valid file
+        try:
+            strain_map = "Missing strain map.jpg"
+            strain_map_image_properties = (
+                BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+                "in",
+                ImageBounds(0.0, 0.0, 10.0, 8.0),
+                LegendBounds(1.0, 2.0, 4.0, 2.0),
+                StrainMapLegendOrientation.VERTICAL,
+                20.0,
+                50.0,
+                "µε",
+            )
+            project.add_strain_maps(
+                "Tutorial Project",
+                [
+                    (
+                        strain_map,
+                        "This is the strain map image for the project",
+                        StrainMapsFileType.IMAGE,
+                        strain_map_image_properties,
                         ["Main Board"],
                     )
                 ],
