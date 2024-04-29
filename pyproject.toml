@@ -76,7 +76,3 @@ minversion = "7.1"
 testpaths = [
     "tests",
 ]
-
-[tool.codespell]
-ignore-words = "doc/styles/Vocab/ANSYS/accept.txt"
-quiet-level = 3
