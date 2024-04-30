@@ -26,7 +26,8 @@ repos:
   rev: v2.2.4
   hooks:
   - id: codespell
-    args: ["--toml", "pyproject.toml"]
+    args: ["--toml", "pyproject.toml", "--ignore-words",
+           "doc/styles/config/vocabularies/ANSYS/accept.txt"]
     additional_dependencies: ["tomli"]
 
 - repo: https://github.com/pycqa/pydocstyle
