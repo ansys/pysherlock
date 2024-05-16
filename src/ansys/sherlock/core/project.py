@@ -1711,6 +1711,8 @@ class Project(GrpcStub):
         """
         Export a sherlock project.
 
+        Requires Sherlock Version: 25R1
+
         Parameters
         ----------
         project_name:str
