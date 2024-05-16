@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
     SherlockDeleteProjectError,
+    SherlockExportProjectException,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
@@ -1689,6 +1690,101 @@ class Project(GrpcStub):
                 raise SherlockImportProjectZipArchiveSingleModeError(message=response.message)
 
         except SherlockImportProjectZipArchiveSingleModeError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
+
+    def export_project(
+        self,
+        project_name,
+        export_design_files,
+        export_result_files,
+        export_archive_results,
+        export_user_files,
+        export_log_files,
+        export_system_data,
+        export_file_dir,
+        export_file_name,
+        overwrite_existing_file,
+    ):
+        """
+        Export a sherlock project.
+
+        Parameters
+        ----------
+        project_name:str
+            Name of the project being exported.
+        export_design_files: bool
+            Determines if design files should be exported.
+        export_result_files: bool
+            Determines if all analysis module result files should be exported.
+        export_archive_results: bool
+            Determines if all archive result files should be exported.
+        export_user_files: bool
+            Determines if user properties and custom data files should be exported.
+        export_log_files: bool
+            Determines if Sherlock console and application log files should be exported.
+        export_system_data: bool
+            Determines if system technical data should be exported.
+        export_file_dir: str
+            Destination of export file.
+        export_file_name: str
+            Name to be given to the exported file.
+        overwrite_existing_file: bool
+            Determines if exported file will overwrite a previously existing file.
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.export_project("Tutorial Project",
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        "C:/Path/To/Exported/Project",
+        "Exported_Project",
+        True)
+        """
+        try:
+            if project_name == "":
+                raise SherlockExportProjectException(message="Project name is invalid")
+
+            if export_file_dir == "":
+                raise SherlockExportProjectException(message="Export directory is invalid")
+
+            if export_file_name == "":
+                raise SherlockExportProjectException(message="Export file name is invalid")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ExportProjectRequest(
+                project=project_name,
+                exportDesignFiles=export_design_files,
+                exportResultFiles=export_result_files,
+                exportArchivedResults=export_archive_results,
+                exportUserFiles=export_user_files,
+                exportLogFiles=export_log_files,
+                exportSystemData=export_system_data,
+                exportFileDirectory=export_file_dir,
+                exportFileName=export_file_name,
+                overwriteExistingFile=overwrite_existing_file,
+            )
+
+            response = self.stub.exportProject(request)
+
+            if response.value == -1:
+                raise SherlockExportProjectException(message=response.message)
+
+        except SherlockExportProjectException as e:
             LOG.error(str(e))
             raise e
 
