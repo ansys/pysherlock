@@ -1027,7 +1027,7 @@ class SherlockExportNetListError(Exception):
         return f"Export net list error: {self.message}"
 
 
-class SherlockExportProjectException(Exception):
+class SherlockExportProjectError(Exception):
     """Contains the error raised when a project cannot be exported."""
 
     def __init__(self, message):
@@ -1036,4 +1036,4 @@ class SherlockExportProjectException(Exception):
 
     def __str__(self):
         """Format error message."""
-        return f"Export Project error : {self.message}"
+        return f"Export project error : {self.message}"
