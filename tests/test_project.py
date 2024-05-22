@@ -14,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
     SherlockDeleteProjectError,
+    SherlockExportProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
@@ -65,6 +66,8 @@ def test_all():
         project_name = helper_test_add_project(project)
     finally:
         clean_up_after_add(project, project_name)
+
+    helper_test_export_project(project)
 
 
 def helper_test_delete_project(project):
@@ -2967,6 +2970,100 @@ def helper_test_import_project_zip_archive_single_mode(project):
 def clean_up_after_add(project, project_name):
     if project_name is not None:
         project.delete_project(project_name)
+
+
+def helper_test_export_project(project):
+    """Test method for export project"""
+    try:
+        result = project.export_project(
+            project_name="",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="/Test/Dir",
+            export_file_name="ExportedProject",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Project name is invalid"
+
+    try:
+        result = project.export_project(
+            project_name="Tutorial Project",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="",
+            export_file_name="ExportedProject",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Export directory is invalid"
+
+    try:
+        result = project.export_project(
+            project_name="Tutorial Project",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="/Test/Dir",
+            export_file_name="",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Export file name is invalid"
+
+    if project._is_connection_up():
+        try:
+            result = project.export_project(
+                project_name="",
+                export_design_files=True,
+                export_result_files=True,
+                export_archive_results=True,
+                export_user_files=True,
+                export_log_files=True,
+                export_system_data=True,
+                export_file_dir="/Test/Dir",
+                export_file_name="ExportedProject",
+                overwrite_existing_file=True,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportProjectError
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        output_file_name = "ExportedProject"
+        try:
+            result = project.export_project(
+                project_name="Tutorial Project",
+                export_design_files=True,
+                export_result_files=True,
+                export_archive_results=True,
+                export_user_files=True,
+                export_log_files=True,
+                export_system_data=True,
+                export_file_dir=this_dir,
+                export_file_name=output_file_name,
+                overwrite_existing_file=True,
+            )
+            assert result == 0
+
+            # Clean up file
+            output_file = os.path.join(this_dir, output_file_name)
+            if os.path.exists(output_file):
+                os.remove(output_file)
+            else:
+                pytest.fail("Failed to generate export file.")
+        except SherlockExportProjectError as e:
+            pytest.fail(str(e))
 
 
 if __name__ == "__main__":
