@@ -19,6 +19,7 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
+    SherlockDeleteAllMountPointsError,
     SherlockUpdateMountPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
@@ -299,3 +300,64 @@ class Layer(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+    def delete_all_mount_points(self, project, cca_name):
+        """Delete all mount points in specific CCA of specific project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.layer.update_mount_points_by_file(
+            "Test",
+            "Card",
+            "MountPointImport.csv",
+        )
+        >>> sherlock.layer.delete_all_mount_points("Test", "Card")
+        """
+        try:
+            if project == "":
+                raise SherlockDeleteAllMountPointsError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockDeleteAllMountPointsError(message="CCA name is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.DeleteAllMountPointsRequest(
+                project=project,
+                ccaName=cca_name,
+            )
+
+            response = self.stub.deleteAllMountPoints(request)
+
+            if response.value == -1:
+                raise SherlockDeleteAllMountPointsError(message=response.message)
+
+        except SherlockDeleteAllMountPointsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
