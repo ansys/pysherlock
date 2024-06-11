@@ -310,7 +310,7 @@ def helper_test_delete_all_mount_points(layer):
     try:
         layer.delete_all_mount_points(
             "",
-            "Card",
+            "CCA",
         )
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockDeleteAllMountPointsError as e:
@@ -318,7 +318,7 @@ def helper_test_delete_all_mount_points(layer):
 
     try:
         layer.delete_all_mount_points(
-            "Test",
+            "Tutorial Project",
             "",
         )
         pytest.fail("No exception thrown when using an invalid parameter")

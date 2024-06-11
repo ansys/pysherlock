@@ -302,7 +302,7 @@ class Layer(GrpcStub):
             raise e
 
     def delete_all_mount_points(self, project, cca_name):
-        """Delete all mount points in specific CCA of specific project.
+        """Delete all mount points for a CCA.
 
         Parameters
         ----------
