@@ -19,6 +19,7 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
+    SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockUpdateMountPointsByFileError,
 )
@@ -357,6 +358,67 @@ class Layer(GrpcStub):
                 raise SherlockDeleteAllMountPointsError(message=response.message)
 
         except SherlockDeleteAllMountPointsError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
+
+    def delete_all_ict_fixtures(self, project, cca_name):
+        """Delete all ict fixtures for a CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.layer.update_ict_fixtures_by_file(
+            "Test",
+            "Card",
+            "ICTFixturesImport.csv",
+        )
+        >>> sherlock.layer.delete_all_ict_fixtures("Test", "Card")
+        """
+        try:
+            if project == "":
+                raise SherlockDeleteAllICTFixturesError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockDeleteAllICTFixturesError(message="CCA name is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.DeleteAllICTFixturesRequest(
+                project=project,
+                ccaName=cca_name,
+            )
+
+            response = self.stub.deleteAllICTFixtures(request)
+
+            if response.value == -1:
+                raise SherlockDeleteAllICTFixturesError(message=response.message)
+
+        except SherlockDeleteAllICTFixturesError as e:
             LOG.error(str(e))
             raise e
 

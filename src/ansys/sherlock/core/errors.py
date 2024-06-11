@@ -1049,3 +1049,15 @@ class SherlockDeleteAllMountPointsError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete mount points error: {self.message}"
+
+
+class SherlockDeleteAllICTFixturesError(Exception):
+    """Contains the error raised when the ict fixtures cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete ict fixtures error: {self.message}"
