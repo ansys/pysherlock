@@ -6,6 +6,7 @@ import pytest
 
 from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
+    SherlockDeleteAllMountPointsError,
     SherlockUpdateMountPointsByFileError,
 )
 from ansys.sherlock.core.layer import Layer
@@ -19,6 +20,7 @@ def test_all():
     layer = Layer(channel)
 
     helper_test_update_mount_points_by_file(layer)
+    helper_test_delete_all_mount_points(layer)
     helper_test_add_potting_region(layer)
 
 
@@ -301,6 +303,47 @@ def helper_test_update_mount_points_by_file(layer):
             pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdateMountPointsByFileError
+
+
+def helper_test_delete_all_mount_points(layer):
+    """Test delete_all_mount_points API."""
+    try:
+        layer.delete_all_mount_points(
+            "",
+            "CCA",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteAllMountPointsError as e:
+        assert str(e) == "Delete mount points error: Project name is invalid."
+
+    try:
+        layer.delete_all_mount_points(
+            "Tutorial Project",
+            "",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteAllMountPointsError as e:
+        assert str(e) == "Delete mount points error: CCA name is invalid."
+
+    if layer._is_connection_up():
+        try:
+            layer.delete_all_mount_points(
+                "Tutorial Project",
+                "Invalid CCA",
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockDeleteAllMountPointsError
+
+        try:
+            result = layer.delete_all_mount_points(
+                "Tutorial Project",
+                "Main Board",
+            )
+            assert result == 0
+
+        except Exception as e:
+            pytest.fail(e.message)
 
 
 if __name__ == "__main__":

@@ -1037,3 +1037,15 @@ class SherlockExportProjectError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export project error : {self.message}"
+
+
+class SherlockDeleteAllMountPointsError(Exception):
+    """Contains the error raised when the mount points cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete mount points error: {self.message}"
