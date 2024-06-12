@@ -364,7 +364,7 @@ class Layer(GrpcStub):
         return response.value
 
     def delete_all_ict_fixtures(self, project, cca_name):
-        """Delete all ict fixtures for a CCA.
+        """Delete all ICT fixtures for a CCA.
 
         Parameters
         ----------
