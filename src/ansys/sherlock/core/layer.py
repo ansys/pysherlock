@@ -21,6 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
+    SherlockDeleteAllTestPointsError,
     SherlockUpdateMountPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
@@ -419,6 +420,67 @@ class Layer(GrpcStub):
                 raise SherlockDeleteAllICTFixturesError(message=response.message)
 
         except SherlockDeleteAllICTFixturesError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
+
+    def delete_all_test_points(self, project, cca_name):
+        """Delete all test points for a CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.layer.update_test_points_by_file(
+            "Test",
+            "Card",
+            "TestPointsImport.csv",
+        )
+        >>> sherlock.layer.delete_all_test_points("Test", "Card")
+        """
+        try:
+            if project == "":
+                raise SherlockDeleteAllTestPointsError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockDeleteAllTestPointsError(message="CCA name is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.DeleteAllTestPointsRequest(
+                project=project,
+                ccaName=cca_name,
+            )
+
+            response = self.stub.deleteAllTestPoints(request)
+
+            if response.value == -1:
+                raise SherlockDeleteAllTestPointsError(message=response.message)
+
+        except SherlockDeleteAllTestPointsError as e:
             LOG.error(str(e))
             raise e
 
