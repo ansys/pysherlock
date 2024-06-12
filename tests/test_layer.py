@@ -6,6 +6,7 @@ import pytest
 
 from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
+    SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockUpdateMountPointsByFileError,
 )
@@ -20,6 +21,7 @@ def test_all():
     layer = Layer(channel)
 
     helper_test_update_mount_points_by_file(layer)
+    helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
     helper_test_add_potting_region(layer)
 
@@ -337,6 +339,47 @@ def helper_test_delete_all_mount_points(layer):
 
         try:
             result = layer.delete_all_mount_points(
+                "Tutorial Project",
+                "Main Board",
+            )
+            assert result == 0
+
+        except Exception as e:
+            pytest.fail(e.message)
+
+
+def helper_test_delete_all_ict_fixtures(layer):
+    """Test delete_all_ict_fixtures API."""
+    try:
+        layer.delete_all_ict_fixtures(
+            "",
+            "CCA",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteAllICTFixturesError as e:
+        assert str(e) == "Delete ict fixtures error: Project name is invalid."
+
+    try:
+        layer.delete_all_ict_fixtures(
+            "Tutorial Project",
+            "",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteAllICTFixturesError as e:
+        assert str(e) == "Delete ict fixtures error: CCA name is invalid."
+
+    if layer._is_connection_up():
+        try:
+            layer.delete_all_ict_fixtures(
+                "Tutorial Project",
+                "Invalid CCA",
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockDeleteAllICTFixturesError
+
+        try:
+            result = layer.delete_all_ict_fixtures(
                 "Tutorial Project",
                 "Main Board",
             )
