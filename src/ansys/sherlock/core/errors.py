@@ -1052,7 +1052,7 @@ class SherlockDeleteAllMountPointsError(Exception):
 
 
 class SherlockDeleteAllICTFixturesError(Exception):
-    """Contains the error raised when the ict fixtures cannot be deleted."""
+    """Contains the error raised when the ICT fixtures cannot be deleted."""
 
     def __init__(self, message):
         """Initialize error message."""

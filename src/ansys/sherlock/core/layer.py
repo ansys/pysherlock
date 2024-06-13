@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2023-2024 ANSYS, Inc. All rights reserved
 
 """Module containing all layer management capabilities."""
 from ansys.sherlock.core.types.layer_types import (
