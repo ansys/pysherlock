@@ -23,6 +23,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
     SherlockUpdateMountPointsByFileError,
+    SherlockUpdateTestPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 
@@ -485,3 +486,81 @@ class Layer(GrpcStub):
             raise e
 
         return response.value
+
+    def update_test_points_by_file(
+        self,
+        project,
+        cca_name,
+        file_path,
+    ):
+        """Update test point properties of a CCA from a CSV file.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        file_path : str
+            Path for the CSV file with the test point properties.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.layer.update_test_points_by_file(
+            "Test",
+            "Card",
+            "TestPointsImport.csv",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockUpdateTestPointsByFileError(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockUpdateTestPointsByFileError(message="CCA name is invalid.")
+            if file_path == "":
+                raise SherlockUpdateTestPointsByFileError(message="File path is required.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.UpdateTestPointsByFileRequest(
+                project=project,
+                ccaName=cca_name,
+                filePath=file_path,
+            )
+
+            response = self.stub.updateTestPointsByFile(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockUpdateTestPointsByFileError(error_array=response.updateError)
+
+                raise SherlockUpdateTestPointsByFileError(message=return_code.message)
+
+            else:
+                LOG.info(return_code.message)
+                return return_code.value
+
+        except SherlockUpdateTestPointsByFileError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e

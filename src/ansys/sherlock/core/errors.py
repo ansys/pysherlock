@@ -1073,3 +1073,20 @@ class SherlockDeleteAllTestPointsError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Delete test points error: {self.message}"
+
+
+class SherlockUpdateTestPointsByFileError(Exception):
+    """Contains the errors raised when test points cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Update test points by file error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update test points by file error: {self.message}"]
