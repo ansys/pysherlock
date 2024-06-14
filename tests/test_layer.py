@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2023-2024 ANSYS, Inc. All rights reserved
 import uuid
 
 import grpc
@@ -8,6 +8,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
+    SherlockDeleteAllTestPointsError,
     SherlockUpdateMountPointsByFileError,
 )
 from ansys.sherlock.core.layer import Layer
@@ -23,6 +24,7 @@ def test_all():
     helper_test_update_mount_points_by_file(layer)
     helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
+    helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
 
 
@@ -380,6 +382,47 @@ def helper_test_delete_all_ict_fixtures(layer):
 
         try:
             result = layer.delete_all_ict_fixtures(
+                "Tutorial Project",
+                "Main Board",
+            )
+            assert result == 0
+
+        except Exception as e:
+            pytest.fail(e.message)
+
+
+def helper_test_delete_all_test_points(layer):
+    """Test delete_all_test_points API."""
+    try:
+        layer.delete_all_test_points(
+            "",
+            "CCA",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteAllTestPointsError as e:
+        assert str(e) == "Delete test points error: Project name is invalid."
+
+    try:
+        layer.delete_all_test_points(
+            "Tutorial Project",
+            "",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteAllTestPointsError as e:
+        assert str(e) == "Delete test points error: CCA name is invalid."
+
+    if layer._is_connection_up():
+        try:
+            layer.delete_all_test_points(
+                "Tutorial Project",
+                "Invalid CCA",
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockDeleteAllTestPointsError
+
+        try:
+            result = layer.delete_all_test_points(
                 "Tutorial Project",
                 "Main Board",
             )
