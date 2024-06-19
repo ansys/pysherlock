@@ -82,7 +82,7 @@ This code uses the Sherlock Part Library to update the parts list:
             "Tutorial",
             "Main Board",
             "Sherlock Part Library",
-            PartsListSearchMatchingMode.BOTH,
+            "Both",
             PartsListSearchDuplicationMode.ERROR,
     )
 

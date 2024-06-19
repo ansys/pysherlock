@@ -25,7 +25,6 @@ from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
     PartsListSearchDuplicationMode,
-    PartsListSearchMatchingMode,
 )
 
 
@@ -58,8 +57,8 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Main Board",
                 "Sherlock Part Library",
-                PartsListSearchMatchingMode.BOTH,
-                PartsListSearchDuplicationMode.ERROR,
+                "Both",
+                "Error",
             )
             assert result == 0
             # wait for Sherlock to finish updating so subsequent tests don't fail
@@ -72,7 +71,7 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Invalid CCA",
                 "Sherlock Part Library",
-                PartsListSearchMatchingMode.BOTH,
+                "Both",
                 PartsListSearchDuplicationMode.ERROR,
             )
             pytest.fail("No exception raised when using an invalid parameter")
@@ -84,7 +83,7 @@ def helper_test_update_parts_list(parts):
             "",
             "Card",
             "Sherlock Part Library",
-            PartsListSearchMatchingMode.BOTH,
+            "Both",
             PartsListSearchDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
@@ -96,7 +95,7 @@ def helper_test_update_parts_list(parts):
             "Test",
             "",
             "Sherlock Part Library",
-            PartsListSearchMatchingMode.BOTH,
+            "Both",
             PartsListSearchDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
@@ -108,7 +107,7 @@ def helper_test_update_parts_list(parts):
             "Test",
             "Card",
             "",
-            PartsListSearchMatchingMode.BOTH,
+            "Both",
             PartsListSearchDuplicationMode.ERROR,
         )
         pytest.fail("No exception raised when using an invalid parameter")
@@ -121,7 +120,7 @@ def helper_test_update_parts_from_AVL(parts):
         response = parts.update_parts_from_AVL(
             project="",
             cca_name="Main Board",
-            matching_mode=PartsListSearchMatchingMode.BOTH,
+            matching_mode="Both",
             duplication_mode=PartsListSearchDuplicationMode.FIRST,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
@@ -134,7 +133,7 @@ def helper_test_update_parts_from_AVL(parts):
         response = parts.update_parts_from_AVL(
             project="Tutorial Project",
             cca_name="",
-            matching_mode=PartsListSearchMatchingMode.BOTH,
+            matching_mode="Both",
             duplication_mode=PartsListSearchDuplicationMode.FIRST,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
@@ -148,7 +147,7 @@ def helper_test_update_parts_from_AVL(parts):
             response = parts.update_parts_from_AVL(
                 project="Tutorial Project",
                 cca_name="Main Board",
-                matching_mode=PartsListSearchMatchingMode.BOTH,
+                matching_mode="Both",
                 duplication_mode=PartsListSearchDuplicationMode.FIRST,
                 avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
                 avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
