@@ -10,6 +10,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
     SherlockUpdateMountPointsByFileError,
+    SherlockUpdateTestFixturesByFileError,
     SherlockUpdateTestPointsByFileError,
 )
 from ansys.sherlock.core.layer import Layer
@@ -27,6 +28,7 @@ def test_all():
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
+    helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
 
 
@@ -476,6 +478,50 @@ def helper_test_update_test_points_by_file(layer):
             pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdateTestPointsByFileError
+
+
+def helper_test_update_test_fixtures_by_file(layer):
+    """Test update_test_fixtures_by_file API."""
+    try:
+        layer.update_test_fixtures_by_file(
+            "",
+            "CCA",
+            "TestFixtureImport.csv",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockUpdateTestFixturesByFileError as e:
+        assert e.str_itr()[0] == "Update test fixtures by file error: Project name is invalid."
+
+    try:
+        layer.update_test_fixtures_by_file(
+            "Tutorial Project",
+            "",
+            "TestFixtureImport.csv",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockUpdateTestFixturesByFileError as e:
+        assert e.str_itr()[0] == "Update test fixtures by file error: CCA name is invalid."
+
+    try:
+        layer.update_test_fixtures_by_file(
+            "Tutorial Project",
+            "CCA",
+            "",
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockUpdateTestFixturesByFileError as e:
+        assert e.str_itr()[0] == "Update test fixtures by file error: File path is required."
+
+    if layer._is_connection_up():
+        try:
+            layer.update_test_fixtures_by_file(
+                "Tutorial Project",
+                "Invalid CCA",
+                "TestFixtureImport.csv",
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockUpdateTestFixturesByFileError
 
 
 if __name__ == "__main__":
