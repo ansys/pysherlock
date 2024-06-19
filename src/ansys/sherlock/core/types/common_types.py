@@ -80,3 +80,13 @@ class TableDelimiter:
     """TAB"""
     SEMICOLON = SherlockCommonService_pb2.TableDelimiter.SEMICOLON
     """SEMICOLON"""
+
+
+# TODO: JM remove this
+class PartsListSearchMatchingMode:
+    """Constants for Matching Mode."""
+
+    BOTH = SherlockCommonService_pb2.MatchingMode.Both
+    """Both"""
+    PART = SherlockCommonService_pb2.MatchingMode.Part
+    """Part"""

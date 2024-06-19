@@ -3,6 +3,7 @@
 import os
 import platform
 import time
+from warnings import catch_warnings
 
 import grpc
 import pytest
@@ -20,7 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.parts import Parts
-from ansys.sherlock.core.types.common_types import TableDelimiter
+from ansys.sherlock.core.types.common_types import TableDelimiter  # PartsListSearchMatchingMode,
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
@@ -58,8 +59,8 @@ def helper_test_update_parts_list(parts):
                 "Tutorial Project",
                 "Main Board",
                 "Sherlock Part Library",
-                PartsListSearchMatchingMode.BOTH,
-                PartsListSearchDuplicationMode.ERROR,
+                "Both",
+                "Error",
             )
             assert result == 0
             # wait for Sherlock to finish updating so subsequent tests don't fail
@@ -876,6 +877,15 @@ def helper_test_export_net_list(parts):
             )
         except SherlockExportNetListError as e:
             assert type(e) == SherlockExportNetListError
+
+
+def test_deprecated_PartsListSearchMatchingMode():
+    with catch_warnings(record=True) as warnings:
+        matchingMode = PartsListSearchMatchingMode.BOTH
+        assert len(warnings) == 1
+        assert issubclass(warnings[0].category, DeprecationWarning)
+        # TODO: JM change the expected message
+        assert str(warnings[0].message) == "PartsListSearchMatchingMode is deprecated"
 
 
 if __name__ == "__main__":

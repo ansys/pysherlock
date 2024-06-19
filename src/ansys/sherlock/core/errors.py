@@ -846,6 +846,18 @@ class SherlockUpdateMechanicalShockPropsError(Exception):
         return f"Update mechanical shock properties error: {self.message}"
 
 
+class SherlockUpdatePartListValidationAnalysisPropsError(Exception):
+    """Contains the error raised when part list validation analysis properties cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update part list validation analysis properties error: {self.message}"
+
+
 class SherlockUpdateSolderFatiguePropsError(Exception):
     """Contains the error raised when properties for solder fatigue analysis cannot be updated."""
 

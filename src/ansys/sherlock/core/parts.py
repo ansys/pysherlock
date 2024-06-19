@@ -23,13 +23,12 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePartsLocationsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
-from ansys.sherlock.core.types.common_types import TableDelimiter
+from ansys.sherlock.core.types.common_types import PartsListSearchMatchingMode, TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
     PartLocation,
     PartsListSearchDuplicationMode,
-    PartsListSearchMatchingMode,
 )
 
 

@@ -1829,3 +1829,150 @@ class Analysis(GrpcStub):
         except SherlockUpdatePartModelingPropsError as e:
             LOG.error(str(e))
             raise e
+
+    def update_part_list_validation_analysis_props(
+        self,
+        project,
+        analysis_properties,
+    ):
+        """Update properties for an ICT analysis.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        ict_analysis_properties : list
+            List of ICT analysis properties for a CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - ict_application_time : double
+                Specifies the amount of time to complete one ICT event.
+            - ict_application_time_units : str
+                Application time units.
+                Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``, ``"day"``, ``"year"``.
+            - ict_number_of_events: int
+                Specifies the number of events to apply to the application time when computing
+                the time to failure for a component.
+            - part_validation_enabled: bool
+                Whether to enable part validation. The default is ``None``.
+            - require_material_assignment_enabled: bool
+                Whether to require material assignment. The default is ``None``.
+            - ict_result_count: int
+                The number of ICT result layers to generate. This parameter is for use with
+                thermal analysis.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_ict_analysis_props(
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'ict_application_time': 2,
+                'ict_application_time_units': 'sec',
+                'ict_number_of_events': 10,
+                'part_validation_enabled': False,
+                'require_material_assignment_enabled': False,
+            },
+            ]
+        )
+
+        """
+        try:
+            if project == "":
+                raise SherlockUpdateICTAnalysisPropsError(message="Project name is invalid.")
+
+            if not isinstance(ict_analysis_properties, list):
+                raise SherlockUpdateICTAnalysisPropsError(
+                    message="ICT analysis properties argument is invalid."
+                )
+
+            if len(ict_analysis_properties) == 0:
+                raise SherlockUpdateICTAnalysisPropsError(
+                    message="One or more ICT analysis properties are required."
+                )
+
+            request = SherlockAnalysisService_pb2.UpdateICTAnalysisPropsRequest(project=project)
+
+            for i, ict_analysis_props in enumerate(ict_analysis_properties):
+                if not isinstance(ict_analysis_props, dict):
+                    raise SherlockUpdateICTAnalysisPropsError(
+                        f"ICT analysis props argument is invalid for ICT analysis properties {i}."
+                    )
+
+                if "cca_name" not in ict_analysis_props.keys():
+                    raise SherlockUpdateICTAnalysisPropsError(
+                        message=f"CCA name is missing for ICT analysis properties {i}."
+                    )
+
+                cca_name = ict_analysis_props["cca_name"]
+                if cca_name == "":
+                    raise SherlockUpdateICTAnalysisPropsError(
+                        message=f"CCA name is invalid for ICT analysis properties {i}."
+                    )
+
+                props_request = request.ictAnalysisProperties.add()
+                props_request.ccaName = cca_name
+
+                if "ict_analysis_count" in ict_analysis_props.keys():
+                    props_request.ictAnalysisCount = ict_analysis_props["ict_analysis_count"]
+
+                if "ict_application_time" in ict_analysis_props.keys():
+                    props_request.applicationTime = ict_analysis_props["ict_application_time"]
+
+                if "ict_application_time_units" in ict_analysis_props.keys():
+                    props_request.applicationTimeUnits = ict_analysis_props[
+                        "ict_application_time_units"
+                    ]
+
+                if "ict_number_of_events" in ict_analysis_props.keys():
+                    props_request.numberOfEvents = ict_analysis_props["ict_number_of_events"]
+
+                if "part_validation_enabled" in ict_analysis_props.keys():
+                    props_request.partValidationEnabled = ict_analysis_props[
+                        "part_validation_enabled"
+                    ]
+
+                if "require_material_assignment_enabled" in ict_analysis_props.keys():
+                    props_request.requireMaterialAssignmentEnabled = ict_analysis_props[
+                        "require_material_assignment_enabled"
+                    ]
+
+                if "force_model_rebuild" in ict_analysis_props.keys():
+                    props_request.forceModelRebuild = ict_analysis_props["force_model_rebuild"]
+
+        except SherlockUpdateICTAnalysisPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updateICTAnalysisProps(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdateICTAnalysisPropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdateICTAnalysisPropsError as e:
+            LOG.error(str(e))
+            raise e

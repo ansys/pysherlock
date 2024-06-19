@@ -9,5 +9,7 @@ Constants
 ---------
 .. autoclass:: ListUnitsRequestUnitType
      :members:
+.. autoclass:: PartsListSearchMatchingMode
+     :members:
 .. autoclass:: TableDelimiter
      :members:

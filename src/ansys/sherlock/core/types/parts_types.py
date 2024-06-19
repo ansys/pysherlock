@@ -2,18 +2,37 @@
 
 """Module containing types for the Parts Service."""
 
+# import warnings
+
 try:
+    import SherlockCommonService_pb2
     import SherlockPartsService_pb2
 except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockPartsService_pb2
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 
 
 class PartsListSearchMatchingMode:
     """Constants for Matching Mode in the Update Parts List and Update Parts from AVL request."""
 
-    BOTH = SherlockPartsService_pb2.MatchingMode.Both
+    # def deprecation(message):
+    #     warnings.warn(message, DeprecationWarning, stacklevel=2)
+
+    # TODO: JM remove this enum from common_types.py
+    #          change examples to use the string values directly
+
+    # TODO: JM this isn't working
+    # def __getattribute__(self, item):
+    #     # if item == 'BOTH':
+    #     message = (
+    #         "PartsListSearchMatchingMode is deprecated in parts_types.py. Use the string values."
+    #     )
+    #     warnings.warn(message, DeprecationWarning, stacklevel=2)
+    #
+    #     return type.__getattribute__(self, item)
+
+    BOTH = SherlockCommonService_pb2.MatchingMode.Both
     """Both"""
-    PART = SherlockPartsService_pb2.MatchingMode.Part
+    PART = SherlockCommonService_pb2.MatchingMode.Part
     """Part"""
 
 
