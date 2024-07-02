@@ -1,4 +1,7 @@
 # © 2023-2024 ANSYS, Inc. All rights reserved
+import os
+import platform
+import time
 import uuid
 
 import grpc
@@ -9,6 +12,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockExportAllTestPoints,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
     SherlockUpdateTestPointsByFileError,
@@ -30,6 +34,7 @@ def test_all():
     helper_test_add_potting_region(layer)
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
+    helper_test_export_all_test_points(layer)
 
 
 def helper_test_add_potting_region(layer):
@@ -522,6 +527,74 @@ def helper_test_update_test_fixtures_by_file(layer):
             pytest.fail("No exception thrown when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockUpdateTestFixturesByFileError
+
+
+def helper_test_export_all_test_points(layer):
+    """Tests export_all_test_points API."""
+    try:
+        layer.export_all_test_points(
+            "",
+            "Main Board",
+            "Test Points.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllTestPoints as e:
+        assert e.str_itr()[0] == "Export test points error: Project name is invalid."
+
+    try:
+        layer.export_all_test_points(
+            "Tutorial Project",
+            "",
+            "Test Points.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllTestPoints as e:
+        assert e.str_itr()[0] == "Export test points error: CCA name is invalid."
+
+    try:
+        layer.export_all_test_points(
+            "Tutorial Project",
+            "Main Board",
+            "",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllTestPoints as e:
+        assert e.str_itr()[0] == "Export test points error: File path is required."
+
+    if layer._is_connection_up():
+        if platform.system() == "Windows":
+            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
+        else:
+            temp_dir = os.environ.get("TEMP", "/tmp")
+        test_points_file = os.path.join(temp_dir, "test_points.csv")
+
+        try:
+            result = layer.export_all_test_points(
+                "Tutorial Project",
+                "Main Board",
+                test_points_file,
+            )
+
+            assert os.path.exists(test_points_file)
+            time.sleep(0.5)
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
+        finally:
+            try:
+                os.remove(test_points_file)
+            except Exception as e:
+                print(str(e))
+
+        try:
+            layer.export_all_test_points(
+                "Tutorial Project",
+                "Invalid CCA",
+                test_points_file,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportAllTestPoints
 
 
 if __name__ == "__main__":
