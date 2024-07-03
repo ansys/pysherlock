@@ -16,7 +16,7 @@ from ansys.sherlock.core.grpc_stub import GrpcStub
 
 # Maps PySherlock release versions to Sherlock release versions
 VERSION_MAP = {
-    (0, 2, 0): "20R",
+    (0, 2, 0): "2024R1",
     (0, 3, 0): "2024R1",
     (0, 4, 0): "2024R1",
     (0, 5, 0): "2024R2",
