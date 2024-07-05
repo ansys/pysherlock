@@ -1,7 +1,6 @@
 # © 2023-2024 ANSYS, Inc. All rights reserved
 import os
 import platform
-import time
 import uuid
 
 import grpc
@@ -576,15 +575,9 @@ def helper_test_export_all_test_points(layer):
             )
 
             assert os.path.exists(test_points_file)
-            time.sleep(0.5)
             assert result == 0
         except Exception as e:
             pytest.fail(e.message)
-        finally:
-            try:
-                os.remove(test_points_file)
-            except Exception as e:
-                print(str(e))
 
         try:
             layer.export_all_test_points(

@@ -722,19 +722,12 @@ class Layer(GrpcStub):
                 forceUnits=force_units,
             )
 
-            response = self.stub.exportAllTestPoints(request)
+            return_code = self.stub.exportAllTestPoints(request)
 
-            return_code = response.returnCode
+            if return_code.value != 0:
+                raise SherlockExportAllTestPoints(error_array=return_code.message)
 
-            if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockExportAllTestPoints(error_array=response.updateError)
-
-                raise SherlockExportAllTestPoints(message=return_code.message)
-
-            else:
-                LOG.info(return_code.message)
-                return return_code.value
+            return return_code.value
 
         except SherlockExportAllTestPoints as e:
             for error in e.str_itr():
