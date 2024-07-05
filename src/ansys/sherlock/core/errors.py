@@ -1133,7 +1133,6 @@ class SherlockExportAllTestPoints(Exception):
         """Create list of error messages."""
         if self.message is None:
             return [f"Export test points error: {error}" for error in self.error_array]
-
         assert self.error_array is None
         return [f"Export test points error: {self.message}"]
 
@@ -1160,3 +1159,16 @@ class SherlockExportAllMountPoints(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export mount points error: {self.message}"
+
+
+class SherlockCreateCCAFromModelingRegionError(Exception):
+    """Contains the error raised when a CCA cannot be created from a modeling region."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Create CCA from modeling region error: {self.message}"
+

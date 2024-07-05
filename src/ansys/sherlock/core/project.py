@@ -27,6 +27,7 @@ from ansys.sherlock.core.errors import (
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
     SherlockUpdateThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.project_types import (
@@ -1793,3 +1794,151 @@ class Project(GrpcStub):
             raise e
 
         return response.value
+
+    def create_cca_from_modeling_region(self, project, cca_from_mr_properties):
+        """Create one or more CCAs from modeling regions in a given project.
+
+                        Parameters
+                        ----------
+                        project : str
+                            Name of the Sherlock project.
+                        cca_from_mr_properties : list
+                            List of CCAs to be to be created from modeling regions
+                            consisting of these properties:
+
+                            - cca_name : str
+                                Name of the CCA.
+                            - modeling_region_id : str
+                                Name of the modeling region.
+                            - description : str
+                                Description of the CCA.
+                            - default_solder_type: str
+                                The default solder type. The default is ``None``.
+                            - default_stencil_thickness: float
+                                The default stencil thickness. The default is ``None``.
+                            - default_stencil_thickness_units: str
+                                Units for default stencil thickness. The default is ``None``.
+                            - default_part_temp_rise: float
+                                Default part temp rise. The default is ``None``.
+                            - default_part_temp_rise_units: str
+                                Units for default part temp rise. The default is ``None``.
+                                Options are ``"C"``, ``"F"``, and ``"K"``.
+                            - guess_part_properties: bool
+                                Whether to enable guess part properties. The default is ``None``.
+                            - generate_image_layers: bool
+                                Whether to generate image layers or not.  The default is ``None``.
+
+                        Returns
+                        -------
+                        int
+                            Status code of the response. 0 for success.
+
+                        Examples
+                        --------
+                        >>> from ansys.sherlock.core.launcher import launch_sherlock
+                        >>> sherlock = launch_sherlock()
+                        >>> sherlock.project.import_odb_archive(
+                            "ODB++ Tutorial.tgz",
+                            True,
+                            True,
+                            True,
+                            True,
+                            project="Test",
+                            cca_name="Card",
+                        )
+                        >>> sherlock.project.create_cca_from_modeling_region()
+                            "Test",
+                            [{
+                                'cca_name': 'Card',
+                                'modeling_region_id': 'MR1'
+                                'description': 'Test',
+                                'default_solder_type': 'SAC305',
+                                'default_stencil_thickness': 10,
+                                'default_stencil_thickness_units': 'mm',
+                                'default_part_temp_rise': 20,
+                                'default_part_temp_rise_units': 'C',
+                                'guess_part_properties': False,
+                                'generate_image_layers': False,
+                            },
+                            ]
+                        )"""
+
+        try:
+            if project == "":
+                raise SherlockCreateCCAFromModelingRegionError(message="Project name is invalid.")
+
+            if not isinstance(cca_from_mr_properties, list):
+                raise SherlockCreateCCAFromModelingRegionError(message="CCA properties argument is invalid.")
+
+            if len(cca_from_mr_properties) == 0:
+                raise SherlockCreateCCAFromModelingRegionError(message="One or more CCAs are required.")
+
+            request = SherlockProjectService_pb2.CreateCcaFromModelingRegionRequest(project=project)
+
+            for i, cca in enumerate(cca_from_mr_properties):
+
+                cca_request = request.cCAsFromModelingRegions.add()
+
+                if not isinstance(cca, dict):
+                    raise SherlockCreateCCAFromModelingRegionError(message=f"CCA properties are invalid for CCA {i}.")
+
+                if "cca_name" not in cca.keys():
+                    raise SherlockCreateCCAFromModelingRegionError(message=f"CCA name is missing for CCA {i}.")
+
+                if "modeling_region_id" not in cca.keys():
+                    raise SherlockCreateCCAFromModelingRegionError(message=f"Modeling Region ID is missing for CCA {i}.")
+
+                cca_request.ccaName = cca["cca_name"]
+                cca_request.modelingRegionID = cca["modeling_region_id"]
+
+                if cca_request.ccaName == "":
+                    raise SherlockCreateCCAFromModelingRegionError(message=f"CCA name is invalid for CCA {i}.")
+
+                if cca_request.modelingRegionID == "":
+                    raise SherlockCreateCCAFromModelingRegionError(message=f"Modeling Region ID is invalid for CCA {i}.")
+
+                if "description" in cca.keys():
+                    cca_request.description = cca["description"]
+
+                if "default_solder_type" in cca.keys():
+                    cca_request.defaultSolderType = cca["default_solder_type"]
+
+                if "default_stencil_thickness" in cca.keys():
+                    cca_request.defaultStencilThickness = cca["default_stencil_thickness"]
+
+                if "default_stencil_thickness_units" in cca.keys():
+                    cca_request.defaultStencilThicknessUnits = cca[
+                        "default_stencil_thickness_units"
+                    ]
+
+                if "default_part_temp_rise" in cca.keys():
+                    cca_request.defaultPartTempRise = cca["default_part_temp_rise"]
+
+                if "default_part_temp_rise_units" in cca.keys():
+                    cca_request.defaultPartTempRiseUnits = cca["default_part_temp_rise_units"]
+
+                if "guess_part_properties" in cca.keys():
+                    cca_request.guessPartProperties = cca["guess_part_properties"]
+
+                if "generate_image_layers" in cca.keys():
+                    cca_request.generateImageLayers = cca["generate_image_layers"]
+
+        except SherlockCreateCCAFromModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.createCCAFromModelingRegion(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockCreateCCAFromModelingRegionError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockCreateCCAFromModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
