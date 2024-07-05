@@ -1107,3 +1107,15 @@ class SherlockUpdateTestFixturesByFileError(Exception):
 
         assert self.error_array is None
         return [f"Update test fixtures by file error: {self.message}"]
+
+
+class SherlockCreateCCAFromModelingRegionError(Exception):
+    """Contains the error raised when a CCA cannot be created from a modeling region"""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Create CCA from modeling region error: {self.message}"
