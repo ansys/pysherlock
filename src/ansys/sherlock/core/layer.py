@@ -62,6 +62,8 @@ class Layer(GrpcStub):
     ):
         """Add one or more potting regions to a given project.
 
+        Available Since: 2024R1
+
         Parameters
         ----------
         project : str
@@ -326,6 +328,8 @@ class Layer(GrpcStub):
     ):
         """Update mount point properties of a CCA from a CSV file.
 
+        Available Since: 2023R1
+
         Parameters
         ----------
         project : str
@@ -403,6 +407,8 @@ class Layer(GrpcStub):
     def delete_all_mount_points(self, project, cca_name):
         """Delete all mount points for a CCA.
 
+        Available Since: 2022R2
+
         Parameters
         ----------
         project : str
@@ -465,6 +471,8 @@ class Layer(GrpcStub):
     def delete_all_ict_fixtures(self, project, cca_name):
         """Delete all ICT fixtures for a CCA.
 
+        Available Since: 2023R1
+
         Parameters
         ----------
         project : str
@@ -526,6 +534,8 @@ class Layer(GrpcStub):
     @requires_version("0,7,0", VERSION_MAP)
     def delete_all_test_points(self, project, cca_name):
         """Delete all test points for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -593,6 +603,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update test point properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -672,6 +684,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update test fixture properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -753,6 +767,8 @@ class Layer(GrpcStub):
         force_units="DEFAULT",
     ):
         """Export the test point properties for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------

@@ -56,6 +56,8 @@ class Project(GrpcStub):
     def delete_project(self, project):
         """Delete a Sherlock project.
 
+        Available Since: 2022R2
+
         Parameters
         ----------
         project : str
@@ -113,6 +115,8 @@ class Project(GrpcStub):
         polyline_tolerance_units="mm",
     ):
         """Import an ODB++ archive file.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -215,6 +219,8 @@ class Project(GrpcStub):
     ):
         """Import an IPC-2581 archive file.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         archive_file : str
@@ -295,6 +301,8 @@ class Project(GrpcStub):
     def generate_project_report(self, project, author, company, report_file):
         """Generate a project report.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -370,6 +378,8 @@ class Project(GrpcStub):
     def list_ccas(self, project, cca_names=None):
         """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
 
+        Available Since: 2023R2
+
         Parameters
         ----------
         project: str
@@ -426,6 +436,8 @@ class Project(GrpcStub):
     @requires_version("0,3,0", VERSION_MAP)
     def add_cca(self, project, cca_properties):
         """Add one or more CCAs to a project.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -557,6 +569,8 @@ class Project(GrpcStub):
     @requires_version("0,2,0", VERSION_MAP)
     def add_strain_maps(self, project, strain_maps):
         """Add strain map files to CCAs in a Sherlock project.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -831,6 +845,8 @@ class Project(GrpcStub):
     def list_strain_maps(self, project, cca_names=None):
         """List the strain maps assigned to each CCA or given CCAs.
 
+        Available Since: 2023R2
+
         Parameters
         ----------
         project: str
@@ -891,6 +907,8 @@ class Project(GrpcStub):
     def add_project(self, project_name: str, project_category: str, project_description: str):
         """Add a sherlock project to sherlock.
 
+        Available Since: 2024R1
+
         Parameters
         ----------
         project_name: str
@@ -935,6 +953,8 @@ class Project(GrpcStub):
     @requires_version("0,5,0", VERSION_MAP)
     def list_thermal_maps(self, project, cca_names=None):
         """List the thermal map files and their type assigned to each CCA of given CCAs.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -995,6 +1015,8 @@ class Project(GrpcStub):
     def update_thermal_maps(self, project, thermal_map_files):
         """
         Update thermal map files to a Sherlock project.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -1280,6 +1302,8 @@ class Project(GrpcStub):
     def add_thermal_maps(self, project, add_thermal_map_files):
         """
         Add thermal map files to a Sherlock project.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -1589,6 +1613,8 @@ class Project(GrpcStub):
         """
         Import a zipped project archive -- multiple project mode.
 
+        Available Since: 2024R2
+
         Parameters
         ----------
         project : str
@@ -1643,6 +1669,8 @@ class Project(GrpcStub):
     ):
         """
         Import a zipped project archive -- single project mode.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -1730,7 +1758,7 @@ class Project(GrpcStub):
         """
         Export a sherlock project.
 
-        Requires Sherlock Version: 2025 R1
+        Available Since: 2025R1
 
         Parameters
         ----------

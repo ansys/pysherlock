@@ -130,7 +130,10 @@ class Parts(GrpcStub):
                     )
 
     def _init_location_units(self):
-        """Initialize units for part location."""
+        """Initialize units for part location.
+
+        Available since: 2022R1
+        """
         if self._is_connection_up():
             part_location_request = SherlockPartsService_pb2.GetPartLocationUnitsRequest()
             part_location_response = self.stub.getPartLocationUnits(part_location_request)
@@ -138,7 +141,10 @@ class Parts(GrpcStub):
                 self.PART_LOCATION_UNITS = part_location_response.units
 
     def _init_board_sides(self):
-        """Initialize board sides."""
+        """Initialize board sides.
+
+        Available Since: 2022R1
+        """
         if self._is_connection_up():
             board_sides_request = SherlockPartsService_pb2.GetBoardSidesRequest()
             board_sides_response = self.stub.getBoardSides(board_sides_request)
@@ -155,6 +161,8 @@ class Parts(GrpcStub):
         duplication_mode,
     ):
         """Update a parts list based on matching and duplication preferences.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -237,6 +245,8 @@ class Parts(GrpcStub):
     @requires_version("0,2,0", VERSION_MAP)
     def update_parts_locations(self, project, cca_name, part_loc):
         """Update one or more part locations.
+
+        Available Since: 2022R2
 
         Parameters
         ----------
@@ -339,6 +349,8 @@ class Parts(GrpcStub):
     def update_parts_locations_by_file(self, project, cca_name, file_path, numeric_format=""):
         """Update one or more part locations using a CSV file.
 
+        Available Since: 2023R1
+
         Parameters
         ----------
         project : str
@@ -422,6 +434,8 @@ class Parts(GrpcStub):
     def import_parts_list(self, project, cca_name, import_file, import_as_user_src):
         """Import a parts list for a CCA.
 
+        Available Since: 2021R2
+
         Parameters
         ----------
         project : str
@@ -497,6 +511,8 @@ class Parts(GrpcStub):
     def export_parts_list(self, project, cca_name, export_file):
         """Export a parts list for a CCA.
 
+        Available Since: 2021R2
+
         Parameters
         ----------
         project : str
@@ -565,6 +581,8 @@ class Parts(GrpcStub):
     def enable_lead_modeling(self, project, cca_name):
         """Enable lead modeling for leaded parts.
 
+        Available Since: 2021R2
+
         Parameters
         ----------
         project : str
@@ -624,6 +642,8 @@ class Parts(GrpcStub):
     @requires_version("0,2,0", VERSION_MAP)
     def get_part_location(self, project, cca_name, ref_des, location_units):
         """Return the location properties for one or more part.
+
+        Available Since: 2022R1
 
         Parameters
         ----------
@@ -706,6 +726,8 @@ class Parts(GrpcStub):
         avl_description: AVLDescription,
     ) -> SherlockPartsService_pb2.UpdatePartsListFromAVLResponse:
         r"""Update the parts list from the Approved Vendor List (AVL).
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -800,6 +822,8 @@ class Parts(GrpcStub):
     def update_parts_list_properties(self, project, cca_name, part_properties):
         """
         Update one or more properties of one or more parts in a parts list.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -932,6 +956,8 @@ class Parts(GrpcStub):
         utf8_enabled=False,
     ):
         """Export a net list to a delimited output file.
+
+        Available Since: 2024R2
 
         Parameters
         ----------

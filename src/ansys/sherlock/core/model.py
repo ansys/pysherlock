@@ -57,6 +57,8 @@ class Model(GrpcStub):
     ):
         r"""Export a trace reinforcement model.
 
+        Available Since: 2023R1
+
         Parameters
         ----------
         project_name : str
@@ -224,6 +226,8 @@ class Model(GrpcStub):
     ):
         r"""Generate one or more trace models for a project.
 
+        Available Since: 2023R2
+
         Parameters
         ----------
         project_name : str
@@ -322,6 +326,8 @@ class Model(GrpcStub):
     ):
         r"""Export an Electronics Desktop model.
 
+        Available Since: 2024R2
+
         Parameters
         ----------
         project_name : str
@@ -386,6 +392,8 @@ class Model(GrpcStub):
     @requires_version("0,6,0", VERSION_MAP)
     def exportTraceModel(self, layer_params):
         r"""Export a trace model to a specified output file.
+
+        Available Since: 2024R2
 
         Parameters
         ----------

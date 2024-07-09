@@ -100,6 +100,8 @@ class Analysis(GrpcStub):
     ):
         """Run one or more Sherlock analyses.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -192,6 +194,8 @@ class Analysis(GrpcStub):
     def get_harmonic_vibe_input_fields(self, model_source=None):
         """Get harmonic vibe property fields based on the user configuration.
 
+        Available Since: 2024R1
+
         Parameters
         ----------
         model_source : ModelSource, optional
@@ -240,6 +244,8 @@ class Analysis(GrpcStub):
         harmonic_vibe_properties,
     ):
         """Update properties for a harmonic vibe analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -500,6 +506,8 @@ class Analysis(GrpcStub):
     def get_ict_analysis_input_fields(self):
         """Get ICT analysis property fields based on the user configuration.
 
+        Available Since: 2024R1
+
         Parameters
         ----------
         None
@@ -534,6 +542,8 @@ class Analysis(GrpcStub):
         ict_analysis_properties,
     ):
         """Update properties for an ICT analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -679,6 +689,8 @@ class Analysis(GrpcStub):
     def get_mechanical_shock_input_fields(self, model_source=None):
         """Get mechanical shock property fields based on the user configuration.
 
+        Available Since: 2024R1
+
         Parameters
         ----------
         model_source : ModelSource, optional
@@ -727,6 +739,8 @@ class Analysis(GrpcStub):
         mechanical_shock_properties,
     ):
         """Update properties for a mechanical shock analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -929,6 +943,8 @@ class Analysis(GrpcStub):
     def get_solder_fatigue_input_fields(self):
         """Get solder fatigue property fields based on the user configuration.
 
+        Available Since: 2024R1
+
         Returns
         -------
         list
@@ -968,6 +984,8 @@ class Analysis(GrpcStub):
         solder_fatigue_properties,
     ):
         """Update properties for a solder fatigue analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -1103,6 +1121,8 @@ class Analysis(GrpcStub):
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.
 
+        Available Since: 2023R2
+
         Parameters
         ----------
         model_source : ModelSource, optional
@@ -1164,6 +1184,8 @@ class Analysis(GrpcStub):
         strain_map_natural_freqs=None,
     ):
         """Update properties for a random vibe analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -1300,6 +1322,8 @@ class Analysis(GrpcStub):
     def get_natural_frequency_input_fields(self):
         """Get natural frequency property fields based on the user configuration.
 
+        Available Since: 2023R2
+
         Returns
         -------
         list
@@ -1348,6 +1372,8 @@ class Analysis(GrpcStub):
         analysis_temp_units: str = None,
     ):
         """Update properties for a natural frequency analysis.
+
+        Available Since:2023R2
 
         Parameters
         ----------
@@ -1456,6 +1482,8 @@ class Analysis(GrpcStub):
         strain_map_analyses,
     ):
         """Run one or more strain map analyses.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1607,6 +1635,8 @@ class Analysis(GrpcStub):
     def update_pcb_modeling_props(self, project, cca_names, analyses):
         """Update FEA PCB Modeling properties for one or more CCAs.
 
+        Available Since: 2023R2
+
         Parameters
         ----------
         project : str
@@ -1723,6 +1753,8 @@ class Analysis(GrpcStub):
     @requires_version("0,3,0", VERSION_MAP)
     def update_part_modeling_props(self, project, part_modeling_props):
         """Update part modeling properties for a given project's CCA.
+
+        Available Since: 2024R1
 
         Parameters
         ----------

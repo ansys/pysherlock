@@ -54,6 +54,8 @@ class Common(GrpcStub):
     def is_sherlock_client_loading(self):
         """Check if the Sherlock client is opened and done initializing.
 
+        Available Since: 2023R2
+
         Returns
         -------
         bool
@@ -78,6 +80,8 @@ class Common(GrpcStub):
     def exit(self, close_sherlock_client=False):
         """Close the gRPC connection.
 
+        Available Since: 2023R1
+
         Parameters
         ----------
         close_sherlock_client : bool, optional
@@ -100,6 +104,8 @@ class Common(GrpcStub):
     @requires_version("0,2,0", VERSION_MAP)
     def list_units(self, unitType):
         """List units for a unit type.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -133,6 +139,8 @@ class Common(GrpcStub):
     @requires_version("0,3,0", VERSION_MAP)
     def list_solder_materials(self):
         """List valid solders.
+
+        Available Since: 2024R1
 
         Returns
         -------

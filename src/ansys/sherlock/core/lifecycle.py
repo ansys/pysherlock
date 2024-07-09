@@ -55,7 +55,10 @@ class Lifecycle(GrpcStub):
         self.STEP_TYPE_LIST = ["RAMP", "HOLD"]
 
     def _init_cycle_types(self):
-        """Initialize the list for cycle types."""
+        """Initialize the list for cycle types.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             cycle_type_request = SherlockLifeCycleService_pb2.ListLCTypesRequest()
             cycle_type_response = self.stub.listLifeCycleTypes(cycle_type_request)
@@ -63,7 +66,10 @@ class Lifecycle(GrpcStub):
                 self.CYCLE_TYPE_LIST = cycle_type_response.types
 
     def _init_rv_profile_types(self):
-        """Initialize the list for RV profile types."""
+        """Initialize the list for RV profile types.
+
+        Available Since: 2023R1
+        """
         if self._is_connection_up():
             rv_profile_request = SherlockLifeCycleService_pb2.ListRandomVibeProfileTypesRequest()
             rv_profile_response = self.stub.listRandomVibeProfileTypes(rv_profile_request)
@@ -71,7 +77,10 @@ class Lifecycle(GrpcStub):
                 self.RV_PROFILE_TYPE_LIST = rv_profile_response.types
 
     def _init_harmonic_profile_types(self):
-        """Initialize the list for harmonic profile types."""
+        """Initialize the list for harmonic profile types.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             harmonic_profile_request = (
                 SherlockLifeCycleService_pb2.ListHarmonicProfileTypesRequest()
@@ -81,7 +90,10 @@ class Lifecycle(GrpcStub):
                 self.HARMONIC_PROFILE_TYPE_LIST = harmonic_profile_response.types
 
     def _init_ampl_units(self):
-        """Initialize the list for amplitude units."""
+        """Initialize the list for amplitude units.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             ampl_unit_request = SherlockLifeCycleService_pb2.ListAmplUnitsRequest()
             ampl_type_response = self.stub.listAmplUnits(ampl_unit_request)
@@ -89,7 +101,10 @@ class Lifecycle(GrpcStub):
                 self.AMPL_UNIT_LIST = ampl_type_response.amplUnits
 
     def _init_cycle_states(self):
-        """Initialize the list for cycle states."""
+        """Initialize the list for cycle states.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             cycle_state_request = SherlockLifeCycleService_pb2.ListLCStatesRequest()
             cycle_state_response = self.stub.listLifeCycleStates(cycle_state_request)
@@ -97,7 +112,10 @@ class Lifecycle(GrpcStub):
                 self.CYCLE_STATE_LIST = cycle_state_response.states
 
     def _init_load_units(self):
-        """Initialize the list for load units."""
+        """Initialize the list for load units.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()
             load_unit_response = self.stub.listShockLoadUnits(load_unit_request)
@@ -105,7 +123,10 @@ class Lifecycle(GrpcStub):
                 self.LOAD_UNIT_LIST = load_unit_response.units
 
     def _init_shock_shapes(self):
-        """Initialize the list for shock shapes."""
+        """Initialize the list for shock shapes.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             shock_shape_request = SherlockLifeCycleService_pb2.ListShockPulsesRequest()
             shock_shape_response = self.stub.listShockPulses(shock_shape_request)
@@ -283,6 +304,8 @@ class Lifecycle(GrpcStub):
     ):
         """Create a life phase.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -400,6 +423,8 @@ class Lifecycle(GrpcStub):
         description="",
     ):
         """Add a random vibe event to a life cycle phase.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -548,6 +573,8 @@ class Lifecycle(GrpcStub):
         random_vibe_profiles,
     ):
         """Add random vibe profiles to a life cycle phase.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -726,6 +753,8 @@ class Lifecycle(GrpcStub):
     ):
         """Add a thermal event to a life cycle phase.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -838,6 +867,8 @@ class Lifecycle(GrpcStub):
         thermal_profiles,
     ):
         """Add thermal profiles to a life cycle phase.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1016,6 +1047,8 @@ class Lifecycle(GrpcStub):
     ):
         """Add a harmonic event to a life cycle phase.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -1167,6 +1200,8 @@ class Lifecycle(GrpcStub):
         harmonic_vibe_profiles,
     ):
         """Add harmonic vibe profiles to a life cycle phase.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1355,6 +1390,8 @@ class Lifecycle(GrpcStub):
     ):
         """Add a shock event to a life cycle phase.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -1483,6 +1520,8 @@ class Lifecycle(GrpcStub):
         shock_profiles,
     ):
         """Add shock profiles to a life cycle phase.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1682,6 +1721,8 @@ class Lifecycle(GrpcStub):
     def load_random_vibe_profile(self, project, phase_name, event_name, file_path):
         """Load random vibe profile from .csv or .dat file.
 
+        Available Since: 2023R1
+
         Parameters
         ----------
         project : str
@@ -1753,6 +1794,8 @@ class Lifecycle(GrpcStub):
     @requires_version("0,2,0", VERSION_MAP)
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
         """Load a thermal profile from a .dat or .csv file.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -1829,6 +1872,8 @@ class Lifecycle(GrpcStub):
     def load_harmonic_profile(self, project, phase_name, event_name, file_path):
         """Load a harmonic profile from a DAT or CSV file to a life cycle phase.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -1902,6 +1947,8 @@ class Lifecycle(GrpcStub):
     def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
         """Load shock profile dataset from a .csv or .dat file.
 
+        Available Since: 2021R1
+
         Parameters
         ----------
         project : str
@@ -1965,6 +2012,8 @@ class Lifecycle(GrpcStub):
     @requires_version("0,2,0", VERSION_MAP)
     def load_shock_profile_pulses(self, project, phase_name, event_name, file_path):
         """Load shock profile pulses from a .csv .dat file.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
