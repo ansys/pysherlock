@@ -1861,8 +1861,8 @@ class Project(GrpcStub):
                                 'generate_image_layers': False,
                             },
                             ]
-                        )"""
-
+                        )
+                        """
         try:
             if project == "":
                 raise SherlockCreateCCAFromModelingRegionError(message="Project name is invalid.")

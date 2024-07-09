@@ -1110,7 +1110,7 @@ class SherlockUpdateTestFixturesByFileError(Exception):
 
 
 class SherlockCreateCCAFromModelingRegionError(Exception):
-    """Contains the error raised when a CCA cannot be created from a modeling region"""
+    """Contains the error raised when a CCA cannot be created from a modeling region."""
 
     def __init__(self, message):
         """Initialize error message."""
