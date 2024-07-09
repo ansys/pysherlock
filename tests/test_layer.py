@@ -602,7 +602,7 @@ def helper_test_export_all_test_fixtures(layer):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportAllTestFixtures as e:
-        assert e.str_itr()[0] == "Export test fixtures error: Project name is invalid."
+        assert str(e) == "Export test fixtures error: Project name is invalid."
 
     try:
         layer.export_all_test_fixtures(
@@ -612,7 +612,7 @@ def helper_test_export_all_test_fixtures(layer):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportAllTestFixtures as e:
-        assert e.str_itr()[0] == "Export test fixtures error: CCA name is invalid."
+        assert str(e) == "Export test fixtures error: CCA name is invalid."
 
     try:
         layer.export_all_test_fixtures(
@@ -622,7 +622,7 @@ def helper_test_export_all_test_fixtures(layer):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportAllTestFixtures as e:
-        assert e.str_itr()[0] == "Export test fixtures error: File path is required."
+        assert str(e) == "Export test fixtures error: File path is required."
 
     if layer._is_connection_up():
         if platform.system() == "Windows":

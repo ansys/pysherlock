@@ -801,14 +801,13 @@ class Layer(GrpcStub):
                 units=units,
             )
 
-            return_code = self.stub.exportAllICTFixtures(request)
+            response = self.stub.exportAllICTFixtures(request)
 
-            if return_code.value != 0:
-                raise SherlockExportAllTestFixtures(error_array=return_code.message)
-
-            return return_code.value
+            if response.value == -1:
+                raise SherlockExportAllTestFixtures(message=response.message)
 
         except SherlockExportAllTestFixtures as e:
-            for error in e.str_itr():
-                LOG.error(error)
+            LOG.error(str(e))
             raise e
+
+        return response.value
