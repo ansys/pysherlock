@@ -58,7 +58,7 @@ def helper_test_update_parts_list(parts):
                 "Main Board",
                 "Sherlock Part Library",
                 "Both",
-                "Error",
+                PartsListSearchDuplicationMode.ERROR,
             )
             assert result == 0
             # wait for Sherlock to finish updating so subsequent tests don't fail
@@ -117,7 +117,7 @@ def helper_test_update_parts_list(parts):
 
 def helper_test_update_parts_from_AVL(parts):
     try:
-        response = parts.update_parts_from_AVL(
+        parts.update_parts_from_AVL(
             project="",
             cca_name="Main Board",
             matching_mode="Both",
@@ -130,7 +130,7 @@ def helper_test_update_parts_from_AVL(parts):
         assert e.message == "Project name is invalid."
 
     try:
-        response = parts.update_parts_from_AVL(
+        parts.update_parts_from_AVL(
             project="Tutorial Project",
             cca_name="",
             matching_mode="Both",

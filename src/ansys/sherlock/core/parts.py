@@ -3,11 +3,9 @@
 """Module containing all parts management capabilities."""
 
 try:
-    import SherlockCommonService_pb2
     import SherlockPartsService_pb2
     import SherlockPartsService_pb2_grpc
 except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2_grpc
 
@@ -43,29 +41,6 @@ class Parts(GrpcStub):
         self.stub = SherlockPartsService_pb2_grpc.SherlockPartsServiceStub(channel)
         self.PART_LOCATION_UNITS = None
         self.BOARD_SIDES = None
-        self.MATCHING_ARGS = ["Both", "Part"]
-        self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
-        self.AVL_PART_NUM_ARGS = [
-            "AssignInternalPartNum",
-            "AssignVendorAndPartNum",
-            "DoNotChangeVendorOrPartNum",
-        ]
-        self.AVL_DESCRIPTION_ARGS = ["AssignApprovedDescription", "DoNotChangeDescription"]
-
-    @staticmethod
-    def _add_matching_duplication(request, matching, duplication):
-        """Add matching and duplication properties to the request."""
-        if matching == "Both":
-            request.matching = SherlockCommonService_pb2.MatchingMode.Both
-        elif matching == "Part":
-            request.matching = SherlockCommonService_pb2.MatchingMode.Part
-
-        if duplication == "First":
-            request.duplication = SherlockPartsService_pb2.DuplicationMode.First
-        elif duplication == "Error":
-            request.duplication = SherlockPartsService_pb2.DuplicationMode.Error
-        elif duplication == "Ignore":
-            request.duplication = SherlockPartsService_pb2.DuplicationMode.Ignore
 
     @staticmethod
     def _add_part_loc_request(request, parts):
@@ -233,10 +208,12 @@ class Parts(GrpcStub):
             return
 
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
-            project=project, ccaName=cca_name, partLibrary=part_library
+            project=project,
+            ccaName=cca_name,
+            partLibrary=part_library,
+            matching=matching_mode,
+            duplication=duplication_mode,
         )
-
-        self._add_matching_duplication(request, matching_mode, duplication_mode)
 
         response = self.stub.updatePartsList(request)
 
