@@ -1124,3 +1124,15 @@ class SherlockExportAllTestPoints(Exception):
 
         assert self.error_array is None
         return [f"Export test points error: {self.message}"]
+
+
+class SherlockExportAllTestFixtures(Exception):
+    """Contains the errors raised when test fixtures cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export test fixtures error: {self.message}"

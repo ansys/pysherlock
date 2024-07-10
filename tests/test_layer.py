@@ -11,6 +11,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -33,6 +34,7 @@ def test_all():
     helper_test_add_potting_region(layer)
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
+    helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
 
 
@@ -588,6 +590,68 @@ def helper_test_export_all_test_points(layer):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportAllTestPoints
+
+
+def helper_test_export_all_test_fixtures(layer):
+    """Tests export_all_test_fixtures API."""
+    try:
+        layer.export_all_test_fixtures(
+            "",
+            "Main Board",
+            "Test Fixtures.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllTestFixtures as e:
+        assert str(e) == "Export test fixtures error: Project name is invalid."
+
+    try:
+        layer.export_all_test_fixtures(
+            "Tutorial Project",
+            "",
+            "Test Fixtures.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllTestFixtures as e:
+        assert str(e) == "Export test fixtures error: CCA name is invalid."
+
+    try:
+        layer.export_all_test_fixtures(
+            "Tutorial Project",
+            "Main Board",
+            "",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllTestFixtures as e:
+        assert str(e) == "Export test fixtures error: File path is required."
+
+    if layer._is_connection_up():
+        if platform.system() == "Windows":
+            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
+        else:
+            temp_dir = os.environ.get("TEMP", "/tmp")
+        test_fixtures_file = os.path.join(temp_dir, "test_fixtures.csv")
+
+        try:
+            result = layer.export_all_test_fixtures(
+                "Tutorial Project",
+                "Main Board",
+                test_fixtures_file,
+            )
+
+            assert os.path.exists(test_fixtures_file)
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
+
+        try:
+            layer.export_all_test_fixtures(
+                "Tutorial Project",
+                "Invalid CCA",
+                test_fixtures_file,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportAllTestFixtures
 
 
 if __name__ == "__main__":

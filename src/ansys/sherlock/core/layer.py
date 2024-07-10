@@ -22,6 +22,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -663,7 +664,7 @@ class Layer(GrpcStub):
         cca_name : str
             Name of the CCA.
         export_file : str
-            Full path for the CSV file to export the parts list to.
+            Full path for the CSV file to export the test points list to.
         length_units : str, optional
             Length units to use when exporting the test points.
             The default is ``DEFAULT``.
@@ -733,3 +734,80 @@ class Layer(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+    def export_all_test_fixtures(
+        self,
+        project,
+        cca_name,
+        export_file,
+        units="DEFAULT",
+    ):
+        """Export the test fixture properties for a CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        export_file : str
+            Full path for the CSV file to export the text fixtures list to.
+        units : str, optional
+            Units to use when exporting the test fixtures.
+            The default is ``DEFAULT``.
+
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Tutorial Project",
+            cca_name="Card",
+        )
+        >>> sherlock.layer.export_all_test_fixtures(
+            "Tutorial Project",
+            "Card",
+            "TestFixturesExport.csv",
+            "DEFAULT",
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockExportAllTestFixtures(message="Project name is invalid.")
+            if cca_name == "":
+                raise SherlockExportAllTestFixtures(message="CCA name is invalid.")
+            if export_file == "":
+                raise SherlockExportAllTestFixtures(message="File path is required.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.ExportAllICTFixturesRequest(
+                project=project,
+                ccaName=cca_name,
+                filePath=export_file,
+                units=units,
+            )
+
+            response = self.stub.exportAllICTFixtures(request)
+
+            if response.value == -1:
+                raise SherlockExportAllTestFixtures(message=response.message)
+
+        except SherlockExportAllTestFixtures as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
