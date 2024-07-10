@@ -571,7 +571,7 @@ def helper_test_export_all_test_points(layer):
 
         try:
             result = layer.export_all_test_points(
-                "Tutorial Project",
+                "Test Point Test Project",
                 "Main Board",
                 test_points_file,
             )
@@ -579,11 +579,11 @@ def helper_test_export_all_test_points(layer):
             assert os.path.exists(test_points_file)
             assert result == 0
         except Exception as e:
-            pytest.fail(e.message)
+            pytest.fail(str(e.error_array) if hasattr(e, "error_array") else str(e))
 
         try:
             layer.export_all_test_points(
-                "Tutorial Project",
+                "Test Point Test Project",
                 "Invalid CCA",
                 test_points_file,
             )
