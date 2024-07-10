@@ -1136,3 +1136,15 @@ class SherlockExportAllTestFixtures(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export test fixtures error: {self.message}"
+
+
+class SherlockExportAllMountPoints(Exception):
+    """Contains the errors raised when mount points cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export mount points error: {self.message}"
