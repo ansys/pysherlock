@@ -11,6 +11,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
     SherlockUpdateMountPointsByFileError,
@@ -34,6 +35,7 @@ def test_all():
     helper_test_add_potting_region(layer)
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
+    helper_test_export_all_mount_points(layer)
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
 
@@ -652,6 +654,68 @@ def helper_test_export_all_test_fixtures(layer):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportAllTestFixtures
+
+
+def helper_test_export_all_mount_points(layer):
+    """Tests export_all_mount_points API."""
+    try:
+        layer.export_all_mount_points(
+            "",
+            "Main Board",
+            "Mount Points.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllMountPoints as e:
+        assert str(e) == "Export mount points error: Project name is invalid."
+
+    try:
+        layer.export_all_mount_points(
+            "Tutorial Project",
+            "",
+            "Mount Points.csv",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllMountPoints as e:
+        assert str(e) == "Export mount points error: CCA name is invalid."
+
+    try:
+        layer.export_all_mount_points(
+            "Tutorial Project",
+            "Main Board",
+            "",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockExportAllMountPoints as e:
+        assert str(e) == "Export mount points error: File path is required."
+
+    if layer._is_connection_up():
+        if platform.system() == "Windows":
+            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
+        else:
+            temp_dir = os.environ.get("TEMP", "/tmp")
+        mount_points_file = os.path.join(temp_dir, "mount_points.csv")
+
+        try:
+            result = layer.export_all_mount_points(
+                "Tutorial Project",
+                "Main Board",
+                mount_points_file,
+            )
+
+            assert os.path.exists(mount_points_file)
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
+
+        try:
+            layer.export_all_mount_points(
+                "Tutorial Project",
+                "Invalid CCA",
+                mount_points_file,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportAllMountPoints
 
 
 if __name__ == "__main__":
