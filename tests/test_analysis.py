@@ -600,13 +600,13 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert str(e) == "Update harmonic vibe properties error: Project name is invalid."
 
     try:
         analysis.update_harmonic_vibe_props("Test", "Card")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -615,7 +615,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
 
     try:
         analysis.update_harmonic_vibe_props("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -624,7 +624,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
 
     try:
         analysis.update_harmonic_vibe_props("Test", ["Card"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -646,7 +646,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -669,7 +669,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -692,7 +692,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -756,13 +756,13 @@ def helper_test_update_ict_analysis_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert str(e) == "Update ICT analysis properties error: Project name is invalid."
 
     try:
         analysis.update_ict_analysis_props("Tutorial Project", "Main Board")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -771,7 +771,7 @@ def helper_test_update_ict_analysis_props(analysis):
 
     try:
         analysis.update_ict_analysis_props("Tutorial Project", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -780,7 +780,7 @@ def helper_test_update_ict_analysis_props(analysis):
 
     try:
         analysis.update_ict_analysis_props("Tutorial Project", ["INVALID"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -801,7 +801,7 @@ def helper_test_update_ict_analysis_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -823,7 +823,7 @@ def helper_test_update_ict_analysis_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -892,13 +892,13 @@ def helper_test_update_mechanical_shock_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert str(e) == "Update mechanical shock properties error: Project name is invalid."
 
     try:
         analysis.update_mechanical_shock_props("Test", "INVALID_TYPE")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -907,7 +907,7 @@ def helper_test_update_mechanical_shock_props(analysis):
 
     try:
         analysis.update_mechanical_shock_props("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -916,7 +916,7 @@ def helper_test_update_mechanical_shock_props(analysis):
 
     try:
         analysis.update_mechanical_shock_props("Test", ["INVALID"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -943,7 +943,7 @@ def helper_test_update_mechanical_shock_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -971,7 +971,7 @@ def helper_test_update_mechanical_shock_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -1049,13 +1049,13 @@ def helper_test_update_solder_fatigue_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert str(e) == "Update solder fatigue properties error: Project name is invalid."
 
     try:
         analysis.update_solder_fatigue_props("Test", "INVALID_TYPE")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1064,7 +1064,7 @@ def helper_test_update_solder_fatigue_props(analysis):
 
     try:
         analysis.update_solder_fatigue_props("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1073,7 +1073,7 @@ def helper_test_update_solder_fatigue_props(analysis):
 
     try:
         analysis.update_solder_fatigue_props("Test", ["INVALID"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1093,7 +1093,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1114,7 +1114,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
