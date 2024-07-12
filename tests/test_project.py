@@ -3208,27 +3208,28 @@ def helper_test_create_cca_from_modeling_region(project):
             " is invalid for CCA 0."
         )
 
-    try:
-        project.create_cca_from_modeling_region(
-            "Tutorial Project",
-            [
-                {
-                    "cca_name": "Main Board",
-                    "modeling_region_id": "MR1",
-                    "description": "Test",
-                    "default_solder_type": "SAC305",
-                    "default_stencil_thickness": 10,
-                    "default_stencil_thickness_units": "INVALID",
-                    "default_part_temp_rise": 20,
-                    "default_part_temp_rise_units": "C",
-                    "guess_part_properties": False,
-                    "generate_image_layers": False,
-                },
-            ],
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except Exception as e:
-        assert type(e) == SherlockCreateCCAFromModelingRegionError
+    if project._is_connection_up():
+        try:
+            project.create_cca_from_modeling_region(
+                "Tutorial Project",
+                [
+                    {
+                        "cca_name": "Main Board",
+                        "modeling_region_id": "MR1",
+                        "description": "Test",
+                        "default_solder_type": "SAC305",
+                        "default_stencil_thickness": 10,
+                        "default_stencil_thickness_units": "INVALID",
+                        "default_part_temp_rise": 20,
+                        "default_part_temp_rise_units": "C",
+                        "guess_part_properties": False,
+                        "generate_image_layers": False,
+                    },
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockCreateCCAFromModelingRegionError
 
 
 if __name__ == "__main__":
