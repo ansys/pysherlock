@@ -3216,7 +3216,7 @@ def helper_test_create_cca_from_modeling_region(project):
                     {
                         "cca_name": "Main Board",
                         "modeling_region_id": "MR1",
-                        "description": "Test",
+                        "description": "Test invalid parameter",
                         "default_solder_type": "SAC305",
                         "default_stencil_thickness": 10,
                         "default_stencil_thickness_units": "INVALID",
