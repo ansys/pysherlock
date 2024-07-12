@@ -2,23 +2,36 @@
 
 """Module containing types for the Parts Service."""
 
+import warnings
+
 try:
+    import SherlockCommonService_pb2
     import SherlockPartsService_pb2
 except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockPartsService_pb2
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 
 
+def deprecation(cls):
+    """Raise a DeprecationWarning when a deprecated class is used."""
+    # if str(cls).find("PartsListSearchMatchingMode") != -1:
+    message = f"{cls} is deprecated. Use a string with the value of the constant name \
+    as defined in the proto file."
+    warnings.warn(message, DeprecationWarning, stacklevel=2)
+    return cls
+
+
+@deprecation
 class PartsListSearchMatchingMode:
-    """Constants for Matching Mode in the Update Parts List and Update Parts from AVL request."""
+    """DEPRECATED. Constants for Matching Mode in Update Parts List & Update Parts from AVL."""
 
-    BOTH = SherlockPartsService_pb2.MatchingMode.Both
+    BOTH = SherlockCommonService_pb2.MatchingMode.Both
     """Both"""
-    PART = SherlockPartsService_pb2.MatchingMode.Part
+    PART = SherlockCommonService_pb2.MatchingMode.Part
     """Part"""
 
 
 class PartsListSearchDuplicationMode:
-    """Constants for Duplication Mode in the Update Parts List and Update Parts from AVL request."""
+    """Constants for Duplication Mode in Update Parts List and Update Parts from AVL request."""
 
     FIRST = SherlockPartsService_pb2.DuplicationMode.First
     """First"""

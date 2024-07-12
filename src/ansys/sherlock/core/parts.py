@@ -29,7 +29,6 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     PartLocation,
     PartsListSearchDuplicationMode,
-    PartsListSearchMatchingMode,
 )
 
 
@@ -42,29 +41,6 @@ class Parts(GrpcStub):
         self.stub = SherlockPartsService_pb2_grpc.SherlockPartsServiceStub(channel)
         self.PART_LOCATION_UNITS = None
         self.BOARD_SIDES = None
-        self.MATCHING_ARGS = ["Both", "Part"]
-        self.DUPLICATION_ARGS = ["First", "Error", "Ignore"]
-        self.AVL_PART_NUM_ARGS = [
-            "AssignInternalPartNum",
-            "AssignVendorAndPartNum",
-            "DoNotChangeVendorOrPartNum",
-        ]
-        self.AVL_DESCRIPTION_ARGS = ["AssignApprovedDescription", "DoNotChangeDescription"]
-
-    @staticmethod
-    def _add_matching_duplication(request, matching, duplication):
-        """Add matching and duplication properties to the request."""
-        if matching == "Both":
-            request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Both
-        elif matching == "Part":
-            request.matching = SherlockPartsService_pb2.UpdatePartsListRequest.Part
-
-        if duplication == "First":
-            request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.First
-        elif duplication == "Error":
-            request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.Error
-        elif duplication == "Ignore":
-            request.duplication = SherlockPartsService_pb2.UpdatePartsListRequest.Ignore
 
     @staticmethod
     def _add_part_loc_request(request, parts):
@@ -184,7 +160,7 @@ class Parts(GrpcStub):
             Name of the CCA.
         part_library : str
             Name of the parts library.
-        matching_mode : PartsListSearchMatchingMode
+        matching_mode : str
             Matching mode for updates.
         duplication_mode : PartsListSearchDuplicationMode
             How to handle duplication during the update.
@@ -211,7 +187,7 @@ class Parts(GrpcStub):
             "Test",
             "Card",
             "Sherlock Part Library",
-            PartsListSearchMatchingMode.BOTH,
+            "Both",
             PartsListSearchDuplicationMode.ERROR,
         )
         """
@@ -232,10 +208,12 @@ class Parts(GrpcStub):
             return
 
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
-            project=project, ccaName=cca_name, partLibrary=part_library
+            project=project,
+            ccaName=cca_name,
+            partLibrary=part_library,
+            matching=matching_mode,
+            duplication=duplication_mode,
         )
-
-        self._add_matching_duplication(request, matching_mode, duplication_mode)
 
         response = self.stub.updatePartsList(request)
 
@@ -711,7 +689,7 @@ class Parts(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        matching_mode: PartsListSearchMatchingMode,
+        matching_mode: str,
         duplication_mode: PartsListSearchDuplicationMode,
         avl_part_num: AVLPartNum,
         avl_description: AVLDescription,
@@ -724,7 +702,7 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name : str
             Name of the CCA.
-        matching_mode: PartsListSearchMatchingMode
+        matching_mode: str
             Determines how parts are matched against the AVL
         duplication_mode: PartsListSearchDuplicationMode
             Determines how duplicate part matches are handled when found
@@ -753,7 +731,6 @@ class Parts(GrpcStub):
             AVLDescription,
             AVLPartNum,
             PartsListSearchDuplicationMode,
-            PartsListSearchMatchingMode
         )
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -768,7 +745,7 @@ class Parts(GrpcStub):
         >>> sherlock.parts.update_parts_from_AVL(
             project="Test",
             cca_name="Card",
-            matching_mode=PartsListSearchMatchingMode.BOTH,
+            matching_mode="Both",
             duplication=PartsListSearchDuplicationMode.FIRST,
             avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
             avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION
