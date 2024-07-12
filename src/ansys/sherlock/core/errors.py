@@ -1171,4 +1171,3 @@ class SherlockCreateCCAFromModelingRegionError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Create CCA from modeling region error: {self.message}"
-

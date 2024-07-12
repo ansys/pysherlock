@@ -13,6 +13,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
     SherlockDeleteProjectError,
     SherlockExportProjectError,
     SherlockGenerateProjectReportError,
@@ -24,7 +25,6 @@ from ansys.sherlock.core.errors import (
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
     SherlockUpdateThermalMapsError,
-    SherlockCreateCCAFromModelingRegionError,
 )
 from ansys.sherlock.core.project import Project
 from ansys.sherlock.core.types.project_types import (
@@ -396,8 +396,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Header row count is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count is required for strain map 0.']"
         )
 
     try:
@@ -419,8 +419,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Header row count must be greater than or equal to 0 for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count must be greater than or equal to 0 for strain map 0.']"
         )
 
     try:
@@ -442,8 +442,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Reference ID column is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Reference ID column is required for strain map 0.']"
         )
 
     try:
@@ -465,8 +465,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Strain column is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain column is required for strain map 0.']"
         )
 
     try:
@@ -488,8 +488,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Strain units are required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain units are required for strain map 0.']"
         )
 
     try:
@@ -511,8 +511,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == '[\'Add strain maps error: Strain units "BAD" '
-                                    "are invalid for strain map 0.']"
+            str(e.str_itr()) == '[\'Add strain maps error: Strain units "BAD" '
+            "are invalid for strain map 0.']"
         )
 
     try:
@@ -535,8 +535,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "cca_names is not a list for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "cca_names is not a list for strain map 0.']"
         )
 
     try:
@@ -598,8 +598,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Header row count is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count is required for strain map 0.']"
         )
 
     try:
@@ -621,8 +621,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Header row count must be greater than or equal to 0 for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count must be greater than or equal to 0 for strain map 0.']"
         )
 
     try:
@@ -644,8 +644,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Reference ID column is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Reference ID column is required for strain map 0.']"
         )
 
     try:
@@ -667,8 +667,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Strain column is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain column is required for strain map 0.']"
         )
 
     try:
@@ -690,8 +690,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Strain units are required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain units are required for strain map 0.']"
         )
 
     try:
@@ -713,8 +713,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == '[\'Add strain maps error: Strain units "BAD" '
-                                    "are invalid for strain map 0.']"
+            str(e.str_itr()) == '[\'Add strain maps error: Strain units "BAD" '
+            "are invalid for strain map 0.']"
         )
 
     try:
@@ -737,8 +737,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "cca_names is not a list for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "cca_names is not a list for strain map 0.']"
         )
 
     try:
@@ -767,7 +767,7 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: " "Path is required for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: " "Path is required for strain map 0.']"
         )
 
     try:
@@ -787,8 +787,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "image_file is not a list for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "image_file is not a list for strain map 0.']"
         )
 
     try:
@@ -817,8 +817,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid board bounds for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid board bounds for strain map 0.']"
         )
 
     try:
@@ -848,8 +848,8 @@ def helper_test_add_strain_maps(project):
 
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid coordinate units for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid coordinate units for strain map 0.']"
         )
 
     try:
@@ -879,8 +879,8 @@ def helper_test_add_strain_maps(project):
 
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid image bounds for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid image bounds for strain map 0.']"
         )
 
     try:
@@ -909,8 +909,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid legend bounds for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid legend bounds for strain map 0.']"
         )
 
     try:
@@ -939,8 +939,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid legend orientation for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid legend orientation for strain map 0.']"
         )
 
     try:
@@ -969,8 +969,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid minimum strain for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid minimum strain for strain map 0.']"
         )
 
     try:
@@ -999,8 +999,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid maximum strain for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid maximum strain for strain map 0.']"
         )
 
     try:
@@ -1029,8 +1029,8 @@ def helper_test_add_strain_maps(project):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddStrainMapsError as e:
         assert (
-                str(e.str_itr()) == "['Add strain maps error: "
-                                    "Invalid strain units for strain map 0.']"
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid strain units for strain map 0.']"
         )
 
     if project._is_connection_up():
@@ -3090,15 +3090,16 @@ def helper_test_create_cca_from_modeling_region(project):
         )
         assert False
     except SherlockCreateCCAFromModelingRegionError as e:
-        assert str(e) == "Create CCA from modeling region error: Project " \
-                         "name is invalid."
+        assert str(e) == "Create CCA from modeling region error: Project " "name is invalid."
 
     try:
         project.create_cca_from_modeling_region("Test", "")
         assert False
     except SherlockCreateCCAFromModelingRegionError as e:
-        assert str(e) == "Create CCA from modeling region error: CCA " \
-                         "properties argument is invalid."
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA "
+            "properties argument is invalid."
+        )
 
     try:
         project.create_cca_from_modeling_region("Test", [])
@@ -3110,8 +3111,10 @@ def helper_test_create_cca_from_modeling_region(project):
         project.create_cca_from_modeling_region("Test", [""])
         assert False
     except SherlockCreateCCAFromModelingRegionError as e:
-        assert str(e) == "Create CCA from modeling region error: CCA properties " \
-                         "are invalid for CCA 0."
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA properties "
+            "are invalid for CCA 0."
+        )
 
     try:
         project.create_cca_from_modeling_region(
@@ -3175,8 +3178,10 @@ def helper_test_create_cca_from_modeling_region(project):
         )
         assert False
     except SherlockCreateCCAFromModelingRegionError as e:
-        assert str(e) == "Create CCA from modeling region error: Modeling Region ID" \
-                         " is missing for CCA 0."
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is missing for CCA 0."
+        )
 
     try:
         project.create_cca_from_modeling_region(
@@ -3198,8 +3203,10 @@ def helper_test_create_cca_from_modeling_region(project):
         )
         assert False
     except SherlockCreateCCAFromModelingRegionError as e:
-        assert str(e) == "Create CCA from modeling region error: Modeling Region ID" \
-                         " is invalid for CCA 0."
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is invalid for CCA 0."
+        )
 
     try:
         project.create_cca_from_modeling_region(
