@@ -3213,7 +3213,7 @@ def helper_test_create_cca_from_modeling_region(project):
 
     try:
         project.create_cca_from_modeling_region(
-            "Test",
+            "Tutorial Project",
             [
                 {
                     "cca_name": "Main Board",
