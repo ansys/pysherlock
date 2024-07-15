@@ -29,7 +29,7 @@ class TestModel(unittest.TestCase):
                 model.export_trace_reinforcement_model("Tutorial Project", invalid_cca, path)
                 pytest.fail("No exception raised when using an invalid parameter")
             except Exception as e:
-                assert type(e) == SherlockModelServiceError
+                assert type(e) is SherlockModelServiceError
 
             try:
                 result = model.export_trace_reinforcement_model(
@@ -193,7 +193,7 @@ class TestModel(unittest.TestCase):
                 )
                 pytest.fail("No exception raised when using an invalid parameter")
             except Exception as e:
-                assert type(e) == SherlockModelServiceError
+                assert type(e) is SherlockModelServiceError
 
             try:
                 result = model.generate_trace_model(
@@ -262,7 +262,7 @@ class TestModel(unittest.TestCase):
                 )
                 pytest.fail("No exception raised when using an invalid parameter")
             except Exception as e:
-                assert type(e) == SherlockExportAEDBError
+                assert type(e) is SherlockExportAEDBError
 
             try:
                 result = model.export_aedb(

@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateICTAnalysisPropsError,
     SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePartListValidationAnalysisPropsError,
     SherlockUpdatePartModelingPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
@@ -56,6 +57,7 @@ def test_all():
     helper_test_update_natural_frequency_props(analysis)
     helper_test_update_pcb_modeling_props(analysis)
     helper_test_update_part_modeling_props(analysis)
+    helper_test_update_parts_list_validation_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -598,13 +600,13 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert str(e) == "Update harmonic vibe properties error: Project name is invalid."
 
     try:
         analysis.update_harmonic_vibe_props("Test", "Card")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -613,7 +615,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
 
     try:
         analysis.update_harmonic_vibe_props("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -622,7 +624,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
 
     try:
         analysis.update_harmonic_vibe_props("Test", ["Card"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -644,7 +646,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -667,7 +669,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -690,7 +692,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateHarmonicVibePropsError as e:
         assert (
             str(e) == "Update harmonic vibe properties error: "
@@ -754,13 +756,13 @@ def helper_test_update_ict_analysis_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert str(e) == "Update ICT analysis properties error: Project name is invalid."
 
     try:
         analysis.update_ict_analysis_props("Tutorial Project", "Main Board")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -769,7 +771,7 @@ def helper_test_update_ict_analysis_props(analysis):
 
     try:
         analysis.update_ict_analysis_props("Tutorial Project", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -778,7 +780,7 @@ def helper_test_update_ict_analysis_props(analysis):
 
     try:
         analysis.update_ict_analysis_props("Tutorial Project", ["INVALID"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -799,7 +801,7 @@ def helper_test_update_ict_analysis_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -821,7 +823,7 @@ def helper_test_update_ict_analysis_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateICTAnalysisPropsError as e:
         assert (
             str(e) == "Update ICT analysis properties error: "
@@ -890,13 +892,13 @@ def helper_test_update_mechanical_shock_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert str(e) == "Update mechanical shock properties error: Project name is invalid."
 
     try:
         analysis.update_mechanical_shock_props("Test", "INVALID_TYPE")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -905,7 +907,7 @@ def helper_test_update_mechanical_shock_props(analysis):
 
     try:
         analysis.update_mechanical_shock_props("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -914,7 +916,7 @@ def helper_test_update_mechanical_shock_props(analysis):
 
     try:
         analysis.update_mechanical_shock_props("Test", ["INVALID"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -941,7 +943,7 @@ def helper_test_update_mechanical_shock_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -969,7 +971,7 @@ def helper_test_update_mechanical_shock_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateMechanicalShockPropsError as e:
         assert (
             str(e) == "Update mechanical shock properties error: "
@@ -1047,13 +1049,13 @@ def helper_test_update_solder_fatigue_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert str(e) == "Update solder fatigue properties error: Project name is invalid."
 
     try:
         analysis.update_solder_fatigue_props("Test", "INVALID_TYPE")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1062,7 +1064,7 @@ def helper_test_update_solder_fatigue_props(analysis):
 
     try:
         analysis.update_solder_fatigue_props("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1071,7 +1073,7 @@ def helper_test_update_solder_fatigue_props(analysis):
 
     try:
         analysis.update_solder_fatigue_props("Test", ["INVALID"])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1091,7 +1093,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1112,7 +1114,7 @@ def helper_test_update_solder_fatigue_props(analysis):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateSolderFatiguePropsError as e:
         assert (
             str(e) == "Update solder fatigue properties error: "
@@ -1584,6 +1586,26 @@ def helper_test_update_part_modeling_props(analysis):
         analysis.update_part_modeling_props(
             "Test",
             {
+                "cca_name": "",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True,
+            },
+        )
+        pytest.fail("No exception thrown when CCA name is empty.")
+    except SherlockUpdatePartModelingPropsError as e:
+        assert str(e) == "Update part modeling props error: CCA name is invalid."
+
+    try:
+        analysis.update_part_modeling_props(
+            "Test",
+            {
                 "cca_name": "Card",
                 "part_min_size": 1,
                 "part_min_size_units": "in",
@@ -1632,6 +1654,131 @@ def helper_test_update_part_modeling_props(analysis):
         )
         assert result == 0
     except SherlockUpdatePartModelingPropsError as e:
+        pytest.fail(str(e))
+
+
+def helper_test_update_parts_list_validation_props(analysis):
+    try:
+        analysis.update_part_list_validation_analysis_props("Tutorial Project", "Main Board")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartListValidationAnalysisPropsError as e:
+        assert (
+            str(e) == "Update part list validation analysis properties error: "
+            "Properties per CCA argument is invalid."
+        )
+
+    try:
+        analysis.update_part_list_validation_analysis_props("Tutorial Project", [])
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartListValidationAnalysisPropsError as e:
+        assert e.message == "One or more analysis properties are required."
+
+    try:
+        analysis.update_part_list_validation_analysis_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "process_use_avl": True,
+                    "process_use_wizard": False,
+                    "process_check_confirmed_properties": True,
+                    "process_check_part_numbers": True,
+                    "matching_mode": "Part",
+                    "avl_require_internal_part_number": True,
+                    "avl_require_approved_description": True,
+                    "avl_require_approved_manufacturer": True,
+                },
+                {
+                    "process_use_avl": True,
+                    "process_use_wizard": False,
+                    "process_check_confirmed_properties": True,
+                    "process_check_part_numbers": True,
+                    "matching_mode": "Part",
+                    "avl_require_internal_part_number": True,
+                    "avl_require_approved_description": True,
+                    "avl_require_approved_manufacturer": True,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartListValidationAnalysisPropsError as e:
+        assert e.message == "CCA name is missing for analysis properties 1."
+
+    try:
+        analysis.update_part_list_validation_analysis_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "process_use_avl": True,
+                    "process_use_wizard": False,
+                    "process_check_confirmed_properties": True,
+                    "process_check_part_numbers": True,
+                    "matching_mode": "Part",
+                    "avl_require_internal_part_number": True,
+                    "avl_require_approved_description": True,
+                    "avl_require_approved_manufacturer": True,
+                },
+                {
+                    "cca_name": "",
+                    "process_use_avl": True,
+                    "process_use_wizard": False,
+                    "process_check_confirmed_properties": True,
+                    "process_check_part_numbers": True,
+                    "matching_mode": "Part",
+                    "avl_require_internal_part_number": True,
+                    "avl_require_approved_description": True,
+                    "avl_require_approved_manufacturer": True,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockUpdatePartListValidationAnalysisPropsError as e:
+        assert e.message == "CCA name is invalid for analysis properties 1."
+
+    if not analysis._is_connection_up():
+        return
+
+    try:
+        analysis.update_part_list_validation_analysis_props(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "process_use_avl": True,
+                    "process_use_wizard": False,
+                    "process_check_confirmed_properties": True,
+                    "process_check_part_numbers": True,
+                    "matching_mode": "Part",
+                    "avl_require_internal_part_number": True,
+                    "avl_require_approved_description": True,
+                    "avl_require_approved_manufacturer": True,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockUpdatePartListValidationAnalysisPropsError
+
+    try:
+        result = analysis.update_part_list_validation_analysis_props(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "process_use_avl": True,
+                    "process_use_wizard": False,
+                    "process_check_confirmed_properties": True,
+                    "process_check_part_numbers": False,
+                    "matching_mode": "Part",
+                    "avl_require_internal_part_number": True,
+                    "avl_require_approved_description": False,
+                    "avl_require_approved_manufacturer": True,
+                },
+            ],
+        )
+        assert result == 0
+    except SherlockUpdatePartListValidationAnalysisPropsError as e:
         pytest.fail(str(e))
 
 

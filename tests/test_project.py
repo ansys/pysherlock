@@ -182,7 +182,7 @@ def helper_test_list_ccas(project):
 
     try:
         project.list_ccas("Tutorial Project", "CCA names that is not a list")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockListCCAsError as e:
         assert str(e.str_itr()) == "['List CCAs error: cca_names is not a list.']"
 
@@ -228,25 +228,25 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: Project name is invalid."
 
     try:
         project.add_cca("Test", "")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA properties argument is invalid."
 
     try:
         project.add_cca("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: One or more CCAs are required."
 
     try:
         project.add_cca("Test", [""])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA properties are invalid for CCA 0."
 
@@ -265,7 +265,7 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA name is missing for CCA 0."
 
@@ -285,7 +285,7 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA name is invalid for CCA 0."
 

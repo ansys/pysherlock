@@ -595,7 +595,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
                 )
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
             str(e.str_itr()) == "['Add thermal profiles error: "
@@ -621,7 +621,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
                 )
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
             str(e.str_itr()) == "['Add thermal profiles error: "
@@ -647,7 +647,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
                 )
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
             str(e.str_itr()) == "['Add thermal profiles error: "
@@ -673,7 +673,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
                 )
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
             str(e.str_itr()) == "['Add thermal profiles error: "
@@ -699,7 +699,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
                 )
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
             str(e.str_itr()) == "['Add thermal profiles error: "
@@ -725,7 +725,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
                 )
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddThermalProfilesError as e:
         assert (
             str(e.str_itr()) == "['Add thermal profiles error: "

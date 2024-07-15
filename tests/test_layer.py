@@ -572,18 +572,6 @@ def helper_test_export_all_test_points(layer):
         test_points_file = os.path.join(temp_dir, "test_points.csv")
 
         try:
-            result = layer.export_all_test_points(
-                "Test Point Test Project",
-                "Main Board",
-                test_points_file,
-            )
-
-            assert os.path.exists(test_points_file)
-            assert result == 0
-        except Exception as e:
-            pytest.fail(str(e.error_array) if hasattr(e, "error_array") else str(e))
-
-        try:
             layer.export_all_test_points(
                 "Test Point Test Project",
                 "Invalid CCA",
@@ -592,6 +580,18 @@ def helper_test_export_all_test_points(layer):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportAllTestPoints
+
+        try:
+            result = layer.export_all_test_points(
+                "Test Point Test Project",
+                "Main Board",
+                test_points_file,
+            )
+
+            assert os.path.exists(test_points_file)
+            assert result == 0
+        except SherlockExportAllTestPoints as e:
+            pytest.fail(str(e.str_itr()))
 
 
 def helper_test_export_all_test_fixtures(layer):
@@ -634,6 +634,16 @@ def helper_test_export_all_test_fixtures(layer):
         test_fixtures_file = os.path.join(temp_dir, "test_fixtures.csv")
 
         try:
+            layer.export_all_test_fixtures(
+                "Tutorial Project",
+                "Invalid CCA",
+                test_fixtures_file,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) is SherlockExportAllTestFixtures
+
+        try:
             result = layer.export_all_test_fixtures(
                 "Tutorial Project",
                 "Main Board",
@@ -642,18 +652,8 @@ def helper_test_export_all_test_fixtures(layer):
 
             assert os.path.exists(test_fixtures_file)
             assert result == 0
-        except Exception as e:
-            pytest.fail(e.message)
-
-        try:
-            layer.export_all_test_fixtures(
-                "Tutorial Project",
-                "Invalid CCA",
-                test_fixtures_file,
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except Exception as e:
-            assert type(e) == SherlockExportAllTestFixtures
+        except SherlockExportAllTestFixtures as e:
+            pytest.fail(str(e))
 
 
 def helper_test_export_all_mount_points(layer):
