@@ -3243,7 +3243,7 @@ def helper_test_create_cca_from_modeling_region(project):
                 },
             ],
         )
-        pytest.fail("No exception raised when missing parameters")
+        pytest.fail("No exception raised when parameters are missing")
     except Exception as e:
         assert type(e) == SherlockCreateCCAFromModelingRegionError
 
