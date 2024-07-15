@@ -3247,28 +3247,6 @@ def helper_test_create_cca_from_modeling_region(project):
     except Exception as e:
         assert type(e) == SherlockCreateCCAFromModelingRegionError
 
-    # try:
-    #     result = project.create_cca_from_modeling_region(
-    #         "ModelingRegion",
-    #         [
-    #             {
-    #                 "cca_name": "Main Board",
-    #                 "modeling_region_id": "MR1",
-    #                 "description": "Test",
-    #                 "default_solder_type": "SAC305",
-    #                 "default_stencil_thickness": 10,
-    #                 "default_stencil_thickness_units": "mm",
-    #                 "default_part_temp_rise": 20,
-    #                 "default_part_temp_rise_units": "C",
-    #                 "guess_part_properties": False,
-    #                 "generate_image_layers": False,
-    #             },
-    #         ],
-    #     )
-    #     assert result == 0
-    # except SherlockCreateCCAFromModelingRegionError as e:
-    #     pytest.fail(str(e))
-
 
 if __name__ == "__main__":
     test_all()
