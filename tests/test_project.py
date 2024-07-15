@@ -13,6 +13,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
     SherlockDeleteProjectError,
     SherlockExportProjectError,
     SherlockGenerateProjectReportError,
@@ -61,6 +62,7 @@ def test_all():
     helper_test_add_thermal_maps(project)
     helper_test_update_thermal_maps(project)
     helper_test_list_thermal_maps(project)
+    helper_test_create_cca_from_modeling_region(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
@@ -3064,6 +3066,186 @@ def helper_test_export_project(project):
                 pytest.fail("Failed to generate export file.")
         except SherlockExportProjectError as e:
             pytest.fail(str(e))
+
+
+def helper_test_create_cca_from_modeling_region(project):
+    """Test create_cca_from_modeling_region API"""
+    try:
+        project.create_cca_from_modeling_region(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                    "description": "test MR1",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: Project " "name is invalid."
+
+    try:
+        project.create_cca_from_modeling_region("Test", "")
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA "
+            "properties argument is invalid."
+        )
+
+    try:
+        project.create_cca_from_modeling_region("Test", [])
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: One or more CCAs are required."
+
+    try:
+        project.create_cca_from_modeling_region("Test", [""])
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA properties "
+            "are invalid for CCA 0."
+        )
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "modeling_region_id": "MR1",
+                    "description": "tests MR1",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: CCA name is missing for CCA 0."
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "",
+                    "modeling_region_id": "MR1",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: CCA name is invalid for CCA 0."
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is missing for CCA 0."
+        )
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Card",
+                    "modeling_region_id": "",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is invalid for CCA 0."
+        )
+
+    if not project._is_connection_up():
+        return
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "INVALID",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
+
+    try:
+        project.create_cca_from_modeling_region(
+            "ModelingRegion",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                },
+            ],
+        )
+        pytest.fail("No exception raised when parameters are missing")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
 
 
 if __name__ == "__main__":
