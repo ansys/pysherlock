@@ -3233,19 +3233,19 @@ def helper_test_create_cca_from_modeling_region(project):
     except Exception as e:
         assert type(e) == SherlockCreateCCAFromModelingRegionError
 
-    # try:
-    #     result = project.create_cca_from_modeling_region(
-    #         "ModelingRegion",
-    #         [
-    #             {
-    #                 "cca_name": "Main Board",
-    #                 "modeling_region_id": "MR1",
-    #             },
-    #         ],
-    #     )
-    #     assert result == 0
-    # except SherlockCreateCCAFromModelingRegionError as e:
-    #     pytest.fai(str(e))
+    try:
+        project.create_cca_from_modeling_region(
+            "ModelingRegion",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                },
+            ],
+        )
+        pytest.fail("No exception raised when missing parameters")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
 
     # try:
     #     result = project.create_cca_from_modeling_region(
