@@ -1171,3 +1171,16 @@ class SherlockCreateCCAFromModelingRegionError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Create CCA from modeling region error: {self.message}"
+
+
+class SherlockExportFEAModelError(Exception):
+    """Contains the error raised when a FEA model cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export FEA model error: {self.message}"
+

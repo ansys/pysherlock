@@ -7,8 +7,19 @@ import unittest
 import grpc
 import pytest
 
-from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockModelServiceError
+from ansys.sherlock.core.errors import (
+    SherlockExportAEDBError,
+    SherlockExportFEAModelError,
+    SherlockModelServiceError,
+)
 from ansys.sherlock.core.model import Model
+from ansys.sherlock.core.types.model_types import (
+    ExportFEAModelAnalysisType,
+    MaxEdgeLength,
+    MaxMeshSize,
+    MinHoleDiameter,
+    VerticalMeshSize,
+)
 
 
 class TestModel(unittest.TestCase):
@@ -362,6 +373,684 @@ class TestModel(unittest.TestCase):
                 assert result == 0
             except SherlockModelServiceError as e:
                 pytest.fail(str(e))
+
+    def test_export_FEA_model(self):
+        channel_param = "127.0.0.1:9090"
+        channel = grpc.insecure_channel(channel_param)
+        model = Model(channel)
+
+        if platform.system() == "Windows":
+            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
+        else:
+            temp_dir = os.environ.get("TEMP", "/tmp")
+        path = os.path.join(temp_dir, "export.wbjn")
+
+        if model._is_connection_up():
+            try:
+                model.export_FEA_model(
+                    project="Tutorial Project",
+                    cca_name="Invalid CCA",
+                    export_file=path,
+                    analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                    drill_hole_parameters=[
+                        {
+                            "drill_hole_modeling": "ENABLED",
+                            "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                            "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        }
+                    ],
+                    detect_lead_modeling="ENABLED",
+                    lead_model_parameters=[
+                        {
+                            "lead_modeling": "ENABLED",
+                            "lead_element_order": "First Order (Linear)",
+                            "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                            "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                            "thicknessCount": 3,
+                            "aspectRatio": 2,
+                        }
+                    ],
+                    display_model=True,
+                    clear_FEA_database=True,
+                    use_FEA_model_id=True,
+                    coordinate_units="mm",
+                )
+                pytest.fail("No exception raised for invalid project name")
+            except Exception as e:
+                assert type(e) == SherlockExportFEAModelError
+
+        try:
+            model.export_FEA_model(
+                project="",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Project name is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: CCA name is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file="",
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Export file path is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file="test",
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == f'Export FEA model error: Export file directory "test" does not exist.'
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis="",
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Analysis for FEA model is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "test",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Drill hole modeling status is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": 0,
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Minimum hole diameter is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": 0,
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Maximum edge length is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="test",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Detect lead modeling status is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "test",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Lead modeling status is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "test",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Lead element order is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": 0,
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Maximum mesh size is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": 0,
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: Vertical mesh size is invalid."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": "3",
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == (
+                "Export FEA model error: Invalid thickness count. Must be an "
+                "integer between 1 and 5, with a default value of 3."
+            )
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": "2",
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == (
+                "Export FEA model error: Invalid aspect ratio. Must be an integer "
+                "between 1 and 10, with a default value of 2."
+            )
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model="True",
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: display_model must be a boolean."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database="True",
+                use_FEA_model_id=True,
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: clear_FEA_database must be a boolean."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id="True",
+                coordinate_units="mm",
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: use_FEA_model_id must be a boolean."
+
+        try:
+            model.export_FEA_model(
+                project="Tutorial Project",
+                cca_name="Main Board",
+                export_file=path,
+                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2,
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units=0,
+            )
+            pytest.fail("No exception raised for invalid project name")
+        except SherlockExportFEAModelError as e:
+            assert str(e) == "Export FEA model error: coordinate_units must be a string."
 
 
 if __name__ == "__main__":
