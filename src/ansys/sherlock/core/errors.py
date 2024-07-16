@@ -1183,4 +1183,3 @@ class SherlockExportFEAModelError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export FEA model error: {self.message}"
-
