@@ -17,7 +17,6 @@ Use the search feature or click links to view API documentation.
    layer
    lifecycle
    model
-   model_types
    parts
    layer_types
    parts_types
@@ -33,7 +32,6 @@ Use the search feature or click links to view API documentation.
    ansys.sherlock.core.layer
    ansys.sherlock.core.lifecycle
    ansys.sherlock.core.model
-   ansys.sherlock.core.types.model_types
    ansys.sherlock.core.parts
    ansys.sherlock.core.types.layer_types
    ansys.sherlock.core.types.parts_types

@@ -21,12 +21,7 @@ from ansys.sherlock.core.errors import (
     SherlockModelServiceError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
-from ansys.sherlock.core.types.model_types import (
-    MaxEdgeLength,
-    MaxMeshSize,
-    MinHoleDiameter,
-    VerticalMeshSize,
-)
+from ansys.sherlock.core.types.common_types import Measurement
 
 
 class Model(GrpcStub):
@@ -650,7 +645,7 @@ class Model(GrpcStub):
         project: str,
         cca_name: str,
         export_file: str,
-        analysis: int,
+        analysis: str,
         drill_hole_parameters: List[dict],
         detect_lead_modeling: str,
         lead_model_parameters: List[dict],
@@ -670,8 +665,9 @@ class Model(GrpcStub):
             Name of the CCA.
         export_file : str
             Full path for saving exported files to. The file extension must be ``".wbjn"``.
-        analysis : ExportFEAModelAnalysisType
-            The type of analysis is being exported.
+        analysis : str
+            The type of analysis that is being exported. Valid values are ``NaturalFreq``,
+            ``HarmonicVibe``, ``ICTAnalysis``, ``MechanicalShock`` or ``RandomVibe``.
         drill_hole_parameters : list
             List of the drill hole parameters consisting of these properties:
 
@@ -685,14 +681,14 @@ class Model(GrpcStub):
                     The properties of the maximum edge length.
         detect_lead_modeling : str
             The status of the detect lead modeling feature. If enabled, automatically enable lead
-            modeling if any part has lead geometry defined. Valid values are ``ENABLED/enabled`` or
-            ``DISABLED/disabled``.
+            modeling if any part has lead geometry defined. Valid values are ``ENABLED`` or
+            ``DISABLED``.
         lead_model_parameters : list
             List of the lead model parameters consisting of these properties:
 
                 - lead_modeling : str
                     The status of the lead modeling feature. If enabled, automatically enable lead
-                    modeling. Valid values are ``ENABLED/enabled`` or ``DISABLED/disabled``.
+                    modeling. Valid values are ``ENABLED`` or ``DISABLED``.
                 - lead_element_order : str
                      The type of the element order. Valid values are ``First Order (Linear)``,
                      ``Second Order (Quadratic)``, or ``Solid Shell``.
@@ -726,24 +722,20 @@ class Model(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> from ansys.sherlock.core.types.model_types import (
-            ExportFEAModelAnalysisType,
-            MaxEdgeLength,
-            MaxMeshSize,
-            MinHoleDiameter,
-            VerticalMeshSize,
+        >>> from ansys.sherlock.core.types.common_types import (
+            Measurement,
         )
         >>> sherlock = launch_sherlock()
         >>> sherlock.model.export_FEA_model(
                 project="Test Project",
                 cca_name="Main Board",
                 export_file="C:/Temp/export.wbjn",
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm")
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm")
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -751,8 +743,8 @@ class Model(GrpcStub):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2
                     }
@@ -778,77 +770,51 @@ class Model(GrpcStub):
                     message=f"Export file directory " f'"{export_file}" ' f"does not exist."
                 )
 
-            if not isinstance(analysis, int) or analysis == "":
+            if not isinstance(analysis, str) or analysis == "":
                 raise SherlockExportFEAModelError(message=f"Analysis for FEA model is invalid.")
 
             for param in drill_hole_parameters:
                 drill_hole_modeling = param.get("drill_hole_modeling")
-                if drill_hole_modeling not in ["ENABLED", "enabled", "DISABLED", "disabled"]:
+                if not isinstance(drill_hole_modeling, str):
                     raise SherlockExportFEAModelError(
-                        message="Drill hole modeling status " "is invalid."
+                        message="Drill hole modeling status is " "invalid."
                     )
 
                 min_hole_diameter = param.get("min_hole_diameter")
-                if not isinstance(min_hole_diameter, MinHoleDiameter):
+                if not isinstance(min_hole_diameter, Measurement):
                     raise SherlockExportFEAModelError(message="Minimum hole diameter is invalid.")
 
                 max_edge_length = param.get("max_edge_length")
-                if not isinstance(max_edge_length, MaxEdgeLength):
+                if not isinstance(max_edge_length, Measurement):
                     raise SherlockExportFEAModelError(message="Maximum edge length is invalid.")
 
-            if detect_lead_modeling not in ["ENABLED", "enabled", "DISABLED", "disabled"]:
+            if not isinstance(detect_lead_modeling, str):
                 raise SherlockExportFEAModelError(message="Detect lead modeling status is invalid.")
 
             for param in lead_model_parameters:
                 lead_modeling = param.get("lead_modeling")
-                if lead_modeling not in ["ENABLED", "enabled", "DISABLED", "disabled"]:
+                if not isinstance(lead_modeling, str):
                     raise SherlockExportFEAModelError(message="Lead modeling status is invalid.")
 
                 lead_element_order = param.get("lead_element_order")
-                if lead_element_order not in [
-                    "First Order (Linear)",
-                    "Second Order (Quadratic)",
-                    "Solid Shell",
-                ]:
+                if not isinstance(lead_element_order, str):
                     raise SherlockExportFEAModelError(message="Lead element order is invalid.")
 
                 max_mesh_size = param.get("max_mesh_size")
-                if not isinstance(max_mesh_size, MaxMeshSize):
+                if not isinstance(max_mesh_size, Measurement):
                     raise SherlockExportFEAModelError(message="Maximum mesh size is invalid.")
 
                 vertical_mesh_size = param.get("vertical_mesh_size")
-                if not isinstance(vertical_mesh_size, VerticalMeshSize):
+                if not isinstance(vertical_mesh_size, Measurement):
                     raise SherlockExportFEAModelError(message="Vertical mesh size is invalid.")
 
-                thickness_count = param.get("thicknessCount", 3)
-                if (
-                    not isinstance(thickness_count, int)
-                    or thickness_count < 1
-                    or thickness_count > 5
-                ):
-                    raise SherlockExportFEAModelError(
-                        message="Invalid thickness count. Must be an integer between 1 and 5, with "
-                        "a default value of 3."
-                    )
+                thickness_count = param.get("thicknessCount")
+                if not isinstance(thickness_count, int):
+                    raise SherlockExportFEAModelError(message="Thickness count is invalid.")
 
-                aspect_ratio = param.get("aspectRatio", 2)
-                if not isinstance(aspect_ratio, int) or aspect_ratio < 1 or aspect_ratio > 10:
-                    raise SherlockExportFEAModelError(
-                        message="Invalid aspect ratio. Must be an integer between 1 and 10, with "
-                        "a default value of 2."
-                    )
-
-            if not isinstance(display_model, bool):
-                raise SherlockExportFEAModelError(message="display_model must be a boolean.")
-
-            if not isinstance(clear_FEA_database, bool):
-                raise SherlockExportFEAModelError(message="clear_FEA_database must be a boolean.")
-
-            if not isinstance(use_FEA_model_id, bool):
-                raise SherlockExportFEAModelError(message="use_FEA_model_id must be a boolean.")
-
-            if not isinstance(coordinate_units, str):
-                raise SherlockExportFEAModelError(message="coordinate_units must be a string.")
+                aspect_ratio = param.get("aspectRatio")
+                if not isinstance(aspect_ratio, int):
+                    raise SherlockExportFEAModelError(message="Aspect ratio is invalid.")
 
             if not self._is_connection_up():
                 LOG.error("There is no connection to a gRPC service.")
@@ -871,10 +837,10 @@ class Model(GrpcStub):
                 export_request.drillHoleParam.maxEdgeLength.value = max_edge_length.value
                 export_request.drillHoleParam.maxEdgeLength.unit = max_edge_length.unit
 
-            export_request.detectLeadModeling = detect_lead_modeling
+            export_request.detectLeadModeling = detect_lead_modeling.upper()
 
             for param in lead_model_parameters:
-                export_request.leadModelParam.leadModeling = param.get("lead_modeling")
+                export_request.leadModelParam.leadModeling = param.get("lead_modeling").upper()
 
                 export_request.leadModelParam.leadElemOrder = param.get("lead_element_order")
 

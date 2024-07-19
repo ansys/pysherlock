@@ -80,3 +80,14 @@ class TableDelimiter:
     """TAB"""
     SEMICOLON = SherlockCommonService_pb2.TableDelimiter.SEMICOLON
     """SEMICOLON"""
+
+
+class Measurement:
+    """Contains the properties of the measurement."""
+
+    def __init__(self, value, unit):
+        """Initialize the measurement properties."""
+        self.value = value
+        """value : float"""
+        self.unit = unit
+        """unit : string"""

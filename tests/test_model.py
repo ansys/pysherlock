@@ -13,13 +13,7 @@ from ansys.sherlock.core.errors import (
     SherlockModelServiceError,
 )
 from ansys.sherlock.core.model import Model
-from ansys.sherlock.core.types.model_types import (
-    ExportFEAModelAnalysisType,
-    MaxEdgeLength,
-    MaxMeshSize,
-    MinHoleDiameter,
-    VerticalMeshSize,
-)
+from ansys.sherlock.core.types.common_types import Measurement
 
 
 class TestModel(unittest.TestCase):
@@ -391,12 +385,12 @@ class TestModel(unittest.TestCase):
                     project="Tutorial Project",
                     cca_name="Invalid CCA",
                     export_file=path,
-                    analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                    analysis="NaturalFreq",
                     drill_hole_parameters=[
                         {
                             "drill_hole_modeling": "ENABLED",
-                            "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                            "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                            "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                            "max_edge_length": Measurement(value=1.0, unit="mm"),
                         }
                     ],
                     detect_lead_modeling="ENABLED",
@@ -404,8 +398,8 @@ class TestModel(unittest.TestCase):
                         {
                             "lead_modeling": "ENABLED",
                             "lead_element_order": "First Order (Linear)",
-                            "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                            "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                            "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                            "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                             "thicknessCount": 3,
                             "aspectRatio": 2,
                         }
@@ -424,12 +418,12 @@ class TestModel(unittest.TestCase):
                 project="",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -437,8 +431,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -457,12 +451,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -470,8 +464,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -490,12 +484,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file="",
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -503,8 +497,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -523,12 +517,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file="test",
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -536,8 +530,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -560,8 +554,8 @@ class TestModel(unittest.TestCase):
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -569,8 +563,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -589,12 +583,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "test",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -602,8 +596,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -622,12 +616,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
                         "min_hole_diameter": 0,
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -635,8 +629,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -655,11 +649,11 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
                         "max_edge_length": 0,
                     }
                 ],
@@ -668,8 +662,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -688,12 +682,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="test",
@@ -701,8 +695,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -721,12 +715,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -734,8 +728,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "test",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -754,12 +748,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -767,8 +761,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "test",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -787,12 +781,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -801,7 +795,7 @@ class TestModel(unittest.TestCase):
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
                         "max_mesh_size": 0,
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": 2,
                     }
@@ -820,12 +814,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -833,7 +827,7 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
                         "vertical_mesh_size": 0,
                         "thicknessCount": 3,
                         "aspectRatio": 2,
@@ -853,12 +847,12 @@ class TestModel(unittest.TestCase):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -866,8 +860,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": "3",
                         "aspectRatio": 2,
                     }
@@ -879,22 +873,19 @@ class TestModel(unittest.TestCase):
             )
             pytest.fail("No exception raised for invalid project name")
         except SherlockExportFEAModelError as e:
-            assert str(e) == (
-                "Export FEA model error: Invalid thickness count. Must be an "
-                "integer between 1 and 5, with a default value of 3."
-            )
+            assert str(e) == ("Export FEA model error: Thickness count is invalid.")
 
         try:
             model.export_FEA_model(
                 project="Tutorial Project",
                 cca_name="Main Board",
                 export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
+                analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
                         "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
                 detect_lead_modeling="ENABLED",
@@ -902,8 +893,8 @@ class TestModel(unittest.TestCase):
                     {
                         "lead_modeling": "ENABLED",
                         "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
                         "aspectRatio": "2",
                     }
@@ -915,142 +906,7 @@ class TestModel(unittest.TestCase):
             )
             pytest.fail("No exception raised for invalid project name")
         except SherlockExportFEAModelError as e:
-            assert str(e) == (
-                "Export FEA model error: Invalid aspect ratio. Must be an integer "
-                "between 1 and 10, with a default value of 2."
-            )
-
-        try:
-            model.export_FEA_model(
-                project="Tutorial Project",
-                cca_name="Main Board",
-                export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
-                drill_hole_parameters=[
-                    {
-                        "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
-                    }
-                ],
-                detect_lead_modeling="ENABLED",
-                lead_model_parameters=[
-                    {
-                        "lead_modeling": "ENABLED",
-                        "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
-                        "thicknessCount": 3,
-                        "aspectRatio": 2,
-                    }
-                ],
-                display_model="True",
-                clear_FEA_database=True,
-                use_FEA_model_id=True,
-                coordinate_units="mm",
-            )
-            pytest.fail("No exception raised for invalid project name")
-        except SherlockExportFEAModelError as e:
-            assert str(e) == "Export FEA model error: display_model must be a boolean."
-
-        try:
-            model.export_FEA_model(
-                project="Tutorial Project",
-                cca_name="Main Board",
-                export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
-                drill_hole_parameters=[
-                    {
-                        "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
-                    }
-                ],
-                detect_lead_modeling="ENABLED",
-                lead_model_parameters=[
-                    {
-                        "lead_modeling": "ENABLED",
-                        "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
-                        "thicknessCount": 3,
-                        "aspectRatio": 2,
-                    }
-                ],
-                display_model=True,
-                clear_FEA_database="True",
-                use_FEA_model_id=True,
-                coordinate_units="mm",
-            )
-            pytest.fail("No exception raised for invalid project name")
-        except SherlockExportFEAModelError as e:
-            assert str(e) == "Export FEA model error: clear_FEA_database must be a boolean."
-
-        try:
-            model.export_FEA_model(
-                project="Tutorial Project",
-                cca_name="Main Board",
-                export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
-                drill_hole_parameters=[
-                    {
-                        "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
-                    }
-                ],
-                detect_lead_modeling="ENABLED",
-                lead_model_parameters=[
-                    {
-                        "lead_modeling": "ENABLED",
-                        "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
-                        "thicknessCount": 3,
-                        "aspectRatio": 2,
-                    }
-                ],
-                display_model=True,
-                clear_FEA_database=True,
-                use_FEA_model_id="True",
-                coordinate_units="mm",
-            )
-            pytest.fail("No exception raised for invalid project name")
-        except SherlockExportFEAModelError as e:
-            assert str(e) == "Export FEA model error: use_FEA_model_id must be a boolean."
-
-        try:
-            model.export_FEA_model(
-                project="Tutorial Project",
-                cca_name="Main Board",
-                export_file=path,
-                analysis=ExportFEAModelAnalysisType.NATURAL_FREQUENCY,
-                drill_hole_parameters=[
-                    {
-                        "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": MinHoleDiameter(value=0.5, unit="mm"),
-                        "max_edge_length": MaxEdgeLength(value=1.0, unit="mm"),
-                    }
-                ],
-                detect_lead_modeling="ENABLED",
-                lead_model_parameters=[
-                    {
-                        "lead_modeling": "ENABLED",
-                        "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": MaxMeshSize(value=0.5, unit="mm"),
-                        "vertical_mesh_size": VerticalMeshSize(value=0.1, unit="mm"),
-                        "thicknessCount": 3,
-                        "aspectRatio": 2,
-                    }
-                ],
-                display_model=True,
-                clear_FEA_database=True,
-                use_FEA_model_id=True,
-                coordinate_units=0,
-            )
-            pytest.fail("No exception raised for invalid project name")
-        except SherlockExportFEAModelError as e:
-            assert str(e) == "Export FEA model error: coordinate_units must be a string."
+            assert str(e) == ("Export FEA model error: Aspect ratio is invalid.")
 
 
 if __name__ == "__main__":
