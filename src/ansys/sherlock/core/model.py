@@ -777,7 +777,7 @@ class Model(GrpcStub):
                 drill_hole_modeling = param.get("drill_hole_modeling")
                 if not isinstance(drill_hole_modeling, str):
                     raise SherlockExportFEAModelError(
-                        message="Drill hole modeling status is " "invalid."
+                        message="Drill hole modeling status is invalid."
                     )
 
                 min_hole_diameter = param.get("min_hole_diameter")
@@ -824,7 +824,9 @@ class Model(GrpcStub):
             export_request.project = project
             export_request.ccaName = cca_name
             export_request.exportFile = export_file
-            export_request.analysis = analysis
+            export_request.analysis = (
+                SherlockModelService_pb2.ExportFEAModelRequest.ExportAnalysis.Value(analysis)
+            )
 
             for param in drill_hole_parameters:
                 export_request.drillHoleParam.drillHoleModeling = param.get("drill_hole_modeling")

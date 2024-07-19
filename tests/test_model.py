@@ -586,7 +586,7 @@ class TestModel(unittest.TestCase):
                 analysis="NaturalFreq",
                 drill_hole_parameters=[
                     {
-                        "drill_hole_modeling": "test",
+                        "drill_hole_modeling": 0,
                         "min_hole_diameter": Measurement(value=0.5, unit="mm"),
                         "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
@@ -690,7 +690,7 @@ class TestModel(unittest.TestCase):
                         "max_edge_length": Measurement(value=1.0, unit="mm"),
                     }
                 ],
-                detect_lead_modeling="test",
+                detect_lead_modeling=0,
                 lead_model_parameters=[
                     {
                         "lead_modeling": "ENABLED",
@@ -726,7 +726,7 @@ class TestModel(unittest.TestCase):
                 detect_lead_modeling="ENABLED",
                 lead_model_parameters=[
                     {
-                        "lead_modeling": "test",
+                        "lead_modeling": 0,
                         "lead_element_order": "First Order (Linear)",
                         "max_mesh_size": Measurement(value=0.5, unit="mm"),
                         "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
@@ -760,7 +760,7 @@ class TestModel(unittest.TestCase):
                 lead_model_parameters=[
                     {
                         "lead_modeling": "ENABLED",
-                        "lead_element_order": "test",
+                        "lead_element_order": 0,
                         "max_mesh_size": Measurement(value=0.5, unit="mm"),
                         "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
                         "thicknessCount": 3,
@@ -873,7 +873,7 @@ class TestModel(unittest.TestCase):
             )
             pytest.fail("No exception raised for invalid project name")
         except SherlockExportFEAModelError as e:
-            assert str(e) == ("Export FEA model error: Thickness count is invalid.")
+            assert str(e) == "Export FEA model error: Thickness count is invalid."
 
         try:
             model.export_FEA_model(
@@ -906,7 +906,7 @@ class TestModel(unittest.TestCase):
             )
             pytest.fail("No exception raised for invalid project name")
         except SherlockExportFEAModelError as e:
-            assert str(e) == ("Export FEA model error: Aspect ratio is invalid.")
+            assert str(e) == "Export FEA model error: Aspect ratio is invalid."
 
 
 if __name__ == "__main__":
