@@ -74,12 +74,14 @@ def launch_sherlock(
         return None
 
     try:
-        args = _get_sherlock_exe_path() + " -grpcPort=" + str(port)
+        args = [_get_sherlock_exe_path()]
+        args.append("-grpcPort=" + str(port))
         if single_project_path != "":
-            args = f'{args} -singleProject "{single_project_path}"'
+            args.append(f'-singleProject "{single_project_path}"')
         if sherlock_cmd_args != "":
-            args = f"{args} {sherlock_cmd_args}"
-        subprocess.Popen(shlex.split(args))
+            args.append(f"{shlex.split(sherlock_cmd_args)}")
+        print(args)
+        subprocess.Popen(args)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
