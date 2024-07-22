@@ -770,16 +770,7 @@ class Model(GrpcStub):
                     message=f"Export file directory " f'"{export_file}" ' f"does not exist."
                 )
 
-            if not isinstance(analysis, str) or analysis == "":
-                raise SherlockExportFEAModelError(message=f"Analysis for FEA model is invalid.")
-
             for param in drill_hole_parameters:
-                drill_hole_modeling = param.get("drill_hole_modeling")
-                if not isinstance(drill_hole_modeling, str):
-                    raise SherlockExportFEAModelError(
-                        message="Drill hole modeling status is invalid."
-                    )
-
                 min_hole_diameter = param.get("min_hole_diameter")
                 if not isinstance(min_hole_diameter, Measurement):
                     raise SherlockExportFEAModelError(message="Minimum hole diameter is invalid.")
@@ -788,18 +779,7 @@ class Model(GrpcStub):
                 if not isinstance(max_edge_length, Measurement):
                     raise SherlockExportFEAModelError(message="Maximum edge length is invalid.")
 
-            if not isinstance(detect_lead_modeling, str):
-                raise SherlockExportFEAModelError(message="Detect lead modeling status is invalid.")
-
             for param in lead_model_parameters:
-                lead_modeling = param.get("lead_modeling")
-                if not isinstance(lead_modeling, str):
-                    raise SherlockExportFEAModelError(message="Lead modeling status is invalid.")
-
-                lead_element_order = param.get("lead_element_order")
-                if not isinstance(lead_element_order, str):
-                    raise SherlockExportFEAModelError(message="Lead element order is invalid.")
-
                 max_mesh_size = param.get("max_mesh_size")
                 if not isinstance(max_mesh_size, Measurement):
                     raise SherlockExportFEAModelError(message="Maximum mesh size is invalid.")
@@ -807,14 +787,6 @@ class Model(GrpcStub):
                 vertical_mesh_size = param.get("vertical_mesh_size")
                 if not isinstance(vertical_mesh_size, Measurement):
                     raise SherlockExportFEAModelError(message="Vertical mesh size is invalid.")
-
-                thickness_count = param.get("thicknessCount")
-                if not isinstance(thickness_count, int):
-                    raise SherlockExportFEAModelError(message="Thickness count is invalid.")
-
-                aspect_ratio = param.get("aspectRatio")
-                if not isinstance(aspect_ratio, int):
-                    raise SherlockExportFEAModelError(message="Aspect ratio is invalid.")
 
             if not self._is_connection_up():
                 LOG.error("There is no connection to a gRPC service.")
