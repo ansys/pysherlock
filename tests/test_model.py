@@ -677,6 +677,45 @@ class TestModel(unittest.TestCase):
             except Exception as e:
                 assert type(e) == SherlockExportFEAModelError
 
+            try:
+                result = model.export_FEA_model(
+                    project="Tutorial Project",
+                    cca_name="Main Board",
+                    export_file=path,
+                    analysis="NaturalFreq",
+                    drill_hole_parameters=[
+                        {
+                            "drill_hole_modeling": "ENABLED",
+                            "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                            "max_edge_length": Measurement(value=1.0, unit="mm"),
+                        }
+                    ],
+                    detect_lead_modeling="ENABLED",
+                    lead_model_parameters=[
+                        {
+                            "lead_modeling": "ENABLED",
+                            "lead_element_order": "First Order (Linear)",
+                            "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                            "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
+                            "thicknessCount": 3,
+                            "aspectRatio": 2,
+                        }
+                    ],
+                    display_model=False,
+                    clear_FEA_database=False,
+                    use_FEA_model_id=False,
+                    coordinate_units="mm",
+                )
+                assert result == 0
+
+                # Clean up file
+                if os.path.exists(path):
+                    os.remove(path)
+                else:
+                    pytest.fail("Failed to generate export file.")
+            except SherlockExportFEAModelError as e:
+                pytest.fail(str(e))
+
 
 if __name__ == "__main__":
     unittest.main()
