@@ -708,13 +708,12 @@ class TestModel(unittest.TestCase):
                 )
                 assert result == 0
 
+            except SherlockExportFEAModelError as e:
+                pytest.fail(str(e))
+            finally:
                 # Clean up file
                 if os.path.exists(path):
                     os.remove(path)
-                else:
-                    pytest.fail("Failed to generate export file.")
-            except SherlockExportFEAModelError as e:
-                pytest.fail(str(e))
 
 
 if __name__ == "__main__":
