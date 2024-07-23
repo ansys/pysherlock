@@ -12,9 +12,16 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 
+from typing import List
+
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockModelServiceError
+from ansys.sherlock.core.errors import (
+    SherlockExportAEDBError,
+    SherlockExportFEAModelError,
+    SherlockModelServiceError,
+)
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.common_types import Measurement
 
 
 class Model(GrpcStub):
@@ -632,3 +639,210 @@ class Model(GrpcStub):
         dhm.maxEdgeLength.units = drill_hole_max_edge_length_units
 
         return ret
+
+    def export_FEA_model(
+        self,
+        project: str,
+        cca_name: str,
+        export_file: str,
+        analysis: str,
+        drill_hole_parameters: List[dict],
+        detect_lead_modeling: str,
+        lead_model_parameters: List[dict],
+        display_model: bool,
+        clear_FEA_database: bool,
+        use_FEA_model_id: bool,
+        coordinate_units: str,
+    ):
+        """
+        Export a FEA model.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        export_file : str
+            Full path for saving exported files to. The file extension must be ``".wbjn"``.
+        analysis : str
+            The type of analysis that is being exported. Valid values are ``NaturalFreq``,
+            ``HarmonicVibe``, ``ICTAnalysis``, ``MechanicalShock`` or ``RandomVibe``.
+        drill_hole_parameters : list
+            List of the drill hole parameters consisting of these properties:
+
+                - drill_hole_modeling : str
+                    The status of the drill hole modeling feature. If enabled, automatically enable
+                    drill hole modeling. Valid values are ``ENABLED/enabled`` or
+                    ``DISABLED/disabled``.
+                - min_hole_diameter : MinHoleDiameter
+                    The properties of the minimum hole diameter.
+                - max_edge_length : MaxEdgeLength
+                    The properties of the maximum edge length.
+        detect_lead_modeling : str
+            The status of the detect lead modeling feature. If enabled, automatically enable lead
+            modeling if any part has lead geometry defined. Valid values are ``ENABLED`` or
+            ``DISABLED``.
+        lead_model_parameters : list
+            List of the lead model parameters consisting of these properties:
+
+                - lead_modeling : str
+                    The status of the lead modeling feature. If enabled, automatically enable lead
+                    modeling. Valid values are ``ENABLED`` or ``DISABLED``.
+                - lead_element_order : str
+                     The type of the element order. Valid values are ``First Order (Linear)``,
+                     ``Second Order (Quadratic)``, or ``Solid Shell``.
+                - max_mesh_size : MaxMeshSize
+                    The properties of the maximum mesh size.
+                - vertical_mesh_size : VerticalMeshSize
+                    The properties of the vertical mesh size.
+                - thicknessCount : int, optional
+                    The number of elements through the lead thickness that will be created per lead.
+                     The default value is 3 and the maximum is 5. Only used when the advanced lead
+                     mesh setting is enabled.
+                - aspectRatio : int, optional
+                    The aspect ratio is multiplied by the lead thickness divided by the through
+                    thickness count to give the lead element height. The default value is 2 and the
+                    maximum is 10. Only used when the advanced lead mesh setting is enabled.
+        display_model : bool
+            Whether to display the model after export.
+        clear_FEA_database : bool
+            Whether to clear FEA database before defining model.
+        use_FEA_model_id : bool
+            Whether to use FEA model ID.
+        coordinate_units : str
+            Units of the model coordinates to use when exporting a model.
+
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.common_types import (
+            Measurement,
+        )
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.model.export_FEA_model(
+                project="Test Project",
+                cca_name="Main Board",
+                export_file="C:/Temp/export.wbjn",
+                analysis="NaturalFreq",
+                drill_hole_parameters=[
+                    {
+                        "drill_hole_modeling": "ENABLED",
+                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                        "max_edge_length": Measurement(value=1.0, unit="mm")
+                    }
+                ],
+                detect_lead_modeling="ENABLED",
+                lead_model_parameters=[
+                    {
+                        "lead_modeling": "ENABLED",
+                        "lead_element_order": "First Order (Linear)",
+                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
+                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
+                        "thicknessCount": 3,
+                        "aspectRatio": 2
+                    }
+                ],
+                display_model=True,
+                clear_FEA_database=True,
+                use_FEA_model_id=True,
+                coordinate_units="mm"
+            )
+        """
+        try:
+            if not project:
+                raise SherlockExportFEAModelError(message="Project name is invalid.")
+
+            if not cca_name:
+                raise SherlockExportFEAModelError(message="CCA name is invalid.")
+
+            if not export_file:
+                raise SherlockExportFEAModelError(message="Export file path is invalid.")
+
+            if not os.path.exists(os.path.dirname(export_file)):
+                raise SherlockExportFEAModelError(
+                    message=f"Export file directory " f'"{export_file}" ' f"does not exist."
+                )
+
+            for param in drill_hole_parameters:
+                min_hole_diameter = param.get("min_hole_diameter")
+                if not isinstance(min_hole_diameter, Measurement):
+                    raise SherlockExportFEAModelError(message="Minimum hole diameter is invalid.")
+
+                max_edge_length = param.get("max_edge_length")
+                if not isinstance(max_edge_length, Measurement):
+                    raise SherlockExportFEAModelError(message="Maximum edge length is invalid.")
+
+            for param in lead_model_parameters:
+                max_mesh_size = param.get("max_mesh_size")
+                if not isinstance(max_mesh_size, Measurement):
+                    raise SherlockExportFEAModelError(message="Maximum mesh size is invalid.")
+
+                vertical_mesh_size = param.get("vertical_mesh_size")
+                if not isinstance(vertical_mesh_size, Measurement):
+                    raise SherlockExportFEAModelError(message="Vertical mesh size is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            export_request = SherlockModelService_pb2.ExportFEAModelRequest()
+            export_request.project = project
+            export_request.ccaName = cca_name
+            export_request.exportFile = export_file
+            export_request.analysis = (
+                SherlockModelService_pb2.ExportFEAModelRequest.ExportAnalysis.Value(analysis)
+            )
+
+            for param in drill_hole_parameters:
+                export_request.drillHoleParam.drillHoleModeling = param.get("drill_hole_modeling")
+
+                min_hole_diameter = param.get("min_hole_diameter")
+                export_request.drillHoleParam.minHoleDiameter.value = min_hole_diameter.value
+                export_request.drillHoleParam.minHoleDiameter.unit = min_hole_diameter.unit
+
+                max_edge_length = param.get("max_edge_length")
+                export_request.drillHoleParam.maxEdgeLength.value = max_edge_length.value
+                export_request.drillHoleParam.maxEdgeLength.unit = max_edge_length.unit
+
+            export_request.detectLeadModeling = detect_lead_modeling.upper()
+
+            for param in lead_model_parameters:
+                export_request.leadModelParam.leadModeling = param.get("lead_modeling").upper()
+
+                export_request.leadModelParam.leadElemOrder = param.get("lead_element_order")
+
+                max_mesh_size = param.get("max_mesh_size")
+                export_request.leadModelParam.maxMeshSize.value = max_mesh_size.value
+                export_request.leadModelParam.maxMeshSize.unit = max_mesh_size.unit
+
+                vertical_mesh_size = param.get("vertical_mesh_size")
+                export_request.leadModelParam.verticalMeshSize.value = vertical_mesh_size.value
+                export_request.leadModelParam.verticalMeshSize.unit = vertical_mesh_size.unit
+
+                thickness_count = param.get("thicknessCount", 3)
+                export_request.leadModelParam.thicknessCount = thickness_count
+
+                aspect_ratio = param.get("aspectRatio", 2)
+                export_request.leadModelParam.aspectRatio = aspect_ratio
+
+            export_request.displayModel = display_model
+            export_request.clearFEADatabase = clear_FEA_database
+            export_request.useFEAModelID = use_FEA_model_id
+            export_request.coordinateUnits = coordinate_units
+
+            return_code = self.stub.exportFEAModel(export_request)
+            if return_code.value != 0:
+                raise SherlockExportFEAModelError(message=return_code.message)
+
+            return return_code.value
+
+        except SherlockExportFEAModelError as e:
+            LOG.error(str(e))
+            raise e
