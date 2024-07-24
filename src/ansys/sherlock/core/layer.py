@@ -16,6 +16,8 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
 
+from typing import List
+
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddPottingRegionError,
