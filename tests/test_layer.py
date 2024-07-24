@@ -11,6 +11,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockDeleteModelingRegionError,
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
@@ -38,6 +39,7 @@ def test_all():
     helper_test_export_all_mount_points(layer)
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
+    helper_test_delete_modeling_region(layer)
 
 
 def helper_test_add_potting_region(layer):
@@ -716,6 +718,52 @@ def helper_test_export_all_mount_points(layer):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportAllMountPoints
+
+
+def helper_test_delete_modeling_region(layer):
+    """Test delete_modeling_region API."""
+    try:
+        layer.delete_modeling_region("", [{"cca_name": "Main Board", "region_id": "12345"}])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Project name is invalid."
+
+    try:
+        layer.delete_modeling_region("Tutorial Project", [])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Delete regions list is empty."
+
+    try:
+        layer.delete_modeling_region("Tutorial Project", [{"cca_name": "", "region_id": "12345"}])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: CCA name is invalid."
+
+    try:
+        layer.delete_modeling_region(
+            "Tutorial Project", [{"cca_name": "Main Board", "region_id": ""}]
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Region ID is invalid."
+
+    if layer._is_connection_up():
+        try:
+            layer.delete_modeling_region(
+                "Tutorial Project", [{"cca_name": "Main Board", "region_id": "InvalidID"}]
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockDeleteModelingRegionError
+
+        try:
+            result = layer.delete_modeling_region(
+                "Tutorial Project", [{"cca_name": "Main Board", "region_id": "12345"}]
+            )
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
 
 
 if __name__ == "__main__":

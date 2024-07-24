@@ -1183,3 +1183,15 @@ class SherlockExportFEAModelError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export FEA model error: {self.message}"
+
+
+class SherlockDeleteModelingRegionError(Exception):
+    """Contains the error raised when the modeling regions cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete modeling region error: {self.message}"
