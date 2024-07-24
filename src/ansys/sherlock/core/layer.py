@@ -891,7 +891,7 @@ class Layer(GrpcStub):
 
         return response.value
 
-    def delete_modeling_region(self, project, delete_regions):
+    def delete_modeling_region(self, project: str, delete_regions: List[Dict[str, str]]):
         """Delete one or more modeling regions for a specific project.
 
         Parameters
