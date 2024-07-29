@@ -929,10 +929,16 @@ class Layer(GrpcStub):
         try:
             if project == "":
                 raise SherlockDeleteModelingRegionError(message="Project name is invalid.")
+            if not isinstance(delete_regions, list):
+                raise SherlockDeleteModelingRegionError(message="Delete regions should be a list.")
             if not delete_regions:
                 raise SherlockDeleteModelingRegionError(message="Delete regions list is empty.")
 
             for region in delete_regions:
+                if not isinstance(region, dict):
+                    raise SherlockDeleteModelingRegionError(
+                        message="Each region should be a dictionary."
+                    )
                 if "cca_name" not in region or region["cca_name"] == "":
                     raise SherlockDeleteModelingRegionError(message="CCA name is invalid.")
                 if "region_id" not in region or region["region_id"] == "":

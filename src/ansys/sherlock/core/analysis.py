@@ -1339,7 +1339,7 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the CCA.
         natural_freq_count: int
-            Natural frequecy result count.
+            Natural frequency result count.
         natural_freq_min: float, optional
             Minimum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
