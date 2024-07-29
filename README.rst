@@ -62,7 +62,7 @@ installed either on your local machine or a remote machine. To use a remote sess
 remote machine must be available from your Python program.
 
 Getting Started
-----
+---------------
 PySherlock uses an environment variable called ``AWP_ROOT<ver>``, where ``<ver>`` is the Sherlock release number,
 such as 242 for release 2024 R2. Each release version should have its own environment variable. This variable
 is how PySherlock finds a Sherlock installation for a specific version. If there are multiple versions,
