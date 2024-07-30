@@ -61,6 +61,26 @@ You must have a licensed copy of `Ansys Sherlock <https://www.ansys.com/products
 installed either on your local machine or a remote machine. To use a remote session, a connection to the
 remote machine must be available from your Python program.
 
+Getting Started
+---------------
+PySherlock uses an environment variable called ``AWP_ROOT<ver>``, where ``<ver>`` is the Sherlock release number,
+such as 242 for release 2024 R2. Each release version should have its own environment variable. This variable
+is how PySherlock finds a Sherlock installation for a specific version. If there are multiple versions,
+PySherlock will pick the latest.
+
+On a Windows System, the environment variable ``AWP_ROOT<ver>`` is configured by the Ansys installer.
+
+On a Linux system, the ``AWP_ROOT<ver>`` environment variable must be configured by the user. It must point
+to the absolute path of an Ansys installation directory. For example, if Sherlock 24R2 is installed
+in the following location ``/opt/ansys_inc/v242/sherlock/`` , then an environment variable named ``AWP_ROOT242``
+must be created and set to ``/opt/ansys_inc/v242/``. If there are multiple versions of Ansys tools installed,
+similar environment variables must be created for those versions.
+
+For the rest of the setup please refer to the tutorial videos below.
+
+    * `PySherlock Installation and Usage Demo | Step-by-Step Guide for Beginners <https://www.youtube.com/watch?v=ugiueYuNEKk>`_
+    * `PySherlock Installation and Usage Demo | Advanced Setup Guide <https://www.youtube.com/watch?v=06s_tNvlOTM>`_
+
 Documentation and issues
 ------------------------
 For comprehensive information on PySherlock, see the latest release
