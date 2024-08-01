@@ -900,6 +900,7 @@ class Layer(GrpcStub):
         project: str,
         modeling_regions: List[Dict[str, Union[str, float, bool, dict]]],
     ):
+
         """
         Add one or more modeling regions to a specific project.
 
