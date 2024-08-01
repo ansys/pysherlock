@@ -37,9 +37,9 @@ def test_all():
     helper_test_add_potting_region(layer)
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
-    # helper_test_export_all_mount_points(layer)
-    # helper_test_export_all_test_fixtures(layer)
-    # helper_test_export_all_test_points(layer)
+    helper_test_export_all_mount_points(layer)
+    helper_test_export_all_test_fixtures(layer)
+    helper_test_export_all_test_points(layer)
     helper_test_add_modeling_region(layer)
 
 
