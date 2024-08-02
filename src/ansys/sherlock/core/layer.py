@@ -900,7 +900,6 @@ class Layer(GrpcStub):
         project: str,
         modeling_regions: List[Dict[str, Union[str, float, bool, dict]]],
     ):
-
         """
         Add one or more modeling regions to a specific project.
 
@@ -923,34 +922,32 @@ class Layer(GrpcStub):
                 The shape of the modeling region.
             - pcb_model_props : list
                 List of the PCB model parameters consisting of these properties:
-
-                - export_model_type : str
-                    The type of model to be generated for a given modeling region.
-                    Valid values are ``Default``, ``Sherlock``, ``Sweep`` and ``None``.
-                - elem_order: str
-                    The type of 3D elements to be created for the PCB in the modeling region.
-                    Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
-                - max_mesh_size : float
-                    The maximum size of the mesh to be used in the region.
-                - max_mesh_size_units : str
-                    Units for the maximum mesh size.
-                - quads_preferred : bool
-                    Whether to generate quad-shaped elements when creating the mesh if true.
+                    - export_model_type : str
+                        The type of model to be generated for a given modeling region.
+                        Valid values are ``Default``, ``Sherlock``, ``Sweep`` and ``None``.
+                    - elem_order: str
+                        The type of 3D elements to be created for the PCB in the modeling region.
+                        Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
+                    - max_mesh_size : float
+                        The maximum size of the mesh to be used in the region.
+                    - max_mesh_size_units : str
+                        Units for the maximum mesh size.
+                    - quads_preferred : bool
+                        Whether to generate quad-shaped elements when creating the mesh if true.
             - trace_model_props : list
                 List of the trace model parameters consisting of these properties:
-
-                - trace_model_type : str
-                    The specification of whether trace modeling should be performed
-                    within the region. Valid values are ``Default``, ``Enabled`` and
-                    ``Disabled``.
-                - elem_order: str, optional
-                    The type of 3D elements to be created for the PCB in the modeling region.
-                    Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
-                - trace_mesh_size : float, optional
-                    The maximum mesh size to be used in the region when trace modeling
-                    is enabled.
-                - trace_mesh_size_units: str, optional
-                    Units for the maximum mesh size when trace modeling is enabled.
+                    - trace_model_type : str
+                        The specification of whether trace modeling should be performed
+                        within the region. Valid values are ``Default``, ``Enabled`` and
+                        ``Disabled``.
+                    - elem_order: str, optional
+                        The type of 3D elements to be created for the PCB in the modeling region.
+                        Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
+                    - trace_mesh_size : float, optional
+                        The maximum mesh size to be used in the region when trace modeling
+                        is enabled.
+                    - trace_mesh_size_units: str, optional
+                        Units for the maximum mesh size when trace modeling is enabled.
             - region_id_replacement : str, optional
                 Represents a unique region id that will replace the existing regionId
                 value during an update.
