@@ -812,7 +812,7 @@ def helper_test_add_modeling_region(layer):
         pytest.fail("No exception raised for invalid PCB model export type")
     except SherlockAddModelingRegionError as e:
         assert str(e.str_itr()) == (
-            "['Add modeling region error: PCB model export type is " "invalid.']"
+            "['Add modeling region error: PCB model export type is invalid.']"
         )
 
     # Invalid PCB element order
