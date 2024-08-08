@@ -948,9 +948,6 @@ class Layer(GrpcStub):
                         is enabled.
                     - trace_mesh_size_units: str, optional
                         Units for the maximum mesh size when trace modeling is enabled.
-            - region_id_replacement : str, optional
-                Represents a unique region id that will replace the existing regionId
-                value during an update.
 
 
         Returns
@@ -1075,9 +1072,10 @@ class Layer(GrpcStub):
                     modeling_region.ccaName = region_request["cca_name"]
                     modeling_region.regionId = region_request["region_id"]
                     modeling_region.regionUnits = region_request["region_units"]
-                    modeling_region.modelMode = getattr(
-                        SherlockLayerService_pb2.ModelingRegion.ModelingMode,
-                        region_request["model_mode"],
+                    modeling_region.modelMode = (
+                        SherlockLayerService_pb2.ModelingRegion.ModelingMode.Value(
+                            region_request["model_mode"]
+                        )
                     )
 
                     shape = region_request["shape"]
@@ -1150,11 +1148,6 @@ class Layer(GrpcStub):
                     if "trace_mesh_size_units" in trace_model_props:
                         modeling_region.traceModelProps.traceMeshSizeUnits = trace_model_props[
                             "trace_mesh_size_units"
-                        ]
-
-                    if "region_id_replacement" in region_request:
-                        modeling_region.regionIdReplacement = region_request[
-                            "region_id_replacement"
                         ]
 
                 return_code = self.stub.addModelingRegion(add_modeling_region_request)
