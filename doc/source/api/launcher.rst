@@ -9,6 +9,6 @@ Launcher
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.launcher.launch_sherlock
-     ansys.sherlock.core.launcher.connect_grpc_channel
+     launch_sherlock
+     connect_grpc_channel
 

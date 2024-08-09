@@ -8,4 +8,4 @@ Model
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.model.Model
+     Model
