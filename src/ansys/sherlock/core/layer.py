@@ -1035,19 +1035,19 @@ class Layer(GrpcStub):
                         )
                     if "elem_order" not in pcb_model_props or pcb_model_props["elem_order"] == "":
                         raise SherlockAddModelingRegionError(
-                            message="PCB element " "order is invalid."
+                            message="PCB element order is invalid."
                         )
                     if "max_mesh_size" not in pcb_model_props or not isinstance(
                         pcb_model_props["max_mesh_size"], float
                     ):
                         raise SherlockAddModelingRegionError(
-                            message="PCB max mesh size " "is invalid."
+                            message="PCB max mesh size is invalid."
                         )
                     if "quads_preferred" not in pcb_model_props or not isinstance(
                         pcb_model_props["quads_preferred"], bool
                     ):
                         raise SherlockAddModelingRegionError(
-                            message="PCB quads preferred " "is invalid."
+                            message="PCB quads preferred is invalid."
                         )
 
                 trace_model_props = region.get("trace_model_props", {})
@@ -1056,9 +1056,7 @@ class Layer(GrpcStub):
                         "trace_model_type" not in trace_model_props
                         or trace_model_props["trace_model_type"] == ""
                     ):
-                        raise SherlockAddModelingRegionError(
-                            message="Trace model type is " "invalid."
-                        )
+                        raise SherlockAddModelingRegionError(message="Trace model type is invalid.")
 
                 if not self._is_connection_up():
                     LOG.error("There is no connection to a gRPC service.")
