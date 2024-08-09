@@ -1031,7 +1031,7 @@ class Layer(GrpcStub):
                         or pcb_model_props["export_model_type"] == ""
                     ):
                         raise SherlockAddModelingRegionError(
-                            message="PCB model export " "type is invalid."
+                            message="PCB model export type is invalid."
                         )
                     if "elem_order" not in pcb_model_props or pcb_model_props["elem_order"] == "":
                         raise SherlockAddModelingRegionError(
