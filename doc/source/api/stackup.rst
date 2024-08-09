@@ -8,4 +8,4 @@ Stackup
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.stackup.Stackup
+     Stackup
