@@ -9,4 +9,4 @@ Lifecycle
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.lifecycle.Lifecycle
+     Lifecycle

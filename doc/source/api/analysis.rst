@@ -8,4 +8,4 @@ Analysis
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.analysis.Analysis
+     Analysis

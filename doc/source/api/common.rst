@@ -8,4 +8,4 @@ Common
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.common.Common
+     Common

@@ -909,6 +909,7 @@ class Layer(GrpcStub):
             Name of the Sherlock project.
         modeling_regions : list of dict
             List of modeling regions to add. Each dictionary should contain:
+
             - cca_name : str
                 Name of the CCA.
             - region_id : str
@@ -922,6 +923,7 @@ class Layer(GrpcStub):
                 The shape of the modeling region.
             - pcb_model_props : list
                 List of the PCB model parameters consisting of these properties:
+
                     - export_model_type : str
                         The type of model to be generated for a given modeling region.
                         Valid values are ``Default``, ``Sherlock``, ``Sweep`` and ``None``.
@@ -936,6 +938,7 @@ class Layer(GrpcStub):
                         Whether to generate quad-shaped elements when creating the mesh if true.
             - trace_model_props : list
                 List of the trace model parameters consisting of these properties:
+
                     - trace_model_type : str
                         The specification of whether trace modeling should be performed
                         within the region. Valid values are ``Default``, ``Enabled`` and

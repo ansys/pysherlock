@@ -6,4 +6,4 @@ Parts
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.parts.Parts
+     Parts
