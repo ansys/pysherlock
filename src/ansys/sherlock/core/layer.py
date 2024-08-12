@@ -11,10 +11,12 @@ from ansys.sherlock.core.types.layer_types import (
 
 try:
     import SherlockLayerService_pb2
+    from SherlockLayerService_pb2 import ModelingRegion
     import SherlockLayerService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
+    from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
 
 from typing import Dict, List, Union
 
