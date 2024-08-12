@@ -1073,10 +1073,8 @@ class Layer(GrpcStub):
                     modeling_region.ccaName = region_request["cca_name"]
                     modeling_region.regionId = region_request["region_id"]
                     modeling_region.regionUnits = region_request["region_units"]
-                    modeling_region.modelMode = (
-                        SherlockLayerService_pb2.ModelingRegion.ModelingMode.Value(
-                            region_request["model_mode"]
-                        )
+                    modeling_region.modelMode = ModelingRegion.ModelingMode.Value(
+                        region_request["model_mode"]
                     )
 
                     shape = region_request["shape"]
@@ -1120,7 +1118,7 @@ class Layer(GrpcStub):
                         pcb_model_props["export_model_type"],
                     )
                     modeling_region.pcbModelProps.elemOrder = getattr(
-                        SherlockLayerService_pb2.ModelingRegion.ElementOrder,
+                        ModelingRegion.ElementOrder,
                         pcb_model_props["elem_order"],
                     )
                     modeling_region.pcbModelProps.maxMeshSize = pcb_model_props["max_mesh_size"]
@@ -1139,7 +1137,7 @@ class Layer(GrpcStub):
                     )
                     if "elem_order" in trace_model_props:
                         modeling_region.traceModelProps.elemOrder = getattr(
-                            SherlockLayerService_pb2.ModelingRegion.ElementOrder,
+                            ModelingRegion.ElementOrder,
                             trace_model_props["elem_order"],
                         )
                     if "trace_mesh_size" in trace_model_props:
