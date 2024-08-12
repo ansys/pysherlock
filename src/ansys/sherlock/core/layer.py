@@ -18,8 +18,6 @@ except ModuleNotFoundError:
 
 from typing import Dict, List, Union
 
-from SherlockLayerService_pb2 import ModelingRegion
-
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddModelingRegionError,
