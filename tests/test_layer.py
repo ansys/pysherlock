@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
+    SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
     SherlockUpdateTestPointsByFileError,
@@ -41,6 +42,7 @@ def test_all():
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
     helper_test_add_modeling_region(layer)
+    helper_test_update_modeling_region(layer)
 
 
 def helper_test_add_potting_region(layer):
@@ -866,6 +868,159 @@ def helper_test_add_modeling_region(layer):
             result = layer.add_modeling_region("Tutorial Project", valid_region)
             assert result == 0
         except SherlockAddModelingRegionError as e:
+            pytest.fail(str(e))
+
+
+def helper_test_update_modeling_region(layer):
+    modeling_region_example = [
+        {
+            "cca_name": "Card",
+            "region_id": "Region001",
+            "region_units": "mm",
+            "model_mode": "Enabled",
+            "shape": PolygonalShape(points=[(0, 0), (0, 6.35), (9.77, 0)], rotation=87.8),
+            "pcb_model_props": {
+                "export_model_type": "Sherlock",
+                "elem_order": "First_Order",
+                "max_mesh_size": 0.5,
+                "max_mesh_size_units": "mm",
+                "quads_preferred": True,
+            },
+            "trace_model_props": {
+                "trace_model_type": "Enabled",
+                "elem_order": "Second_Order",
+                "trace_mesh_size": 0.3,
+                "trace_mesh_size_units": "mm",
+            },
+            "region_id_replacement": "NewRegion001",
+        }
+    ]
+
+    # Invalid project name
+    try:
+        layer.update_modeling_region("", modeling_region_example)
+        pytest.fail("No exception raised for invalid project name")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: Project name is invalid.']"
+
+    # Empty modeling regions list
+    try:
+        layer.update_modeling_region("Tutorial Project", [])
+        pytest.fail("No exception raised for empty modeling regions list")
+    except SherlockUpdateModelingRegionError as e:
+        assert (
+            str(e.str_itr()) == "['Update modeling region error: Modeling regions list is empty.']"
+        )
+
+    # Invalid CCA name
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["cca_name"] = ""
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid CCA name")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: CCA name is invalid.']"
+
+    # Invalid region ID
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["region_id"] = ""
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid region ID")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: Region ID is invalid.']"
+
+    # Invalid region units
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["region_units"] = ""
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid region units")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: Region units are invalid.']"
+
+    # Missing shape
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0].pop("shape")
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for missing shape")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: Shape is missing.']"
+
+    # Invalid shape type
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["shape"] = "InvalidShapeType"
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid shape type")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: Shape is not of a valid type.']"
+
+    # Invalid PCB model export type
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["pcb_model_props"]["export_model_type"] = ""
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid PCB model export type")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == (
+            "['Update modeling region error: PCB model export type is invalid.']"
+        )
+
+    # Invalid PCB element order
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["pcb_model_props"]["elem_order"] = ""
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid PCB element order")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: PCB element order is invalid.']"
+
+    # Invalid PCB max mesh size
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["pcb_model_props"]["max_mesh_size"] = "not_a_float"
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid PCB max mesh size")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: PCB max mesh size is invalid.']"
+
+    # Invalid PCB quads preferred
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["pcb_model_props"]["quads_preferred"] = "not_a_bool"
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid PCB quads preferred")
+    except SherlockUpdateModelingRegionError as e:
+        assert (
+            str(e.str_itr()) == "['Update modeling region error: PCB quads preferred is invalid.']"
+        )
+
+    # Invalid trace model type
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["trace_model_props"]["trace_model_type"] = ""
+    try:
+        layer.update_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid trace model type")
+    except SherlockUpdateModelingRegionError as e:
+        assert str(e.str_itr()) == "['Update modeling region error: Trace model type is invalid.']"
+
+    if layer._is_connection_up():
+        # Unhappy project name
+        try:
+            layer.update_modeling_region("Invalid Project", modeling_region_example)
+            pytest.fail("No exception raised for invalid project name")
+        except Exception as e:
+            assert type(e) == SherlockUpdateModelingRegionError
+
+        # Valid request
+        try:
+            valid_region = copy.deepcopy(modeling_region_example)
+            valid_region[0]["cca_name"] = "Main Board"
+            result = layer.update_modeling_region("Tutorial Project", valid_region)
+            assert result == 0
+        except SherlockUpdateModelingRegionError as e:
             pytest.fail(str(e))
 
 
