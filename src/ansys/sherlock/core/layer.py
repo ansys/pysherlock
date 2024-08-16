@@ -1088,24 +1088,25 @@ class Layer(GrpcStub):
                         polygonal_shape.rotation = shape.rotation
                     elif isinstance(shape, RectangularShape):
                         rectangular_shape = modeling_region.rectangularShape
-                        for point in shape.points:
-                            rectangular_point = rectangular_shape.points.add()
-                            rectangular_point.x = point[0]
-                            rectangular_point.y = point[1]
+                        rectangular_shape.length = shape.length
+                        rectangular_shape.width = shape.width
+                        rectangular_shape.centerX = shape.centerX
+                        rectangular_shape.centerY = shape.centerY
                         rectangular_shape.rotation = shape.rotation
                     elif isinstance(shape, SlotShape):
                         slot_shape = modeling_region.slotShape
-                        for point in shape.points:
-                            slot_point = slot_shape.points.add()
-                            slot_point.x = point[0]
-                            slot_point.y = point[1]
+                        slot_shape.length = shape.length
+                        slot_shape.width = shape.width
+                        slot_shape.nodeCount = shape.nodeCount
+                        slot_shape.centerX = shape.centerX
+                        slot_shape.centerY = shape.centerY
                         slot_shape.rotation = shape.rotation
                     elif isinstance(shape, CircularShape):
                         circular_shape = modeling_region.circularShape
-                        for point in shape.points:
-                            circular_point = circular_shape.points.add()
-                            circular_point.x = point[0]
-                            circular_point.y = point[1]
+                        circular_shape.diameter = shape.diameter
+                        circular_shape.nodeCount = shape.nodeCount
+                        circular_shape.centerX = shape.centerX
+                        circular_shape.centerY = shape.centerY
                         circular_shape.rotation = shape.rotation
                     else:
                         raise SherlockAddModelingRegionError(
@@ -1240,25 +1241,25 @@ class Layer(GrpcStub):
         )
         >>> modeling_regions = [
         >>>     {
-        >>>         "cca_name": "CCA1",
-        >>>         "region_id": "Region1",
+        >>>         "cca_name": "Card",
+        >>>         "region_id": "Region001",
         >>>         "region_units": "mm",
-        >>>         "model_mode": "Mode1",
+        >>>         "model_mode": "Enabled",
         >>>         "shape": PolygonalShape(points=[(0, 0), (1, 1)], rotation=0),
         >>>         "pcb_model_props": {
-        >>>             "export_model_type": "Type1",
-        >>>             "elem_order": "Order1",
+        >>>             "export_model_type": "Sherlock",
+        >>>             "elem_order": "Second_Order",
         >>>             "max_mesh_size": 0.5,
         >>>             "max_mesh_size_units": "mm",
         >>>             "quads_preferred": True,
         >>>         },
         >>>         "trace_model_props": {
-        >>>             "trace_model_type": "TypeA",
-        >>>             "elem_order": "OrderA",
+        >>>             "trace_model_type": "Enabled",
+        >>>             "elem_order": "Enabled",
         >>>             "trace_mesh_size": 0.1,
         >>>             "trace_mesh_size_units": "mm",
         >>>         },
-        >>>         "region_id_replacement": "NewRegion1",
+        >>>         "region_id_replacement": "NewRegion001",
         >>>     }
         >>> ]
         >>> result = sherlock.layer.update_modeling_region("Tutorial Project", modeling_regions)
@@ -1353,27 +1354,26 @@ class Layer(GrpcStub):
                     polygonal_shape.rotation = shape.rotation
                 elif isinstance(shape, RectangularShape):
                     rectangular_shape = modeling_region.rectangularShape
-                    for point in shape.points:
-                        rectangular_point = rectangular_shape.points.add()
-                        rectangular_point.x = point[0]
-                        rectangular_point.y = point[1]
+                    rectangular_shape.length = shape.length
+                    rectangular_shape.width = shape.width
+                    rectangular_shape.centerX = shape.center_x
+                    rectangular_shape.centerY = shape.center_y
                     rectangular_shape.rotation = shape.rotation
                 elif isinstance(shape, SlotShape):
                     slot_shape = modeling_region.slotShape
-                    for point in shape.points:
-                        slot_point = slot_shape.points.add()
-                        slot_point.x = point[0]
-                        slot_point.y = point[1]
+                    slot_shape.length = shape.length
+                    slot_shape.width = shape.width
+                    slot_shape.nodeCount = shape.node_count
+                    slot_shape.centerX = shape.center_x
+                    slot_shape.centerY = shape.center_y
                     slot_shape.rotation = shape.rotation
                 elif isinstance(shape, CircularShape):
                     circular_shape = modeling_region.circularShape
-                    for point in shape.points:
-                        circular_point = circular_shape.points.add()
-                        circular_point.x = point[0]
-                        circular_point.y = point[1]
+                    circular_shape.diameter = shape.diameter
+                    circular_shape.nodeCount = shape.node_count
+                    circular_shape.centerX = shape.center_x
+                    circular_shape.centerY = shape.center_y
                     circular_shape.rotation = shape.rotation
-                else:
-                    raise SherlockUpdateModelingRegionError(message="Shape is not of a valid type.")
 
                 ExportModelType = ModelingRegion.PCBModelingProperties.ExportModelType
                 pcb_model_props = region_request.get("pcb_model_props", {})
