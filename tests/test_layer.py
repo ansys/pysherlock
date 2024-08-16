@@ -921,7 +921,7 @@ def helper_test_update_modeling_region(layer, region_id):
 
     # Invalid CCA name
     invalid_region = copy.deepcopy(modeling_region_example)
-    invalid_region[0]["cca_name"] = ""
+    invalid_region[0].pop("cca_name")
     try:
         layer.update_modeling_region("Tutorial Project", invalid_region)
         pytest.fail("No exception raised for invalid CCA name")
@@ -939,7 +939,7 @@ def helper_test_update_modeling_region(layer, region_id):
 
     # Invalid region units
     invalid_region = copy.deepcopy(modeling_region_example)
-    invalid_region[0]["region_units"] = ""
+    invalid_region[0].pop("region_units")
     try:
         layer.update_modeling_region("Tutorial Project", invalid_region)
         pytest.fail("No exception raised for invalid region units")

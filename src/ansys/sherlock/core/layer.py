@@ -1272,11 +1272,11 @@ class Layer(GrpcStub):
                 raise SherlockUpdateModelingRegionError(message="Modeling regions list is empty.")
 
             for region in modeling_regions:
-                if "cca_name" not in region or not region["cca_name"]:
+                if "cca_name" not in region:
                     raise SherlockUpdateModelingRegionError(message="CCA name is invalid.")
-                if "region_id" not in region or not region["region_id"]:
+                if "region_id" not in region:
                     raise SherlockUpdateModelingRegionError(message="Region ID is invalid.")
-                if "region_units" not in region or not region["region_units"]:
+                if "region_units" not in region:
                     raise SherlockUpdateModelingRegionError(message="Region units are invalid.")
                 if "shape" not in region:
                     raise SherlockUpdateModelingRegionError(message="Shape is missing.")
