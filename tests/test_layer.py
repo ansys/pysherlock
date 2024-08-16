@@ -778,7 +778,7 @@ def helper_test_add_modeling_region(layer):
 
     # Invalid region ID
     invalid_region = copy.deepcopy(modeling_region_example)
-    invalid_region[0]["region_id"] = ""
+    invalid_region[0].pop("region_id")
     try:
         layer.add_modeling_region("Tutorial Project", invalid_region)
         pytest.fail("No exception raised for invalid region ID")
