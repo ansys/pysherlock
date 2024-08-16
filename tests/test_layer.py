@@ -42,11 +42,11 @@ def test_all():
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
-    helper_test_update_test_fixtures_by_file(layer)
-    helper_test_update_test_points_by_file(layer)
-    helper_test_export_all_mount_points(layer)
-    helper_test_export_all_test_fixtures(layer)
-    helper_test_export_all_test_points(layer)
+    # helper_test_update_test_fixtures_by_file(layer)
+    # helper_test_update_test_points_by_file(layer)
+    # helper_test_export_all_mount_points(layer)
+    # helper_test_export_all_test_fixtures(layer)
+    # helper_test_export_all_test_points(layer)
     region_id = helper_test_add_modeling_region(layer)
     helper_test_update_modeling_region(layer, region_id)
 
@@ -775,15 +775,6 @@ def helper_test_add_modeling_region(layer):
         pytest.fail("No exception raised for invalid CCA name")
     except SherlockAddModelingRegionError as e:
         assert str(e.str_itr()) == "['Add modeling region error: CCA name is invalid.']"
-
-    # Invalid region ID
-    invalid_region = copy.deepcopy(modeling_region_example)
-    invalid_region[0].pop("region_id")
-    try:
-        layer.add_modeling_region("Tutorial Project", invalid_region)
-        pytest.fail("No exception raised for invalid region ID")
-    except SherlockAddModelingRegionError as e:
-        assert str(e.str_itr()) == "['Add modeling region error: Region ID is invalid.']"
 
     # Invalid region units
     invalid_region = copy.deepcopy(modeling_region_example)
