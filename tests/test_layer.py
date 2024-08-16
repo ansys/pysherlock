@@ -776,6 +776,15 @@ def helper_test_add_modeling_region(layer):
     except SherlockAddModelingRegionError as e:
         assert str(e.str_itr()) == "['Add modeling region error: CCA name is invalid.']"
 
+    # Invalid region ID
+    invalid_region = copy.deepcopy(modeling_region_example)
+    invalid_region[0]["region_id"] = "invalidRegionID"
+    try:
+        layer.add_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid region ID")
+    except SherlockAddModelingRegionError as e:
+        assert str(e.str_itr()) == "['Add modeling region error: Region ID is invalid.']"
+
     # Invalid region units
     invalid_region = copy.deepcopy(modeling_region_example)
     invalid_region[0]["region_units"] = ""
