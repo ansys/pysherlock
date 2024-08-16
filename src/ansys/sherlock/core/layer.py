@@ -1255,7 +1255,7 @@ class Layer(GrpcStub):
         >>>         },
         >>>         "trace_model_props": {
         >>>             "trace_model_type": "Enabled",
-        >>>             "elem_order": "Enabled",
+        >>>             "elem_order": "Second_Order",
         >>>             "trace_mesh_size": 0.1,
         >>>             "trace_mesh_size_units": "mm",
         >>>         },
