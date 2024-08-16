@@ -1200,3 +1200,20 @@ class SherlockAddModelingRegionError(Exception):
 
         assert self.error_array is None
         return [f"Add modeling region error: {self.message}"]
+
+
+class SherlockUpdateModelingRegionError(Exception):
+    """Contains the errors raised when modeling regions for a project cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Update modeling region error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update modeling region error: {self.message}"]

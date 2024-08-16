@@ -30,6 +30,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
+    SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
     SherlockUpdateTestPointsByFileError,
@@ -997,7 +998,7 @@ class Layer(GrpcStub):
                 }
             }
         ]
-        >>> result = sherlock.project.add_modeling_region("Tutorial Project", modeling_regions)
+        >>> result = sherlock.layer.add_modeling_region("Tutorial Project", modeling_regions)
         """
         try:
             if not project:
@@ -1087,24 +1088,25 @@ class Layer(GrpcStub):
                         polygonal_shape.rotation = shape.rotation
                     elif isinstance(shape, RectangularShape):
                         rectangular_shape = modeling_region.rectangularShape
-                        for point in shape.points:
-                            rectangular_point = rectangular_shape.points.add()
-                            rectangular_point.x = point[0]
-                            rectangular_point.y = point[1]
+                        rectangular_shape.length = shape.length
+                        rectangular_shape.width = shape.width
+                        rectangular_shape.centerX = shape.centerX
+                        rectangular_shape.centerY = shape.centerY
                         rectangular_shape.rotation = shape.rotation
                     elif isinstance(shape, SlotShape):
                         slot_shape = modeling_region.slotShape
-                        for point in shape.points:
-                            slot_point = slot_shape.points.add()
-                            slot_point.x = point[0]
-                            slot_point.y = point[1]
+                        slot_shape.length = shape.length
+                        slot_shape.width = shape.width
+                        slot_shape.nodeCount = shape.nodeCount
+                        slot_shape.centerX = shape.centerX
+                        slot_shape.centerY = shape.centerY
                         slot_shape.rotation = shape.rotation
                     elif isinstance(shape, CircularShape):
                         circular_shape = modeling_region.circularShape
-                        for point in shape.points:
-                            circular_point = circular_shape.points.add()
-                            circular_point.x = point[0]
-                            circular_point.y = point[1]
+                        circular_shape.diameter = shape.diameter
+                        circular_shape.nodeCount = shape.nodeCount
+                        circular_shape.centerX = shape.centerX
+                        circular_shape.centerY = shape.centerY
                         circular_shape.rotation = shape.rotation
                     else:
                         raise SherlockAddModelingRegionError(
@@ -1156,5 +1158,268 @@ class Layer(GrpcStub):
                 return return_code.value
 
         except SherlockAddModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+    def update_modeling_region(
+        self,
+        project: str,
+        modeling_regions: List[Dict[str, Union[str, float, bool, dict]]],
+    ):
+        """
+        Update one or more modeling regions in a specific project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        modeling_regions : list of dict
+            List of modeling regions to update. Each dictionary should contain:
+
+            - cca_name : str
+                Name of the CCA.
+            - region_id : str
+                Unique region ID of the modeling region.
+            - region_units : str
+                Units of the modeling region.
+            - model_mode : str
+                Mode that specifies how the region is used. Valid values are ``Enabled``,
+                ``Disabled`` and ``Excluded``.
+            - shape: PolygonalShape|RectangularShape|SlotShape|CircularShape|PCBShape
+                The shape of the modeling region.
+            - pcb_model_props : list
+                List of the PCB model parameters consisting of these properties:
+
+                    - export_model_type : str
+                        The type of model to be generated for a given modeling region.
+                        Valid values are ``Default``, ``Sherlock``, ``Sweep`` and ``None``.
+                    - elem_order: str
+                        The type of 3D elements to be created for the PCB in the modeling region.
+                        Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
+                    - max_mesh_size : float
+                        The maximum size of the mesh to be used in the region.
+                    - max_mesh_size_units : str
+                        Units for the maximum mesh size.
+                    - quads_preferred : bool
+                        Whether to generate quad-shaped elements when creating the mesh if true.
+            - trace_model_props : list
+                List of the trace model parameters consisting of these properties:
+
+                    - trace_model_type : str
+                        The specification of whether trace modeling should be performed
+                        within the region. Valid values are ``Default``, ``Enabled`` and
+                        ``Disabled``.
+                    - elem_order: str, optional
+                        The type of 3D elements to be created for the PCB in the modeling region.
+                        Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
+                    - trace_mesh_size : float, optional
+                        The maximum mesh size to be used in the region when trace modeling
+                        is enabled.
+                    - trace_mesh_size_units: str, optional
+                        Units for the maximum mesh size when trace modeling is enabled.
+            - region_id_replacement : str, optional
+                Represents a unique region id that will replace the existing regionId value during
+                a modeling region update if a value exists.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+         Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Tutorial Project",
+            cca_name="Card",
+        )
+        >>> modeling_regions = [
+        >>>     {
+        >>>         "cca_name": "Card",
+        >>>         "region_id": "Region001",
+        >>>         "region_units": "mm",
+        >>>         "model_mode": "Enabled",
+        >>>         "shape": PolygonalShape(points=[(0, 0), (1, 1)], rotation=0),
+        >>>         "pcb_model_props": {
+        >>>             "export_model_type": "Sherlock",
+        >>>             "elem_order": "Second_Order",
+        >>>             "max_mesh_size": 0.5,
+        >>>             "max_mesh_size_units": "mm",
+        >>>             "quads_preferred": True,
+        >>>         },
+        >>>         "trace_model_props": {
+        >>>             "trace_model_type": "Enabled",
+        >>>             "elem_order": "Second_Order",
+        >>>             "trace_mesh_size": 0.1,
+        >>>             "trace_mesh_size_units": "mm",
+        >>>         },
+        >>>         "region_id_replacement": "NewRegion001",
+        >>>     }
+        >>> ]
+        >>> result = sherlock.layer.update_modeling_region("Tutorial Project", modeling_regions)
+        """
+        try:
+            if not project:
+                raise SherlockUpdateModelingRegionError(message="Project name is invalid.")
+
+            if not modeling_regions:
+                raise SherlockUpdateModelingRegionError(message="Modeling regions list is empty.")
+
+            for region in modeling_regions:
+                if "cca_name" not in region:
+                    raise SherlockUpdateModelingRegionError(message="CCA name is invalid.")
+                if "region_id" not in region:
+                    raise SherlockUpdateModelingRegionError(message="Region ID is invalid.")
+                if "region_units" not in region:
+                    raise SherlockUpdateModelingRegionError(message="Region units are invalid.")
+                if "shape" not in region:
+                    raise SherlockUpdateModelingRegionError(message="Shape is missing.")
+                elif not isinstance(
+                    region["shape"],
+                    (
+                        PolygonalShape,
+                        RectangularShape,
+                        SlotShape,
+                        CircularShape,
+                        PCBShape,
+                    ),
+                ):
+                    raise SherlockUpdateModelingRegionError(message="Shape is not of a valid type.")
+
+                pcb_model_props = region.get("pcb_model_props", {})
+                if pcb_model_props:
+                    if (
+                        "export_model_type" not in pcb_model_props
+                        or pcb_model_props["export_model_type"] == ""
+                    ):
+                        raise SherlockUpdateModelingRegionError(
+                            message="PCB model export type is invalid."
+                        )
+                    if "elem_order" not in pcb_model_props or pcb_model_props["elem_order"] == "":
+                        raise SherlockUpdateModelingRegionError(
+                            message="PCB element order is invalid."
+                        )
+                    if "max_mesh_size" not in pcb_model_props or not isinstance(
+                        pcb_model_props["max_mesh_size"], float
+                    ):
+                        raise SherlockUpdateModelingRegionError(
+                            message="PCB max mesh size is invalid."
+                        )
+                    if "quads_preferred" not in pcb_model_props or not isinstance(
+                        pcb_model_props["quads_preferred"], bool
+                    ):
+                        raise SherlockUpdateModelingRegionError(
+                            message="PCB quads preferred is invalid."
+                        )
+
+                trace_model_props = region.get("trace_model_props", {})
+                if trace_model_props:
+                    if (
+                        "trace_model_type" not in trace_model_props
+                        or trace_model_props["trace_model_type"] == ""
+                    ):
+                        raise SherlockUpdateModelingRegionError(
+                            message="Trace model type is invalid."
+                        )
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            update_modeling_region_request = SherlockLayerService_pb2.UpdateModelingRegionRequest()
+            update_modeling_region_request.project = project
+
+            for region_request in modeling_regions:
+                modeling_region = update_modeling_region_request.modelingRegions.add()
+                modeling_region.ccaName = region_request["cca_name"]
+                modeling_region.regionId = region_request["region_id"]
+                modeling_region.regionUnits = region_request["region_units"]
+                modeling_region.modelMode = ModelingRegion.ModelingMode.Value(
+                    region_request["model_mode"]
+                )
+
+                shape = region_request["shape"]
+                if isinstance(shape, PolygonalShape):
+                    polygonal_shape = modeling_region.polygonalShape
+                    for point in shape.points:
+                        polygonal_point = polygonal_shape.points.add()
+                        polygonal_point.x = point[0]
+                        polygonal_point.y = point[1]
+                    polygonal_shape.rotation = shape.rotation
+                elif isinstance(shape, RectangularShape):
+                    rectangular_shape = modeling_region.rectangularShape
+                    rectangular_shape.length = shape.length
+                    rectangular_shape.width = shape.width
+                    rectangular_shape.centerX = shape.center_x
+                    rectangular_shape.centerY = shape.center_y
+                    rectangular_shape.rotation = shape.rotation
+                elif isinstance(shape, SlotShape):
+                    slot_shape = modeling_region.slotShape
+                    slot_shape.length = shape.length
+                    slot_shape.width = shape.width
+                    slot_shape.nodeCount = shape.node_count
+                    slot_shape.centerX = shape.center_x
+                    slot_shape.centerY = shape.center_y
+                    slot_shape.rotation = shape.rotation
+                elif isinstance(shape, CircularShape):
+                    circular_shape = modeling_region.circularShape
+                    circular_shape.diameter = shape.diameter
+                    circular_shape.nodeCount = shape.node_count
+                    circular_shape.centerX = shape.center_x
+                    circular_shape.centerY = shape.center_y
+                    circular_shape.rotation = shape.rotation
+
+                ExportModelType = ModelingRegion.PCBModelingProperties.ExportModelType
+                pcb_model_props = region_request.get("pcb_model_props", {})
+                modeling_region.pcbModelProps.exportModelType = getattr(
+                    ExportModelType,
+                    pcb_model_props["export_model_type"],
+                )
+                modeling_region.pcbModelProps.elemOrder = getattr(
+                    ModelingRegion.ElementOrder,
+                    pcb_model_props["elem_order"],
+                )
+                modeling_region.pcbModelProps.maxMeshSize = pcb_model_props["max_mesh_size"]
+                modeling_region.pcbModelProps.maxMeshSizeUnits = pcb_model_props[
+                    "max_mesh_size_units"
+                ]
+                modeling_region.pcbModelProps.quadsPreferred = pcb_model_props["quads_preferred"]
+
+                TraceModelingType = ModelingRegion.TraceModelingProperties.TraceModelingType
+                trace_model_props = region_request.get("trace_model_props", {})
+                modeling_region.traceModelProps.traceModelType = getattr(
+                    TraceModelingType,
+                    trace_model_props["trace_model_type"],
+                )
+                if "elem_order" in trace_model_props:
+                    modeling_region.traceModelProps.elemOrder = getattr(
+                        ModelingRegion.ElementOrder,
+                        trace_model_props["elem_order"],
+                    )
+                if "trace_mesh_size" in trace_model_props:
+                    modeling_region.traceModelProps.traceMeshSize = trace_model_props[
+                        "trace_mesh_size"
+                    ]
+                if "trace_mesh_size_units" in trace_model_props:
+                    modeling_region.traceModelProps.traceMeshSizeUnits = trace_model_props[
+                        "trace_mesh_size_units"
+                    ]
+
+                if "region_id_replacement" in region_request:
+                    modeling_region.regionIdReplacement = region_request["region_id_replacement"]
+
+            return_code = self.stub.updateModelingRegion(update_modeling_region_request)
+            if return_code.value != 0:
+                raise SherlockUpdateModelingRegionError(message=return_code.message)
+
+            return return_code.value
+
+        except SherlockUpdateModelingRegionError as e:
             LOG.error(str(e))
             raise e
