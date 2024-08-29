@@ -16,7 +16,9 @@ from ansys.sherlock.core.errors import (
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
     SherlockDeleteProjectError,
+    SherlockExportProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
@@ -1693,3 +1695,263 @@ class Project(GrpcStub):
             raise e
 
         return response.value
+
+    def export_project(
+        self,
+        project_name,
+        export_design_files,
+        export_result_files,
+        export_archive_results,
+        export_user_files,
+        export_log_files,
+        export_system_data,
+        export_file_dir,
+        export_file_name,
+        overwrite_existing_file,
+    ):
+        """
+        Export a sherlock project.
+
+        Requires Sherlock Version: 2025 R1
+
+        Parameters
+        ----------
+        project_name : str
+            Name of the project being exported.
+        export_design_files : bool
+            Determines if design files should be exported.
+        export_result_files : bool
+            Determines if all analysis module result files should be exported.
+        export_archive_results : bool
+            Determines if all archive result files should be exported.
+        export_user_files : bool
+            Determines if user properties and custom data files should be exported.
+        export_log_files : bool
+            Determines if Sherlock console and application log files should be exported.
+        export_system_data : bool
+            Determines if system technical data should be exported.
+        export_file_dir : str
+            Destination of export file.
+        export_file_name : str
+            Name to be given to the exported file.
+        overwrite_existing_file : bool
+            Determines if exported file will overwrite a previously existing file.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.export_project("Tutorial Project",
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        "C:/Path/To/Exported/Project",
+        "Exported_Project",
+        True)
+        """
+        try:
+            if project_name == "":
+                raise SherlockExportProjectError(message="Project name is invalid")
+
+            if export_file_dir == "":
+                raise SherlockExportProjectError(message="Export directory is invalid")
+
+            if export_file_name == "":
+                raise SherlockExportProjectError(message="Export file name is invalid")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockProjectService_pb2.ExportProjectRequest(
+                project=project_name,
+                exportDesignFiles=export_design_files,
+                exportResultFiles=export_result_files,
+                exportArchivedResults=export_archive_results,
+                exportUserFiles=export_user_files,
+                exportLogFiles=export_log_files,
+                exportSystemData=export_system_data,
+                exportFileDirectory=export_file_dir,
+                exportFileName=export_file_name,
+                overwriteExistingFile=overwrite_existing_file,
+            )
+
+            response = self.stub.exportProject(request)
+
+            if response.value == -1:
+                raise SherlockExportProjectError(message=response.message)
+
+        except SherlockExportProjectError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
+
+    def create_cca_from_modeling_region(self, project, cca_from_mr_properties):
+        """Create one or more CCAs from modeling regions in a given project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_from_mr_properties : list
+            List of CCAs to be to be created from modeling regions
+            consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - modeling_region_id : str
+                Name of the modeling region.
+            - description : str
+                Description of the CCA.
+            - default_solder_type: str
+                The default solder type. The default is ``None``.
+            - default_stencil_thickness: float
+                The default stencil thickness. The default is ``None``.
+            - default_stencil_thickness_units: str
+                Units for default stencil thickness. The default is ``None``.
+            - default_part_temp_rise: float
+                Default part temp rise. The default is ``None``.
+            - default_part_temp_rise_units: str
+                Units for default part temp rise. The default is ``None``.
+                Options are ``"C"``, ``"F"``, and ``"K"``.
+            - guess_part_properties: bool
+                Whether to enable guess part properties. The default is ``None``.
+            - generate_image_layers: bool
+                Whether to generate image layers or not.  The default is ``None``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.project.create_cca_from_modeling_region()
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'modeling_region_id': 'MR1'
+                'description': 'Test',
+                'default_solder_type': 'SAC305',
+                'default_stencil_thickness': 10,
+                'default_stencil_thickness_units': 'mm',
+                'default_part_temp_rise': 20,
+                'default_part_temp_rise_units': 'C',
+                'guess_part_properties': False,
+                'generate_image_layers': False,
+            },
+            ]
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockCreateCCAFromModelingRegionError(message="Project name is invalid.")
+
+            if not isinstance(cca_from_mr_properties, list):
+                raise SherlockCreateCCAFromModelingRegionError(
+                    message="CCA properties argument is invalid."
+                )
+
+            if len(cca_from_mr_properties) == 0:
+                raise SherlockCreateCCAFromModelingRegionError(
+                    message="One or more CCAs are required."
+                )
+
+            request = SherlockProjectService_pb2.CreateCcaFromModelingRegionRequest(project=project)
+
+            for i, cca in enumerate(cca_from_mr_properties):
+                cca_request = request.cCAsFromModelingRegions.add()
+
+                if not isinstance(cca, dict):
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"CCA properties are invalid for CCA {i}."
+                    )
+
+                if "cca_name" not in cca.keys():
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"CCA name is missing for CCA {i}."
+                    )
+
+                if "modeling_region_id" not in cca.keys():
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"Modeling Region ID is missing for CCA {i}."
+                    )
+
+                cca_request.ccaName = cca["cca_name"]
+                cca_request.modelingRegionID = cca["modeling_region_id"]
+
+                if cca_request.ccaName == "":
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"CCA name is invalid for CCA {i}."
+                    )
+
+                if cca_request.modelingRegionID == "":
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"Modeling Region ID is invalid for CCA {i}."
+                    )
+
+                if "description" in cca.keys():
+                    cca_request.description = cca["description"]
+
+                if "default_solder_type" in cca.keys():
+                    cca_request.defaultSolderType = cca["default_solder_type"]
+
+                if "default_stencil_thickness" in cca.keys():
+                    cca_request.defaultStencilThickness = cca["default_stencil_thickness"]
+
+                if "default_stencil_thickness_units" in cca.keys():
+                    cca_request.defaultStencilThicknessUnits = cca[
+                        "default_stencil_thickness_units"
+                    ]
+
+                if "default_part_temp_rise" in cca.keys():
+                    cca_request.defaultPartTempRise = cca["default_part_temp_rise"]
+
+                if "default_part_temp_rise_units" in cca.keys():
+                    cca_request.defaultPartTempRiseUnits = cca["default_part_temp_rise_units"]
+
+                if "guess_part_properties" in cca.keys():
+                    cca_request.guessPartProperties = cca["guess_part_properties"]
+
+                if "generate_image_layers" in cca.keys():
+                    cca_request.generateImageLayers = cca["generate_image_layers"]
+
+        except SherlockCreateCCAFromModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.createCCAFromModelingRegion(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockCreateCCAFromModelingRegionError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockCreateCCAFromModelingRegionError as e:
+            LOG.error(str(e))
+            raise e

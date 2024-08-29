@@ -846,6 +846,18 @@ class SherlockUpdateMechanicalShockPropsError(Exception):
         return f"Update mechanical shock properties error: {self.message}"
 
 
+class SherlockUpdatePartListValidationAnalysisPropsError(Exception):
+    """Contains the error raised when part list validation analysis properties cannot be updated."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Update part list validation analysis properties error: {self.message}"
+
+
 class SherlockUpdateSolderFatiguePropsError(Exception):
     """Contains the error raised when properties for solder fatigue analysis cannot be updated."""
 
@@ -1025,3 +1037,183 @@ class SherlockExportNetListError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export net list error: {self.message}"
+
+
+class SherlockExportProjectError(Exception):
+    """Contains the error raised when a project cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export project error : {self.message}"
+
+
+class SherlockDeleteAllMountPointsError(Exception):
+    """Contains the error raised when the mount points cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete mount points error: {self.message}"
+
+
+class SherlockDeleteAllICTFixturesError(Exception):
+    """Contains the error raised when the ICT fixtures cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete ict fixtures error: {self.message}"
+
+
+class SherlockDeleteAllTestPointsError(Exception):
+    """Contains the error raised when the test points cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete test points error: {self.message}"
+
+
+class SherlockUpdateTestPointsByFileError(Exception):
+    """Contains the errors raised when test points cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Update test points by file error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update test points by file error: {self.message}"]
+
+
+class SherlockUpdateTestFixturesByFileError(Exception):
+    """Contains the errors raised when test fixtures cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Update test fixtures by file error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update test fixtures by file error: {self.message}"]
+
+
+class SherlockExportAllTestPoints(Exception):
+    """Contains the errors raised when test points cannot be exported."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Export test points error: {error}" for error in self.error_array]
+        assert self.error_array is None
+        return [f"Export test points error: {self.message}"]
+
+
+class SherlockExportAllTestFixtures(Exception):
+    """Contains the errors raised when test fixtures cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export test fixtures error: {self.message}"
+
+
+class SherlockExportAllMountPoints(Exception):
+    """Contains the errors raised when mount points cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export mount points error: {self.message}"
+
+
+class SherlockCreateCCAFromModelingRegionError(Exception):
+    """Contains the error raised when a CCA cannot be created from a modeling region."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Create CCA from modeling region error: {self.message}"
+
+
+class SherlockExportFEAModelError(Exception):
+    """Contains the error raised when a FEA model cannot be exported."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Export FEA model error: {self.message}"
+
+
+class SherlockAddModelingRegionError(Exception):
+    """Contains the errors raised when modeling regions for a project cannot be added."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Add modeling region error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Add modeling region error: {self.message}"]
+
+
+class SherlockUpdateModelingRegionError(Exception):
+    """Contains the errors raised when modeling regions for a project cannot be updated."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Format error message."""
+        if self.message is None:
+            return [f"Update modeling region error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Update modeling region error: {self.message}"]

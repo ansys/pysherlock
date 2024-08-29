@@ -13,7 +13,9 @@ from ansys.sherlock.core.errors import (
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
     SherlockDeleteProjectError,
+    SherlockExportProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
@@ -60,11 +62,14 @@ def test_all():
     helper_test_add_thermal_maps(project)
     helper_test_update_thermal_maps(project)
     helper_test_list_thermal_maps(project)
+    helper_test_create_cca_from_modeling_region(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
     finally:
         clean_up_after_add(project, project_name)
+
+    helper_test_export_project(project)
 
 
 def helper_test_delete_project(project):
@@ -177,7 +182,7 @@ def helper_test_list_ccas(project):
 
     try:
         project.list_ccas("Tutorial Project", "CCA names that is not a list")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockListCCAsError as e:
         assert str(e.str_itr()) == "['List CCAs error: cca_names is not a list.']"
 
@@ -223,25 +228,25 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: Project name is invalid."
 
     try:
         project.add_cca("Test", "")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA properties argument is invalid."
 
     try:
         project.add_cca("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: One or more CCAs are required."
 
     try:
         project.add_cca("Test", [""])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA properties are invalid for CCA 0."
 
@@ -260,7 +265,7 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA name is missing for CCA 0."
 
@@ -280,7 +285,7 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA name is invalid for CCA 0."
 
@@ -2967,6 +2972,280 @@ def helper_test_import_project_zip_archive_single_mode(project):
 def clean_up_after_add(project, project_name):
     if project_name is not None:
         project.delete_project(project_name)
+
+
+def helper_test_export_project(project):
+    """Test method for export project"""
+    try:
+        result = project.export_project(
+            project_name="",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="/Test/Dir",
+            export_file_name="ExportedProject",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Project name is invalid"
+
+    try:
+        result = project.export_project(
+            project_name="Tutorial Project",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="",
+            export_file_name="ExportedProject",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Export directory is invalid"
+
+    try:
+        result = project.export_project(
+            project_name="Tutorial Project",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="/Test/Dir",
+            export_file_name="",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Export file name is invalid"
+
+    if project._is_connection_up():
+        try:
+            result = project.export_project(
+                project_name="",
+                export_design_files=True,
+                export_result_files=True,
+                export_archive_results=True,
+                export_user_files=True,
+                export_log_files=True,
+                export_system_data=True,
+                export_file_dir="/Test/Dir",
+                export_file_name="ExportedProject",
+                overwrite_existing_file=True,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportProjectError
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        output_file_name = "ExportedProject"
+        try:
+            result = project.export_project(
+                project_name="Tutorial Project",
+                export_design_files=True,
+                export_result_files=True,
+                export_archive_results=True,
+                export_user_files=True,
+                export_log_files=True,
+                export_system_data=True,
+                export_file_dir=this_dir,
+                export_file_name=output_file_name,
+                overwrite_existing_file=True,
+            )
+            assert result == 0
+
+            # Clean up file
+            output_file = os.path.join(this_dir, output_file_name)
+            if os.path.exists(output_file):
+                os.remove(output_file)
+            else:
+                pytest.fail("Failed to generate export file.")
+        except SherlockExportProjectError as e:
+            pytest.fail(str(e))
+
+
+def helper_test_create_cca_from_modeling_region(project):
+    """Test create_cca_from_modeling_region API"""
+    try:
+        project.create_cca_from_modeling_region(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                    "description": "test MR1",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: Project " "name is invalid."
+
+    try:
+        project.create_cca_from_modeling_region("Test", "")
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA "
+            "properties argument is invalid."
+        )
+
+    try:
+        project.create_cca_from_modeling_region("Test", [])
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: One or more CCAs are required."
+
+    try:
+        project.create_cca_from_modeling_region("Test", [""])
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA properties "
+            "are invalid for CCA 0."
+        )
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "modeling_region_id": "MR1",
+                    "description": "tests MR1",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: CCA name is missing for CCA 0."
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "",
+                    "modeling_region_id": "MR1",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: CCA name is invalid for CCA 0."
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is missing for CCA 0."
+        )
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Card",
+                    "modeling_region_id": "",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is invalid for CCA 0."
+        )
+
+    if not project._is_connection_up():
+        return
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "INVALID",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
+
+    try:
+        project.create_cca_from_modeling_region(
+            "ModelingRegion",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                },
+            ],
+        )
+        pytest.fail("No exception raised when parameters are missing")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
 
 
 if __name__ == "__main__":

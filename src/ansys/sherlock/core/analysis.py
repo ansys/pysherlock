@@ -17,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateICTAnalysisPropsError,
     SherlockUpdateMechanicalShockPropsError,
     SherlockUpdateNaturalFrequencyPropsError,
+    SherlockUpdatePartListValidationAnalysisPropsError,
     SherlockUpdatePartModelingPropsError,
     SherlockUpdatePcbModelingPropsError,
     SherlockUpdateRandomVibePropsError,
@@ -103,13 +104,13 @@ class Analysis(GrpcStub):
         analyses : list of ``elements``
 
             - elements: list
-                List of tuples (``type``, ``event``)
+                Tuples (``type``, ``event``)
 
                 - analysis_type : RunAnalysisRequestAnalysisType
                     Type of analysis to run.
 
                 - event : list
-                    List of tuples (``phase_name``, ``event_name``)
+                    Tuples (``phase_name``, ``event_name``)
 
                     - phase_name : str
                         Name of the life cycle phase.
@@ -195,7 +196,7 @@ class Analysis(GrpcStub):
         Returns
         -------
         list
-            List of harmonic vibe property fields based on the user configuration.
+            Harmonic vibe property fields based on the user configuration.
 
         Examples
         --------
@@ -238,7 +239,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         harmonic_vibe_properties : list
-            List of harmonic vibe properties for a CCA consisting of these properties:
+            Harmonic vibe properties for a CCA consisting of these properties:
 
             - cca_name : str
                 Name of the CCA.
@@ -301,14 +302,14 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.update_harmonic_vibe_props(
             "Test",
             [{
-                'cca_name': 'Card',
-                'harmonic_vibe_count': 2,
-                'harmonic_vibe_damping': '0.01, 0.05',
-                'part_validation_enabled': False,
-                'require_material_assignment_enabled': False,
-                'analysis_temp': 20,
-                'analysis_temp_units': 'C',
-                'filter_by_event_frequency': False,
+                "cca_name": "Card",
+                "harmonic_vibe_count": 2,
+                "harmonic_vibe_damping": "0.01, 0.05",
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": False,
+                "analysis_temp": 20,
+                "analysis_temp_units": "C",
+                "filter_by_event_frequency": False,
             },
             ]
         )
@@ -498,7 +499,7 @@ class Analysis(GrpcStub):
         Returns
         -------
         list
-            List of ICT analysis property fields based on the user configuration.
+            ICT analysis property fields based on the user configuration.
 
         Examples
         --------
@@ -530,7 +531,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         ict_analysis_properties : list
-            List of ICT analysis properties for a CCA consisting of these properties:
+            ICT analysis properties for a CCA consisting of these properties:
 
             - cca_name : str
                 Name of the CCA.
@@ -571,12 +572,12 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.update_ict_analysis_props(
             "Test",
             [{
-                'cca_name': 'Card',
-                'ict_application_time': 2,
-                'ict_application_time_units': 'sec',
-                'ict_number_of_events': 10,
-                'part_validation_enabled': False,
-                'require_material_assignment_enabled': False,
+                "cca_name": "Card",
+                "ict_application_time": 2,
+                "ict_application_time_units": "sec",
+                "ict_number_of_events": 10,
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": False,
             },
             ]
         )
@@ -678,7 +679,7 @@ class Analysis(GrpcStub):
         Returns
         -------
         list
-            List of mechanical shock property fields based on the user configuration.
+            Mechanical shock property fields based on the user configuration.
 
         Examples
         --------
@@ -721,7 +722,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         mechanical_shock_properties : list
-            List of mechanical shock properties for a CCA consisting of these properties:
+            Mechanical shock properties for a CCA consisting of these properties:
 
             - cca_name : str
                 Name of the CCA.
@@ -778,20 +779,20 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.update_mechanical_shock_props(
             "Test",
             [{
-                'cca_name': 'Card',
-                'model_source': ModelSource.GENERATED,
-                'shock_result_count': 2,
-                'critical_shock_strain': 10,
-                'critical_shock_strain_units': 'strain',
-                'part_validation_enabled': True,
-                'require_material_assignment_enabled': False,
-                'force_model_rebuild': 'AUTO',
-                'natural_freq_min': 10,
-                'natural_freq_min_units': 'Hz',
-                'natural_freq_max': 100,
-                'natural_freq_max_units': 'KHz',
-                'analysis_temp': 20,
-                'analysis_temp_units': 'F',
+                "cca_name": "Card",
+                "model_source": ModelSource.GENERATED,
+                "shock_result_count": 2,
+                "critical_shock_strain": 10,
+                "critical_shock_strain_units": "strain",
+                "part_validation_enabled": True,
+                "require_material_assignment_enabled": False,
+                "force_model_rebuild": "AUTO",
+                "natural_freq_min": 10,
+                "natural_freq_min_units": "Hz",
+                "natural_freq_max": 100,
+                "natural_freq_max_units": "KHz",
+                "analysis_temp": 20,
+                "analysis_temp_units": "F",
             },
             ]
         )
@@ -919,7 +920,7 @@ class Analysis(GrpcStub):
         Returns
         -------
         list
-            List of solder fatigue property fields based on the user configuration.
+            Solder fatigue property fields based on the user configuration.
 
         Examples
         --------
@@ -960,7 +961,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         solder_fatigue_properties : list
-            List of mechanical shock properties for a CCA consisting of these properties:
+            Mechanical shock properties for a CCA consisting of these properties:
 
             - cca_name : str
                 Name of the CCA.
@@ -996,12 +997,12 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.update_solder_fatigue_props(
             "Test",
             [{
-                'cca_name': 'Card',
-                'solder_material': 'TIN-LEAD (63SN37PB)',
-                'part_temp': 70,
-                'part_temp_units': 'F',
-                'use_part_temp_rise_min': True,
-                'part_validation_enabled': True
+                "cca_name": "Card",
+                "solder_material": "TIN-LEAD (63SN37PB)",
+                "part_temp": 70,
+                "part_temp_units": "F",
+                "use_part_temp_rise_min": True,
+                "part_validation_enabled": True
             },
             ]
         )
@@ -1097,7 +1098,7 @@ class Analysis(GrpcStub):
         Returns
         -------
         list
-            List of random vibe property fields based on the user configuration.
+            Random vibe property fields based on the user configuration.
 
         Examples
         --------
@@ -1194,7 +1195,7 @@ class Analysis(GrpcStub):
             Model source. The default is ``None``.
             This parameter is required for strain map analysis.
         strain_map_natural_freqs : list, optional
-            List of natural frequencies. The default is ``None``.
+            Natural frequencies. The default is ``None``.
             This parameter is required for strain map analysis.
 
         Returns
@@ -1221,7 +1222,7 @@ class Analysis(GrpcStub):
             random_vibe_damping="0.01, 0.05",
             analysis_temp=20,
             analysis_temp_units="C",
-            model_source=ModelSource.STRAIN_MAP,
+            model_source=ModelSource.STRAIN_MAP
         )
 
         """
@@ -1286,7 +1287,7 @@ class Analysis(GrpcStub):
         Returns
         -------
         list
-            List of natural frequency property fields based on the user configuration.
+            Matural frequency property fields based on the user configuration.
 
         Examples
         --------
@@ -1338,7 +1339,7 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the CCA.
         natural_freq_count: int
-            Natural frequecy result count.
+            Natural frequency result count.
         natural_freq_min: float, optional
             Minimum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
@@ -1445,12 +1446,12 @@ class Analysis(GrpcStub):
         cca_name : str
             Name of the main CCA for the analysis.
         strain_map_analyses : list
-            List of analyses consisting of these properties:
+            Analyses consisting of these properties:
 
             - analysis_type : RunStrainMapAnalysisRequestAnalysisType
                 Type of analysis to run.
             - event_strain_maps : list
-                List of the strain maps assigned to the desired life cycle events for
+                Strain maps assigned to the desired life cycle events for
                 a given PCB side. The list consists of these properties:
 
               - phase_name : str
@@ -1594,7 +1595,7 @@ class Analysis(GrpcStub):
         cca_names : list
             Names of the CCAs to be used for the analysis.
         analyses : list
-            List of elements consisting of the following properties:
+            Elements consisting of the following properties:
 
             - analysis_type : UpdatePcbModelingPropsRequestAnalysisType
                 Type of analysis applied.
@@ -1647,7 +1648,7 @@ class Analysis(GrpcStub):
                     "mm",
                     True,
                 )
-            ],
+            ]
         )
         """
         try:
@@ -1708,7 +1709,7 @@ class Analysis(GrpcStub):
         project : str
             Name of the Sherlock project.
         part_modeling_props : dict
-            Dict of part modeling properties for a CCA consisting of these properties:
+            Part modeling properties for a CCA consisting of these properties:
 
             - cca_name : str
                 Name of the CCA.
@@ -1754,16 +1755,16 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.update_part_modeling_props(
             "Test",
             {
-                'cca_name': 'Card',
-                'part_enabled': True,
-                'part_min_size': 1,
-                'part_min_size_units': 'in',
-                'part_elem_order': 'First Order (Linear)',
-                'part_max_edge_length': 1,
-                'part_max_edge_length_units': 'in',
-                'part_max_vertical': 1,
-                'part_max_vertical_units': 'in',
-                'part_results_filtered': True
+                "cca_name": "Card",
+                "part_enabled": True,
+                "part_min_size": 1,
+                "part_min_size_units": "in",
+                "part_elem_order": "First Order (Linear)",
+                "part_max_edge_length": 1,
+                "part_max_edge_length_units": "in",
+                "part_max_vertical": 1,
+                "part_max_vertical_units": "in",
+                "part_results_filtered": True
             }
         )
 
@@ -1827,5 +1828,145 @@ class Analysis(GrpcStub):
                 LOG.info(response.message)
                 return response.value
         except SherlockUpdatePartModelingPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+    def update_part_list_validation_analysis_props(
+        self,
+        project,
+        properties_per_cca,
+    ):
+        """Update properties for a Part List Validation analysis.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        properties_per_cca : list
+            Part List Validation analysis properties for each CCA consisting of these properties:
+
+            - cca_name : str
+                Name of the CCA.
+            - process_use_avl : bool
+                Whether to use AVL.
+            - process_use_wizard : bool
+                Whether to use the wizard.
+            - process_check_confirmed_properties : bool
+                Whether to check confirmed properties.
+            - process_check_part_numbers : bool
+                Whether to check part numbers.
+            - matching_mode : str
+                Matching type.
+            - avl_require_internal_part_number : bool
+                Whether to require an internal part number.
+            - avl_require_approved_description : bool
+                Whether to require an approved description.
+            - avl_require_approved_manufacturer : bool
+                Whether to require an approved manufacturer.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.analysis.update_part_list_validation_analysis_props(
+            "Test",
+            [{
+                "cca_name": "Card",
+                "process_use_avl": True,
+                "process_use_wizard": False,
+                "process_check_confirmed_properties": True,
+                "process_check_part_numbers": True,
+                "matching_mode": "Part",
+                "avl_require_internal_part_number": True,
+                "avl_require_approved_description": False,
+                "avl_require_approved_manufacturer": True,
+            },
+            ]
+        )
+        """
+        try:
+            if not isinstance(properties_per_cca, list):
+                raise SherlockUpdatePartListValidationAnalysisPropsError(
+                    message="Properties per CCA argument is invalid."
+                )
+
+            if len(properties_per_cca) == 0:
+                raise SherlockUpdatePartListValidationAnalysisPropsError(
+                    message="One or more analysis properties are required."
+                )
+
+            request = SherlockAnalysisService_pb2.UpdatePartsListValidationPropsRequest(
+                project=project
+            )
+
+            for i, analysis_properties in enumerate(properties_per_cca):
+                if not isinstance(analysis_properties, dict):
+                    raise SherlockUpdatePartListValidationAnalysisPropsError(
+                        f"Analysis properties is invalid for index {i}."
+                    )
+
+                if "cca_name" not in analysis_properties.keys():
+                    raise SherlockUpdatePartListValidationAnalysisPropsError(
+                        message=f"CCA name is missing for analysis properties {i}."
+                    )
+
+                cca_name = analysis_properties["cca_name"]
+                if cca_name == "":
+                    raise SherlockUpdatePartListValidationAnalysisPropsError(
+                        message=f"CCA name is invalid for analysis properties {i}."
+                    )
+
+                request.partsListValidationProperties.add(
+                    ccaName=cca_name,
+                    processUseAVL=analysis_properties.get("process_use_avl", False),
+                    processUseWizard=analysis_properties.get("process_use_wizard", False),
+                    processCheckConfirmedProperties=analysis_properties.get(
+                        "process_check_confirmed_properties", False
+                    ),
+                    processCheckPartNumbers=analysis_properties.get(
+                        "process_check_part_numbers", False
+                    ),
+                    matching=analysis_properties.get("matching_mode", "Both"),
+                    avlRequireInternalPartNumber=analysis_properties.get(
+                        "avl_require_internal_part_number", False
+                    ),
+                    avlRequireApprovedDescription=analysis_properties.get(
+                        "avl_require_approved_description", False
+                    ),
+                    avlRequireApprovedManufacturer=analysis_properties.get(
+                        "avl_require_approved_manufacturer", False
+                    ),
+                )
+        except SherlockUpdatePartListValidationAnalysisPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            LOG.error("There is no connection to a gRPC service.")
+            return
+
+        response = self.stub.updatePartsListValidationProps(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockUpdatePartListValidationAnalysisPropsError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockUpdatePartListValidationAnalysisPropsError as e:
             LOG.error(str(e))
             raise e

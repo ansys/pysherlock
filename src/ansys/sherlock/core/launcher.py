@@ -3,6 +3,7 @@
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
 import os
+import shlex
 import socket
 import subprocess
 import time
@@ -73,11 +74,13 @@ def launch_sherlock(
         return None
 
     try:
-        args = _get_sherlock_exe_path() + " -grpcPort=" + str(port)
+        args = [_get_sherlock_exe_path()]
+        args.append("-grpcPort=" + str(port))
         if single_project_path != "":
-            args = f'{args} -singleProject "{single_project_path}"'
+            args.append(f'-singleProject "{single_project_path}"')
         if sherlock_cmd_args != "":
-            args = f"{args} {sherlock_cmd_args}"
+            args.append(f"{shlex.split(sherlock_cmd_args)}")
+        print(args)
         subprocess.Popen(args)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
@@ -153,5 +156,8 @@ def _get_sherlock_exe_path():
     ansys_base = _get_base_ansys()
     if not ansys_base:
         return ""
-    sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
+    if os.name == "nt":
+        sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
+    else:
+        sherlock_bin = os.path.join(ansys_base, "sherlock", "runSherlock")
     return sherlock_bin

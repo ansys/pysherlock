@@ -8,4 +8,4 @@ Project
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.project.Project
+     Project
