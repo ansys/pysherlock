@@ -27,13 +27,13 @@ dependencies = [
     "ansys-api-sherlock==0.1.31",
     "grpcio>=1.17",
     "importlib-metadata>=4.0,<5; python_version<='3.8'",
-    "protobuf~=3.20",
+    "protobuf>=3.20",
 ]
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.66.0",
-    "protobuf==3.20.3",
+    "grpcio==1.66.1",
+    "protobuf==5.28.0",
     "pytest==8.3.2",
     "pytest-cov==5.0.0",
 ]
