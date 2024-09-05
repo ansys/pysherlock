@@ -1064,64 +1064,6 @@ def helper_test_update_modeling_region(layer, region_id):
 
 
 def helper_test_copy_modeling_region(layer, region_id):
-    modeling_region_example = [
-        {
-            "cca_name": "Card",
-            "region_id": region_id,
-            "region_units": "mm",
-            "model_mode": "Enabled",
-            "shape": PolygonalShape(points=[(0, 0), (0, 6.35), (9.77, 0)], rotation=87.8),
-            "pcb_model_props": {
-                "export_model_type": "Sherlock",
-                "elem_order": "First_Order",
-                "max_mesh_size": 0.5,
-                "max_mesh_size_units": "mm",
-                "quads_preferred": True,
-            },
-            "trace_model_props": {
-                "trace_model_type": "Enabled",
-                "elem_order": "Second_Order",
-                "trace_mesh_size": 0.3,
-                "trace_mesh_size_units": "mm",
-            },
-            "region_id_replacement": "NewRegion001",
-        }
-    ]
-
-    # Invalid project name
-    try:
-        layer.copy_modeling_region("", modeling_region_example)
-        pytest.fail("No exception raised for invalid project name")
-    except SherlockCopyModelingRegionError as e:
-        assert str(e.str_itr()) == "['Copy modeling region error: Project name is invalid.']"
-
-    # Empty modeling regions list
-    try:
-        layer.copy_modeling_region("Tutorial Project", [])
-        pytest.fail("No exception raised for empty modeling regions list")
-    except SherlockCopyModelingRegionError as e:
-        assert str(e.str_itr()) == "['Copy modeling region error: Modeling regions list is empty.']"
-
-    # Invalid CCA name
-    invalid_region = copy.deepcopy(modeling_region_example)
-    invalid_region[0].pop("cca_name")
-    try:
-        layer.copy_modeling_region("Tutorial Project", invalid_region)
-        pytest.fail("No exception raised for invalid CCA name")
-    except SherlockCopyModelingRegionError as e:
-        assert str(e.str_itr()) == "['Copy modeling region error: CCA name is invalid.']"
-
-    # Invalid region ID
-    invalid_region = copy.deepcopy(modeling_region_example)
-    invalid_region[0].pop("region_id")
-    try:
-        layer.copy_modeling_region("Tutorial Project", invalid_region)
-        pytest.fail("No exception raised for invalid region ID")
-    except SherlockCopyModelingRegionError as e:
-        assert str(e.str_itr())
-
-
-def helper_test_copy_modeling_region(layer, region_id):
     copy_region_example = [
         {
             "cca_name": "Card",

@@ -1448,10 +1448,10 @@ class Layer(GrpcStub):
             - region_id_copy : str
                 Region ID of the modeling region copy. Must be unique.
             - center_x : float
-                The center x coordinate of the modeling region copy. used for location placement in
+                The center x coordinate of the modeling region copy. Used for location placement in
                 the Layer Viewer.
             - center_y : float
-                The center y coordinate of the modeling region copy. used for location placement in
+                The center y coordinate of the modeling region copy. Used for location placement in
                 the Layer Viewer.
 
         Returns
