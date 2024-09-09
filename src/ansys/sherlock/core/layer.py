@@ -24,6 +24,7 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockAddModelingRegionError,
     SherlockAddPottingRegionError,
+    SherlockCopyModelingRegionError,
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
@@ -1421,5 +1422,110 @@ class Layer(GrpcStub):
             return return_code.value
 
         except SherlockUpdateModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+    def copy_modeling_region(
+        self,
+        project: str,
+        copy_regions: List[Dict[str, Union[str, float]]],
+    ):
+        """
+        Copy one or more modeling regions in a specific project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        copy_regions : list of dict
+            List of modeling regions to copy along with their corresponding "copy to" parameters.
+            Each dictionary should contain:
+
+            - cca_name : str
+                Name of the CCA.
+            - region_id : str
+                Region ID of the existing modeling region to copy.
+            - region_id_copy : str
+                Region ID of the modeling region copy. Must be unique.
+            - center_x : float
+                The center x coordinate of the modeling region copy. Used for location placement in
+                the Layer Viewer.
+            - center_y : float
+                The center y coordinate of the modeling region copy. Used for location placement in
+                the Layer Viewer.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Tutorial Project",
+            cca_name="Card",
+        )
+        >>> copy_regions = [
+        >>>     {
+        >>>         "cca_name": "Card",
+        >>>         "region_id": "Region001",
+        >>>         "region_id_copy": "RegionCopy001",
+        >>>         "center_x": 10.0,
+        >>>         "center_y": 20.0,
+        >>>     }
+        >>> ]
+        >>> result = sherlock.layer.copy_modeling_region("Tutorial Project", copy_regions)
+        """
+        try:
+            if not project:
+                raise SherlockCopyModelingRegionError(message="Project name is invalid.")
+
+            if not copy_regions:
+                raise SherlockCopyModelingRegionError(message="Copy regions list is empty.")
+
+            copy_regions_request = []
+            for region in copy_regions:
+                if "cca_name" not in region or region["cca_name"] == "":
+                    raise SherlockCopyModelingRegionError(message="CCA name is invalid.")
+                if "region_id" not in region or region["region_id"] == "":
+                    raise SherlockCopyModelingRegionError(message="Region ID is invalid.")
+                if "region_id_copy" not in region or region["region_id_copy"] == "":
+                    raise SherlockCopyModelingRegionError(message="Region ID copy is invalid.")
+                if "center_x" not in region or not isinstance(region["center_x"], float):
+                    raise SherlockCopyModelingRegionError(message="Center X coordinate is invalid.")
+                if "center_y" not in region or not isinstance(region["center_y"], float):
+                    raise SherlockCopyModelingRegionError(message="Center Y coordinate is invalid.")
+
+                copy_region = (
+                    SherlockLayerService_pb2.CopyModelingRegionRequest.CopyModelingRegionInfo(
+                        ccaName=region["cca_name"],
+                        regionId=region["region_id"],
+                        regionIdCopy=region["region_id_copy"],
+                        centerX=region["center_x"],
+                        centerY=region["center_y"],
+                    )
+                )
+                copy_regions_request.append(copy_region)
+
+            request = SherlockLayerService_pb2.CopyModelingRegionRequest(
+                project=project,
+                copyRegions=copy_regions_request,
+            )
+
+            response = self.stub.copyModelingRegion(request)
+
+            if response.value == -1:
+                raise SherlockCopyModelingRegionError(message=response.message)
+
+            return response.value
+
+        except SherlockCopyModelingRegionError as e:
             LOG.error(str(e))
             raise e

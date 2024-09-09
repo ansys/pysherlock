@@ -10,6 +10,7 @@ import pytest
 from ansys.sherlock.core.errors import (
     SherlockAddModelingRegionError,
     SherlockAddPottingRegionError,
+    SherlockCopyModelingRegionError,
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
@@ -49,6 +50,7 @@ def test_all():
     helper_test_export_all_test_points(layer)
     region_id = helper_test_add_modeling_region(layer)
     helper_test_update_modeling_region(layer, region_id)
+    helper_test_copy_modeling_region(layer, region_id)
 
 
 def helper_test_add_potting_region(layer):
@@ -1059,6 +1061,94 @@ def helper_test_update_modeling_region(layer, region_id):
             assert result == 0
         except SherlockUpdateModelingRegionError as e:
             pytest.fail(str(e))
+
+
+def helper_test_copy_modeling_region(layer, region_id):
+    copy_region_example = [
+        {
+            "cca_name": "Card",
+            "region_id": region_id,
+            "region_id_copy": "RegionCopy001",
+            "center_x": 10.0,
+            "center_y": 20.0,
+        }
+    ]
+
+    # Invalid project name
+    try:
+        layer.copy_modeling_region("", copy_region_example)
+        pytest.fail("No exception raised for invalid project name")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: Project name is invalid.']"
+
+    # Empty copy regions list
+    try:
+        layer.copy_modeling_region("Tutorial Project", [])
+        pytest.fail("No exception raised for empty copy regions list")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: Copy regions list is empty.']"
+
+    # Invalid CCA name
+    invalid_region = copy.deepcopy(copy_region_example)
+    invalid_region[0]["cca_name"] = ""
+    try:
+        layer.copy_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid CCA name")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: CCA name is invalid.']"
+
+    # Invalid region ID
+    invalid_region = copy.deepcopy(copy_region_example)
+    invalid_region[0]["region_id"] = ""
+    try:
+        layer.copy_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid region ID")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: Region ID is invalid.']"
+
+    # Invalid region ID copy
+    invalid_region = copy.deepcopy(copy_region_example)
+    invalid_region[0]["region_id_copy"] = ""
+    try:
+        layer.copy_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid region ID copy")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: Region ID copy is invalid.']"
+
+    # Invalid center X coordinate
+    invalid_region = copy.deepcopy(copy_region_example)
+    invalid_region[0]["center_x"] = "not_a_float"
+    try:
+        layer.copy_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid center X coordinate")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: Center X coordinate is invalid.']"
+
+    # Invalid center Y coordinate
+    invalid_region = copy.deepcopy(copy_region_example)
+    invalid_region[0]["center_y"] = "not_a_float"
+    try:
+        layer.copy_modeling_region("Tutorial Project", invalid_region)
+        pytest.fail("No exception raised for invalid center Y coordinate")
+    except SherlockCopyModelingRegionError as e:
+        assert str(e.str_itr()) == "['Copy modeling region error: Center Y coordinate is invalid.']"
+
+    if layer._is_connection_up():
+        # Unhappy project name
+        try:
+            layer.copy_modeling_region("Invalid Project", copy_region_example)
+            pytest.fail("No exception raised for invalid project name")
+        except Exception as e:
+            assert type(e) == SherlockCopyModelingRegionError
+
+        # Valid request
+        try:
+            valid_region = copy.deepcopy(copy_region_example)
+            valid_region[0]["cca_name"] = "Main Board"
+            result = layer.copy_modeling_region("Tutorial Project", valid_region)
+            assert result == 0
+        except SherlockCopyModelingRegionError as e:
+            pytest.fail(e.str_itr())
 
 
 if __name__ == "__main__":
