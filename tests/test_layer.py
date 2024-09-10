@@ -873,6 +873,7 @@ def helper_test_add_modeling_region(layer):
         try:
             valid_region = copy.deepcopy(modeling_region_example)
             valid_region[0]["cca_name"] = "Main Board"
+            valid_region[0]["region_id"] = f"Region{uuid.uuid4()}"
             result = layer.add_modeling_region("Tutorial Project", valid_region)
             assert result == 0
         except SherlockAddModelingRegionError as e:
@@ -881,6 +882,7 @@ def helper_test_add_modeling_region(layer):
 
 
 def helper_test_update_modeling_region(layer, region_id):
+    updated_region_id = f"UpdatedRegion{uuid.uuid4()}"
     modeling_region_example = [
         {
             "cca_name": "Card",
@@ -901,9 +903,11 @@ def helper_test_update_modeling_region(layer, region_id):
                 "trace_mesh_size": 0.3,
                 "trace_mesh_size_units": "mm",
             },
-            "region_id_replacement": "NewRegion001",
+            "region_id_replacement": updated_region_id,
         }
     ]
+
+    region_id = updated_region_id
 
     # Invalid project name
     try:
@@ -1030,8 +1034,9 @@ def helper_test_update_modeling_region(layer, region_id):
             valid_region[0]["shape"] = RectangularShape(
                 length=10.0, width=5.0, center_x=0.0, center_y=0.0, rotation=45.0
             )
-            valid_region[0]["region_id"] = "NewRegion001"
-            valid_region[0]["region_id_replacement"] = "NewRegion002"
+            valid_region[0]["region_id"] = region_id
+            region_id = f"UpdatedRegion{uuid.uuid4()}"
+            valid_region[0]["region_id_replacement"] = region_id
             result = layer.update_modeling_region("Tutorial Project", valid_region)
             assert result == 0
         except SherlockUpdateModelingRegionError as e:
@@ -1044,22 +1049,23 @@ def helper_test_update_modeling_region(layer, region_id):
             valid_region[0]["shape"] = SlotShape(
                 length=10.0, width=5.0, node_count=6, center_x=0.0, center_y=0.0, rotation=45.0
             )
-            valid_region[0]["region_id"] = "NewRegion002"
-            valid_region[0]["region_id_replacement"] = "NewRegion003"
+            valid_region[0]["region_id"] = region_id
+            region_id = f"UpdatedRegion{uuid.uuid4()}"
+            valid_region[0]["region_id_replacement"] = region_id
             result = layer.update_modeling_region("Tutorial Project", valid_region)
             assert result == 0
         except SherlockUpdateModelingRegionError as e:
             pytest.fail(str(e))
 
         # Test for CircularShape
-        region_id = "NewRegion004"
         try:
             valid_region = copy.deepcopy(modeling_region_example)
             valid_region[0]["cca_name"] = "Main Board"
             valid_region[0]["shape"] = CircularShape(
                 diameter=10.0, node_count=8, center_x=0.0, center_y=0.0, rotation=0.0
             )
-            valid_region[0]["region_id"] = "NewRegion003"
+            valid_region[0]["region_id"] = region_id
+            region_id = f"UpdatedRegion{uuid.uuid4()}"
             valid_region[0]["region_id_replacement"] = region_id
             result = layer.update_modeling_region("Tutorial Project", valid_region)
             assert result == 0
@@ -1069,11 +1075,12 @@ def helper_test_update_modeling_region(layer, region_id):
 
 
 def helper_test_copy_modeling_region(layer, region_id):
+    region_id_copy = f"RegionCopy{uuid.uuid4()}"
     copy_region_example = [
         {
             "cca_name": "Card",
             "region_id": region_id,
-            "region_id_copy": "RegionCopy001",
+            "region_id_copy": region_id_copy,
             "center_x": 10.0,
             "center_y": 20.0,
         }
@@ -1150,7 +1157,6 @@ def helper_test_copy_modeling_region(layer, region_id):
         try:
             valid_region = copy.deepcopy(copy_region_example)
             valid_region[0]["cca_name"] = "Main Board"
-            valid_region[0]["region_id"] = region_id
             result = layer.copy_modeling_region("Tutorial Project", valid_region)
             assert result == 0
         except SherlockCopyModelingRegionError as e:
