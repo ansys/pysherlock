@@ -49,7 +49,7 @@ def test_all():
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
     region_id = helper_test_add_modeling_region(layer)
-    helper_test_update_modeling_region(layer, region_id)
+    region_id = helper_test_update_modeling_region(layer, region_id)
     helper_test_copy_modeling_region(layer, region_id)
 
 
@@ -658,7 +658,7 @@ def helper_test_export_all_test_fixtures(layer):
 
         try:
             result = layer.export_all_test_fixtures(
-                "Tutorial Project",
+                "Test Point Test Project",
                 "Main Board",
                 test_fixtures_file,
             )
@@ -709,18 +709,6 @@ def helper_test_export_all_mount_points(layer):
         mount_points_file = os.path.join(temp_dir, "mount_points.csv")
 
         try:
-            result = layer.export_all_mount_points(
-                "Tutorial Project",
-                "Main Board",
-                mount_points_file,
-            )
-
-            assert os.path.exists(mount_points_file)
-            assert result == 0
-        except Exception as e:
-            pytest.fail(e.message)
-
-        try:
             layer.export_all_mount_points(
                 "Tutorial Project",
                 "Invalid CCA",
@@ -729,6 +717,18 @@ def helper_test_export_all_mount_points(layer):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockExportAllMountPoints
+
+        try:
+            result = layer.export_all_mount_points(
+                "Test Point Test Project",
+                "Main Board",
+                mount_points_file,
+            )
+
+            assert os.path.exists(mount_points_file)
+            assert result == 0
+        except SherlockExportAllMountPoints as e:
+            pytest.fail(e.message)
 
 
 def helper_test_add_modeling_region(layer):
@@ -1030,6 +1030,7 @@ def helper_test_update_modeling_region(layer, region_id):
             valid_region[0]["shape"] = RectangularShape(
                 length=10.0, width=5.0, center_x=0.0, center_y=0.0, rotation=45.0
             )
+            valid_region[0]["region_id"] = "NewRegion001"
             valid_region[0]["region_id_replacement"] = "NewRegion002"
             result = layer.update_modeling_region("Tutorial Project", valid_region)
             assert result == 0
@@ -1041,8 +1042,9 @@ def helper_test_update_modeling_region(layer, region_id):
             valid_region = copy.deepcopy(modeling_region_example)
             valid_region[0]["cca_name"] = "Main Board"
             valid_region[0]["shape"] = SlotShape(
-                length=10.0, width=5.0, node_count=4, center_x=0.0, center_y=0.0, rotation=45.0
+                length=10.0, width=5.0, node_count=6, center_x=0.0, center_y=0.0, rotation=45.0
             )
+            valid_region[0]["region_id"] = "NewRegion002"
             valid_region[0]["region_id_replacement"] = "NewRegion003"
             result = layer.update_modeling_region("Tutorial Project", valid_region)
             assert result == 0
@@ -1050,15 +1052,18 @@ def helper_test_update_modeling_region(layer, region_id):
             pytest.fail(str(e))
 
         # Test for CircularShape
+        region_id = "NewRegion004"
         try:
             valid_region = copy.deepcopy(modeling_region_example)
             valid_region[0]["cca_name"] = "Main Board"
             valid_region[0]["shape"] = CircularShape(
                 diameter=10.0, node_count=8, center_x=0.0, center_y=0.0, rotation=0.0
             )
-            valid_region[0]["region_id_replacement"] = "NewRegion004"
+            valid_region[0]["region_id"] = "NewRegion003"
+            valid_region[0]["region_id_replacement"] = region_id
             result = layer.update_modeling_region("Tutorial Project", valid_region)
             assert result == 0
+            return region_id
         except SherlockUpdateModelingRegionError as e:
             pytest.fail(str(e))
 
@@ -1145,6 +1150,7 @@ def helper_test_copy_modeling_region(layer, region_id):
         try:
             valid_region = copy.deepcopy(copy_region_example)
             valid_region[0]["cca_name"] = "Main Board"
+            valid_region[0]["region_id"] = region_id
             result = layer.copy_modeling_region("Tutorial Project", valid_region)
             assert result == 0
         except SherlockCopyModelingRegionError as e:
