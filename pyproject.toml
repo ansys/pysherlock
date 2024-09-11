@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==0.1.31",
+    "ansys-api-sherlock==0.1.32",
     "grpcio>=1.17",
     "importlib-metadata>=4.0,<5; python_version<='3.8'",
     "protobuf>=3.20",
