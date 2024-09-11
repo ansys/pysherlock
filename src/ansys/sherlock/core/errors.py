@@ -1234,3 +1234,15 @@ class SherlockCopyModelingRegionError(Exception):
 
         assert self.error_array is None
         return [f"Copy modeling region error: {self.message}"]
+
+
+class SherlockGetPartsListValidationAnalysisPropsError(Exception):
+    """Contains the error raised when getting parts list validation properties."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get parts list validation analysis properties error: {self.message}"

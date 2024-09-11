@@ -11,6 +11,7 @@ except ModuleNotFoundError:
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
+    SherlockGetPartsListValidationAnalysisPropsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
@@ -1968,5 +1969,92 @@ class Analysis(GrpcStub):
                 LOG.info(response.message)
                 return response.value
         except SherlockUpdatePartListValidationAnalysisPropsError as e:
+            LOG.error(str(e))
+            raise e
+
+    def get_parts_list_validation_analysis_props(
+        self,
+        project: str,
+        cca_name: str,
+    ):
+        """Get properties for a Part List Validation analysis.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+
+        Returns
+        PartsListValidationPropsResponse
+            - returnCode : ReturnCode
+                - value : int
+                    Status code of the response. 0 for success.
+                - message : str
+                    indicates general errors that occurred while attempting to update parts
+            - partLibrary : str
+                Part library name
+            - processUseAVL : bool
+                Process option to use AVL
+            - processUseWizard : bool
+                Process option to use wizard
+            - processCheckConfirmedProperties : bool
+                Process option to check confirmed properties
+            - processCheckPartNumbers : bool
+                Process option to check part numbers
+            - matching : MatchingMode
+                Matching type
+            - avlRequireInternalPartNumber : bool
+                AVL option to require internal part number
+            - avlRequireApprovedDescription : bool
+                AVL option to require approved description
+            - avlRequireApprovedManufacturer : bool
+                AVL option to require approved manufacturer
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> response = sherlock.analysis.get_parts_list_validation_analysis_props(
+            "Test", "Card"
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockGetPartsListValidationAnalysisPropsError(
+                    message="Project name is invalid."
+                )
+            if cca_name == "":
+                raise SherlockGetPartsListValidationAnalysisPropsError(
+                    message="CCA name is invalid."
+                )
+
+            request = SherlockAnalysisService_pb2.GetPartsListValidationPropsRequest(
+                project=project, ccaName=cca_name
+            )
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            response = self.stub.getPartsListValidationProps(request)
+
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                raise SherlockGetPartsListValidationAnalysisPropsError(return_code.message)
+
+            return response
+        except SherlockGetPartsListValidationAnalysisPropsError as e:
             LOG.error(str(e))
             raise e

@@ -718,7 +718,7 @@ class Parts(GrpcStub):
                 - value : int
                     Status code of the response. 0 for success.
                 - message : str
-                    indicates general errors that occurred while attempting to update parts
+                    Indicates general errors that occurred while attempting to update parts
             - numPartsUpdated : int
                 Number of parts updated
             - updateErrors : list<str>

@@ -11,6 +11,7 @@ import pytest
 
 from ansys.sherlock.core.analysis import Analysis
 from ansys.sherlock.core.errors import (
+    SherlockGetPartsListValidationAnalysisPropsError,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
@@ -58,6 +59,7 @@ def test_all():
     helper_test_update_pcb_modeling_props(analysis)
     helper_test_update_part_modeling_props(analysis)
     helper_test_update_parts_list_validation_props(analysis)
+    helper_test_get_parts_list_validation_analysis_props(analysis)
 
 
 def helper_test_run_analysis(analysis):
@@ -1780,6 +1782,45 @@ def helper_test_update_parts_list_validation_props(analysis):
         assert result == 0
     except SherlockUpdatePartListValidationAnalysisPropsError as e:
         pytest.fail(str(e))
+
+
+def helper_test_get_parts_list_validation_analysis_props(analysis):
+    try:
+        analysis.get_parts_list_validation_analysis_props("", "Main Board")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockGetPartsListValidationAnalysisPropsError as e:
+        assert (
+            str(e)
+            == "Get parts list validation analysis properties error: Project name is invalid."
+        )
+
+    if analysis._is_connection_up():
+        try:
+            analysis.get_parts_list_validation_analysis_props(
+                "Tutorial Project",
+                "Invalid CCA name",
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockGetPartsListValidationAnalysisPropsError
+
+        try:
+            response = analysis.get_parts_list_validation_analysis_props(
+                "Tutorial Project",
+                "Main Board",
+            )
+            assert response is not None
+            assert response.partLibrary is not None
+            assert response.processUseAVL is not None
+            assert response.processUseWizard is not None
+            assert response.processCheckConfirmedProperties is not None
+            assert response.processCheckPartNumbers is not None
+            assert response.matching is not None
+            assert response.avlRequireInternalPartNumber is not None
+            assert response.avlRequireApprovedDescription is not None
+            assert response.avlRequireApprovedManufacturer is not None
+        except SherlockGetPartsListValidationAnalysisPropsError as e:
+            pytest.fail(str(e))
 
 
 if __name__ == "__main__":
