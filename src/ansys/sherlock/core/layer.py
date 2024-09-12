@@ -28,6 +28,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockDeleteModelingRegionError,
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
@@ -1529,3 +1530,80 @@ class Layer(GrpcStub):
         except SherlockCopyModelingRegionError as e:
             LOG.error(str(e))
             raise e
+
+    def delete_modeling_region(self, project: str, delete_regions: List[Dict[str, str]]):
+        """Delete one or more modeling regions for a specific project.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        delete_regions : list of dict
+            List of modeling regions to delete. Each dictionary should contain:
+            - "cca_name" : str, Name of the CCA.
+            - "region_id" : str, Unique region ID of the modeling region to delete.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+                "ODB++ Tutorial.tgz",
+                True,
+                True,
+                True,
+                True,
+                project="Test",
+                cca_name="Card",
+            )
+        >>> delete_regions = [{"cca_name": "Card", "region_id": "12345"}]
+        >>> sherlock.layer.delete_modeling_region("Test", delete_regions)
+        """
+        try:
+            if project == "":
+                raise SherlockDeleteModelingRegionError(message="Project name is invalid.")
+            if not isinstance(delete_regions, list):
+                raise SherlockDeleteModelingRegionError(message="Delete regions should be a list.")
+            if not delete_regions:
+                raise SherlockDeleteModelingRegionError(message="Delete regions list is empty.")
+
+            for region in delete_regions:
+                if not isinstance(region, dict):
+                    raise SherlockDeleteModelingRegionError(
+                        message="Each region should be a dictionary."
+                    )
+                if "cca_name" not in region or region["cca_name"] == "":
+                    raise SherlockDeleteModelingRegionError(message="CCA name is invalid.")
+                if "region_id" not in region or region["region_id"] == "":
+                    raise SherlockDeleteModelingRegionError(message="Region ID is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            delete_regions_info = [
+                SherlockLayerService_pb2.DeleteModelingRegionRequest.DeleteModelingRegionInfo(
+                    ccaName=region["cca_name"], regionId=region["region_id"]
+                )
+                for region in delete_regions
+            ]
+
+            request = SherlockLayerService_pb2.DeleteModelingRegionRequest(
+                project=project, deleteRegions=delete_regions_info
+            )
+
+            response = self.stub.deleteModelingRegion(request)
+
+            if response.value == -1:
+                raise SherlockDeleteModelingRegionError(message=response.message)
+
+        except SherlockDeleteModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
