@@ -14,6 +14,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteAllICTFixturesError,
     SherlockDeleteAllMountPointsError,
     SherlockDeleteAllTestPointsError,
+    SherlockDeleteModelingRegionError,
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPoints,
@@ -51,6 +52,7 @@ def test_all():
     region_id = helper_test_add_modeling_region(layer)
     region_id = helper_test_update_modeling_region(layer, region_id)
     helper_test_copy_modeling_region(layer, region_id)
+    helper_test_delete_modeling_region(layer, region_id)
 
 
 def helper_test_add_potting_region(layer):
@@ -1161,6 +1163,72 @@ def helper_test_copy_modeling_region(layer, region_id):
             assert result == 0
         except SherlockCopyModelingRegionError as e:
             pytest.fail(e.str_itr())
+
+
+def helper_test_delete_modeling_region(layer, region_id):
+
+    # Invalid project name
+    try:
+        layer.delete_modeling_region("", [{"cca_name": "Main Board", "region_id": "12345"}])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Project name is invalid."
+
+    # Non-list delete regions
+    try:
+        layer.delete_modeling_region("Tutorial Project", "not_a_list")
+        pytest.fail("No exception thrown when using a non-list delete regions")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Delete regions should be a list."
+
+    # Invalid modeling regions list
+    try:
+        layer.delete_modeling_region("Tutorial Project", [])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Delete regions list is empty."
+
+    # Non-dictionary delete region
+    try:
+        layer.delete_modeling_region("Tutorial Project", ["not_a_dict"])
+        pytest.fail("No exception thrown when using a non-dictionary delete region")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Each region should be a dictionary."
+
+    # Invalid CCA name
+    try:
+        layer.delete_modeling_region("Tutorial Project", [{"cca_name": "", "region_id": "12345"}])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: CCA name is invalid."
+
+    # Invalid region ID
+    try:
+        layer.delete_modeling_region(
+            "Tutorial Project", [{"cca_name": "Main Board", "region_id": ""}]
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Region ID is invalid."
+
+    if layer._is_connection_up():
+        # Unhappy project name
+        try:
+            layer.delete_modeling_region(
+                "Tutorial Project", [{"cca_name": "Main Board", "region_id": "InvalidID"}]
+            )
+            pytest.fail("No exception thrown when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockDeleteModelingRegionError
+
+        # Valid request
+        try:
+            result = layer.delete_modeling_region(
+                "Tutorial Project", [{"cca_name": "Main Board", "region_id": region_id}]
+            )
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
 
 
 if __name__ == "__main__":
