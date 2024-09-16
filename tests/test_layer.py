@@ -1174,12 +1174,26 @@ def helper_test_delete_modeling_region(layer, region_id):
     except SherlockDeleteModelingRegionError as e:
         assert str(e) == "Delete modeling region error: Project name is invalid."
 
+    # Non-list delete regions
+    try:
+        layer.delete_modeling_region("Tutorial Project", "not_a_list")
+        pytest.fail("No exception thrown when using a non-list delete regions")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Delete regions should be a list."
+
     # Invalid modeling regions list
     try:
         layer.delete_modeling_region("Tutorial Project", [])
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockDeleteModelingRegionError as e:
         assert str(e) == "Delete modeling region error: Delete regions list is empty."
+
+    # Non-dictionary delete region
+    try:
+        layer.delete_modeling_region("Tutorial Project", ["not_a_dict"])
+        pytest.fail("No exception thrown when using a non-dictionary delete region")
+    except SherlockDeleteModelingRegionError as e:
+        assert str(e) == "Delete modeling region error: Each region should be a dictionary."
 
     # Invalid CCA name
     try:

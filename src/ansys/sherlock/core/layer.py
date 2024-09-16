@@ -1491,6 +1491,10 @@ class Layer(GrpcStub):
             if not copy_regions:
                 raise SherlockCopyModelingRegionError(message="Copy regions list is empty.")
 
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
             copy_regions_request = []
             for region in copy_regions:
                 if "cca_name" not in region or region["cca_name"] == "":
