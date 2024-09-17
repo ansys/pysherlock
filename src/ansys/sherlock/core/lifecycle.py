@@ -1797,12 +1797,18 @@ class Lifecycle(GrpcStub):
             )
             response = self.stub.loadThermalProfile(request)
             return_code = response.returnCode
-            if return_code.value == -1:
-                raise SherlockLoadThermalProfileError(return_code.message)
 
-            return return_code.value
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockLoadThermalProfileError(error_array=response.errors)
+
+                raise SherlockLoadThermalProfileError(message=return_code.message)
+            else:
+                LOG.info(return_code.message)
+                return return_code.value
         except SherlockLoadThermalProfileError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     def load_harmonic_profile(self, project, phase_name, event_name, file_path):
