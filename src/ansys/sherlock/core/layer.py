@@ -1491,11 +1491,6 @@ class Layer(GrpcStub):
             if not copy_regions:
                 raise SherlockCopyModelingRegionError(message="Copy regions list is empty.")
 
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
-
-            copy_regions_request = []
             for region in copy_regions:
                 if "cca_name" not in region or region["cca_name"] == "":
                     raise SherlockCopyModelingRegionError(message="CCA name is invalid.")
@@ -1508,6 +1503,13 @@ class Layer(GrpcStub):
                 if "center_y" not in region or not isinstance(region["center_y"], float):
                     raise SherlockCopyModelingRegionError(message="Center Y coordinate is invalid.")
 
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            copy_regions_request = []
+
+            for region in copy_regions:
                 copy_region = (
                     SherlockLayerService_pb2.CopyModelingRegionRequest.CopyModelingRegionInfo(
                         ccaName=region["cca_name"],
