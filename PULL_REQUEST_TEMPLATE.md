@@ -1,5 +1,7 @@
 Checklist:
 - [] Run unit tests and make sure they all pass
+		- Run tests without Sherlock running
+		- Run tests with Sherlock GRPC connection
 - [] Check and fix style errors
 		- pre-commit command line check
 		- Problems tab in PyCharm
@@ -10,4 +12,4 @@ Checklist:
 		- Open index.html
 		- Click on "API Reference" at the top.
 		- Verify HTML for API changes.
-- [] Check that test code coverage is at least 80% when Sherlock is running and can be connected to using gRPC
+- [] Check that test code coverage is at least 80% when Sherlock is running
