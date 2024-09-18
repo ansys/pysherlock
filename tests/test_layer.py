@@ -17,7 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteModelingRegionError,
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
-    SherlockExportAllTestPoints,
+    SherlockExportAllTestPointsError,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -556,7 +556,7 @@ def helper_test_export_all_test_points(layer):
             "Test Points.csv",
         )
         pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockExportAllTestPoints as e:
+    except SherlockExportAllTestPointsError as e:
         assert e.str_itr()[0] == "Export test points error: Project name is invalid."
 
     try:
@@ -566,7 +566,7 @@ def helper_test_export_all_test_points(layer):
             "Test Points.csv",
         )
         pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockExportAllTestPoints as e:
+    except SherlockExportAllTestPointsError as e:
         assert e.str_itr()[0] == "Export test points error: CCA name is invalid."
 
     try:
@@ -576,7 +576,7 @@ def helper_test_export_all_test_points(layer):
             "",
         )
         pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockExportAllTestPoints as e:
+    except SherlockExportAllTestPointsError as e:
         assert e.str_itr()[0] == "Export test points error: File path is required."
 
     if layer._is_connection_up():
@@ -594,7 +594,7 @@ def helper_test_export_all_test_points(layer):
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
-            assert type(e) == SherlockExportAllTestPoints
+            assert type(e) == SherlockExportAllTestPointsError
 
         try:
             result = layer.export_all_test_points(
@@ -605,7 +605,7 @@ def helper_test_export_all_test_points(layer):
 
             assert os.path.exists(test_points_file)
             assert result == 0
-        except SherlockExportAllTestPoints as e:
+        except SherlockExportAllTestPointsError as e:
             pytest.fail(str(e.str_itr()))
 
 

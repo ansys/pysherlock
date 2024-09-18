@@ -31,7 +31,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteModelingRegionError,
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
-    SherlockExportAllTestPoints,
+    SherlockExportAllTestPointsError,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -713,11 +713,11 @@ class Layer(GrpcStub):
         """
         try:
             if project == "":
-                raise SherlockExportAllTestPoints(message="Project name is invalid.")
+                raise SherlockExportAllTestPointsError(message="Project name is invalid.")
             if cca_name == "":
-                raise SherlockExportAllTestPoints(message="CCA name is invalid.")
+                raise SherlockExportAllTestPointsError(message="CCA name is invalid.")
             if export_file == "":
-                raise SherlockExportAllTestPoints(message="File path is required.")
+                raise SherlockExportAllTestPointsError(message="File path is required.")
 
             if not self._is_connection_up():
                 LOG.error("There is no connection to a gRPC service.")
@@ -732,16 +732,16 @@ class Layer(GrpcStub):
                 forceUnits=force_units,
             )
 
-            return_code = self.stub.exportAllTestPoints(request)
+            response = self.stub.exportAllTestPoints(request)
 
-            if return_code.value != 0:
-                raise SherlockExportAllTestPoints(error_array=return_code.message)
+            if response.value == -1:
+                raise SherlockExportAllTestPointsError(message=response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
 
-            return return_code.value
-
-        except SherlockExportAllTestPoints as e:
-            for error in e.str_itr():
-                LOG.error(error)
+        except SherlockExportAllTestPointsError as e:
+            LOG.error(e.message)
             raise e
 
     def export_all_test_fixtures(
