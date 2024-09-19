@@ -1319,17 +1319,17 @@ class Analysis(GrpcStub):
 
     def update_natural_frequency_props(
         self,
-        project,
-        cca_name,
-        natural_freq_count,
-        natural_freq_min,
-        natural_freq_min_units,
-        natural_freq_max,
-        natural_freq_max_units,
-        part_validation_enabled,
-        require_material_assignment_enabled,
-        analysis_temp=None,
-        analysis_temp_units=None,
+        project: str,
+        cca_name: str,
+        natural_freq_count: int,
+        natural_freq_min: int,
+        natural_freq_min_units: str,
+        natural_freq_max: int,
+        natural_freq_max_units: str,
+        part_validation_enabled: bool,
+        require_material_assignment_enabled: bool,
+        analysis_temp: float = None,
+        analysis_temp_units: str = None,
     ):
         """Update properties for a natural frequency analysis.
 
@@ -1341,12 +1341,12 @@ class Analysis(GrpcStub):
             Name of the CCA.
         natural_freq_count: int
             Natural frequency result count.
-        natural_freq_min: float, optional
+        natural_freq_min: int, optional
             Minimum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_min_units: str, optional
             Minimum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
             This parameter is for NX Nastran analysis only.
-        natural_freq_max: float, optional
+        natural_freq_max: int, optional
             Maximum frequency. This parameter is for NX Nastran analysis only.
         natural_freq_max_units: str, optional
             Maximum frequency units. Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
