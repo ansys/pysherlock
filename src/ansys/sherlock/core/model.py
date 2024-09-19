@@ -275,22 +275,7 @@ class Model(GrpcStub):
         try:
             if not project_name:
                 raise SherlockModelServiceError("Project name is invalid.")
-            if not cca_name:
-                raise SherlockModelServiceError("CCA name is invalid.")
-            if not copper_layer_name:
-                raise SherlockModelServiceError("Copper layer name is required.")
-            if max_arc_segment is None:
-                raise SherlockModelServiceError("Maximum arc segment is required.")
-            if not max_arc_segment_units:
-                raise SherlockModelServiceError("Maximum arc segment units are required.")
-            if min_trace_area is None:
-                raise SherlockModelServiceError("Minimum trace area is required.")
-            if not min_trace_area_units:
-                raise SherlockModelServiceError("Minimum trace area units are required.")
-            if min_hole_area is None:
-                raise SherlockModelServiceError("Minimum hole area is required.")
-            if not min_hole_area_units:
-                raise SherlockModelServiceError("Minimum hole area units are required.")
+
         except Exception as e:
             LOG.error(str(e))
             raise
