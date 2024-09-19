@@ -557,7 +557,7 @@ def helper_test_export_all_test_points(layer):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportAllTestPointsError as e:
-        assert e.str_itr()[0] == "Export test points error: Project name is invalid."
+        assert str(e) == "Export test points error: Project name is invalid."
 
     try:
         layer.export_all_test_points(
@@ -567,7 +567,7 @@ def helper_test_export_all_test_points(layer):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportAllTestPointsError as e:
-        assert e.str_itr()[0] == "Export test points error: CCA name is invalid."
+        assert str(e) == "Export test points error: CCA name is invalid."
 
     try:
         layer.export_all_test_points(
@@ -577,7 +577,7 @@ def helper_test_export_all_test_points(layer):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockExportAllTestPointsError as e:
-        assert e.str_itr()[0] == "Export test points error: File path is required."
+        assert str(e) == "Export test points error: File path is required."
 
     if layer._is_connection_up():
         if platform.system() == "Windows":
@@ -606,7 +606,7 @@ def helper_test_export_all_test_points(layer):
             assert os.path.exists(test_points_file)
             assert result == 0
         except SherlockExportAllTestPointsError as e:
-            pytest.fail(str(e.str_itr()))
+            pytest.fail(str(e))
 
 
 def helper_test_export_all_test_fixtures(layer):

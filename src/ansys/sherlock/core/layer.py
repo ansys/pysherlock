@@ -736,13 +736,12 @@ class Layer(GrpcStub):
 
             if response.value == -1:
                 raise SherlockExportAllTestPointsError(message=response.message)
-            else:
-                LOG.info(response.message)
-                return response.value
 
         except SherlockExportAllTestPointsError as e:
-            LOG.error(e.message)
+            LOG.error(str(e))
             raise e
+
+        return response.value
 
     def export_all_test_fixtures(
         self,
