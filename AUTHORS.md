@@ -8,7 +8,9 @@
 
 * [Alexander Kaszynski](https://github.com/akaszynski)
 * [Ethan Ermovick](https://github.com/ansys-eermovic)
-* [Jeff Moody](https://github.com/ansys-jmoody)
+* [Jeff Moody](https://github.com/ansjmoody)
 * [Paul Walters](https://github.com/ansys-pwalters)
 * [Roberto Pastor](https://github.com/RobPasMue)
 * [Ryan Giannamore](https://github.com/Ansys-rgiannam)
+* [Keith Hanson](https://github.com/anskhanson)
+* [Nayane Fernandes](https://github.com/ansnfernand)
