@@ -1121,20 +1121,16 @@ class SherlockUpdateTestFixturesByFileError(Exception):
         return [f"Update test fixtures by file error: {self.message}"]
 
 
-class SherlockExportAllTestPoints(Exception):
+class SherlockExportAllTestPointsError(Exception):
     """Contains the errors raised when test points cannot be exported."""
 
-    def __init__(self, message=None, error_array=None):
+    def __init__(self, message):
         """Initialize error message."""
         self.message = message
-        self.error_array = error_array
 
-    def str_itr(self):
-        """Create list of error messages."""
-        if self.message is None:
-            return [f"Export test points error: {error}" for error in self.error_array]
-        assert self.error_array is None
-        return [f"Export test points error: {self.message}"]
+    def __str__(self):
+        """Format error message."""
+        return f"Export test points error: {self.message}"
 
 
 class SherlockExportAllTestFixtures(Exception):
