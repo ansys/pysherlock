@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==0.1.33",
+    "ansys-api-sherlock==0.1.34",
     "grpcio>=1.17",
     "protobuf>=3.20",
 ]
