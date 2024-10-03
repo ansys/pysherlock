@@ -1,0 +1,22 @@
+﻿ansys.sherlock.core.types.project\_types.IcepakFile
+===================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: IcepakFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   
