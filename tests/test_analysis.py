@@ -28,7 +28,6 @@ from ansys.sherlock.core.types.analysis_types import (
     ElementOrder,
     ModelSource,
     RunAnalysisRequestAnalysisType,
-    RunStrainMapAnalysisRequestAnalysisType,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
@@ -120,7 +119,10 @@ def helper_test_run_analysis(analysis):
 
 def helper_test_run_strain_map_analysis(analysis):
     """Test run_strain_map_analysis API."""
-    random_vibe_analysis_type = RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE
+    analysis_type_enum = (
+        SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
+    )
+    random_vibe_analysis_type = analysis_type_enum.RandomVibe
     if analysis._is_connection_up():
         try:
             analysis.run_strain_map_analysis(
@@ -160,6 +162,31 @@ def helper_test_run_strain_map_analysis(analysis):
                             [
                                 "Phase 1",
                                 "Random Vibe",
+                                "TOP",
+                                "MemoryCard1Strain",
+                                "Memory Card 1",
+                            ],
+                        ],
+                    ]
+                ],
+            )
+            assert result == 0
+        except SherlockRunStrainMapAnalysisError as e:
+            pytest.fail(e.message)
+
+        try:
+            result = analysis.run_strain_map_analysis(
+                "AssemblyTutorial",
+                "Main Board",
+                [
+                    [
+                        analysis_type_enum.RandomVibe,
+                        [
+                            ["Phase 1", "Harmonic Vibe", "TOP", "MainBoardStrain - Top"],
+                            ["Phase 1", "Harmonic Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+                            [
+                                "Phase 1",
+                                "Harmonic Vibe",
                                 "TOP",
                                 "MemoryCard1Strain",
                                 "Memory Card 1",
