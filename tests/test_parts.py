@@ -1,8 +1,7 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 import os
 import platform
-import time
 
 import grpc
 import pytest
@@ -35,9 +34,7 @@ def test_all():
     parts = Parts(channel)
 
     helper_test_update_parts_list(parts)
-    time.sleep(1)
     helper_test_update_parts_list_properties(parts)
-    time.sleep(1)
     helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
@@ -61,8 +58,6 @@ def helper_test_update_parts_list(parts):
                 PartsListSearchDuplicationMode.ERROR,
             )
             assert result == 0
-            # wait for Sherlock to finish updating so subsequent tests don't fail
-            time.sleep(1)
         except Exception as e:
             pytest.fail(e.message)
 
@@ -534,9 +529,6 @@ def helper_test_export_parts_list(parts):
                 parts_list_file,
             )
             assert os.path.exists(parts_list_file)
-            # may need to wait for a bit because the response may be returned
-            # before Sherlock finishes writing the file
-            time.sleep(0.5)
             assert result == 0
         except Exception as e:
             pytest.fail(e.message)

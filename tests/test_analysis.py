@@ -1,5 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
-import time
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 try:
     import SherlockAnalysisService_pb2
@@ -41,7 +40,6 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     analysis = Analysis(channel)
     helper_test_run_analysis(analysis)
-    time.sleep(1)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
     helper_test_get_ict_analysis_input_fields(analysis)
