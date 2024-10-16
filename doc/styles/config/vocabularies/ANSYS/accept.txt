@@ -7,3 +7,6 @@ GitHub
 leaded
 ODB\+\+
 Pythonic
+venv
+Makefile
+py
