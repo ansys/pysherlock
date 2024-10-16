@@ -1,6 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
-
-import time
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 import grpc
 import pytest
@@ -167,8 +165,6 @@ def helper_test_gen_stackup(stackup):
                 "mil",
             )
             assert result == 0
-            # wait for the process to finish to allow tests that modify a layer to succeed
-            time.sleep(2)
         except SherlockGenStackupError as e:
             pytest.fail(str(e))
 
@@ -275,7 +271,6 @@ def helper_test_update_conductor_layer(stackup):
                 resin_material="Generic FR-4 Generic FR-4",
             )
             assert result == 0
-            time.sleep(1)
         except SherlockUpdateConductorLayerError as e:
             pytest.fail(str(e))
 
@@ -465,7 +460,6 @@ def helper_test_update_laminate_layer(stackup):
                 "0.0",
             )
             assert result == 0
-            time.sleep(1)
         except SherlockUpdateLaminateLayerError as e:
             pytest.fail(str(e))
 
