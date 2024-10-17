@@ -77,7 +77,8 @@ def launch_sherlock(
         args = [_get_sherlock_exe_path()]
         args.append("-grpcPort=" + str(port))
         if single_project_path != "":
-            args.append(f'-singleProject "{single_project_path}"')
+            args.append("-singleProject")
+            args.append(single_project_path)
         if sherlock_cmd_args != "":
             args.append(f"{shlex.split(sherlock_cmd_args)}")
         print(args)
