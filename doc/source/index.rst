@@ -13,7 +13,7 @@ PySherlock is a Python client library for the Ansys Sherlock product.
     :start-after: .. readme_start
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
     :caption: Getting Started
     :hidden:
 
@@ -21,3 +21,4 @@ PySherlock is a Python client library for the Ansys Sherlock product.
     user_guide/index
     api/index
     contributing
+    changelog
