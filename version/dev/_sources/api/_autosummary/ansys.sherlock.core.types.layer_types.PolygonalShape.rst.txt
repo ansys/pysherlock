@@ -1,0 +1,38 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PolygonalShape
+=====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PolygonalShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PolygonalShape.points
+      
+      
+      PolygonalShape.rotation
+      
+   
+   
+
+.. vale on
