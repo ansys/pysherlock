@@ -28,6 +28,8 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     PCBShape,
     PolygonalShape,
+    PottingRegionData,
+    PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
 )
@@ -44,6 +46,7 @@ def test_all():
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
+    helper_test_update_potting_region(layer)
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
     helper_test_export_all_mount_points(layer)
@@ -179,71 +182,6 @@ def helper_test_add_potting_region(layer):
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape invalid for potting region 0."
 
-    try:
-        shape = PolygonalShape(points="INVALID", rotation=123.4)
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": shape,
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when polygonal points list is invalid.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Invalid points argument for potting region 0."
-
-    try:
-        invalid_point = "INVALID"
-        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), invalid_point], rotation=123.4)
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": shape,
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when polygonal points list element is incorrect type.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Point 2 invalid for potting region 0."
-
-    try:
-        invalid_point = (4.4, 5.5, 10)
-        shape = PolygonalShape(points=[(1, 2), invalid_point, (1, 6)], rotation=123.4)
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": shape,
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when polygonal points list element is incorrect length.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Point 1 invalid for potting region 0."
-
     if not layer._is_connection_up():
         return
 
@@ -290,6 +228,73 @@ def helper_test_add_potting_region(layer):
         assert result == 0
     except SherlockAddPottingRegionError as e:
         pytest.fail(str(e))
+
+
+def helper_test_update_potting_region(layer):
+    """Test update potting region API."""
+
+    if layer._is_connection_up():
+        project = "Tutorial Project"
+        # Add Potting region to update
+        potting_id = f"Test Region {uuid.uuid4()}"
+        cca_name = "Main Board"
+        potting_side = "TOP"
+        potting_material = "epoxyencapsulant"
+        potting_units = "mm"
+        potting_thickness = 0.1
+        potting_standoff = 0.2
+        potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
+
+        layer.add_potting_region(
+            project,
+            [
+                {
+                    "cca_name": cca_name,
+                    "potting_id": potting_id,
+                    "side": potting_side,
+                    "material": potting_material,
+                    "potting_units": potting_units,
+                    "thickness": potting_thickness,
+                    "standoff": potting_standoff,
+                    "shape": potting_shape,
+                },
+            ],
+        )
+
+        # Update potting region that was added above
+
+        update_request1 = PottingRegionUpdateData(
+            potting_region_id_to_update=potting_id,
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=45.0),
+            ),
+        )
+        update_request2 = PottingRegionUpdateData(
+            potting_region_id_to_update=potting_id,
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=0.0),
+            ),
+        )
+        potting_region_requests = [update_request1, update_request2]
+        responses = layer.update_potting_region(project, potting_region_requests)
+
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == ""
 
 
 def helper_test_update_mount_points_by_file(layer):

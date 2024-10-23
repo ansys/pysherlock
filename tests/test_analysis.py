@@ -178,7 +178,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 "Main Board",
                 [
                     [
-                        analysis_type_enum.RandomVibe,
+                        analysis_type_enum.HarmonicVibe,
                         [
                             ["Phase 1", "Harmonic Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Harmonic Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
