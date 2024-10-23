@@ -8,6 +8,13 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2
 
 
+def basic_str_validator(value: str, field_name: str):
+    """Apply basic string validation."""
+    if value is None or value == "":
+        raise ValueError(field_name + " is invalid because it is None or empty.")
+    return value
+
+
 class ListUnitsRequestUnitType:
     """Constants for Unit Type in the List Units request."""
 
