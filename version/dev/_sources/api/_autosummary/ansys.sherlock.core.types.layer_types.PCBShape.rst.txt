@@ -1,0 +1,26 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PCBShape
+===============================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PCBShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   
+
+.. vale on
