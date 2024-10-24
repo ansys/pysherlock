@@ -34,6 +34,34 @@ class TestLauncher(unittest.TestCase):
             launcher._get_sherlock_exe_path(),
         )
 
+    @patch("subprocess.Popen")
+    @patch.dict(
+        os.environ,
+        {
+            "AWP_ROOT242": "C:\\Program Files\\ANSYS Inc\\v242",
+        },
+        clear=True,
+    )
+    def test_launch_sherlock_with_version(self, mock_popen):
+        mock_popen.return_value.communicate.return_value = (b"", b"")
+        mock_popen.return_value.returncode = 0
+
+        year = 24
+        release_number = 2
+        project_path = "D:\\Sherlock\\Projects\\Assembly Tutorial"
+        sherlock = launcher.launch_sherlock(
+            port=9090, single_project_path=project_path, year=year, release_number=release_number
+        )
+
+        mock_popen.assert_called_once_with(
+            [
+                "C:\\Program Files\\ANSYS Inc\\v242\\sherlock\\SherlockClient.exe",
+                "-grpcPort=9090",
+                "-singleProject",
+                project_path,
+            ]
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

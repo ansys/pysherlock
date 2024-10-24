@@ -33,7 +33,12 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 
 
 def launch_sherlock(
-    host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="", sherlock_cmd_args=""
+    host=LOCALHOST,
+    port=SHERLOCK_DEFAULT_PORT,
+    release_number=None,
+    single_project_path="",
+    sherlock_cmd_args="",
+    year=None,
 ):
     r"""Launch Sherlock and start gRPC on a given host and port.
 
@@ -44,10 +49,14 @@ def launch_sherlock(
         is the IP address for the local host.
     port : int, optional
         Port number for the connection.
+    release_number : int, optional
+        Release number of Sherlock to launch.
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
     sherlock_cmd_args : str, optional
         Additional command arguments for launching Sherlock.
+    year : int, optional
+        Year of the Sherlock release to launch.
 
     Returns
     -------
@@ -60,7 +69,7 @@ def launch_sherlock(
     >>> launcher.launch_sherlock()
 
     >>> from ansys.sherlock.core import launcher
-    >>> launcher.launch_sherlock(port=9092)
+    >>> launcher.launch_sherlock(port=9092, year=2024, release_number=1)
 
     >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
@@ -74,7 +83,7 @@ def launch_sherlock(
         return None
 
     try:
-        args = [_get_sherlock_exe_path()]
+        args = [_get_sherlock_exe_path(year=year, release_number=release_number)]
         args.append("-grpcPort=" + str(port))
         if single_project_path != "":
             args.append("-singleProject")
@@ -132,12 +141,19 @@ def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     return SHERLOCK
 
 
-def _get_base_ansys():
+def _get_base_ansys(year=None, release_number=None):
     supported_installed_versions = {
         env_key: path
         for env_key, path in os.environ.items()
         if env_key.startswith("AWP_ROOT") and os.path.isdir(path)
     }
+
+    if year and release_number:
+        version_key = f"AWP_ROOT{year}{release_number}"
+        if version_key in supported_installed_versions:
+            return supported_installed_versions[version_key]
+        else:
+            return ""
 
     for key in sorted(supported_installed_versions, reverse=True):
         ansys_version = _get_ansys_version_from_awp_root(key)
@@ -153,8 +169,8 @@ def _get_ansys_version_from_awp_root(awp_root):
     return ""
 
 
-def _get_sherlock_exe_path():
-    ansys_base = _get_base_ansys()
+def _get_sherlock_exe_path(year=None, release_number=None):
+    ansys_base = _get_base_ansys(year=year, release_number=release_number)
     if not ansys_base:
         return ""
     if os.name == "nt":
