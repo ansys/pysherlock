@@ -46,7 +46,7 @@ class TestLauncher(unittest.TestCase):
         mock_popen.return_value.communicate.return_value = (b"", b"")
         mock_popen.return_value.returncode = 0
 
-        year = 24
+        year = 2024
         release_number = 2
         project_path = "D:\\Sherlock\\Projects\\Assembly Tutorial"
         sherlock = launcher.launch_sherlock(

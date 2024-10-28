@@ -33,13 +33,13 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 
 
 def launch_sherlock(
-    host=LOCALHOST,
-    port=SHERLOCK_DEFAULT_PORT,
-    release_number=None,
-    single_project_path="",
-    sherlock_cmd_args="",
-    year=None,
-):
+    host: str = LOCALHOST,
+    port: int = SHERLOCK_DEFAULT_PORT,
+    release_number: int = None,
+    single_project_path: str = "",
+    sherlock_cmd_args: str = "",
+    year: int = None,
+) -> Sherlock:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
     Parameters
@@ -50,13 +50,15 @@ def launch_sherlock(
     port : int, optional
         Port number for the connection.
     release_number : int, optional
-        Release number of Sherlock to launch.
+        Release number of Sherlock to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
     sherlock_cmd_args : str, optional
         Additional command arguments for launching Sherlock.
     year : int, optional
-        Year of the Sherlock release to launch.
+        Year of the Sherlock release to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
 
     Returns
     -------
@@ -149,11 +151,13 @@ def _get_base_ansys(year=None, release_number=None):
     }
 
     if year and release_number:
+        # Extract the last two digits if year is a four-digit number
+        if 1000 <= year <= 9999:
+            year = year % 100
+
         version_key = f"AWP_ROOT{year}{release_number}"
         if version_key in supported_installed_versions:
             return supported_installed_versions[version_key]
-        else:
-            return ""
 
     for key in sorted(supported_installed_versions, reverse=True):
         ansys_version = _get_ansys_version_from_awp_root(key)
