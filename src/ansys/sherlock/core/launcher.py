@@ -150,10 +150,14 @@ def _get_base_ansys(year=None, release_number=None):
         if env_key.startswith("AWP_ROOT") and os.path.isdir(path)
     }
 
-    if year and release_number:
-        # Extract the last two digits if year is a four-digit number
-        if 1000 <= year <= 9999:
-            year = year % 100
+    try:
+        if year and release_number:
+            year = _extract_sherlock_version_year(year)
+            version_key = f"AWP_ROOT{year}{release_number}"
+            if version_key in supported_installed_versions:
+                return supported_installed_versions[version_key]
+    except ValueError as e:
+        LOG.error(f"Error extracting Sherlock version year: {e}")
 
         version_key = f"AWP_ROOT{year}{release_number}"
         if version_key in supported_installed_versions:
@@ -182,3 +186,9 @@ def _get_sherlock_exe_path(year=None, release_number=None):
     else:
         sherlock_bin = os.path.join(ansys_base, "sherlock", "runSherlock")
     return sherlock_bin
+
+
+def _extract_sherlock_version_year(year):
+    if 1000 <= year <= 9999:
+        return year % 100
+    raise ValueError("Year must be a 4-digit integer.")

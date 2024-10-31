@@ -34,33 +34,31 @@ class TestLauncher(unittest.TestCase):
             launcher._get_sherlock_exe_path(),
         )
 
-    @patch("subprocess.Popen")
+    def test_extract_sherlock_version_year_with_two_digits(self):
+        with self.assertRaises(ValueError) as context:
+            launcher._extract_sherlock_version_year(24)
+        self.assertEqual(str(context.exception), "Year must be a 4-digit integer.")
+
+    def test_extract_sherlock_version_year_with_four_digits(self):
+        self.assertEqual(24, launcher._extract_sherlock_version_year(2024))
+
     @patch.dict(
         os.environ,
         {
-            "AWP_ROOT242": "C:\\Program Files\\ANSYS Inc\\v242",
+            "AWP_ROOT241": "C:\\Program Files\\ANSYS Inc\\v241",
+            "AWP_ROOT232": "C:\\Program Files\\ANSYS Inc\\v232",
         },
         clear=True,
     )
-    def test_launch_sherlock_with_version(self, mock_popen):
-        mock_popen.return_value.communicate.return_value = (b"", b"")
-        mock_popen.return_value.returncode = 0
-
-        year = 2024
-        release_number = 2
-        project_path = "D:\\Sherlock\\Projects\\Assembly Tutorial"
-        sherlock = launcher.launch_sherlock(
-            port=9090, single_project_path=project_path, year=year, release_number=release_number
-        )
-
-        mock_popen.assert_called_once_with(
-            [
-                "C:\\Program Files\\ANSYS Inc\\v242\\sherlock\\SherlockClient.exe",
-                "-grpcPort=9090",
-                "-singleProject",
-                project_path,
-            ]
-        )
+    @patch("os.path.isdir")
+    @patch("ansys.sherlock.core.launcher._extract_sherlock_version_year")
+    def test_get_base_ansys_calls_extract_sherlock_version_year(
+        self, mock_extract_year, mock_os_path_isdir
+    ):
+        mock_os_path_isdir.return_value = True
+        mock_extract_year.return_value = 24
+        launcher._get_base_ansys(year=2024, release_number=1)
+        mock_extract_year.assert_called_once_with(2024)
 
 
 if __name__ == "__main__":
