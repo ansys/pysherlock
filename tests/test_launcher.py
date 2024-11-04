@@ -36,7 +36,7 @@ class TestLauncher(unittest.TestCase):
 
     def test_extract_sherlock_version_year_with_two_digits(self):
         with self.assertRaises(ValueError) as context:
-            launcher._extract_sherlock_version_year(24)
+            launcher._extract_sherlock_version_year(999)
         self.assertEqual(str(context.exception), "Year must be a 4-digit integer.")
 
     def test_extract_sherlock_version_year_with_four_digits(self):
