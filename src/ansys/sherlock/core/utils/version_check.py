@@ -34,10 +34,8 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
             cur_version = int(self._server_version)
             nonlocal min_version
             nonlocal max_version
-            if max_version is None:
-                max_version = cur_version
 
-            if min_version > max_version:
+            if max_version is not None and min_version > max_version:
                 raise ValueError("min_version is > max_version in version decorator")
             if cur_version < min_version:
                 raise SherlockVersionError(
@@ -48,7 +46,7 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
                     + " update server to at least version "
                     + str(min_version)
                 )
-            elif cur_version > max_version:
+            if max_version is not None and cur_version > max_version:
                 raise SherlockVersionError(
                     "Sherlock version "
                     + str(cur_version)
@@ -57,8 +55,9 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
                     + " deprecated after version "
                     + str(max_version)
                 )
-            else:
-                return func(self, *args, **kwargs)
+
+            # If no issues have been raised call the wrapped function
+            return func(self, *args, **kwargs)
 
         return wrapper
 
