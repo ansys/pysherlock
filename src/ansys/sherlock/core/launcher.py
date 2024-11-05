@@ -157,9 +157,7 @@ def _get_base_ansys(year: int = None, release_number: int = None) -> str:
             if version_key in supported_installed_versions:
                 return supported_installed_versions[version_key]
             else:
-                raise ValueError(
-                    f"Specified version AWP_ROOT{year}{release_number} is not installed."
-                )
+                raise ValueError(f"Sherlock {year}{release_number} is not installed.")
         except ValueError as e:
             LOG.error(f"Error extracting Sherlock version year: {e}")
             raise
