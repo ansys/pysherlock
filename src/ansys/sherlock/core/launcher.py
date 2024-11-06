@@ -33,8 +33,13 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 
 
 def launch_sherlock(
-    host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT, single_project_path="", sherlock_cmd_args=""
-):
+    host: str = LOCALHOST,
+    port: int = SHERLOCK_DEFAULT_PORT,
+    single_project_path: str = "",
+    sherlock_cmd_args: str = "",
+    year: int = None,
+    release_number: int = None,
+) -> Sherlock:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
     Parameters
@@ -48,6 +53,12 @@ def launch_sherlock(
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
     sherlock_cmd_args : str, optional
         Additional command arguments for launching Sherlock.
+    year : int, optional
+        4-digit year of the Sherlock release to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
+    release_number : int, optional
+        Release number of Sherlock to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
 
     Returns
     -------
@@ -60,7 +71,7 @@ def launch_sherlock(
     >>> launcher.launch_sherlock()
 
     >>> from ansys.sherlock.core import launcher
-    >>> launcher.launch_sherlock(port=9092)
+    >>> launcher.launch_sherlock(port=9092, year=2024, release_number=1)
 
     >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
@@ -74,7 +85,7 @@ def launch_sherlock(
         return None
 
     try:
-        args = [_get_sherlock_exe_path()]
+        args = [_get_sherlock_exe_path(year=year, release_number=release_number)]
         args.append("-grpcPort=" + str(port))
         if single_project_path != "":
             args.append("-singleProject")
@@ -132,12 +143,24 @@ def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     return SHERLOCK
 
 
-def _get_base_ansys():
+def _get_base_ansys(year: int = None, release_number: int = None) -> str:
     supported_installed_versions = {
         env_key: path
         for env_key, path in os.environ.items()
         if env_key.startswith("AWP_ROOT") and os.path.isdir(path)
     }
+
+    if year is not None and release_number is not None:
+        try:
+            year = _extract_sherlock_version_year(year)
+            version_key = f"AWP_ROOT{year}{release_number}"
+            if version_key in supported_installed_versions:
+                return supported_installed_versions[version_key]
+            else:
+                raise ValueError(f"Sherlock {year} {release_number} is not installed.")
+        except ValueError as e:
+            LOG.error(f"Error extracting Sherlock version year: {e}")
+            raise
 
     for key in sorted(supported_installed_versions, reverse=True):
         ansys_version = _get_ansys_version_from_awp_root(key)
@@ -153,8 +176,8 @@ def _get_ansys_version_from_awp_root(awp_root):
     return ""
 
 
-def _get_sherlock_exe_path():
-    ansys_base = _get_base_ansys()
+def _get_sherlock_exe_path(year: int = None, release_number: int = None) -> str:
+    ansys_base = _get_base_ansys(year=year, release_number=release_number)
     if not ansys_base:
         return ""
     if os.name == "nt":
@@ -162,3 +185,9 @@ def _get_sherlock_exe_path():
     else:
         sherlock_bin = os.path.join(ansys_base, "sherlock", "runSherlock")
     return sherlock_bin
+
+
+def _extract_sherlock_version_year(year: int) -> int:
+    if 1000 <= year <= 9999:
+        return year % 100
+    raise ValueError("Year must be a 4-digit integer.")
