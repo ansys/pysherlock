@@ -5,6 +5,7 @@ import platform
 import uuid
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.errors import (
@@ -232,17 +233,38 @@ def helper_test_add_potting_region(layer):
 
 def helper_test_update_potting_region(layer):
     """Test update potting region API."""
+    project = "Tutorial Project"
+    # Add Potting region to update
+    potting_id = f"Test Region {uuid.uuid4()}"
+    cca_name = "Main Board"
+    potting_side = "TOP"
+    potting_material = "epoxyencapsulant"
+    potting_units = "mm"
+    potting_thickness = 0.1
+    potting_standoff = 0.2
+    try:
+        PottingRegionUpdateData(
+            potting_region_id_to_update="",
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=45.0),
+            ),
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Value error, potting_region_id_to_update is invalid because it is None or empty."
+        )
 
     if layer._is_connection_up():
-        project = "Tutorial Project"
-        # Add Potting region to update
-        potting_id = f"Test Region {uuid.uuid4()}"
-        cca_name = "Main Board"
-        potting_side = "TOP"
-        potting_material = "epoxyencapsulant"
-        potting_units = "mm"
-        potting_thickness = 0.1
-        potting_standoff = 0.2
+
         potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
 
         layer.add_potting_region(
