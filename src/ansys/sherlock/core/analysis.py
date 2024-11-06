@@ -1171,7 +1171,7 @@ class Analysis(GrpcStub):
 
         return fields
 
-    #  First PySherlock Release "0,2,0"
+    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_random_vibe_props(
         self,
@@ -1327,7 +1327,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0,2,0"
+    #  First PySherlock Release "0.2.0"
     @require_version()
     def get_natural_frequency_input_fields(self):
         """Get natural frequency property fields based on the user configuration.

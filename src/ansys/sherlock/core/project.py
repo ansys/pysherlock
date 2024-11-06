@@ -846,7 +846,7 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0,2,0"
+    #  First PySherlock Release "0.2.0"
     @require_version()
     def list_strain_maps(self, project, cca_names=None):
         """List the strain maps assigned to each CCA or given CCAs.
