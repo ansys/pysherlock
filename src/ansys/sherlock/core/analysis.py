@@ -198,7 +198,6 @@ class Analysis(GrpcStub):
         ----------
         model_source : ModelSource, optional
             Model source to get the harmonic vibe property fields from.
-            Only ModelSource.GENERATED is supported.
             The default is ``None``.
 
         Returns
@@ -254,8 +253,10 @@ class Analysis(GrpcStub):
 
             - cca_name : str
                 Name of the CCA.
+            - model_source: ModelSource
+                Model source. The default is ``None``.
             - harmonic_vibe_count : int
-                Number of harmonic vibe result layers to generate.
+                Number of harmonic vibe result layers to generate. The default is ``None``.
             - harmonic_vibe_damping: str
                 One or more modal damping ratios. The default is ``None``.
                 Separate multiple float values with commas.
@@ -291,6 +292,8 @@ class Analysis(GrpcStub):
             - reuse_modal_analysis: bool
                 Whether to reuse the natural frequency for modal analysis. The
                 default is ``None``. This parameter is for NX Nastran analysis only.
+            - strain_map_natural_freq: double
+                Natural frequency for strain map analysis.
 
         Returns
         -------
@@ -314,13 +317,21 @@ class Analysis(GrpcStub):
             "Test",
             [{
                 "cca_name": "Card",
+                "model_source": ModelSource.GENERATED,
                 "harmonic_vibe_count": 2,
                 "harmonic_vibe_damping": "0.01, 0.05",
                 "part_validation_enabled": False,
                 "require_material_assignment_enabled": False,
                 "analysis_temp": 20,
                 "analysis_temp_units": "C",
+                "force_model_rebuild": "AUTO",
                 "filter_by_event_frequency": False,
+                "natural_freq_min": 10,
+                "natural_freq_min_units": "Hz",
+                "natural_freq_max": 1000,
+                "natural_freq_max_units": "KHz",
+                "reuse_modal_analysis": True,
+                "strain_map_natural_freq": 100.13,
             },
             ]
         )
@@ -358,6 +369,11 @@ class Analysis(GrpcStub):
                     raise SherlockUpdateHarmonicVibePropsError(
                         message=f"CCA name is invalid for harmonic vibe properties {i}."
                     )
+
+                if "model_source" in harmonic_vibe_props.keys():
+                    model_source = harmonic_vibe_props["model_source"]
+                else:
+                    model_source = None
 
                 if "harmonic_vibe_count" in harmonic_vibe_props.keys():
                     harmonic_vibe_count = harmonic_vibe_props["harmonic_vibe_count"]
@@ -435,9 +451,16 @@ class Analysis(GrpcStub):
                 else:
                     reuse_modal_analysis = None
 
+                if "strain_map_natural_freq" in harmonic_vibe_props.keys():
+                    strain_map_natural_freq = harmonic_vibe_props["strain_map_natural_freq"]
+                else:
+                    strain_map_natural_freq = None
+
                 props_request = request.harmonicVibeProperties.add()
                 props_request.ccaName = cca_name
-                props_request.modelSource = SherlockAnalysisService_pb2.ModelSource.GENERATED
+
+                if model_source is not None:
+                    props_request.modelSource = model_source
 
                 if harmonic_vibe_count is not None:
                     props_request.harmonicVibeCount = harmonic_vibe_count
@@ -480,6 +503,8 @@ class Analysis(GrpcStub):
                 if reuse_modal_analysis is not None:
                     props_request.reuseModalAnalysis = reuse_modal_analysis
 
+                if strain_map_natural_freq is not None:
+                    props_request.strainMapNaturalFreq = strain_map_natural_freq
         except SherlockUpdateHarmonicVibePropsError as e:
             LOG.error(str(e))
             raise e
@@ -505,10 +530,6 @@ class Analysis(GrpcStub):
         """Get ICT analysis property fields based on the user configuration.
 
         Available Since: 2024R1
-
-        Parameters
-        ----------
-        None
 
         Returns
         -------
@@ -2038,6 +2059,7 @@ class Analysis(GrpcStub):
             Name of the CCA.
 
         Returns
+        -------
         PartsListValidationPropsResponse
             - returnCode : ReturnCode
                 - value : int
