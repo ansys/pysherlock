@@ -243,7 +243,7 @@ class Layer(GrpcStub):
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         """Update one or more potting regions in a specific project.
 
-        Parameters:
+        Parameters
         ----------
         project: str
             Name of the Sherlock project.
