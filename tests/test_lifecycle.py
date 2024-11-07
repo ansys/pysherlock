@@ -21,13 +21,14 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all life cycle APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    lifecycle = Lifecycle(channel)
+    lifecycle = Lifecycle(channel, SKIP_VERSION_CHECK)
 
     phase_name = helper_test_create_life_phase(lifecycle)
     random_vibe_event_name = helper_test_add_random_vibe_event(lifecycle, phase_name)

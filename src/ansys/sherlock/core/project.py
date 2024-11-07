@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all project management capabilities."""
 import os
@@ -10,10 +10,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2_grpc
 
-from ansys.tools.versioning.utils import requires_version
-
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockAddCCAError,
     SherlockAddProjectError,
@@ -42,17 +39,19 @@ from ansys.sherlock.core.types.project_types import (
     LegendBounds,
     StrainMapsFileType,
 )
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Project(GrpcStub):
     """Contains all project management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for Sherlock Project service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def delete_project(self, project):
         """Delete a Sherlock project.
 
@@ -99,7 +98,8 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def import_odb_archive(
         self,
         archive_file,
@@ -205,7 +205,8 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def import_ipc2581_archive(
         self,
         archive_file,
@@ -297,7 +298,8 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def generate_project_report(self, project, author, company, report_file):
         """Generate a project report.
 
@@ -374,7 +376,8 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise SherlockGenerateProjectReportError(str(e))
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def list_ccas(self, project, cca_names=None):
         """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
 
@@ -433,7 +436,8 @@ class Project(GrpcStub):
 
         return response.ccas
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def add_cca(self, project, cca_properties):
         """Add one or more CCAs to a project.
 
@@ -566,7 +570,8 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_strain_maps(self, project, strain_maps):
         """Add strain map files to CCAs in a Sherlock project.
 
@@ -841,7 +846,8 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0,2,0"
+    @require_version()
     def list_strain_maps(self, project, cca_names=None):
         """List the strain maps assigned to each CCA or given CCAs.
 
@@ -903,7 +909,8 @@ class Project(GrpcStub):
 
         return response.ccaStrainMaps
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def add_project(self, project_name: str, project_category: str, project_description: str):
         """Add a sherlock project to sherlock.
 
@@ -950,7 +957,8 @@ class Project(GrpcStub):
 
         return return_code.value
 
-    @requires_version("0,5,0", VERSION_MAP)
+    #  First PySherlock Release "0.5.0"
+    @require_version(242)
     def list_thermal_maps(self, project, cca_names=None):
         """List the thermal map files and their type assigned to each CCA of given CCAs.
 
@@ -1011,7 +1019,8 @@ class Project(GrpcStub):
 
         return response.ccaThermalMaps
 
-    @requires_version("0,5,0", VERSION_MAP)
+    #  First PySherlock Release "0.5.0"
+    @require_version(242)
     def update_thermal_maps(self, project, thermal_map_files):
         """
         Update thermal map files to a Sherlock project.
@@ -1298,7 +1307,8 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,5,0", VERSION_MAP)
+    #  First PySherlock Release "0.5.0"
+    @require_version(242)
     def add_thermal_maps(self, project, add_thermal_map_files):
         """
         Add thermal map files to a Sherlock project.
@@ -1608,7 +1618,8 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,5,0", VERSION_MAP)
+    #  First PySherlock Release "0.5.0"
+    @require_version(242)
     def import_project_zip_archive(self, project, category, archive_file):
         """
         Import a zipped project archive -- multiple project mode.
@@ -1663,7 +1674,8 @@ class Project(GrpcStub):
 
         return response.value
 
-    @requires_version("0,5,0", VERSION_MAP)
+    #  First PySherlock Release "0.5.0"
+    @require_version(242)
     def import_project_zip_archive_single_mode(
         self, project, category, archive_file, destination_file_directory
     ):
@@ -1741,7 +1753,8 @@ class Project(GrpcStub):
 
         return response.value
 
-    @requires_version("0,7,0", VERSION_MAP)
+    #  First PySherlock Release "0.7.0"
+    @require_version(251)
     def export_project(
         self,
         project_name,
@@ -1841,6 +1854,8 @@ class Project(GrpcStub):
 
         return response.value
 
+    #  First PySherlock Release "0.7.0"
+    @require_version(251)
     def create_cca_from_modeling_region(self, project, cca_from_mr_properties):
         """Create one or more CCAs from modeling regions in a given project.
 

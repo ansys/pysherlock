@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all analysis capabilities."""
 
@@ -9,10 +9,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2_grpc
 
-from ansys.tools.versioning.utils import requires_version
-
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockGetPartsListValidationAnalysisPropsError,
     SherlockRunAnalysisError,
@@ -28,14 +25,15 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Analysis(GrpcStub):
     """Contains all analysis capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for the Sherlock Analysis service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
         self.FIELD_NAMES = {
             "analysisTemp": "analysis_temp",
@@ -91,7 +89,8 @@ class Analysis(GrpcStub):
                     event = phase.events.add()
                     event.name = e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def run_analysis(
         self,
         project,
@@ -190,7 +189,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def get_harmonic_vibe_input_fields(self, model_source=None):
         """Get harmonic vibe property fields based on the user configuration.
 
@@ -237,7 +237,8 @@ class Analysis(GrpcStub):
 
         return fields
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_harmonic_vibe_props(
         self,
         project,
@@ -502,7 +503,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,4,0", VERSION_MAP)
+    #  First PySherlock Release "0.4.0"
+    @require_version(241)
     def get_ict_analysis_input_fields(self):
         """Get ICT analysis property fields based on the user configuration.
 
@@ -535,7 +537,8 @@ class Analysis(GrpcStub):
 
         return fields
 
-    @requires_version("0,4,0", VERSION_MAP)
+    #  First PySherlock Release "0.4.0"
+    @require_version(241)
     def update_ict_analysis_props(
         self,
         project,
@@ -685,7 +688,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def get_mechanical_shock_input_fields(self, model_source=None):
         """Get mechanical shock property fields based on the user configuration.
 
@@ -732,7 +736,8 @@ class Analysis(GrpcStub):
 
         return fields
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def update_mechanical_shock_props(
         self,
         project,
@@ -939,7 +944,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def get_solder_fatigue_input_fields(self):
         """Get solder fatigue property fields based on the user configuration.
 
@@ -977,7 +983,8 @@ class Analysis(GrpcStub):
 
         return fields
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def update_solder_fatigue_props(
         self,
         project,
@@ -1117,7 +1124,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.
 
@@ -1163,7 +1171,8 @@ class Analysis(GrpcStub):
 
         return fields
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0,2,0"
+    @require_version()
     def update_random_vibe_props(
         self,
         project,
@@ -1318,7 +1327,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0,2,0"
+    @require_version()
     def get_natural_frequency_input_fields(self):
         """Get natural frequency property fields based on the user configuration.
 
@@ -1356,7 +1366,8 @@ class Analysis(GrpcStub):
 
         return fields
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_natural_frequency_props(
         self,
         project: str,
@@ -1474,7 +1485,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def run_strain_map_analysis(
         self,
         project,
@@ -1631,7 +1643,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_pcb_modeling_props(self, project, cca_names, analyses):
         """Update FEA PCB Modeling properties for one or more CCAs.
 
@@ -1750,7 +1763,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,3,0", VERSION_MAP)
+    #  First PySherlock Release "0.3.0"
+    @require_version(241)
     def update_part_modeling_props(self, project, part_modeling_props):
         """Update part modeling properties for a given project's CCA.
 
@@ -1883,6 +1897,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    #  First PySherlock Release "0.7.0"
+    @require_version(251)
     def update_part_list_validation_analysis_props(
         self,
         project,
@@ -2023,6 +2039,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    #  First PySherlock Release "0.7.0"
+    @require_version(251)
     def get_parts_list_validation_analysis_props(
         self,
         project: str,

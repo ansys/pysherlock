@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module for shared methods for the gRPC stubs."""
 try:
@@ -13,9 +13,10 @@ import grpc
 class GrpcStub:
     """Provides the gRPC stub."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize the gRPC stub."""
         self.channel = channel
+        self._server_version = server_version
 
     def _is_connection_up(self):
         try:

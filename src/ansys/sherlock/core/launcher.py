@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
@@ -8,17 +8,15 @@ import socket
 import subprocess
 import time
 
-from ansys.tools.versioning.utils import requires_version
 import grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
+from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
 
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
-EARLIEST_SUPPORTED_VERSION = 211
 sherlock_cmd_args = []
 
 
@@ -34,7 +32,7 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
-@requires_version("0,2,0", VERSION_MAP)
+#  First PySherlock Release "0.2.0"
 def launch_sherlock(
     host: str = LOCALHOST,
     port: int = SHERLOCK_DEFAULT_PORT,
@@ -86,8 +84,9 @@ def launch_sherlock(
     except Exception as e:
         print(str(e))
         return None
-
+    server_version = None
     try:
+
         args = [_get_sherlock_exe_path(year=year, release_number=release_number)]
         args.append("-grpcPort=" + str(port))
         if single_project_path != "":
@@ -96,12 +95,14 @@ def launch_sherlock(
         if sherlock_cmd_args != "":
             args.append(f"{shlex.split(sherlock_cmd_args)}")
         print(args)
+        server_version = get_latest_version()
         subprocess.Popen(args)
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
     try:
-        sherlock = connect_grpc_channel(port)
+
+        sherlock = connect_grpc_channel(port, server_version)
 
         # Check that the gRPC connection is up (timeout after 3 minutes).
         count = 0
@@ -123,8 +124,8 @@ def launch_sherlock(
         LOG.error(str(e))
 
 
-@requires_version("0,2,0", VERSION_MAP)
-def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
+#  First PySherlock Release "0.2.0"
+def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT, server_version=None):
     """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 
     The ``Sherlock`` connection object is used to invoke the APIs from their respective services.
@@ -143,7 +144,7 @@ def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
-    SHERLOCK = Sherlock(channel)
+    SHERLOCK = Sherlock(channel, server_version)
     return SHERLOCK
 
 
@@ -168,15 +169,23 @@ def _get_base_ansys(year: int = None, release_number: int = None) -> str:
 
     for key in sorted(supported_installed_versions, reverse=True):
         ansys_version = _get_ansys_version_from_awp_root(key)
-        if ansys_version >= EARLIEST_SUPPORTED_VERSION:
-            return supported_installed_versions[key]
+
+        if ansys_version >= _EARLIEST_SUPPORTED_VERSION:
+            return ansys_version
     return ""
 
 
-def _get_ansys_version_from_awp_root(awp_root):
-    if awp_root.find("AWP_ROOT") >= 0:
-        return int(awp_root.replace("AWP_ROOT", ""))
+def _get_base_ansys():
+    supported_installed_versions = {
+        env_key: path
+        for env_key, path in os.environ.items()
+        if env_key.startswith("AWP_ROOT") and os.path.isdir(path)
+    }
 
+    for key in sorted(supported_installed_versions, reverse=True):
+        ansys_version = _get_ansys_version_from_awp_root(key)
+        if ansys_version >= _EARLIEST_SUPPORTED_VERSION:
+            return supported_installed_versions[key]
     return ""
 
 

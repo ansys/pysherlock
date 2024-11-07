@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all stackup management capabilities."""
 
@@ -9,10 +9,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockStackupService_pb2
     from ansys.api.sherlock.v0 import SherlockStackupService_pb2_grpc
 
-from ansys.tools.versioning.utils import requires_version
-
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockGetLayerCountError,
@@ -30,14 +27,15 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.stackup_types import StackupProperties
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Stackup(GrpcStub):
     """Contains all stackup management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for Sherlock Stackup service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockStackupService_pb2_grpc.SherlockStackupServiceStub(channel)
         self.LAMINATE_THICKNESS_UNIT_LIST = None
         self.LAMINATE_MATERIAL_MANUFACTURER_LIST = None
@@ -168,7 +166,8 @@ class Stackup(GrpcStub):
             layer.thickness = l[2]
             layer.thicknessUnit = l[3]
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def gen_stackup(
         self,
         project,
@@ -320,7 +319,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_conductor_layer(
         self,
         project,
@@ -457,7 +457,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_laminate_layer(
         self,
         project,
@@ -644,7 +645,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def list_conductor_layers(self, project):
         """List CCA conductor layers.
 
@@ -703,7 +705,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def list_laminate_layers(self, project):
         """List all laminate layers and their properties.
 
@@ -767,7 +770,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def get_layer_count(self, project, cca_name):
         """Get the number of CCA layers in a stackup.
 
@@ -824,7 +828,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def get_stackup_props(self, project, cca_name):
         """Get the stackup properties from a CCA.
 
@@ -882,7 +887,8 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def get_total_conductor_thickness(self, project, cca_name, thickness_unit):
         """Return the total conductor thickness.
 

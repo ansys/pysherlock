@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
 
@@ -9,10 +9,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2_grpc
 
-from ansys.tools.versioning.utils import requires_version
-
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportNetListError,
@@ -33,14 +30,15 @@ from ansys.sherlock.core.types.parts_types import (
     PartLocation,
     PartsListSearchDuplicationMode,
 )
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Parts(GrpcStub):
     """Contains all parts management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for the Sherlock Parts service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockPartsService_pb2_grpc.SherlockPartsServiceStub(channel)
         self.PART_LOCATION_UNITS = None
         self.BOARD_SIDES = None
@@ -151,7 +149,8 @@ class Parts(GrpcStub):
             if board_sides_response.returnCode.value == 0:
                 self.BOARD_SIDES = board_sides_response.boardSides
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_parts_list(
         self,
         project,
@@ -242,7 +241,8 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_parts_locations(self, project, cca_name, part_loc):
         """Update one or more part locations.
 
@@ -345,7 +345,8 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def update_parts_locations_by_file(self, project, cca_name, file_path, numeric_format=""):
         """Update one or more part locations using a CSV file.
 
@@ -430,7 +431,8 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def import_parts_list(self, project, cca_name, import_file, import_as_user_src):
         """Import a parts list for a CCA.
 
@@ -507,7 +509,8 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def export_parts_list(self, project, cca_name, export_file):
         """Export a parts list for a CCA.
 
@@ -577,7 +580,8 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def enable_lead_modeling(self, project, cca_name):
         """Enable lead modeling for leaded parts.
 
@@ -639,7 +643,8 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def get_part_location(self, project, cca_name, ref_des, location_units):
         """Return the location properties for one or more part.
 
@@ -715,7 +720,8 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,4,0", VERSION_MAP)
+    #  First PySherlock Release "0.4.0"
+    @require_version(241)
     def update_parts_from_AVL(
         self,
         project: str,
@@ -818,7 +824,8 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,5,0", VERSION_MAP)
+    #  First PySherlock Release "0.5.0"
+    @require_version(242)
     def update_parts_list_properties(self, project, cca_name, part_properties):
         """
         Update one or more properties of one or more parts in a parts list.
@@ -945,7 +952,8 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,6,0", VERSION_MAP)
+    #  First PySherlock Release "0.6.0"
+    @require_version(242)
     def export_net_list(
         self,
         project,

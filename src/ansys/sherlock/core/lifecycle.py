@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all life cycle management capabilities."""
 
@@ -9,10 +9,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2_grpc
 
-from ansys.tools.versioning.utils import requires_version
-
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
     SherlockAddHarmonicVibeProfilesError,
@@ -36,14 +33,15 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Lifecycle(GrpcStub):
     """Contains all life cycle management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for the Sherlock Life Cycle service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockLifeCycleService_pb2_grpc.SherlockLifeCycleServiceStub(channel)
         self.CYCLE_TYPE_LIST = None
         self.RV_PROFILE_TYPE_LIST = None
@@ -291,7 +289,8 @@ class Lifecycle(GrpcStub):
                 message=f"Invalid entry {i}: Load, frequency, or decay is invalid"
             )
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def create_life_phase(
         self,
         project,
@@ -407,7 +406,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_random_vibe_event(
         self,
         project,
@@ -566,7 +566,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_random_vibe_profiles(
         self,
         project,
@@ -740,7 +741,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_thermal_event(
         self,
         project,
@@ -860,7 +862,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_thermal_profiles(
         self,
         project,
@@ -1029,7 +1032,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_harmonic_event(
         self,
         project,
@@ -1193,7 +1197,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_harmonic_vibe_profiles(
         self,
         project,
@@ -1374,7 +1379,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_shock_event(
         self,
         project,
@@ -1513,7 +1519,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def add_shock_profiles(
         self,
         project,
@@ -1717,7 +1724,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def load_random_vibe_profile(self, project, phase_name, event_name, file_path):
         """Load random vibe profile from .csv or .dat file.
 
@@ -1791,7 +1799,8 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def load_thermal_profile(self, project, phase_name, event_name, file_path):
         """Load a thermal profile from a .dat or .csv file.
 
@@ -1868,7 +1877,8 @@ class Lifecycle(GrpcStub):
                 LOG.error(error)
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def load_harmonic_profile(self, project, phase_name, event_name, file_path):
         """Load a harmonic profile from a DAT or CSV file to a life cycle phase.
 
@@ -1943,7 +1953,8 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def load_shock_profile_dataset(self, project, phase_name, event_name, file_path):
         """Load shock profile dataset from a .csv or .dat file.
 
@@ -2009,7 +2020,8 @@ class Lifecycle(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @requires_version("0,2,0", VERSION_MAP)
+    #  First PySherlock Release "0.2.0"
+    @require_version()
     def load_shock_profile_pulses(self, project, phase_name, event_name, file_path):
         """Load shock profile pulses from a .csv .dat file.
 

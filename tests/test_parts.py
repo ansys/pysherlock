@@ -25,13 +25,14 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     PartsListSearchDuplicationMode,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all parts APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    parts = Parts(channel)
+    parts = Parts(channel, SKIP_VERSION_CHECK)
 
     helper_test_update_parts_list(parts)
     helper_test_update_parts_list_properties(parts)
