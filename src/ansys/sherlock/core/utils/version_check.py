@@ -25,7 +25,7 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
 
             if not hasattr(self, "_server_version") or self._server_version is None:
                 raise SherlockVersionError(
-                    "Unable to detect which version " "of sherlock was launched."
+                    "Unable to detect which version of sherlock was launched."
                 )
 
             if self._server_version == SKIP_VERSION_CHECK:
