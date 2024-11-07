@@ -158,19 +158,22 @@ class Common(GrpcStub):
 
     #  First PySherlock Release "0.7.0"
     @require_version(251)
-    def get_sherlock_version(self) -> str:
+    def get_sherlock_info(self) -> str:
         """Get server Sherlock version.
 
         Returns
         -------
-        str
-            Sherlock version
+        SherlockInfoResponse
+            Sherlock information containing
+            releaseVersion, defaultProjectDir and isSingleProjectMode flag
 
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> sherlock.common.get_sherlock_version()
+        >>> release_version = sherlock.common.get_sherlock_info().releaseVersion
+        >>> default_dir = sherlock.common.get_sherlock_info().defaultProjectDir
+        >>> is_single_project = sherlock.common.get_sherlock_info().isSingleProjectMode
         """
         if not self._is_connection_up():
             LOG.error("Not connected to a gRPC service.")
@@ -179,54 +182,4 @@ class Common(GrpcStub):
         request = SherlockCommonService_pb2.SherlockInfoRequest()
         response = self.stub.getSherlockInfo(request)
         if response is not None:
-            return response.releaseVersion
-
-    #  First PySherlock Release "0.7.0"
-    @require_version(251)
-    def get_sherlock_default_project_dir(self) -> str:
-        """Get server Sherlock default project directory.
-
-        Returns
-        -------
-        str
-            Sherlock default project directory
-
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.common.get_sherlock_default_project_dir()
-        """
-        if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
-            raise RuntimeError("Not connected to a gRPC service.")
-
-        request = SherlockCommonService_pb2.SherlockInfoRequest()
-        response = self.stub.getSherlockInfo(request)
-        if response is not None:
-            return response.defaultProjectDir
-
-    #  First PySherlock Release "0.7.0"
-    @require_version(251)
-    def is_single_project_mode(self) -> bool:
-        """Get flag indicating single project mode.
-
-        Returns
-        -------
-        bool
-            True if Sherlock single project mode is active, False otherwise
-
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.common.get_sherlock_default_project_dir()
-        """
-        if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
-            raise RuntimeError("Not connected to a gRPC service.")
-
-        request = SherlockCommonService_pb2.SherlockInfoRequest()
-        response = self.stub.getSherlockInfo(request)
-        if response is not None:
-            return response.isSingleProjectMode
+            return response

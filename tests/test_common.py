@@ -46,5 +46,16 @@ def helper_test_get_solders(common):
             pytest.fail(str(e))
 
 
+def helper_test_get_sherlock_info(common):
+    """Test get_sherlock_info API"""
+
+    if common._is_connection_up():
+        try:
+            sherlock_info_response = common.get_sherlock_info()
+            assert sherlock_info_response is not None
+        except Exception as e:
+            pytest.fail(str(e))
+
+
 if __name__ == "__main__":
     test_all()

@@ -19,7 +19,7 @@ def test_version_check():
         # "get_sherlock_version" was added to PySherlock / Sherlock.
         common = Common(channel, 242)
         # This should fail since it did not exist in 242
-        common.get_sherlock_version()
+        common.get_sherlock_info()
         pytest.fail("Sherlock version should be too low to launch this method")
     except Exception as e:
         if not isinstance(e, SherlockVersionError):
