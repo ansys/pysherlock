@@ -5,17 +5,20 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     PCBShape,
     PolygonalShape,
+    PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
 )
 
 try:
+    import SherlockCommonService_pb2
     import SherlockLayerService_pb2
     from SherlockLayerService_pb2 import ModelingRegion
     import SherlockLayerService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
 
 from typing import Dict, List, Union
@@ -234,6 +237,81 @@ class Layer(GrpcStub):
         except SherlockAddPottingRegionError as e:
             LOG.error(str(e))
             raise e
+
+    def update_potting_region(
+        self, project: str, update_potting_region_requests: list[PottingRegionUpdateData]
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Update one or more potting regions in a specific project.
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        update_potting_region_requests: list[PottingRegionUpdateData]
+            List of data used to update potting regions.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionUpdateData
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionData
+        >>> sherlock = launch_sherlock()
+        >>>
+        >>> update_request1 = PottingRegionUpdateData(
+            potting_region_id_to_update=potting_id,
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(
+                    points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+                    rotation=45.0
+                )
+            )
+        )
+        >>> update_request2 = PottingRegionUpdateData(
+            potting_region_id_to_update=potting_id,
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(
+                    points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+                    rotation=0.0
+                )
+            )
+        )
+        >>> potting_region_requests = [
+            update_request1,
+            update_request2
+        ]
+        >>> responses = sherlock.layer.update_potting_region(project, potting_region_requests)
+        """
+        update_request = SherlockLayerService_pb2.UpdatePottingRegionRequest()
+        update_request.project = project
+
+        for update_potting_region_request in update_potting_region_requests:
+            update_request.updatePottingRegions.append(
+                update_potting_region_request._convert_to_grpc()
+            )
+        responses = []
+        for grpc_return_code in self.stub.updatePottingRegion(update_request):
+            responses.append(grpc_return_code)
+        return responses
 
     def update_mount_points_by_file(
         self,

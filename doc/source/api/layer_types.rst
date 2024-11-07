@@ -5,7 +5,8 @@ Layer Types
 
 Classes used for the Layer API.
 
-.. currentmodule:: ansys.sherlock.core.types.layer_types
+.. automodule:: ansys.sherlock.core.types.layer_types
+     :imported-members: pydantic.BaseModel
 
 .. autosummary::
      :toctree: _autosummary
@@ -15,3 +16,4 @@ Classes used for the Layer API.
      SlotShape
      CircularShape
      PCBShape
+     PottingRegionData

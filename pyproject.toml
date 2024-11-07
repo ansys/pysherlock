@@ -26,6 +26,7 @@ dependencies = [
     "ansys-api-sherlock==0.1.34",
     "grpcio>=1.17",
     "protobuf>=3.20",
+    "pydantic>=2.9.2",
 ]
 
 [project.optional-dependencies]
