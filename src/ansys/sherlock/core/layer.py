@@ -243,6 +243,8 @@ class Layer(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    #  First PySherlock Release "0.7.1"
+    @require_version(251)
     def update_potting_region(
         self, project: str, update_potting_region_requests: list[PottingRegionUpdateData]
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
