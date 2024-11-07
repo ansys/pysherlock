@@ -163,7 +163,7 @@ def _get_base_ansys(year: int = None, release_number: int = None) -> tuple[str, 
                 raise ValueError(f"Sherlock {year} {release_number} is not installed.")
         except ValueError as e:
             LOG.error(f"Error extracting Sherlock version year: {e}")
-            raise
+            raise e
 
     for key in sorted(supported_installed_versions, reverse=True):
         ansys_version = _get_ansys_version_from_awp_root(key)

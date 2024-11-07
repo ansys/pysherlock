@@ -20,7 +20,7 @@ class TestLauncher(unittest.TestCase):
     @patch("os.path.isdir")
     def test_base_ansys(self, mock_os_path_isdir):
         mock_os_path_isdir.return_value = True
-        self.assertEqual("C:\\Program Files\\ANSYS Inc\\v223", launcher._get_base_ansys())
+        self.assertEqual("C:\\Program Files\\ANSYS Inc\\v223", launcher._get_base_ansys()[0])
 
     def test_get_ansys_version_from_awp_root(self):
         self.assertEqual(223, launcher._get_ansys_version_from_awp_root("AWP_ROOT223"))
@@ -28,10 +28,11 @@ class TestLauncher(unittest.TestCase):
 
     @patch("ansys.sherlock.core.launcher._get_base_ansys")
     def test_get_sherlock_exe_path(self, mock_get_base_ansys):
-        mock_get_base_ansys.return_value = "base_ansys_path"
+        mock_get_base_ansys.return_value = ("base_ansys_path", 223)
+        sherlock_path, version = launcher._get_sherlock_exe_path()
         self.assertEqual(
             os.path.join("base_ansys_path", "sherlock", "SherlockClient.exe"),
-            launcher._get_sherlock_exe_path(),
+            sherlock_path,
         )
 
     def test_extract_sherlock_version_year_with_two_digits(self):
