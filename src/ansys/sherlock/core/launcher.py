@@ -8,9 +8,11 @@ import socket
 import subprocess
 import time
 
+from ansys.tools.versioning.utils import requires_version
 import grpc
 
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
 
@@ -32,6 +34,7 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
+@requires_version("0,2,0", VERSION_MAP)
 def launch_sherlock(
     host: str = LOCALHOST,
     port: int = SHERLOCK_DEFAULT_PORT,
@@ -120,6 +123,7 @@ def launch_sherlock(
         LOG.error(str(e))
 
 
+@requires_version("0,2,0", VERSION_MAP)
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 

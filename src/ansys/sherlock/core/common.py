@@ -8,9 +8,21 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2_grpc
 
+from ansys.tools.versioning.utils import requires_version
+
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCommonServiceError
 from ansys.sherlock.core.grpc_stub import GrpcStub
+
+# Maps PySherlock release versions to Sherlock release versions
+VERSION_MAP = {
+    (0, 2, 0): "20R",
+    (0, 3, 0): "2024R1",
+    (0, 4, 0): "2024R1",
+    (0, 5, 0): "2024R2",
+    (0, 6, 0): "2024R2",
+    (0, 7, 0): "2025R1",
+}
 
 
 class Common(GrpcStub):
@@ -21,6 +33,7 @@ class Common(GrpcStub):
         super().__init__(channel)
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
+    @requires_version("0,2,0", VERSION_MAP)
     def check(self):
         """Perform a health check on the gRPC connection.
 
@@ -37,6 +50,7 @@ class Common(GrpcStub):
             LOG.info("Connection is healthy.")
             return True
 
+    @requires_version("0,2,0", VERSION_MAP)
     def is_sherlock_client_loading(self):
         """Check if the Sherlock client is opened and done initializing.
 
@@ -60,6 +74,7 @@ class Common(GrpcStub):
             LOG.error("Sherlock client has not finished initializing.")
             return False
 
+    @requires_version("0,2,0", VERSION_MAP)
     def exit(self, close_sherlock_client=False):
         """Close the gRPC connection.
 
@@ -82,6 +97,7 @@ class Common(GrpcStub):
         except SherlockCommonServiceError as err:
             LOG.error("Exit error: ", str(err))
 
+    @requires_version("0,2,0", VERSION_MAP)
     def list_units(self, unitType):
         """List units for a unit type.
 
@@ -114,6 +130,7 @@ class Common(GrpcStub):
 
         return response.units
 
+    @requires_version("0,3,0", VERSION_MAP)
     def list_solder_materials(self):
         """List valid solders.
 

@@ -23,7 +23,10 @@ except ModuleNotFoundError:
 
 from typing import Dict, List, Union
 
+from ansys.tools.versioning.utils import requires_version
+
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockAddModelingRegionError,
     SherlockAddPottingRegionError,
@@ -51,6 +54,7 @@ class Layer(GrpcStub):
         super().__init__(channel)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
+    @requires_version("0,3,0", VERSION_MAP)
     def add_potting_region(
         self,
         project,
@@ -313,6 +317,7 @@ class Layer(GrpcStub):
             responses.append(grpc_return_code)
         return responses
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_mount_points_by_file(
         self,
         project,
@@ -394,6 +399,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @requires_version("0,7,0", VERSION_MAP)
     def delete_all_mount_points(self, project, cca_name):
         """Delete all mount points for a CCA.
 
@@ -455,6 +461,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @requires_version("0,7,0", VERSION_MAP)
     def delete_all_ict_fixtures(self, project, cca_name):
         """Delete all ICT fixtures for a CCA.
 
@@ -516,6 +523,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @requires_version("0,7,0", VERSION_MAP)
     def delete_all_test_points(self, project, cca_name):
         """Delete all test points for a CCA.
 
@@ -577,6 +585,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @requires_version("0,7,0", VERSION_MAP)
     def update_test_points_by_file(
         self,
         project,
@@ -655,6 +664,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @requires_version("0,7,0", VERSION_MAP)
     def update_test_fixtures_by_file(
         self,
         project,

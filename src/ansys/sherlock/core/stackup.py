@@ -9,7 +9,10 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockStackupService_pb2
     from ansys.api.sherlock.v0 import SherlockStackupService_pb2_grpc
 
+from ansys.tools.versioning.utils import requires_version
+
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockGenStackupError,
     SherlockGetLayerCountError,
@@ -147,6 +150,7 @@ class Stackup(GrpcStub):
             layer.thickness = l[2]
             layer.thicknessUnit = l[3]
 
+    @requires_version("0,2,0", VERSION_MAP)
     def gen_stackup(
         self,
         project,
@@ -296,6 +300,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_conductor_layer(
         self,
         project,
@@ -430,6 +435,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_laminate_layer(
         self,
         project,
@@ -614,6 +620,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def list_conductor_layers(self, project):
         """List CCA conductor layers.
 
@@ -670,6 +677,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def list_laminate_layers(self, project):
         """List all laminate layers and their properties.
 
@@ -731,6 +739,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def get_layer_count(self, project, cca_name):
         """Get the number of CCA layers in a stackup.
 
@@ -785,6 +794,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def get_stackup_props(self, project, cca_name):
         """Get the stackup properties from a CCA.
 
@@ -840,6 +850,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def get_total_conductor_thickness(self, project, cca_name, thickness_unit):
         """Return the total conductor thickness.
 

@@ -14,7 +14,10 @@ except ModuleNotFoundError:
 
 from typing import List
 
+from ansys.tools.versioning.utils import requires_version
+
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockExportAEDBError,
     SherlockExportFEAModelError,
@@ -32,6 +35,7 @@ class Model(GrpcStub):
         super().__init__(channel)
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 
+    @requires_version("0,2,0", VERSION_MAP)
     def export_trace_reinforcement_model(
         self,
         project_name,
@@ -204,6 +208,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @requires_version("0,2,0", VERSION_MAP)
     def generate_trace_model(
         self,
         project_name,
@@ -306,6 +311,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @requires_version("0,6,0", VERSION_MAP)
     def export_aedb(
         self,
         project_name,
@@ -377,6 +383,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @requires_version("0,6,0", VERSION_MAP)
     def exportTraceModel(self, layer_params):
         r"""Export a trace model to a specified output file.
 
@@ -441,6 +448,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @requires_version("0,6,0", VERSION_MAP)
     def createExportTraceCopperLayerParams(
         self,
         project_name,

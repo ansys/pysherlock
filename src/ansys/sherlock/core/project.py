@@ -10,7 +10,10 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2_grpc
 
+from ansys.tools.versioning.utils import requires_version
+
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockAddCCAError,
     SherlockAddProjectError,
@@ -49,6 +52,7 @@ class Project(GrpcStub):
         super().__init__(channel)
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
+    @requires_version("0,2,0", VERSION_MAP)
     def delete_project(self, project):
         """Delete a Sherlock project.
 
@@ -93,6 +97,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def import_odb_archive(
         self,
         archive_file,
@@ -196,6 +201,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def import_ipc2581_archive(
         self,
         archive_file,
@@ -285,6 +291,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def generate_project_report(self, project, author, company, report_file):
         """Generate a project report.
 
@@ -359,6 +366,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise SherlockGenerateProjectReportError(str(e))
 
+    @requires_version("0,2,0", VERSION_MAP)
     def list_ccas(self, project, cca_names=None):
         """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
 
@@ -415,6 +423,7 @@ class Project(GrpcStub):
 
         return response.ccas
 
+    @requires_version("0,3,0", VERSION_MAP)
     def add_cca(self, project, cca_properties):
         """Add one or more CCAs to a project.
 
@@ -545,6 +554,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def add_strain_maps(self, project, strain_maps):
         """Add strain map files to CCAs in a Sherlock project.
 
@@ -817,6 +827,7 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def list_strain_maps(self, project, cca_names=None):
         """List the strain maps assigned to each CCA or given CCAs.
 
@@ -876,6 +887,7 @@ class Project(GrpcStub):
 
         return response.ccaStrainMaps
 
+    @requires_version("0,3,0", VERSION_MAP)
     def add_project(self, project_name: str, project_category: str, project_description: str):
         """Add a sherlock project to sherlock.
 
@@ -920,6 +932,7 @@ class Project(GrpcStub):
 
         return return_code.value
 
+    @requires_version("0,5,0", VERSION_MAP)
     def list_thermal_maps(self, project, cca_names=None):
         """List the thermal map files and their type assigned to each CCA of given CCAs.
 
@@ -978,6 +991,7 @@ class Project(GrpcStub):
 
         return response.ccaThermalMaps
 
+    @requires_version("0,5,0", VERSION_MAP)
     def update_thermal_maps(self, project, thermal_map_files):
         """
         Update thermal map files to a Sherlock project.
@@ -1262,6 +1276,7 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @requires_version("0,5,0", VERSION_MAP)
     def add_thermal_maps(self, project, add_thermal_map_files):
         """
         Add thermal map files to a Sherlock project.
@@ -1569,6 +1584,7 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @requires_version("0,5,0", VERSION_MAP)
     def import_project_zip_archive(self, project, category, archive_file):
         """
         Import a zipped project archive -- multiple project mode.
@@ -1621,6 +1637,7 @@ class Project(GrpcStub):
 
         return response.value
 
+    @requires_version("0,5,0", VERSION_MAP)
     def import_project_zip_archive_single_mode(
         self, project, category, archive_file, destination_file_directory
     ):
@@ -1696,6 +1713,7 @@ class Project(GrpcStub):
 
         return response.value
 
+    @requires_version("0,7,0", VERSION_MAP)
     def export_project(
         self,
         project_name,

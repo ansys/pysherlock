@@ -9,7 +9,10 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2_grpc
 
+from ansys.tools.versioning.utils import requires_version
+
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import VERSION_MAP
 from ansys.sherlock.core.errors import (
     SherlockGetPartsListValidationAnalysisPropsError,
     SherlockRunAnalysisError,
@@ -88,6 +91,7 @@ class Analysis(GrpcStub):
                     event = phase.events.add()
                     event.name = e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def run_analysis(
         self,
         project,
@@ -184,6 +188,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def get_harmonic_vibe_input_fields(self, model_source=None):
         """Get harmonic vibe property fields based on the user configuration.
 
@@ -228,6 +233,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_harmonic_vibe_props(
         self,
         project,
@@ -490,6 +496,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,4,0", VERSION_MAP)
     def get_ict_analysis_input_fields(self):
         """Get ICT analysis property fields based on the user configuration.
 
@@ -520,6 +527,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @requires_version("0,4,0", VERSION_MAP)
     def update_ict_analysis_props(
         self,
         project,
@@ -667,6 +675,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,3,0", VERSION_MAP)
     def get_mechanical_shock_input_fields(self, model_source=None):
         """Get mechanical shock property fields based on the user configuration.
 
@@ -711,6 +720,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @requires_version("0,3,0", VERSION_MAP)
     def update_mechanical_shock_props(
         self,
         project,
@@ -915,6 +925,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,3,0", VERSION_MAP)
     def get_solder_fatigue_input_fields(self):
         """Get solder fatigue property fields based on the user configuration.
 
@@ -950,6 +961,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @requires_version("0,3,0", VERSION_MAP)
     def update_solder_fatigue_props(
         self,
         project,
@@ -1087,6 +1099,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.
 
@@ -1130,6 +1143,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_random_vibe_props(
         self,
         project,
@@ -1282,6 +1296,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def get_natural_frequency_input_fields(self):
         """Get natural frequency property fields based on the user configuration.
 
@@ -1317,6 +1332,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_natural_frequency_props(
         self,
         project: str,
@@ -1432,6 +1448,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def run_strain_map_analysis(
         self,
         project,
@@ -1586,6 +1603,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,2,0", VERSION_MAP)
     def update_pcb_modeling_props(self, project, cca_names, analyses):
         """Update FEA PCB Modeling properties for one or more CCAs.
 
@@ -1702,6 +1720,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @requires_version("0,3,0", VERSION_MAP)
     def update_part_modeling_props(self, project, part_modeling_props):
         """Update part modeling properties for a given project's CCA.
 
