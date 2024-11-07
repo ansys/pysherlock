@@ -404,7 +404,7 @@ class Layer(GrpcStub):
             raise e
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(222)
     def delete_all_mount_points(self, project, cca_name):
         """Delete all mount points for a CCA.
 
@@ -469,7 +469,7 @@ class Layer(GrpcStub):
         return response.value
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(231)
     def delete_all_ict_fixtures(self, project, cca_name):
         """Delete all ICT fixtures for a CCA.
 
@@ -534,7 +534,7 @@ class Layer(GrpcStub):
         return response.value
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(231)
     def delete_all_test_points(self, project, cca_name):
         """Delete all test points for a CCA.
 
@@ -599,7 +599,7 @@ class Layer(GrpcStub):
         return response.value
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(231)
     def update_test_points_by_file(
         self,
         project,
@@ -681,7 +681,7 @@ class Layer(GrpcStub):
             raise e
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(231)
     def update_test_fixtures_by_file(
         self,
         project,
@@ -763,7 +763,7 @@ class Layer(GrpcStub):
             raise e
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(231)
     def export_all_test_points(
         self,
         project,
@@ -855,7 +855,7 @@ class Layer(GrpcStub):
         return response.value
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(231)
     def export_all_test_fixtures(
         self,
         project,
@@ -934,7 +934,7 @@ class Layer(GrpcStub):
         return response.value
 
     #  First PySherlock Release "0.7.0"
-    @require_version(251)
+    @require_version(222)
     def export_all_mount_points(
         self,
         project,
