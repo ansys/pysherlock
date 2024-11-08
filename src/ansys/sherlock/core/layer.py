@@ -52,7 +52,6 @@ class Layer(GrpcStub):
         super().__init__(channel, server_version)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
-    #  First PySherlock Release "0.3.0"
     @require_version(241)
     def add_potting_region(
         self,
@@ -243,7 +242,6 @@ class Layer(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.7.1"
     @require_version(251)
     def update_potting_region(
         self, project: str, update_potting_region_requests: list[PottingRegionUpdateData]
@@ -320,7 +318,6 @@ class Layer(GrpcStub):
             responses.append(grpc_return_code)
         return responses
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_mount_points_by_file(
         self,
@@ -405,7 +402,6 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.7.0"
     @require_version(222)
     def delete_all_mount_points(self, project, cca_name):
         """Delete all mount points for a CCA.
@@ -470,7 +466,6 @@ class Layer(GrpcStub):
 
         return response.value
 
-    #  First PySherlock Release "0.7.0"
     @require_version(231)
     def delete_all_ict_fixtures(self, project, cca_name):
         """Delete all ICT fixtures for a CCA.
@@ -535,7 +530,6 @@ class Layer(GrpcStub):
 
         return response.value
 
-    #  First PySherlock Release "0.7.0"
     @require_version(231)
     def delete_all_test_points(self, project, cca_name):
         """Delete all test points for a CCA.
@@ -600,7 +594,6 @@ class Layer(GrpcStub):
 
         return response.value
 
-    #  First PySherlock Release "0.7.0"
     @require_version(231)
     def update_test_points_by_file(
         self,
@@ -682,7 +675,6 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.7.0"
     @require_version(231)
     def update_test_fixtures_by_file(
         self,
@@ -764,7 +756,6 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.7.0"
     @require_version(231)
     def export_all_test_points(
         self,
@@ -856,7 +847,6 @@ class Layer(GrpcStub):
 
         return response.value
 
-    #  First PySherlock Release "0.7.0"
     @require_version(231)
     def export_all_test_fixtures(
         self,
@@ -935,7 +925,6 @@ class Layer(GrpcStub):
 
         return response.value
 
-    #  First PySherlock Release "0.7.0"
     @require_version(222)
     def export_all_mount_points(
         self,
@@ -1014,7 +1003,6 @@ class Layer(GrpcStub):
 
         return response.value
 
-    #  First PySherlock Release "0.7.0"
     @require_version(251)
     def add_modeling_region(
         self,
@@ -1282,7 +1270,6 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.7.0"
     @require_version(251)
     def update_modeling_region(
         self,
@@ -1548,7 +1535,6 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.7.0"
     @require_version(251)
     def copy_modeling_region(
         self,
@@ -1662,7 +1648,6 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.7.0"
     @require_version(251)
     def delete_modeling_region(self, project: str, delete_regions: List[Dict[str, str]]):
         """Delete one or more modeling regions for a specific project.

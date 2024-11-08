@@ -22,7 +22,6 @@ class Common(GrpcStub):
         super().__init__(channel, server_version)
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def check(self):
         """Perform a health check on the gRPC connection.
@@ -40,7 +39,6 @@ class Common(GrpcStub):
             LOG.info("Connection is healthy.")
             return True
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def is_sherlock_client_loading(self):
         """Check if the Sherlock client is opened and done initializing.
@@ -67,7 +65,6 @@ class Common(GrpcStub):
             LOG.error("Sherlock client has not finished initializing.")
             return False
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def exit(self, close_sherlock_client=False):
         """Close the gRPC connection.
@@ -93,7 +90,6 @@ class Common(GrpcStub):
         except SherlockCommonServiceError as err:
             LOG.error("Exit error: ", str(err))
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def list_units(self, unitType):
         """List units for a unit type.
@@ -129,7 +125,6 @@ class Common(GrpcStub):
 
         return response.units
 
-    #  First PySherlock Release "0.3.0"
     @require_version()
     def list_solder_materials(self):
         """List valid solders.
@@ -156,7 +151,6 @@ class Common(GrpcStub):
 
         return response.solderName
 
-    #  First PySherlock Release "0.7.0"
     @require_version(251)
     def get_sherlock_info(self) -> str:
         """Get server Sherlock version.

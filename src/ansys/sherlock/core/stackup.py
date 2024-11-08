@@ -166,7 +166,6 @@ class Stackup(GrpcStub):
             layer.thickness = l[2]
             layer.thicknessUnit = l[3]
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def gen_stackup(
         self,
@@ -319,7 +318,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_conductor_layer(
         self,
@@ -457,7 +455,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_laminate_layer(
         self,
@@ -645,7 +642,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def list_conductor_layers(self, project):
         """List CCA conductor layers.
@@ -705,7 +701,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def list_laminate_layers(self, project):
         """List all laminate layers and their properties.
@@ -770,7 +765,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def get_layer_count(self, project, cca_name):
         """Get the number of CCA layers in a stackup.
@@ -828,7 +822,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def get_stackup_props(self, project, cca_name):
         """Get the stackup properties from a CCA.
@@ -887,7 +880,6 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def get_total_conductor_thickness(self, project, cca_name, thickness_unit):
         """Return the total conductor thickness.

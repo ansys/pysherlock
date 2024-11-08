@@ -149,7 +149,6 @@ class Parts(GrpcStub):
             if board_sides_response.returnCode.value == 0:
                 self.BOARD_SIDES = board_sides_response.boardSides
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_parts_list(
         self,
@@ -241,7 +240,6 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_parts_locations(self, project, cca_name, part_loc):
         """Update one or more part locations.
@@ -345,7 +343,6 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def update_parts_locations_by_file(self, project, cca_name, file_path, numeric_format=""):
         """Update one or more part locations using a CSV file.
@@ -431,7 +428,6 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def import_parts_list(self, project, cca_name, import_file, import_as_user_src):
         """Import a parts list for a CCA.
@@ -509,7 +505,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def export_parts_list(self, project, cca_name, export_file):
         """Export a parts list for a CCA.
@@ -580,7 +575,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def enable_lead_modeling(self, project, cca_name):
         """Enable lead modeling for leaded parts.
@@ -643,7 +637,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def get_part_location(self, project, cca_name, ref_des, location_units):
         """Return the location properties for one or more part.
@@ -720,7 +713,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.4.0"
     @require_version(241)
     def update_parts_from_AVL(
         self,
@@ -824,7 +816,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    #  First PySherlock Release "0.5.0"
     @require_version(242)
     def update_parts_list_properties(self, project, cca_name, part_properties):
         """
@@ -952,7 +943,6 @@ class Parts(GrpcStub):
                 LOG.error(error)
             raise e
 
-    #  First PySherlock Release "0.6.0"
     @require_version(242)
     def export_net_list(
         self,

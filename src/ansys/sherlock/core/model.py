@@ -33,7 +33,6 @@ class Model(GrpcStub):
         super().__init__(channel, server_version)
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def export_trace_reinforcement_model(
         self,
@@ -209,7 +208,6 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
-    #  First PySherlock Release "0.2.0"
     @require_version()
     def generate_trace_model(
         self,
@@ -315,7 +313,6 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
-    #  First PySherlock Release "0.6.0"
     @require_version(242)
     def export_aedb(
         self,
@@ -390,7 +387,6 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
-    #  First PySherlock Release "0.6.0"
     @require_version(242)
     def exportTraceModel(self, layer_params):
         r"""Export a trace model to a specified output file.
@@ -458,7 +454,6 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
-    #  First PySherlock Release "0.6.0"
     @require_version(242)
     def createExportTraceCopperLayerParams(
         self,

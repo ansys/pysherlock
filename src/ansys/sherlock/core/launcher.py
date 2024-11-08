@@ -32,7 +32,6 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
             raise SherlockCannotUsePortError(port, str(e))
 
 
-#  First PySherlock Release "0.2.0"
 def launch_sherlock(
     host: str = LOCALHOST,
     port: int = SHERLOCK_DEFAULT_PORT,
@@ -120,7 +119,6 @@ def launch_sherlock(
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-#  First PySherlock Release "0.2.0"
 def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT, server_version=None):
     """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 
