@@ -14,13 +14,14 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.stackup import Stackup
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all stackup APIs."""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    stackup = Stackup(channel)
+    stackup = Stackup(channel, SKIP_VERSION_CHECK)
     helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
     helper_test_update_laminate_layer(stackup)

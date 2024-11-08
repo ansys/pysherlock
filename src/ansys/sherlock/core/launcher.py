@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
@@ -13,10 +13,10 @@ import grpc
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
+from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
 
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
-EARLIEST_SUPPORTED_VERSION = 211
 sherlock_cmd_args = []
 
 
@@ -83,10 +83,12 @@ def launch_sherlock(
     except Exception as e:
         print(str(e))
         return None
-
+    _server_version = None
     try:
-        args = [_get_sherlock_exe_path(year=year, release_number=release_number)]
-        args.append("-grpcPort=" + str(port))
+        sherlock_launch_cmd, _server_version = _get_sherlock_exe_path(
+            year=year, release_number=release_number
+        )
+        args = [sherlock_launch_cmd, "-grpcPort=" + str(port)]
         if single_project_path != "":
             args.append("-singleProject")
             args.append(single_project_path)
@@ -94,11 +96,8 @@ def launch_sherlock(
             args.append(f"{shlex.split(sherlock_cmd_args)}")
         print(args)
         subprocess.Popen(args)
-    except Exception as e:
-        LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
-    try:
-        sherlock = connect_grpc_channel(port)
+        sherlock = connect_grpc_channel(port, _server_version)
 
         # Check that the gRPC connection is up (timeout after 3 minutes).
         count = 0
@@ -117,10 +116,10 @@ def launch_sherlock(
 
         return sherlock
     except Exception as e:
-        LOG.error(str(e))
+        LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
+def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT, server_version=None):
     """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 
     The ``Sherlock`` connection object is used to invoke the APIs from their respective services.
@@ -139,11 +138,11 @@ def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT):
     """
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
-    SHERLOCK = Sherlock(channel)
-    return SHERLOCK
+    sherlock = Sherlock(channel, server_version)
+    return sherlock
 
 
-def _get_base_ansys(year: int = None, release_number: int = None) -> str:
+def _get_base_ansys(year: int = None, release_number: int = None) -> tuple[str, int]:
     supported_installed_versions = {
         env_key: path
         for env_key, path in os.environ.items()
@@ -153,20 +152,24 @@ def _get_base_ansys(year: int = None, release_number: int = None) -> str:
     if year is not None and release_number is not None:
         try:
             year = _extract_sherlock_version_year(year)
-            version_key = f"AWP_ROOT{year}{release_number}"
+
+            sherlock_version = int(f"{year}{release_number}")
+            version_key = f"AWP_ROOT{sherlock_version}"
             if version_key in supported_installed_versions:
-                return supported_installed_versions[version_key]
+                return supported_installed_versions[version_key], sherlock_version
             else:
                 raise ValueError(f"Sherlock {year} {release_number} is not installed.")
         except ValueError as e:
             LOG.error(f"Error extracting Sherlock version year: {e}")
-            raise
+            raise e
 
     for key in sorted(supported_installed_versions, reverse=True):
         ansys_version = _get_ansys_version_from_awp_root(key)
-        if ansys_version >= EARLIEST_SUPPORTED_VERSION:
-            return supported_installed_versions[key]
-    return ""
+        sherlock_version = int(ansys_version)
+        if ansys_version >= _EARLIEST_SUPPORTED_VERSION:
+            return supported_installed_versions[key], sherlock_version
+
+    raise ValueError("Could not find any installed version of Sherlock.")
 
 
 def _get_ansys_version_from_awp_root(awp_root):
@@ -177,14 +180,14 @@ def _get_ansys_version_from_awp_root(awp_root):
 
 
 def _get_sherlock_exe_path(year: int = None, release_number: int = None) -> str:
-    ansys_base = _get_base_ansys(year=year, release_number=release_number)
+    ansys_base, sherlock_version = _get_base_ansys(year=year, release_number=release_number)
     if not ansys_base:
         return ""
     if os.name == "nt":
         sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
     else:
         sherlock_bin = os.path.join(ansys_base, "sherlock", "runSherlock")
-    return sherlock_bin
+    return sherlock_bin, sherlock_version
 
 
 def _extract_sherlock_version_year(year: int) -> int:

@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all analysis capabilities."""
 
@@ -25,14 +25,15 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Analysis(GrpcStub):
     """Contains all analysis capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for the Sherlock Analysis service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
         self.FIELD_NAMES = {
             "analysisTemp": "analysis_temp",
@@ -88,6 +89,7 @@ class Analysis(GrpcStub):
                     event = phase.events.add()
                     event.name = e
 
+    @require_version()
     def run_analysis(
         self,
         project,
@@ -95,6 +97,8 @@ class Analysis(GrpcStub):
         analyses,
     ):
         """Run one or more Sherlock analyses.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -184,8 +188,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def get_harmonic_vibe_input_fields(self, model_source=None):
         """Get harmonic vibe property fields based on the user configuration.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -228,12 +235,15 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @require_version()
     def update_harmonic_vibe_props(
         self,
         project,
         harmonic_vibe_properties,
     ):
         """Update properties for a harmonic vibe analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -490,8 +500,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(241)
     def get_ict_analysis_input_fields(self):
         """Get ICT analysis property fields based on the user configuration.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -520,12 +533,15 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @require_version(241)
     def update_ict_analysis_props(
         self,
         project,
         ict_analysis_properties,
     ):
         """Update properties for an ICT analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -667,8 +683,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(241)
     def get_mechanical_shock_input_fields(self, model_source=None):
         """Get mechanical shock property fields based on the user configuration.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -711,12 +730,15 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @require_version(241)
     def update_mechanical_shock_props(
         self,
         project,
         mechanical_shock_properties,
     ):
         """Update properties for a mechanical shock analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -915,8 +937,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(241)
     def get_solder_fatigue_input_fields(self):
         """Get solder fatigue property fields based on the user configuration.
+
+        Available Since: 2024R1
 
         Returns
         -------
@@ -950,12 +975,15 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @require_version(241)
     def update_solder_fatigue_props(
         self,
         project,
         solder_fatigue_properties,
     ):
         """Update properties for a solder fatigue analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -1087,8 +1115,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def get_random_vibe_input_fields(self, model_source=None):
         """Get random vibe property fields based on the user configuration.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1130,6 +1161,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @require_version()
     def update_random_vibe_props(
         self,
         project,
@@ -1150,6 +1182,8 @@ class Analysis(GrpcStub):
         strain_map_natural_freqs=None,
     ):
         """Update properties for a random vibe analysis.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -1282,8 +1316,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def get_natural_frequency_input_fields(self):
         """Get natural frequency property fields based on the user configuration.
+
+        Available Since: 2023R2
 
         Returns
         -------
@@ -1317,6 +1354,7 @@ class Analysis(GrpcStub):
 
         return fields
 
+    @require_version()
     def update_natural_frequency_props(
         self,
         project: str,
@@ -1332,6 +1370,8 @@ class Analysis(GrpcStub):
         analysis_temp_units: str = None,
     ):
         """Update properties for a natural frequency analysis.
+
+        Available Since:2023R2
 
         Parameters
         ----------
@@ -1432,6 +1472,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def run_strain_map_analysis(
         self,
         project,
@@ -1439,6 +1480,8 @@ class Analysis(GrpcStub):
         strain_map_analyses,
     ):
         """Run one or more strain map analyses.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1586,8 +1629,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def update_pcb_modeling_props(self, project, cca_names, analyses):
         """Update FEA PCB Modeling properties for one or more CCAs.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -1702,8 +1748,11 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(241)
     def update_part_modeling_props(self, project, part_modeling_props):
         """Update part modeling properties for a given project's CCA.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -1832,6 +1881,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(251)
     def update_part_list_validation_analysis_props(
         self,
         project,
@@ -1972,6 +2022,7 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(251)
     def get_parts_list_validation_analysis_props(
         self,
         project: str,

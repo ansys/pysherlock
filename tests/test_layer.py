@@ -34,13 +34,14 @@ from ansys.sherlock.core.types.layer_types import (
     RectangularShape,
     SlotShape,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all layer APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    layer = Layer(channel)
+    layer = Layer(channel, SKIP_VERSION_CHECK)
 
     helper_test_update_mount_points_by_file(layer)
     helper_test_delete_all_ict_fixtures(layer)

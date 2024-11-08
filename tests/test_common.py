@@ -6,13 +6,14 @@ import pytest
 from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCommonServiceError
 from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all common APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    common = Common(channel)
+    common = Common(channel, SKIP_VERSION_CHECK)
     helper_test_list_units(common)
     helper_test_get_solders(common)
 
@@ -42,6 +43,17 @@ def helper_test_get_solders(common):
             solders = common.list_solder_materials()
             assert len(solders) != 0
         except SherlockCommonServiceError as e:
+            pytest.fail(str(e))
+
+
+def helper_test_get_sherlock_info(common):
+    """Test get_sherlock_info API"""
+
+    if common._is_connection_up():
+        try:
+            sherlock_info_response = common.get_sherlock_info()
+            assert sherlock_info_response is not None
+        except Exception as e:
             pytest.fail(str(e))
 
 

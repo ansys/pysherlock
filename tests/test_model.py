@@ -14,13 +14,14 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.model import Model
 from ansys.sherlock.core.types.common_types import Measurement
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 class TestModel(unittest.TestCase):
     def test_model_export_trace_reinforcement_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         if platform.system() == "Windows":
             temp_dir = os.environ.get("TEMP", "C:\\TEMP")
@@ -77,7 +78,7 @@ class TestModel(unittest.TestCase):
     def test_model_generate_trace_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
@@ -121,7 +122,7 @@ class TestModel(unittest.TestCase):
     def test_model_export_aedb(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
@@ -191,7 +192,7 @@ class TestModel(unittest.TestCase):
     def test_model_export_trace_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
@@ -278,7 +279,7 @@ class TestModel(unittest.TestCase):
     def test_export_FEA_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         if platform.system() == "Windows":
             temp_dir = os.environ.get("TEMP", "C:\\TEMP")

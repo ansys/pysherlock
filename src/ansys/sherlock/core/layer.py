@@ -41,22 +41,26 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateTestPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Layer(GrpcStub):
     """Module containing all the layer management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for SherlockLayerService."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
+    @require_version(241)
     def add_potting_region(
         self,
         project,
         potting_regions,
     ):
         """Add one or more potting regions to a given project.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -238,6 +242,7 @@ class Layer(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(251)
     def update_potting_region(
         self, project: str, update_potting_region_requests: list[PottingRegionUpdateData]
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
@@ -313,6 +318,7 @@ class Layer(GrpcStub):
             responses.append(grpc_return_code)
         return responses
 
+    @require_version()
     def update_mount_points_by_file(
         self,
         project,
@@ -320,6 +326,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update mount point properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -394,8 +402,11 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(222)
     def delete_all_mount_points(self, project, cca_name):
         """Delete all mount points for a CCA.
+
+        Available Since: 2022R2
 
         Parameters
         ----------
@@ -455,8 +466,11 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def delete_all_ict_fixtures(self, project, cca_name):
         """Delete all ICT fixtures for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -516,8 +530,11 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def delete_all_test_points(self, project, cca_name):
         """Delete all test points for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -577,6 +594,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def update_test_points_by_file(
         self,
         project,
@@ -584,6 +602,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update test point properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -655,6 +675,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(231)
     def update_test_fixtures_by_file(
         self,
         project,
@@ -662,6 +683,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update test fixture properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -733,6 +756,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(231)
     def export_all_test_points(
         self,
         project,
@@ -743,6 +767,8 @@ class Layer(GrpcStub):
         force_units="DEFAULT",
     ):
         """Export the test point properties for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -821,6 +847,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def export_all_test_fixtures(
         self,
         project,
@@ -898,6 +925,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(222)
     def export_all_mount_points(
         self,
         project,
@@ -975,6 +1003,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(251)
     def add_modeling_region(
         self,
         project: str,
@@ -1241,6 +1270,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(251)
     def update_modeling_region(
         self,
         project: str,
@@ -1505,6 +1535,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(251)
     def copy_modeling_region(
         self,
         project: str,
@@ -1617,6 +1648,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(251)
     def delete_modeling_region(self, project: str, delete_regions: List[Dict[str, str]]):
         """Delete one or more modeling regions for a specific project.
 
