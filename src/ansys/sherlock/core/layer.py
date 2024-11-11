@@ -3,11 +3,13 @@
 """Module containing all layer management capabilities."""
 from ansys.sherlock.core.types.layer_types import (
     CircularShape,
+    CopyPottingRegionRequest,
+    DeletePottingRegionRequest,
     PCBShape,
     PolygonalShape,
-    PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
+    UpdatePottingRegionRequest,
 )
 
 try:
@@ -244,16 +246,14 @@ class Layer(GrpcStub):
 
     @require_version(251)
     def update_potting_region(
-        self, project: str, update_potting_region_requests: list[PottingRegionUpdateData]
+        self, request: UpdatePottingRegionRequest
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         """Update one or more potting regions in a specific project.
 
         Parameters
         ----------
-        project: str
-            Name of the Sherlock project.
-        update_potting_region_requests: list[PottingRegionUpdateData]
-            List of data used to update potting regions.
+        request: UpdatePottingRegionRequest
+            Contains all the information needed to update 1 or multiple potting regions per project
 
         Returns
         -------
@@ -265,7 +265,7 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
         >>> from ansys.sherlock.core.types.layer_types import PottingRegionUpdateData
-        >>> from ansys.sherlock.core.types.layer_types import PottingRegionData
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegion
         >>> sherlock = launch_sherlock()
         >>>
         >>> update_request1 = PottingRegionUpdateData(
@@ -304,17 +304,99 @@ class Layer(GrpcStub):
             update_request1,
             update_request2
         ]
-        >>> responses = sherlock.layer.update_potting_region(project, potting_region_requests)
+        >>> responses = sherlock.layer.update_potting_region(request)
         """
-        update_request = SherlockLayerService_pb2.UpdatePottingRegionRequest()
-        update_request.project = project
+        update_request = request._convert_to_grpc()
 
-        for update_potting_region_request in update_potting_region_requests:
-            update_request.updatePottingRegions.append(
-                update_potting_region_request._convert_to_grpc()
-            )
         responses = []
         for grpc_return_code in self.stub.updatePottingRegion(update_request):
+            responses.append(grpc_return_code)
+        return responses
+
+    @require_version(251)
+    def copy_potting_region(
+        self, request: CopyPottingRegionRequest
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Copy one or more potting regions in a specific project.
+
+        Parameters
+        ----------
+        request: CopyPottingRegionRequest
+             Contains all the information needed to copy 1 or multiple potting regions per project
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request
+
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import CopyPottingRegionRequest
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionCopyData
+        >>> sherlock = launch_sherlock()
+        >>> request = CopyPottingRegionRequest(
+                project=project,
+                potting_region_copy_data=[
+                    PottingRegionCopyData(
+                        cca_name=cca_name,
+                        potting_id=potting_id,
+                        copy_potting_id=new_id,
+                        center_x=center_x,
+                        center_y=center_y
+                    ),
+                    PottingRegionCopyData(
+                        cca_name=cca_name,
+                        potting_id=new_id,
+                        copy_potting_id=new_id+"1",
+                        center_x=center_x,
+                        center_y=center_y
+                    )
+                ]
+            )
+
+        >>> responses = sherlock.layer.copy_potting_region(request)
+        """
+        copy_request = request._convert_to_grpc()
+
+        responses = []
+        for grpc_return_code in self.stub.copyPottingRegion(copy_request):
+            responses.append(grpc_return_code)
+        return responses
+
+    @require_version(251)
+    def delete_potting_region(
+        self, request: DeletePottingRegionRequest
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Delete on or more potting regions in a specific project.
+
+        Parameters
+        ----------
+        request: DeletePottingRegionRequest
+             Contains all the information needed to delete 1 or multiple potting regions per project
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request
+
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import DeletePottingRegionRequest
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionDeleteData
+        >>> sherlock = launch_sherlock()
+        >>> request = DeletePottingRegionRequest(
+                    project=project,
+                    potting_region_delete_data=[
+                        PottingRegionDeleteData(
+                            cca_name=cca_name,
+                            potting_id=potting_id
+                        )
+                    ]
+                )
+        >>> responses = sherlock.layer.delete_potting_region(request)
+        """
+        delete_request = request._convert_to_grpc()
+
+        responses = []
+        for grpc_return_code in self.stub.deletePottingRegion(delete_request):
             responses.append(grpc_return_code)
         return responses
 
