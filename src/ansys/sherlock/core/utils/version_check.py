@@ -1,6 +1,7 @@
 # © 2024 ANSYS, Inc. All rights reserved.
-
 """Module for version check done on api methods."""
+import functools
+
 from ansys.sherlock.core.errors import SherlockVersionError
 
 _EARLIEST_SUPPORTED_VERSION = 211
@@ -21,8 +22,12 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
     """Check version of server against expected version."""
 
     def decorate(func):
-        def wrapper(self, *args, **kwargs):
+        """Return wrapped function."""
 
+        @functools.wraps(func)
+        # Use functools to keep the doc string associated with the wrapped function, for Sphinx.
+        def wrapper(self, *args, **kwargs):
+            """Wrap outer function."""
             if not hasattr(self, "_server_version") or self._server_version is None:
                 raise SherlockVersionError(
                     "Unable to detect which version of sherlock was launched."

@@ -147,7 +147,7 @@ class PottingRegion(BaseModel):
         if isinstance(self.shape, CircularShape):
             grpc_potting_region_data.circularShape.CopyFrom(self.shape._convert_to_grpc())
         elif isinstance(self.shape, PCBShape):
-            grpc_potting_region_data.pcbShape.CopyFrom(self.shape._convert_to_grpc())
+            grpc_potting_region_data.pCBShape.CopyFrom(self.shape._convert_to_grpc())
         elif isinstance(self.shape, PolygonalShape):
             grpc_potting_region_data.polygonalShape.CopyFrom(self.shape._convert_to_grpc())
         elif isinstance(self.shape, RectangularShape):

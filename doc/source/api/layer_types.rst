@@ -11,9 +11,19 @@ Classes used for the Layer API.
 .. autosummary::
      :toctree: _autosummary
 
+     CopyPottingRegionRequest
+     DeletePottingRegionRequest
      PolygonalShape
      RectangularShape
      SlotShape
      CircularShape
      PCBShape
-     PottingRegionData
+     PottingRegion
+     PottingRegionCopyData
+     PottingRegionDeleteData
+     PottingRegionUpdateData
+     UpdatePottingRegionRequest
+
+
+
+
