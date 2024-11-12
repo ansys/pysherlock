@@ -329,31 +329,33 @@ class Layer(GrpcStub):
         list[SherlockCommonService_pb2.ReturnCode]
             Return codes for each request
 
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import CopyPottingRegionRequest
         >>> from ansys.sherlock.core.types.layer_types import PottingRegionCopyData
         >>> sherlock = launch_sherlock()
-        >>> request = CopyPottingRegionRequest(
-                project=project,
-                potting_region_copy_data=[
-                    PottingRegionCopyData(
-                        cca_name=cca_name,
-                        potting_id=potting_id,
-                        copy_potting_id=new_id,
-                        center_x=center_x,
-                        center_y=center_y
-                    ),
-                    PottingRegionCopyData(
-                        cca_name=cca_name,
-                        potting_id=new_id,
-                        copy_potting_id=new_id+"1",
-                        center_x=center_x,
-                        center_y=center_y
-                    )
-                ]
-            )
-
-        >>> responses = sherlock.layer.copy_potting_region(request)
+        >>>
+        >>> copy_request_example = CopyPottingRegionRequest(
+            project=project,
+            potting_region_copy_data=[
+                PottingRegionCopyData(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    copy_potting_id=new_id,
+                    center_x=center_x,
+                    center_y=center_y
+                ),
+                PottingRegionCopyData(
+                    cca_name=cca_name,
+                    potting_id=new_id,
+                    copy_potting_id=new_id+"1",
+                    center_x=center_x,
+                    center_y=center_y
+                )
+            ]
+        )
+        >>> responses_example = sherlock.layer.copy_potting_region(copy_request_example)
         """
         copy_request = request._convert_to_grpc()
 
@@ -378,20 +380,23 @@ class Layer(GrpcStub):
         list[SherlockCommonService_pb2.ReturnCode]
             Return codes for each request
 
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import DeletePottingRegionRequest
         >>> from ansys.sherlock.core.types.layer_types import PottingRegionDeleteData
         >>> sherlock = launch_sherlock()
-        >>> request = DeletePottingRegionRequest(
-                    project=project,
-                    potting_region_delete_data=[
-                        PottingRegionDeleteData(
-                            cca_name=cca_name,
-                            potting_id=potting_id
-                        )
-                    ]
+        >>>
+        >>> delete_request_example = DeletePottingRegionRequest(
+            project=project,
+            potting_region_delete_data=[
+                PottingRegionDeleteData(
+                    cca_name=cca_name,
+                    potting_id=potting_id
                 )
-        >>> responses = sherlock.layer.delete_potting_region(request)
+            ]
+        )
+        >>> responses_example = sherlock.layer.delete_potting_region(delete_request_example)
         """
         delete_request = request._convert_to_grpc()
 

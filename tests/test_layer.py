@@ -48,23 +48,23 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
-    # helper_test_update_mount_points_by_file(layer)
-    # helper_test_delete_all_ict_fixtures(layer)
-    # helper_test_delete_all_mount_points(layer)
-    # helper_test_delete_all_test_points(layer)
-    # helper_test_add_potting_region(layer)
-    # helper_test_update_potting_region(layer)
-    # helper_test_copy_potting_regions(layer)
+    helper_test_update_mount_points_by_file(layer)
+    helper_test_delete_all_ict_fixtures(layer)
+    helper_test_delete_all_mount_points(layer)
+    helper_test_delete_all_test_points(layer)
+    helper_test_add_potting_region(layer)
+    helper_test_update_potting_region(layer)
+    helper_test_copy_potting_regions(layer)
     helper_test_delete_potting_regions(layer)
-    # helper_test_update_test_fixtures_by_file(layer)
-    # helper_test_update_test_points_by_file(layer)
-    # helper_test_export_all_mount_points(layer)
-    # helper_test_export_all_test_fixtures(layer)
-    # helper_test_export_all_test_points(layer)
-    # region_id = helper_test_add_modeling_region(layer)
-    # region_id = helper_test_update_modeling_region(layer, region_id)
-    # helper_test_copy_modeling_region(layer, region_id)
-    # helper_test_delete_modeling_region(layer, region_id)
+    helper_test_update_test_fixtures_by_file(layer)
+    helper_test_update_test_points_by_file(layer)
+    helper_test_export_all_mount_points(layer)
+    helper_test_export_all_test_fixtures(layer)
+    helper_test_export_all_test_points(layer)
+    region_id = helper_test_add_modeling_region(layer)
+    region_id = helper_test_update_modeling_region(layer, region_id)
+    helper_test_copy_modeling_region(layer, region_id)
+    helper_test_delete_modeling_region(layer, region_id)
 
 
 def helper_test_add_potting_region(layer):
@@ -244,7 +244,7 @@ def helper_test_update_potting_region(layer):
 
     project = "Tutorial Project"
     # Add Potting region to update
-    potting_id = f"Test Region {uuid.uuid4()}"
+    potting_id = f"Test Region update {uuid.uuid4()}"
     cca_name = "Main Board"
     potting_side = "TOP"
     potting_material = "epoxyencapsulant"
@@ -340,8 +340,8 @@ def helper_test_copy_potting_regions(layer):
 
     project = "Tutorial Project"
     cca_name = "Main Board"
-    potting_id = f"Test Orig Region {uuid.uuid4()}"
-    new_id = f"Test New Region {uuid.uuid4()}"
+    potting_id = f"Test orig Region {uuid.uuid4()}"
+    new_id = f"Test copy Region {uuid.uuid4()}"
     center_x = 0
     center_y = 0
 
