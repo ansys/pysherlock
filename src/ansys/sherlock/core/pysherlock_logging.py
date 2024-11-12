@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 from logging.handlers import TimedRotatingFileHandler
 import sys
+from typing import Optional
 
 LOG_LEVEL = logging.DEBUG
 FILE_NAME = "PySherlock.log"
@@ -38,14 +39,14 @@ def _get_file_handler():
     return file_handler
 
 
-def __get_logger(logger_name):
+def __get_logger(logger_name: str):
     return logging.get_logger(logger_name)
 
 
 class Logger:
     """Provides the PySherlock logger."""
 
-    def __init__(self, logger_name, level=logging.WARN):
+    def __init__(self, logger_name: str, level: Optional[int] = logging.WARN):
         """Initialize logger."""
         self.logger = logging.getLogger(logger_name)
         self.logger.setLevel(LOG_LEVEL)
@@ -57,7 +58,3 @@ class Logger:
         self.error = self.logger.error
         self.critical = self.logger.critical
         self.log = self.logger.log
-
-    def setLevel(self, level):
-        """Set the logging level."""
-        self.logger.setLevel(level)

@@ -22,6 +22,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidThicknessArgumentError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
 )
@@ -148,6 +149,7 @@ class Stackup(GrpcStub):
                 message="glass_construction argument is invalid."
             )
 
+        i = 0
         try:
             for i, layer in enumerate(input):
                 if len(layer) != 4:
@@ -285,8 +287,7 @@ class Stackup(GrpcStub):
             raise SherlockGenStackupError(message=str(e))
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockStackupService_pb2.GenStackupRequest(
             project=project,
@@ -428,8 +429,7 @@ class Stackup(GrpcStub):
             raise SherlockUpdateConductorLayerError(message=str(e))
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockStackupService_pb2.UpdateConductorLayerRequest(
             project=project,
@@ -610,8 +610,7 @@ class Stackup(GrpcStub):
             raise SherlockUpdateLaminateLayerError(message=str(e))
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockStackupService_pb2.UpdateLaminateRequest(
             project=project,
@@ -682,13 +681,13 @@ class Stackup(GrpcStub):
         if self.CONDUCTOR_MATERIAL_LIST is None:
             self._init_conductor_materials()
 
-        try:
-            if project == "":
-                raise SherlockListConductorLayersError(message="Project name is invalid.")
+        if project == "":
+            raise SherlockListConductorLayersError(message="Project name is invalid.")
 
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        try:
 
             request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
             response = self.stub.listConductorLayers(request)
@@ -747,12 +746,12 @@ class Stackup(GrpcStub):
         if self.CONDUCTOR_MATERIAL_LIST is None:
             self._init_conductor_materials()
 
+        if project == "":
+            raise SherlockListLaminateLayersError(message="Project name is invalid.")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
         try:
-            if project == "":
-                raise SherlockListLaminateLayersError(message="Project name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
 
             request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
             response = self.stub.listLaminates(request)
@@ -801,19 +800,16 @@ class Stackup(GrpcStub):
         >>>    cca_name="Card")
         >>> print(f"{conductor_layer_count}")
         """
-        try:
-            if project == "":
-                raise SherlockGetLayerCountError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetLayerCountError(message="CCA name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockGetLayerCountError(message="Project name is invalid.")
+        if cca_name == "":
+            raise SherlockGetLayerCountError(message="CCA name is invalid.")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockStackupService_pb2.GetLayerCountRequest(
-                project=project, ccaName=cca_name
-            )
-            response = self.stub.getLayerCount(request)
+        request = SherlockStackupService_pb2.GetLayerCountRequest(project=project, ccaName=cca_name)
+        response = self.stub.getLayerCount(request)
+        try:
             if response.returnCode.value == -1:
                 raise SherlockGetLayerCountError(response.returnCode.message)
 
@@ -859,19 +855,18 @@ class Stackup(GrpcStub):
             )
         >>> print(f"{stackup_props}")
         """
-        try:
-            if project == "":
-                raise SherlockGetStackupPropsError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetStackupPropsError(message="CCA name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockGetStackupPropsError(message="Project name is invalid.")
+        if cca_name == "":
+            raise SherlockGetStackupPropsError(message="CCA name is invalid.")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockStackupService_pb2.GetStackupPropsRequest(
-                project=project, ccaName=cca_name
-            )
-            response = self.stub.getStackupProps(request)
+        request = SherlockStackupService_pb2.GetStackupPropsRequest(
+            project=project, ccaName=cca_name
+        )
+        response = self.stub.getStackupProps(request)
+        try:
             if response.returnCode.value == -1:
                 raise SherlockGetLayerCountError(response.returnCode.message)
 
@@ -918,21 +913,21 @@ class Stackup(GrpcStub):
                                                                  thickness_unit="oz")
         >>>print(f"{total_thickness}")
         """
-        try:
-            if project == "":
-                raise SherlockGetTotalConductorThicknessError(message="Invalid project name")
-            if cca_name == "":
-                raise SherlockGetTotalConductorThicknessError(message="Invalid CCA name")
-            if thickness_unit == "":
-                raise SherlockGetTotalConductorThicknessError(message="Invalid thickness unit")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockGetTotalConductorThicknessError(message="Invalid project name")
+        if cca_name == "":
+            raise SherlockGetTotalConductorThicknessError(message="Invalid CCA name")
+        if thickness_unit == "":
+            raise SherlockGetTotalConductorThicknessError(message="Invalid thickness unit")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockStackupService_pb2.GetTotalConductorThicknessRequest(
-                project=project, ccaName=cca_name, thicknessUnit=thickness_unit
-            )
-            response = self.stub.getTotalConductorThickness(request)
+        request = SherlockStackupService_pb2.GetTotalConductorThicknessRequest(
+            project=project, ccaName=cca_name, thicknessUnit=thickness_unit
+        )
+        response = self.stub.getTotalConductorThickness(request)
+
+        try:
             if response.returnCode.value == -1:
                 raise SherlockGetTotalConductorThicknessError(response.returnCode.message)
 

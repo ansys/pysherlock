@@ -1,6 +1,19 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all analysis capabilities."""
+from typing import Optional
+
+import grpc
+
+from ansys.sherlock.core.types.analysis_types import (
+    ElementOrder,
+    ModelSource,
+    RunAnalysisRequestAnalysisType,
+    RunStrainMapAnalysisRequestAnalysisType,
+    UpdatePcbModelingPropsRequestAnalysisType,
+    UpdatePcbModelingPropsRequestPcbMaterialModel,
+    UpdatePcbModelingPropsRequestPcbModelType,
+)
 
 try:
     import SherlockAnalysisService_pb2
@@ -12,6 +25,7 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockGetPartsListValidationAnalysisPropsError,
+    SherlockNoGrpcConnectionException,
     SherlockRunAnalysisError,
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
@@ -31,7 +45,7 @@ from ansys.sherlock.core.utils.version_check import require_version
 class Analysis(GrpcStub):
     """Contains all analysis capabilities."""
 
-    def __init__(self, channel, server_version):
+    def __init__(self, channel: grpc.Channel, server_version: int):
         """Initialize a gRPC stub for the Sherlock Analysis service."""
         super().__init__(channel, server_version)
         self.stub = SherlockAnalysisService_pb2_grpc.SherlockAnalysisServiceStub(channel)
@@ -69,7 +83,7 @@ class Analysis(GrpcStub):
             "usePartTempRiseMin": "use_part_temp_rise_min",
         }
 
-    def _translate_field_names(self, names_list):
+    def _translate_field_names(self, names_list: list[str]) -> list[str]:
         names = []
         for name in list(names_list):
             names.append(self.FIELD_NAMES.get(name))
@@ -77,7 +91,10 @@ class Analysis(GrpcStub):
         return names
 
     @staticmethod
-    def _add_analyses(request, analyses):
+    def _add_analyses(
+        request: SherlockAnalysisService_pb2.RunAnalysisRequest,
+        analyses: list[tuple[RunAnalysisRequestAnalysisType, tuple[str, str]]],
+    ):
         """Add analyses."""
         for a in analyses:
             analysis = request.analyses.add()
@@ -92,34 +109,34 @@ class Analysis(GrpcStub):
     @require_version()
     def run_analysis(
         self,
-        project,
-        cca_name,
-        analyses,
-    ):
+        project: str,
+        cca_name: str,
+        analyses: list[tuple[RunAnalysisRequestAnalysisType, tuple[str, str]]],
+    ) -> int:
         """Run one or more Sherlock analyses.
 
         Available Since: 2021R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        analyses : list of ``elements``
+        analyses: list of ``elements``
 
-            - elements: list
+            - elements: list[tuple[RunAnalysisRequestAnalysisType, tuple[str, str]]]
                 Tuples (``type``, ``event``)
 
-                - analysis_type : RunAnalysisRequestAnalysisType
+                - analysis_type: RunAnalysisRequestAnalysisType
                     Type of analysis to run.
 
-                - event : list
+                - event: list[tuple[str, str]]
                     Tuples (``phase_name``, ``event_name``)
 
-                    - phase_name : str
+                    - phase_name: str
                         Name of the life cycle phase.
-                    - event_name : str
+                    - event_name: str
                         Name of the life cycle event.
 
         Returns
@@ -166,8 +183,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockAnalysisService_pb2.RunAnalysisRequest(
             project=project,
@@ -189,20 +205,22 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version()
-    def get_harmonic_vibe_input_fields(self, model_source=None):
+    def get_harmonic_vibe_input_fields(
+        self, model_source: Optional[ModelSource] = None
+    ) -> list[str]:
         """Get harmonic vibe property fields based on the user configuration.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        model_source : ModelSource, optional
+        model_source: ModelSource, optional
             Model source to get the harmonic vibe property fields from.
             The default is ``None``.
 
         Returns
         -------
-        list
+        list[str]
             Harmonic vibe property fields based on the user configuration.
 
         Examples
@@ -221,8 +239,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockAnalysisService_pb2.GetHarmonicVibeInputFieldsRequest(
             modelSource=model_source
@@ -230,32 +247,30 @@ class Analysis(GrpcStub):
         response = self.stub.getHarmonicVibeInputFields(message)
 
         fields = self._translate_field_names(response.fieldName)
-        LOG.info(fields)
-
         return fields
 
     @require_version()
     def update_harmonic_vibe_props(
         self,
-        project,
-        harmonic_vibe_properties,
-    ):
+        project: str,
+        harmonic_vibe_properties: dict[str, bool | int | float | str],
+    ) -> int:
         """Update properties for a harmonic vibe analysis.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        harmonic_vibe_properties : list
+        harmonic_vibe_properties: dict[str, bool | int | float | str]
             Harmonic vibe properties for a CCA consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
             - model_source: ModelSource
                 Model source. The default is ``None``.
-            - harmonic_vibe_count : int
+            - harmonic_vibe_count: int
                 Number of harmonic vibe result layers to generate. The default is ``None``.
             - harmonic_vibe_damping: str
                 One or more modal damping ratios. The default is ``None``.
@@ -361,8 +376,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.updateHarmonicVibeProps(request)
 
@@ -376,7 +390,8 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def _set_update_harmonic_vibe_props_request_properties(self, request, harmonic_vibe_properties):
+    @staticmethod
+    def _set_update_harmonic_vibe_props_request_properties(request, harmonic_vibe_properties):
         for i, harmonic_vibe_props in enumerate(harmonic_vibe_properties):
             if not isinstance(harmonic_vibe_props, dict):
                 raise SherlockUpdateHarmonicVibePropsError(
@@ -529,15 +544,16 @@ class Analysis(GrpcStub):
                 props_request.strainMapNaturalFreq = strain_map_natural_freq
 
     @require_version(241)
-    def get_ict_analysis_input_fields(self):
+    def get_ict_analysis_input_fields(self) -> list[str]:
         """Get ICT analysis property fields based on the user configuration.
 
         Available Since: 2024R1
 
         Returns
         -------
-        list
+        list[str]
             ICT analysis property fields based on the user configuration.
+            ``None`` if not connected to Sherlock.
 
         Examples
         --------
@@ -546,8 +562,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_ict_analysis_input_fields()
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockAnalysisService_pb2.GetICTAnalysisInputFieldsRequest()
         response = self.stub.getICTAnalysisInputFields(message)
@@ -560,25 +575,25 @@ class Analysis(GrpcStub):
     @require_version(241)
     def update_ict_analysis_props(
         self,
-        project,
-        ict_analysis_properties,
-    ):
+        project: str,
+        ict_analysis_properties: dict[str, bool | float | int | str],
+    ) -> int:
         """Update properties for an ICT analysis.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        ict_analysis_properties : list
+        ict_analysis_properties: dict[str, bool | float | int | str]
             ICT analysis properties for a CCA consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
-            - ict_application_time : double
+            - ict_application_time: float
                 Specifies the amount of time to complete one ICT event.
-            - ict_application_time_units : str
+            - ict_application_time_units: str
                 Application time units.
                 Options are ``"ms"``, ``"sec"``, ``"min"``, ``"hr"``, ``"day"``, ``"year"``.
             - ict_number_of_events: int
@@ -692,8 +707,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.updateICTAnalysisProps(request)
 
@@ -708,21 +722,23 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version(241)
-    def get_mechanical_shock_input_fields(self, model_source=None):
+    def get_mechanical_shock_input_fields(
+        self, model_source: Optional[ModelSource] = None
+    ) -> list[str]:
         """Get mechanical shock property fields based on the user configuration.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        model_source : ModelSource, optional
+        model_source: ModelSource, optional
             Model source to get the random vibe property fields from.
-            Only ModelSource.GENERATED is supported.
+            Only GENERATED is supported.
             Default is ``None``.
 
         Returns
         -------
-        list
+        list[str]
             Mechanical shock property fields based on the user configuration.
 
         Examples
@@ -741,8 +757,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockAnalysisService_pb2.GetMechanicalShockInputFieldsRequest(
             modelSource=model_source
@@ -757,21 +772,21 @@ class Analysis(GrpcStub):
     @require_version(241)
     def update_mechanical_shock_props(
         self,
-        project,
-        mechanical_shock_properties,
-    ):
+        project: str,
+        mechanical_shock_properties: dict[str, bool | float | int | str],
+    ) -> int:
         """Update properties for a mechanical shock analysis.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        mechanical_shock_properties : list
+        mechanical_shock_properties: dict[str, bool | float | int | str]
             Mechanical shock properties for a CCA consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
             - model_source: ModelSource, optional
                 Model source. The default is ``None``.
@@ -799,7 +814,7 @@ class Analysis(GrpcStub):
             - natural_freq_max_units: str
                 Maximum frequency units. The default is ``None``.
                 Options are ``"HZ"``, ``"KHZ"``, ``"MHZ"``, and ``"GHZ"``.
-            - analysis_temp: double
+            - analysis_temp: float
                 Temperature. The default is ``None``.
             - analysis_temp_units: str
                 Temperature units. The default is ``None``.
@@ -946,8 +961,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.updateMechanicalShockProps(request)
 
@@ -962,14 +976,14 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version(241)
-    def get_solder_fatigue_input_fields(self):
+    def get_solder_fatigue_input_fields(self) -> list[str]:
         """Get solder fatigue property fields based on the user configuration.
 
         Available Since: 2024R1
 
         Returns
         -------
-        list
+        list[str]
             Solder fatigue property fields based on the user configuration.
 
         Examples
@@ -988,39 +1002,36 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_solder_fatigue_input_fields()
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockAnalysisService_pb2.GetSolderFatigueInputFieldsRequest()
         response = self.stub.getSolderFatigueInputFields(message)
 
         fields = self._translate_field_names(response.fieldName)
-        LOG.info(fields)
-
         return fields
 
     @require_version(241)
     def update_solder_fatigue_props(
         self,
-        project,
-        solder_fatigue_properties,
-    ):
+        project: str,
+        solder_fatigue_properties: dict[str, bool | float | str],
+    ) -> int:
         """Update properties for a solder fatigue analysis.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        solder_fatigue_properties : list
+        solder_fatigue_properties: dict[str, bool | float | str]
             Mechanical shock properties for a CCA consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
             - solder_material: str
                 Solder material. The default is ``None``.
-            - part_temp : float
+            - part_temp: float
                 Part temperature. The default is ``None``.
             - part_temp_units: str
                 Part temperature units. The default is ``None``.
@@ -1124,8 +1135,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.updateSolderFatigueProps(request)
 
@@ -1140,21 +1150,21 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version()
-    def get_random_vibe_input_fields(self, model_source=None):
+    def get_random_vibe_input_fields(self, model_source: Optional[ModelSource] = None) -> list[str]:
         """Get random vibe property fields based on the user configuration.
 
         Available Since: 2023R2
 
         Parameters
         ----------
-        model_source : ModelSource, optional
+        model_source: ModelSource, optional
             Model source to get the random vibe property fields from.
             The default is ``None``.
 
         Returns
         -------
-        list
-            Random vibe property fields based on the user configuration.
+        list[str]
+            Random vibe input field property names based on the user configuration.
 
         Examples
         --------
@@ -1172,8 +1182,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_random_vibe_input_fields(ModelSource.STRAIN_MAP)
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockAnalysisService_pb2.GetRandomVibeInputFieldsRequest(
             modelSource=model_source
@@ -1181,39 +1190,37 @@ class Analysis(GrpcStub):
         response = self.stub.getRandomVibeInputFields(message)
 
         fields = self._translate_field_names(response.fieldName)
-        LOG.info(fields)
-
         return fields
 
     @require_version()
     def update_random_vibe_props(
         self,
-        project,
-        cca_name,
-        random_vibe_damping=None,
-        natural_freq_min=None,
-        natural_freq_min_units=None,
-        natural_freq_max=None,
-        natural_freq_max_units=None,
-        analysis_temp=None,
-        analysis_temp_units=None,
-        part_validation_enabled=None,
-        force_model_rebuild=None,
-        reuse_modal_analysis=None,
-        perform_nf_freq_range_check=None,
-        require_material_assignment_enabled=None,
-        model_source=None,
-        strain_map_natural_freqs=None,
-    ):
+        project: str,
+        cca_name: str,
+        random_vibe_damping: Optional[str] = None,
+        natural_freq_min: Optional[float] = None,
+        natural_freq_min_units: Optional[str] = None,
+        natural_freq_max: Optional[float] = None,
+        natural_freq_max_units: Optional[str] = None,
+        analysis_temp: Optional[float] = None,
+        analysis_temp_units: Optional[str] = None,
+        part_validation_enabled: Optional[bool] = None,
+        force_model_rebuild: Optional[str] = None,
+        reuse_modal_analysis: Optional[bool] = None,
+        perform_nf_freq_range_check: Optional[bool] = None,
+        require_material_assignment_enabled: Optional[bool] = None,
+        model_source: Optional[ModelSource] = None,
+        strain_map_natural_freqs: Optional[str] = None,
+    ) -> int:
         """Update properties for a random vibe analysis.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
         random_vibe_damping: str, optional
             One or more modal damping ratios. The default is ``None``.
@@ -1253,8 +1260,8 @@ class Analysis(GrpcStub):
         model_source: ModelSource, optional
             Model source. The default is ``None``.
             This parameter is required for strain map analysis.
-        strain_map_natural_freqs : list, optional
-            Natural frequencies. The default is ``None``.
+        strain_map_natural_freqs: str, optional
+            Comma-separated list of natural frequencies. The default is ``None``.
             This parameter is required for strain map analysis.
 
         Returns
@@ -1304,8 +1311,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockAnalysisService_pb2.UpdateRandomVibePropsRequest(
             project=project,
@@ -1341,14 +1347,14 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version()
-    def get_natural_frequency_input_fields(self):
+    def get_natural_frequency_input_fields(self) -> list[str]:
         """Get natural frequency property fields based on the user configuration.
 
         Available Since: 2023R2
 
         Returns
         -------
-        list
+        list[str]
             Matural frequency property fields based on the user configuration.
 
         Examples
@@ -1367,15 +1373,12 @@ class Analysis(GrpcStub):
             >>> sherlock.analysis.get_natural_frequency_input_fields()
         """
         if not self._is_connection_up():
-            LOG.error("There is not connected to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockAnalysisService_pb2.GetNaturalFrequencyInputFieldsRequest()
         response = self.stub.getNaturalFrequencyInputFields(message)
 
         fields = self._translate_field_names(response.fieldName)
-        LOG.info(fields)
-
         return fields
 
     @require_version()
@@ -1390,18 +1393,18 @@ class Analysis(GrpcStub):
         natural_freq_max_units: str,
         part_validation_enabled: bool,
         require_material_assignment_enabled: bool,
-        analysis_temp: float = None,
-        analysis_temp_units: str = None,
-    ):
+        analysis_temp: Optional[float] = None,
+        analysis_temp_units: Optional[str] = None,
+    ) -> int:
         """Update properties for a natural frequency analysis.
 
         Available Since:2023R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
         natural_freq_count: int
             Natural frequency result count.
@@ -1467,8 +1470,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockAnalysisService_pb2.UpdateNaturalFrequencyPropsRequest(
             project=project,
@@ -1499,38 +1501,38 @@ class Analysis(GrpcStub):
     @require_version()
     def run_strain_map_analysis(
         self,
-        project,
-        cca_name,
-        strain_map_analyses,
-    ):
+        project: str,
+        cca_name: str,
+        strain_map_analyses: list[tuple[RunStrainMapAnalysisRequestAnalysisType, list[list[str]]]],
+    ) -> int:
         """Run one or more strain map analyses.
 
         Available Since: 2023R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the main CCA for the analysis.
-        strain_map_analyses : list
+        strain_map_analyses: list[tuple[RunStrainMapAnalysisRequestAnalysisType, list[list[str]]]]
             Analyses consisting of these properties:
 
-            - analysis_type : RunStrainMapAnalysisRequestAnalysisType
+            - analysis_type: RunStrainMapAnalysisRequestAnalysisType
                 Type of analysis to run.
-            - event_strain_maps : list
+            - event_strain_maps: list
                 Strain maps assigned to the desired life cycle events for
                 a given PCB side. The list consists of these properties:
 
-              - phase_name : str
+              - phase_name: str
                   Life cycle phase name for the strain map assignment.
-              - event_name : str
+              - event_name: str
                   Life cycle event name for the strain map assignment.
-              - pcb_side : str
+              - pcb_side: str
                   PCB side for the strain map. Options are ``"TOP"`` and ``"BOTTOM"``.
-              - strain_map : str
+              - strain_map: str
                   Name of the strain map assigned to the life cycle event.
-              - sub_assembly_name : str, optional
+              - sub_assembly_name: str, optional
                   Name of the subassembly CCA to assign the strain map to.
 
         Returns
@@ -1637,13 +1639,16 @@ class Analysis(GrpcStub):
 
                     if len(event_strain_map) == 5:
                         event_strain_map_request.subAssemblyName = event_strain_map[4]
+        except SherlockRunStrainMapAnalysisError as e:
+            LOG.error(str(e))
+            raise e
 
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            response = self.stub.runStrainMapAnalysis(request)
+        response = self.stub.runStrainMapAnalysis(request)
 
+        try:
             if response.value == -1:
                 raise SherlockRunStrainMapAnalysisError(response.message)
             else:
@@ -1654,42 +1659,60 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version()
-    def update_pcb_modeling_props(self, project, cca_names, analyses):
+    def update_pcb_modeling_props(
+        self,
+        project: str,
+        cca_names: list[str],
+        analyses: list[
+            tuple[
+                str,
+                UpdatePcbModelingPropsRequestAnalysisType
+                | UpdatePcbModelingPropsRequestPcbModelType
+                | bool
+                | UpdatePcbModelingPropsRequestPcbMaterialModel
+                | ElementOrder
+                | int
+                | str
+                | float
+                | bool,
+            ]
+        ],
+    ) -> int:
         """Update FEA PCB Modeling properties for one or more CCAs.
 
         Available Since: 2023R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_names : list
+        cca_names: list
             Names of the CCAs to be used for the analysis.
-        analyses : list
+        analyses: list[tuple[str, ...]]
             Elements consisting of the following properties:
 
-            - analysis_type : UpdatePcbModelingPropsRequestAnalysisType
+            - analysis_type: UpdatePcbModelingPropsRequestAnalysisType
                 Type of analysis applied.
-            - pcb_model_type : UpdatePcbModelingPropsRequestPcbModelType
+            - pcb_model_type: UpdatePcbModelingPropsRequestPcbModelType
                 The PCB modeling mesh type.
-            - modeling_region_enabled : bool
+            - modeling_region_enabled: bool
                 Indicates if modeling regions are enabled.
-            - pcb_material_model : UpdatePcbModelingPropsRequestPcbMaterialModel
+            - pcb_material_model: UpdatePcbModelingPropsRequestPcbMaterialModel
                 The PCB modeling PCB model type.
-            - pcb_max_materials : int
+            - pcb_max_materials: int
                 The number of PCB materials for Uniform Elements and Layered Elements PCB model
                 types. Not applicable if PCB model is Uniform or Layered.
-            - pcb_elem_order : ElementOrder
+            - pcb_elem_order: ElementOrder
                 The element order for PCB elements.
-            - pcb_max_edge_length : float
+            - pcb_max_edge_length: float
                 The maximum mesh size for PCB elements.
-            - pcb_max_edge_length_units : str
+            - pcb_max_edge_length_units: str
                 The length units for the maximum mesh size.
-            - pcb_max_vertical : float
+            - pcb_max_vertical: float
                 The maximum vertical mesh size for PCB elements.
-            - pcb_max_vertical_units : str
+            - pcb_max_vertical_units: str
                 The length units for the maximum vertical mesh size.
-            - quads_preferred : bool
+            - quads_preferred: bool
                 Indicates that the meshing engine should attempt to generate quad-shaped elements
                 when creating the mesh.
 
@@ -1729,42 +1752,46 @@ class Analysis(GrpcStub):
                 raise SherlockUpdatePcbModelingPropsError(message="CCA names are invalid.")
             if not analyses:
                 raise SherlockUpdatePcbModelingPropsError(message="Analysis input(s) are invalid.")
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+        except SherlockUpdatePcbModelingPropsError as e:
+            LOG.error(str(e))
+            raise e
 
-            request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest(
-                project=project,
-                ccaNames=cca_names,
-            )
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            """Add PCB Modeling Props to Request"""
-            uniform = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Uniform
-            layered = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Layered
-            for a in analyses:
-                analysis = request.analyses.add()
-                analysis.type = a[0]
-                analysis.modelType = a[1]
-                analysis.modelingRegionEnabled = a[2]
-                analysis.pcbMaterialModel = a[3]
-                if analysis.pcbMaterialModel == uniform or analysis.pcbMaterialModel == layered:
-                    analysis.pcbElemOrder = a[4]
-                    analysis.pcbMaxEdgeLength = a[5]
-                    analysis.pcbMaxEdgeLengthUnits = a[6]
-                    analysis.pcbMaxVertical = a[7]
-                    analysis.pcbMaxVerticalUnits = a[8]
-                    analysis.quadsPreferred = a[9]
-                else:
-                    analysis.pcbMaxMaterials = a[4]
-                    analysis.pcbElemOrder = a[5]
-                    analysis.pcbMaxEdgeLength = a[6]
-                    analysis.pcbMaxEdgeLengthUnits = a[7]
-                    analysis.pcbMaxVertical = a[8]
-                    analysis.pcbMaxVerticalUnits = a[9]
-                    analysis.quadsPreferred = a[10]
+        request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest(
+            project=project,
+            ccaNames=cca_names,
+        )
 
-            response = self.stub.updatePcbModelingProps(request)
+        """Add PCB Modeling Props to Request"""
+        uniform = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Uniform
+        layered = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Layered
+        for a in analyses:
+            analysis = request.analyses.add()
+            analysis.type = a[0]
+            analysis.modelType = a[1]
+            analysis.modelingRegionEnabled = a[2]
+            analysis.pcbMaterialModel = a[3]
+            if analysis.pcbMaterialModel == uniform or analysis.pcbMaterialModel == layered:
+                analysis.pcbElemOrder = a[4]
+                analysis.pcbMaxEdgeLength = a[5]
+                analysis.pcbMaxEdgeLengthUnits = a[6]
+                analysis.pcbMaxVertical = a[7]
+                analysis.pcbMaxVerticalUnits = a[8]
+                analysis.quadsPreferred = a[9]
+            else:
+                analysis.pcbMaxMaterials = a[4]
+                analysis.pcbElemOrder = a[5]
+                analysis.pcbMaxEdgeLength = a[6]
+                analysis.pcbMaxEdgeLengthUnits = a[7]
+                analysis.pcbMaxVertical = a[8]
+                analysis.pcbMaxVerticalUnits = a[9]
+                analysis.quadsPreferred = a[10]
 
+        response = self.stub.updatePcbModelingProps(request)
+
+        try:
             if response.value == -1:
                 raise SherlockUpdatePcbModelingPropsError(response.message)
             return response.value
@@ -1773,39 +1800,41 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version(241)
-    def update_part_modeling_props(self, project, part_modeling_props):
+    def update_part_modeling_props(
+        self, project: str, part_modeling_props: dict[str, bool | float | str]
+    ) -> int:
         """Update part modeling properties for a given project's CCA.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        part_modeling_props : dict
+        part_modeling_props: dict[str, bool | float | str]
             Part modeling properties for a CCA consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
-            - part_enabled : bool
+            - part_enabled: bool
                 Whether to enable part modeling. All other fields are ignored if disabled.
-            - part_min_size : float, optional
+            - part_min_size: float, optional
                 Minimum part size.
-            - part_min_size_units : str, optional
+            - part_min_size_units: str, optional
                 Minimum part size units.
-            - part_elem_order : str, optional
+            - part_elem_order: str, optional
                 Part element order.
                 Options are ``"First Order (Linear)"``, ``"Second Order (Quadratic)"``,
                 or ``"Solid Shell"``.
-            - part_max_edge_length : float, optional
+            - part_max_edge_length: float, optional
                 Part max edge length.
-            - part_max_edge_length_units : str, optional
+            - part_max_edge_length_units: str, optional
                 Part max edge length units.
-            - part_max_vertical : float, optional
+            - part_max_vertical: float, optional
                 Part max vertical.
-            - part_max_vertical_units : str, optional
+            - part_max_vertical_units: str, optional
                 Part max vertical units.
-            - part_results_filtered : bool, optional
+            - part_results_filtered: bool, optional
                 Whether to enable filtered part results.
 
         Returns
@@ -1890,8 +1919,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.updatePartModelingProperties(request)
 
@@ -1908,35 +1936,35 @@ class Analysis(GrpcStub):
     @require_version(251)
     def update_part_list_validation_analysis_props(
         self,
-        project,
-        properties_per_cca,
-    ):
+        project: str,
+        properties_per_cca: list[dict[str, bool | str]],
+    ) -> int:
         """Update properties for a Part List Validation analysis.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        properties_per_cca : list
+        properties_per_cca: list[dict[str, bool | str]]
             Part List Validation analysis properties for each CCA consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
-            - process_use_avl : bool
+            - process_use_avl: bool
                 Whether to use AVL.
-            - process_use_wizard : bool
+            - process_use_wizard: bool
                 Whether to use the wizard.
-            - process_check_confirmed_properties : bool
+            - process_check_confirmed_properties: bool
                 Whether to check confirmed properties.
-            - process_check_part_numbers : bool
+            - process_check_part_numbers: bool
                 Whether to check part numbers.
-            - matching_mode : str
+            - matching_mode: str
                 Matching type.
-            - avl_require_internal_part_number : bool
+            - avl_require_internal_part_number: bool
                 Whether to require an internal part number.
-            - avl_require_approved_description : bool
+            - avl_require_approved_description: bool
                 Whether to require an approved description.
-            - avl_require_approved_manufacturer : bool
+            - avl_require_approved_manufacturer: bool
                 Whether to require an approved manufacturer.
 
         Returns
@@ -2031,8 +2059,7 @@ class Analysis(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.updatePartsListValidationProps(request)
 
@@ -2051,41 +2078,41 @@ class Analysis(GrpcStub):
         self,
         project: str,
         cca_name: str,
-    ):
+    ) -> SherlockAnalysisService_pb2.PartsListValidationPropsResponse:
         """Get properties for a Part List Validation analysis.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
 
         Returns
         -------
         PartsListValidationPropsResponse
-            - returnCode : ReturnCode
-                - value : int
+            - returnCode: ReturnCode
+                - value: int
                     Status code of the response. 0 for success.
-                - message : str
+                - message: str
                     indicates general errors that occurred while attempting to update parts
-            - partLibrary : str
+            - partLibrary: str
                 Part library name
-            - processUseAVL : bool
+            - processUseAVL: bool
                 Process option to use AVL
-            - processUseWizard : bool
+            - processUseWizard: bool
                 Process option to use wizard
-            - processCheckConfirmedProperties : bool
+            - processCheckConfirmedProperties: bool
                 Process option to check confirmed properties
-            - processCheckPartNumbers : bool
+            - processCheckPartNumbers: bool
                 Process option to check part numbers
-            - matching : MatchingMode
+            - matching: MatchingMode
                 Matching type
-            - avlRequireInternalPartNumber : bool
+            - avlRequireInternalPartNumber: bool
                 AVL option to require internal part number
-            - avlRequireApprovedDescription : bool
+            - avlRequireApprovedDescription: bool
                 AVL option to require approved description
-            - avlRequireApprovedManufacturer : bool
+            - avlRequireApprovedManufacturer: bool
                 AVL option to require approved manufacturer
 
         Examples
@@ -2120,8 +2147,7 @@ class Analysis(GrpcStub):
             )
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             response = self.stub.getPartsListValidationProps(request)
 

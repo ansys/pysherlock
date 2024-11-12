@@ -1,6 +1,7 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
+from typing import Optional
 
 try:
     import SherlockPartsService_pb2
@@ -16,6 +17,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportPartsListError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsListPropertiesError,
@@ -44,7 +46,10 @@ class Parts(GrpcStub):
         self.BOARD_SIDES = None
 
     @staticmethod
-    def _add_part_loc_request(request, parts):
+    def _add_part_loc_request(
+        request: SherlockPartsService_pb2.UpdatePartsLocationsRequest,
+        parts: list[tuple[str, str, str, str, str, str, str]],
+    ) -> None:
         """Add part locations to the request."""
         for p in parts:
             part = request.partLoc.add()
@@ -56,7 +61,9 @@ class Parts(GrpcStub):
             part.boardSide = p[5]
             part.mirrored = p[6]
 
-    def _check_part_loc_validity(self, part_locations):
+    def _check_part_loc_validity(
+        self, part_locations: list[tuple[str, str, str, str, str, str, str]]
+    ) -> None:
         """Check input to see if it is a valid part location list."""
         if not isinstance(part_locations, list):
             raise SherlockUpdatePartsLocationsError(message="Part location argument is invalid.")
@@ -152,27 +159,31 @@ class Parts(GrpcStub):
     @require_version()
     def update_parts_list(
         self,
-        project,
-        cca_name,
-        part_library,
-        matching_mode,
-        duplication_mode,
-    ):
+        project: str,
+        cca_name: str,
+        part_library: str,
+        matching_mode: str,
+        duplication_mode: (
+            PartsListSearchDuplicationMode.FIRST
+            | PartsListSearchDuplicationMode.ERROR
+            | PartsListSearchDuplicationMode.IGNORE
+        ),
+    ) -> int:
         """Update a parts list based on matching and duplication preferences.
 
         Available Since: 2021R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        part_library : str
+        part_library: str
             Name of the parts library.
-        matching_mode : str
+        matching_mode: str
             Matching mode for updates.
-        duplication_mode : PartsListSearchDuplicationMode
+        duplication_mode: PartsListSearchDuplicationMode
             How to handle duplication during the update.
 
         Returns
@@ -214,8 +225,7 @@ class Parts(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockPartsService_pb2.UpdatePartsListRequest(
             project=project,
@@ -241,34 +251,36 @@ class Parts(GrpcStub):
             raise e
 
     @require_version()
-    def update_parts_locations(self, project, cca_name, part_loc):
+    def update_parts_locations(
+        self, project: str, cca_name: str, part_loc: list[tuple[str, str, str, str, str, str, str]]
+    ) -> int:
         """Update one or more part locations.
 
         Available Since: 2022R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        part_loc : list
+        part_loc: list[tuple[str, str, str, str, str, str, str]]
             List defining the part locations. The list consists
             of these properties:
 
-            - refDes : str
+            - refDes: str
                 Reference designator of the part.
-            - x : str
+            - x: str
                 Value for the x coordinate.
-            - y : str
+            - y: str
                 Value for the y coordinate.
             - rotation: str
                 Rotation.
             - location_units: str
                 Locations units.
-            - board_side : str
+            - board_side: str
                 Board side.
-            - mirrored : str
+            - mirrored: str
                 Mirrored.
 
         Returns
@@ -315,8 +327,7 @@ class Parts(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockPartsService_pb2.UpdatePartsLocationsRequest(
             project=project,
@@ -344,20 +355,22 @@ class Parts(GrpcStub):
             raise e
 
     @require_version()
-    def update_parts_locations_by_file(self, project, cca_name, file_path, numeric_format=""):
+    def update_parts_locations_by_file(
+        self, project: str, cca_name: str, file_path: str, numeric_format: Optional[str] = ""
+    ) -> int:
         """Update one or more part locations using a CSV file.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        file_path : str
+        file_path: str
             Full path to the file with the components and location properties.
-        numeric_format : str, optional
+        numeric_format: str, optional
             Numeric format for the file, which indicates whether commas or points
             are used as decimal markers. The default is ``""``, in which case
             ``"English (United States)"`` is the numeric format. This
@@ -400,8 +413,7 @@ class Parts(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockPartsService_pb2.UpdatePartsLocationsByFileRequest(
             project=project,
@@ -429,20 +441,22 @@ class Parts(GrpcStub):
             raise e
 
     @require_version()
-    def import_parts_list(self, project, cca_name, import_file, import_as_user_src):
+    def import_parts_list(
+        self, project: str, cca_name: str, import_file: str, import_as_user_src: bool
+    ) -> int:
         """Import a parts list for a CCA.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        import_file : str
+        import_file: str
             Full path to the CSV file with the parts list.
-        import_as_user_src : bool
+        import_as_user_src: bool
             Whether to set the data source of the properties to ``"User"``.
             Otherwise, the data source is set to the name of the CSV file.
 
@@ -483,8 +497,7 @@ class Parts(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockPartsService_pb2.ImportPartsListRequest(
             project=project,
@@ -506,18 +519,18 @@ class Parts(GrpcStub):
             raise e
 
     @require_version()
-    def export_parts_list(self, project, cca_name, export_file):
+    def export_parts_list(self, project: str, cca_name: str, export_file: str) -> int:
         """Export a parts list for a CCA.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        export_file : str
+        export_file: str
             Full path for the CSV file to export the parts list to.
 
         Returns
@@ -556,8 +569,7 @@ class Parts(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockPartsService_pb2.ExportPartsListRequest(
             project=project, ccaName=cca_name, exportFile=export_file
@@ -576,16 +588,16 @@ class Parts(GrpcStub):
             raise e
 
     @require_version()
-    def enable_lead_modeling(self, project, cca_name):
+    def enable_lead_modeling(self, project: str, cca_name: str):
         """Enable lead modeling for leaded parts.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
 
         Returns
@@ -638,26 +650,28 @@ class Parts(GrpcStub):
             raise e
 
     @require_version()
-    def get_part_location(self, project, cca_name, ref_des, location_units):
+    def get_part_location(
+        self, project: str, cca_name: str, ref_des: str, location_units: str
+    ) -> list[PartLocation]:
         """Return the location properties for one or more part.
 
         Available Since: 2022R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        ref_des : str
-            Reference designator for specific part.
+        ref_des: str
+            Comma separated list of reference designators of parts to retrieve locations for.
         location_units: str
             Valid units for a part's location.
 
         Returns
         -------
-        list
-            List of PartLocation objects.
+        list[PartLocation]
+            PartLocation for each part that corresponds to the reference designators.
 
         Examples
         --------
@@ -690,8 +704,7 @@ class Parts(GrpcStub):
             if location_units == "":
                 raise SherlockGetPartLocationError(message="Location unit is invalid.")
             if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockPartsService_pb2.GetPartLocationRequest(
                 project=project,
@@ -729,9 +742,9 @@ class Parts(GrpcStub):
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
         matching_mode: str
             Determines how parts are matched against the AVL
@@ -745,14 +758,14 @@ class Parts(GrpcStub):
         Returns
         -------
         UpdatePartsListFromAVLResponse
-            - returnCode : ReturnCode
-                - value : int
+            - returnCode: ReturnCode
+                - value: int
                     Status code of the response. 0 for success.
-                - message : str
+                - message: str
                     Indicates general errors that occurred while attempting to update parts
-            - numPartsUpdated : int
+            - numPartsUpdated: int
                 Number of parts updated
-            - updateErrors : list<str>
+            - updateErrors: list<str>
                 Errors found when updating part
 
         Examples
@@ -798,8 +811,7 @@ class Parts(GrpcStub):
             )
 
             if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             # Call method on server
             response = self.stub.updatePartsListFromAVL(request)
@@ -817,7 +829,12 @@ class Parts(GrpcStub):
             raise e
 
     @require_version(242)
-    def update_parts_list_properties(self, project, cca_name, part_properties):
+    def update_parts_list_properties(
+        self,
+        project: str,
+        cca_name: str,
+        part_properties: list[dict[str, list[str] | dict[str, list[str]]]],
+    ) -> int:
         """
         Update one or more properties of one or more parts in a parts list.
 
@@ -825,22 +842,22 @@ class Parts(GrpcStub):
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        part_properties : list
+        part_properties: list[dict[str, list[str] | dict[str, list[str]]]]
             List of part properties consisting of these properties:
 
-                - reference_designators : List of str, optional
+                - reference_designators: List of str, optional
                     List of the reference designator for each part to be updated. If not included,
                     update properties for all parts in the CCA.
-                - properties : list
+                - properties: list
                     List of properties consisting of these properties:
 
-                        - name : str
+                        - name: str
                             Name of property to be updated.
-                        - value : str
+                        - value: str
                             Value to be applied to the chosen part property.
 
         Returns
@@ -904,8 +921,7 @@ class Parts(GrpcStub):
                         raise SherlockUpdatePartsListPropertiesError(message="Value is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockPartsService_pb2.UpdatePartsListPropertiesRequest(
                 project=project, ccaName=cca_name
@@ -946,31 +962,31 @@ class Parts(GrpcStub):
     @require_version(242)
     def export_net_list(
         self,
-        project,
-        cca_name,
-        output_file,
-        col_delimiter=TableDelimiter.COMMA,
-        overwrite_existing=False,
-        utf8_enabled=False,
-    ):
+        project: str,
+        cca_name: str,
+        output_file: str,
+        col_delimiter: Optional[str] = TableDelimiter.COMMA,
+        overwrite_existing: Optional[bool] = False,
+        utf8_enabled: Optional[bool] = False,
+    ) -> int:
         """Export a net list to a delimited output file.
 
         Available Since: 2024R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        output_file : str
+        output_file: str
             Full path for the output file where the net list will be written.
-        col_delimiter : TableDelimiter, optional
+        col_delimiter: TableDelimiter, optional
             The delimiter character to be used. Defaults to TableDelimiter.COMMA.
-        overwrite_existing : bool, optional
+        overwrite_existing: bool, optional
             Flag to determine if existing .CSV files should be overwritten
             if they match the output_file. Defaults to False.
-        utf8_enabled : bool, optional
+        utf8_enabled: bool, optional
             Flag that specifies if UTF-8 will be used for .CSV files. Defaults to False.
 
         Returns
@@ -1009,8 +1025,7 @@ class Parts(GrpcStub):
                 raise SherlockExportNetListError(message="Output file path is required.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockPartsService_pb2.ExportNetListRequest(
                 project=project,

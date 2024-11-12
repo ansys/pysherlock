@@ -12,13 +12,14 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 
-from typing import List
+from typing import Optional
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockExportAEDBError,
     SherlockExportFEAModelError,
     SherlockModelServiceError,
+    SherlockNoGrpcConnectionException,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.common_types import Measurement
@@ -36,46 +37,46 @@ class Model(GrpcStub):
     @require_version()
     def export_trace_reinforcement_model(
         self,
-        project_name,
-        cca_name,
-        export_file,
-        overwrite=True,
-        display_model=False,
-        generate_models_for_all_layers=False,
-        coordinate_units="mm",
-        trace_param_diameter_threshold_val=2,
-        trace_param_diameter_threshold_unit="mm",
-        trace_param_min_hole_diameter_val=0.25,
-        trace_param_min_hole_diameter_unit="mm",
-        trace_drill_hole_modeling="DISABLED",
-        trace_drill_hole_min_diameter_val=2,
-        trace_drill_hole_min_diameter_unit="mm",
-        trace_drill_hole_max_edge_val=1,
-        trace_drill_hole_max_edge_unit="mm",
-    ):
+        project_name: str,
+        cca_name: str,
+        export_file: str,
+        overwrite: Optional[bool] = True,
+        display_model: Optional[bool] = False,
+        generate_models_for_all_layers: Optional[bool] = False,
+        coordinate_units: Optional[str] = "mm",
+        trace_param_diameter_threshold_val: Optional[float] = 2,
+        trace_param_diameter_threshold_unit: Optional[str] = "mm",
+        trace_param_min_hole_diameter_val: Optional[float] = 0.25,
+        trace_param_min_hole_diameter_unit: Optional[str] = "mm",
+        trace_drill_hole_modeling: Optional[str] = "DISABLED",
+        trace_drill_hole_min_diameter_val: Optional[float] = 2,
+        trace_drill_hole_min_diameter_unit: Optional[str] = "mm",
+        trace_drill_hole_max_edge_val: Optional[float] = 1,
+        trace_drill_hole_max_edge_unit: Optional[str] = "mm",
+    ) -> int:
         r"""Export a trace reinforcement model.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project_name : str
+        project_name: str
             Name of the Sherlock project to generate the trace reinforcement model for.
-        cca_name : str
+        cca_name: str
             Name of the CCA to generate the trace reinforcement model from.
-        export_file : str
+        export_file: str
             Path for saving exported files to. The file extension must be ``".wbjn"``.
-        overwrite : bool, optional
+        overwrite: bool, optional
             Whether to overwrite an existing file having the same file name.
             The default is ``True``.
-        display_model : bool, optional
+        display_model: bool, optional
             Whether to launch and display the exported model in Ansys Workbench
             Mechanical once the export finishes. The default is ``False``.
-        generate_models_for_all_layers :  bool, optional
+        generate_models_for_all_layers:  bool, optional
             Whether to generate and export trace models for not only the generated trace
             reinforcement layers but also all other layers. The default is ``False``, in
             which case only trace reinforcement layers are generated and exported.
-        coordinate_units : str, optional
+        coordinate_units: str, optional
             Units of the model coordinates to use when exporting a model.
             The default is ``"mm"``.
         trace_param_diameter_threshold_val: float, optional
@@ -157,8 +158,7 @@ class Model(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         export_request = SherlockModelService_pb2.ExportTraceReinforcementModelRequest()
         export_request.project = project_name
@@ -212,33 +212,33 @@ class Model(GrpcStub):
     def generate_trace_model(
         self,
         project_name,
-        cca_name="",
-        copper_layer_name="",
-        max_arc_segment=0.0,
-        max_arc_segment_units="mm",
-        min_trace_area=0.0,
-        min_trace_area_units="mm2",
-        min_hole_area=0.0,
-        min_hole_area_units="mm2",
-        use_snapshot_for_non_image_layer=False,
-    ):
+        cca_name: Optional[str] = "",
+        copper_layer_name: Optional[str] = "",
+        max_arc_segment: Optional[float] = 0.0,
+        max_arc_segment_units: Optional[str] = "mm",
+        min_trace_area: Optional[float] = 0.0,
+        min_trace_area_units: Optional[str] = "mm2",
+        min_hole_area: Optional[float] = 0.0,
+        min_hole_area_units: Optional[str] = "mm2",
+        use_snapshot_for_non_image_layer: Optional[bool] = False,
+    ) -> int:
         r"""Generate one or more trace models for a project.
 
         Available Since: 2023R2
 
         Parameters
         ----------
-        project_name : str
+        project_name: str
             Name of the Sherlock project to generate one or more trace models for.
-        cca_name : str, optional
+        cca_name: str, optional
             Name of the CCA to generate one or more trace models from. The default is
             ``""``, in which case trace models are generated for CCAs and
             all layers.
-        copper_layer_name : str, optional
+        copper_layer_name: str, optional
             Name of the copper layer to generate one or more trace models from. The default
             is ``""``, in which case trace models are generated either for the given CCA
             or for all layers.
-        max_arc_segment : float, optional
+        max_arc_segment: float, optional
             Maximum length of the segment to generate when Sherlock
             converts EDA arc drawing commands to line segments. The default is
             ``0.0``. Smaller values for the maximum arc segment result in smoother
@@ -246,19 +246,19 @@ class Model(GrpcStub):
             larger number of shorter segments is higher. Such short segments cause
             the FEA tool to generate a larger number of smaller elements to represent
             the curved solid.
-        max_arc_segment_units : str, optional
+        max_arc_segment_units: str, optional
             Units for the maximum arc segment. The default is ``"mm"``.
-        min_trace_area : float, optional
+        min_trace_area: float, optional
             Minimum area of any trace polygon to include in the trace model.
             The default is ``0.0``, which turns off any area filtering.
-        min_trace_area_units : str, optional
+        min_trace_area_units: str, optional
             Units for the minimum trace area. The default is ``"mm2"``.
-        min_hole_area : float, optional
+        min_hole_area: float, optional
             Minimum area of any trace hole to include in the trace model.
             The default is ``0.0``, which turns off any hole filtering.
-        min_hole_area_units : str, optional
+        min_hole_area_units: str, optional
             Units for the minimum hole area. The default is ``"mm2"``.
-        use_snapshot_for_non_image_layer : bool, optional
+        use_snapshot_for_non_image_layer: bool, optional
             Whether to use an image to generate the trace model for layers that are not
             image layers. The default is ``False``. If ``True`` and a snapshot image for
             the layer exists, the snapshot image is used. Otherwise, an image is created
@@ -288,8 +288,7 @@ class Model(GrpcStub):
             raise
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            raise
+            raise SherlockNoGrpcConnectionException()
 
         gen_request = SherlockModelService_pb2.GenerateTraceModelRequest()
         gen_request.project = project_name
@@ -316,28 +315,28 @@ class Model(GrpcStub):
     @require_version(242)
     def export_aedb(
         self,
-        project_name,
-        cca_name,
-        export_file,
-        overwrite=True,
-        display_model=False,
-    ):
+        project_name: str,
+        cca_name: str,
+        export_file: str,
+        overwrite: Optional[bool] = True,
+        display_model: Optional[bool] = False,
+    ) -> int:
         r"""Export an Electronics Desktop model.
 
         Available Since: 2024R2
 
         Parameters
         ----------
-        project_name : str
+        project_name: str
             Name of the Sherlock project to generate the EDB model for.
-        cca_name : str
+        cca_name: str
             Name of the CCA to generate the EDB model from.
-        export_file : str
+        export_file: str
             Directory for saving exported model to.
-        overwrite : bool, optional
+        overwrite: bool, optional
             Whether to overwrite an existing file having the same file name.
             The default is ``True``.
-        display_model : bool, optional
+        display_model: bool, optional
             Whether to launch and display the exported model in Ansys Electronics
             Desktop once the export finishes. The default is ``False``.
 
@@ -367,8 +366,7 @@ class Model(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         export_request = SherlockModelService_pb2.ExportAEDBRequest()
         export_request.project = project_name
@@ -388,14 +386,14 @@ class Model(GrpcStub):
             raise
 
     @require_version(242)
-    def exportTraceModel(self, layer_params):
+    def exportTraceModel(self, layer_params: list[bool | int | float | str]) -> int:
         r"""Export a trace model to a specified output file.
 
         Available Since: 2024R2
 
         Parameters
         ----------
-        layer_params : list
+        layer_params : list[bool | int | float | str]
             list of parameters for export a trace model of a single copper layer.
 
         Returns
@@ -438,8 +436,7 @@ class Model(GrpcStub):
         """
         try:
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                raise
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockModelService_pb2.ExportTraceModelRequest()
             request.traceModelExportParams.extend(layer_params)
@@ -461,24 +458,26 @@ class Model(GrpcStub):
         cca_name,
         output_file_path,
         copper_layer,
-        overwrite=False,
-        display_after=False,
-        clear_FEA_database=False,
-        use_FEA_model_ID=False,
-        coord_units="mm",
-        mesh_type=SherlockModelService_pb2.MeshType.NONE,
-        is_modeling_region_enabled=False,
-        trace_output_type=SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-        element_order=SherlockAnalysisService_pb2.ElementOrder.Linear,
-        max_mesh_size=1.0,
-        max_mesh_size_units="mm",
-        max_holes_per_trace=2,
-        is_drill_hole_modeling_enabled=False,
-        drill_hole_min_diameter=1.0,
-        drill_hole_min_diameter_units="mm",
-        drill_hole_max_edge_length=1.0,
-        drill_hole_max_edge_length_units="mm",
-    ):
+        overwrite: Optional[bool] = False,
+        display_after: Optional[bool] = False,
+        clear_FEA_database: Optional[bool] = False,
+        use_FEA_model_ID: Optional[bool] = False,
+        coord_units: Optional[str] = "mm",
+        mesh_type: Optional[int | str] = SherlockModelService_pb2.MeshType.NONE,
+        is_modeling_region_enabled: Optional[bool] = False,
+        trace_output_type: Optional[
+            int | str
+        ] = SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
+        element_order: Optional[int | str] = SherlockAnalysisService_pb2.ElementOrder.Linear,
+        max_mesh_size: Optional[float] = 1.0,
+        max_mesh_size_units: Optional[str] = "mm",
+        max_holes_per_trace: Optional[int] = 2,
+        is_drill_hole_modeling_enabled: Optional[bool] = False,
+        drill_hole_min_diameter: Optional[float] = 1.0,
+        drill_hole_min_diameter_units: Optional[str] = "mm",
+        drill_hole_max_edge_length: Optional[float] = 1.0,
+        drill_hole_max_edge_length_units: Optional[str] = "mm",
+    ) -> SherlockModelService_pb2.TraceModelExportParams:
         r"""Create a set of parameters to be used to export a single copper layer.
 
         Creates TraceModelExportParams object that can be added to an export trace model request.
@@ -645,71 +644,71 @@ class Model(GrpcStub):
         cca_name: str,
         export_file: str,
         analysis: str,
-        drill_hole_parameters: List[dict],
+        drill_hole_parameters: list[dict[str, str | Measurement]],
         detect_lead_modeling: str,
-        lead_model_parameters: List[dict],
+        lead_model_parameters: list[dict[str, int | str | Measurement]],
         display_model: bool,
         clear_FEA_database: bool,
         use_FEA_model_id: bool,
         coordinate_units: str,
-    ):
+    ) -> int:
         """
         Export a FEA model.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        export_file : str
+        export_file: str
             Full path for saving exported files to. The file extension must be ``".wbjn"``.
-        analysis : str
+        analysis: str
             The type of analysis that is being exported. Valid values are ``NaturalFreq``,
             ``HarmonicVibe``, ``ICTAnalysis``, ``MechanicalShock`` or ``RandomVibe``.
-        drill_hole_parameters : list
+        drill_hole_parameters: list[dict[str, str | Measurement]]
             List of the drill hole parameters consisting of these properties:
 
-                - drill_hole_modeling : str
+                - drill_hole_modeling: str
                     The status of the drill hole modeling feature. If enabled, automatically enable
                     drill hole modeling. Valid values are ``ENABLED/enabled`` or
                     ``DISABLED/disabled``.
-                - min_hole_diameter : MinHoleDiameter
+                - min_hole_diameter: MinHoleDiameter
                     The properties of the minimum hole diameter.
-                - max_edge_length : MaxEdgeLength
+                - max_edge_length: MaxEdgeLength
                     The properties of the maximum edge length.
-        detect_lead_modeling : str
+        detect_lead_modeling: str
             The status of the detect lead modeling feature. If enabled, automatically enable lead
             modeling if any part has lead geometry defined. Valid values are ``ENABLED`` or
             ``DISABLED``.
-        lead_model_parameters : list
+        lead_model_parameters: list[dict[str, int | str | Measurement]]
             List of the lead model parameters consisting of these properties:
 
-                - lead_modeling : str
+                - lead_modeling: str
                     The status of the lead modeling feature. If enabled, automatically enable lead
                     modeling. Valid values are ``ENABLED`` or ``DISABLED``.
-                - lead_element_order : str
+                - lead_element_order: str
                      The type of the element order. Valid values are ``First Order (Linear)``,
                      ``Second Order (Quadratic)``, or ``Solid Shell``.
-                - max_mesh_size : MaxMeshSize
+                - max_mesh_size: MaxMeshSize
                     The properties of the maximum mesh size.
-                - vertical_mesh_size : VerticalMeshSize
+                - vertical_mesh_size: VerticalMeshSize
                     The properties of the vertical mesh size.
-                - thicknessCount : int, optional
+                - thicknessCount: int, optional
                     The number of elements through the lead thickness that will be created per lead.
                      The default value is 3 and the maximum is 5. Only used when the advanced lead
                      mesh setting is enabled.
-                - aspectRatio : int, optional
+                - aspectRatio: int, optional
                     The aspect ratio is multiplied by the lead thickness divided by the through
                     thickness count to give the lead element height. The default value is 2 and the
                     maximum is 10. Only used when the advanced lead mesh setting is enabled.
-        display_model : bool
+        display_model: bool
             Whether to display the model after export.
-        clear_FEA_database : bool
+        clear_FEA_database: bool
             Whether to clear FEA database before defining model.
-        use_FEA_model_id : bool
+        use_FEA_model_id: bool
             Whether to use FEA model ID.
-        coordinate_units : str
+        coordinate_units: str
             Units of the model coordinates to use when exporting a model.
 
 
@@ -788,8 +787,7 @@ class Model(GrpcStub):
                     raise SherlockExportFEAModelError(message="Vertical mesh size is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             export_request = SherlockModelService_pb2.ExportFEAModelRequest()
             export_request.project = project

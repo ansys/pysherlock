@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Parts Service."""
 
@@ -11,7 +11,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 
 
-def deprecation(cls):
+def deprecation(cls: object):
     """Raise a DeprecationWarning when a deprecated class is used."""
     # if str(cls).find("PartsListSearchMatchingMode") != -1:
     message = f"{cls} is deprecated. Use a string with the value of the constant name \

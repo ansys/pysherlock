@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Project Service."""
 
@@ -13,34 +13,34 @@ project_service = SherlockProjectService_pb2
 class BoardBounds:
     """Contains the properties of the board bounds."""
 
-    def __init__(self, bounds):
+    def __init__(self, bounds: list[tuple[float, float]]):
         """Initialize the board bounds."""
         self.bounds = bounds
-        """bounds (two tuples of the form (x, y) : list[tuple[float, float]]"""
+        """list[tuple[float, float]]: bounds (two tuples of the form (x, y)"""
 
 
 class CsvExcelFile:
-    """Contains the properties for a thermal map csv or excel file."""
+    """Contains the properties for a thermal map, CSV, or Excel file."""
 
     def __init__(
         self,
-        header_row_count,
-        numeric_format,
-        reference_id_column,
-        temperature_column,
-        temperature_units,
+        header_row_count: int,
+        numeric_format: str,
+        reference_id_column: str,
+        temperature_column: str,
+        temperature_units: str,
     ):
-        """Initialize the thermal map csv or excel file properties."""
+        """Initialize the thermal map, CSV or Excel file properties."""
         self.header_row_count = header_row_count
-        """header_row_count: int"""
+        """int: header_row_count"""
         self.numeric_format = numeric_format
-        """numeric_format: string"""
+        """str: numeric_format"""
         self.reference_id_column = reference_id_column
-        """reference_id_column: string"""
+        """str: reference_id_column"""
         self.temperature_column = temperature_column
-        """temperature_column: string"""
+        """str: temperature_column"""
         self.temperature_units = temperature_units
-        """temperature_units: string"""
+        """str: temperature_units"""
 
 
 class IcepakFile:
@@ -50,67 +50,31 @@ class IcepakFile:
 class ImageBounds:
     """Contains the properties of the image bounds."""
 
-    def __init__(self, image_x, image_y, height, width):
+    def __init__(self, image_x: float, image_y: float, height: float, width: float):
         """Initialize the image bounds properties."""
         self.image_x = image_x
-        """x coordinate of the upper left corner : float"""
+        """float: coordinate of the upper left corner"""
         self.image_y = image_y
-        """y coordinate of the upper left corner : float"""
+        """float: y coordinate of the upper left corner"""
         self.height = height
-        """height of the image : float"""
+        """float: height of the image"""
         self.width = width
-        """width of the image : float"""
-
-
-class ImageFile:
-    """Contains the properties for a thermal map image file."""
-
-    def __init__(
-        self,
-        board_bounds,
-        coordinate_units,
-        image_bounds,
-        legend_bounds,
-        legend_orientation,
-        max_temperature,
-        max_temperature_units,
-        min_temperature,
-        min_temperature_units,
-    ):
-        """Initialize the thermal image file properties."""
-        self.board_bounds = board_bounds
-        """board_bounds : BoardBounds"""
-        self.coordinate_units = coordinate_units
-        """coordinate_units : string"""
-        self.image_bounds = image_bounds
-        """image_bounds : ImageBounds"""
-        self.legend_bounds = legend_bounds
-        """legend_bounds : LegendBounds"""
-        self.legend_orientation = legend_orientation
-        """legend_orientation : LegendOrientation"""
-        self.max_temperature = max_temperature
-        """max_temperature : float"""
-        self.max_temperature_units = max_temperature_units
-        """max_temperature_units : string"""
-        self.min_temperature = min_temperature
-        """min_temperature : float"""
-        self.min_temperature_units = min_temperature_units
-        """min_temperature_units : string"""
+        """float: width of the image"""
 
 
 class LegendBounds:
     """Contains the properties of the legend bounds."""
 
-    def __init__(self, legend_x, legend_y, height, width):
+    def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
         """Initialize the legend bounds properties."""
         self.legend_x = legend_x
-        """x coordinate of the upper left corner : float"""
+        """float: x coordinate of the upper left corner"""
         self.legend_y = legend_y
-        """y coordinate of the upper left corner : float"""
+        """float: y coordinate of the upper left corner"""
         self.height = height
-        """height of the legend : float"""
+        """float: height of the legend"""
         self.width = width
-        """width of the legend : float"""
+        """float: width of the legend"""
 
 
 class LegendOrientation:
@@ -121,6 +85,42 @@ class LegendOrientation:
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
     "Vertical"
+
+
+class ImageFile:
+    """Contains the properties for a thermal map image file."""
+
+    def __init__(
+        self,
+        board_bounds: BoardBounds,
+        coordinate_units: str,
+        image_bounds: ImageBounds,
+        legend_bounds: LegendBounds,
+        legend_orientation: LegendOrientation,
+        max_temperature: float,
+        max_temperature_units: str,
+        min_temperature: float,
+        min_temperature_units: str,
+    ):
+        """Initialize the thermal image file properties."""
+        self.board_bounds = board_bounds
+        """BoardBounds: board_bounds"""
+        self.coordinate_units = coordinate_units
+        """str: coordinate_units"""
+        self.image_bounds = image_bounds
+        """ImageBounds: image_bounds"""
+        self.legend_bounds = legend_bounds
+        """LegendBounds: legend_bounds"""
+        self.legend_orientation = legend_orientation
+        """LegendOrientation: legend_orientation"""
+        self.max_temperature = max_temperature
+        """float: max_temperature"""
+        self.max_temperature_units = max_temperature_units
+        """str: max_temperature_units"""
+        self.min_temperature = min_temperature
+        """float: min_temperature"""
+        self.min_temperature_units = min_temperature_units
+        """str: min_temperature_units"""
 
 
 class ThermalBoardSide:

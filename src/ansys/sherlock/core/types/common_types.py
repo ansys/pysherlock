@@ -80,21 +80,21 @@ class TableDelimiter:
     """Types of delimiters that can be used for exporting tables."""
 
     COMMA = SherlockCommonService_pb2.TableDelimiter.COMMA
-    """COMMA"""
+    "COMMA"
     SPACE = SherlockCommonService_pb2.TableDelimiter.SPACE
-    """SPACE"""
+    "SPACE"
     TAB = SherlockCommonService_pb2.TableDelimiter.TAB
-    """TAB"""
+    "TAB"
     SEMICOLON = SherlockCommonService_pb2.TableDelimiter.SEMICOLON
-    """SEMICOLON"""
+    "SEMICOLON"
 
 
 class Measurement:
     """Contains the properties of the measurement."""
 
-    def __init__(self, value, unit):
+    def __init__(self, value: float, unit: str):
         """Initialize the measurement properties."""
         self.value = value
-        """value : float"""
+        """float: measurement value"""
         self.unit = unit
-        """unit : string"""
+        """str: measurement units"""

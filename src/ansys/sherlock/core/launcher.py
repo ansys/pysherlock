@@ -7,6 +7,7 @@ import shlex
 import socket
 import subprocess
 import time
+from typing import Optional
 
 import grpc
 
@@ -20,7 +21,9 @@ SHERLOCK_DEFAULT_PORT = 9090
 sherlock_cmd_args = []
 
 
-def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
+def _is_port_available(
+    host: Optional[str] = LOCALHOST, port: Optional[int] = SHERLOCK_DEFAULT_PORT
+):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         try:
             sock.bind((host, port))
@@ -33,30 +36,30 @@ def _is_port_available(host=LOCALHOST, port=SHERLOCK_DEFAULT_PORT):
 
 
 def launch_sherlock(
-    host: str = LOCALHOST,
-    port: int = SHERLOCK_DEFAULT_PORT,
-    single_project_path: str = "",
-    sherlock_cmd_args: str = "",
-    year: int = None,
-    release_number: int = None,
+    host: Optional[str] = LOCALHOST,
+    port: Optional[int] = SHERLOCK_DEFAULT_PORT,
+    single_project_path: Optional[str] = "",
+    sherlock_command_args: Optional[str] = "",
+    year: Optional[int] = None,
+    release_number: Optional[int] = None,
 ) -> Sherlock:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
     Parameters
     ----------
-    host : str, optional
+    host: str, optional
         IP address to start gRPC on. The default is ``"127.0.0.1"``, which
         is the IP address for the local host.
-    port : int, optional
+    port: int, optional
         Port number for the connection.
     single_project_path : str, optional
         Path to the Sherlock project if invoking Sherlock in the single-project mode.
-    sherlock_cmd_args : str, optional
+    sherlock_command_args : str, optional
         Additional command arguments for launching Sherlock.
-    year : int, optional
+    year: int, optional
         4-digit year of the Sherlock release to launch. If not provided,
         the latest installed version of Sherlock will be launched.
-    release_number : int, optional
+    release_number: int, optional
         Release number of Sherlock to launch. If not provided,
         the latest installed version of Sherlock will be launched.
 
@@ -82,7 +85,8 @@ def launch_sherlock(
         _is_port_available(host, port)
     except Exception as e:
         print(str(e))
-        return None
+        raise e
+
     _server_version = None
     try:
         sherlock_launch_cmd, _server_version = _get_sherlock_exe_path(
@@ -92,8 +96,8 @@ def launch_sherlock(
         if single_project_path != "":
             args.append("-singleProject")
             args.append(single_project_path)
-        if sherlock_cmd_args != "":
-            args.append(f"{shlex.split(sherlock_cmd_args)}")
+        if sherlock_command_args != "":
+            args.append(f"{shlex.split(sherlock_command_args)}")
         print(args)
         subprocess.Popen(args)
 
@@ -119,7 +123,9 @@ def launch_sherlock(
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT, server_version=None):
+def connect_grpc_channel(
+    port: Optional[int] = SHERLOCK_DEFAULT_PORT, server_version: Optional[int] = None
+):
     """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 
     The ``Sherlock`` connection object is used to invoke the APIs from their respective services.
@@ -128,8 +134,11 @@ def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT, server_version=None):
 
     Parameters
     ----------
-    port : int, optional
+    port: int, optional
         Port number for the connection.
+
+    server_version: int, optional
+        Version of Sherlock. Default is the newest version that is installed.
 
     Returns
     -------
@@ -142,7 +151,9 @@ def connect_grpc_channel(port=SHERLOCK_DEFAULT_PORT, server_version=None):
     return sherlock
 
 
-def _get_base_ansys(year: int = None, release_number: int = None) -> tuple[str, int]:
+def _get_base_ansys(
+    year: Optional[int] = None, release_number: Optional[int] = None
+) -> tuple[str, int]:
     supported_installed_versions = {
         env_key: path
         for env_key, path in os.environ.items()
@@ -172,17 +183,19 @@ def _get_base_ansys(year: int = None, release_number: int = None) -> tuple[str, 
     raise ValueError("Could not find any installed version of Sherlock.")
 
 
-def _get_ansys_version_from_awp_root(awp_root):
+def _get_ansys_version_from_awp_root(awp_root: str):
     if awp_root.find("AWP_ROOT") >= 0:
         return int(awp_root.replace("AWP_ROOT", ""))
 
     return ""
 
 
-def _get_sherlock_exe_path(year: int = None, release_number: int = None) -> str:
+def _get_sherlock_exe_path(
+    year: Optional[int] = None, release_number: Optional[int] = None
+) -> tuple[str, int]:
     ansys_base, sherlock_version = _get_base_ansys(year=year, release_number=release_number)
     if not ansys_base:
-        return ""
+        return "", 0
     if os.name == "nt":
         sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
     else:
