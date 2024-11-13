@@ -250,15 +250,17 @@ class Layer(GrpcStub):
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         """Update one or more potting regions in a specific project.
 
+        Available Since: 2025R1
+
         Parameters
         ----------
         request: UpdatePottingRegionRequest
-            Contains all the information needed to update 1 or multiple potting regions per project
+            Contains all the information needed to update one or more potting regions per project.
 
         Returns
         -------
         list[SherlockCommonService_pb2.ReturnCode]
-            Return codes for each request
+            Return codes for each request.
 
         Examples
         --------
@@ -319,15 +321,17 @@ class Layer(GrpcStub):
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         """Copy one or more potting regions in a specific project.
 
+        Available Since: 2025R1
+
         Parameters
         ----------
         request: CopyPottingRegionRequest
-             Contains all the information needed to copy 1 or multiple potting regions per project
+             Contains all the information needed to copy one or more potting regions per project.
 
         Returns
         -------
         list[SherlockCommonService_pb2.ReturnCode]
-            Return codes for each request
+            Return codes for each request.
 
         Examples
         --------
@@ -370,15 +374,17 @@ class Layer(GrpcStub):
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         """Delete on or more potting regions in a specific project.
 
+        Available Since: 2025R1
+
         Parameters
         ----------
         request: DeletePottingRegionRequest
-             Contains all the information needed to delete 1 or multiple potting regions per project
+             Contains all the information needed to delete one or more potting regions per project.
 
         Returns
         -------
         list[SherlockCommonService_pb2.ReturnCode]
-            Return codes for each request
+            Return codes for each request.
 
         Examples
         --------
