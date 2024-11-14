@@ -53,3 +53,5 @@ test-output.xml
 .idea/
 PySherlock.log.*
 doc/build/
+
+doc/source/examples/gallery_examples/**
