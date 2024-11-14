@@ -124,3 +124,6 @@ if switcher_version != "dev":
     linkcheck_ignore.append(
         f"https://github.com/ansys/pysherlock/releases/tag/v{pysherlock.__version__}"
     )
+
+# Suprpress warnings
+suppress_warnings = ["design.grid", "design.fa-build"]
