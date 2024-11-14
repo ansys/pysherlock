@@ -8,7 +8,7 @@
 PySherlock is a Python client library for the Ansys Sherlock product. You are
 viewing version |version|.
 
-..grid:: 1 1 3 3
+.. grid:: 1 1 3 3
 
   .. grid-item-card:: :fa:`power-off` Getting started
       :link: getting_started/index
