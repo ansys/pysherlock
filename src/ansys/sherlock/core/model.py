@@ -65,7 +65,7 @@ class Model(GrpcStub):
         cca_name: str
             Name of the CCA to generate the trace reinforcement model from.
         export_file: str
-            Path for saving exported files to. The file extension must be ``".wbjn"``.
+            Path for saving exported files to. The file extension must be ``.wbjn``.
         overwrite: bool, optional
             Whether to overwrite an existing file having the same file name.
             The default is ``True``.
@@ -408,7 +408,7 @@ class Model(GrpcStub):
         >>> from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
         >>> sherlock = launcher.launch_sherlock()
         >>> list_of_params_for_layers = []
-        >>> list_of_params_for_layers.add(
+        >>> list_of_params_for_layers.append(
                 sherlock.model.createExportTraceCopperLayerParams(
                     "Tutorial Project",
                     "Main Board",
@@ -662,7 +662,7 @@ class Model(GrpcStub):
         cca_name: str
             Name of the CCA.
         export_file: str
-            Full path for saving exported files to. The file extension must be ``".wbjn"``.
+            Full path for saving exported files to. The file extension must be ``.wbjn``.
         analysis: str
             The type of analysis that is being exported. Valid values are ``NaturalFreq``,
             ``HarmonicVibe``, ``ICTAnalysis``, ``MechanicalShock`` or ``RandomVibe``.

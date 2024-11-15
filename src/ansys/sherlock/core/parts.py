@@ -163,11 +163,7 @@ class Parts(GrpcStub):
         cca_name: str,
         part_library: str,
         matching_mode: str,
-        duplication_mode: (
-            PartsListSearchDuplicationMode.FIRST
-            | PartsListSearchDuplicationMode.ERROR
-            | PartsListSearchDuplicationMode.IGNORE
-        ),
+        duplication_mode: PartsListSearchDuplicationMode,
     ) -> int:
         """Update a parts list based on matching and duplication preferences.
 
@@ -833,7 +829,7 @@ class Parts(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        part_properties: list[dict[str, list[str] | dict[str, list[str]]]],
+        part_properties: list[dict[str, list[str] | list[dict[str, str]]]],
     ) -> int:
         """
         Update one or more properties of one or more parts in a parts list.
@@ -846,14 +842,14 @@ class Parts(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the CCA.
-        part_properties: list[dict[str, list[str] | dict[str, list[str]]]]
-            List of part properties consisting of these properties:
+        part_properties: list[dict[str, list[str] | list[dict[str, str]]]]
+            Part properties consisting of these properties:
 
-                - reference_designators: List of str, optional
-                    List of the reference designator for each part to be updated. If not included,
+                - reference_designators: list[str], optional
+                    Reference designator for each part to be updated. If not included,
                     update properties for all parts in the CCA.
-                - properties: list
-                    List of properties consisting of these properties:
+                - properties: list[dict[str, str]]
+                    Part properties consisting of these properties:
 
                         - name: str
                             Name of property to be updated.
@@ -908,16 +904,16 @@ class Parts(GrpcStub):
                     )
 
                 properties = part_property["properties"]
-                for j, property in enumerate(properties):
-                    if len(property) < 1 or len(property) > 2:
+                for j, prop in enumerate(properties):
+                    if len(prop) < 1 or len(prop) > 2:
                         raise SherlockUpdatePartsListPropertiesError(
-                            f"Number of elements ({len(property)}) " f"is wrong for property {j}."
+                            f"Number of elements ({len(prop)}) " f"is wrong for property {j}."
                         )
-                    elif not isinstance(property["name"], str) or property["name"] == "":
+                    elif not isinstance(prop["name"], str) or prop["name"] == "":
                         raise SherlockUpdatePartsListPropertiesError(
                             f"Name is required " f"for property {j}."
                         )
-                    elif not isinstance(property["value"], str):
+                    elif not isinstance(prop["value"], str):
                         raise SherlockUpdatePartsListPropertiesError(message="Value is invalid.")
 
             if not self._is_connection_up():
