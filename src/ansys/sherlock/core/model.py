@@ -463,12 +463,10 @@ class Model(GrpcStub):
         clear_FEA_database: Optional[bool] = False,
         use_FEA_model_ID: Optional[bool] = False,
         coord_units: Optional[str] = "mm",
-        mesh_type: Optional[int | str] = SherlockModelService_pb2.MeshType.NONE,
+        mesh_type: Optional[int] = SherlockModelService_pb2.MeshType.NONE,
         is_modeling_region_enabled: Optional[bool] = False,
-        trace_output_type: Optional[
-            int | str
-        ] = SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-        element_order: Optional[int | str] = SherlockAnalysisService_pb2.ElementOrder.Linear,
+        trace_output_type: Optional[int] = SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
+        element_order: Optional[int] = SherlockAnalysisService_pb2.ElementOrder.Linear,
         max_mesh_size: Optional[float] = 1.0,
         max_mesh_size_units: Optional[str] = "mm",
         max_holes_per_trace: Optional[int] = 2,
