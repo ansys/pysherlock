@@ -3,14 +3,18 @@
 """Module containing all model generation capabilities."""
 import os.path
 
+import grpc
+
+from ansys.sherlock.core.types.analysis_types import ElementOrder
+
 try:
-    import SherlockAnalysisService_pb2
     import SherlockModelService_pb2
+    from SherlockModelService_pb2 import MeshType, TraceOutputType
     import SherlockModelService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
-    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+    from SherlockModelService_pb2 import MeshType, TraceOutputType
 
 from typing import Optional
 
@@ -29,7 +33,7 @@ from ansys.sherlock.core.utils.version_check import require_version
 class Model(GrpcStub):
     """Contains all model generation capabilities."""
 
-    def __init__(self, channel, server_version):
+    def __init__(self, channel: grpc.Channel, server_version: int):
         """Initialize a gRPC stub for the Sherlock Model service."""
         super().__init__(channel, server_version)
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
@@ -403,9 +407,9 @@ class Model(GrpcStub):
 
         Examples
         --------
+        >>> from ansys.sherlock.core.types.analysis_types import ElementOrder
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.api.sherlock.v0 import SherlockModelService_pb2
-        >>> from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
         >>> sherlock = launcher.launch_sherlock()
         >>> list_of_params_for_layers = []
         >>> list_of_params_for_layers.append(
@@ -422,7 +426,7 @@ class Model(GrpcStub):
                     SherlockModelService_pb2.MeshType.NONE,
                     False,
                     SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-                    SherlockAnalysisService_pb2.ElementOrder.Linear,
+                    ElementOrder.LINEAR,
                     1.0,
                     "mm".
                     1,
@@ -463,10 +467,10 @@ class Model(GrpcStub):
         clear_FEA_database: Optional[bool] = False,
         use_FEA_model_ID: Optional[bool] = False,
         coord_units: Optional[str] = "mm",
-        mesh_type: Optional[int] = SherlockModelService_pb2.MeshType.NONE,
+        mesh_type: Optional[int] = MeshType.NONE,
         is_modeling_region_enabled: Optional[bool] = False,
-        trace_output_type: Optional[int] = SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-        element_order: Optional[int] = SherlockAnalysisService_pb2.ElementOrder.Linear,
+        trace_output_type: Optional[int] = TraceOutputType.ALL_REGIONS,
+        element_order: Optional[ElementOrder] = ElementOrder.LINEAR,
         max_mesh_size: Optional[float] = 1.0,
         max_mesh_size_units: Optional[str] = "mm",
         max_holes_per_trace: Optional[int] = 2,
@@ -539,7 +543,7 @@ class Model(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
-        >>> from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+        >>> from ansys.sherlock.core.types.analysis_types import ElementOrder
         >>> from ansys.api.sherlock.v0 import SherlockModelService_pb2
         >>> sherlock = launcher.launch_sherlock()
         >>> copper_1_layer = sherlock.model.createExportTraceCopperLayerParams(
@@ -555,7 +559,7 @@ class Model(GrpcStub):
                 SherlockModelService_pb2.MeshType.NONE,
                 False,
                 SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-                SherlockAnalysisService_pb2.ElementOrder.Linear,
+                ElementOrder.LINEAR,
                 1.0,
                 "mm",
                 2,
@@ -577,7 +581,7 @@ class Model(GrpcStub):
                 SherlockModelService_pb2.MeshType.NONE,
                 False,
                 SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-                SherlockAnalysisService_pb2.ElementOrder.Linear,
+                ElementOrder.LINEAR,
                 1.0,
                 "mm",
                 2,

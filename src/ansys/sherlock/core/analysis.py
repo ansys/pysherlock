@@ -253,7 +253,7 @@ class Analysis(GrpcStub):
     def update_harmonic_vibe_props(
         self,
         project: str,
-        harmonic_vibe_properties: dict[str, bool | int | float | str],
+        harmonic_vibe_properties: list[dict[str, bool | int | float | str]],
     ) -> int:
         """Update properties for a harmonic vibe analysis.
 
@@ -263,7 +263,7 @@ class Analysis(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        harmonic_vibe_properties: dict[str, bool | int | float | str]
+        harmonic_vibe_properties: list[dict[str, bool | int | float | str]]
             Harmonic vibe properties for a CCA consisting of these properties:
 
             - cca_name: str
@@ -576,7 +576,7 @@ class Analysis(GrpcStub):
     def update_ict_analysis_props(
         self,
         project: str,
-        ict_analysis_properties: dict[str, bool | float | int | str],
+        ict_analysis_properties: list[dict[str, bool | float | int | str]],
     ) -> int:
         """Update properties for an ICT analysis.
 
@@ -586,7 +586,7 @@ class Analysis(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        ict_analysis_properties: dict[str, bool | float | int | str]
+        ict_analysis_properties: list[dict[str, bool | float | int | str]]
             ICT analysis properties for a CCA consisting of these properties:
 
             - cca_name: str
@@ -773,7 +773,7 @@ class Analysis(GrpcStub):
     def update_mechanical_shock_props(
         self,
         project: str,
-        mechanical_shock_properties: dict[str, bool | float | int | str],
+        mechanical_shock_properties: list[dict[str, bool | float | int | str]],
     ) -> int:
         """Update properties for a mechanical shock analysis.
 
@@ -783,7 +783,7 @@ class Analysis(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        mechanical_shock_properties: dict[str, bool | float | int | str]
+        mechanical_shock_properties: list[dict[str, bool | float | int | str]]
             Mechanical shock properties for a CCA consisting of these properties:
 
             - cca_name: str
@@ -1014,7 +1014,7 @@ class Analysis(GrpcStub):
     def update_solder_fatigue_props(
         self,
         project: str,
-        solder_fatigue_properties: dict[str, bool | float | str],
+        solder_fatigue_properties: list[dict[str, bool | float | str]],
     ) -> int:
         """Update properties for a solder fatigue analysis.
 
@@ -1024,7 +1024,7 @@ class Analysis(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        solder_fatigue_properties: dict[str, bool | float | str]
+        solder_fatigue_properties: list[dict[str, bool | float | str]]
             Mechanical shock properties for a CCA consisting of these properties:
 
             - cca_name: str
@@ -1503,7 +1503,7 @@ class Analysis(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        strain_map_analyses: list[tuple[RunStrainMapAnalysisRequestAnalysisType, list[list[str]]]],
+        strain_map_analyses: list[list[RunStrainMapAnalysisRequestAnalysisType | list[list[str]]]],
     ) -> int:
         """Run one or more strain map analyses.
 
@@ -1515,7 +1515,7 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the main CCA for the analysis.
-        strain_map_analyses: list[tuple[RunStrainMapAnalysisRequestAnalysisType, list[list[str]]]]
+        strain_map_analyses: list[list[RunStrainMapAnalysisRequestAnalysisType | list[list[str]]]]
             Analyses consisting of these properties:
 
             - analysis_type: RunStrainMapAnalysisRequestAnalysisType
@@ -1543,6 +1543,9 @@ class Analysis(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     RunStrainMapAnalysisRequestAnalysisType
+        >>> )
         >>> sherlock = launch_sherlock()
         >>> analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
         >>> sherlock.analysis.run_strain_map_analysis(
@@ -1665,16 +1668,14 @@ class Analysis(GrpcStub):
         cca_names: list[str],
         analyses: list[
             tuple[
-                str,
-                UpdatePcbModelingPropsRequestAnalysisType
-                | UpdatePcbModelingPropsRequestPcbModelType
-                | bool
-                | UpdatePcbModelingPropsRequestPcbMaterialModel
-                | ElementOrder
-                | int
-                | str
+                bool
                 | float
-                | bool,
+                | str
+                | UpdatePcbModelingPropsRequestAnalysisType
+                | UpdatePcbModelingPropsRequestPcbModelType
+                | UpdatePcbModelingPropsRequestPcbMaterialModel
+                | ElementOrder,
+                ...,
             ]
         ],
     ) -> int:
@@ -1688,7 +1689,10 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_names: list
             Names of the CCAs to be used for the analysis.
-        analyses: list[tuple[str, ...]]
+        analyses: list[tuple[bool | float | str | UpdatePcbModelingPropsRequestAnalysisType\
+                | UpdatePcbModelingPropsRequestPcbModelType\
+                | UpdatePcbModelingPropsRequestPcbMaterialModel\
+                | ElementOrder, ...]]
             Elements consisting of the following properties:
 
             - analysis_type: UpdatePcbModelingPropsRequestAnalysisType
@@ -1699,7 +1703,7 @@ class Analysis(GrpcStub):
                 Indicates if modeling regions are enabled.
             - pcb_material_model: UpdatePcbModelingPropsRequestPcbMaterialModel
                 The PCB modeling PCB model type.
-            - pcb_max_materials: int
+            - pcb_max_materials: Optional[int]
                 The number of PCB materials for Uniform Elements and Layered Elements PCB model
                 types. Not applicable if PCB model is Uniform or Layered.
             - pcb_elem_order: ElementOrder
@@ -1765,8 +1769,10 @@ class Analysis(GrpcStub):
         )
 
         """Add PCB Modeling Props to Request"""
-        uniform = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Uniform
-        layered = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.Layered
+        _analysis = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis
+        uniform = _analysis.PcbMaterialModel.Uniform
+        layered = _analysis.PcbMaterialModel.Layered
+
         for a in analyses:
             analysis = request.analyses.add()
             analysis.type = a[0]
