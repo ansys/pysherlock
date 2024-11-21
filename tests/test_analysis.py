@@ -64,7 +64,7 @@ def test_all():
     helper_test_get_parts_list_validation_analysis_props(analysis)
 
 
-def helper_test_run_analysis(analysis):
+def helper_test_run_analysis(analysis: Analysis):
     """Test run_analysis API."""
     natural_frequency_analysis_type = RunAnalysisRequestAnalysisType.NATURAL_FREQ
 
@@ -517,7 +517,7 @@ def helper_test_get_mechanical_shock_input_fields(analysis: Analysis):
         assert "natural_freq_max_units" in fields
 
 
-def helper_test_get_solder_fatigue_input_fields(analysis):
+def helper_test_get_solder_fatigue_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_solder_fatigue_input_fields()
         assert "solder_material" in fields
@@ -1350,7 +1350,7 @@ def helper_test_update_random_vibe_props(analysis: Analysis):
             pytest.fail(e.message)
 
 
-def helper_test_get_natural_frequency_input_fields(analysis):
+def helper_test_get_natural_frequency_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_natural_frequency_input_fields()
         assert "natural_freq_count" in fields

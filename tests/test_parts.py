@@ -46,7 +46,7 @@ def test_all():
     helper_test_get_part_location(parts)
 
 
-def helper_test_update_parts_list(parts):
+def helper_test_update_parts_list(parts: Parts):
     """Test update_parts_list API."""
 
     if parts._is_connection_up():
@@ -111,7 +111,7 @@ def helper_test_update_parts_list(parts):
         assert str(e.str_itr()) == "['Update parts list error: Parts library is invalid.']"
 
 
-def helper_test_update_parts_from_AVL(parts):
+def helper_test_update_parts_from_AVL(parts: Parts):
     try:
         parts.update_parts_from_AVL(
             project="",
@@ -154,7 +154,7 @@ def helper_test_update_parts_from_AVL(parts):
             pytest.fail(e.message)
 
 
-def helper_test_update_parts_locations(parts):
+def helper_test_update_parts_locations(parts: Parts):
     """Test update_parts_locations API."""
 
     if parts._is_connection_up():
@@ -407,7 +407,7 @@ def helper_test_update_parts_locations(parts):
         )
 
 
-def helper_test_update_parts_locations_by_file(parts):
+def helper_test_update_parts_locations_by_file(parts: Parts):
     """Test update_parts_locations_by_file API."""
 
     if parts._is_connection_up():
@@ -445,7 +445,7 @@ def helper_test_update_parts_locations_by_file(parts):
         assert str(e.str_itr()) == "['Update parts locations by file error: CCA name is invalid.']"
 
 
-def helper_test_import_parts_list(parts):
+def helper_test_import_parts_list(parts: Parts):
     """Tests import_parts_list API."""
     if parts._is_connection_up():
         # happy path test missing because needs valid file
@@ -483,7 +483,7 @@ def helper_test_import_parts_list(parts):
         assert str(e) == "Import parts list error: CCA name is invalid."
 
 
-def helper_test_export_parts_list(parts):
+def helper_test_export_parts_list(parts: Parts):
     """Tests export_parts_list API."""
     try:
         parts.export_parts_list(
@@ -550,7 +550,7 @@ def helper_test_export_parts_list(parts):
             assert type(e) == SherlockExportPartsListError
 
 
-def helper_test_enable_lead_modeling(parts):
+def helper_test_enable_lead_modeling(parts: Parts):
     """Test enable_lead_modelign API."""
     if parts._is_connection_up():
         try:
@@ -590,7 +590,7 @@ def helper_test_enable_lead_modeling(parts):
         assert str(e) == "Enable lead modeling error: CCA name is invalid."
 
 
-def helper_test_get_part_location(parts):
+def helper_test_get_part_location(parts: Parts):
     """Test get_part_location API"""
 
     if parts._is_connection_up():
@@ -680,7 +680,7 @@ def helper_test_get_part_location(parts):
         assert str(e) == "Get part location error: Location unit is invalid."
 
 
-def helper_test_update_parts_list_properties(parts):
+def helper_test_update_parts_list_properties(parts: Parts):
     """Test update_parts_list_properties API"""
     try:
         parts.update_parts_list_properties(
@@ -835,7 +835,7 @@ def helper_test_update_parts_list_properties(parts):
         pytest.fail(e.message)
 
 
-def helper_test_export_net_list(parts):
+def helper_test_export_net_list(parts: Parts):
     """Test export_net_list API"""
 
     try:

@@ -466,7 +466,7 @@ class Layer(GrpcStub):
         >>> sherlock.layer.update_mount_points_by_file(
             "Test",
             "Card",
-            "MountPointImport.csv",
+            "MountPointImport.csv"
         )
         """
         try:
@@ -738,7 +738,7 @@ class Layer(GrpcStub):
         >>> sherlock.layer.update_test_points_by_file(
             "Test",
             "Card",
-            "TestPointsImport.csv",
+            "TestPointsImport.csv"
         )
         """
         try:
@@ -818,7 +818,7 @@ class Layer(GrpcStub):
         >>> sherlock.layer.update_test_fixtures_by_file(
             "Test",
             "Card",
-            "TestFixturesImport.csv",
+            "TestFixturesImport.csv"
         )
         """
         try:
@@ -913,7 +913,7 @@ class Layer(GrpcStub):
             "TestPointsExport.csv",
             "DEFAULT",
             "DEFAULT",
-            "DEFAULT",
+            "DEFAULT"
         )
         """
         try:
@@ -992,7 +992,7 @@ class Layer(GrpcStub):
             "Tutorial Project",
             "Card",
             "TestFixturesExport.csv",
-            "DEFAULT",
+            "DEFAULT"
         )
         """
         try:
@@ -1069,7 +1069,7 @@ class Layer(GrpcStub):
             "Tutorial Project",
             "Card",
             "MountPointsExport.csv",
-            "DEFAULT",
+            "DEFAULT"
         )
         """
         try:

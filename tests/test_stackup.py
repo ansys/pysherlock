@@ -32,7 +32,7 @@ def test_all():
     helper_test_get_total_conductor_thickness(stackup)
 
 
-def helper_test_gen_stackup(stackup):
+def helper_test_gen_stackup(stackup: Stackup):
     """Test gen_stackup API."""
     try:
         stackup.gen_stackup(
@@ -170,7 +170,7 @@ def helper_test_gen_stackup(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_update_conductor_layer(stackup):
+def helper_test_update_conductor_layer(stackup: Stackup):
     """Test update_conductor_layer API."""
     try:
         stackup.update_conductor_layer(
@@ -276,7 +276,7 @@ def helper_test_update_conductor_layer(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_update_laminate_layer(stackup):
+def helper_test_update_laminate_layer(stackup: Stackup):
     """Test update_laminate_layer API."""
 
     try:
@@ -465,7 +465,7 @@ def helper_test_update_laminate_layer(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_list_conductor_layers(stackup):
+def helper_test_list_conductor_layers(stackup: Stackup):
     """Test list_conductor_layers API"""
     try:
         stackup.list_conductor_layers("")
@@ -494,7 +494,7 @@ def helper_test_list_conductor_layers(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_list_laminate_layers(stackup):
+def helper_test_list_laminate_layers(stackup: Stackup):
     """Test list_laminate_layers API"""
     try:
         stackup.list_laminate_layers("")
@@ -522,7 +522,7 @@ def helper_test_list_laminate_layers(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_get_layer_count(stackup):
+def helper_test_get_layer_count(stackup: Stackup):
     """Test get_layer_count API"""
     try:
         stackup.get_layer_count(project="", cca_name="Card")
@@ -623,7 +623,7 @@ def helper_test_get_stackup_props(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_get_total_conductor_thickness(stackup):
+def helper_test_get_total_conductor_thickness(stackup: Stackup):
     try:
         stackup.get_total_conductor_thickness(project="", cca_name="Card", thickness_unit="oz")
         pytest.fail("No exception raised when using an invalid parameter")

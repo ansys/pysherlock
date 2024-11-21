@@ -1,6 +1,5 @@
 # © 2023-2024 ANSYS, Inc. All rights reserved.
 
-
 """Module containing types for the Analysis Service."""
 
 try:

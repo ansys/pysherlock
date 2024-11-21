@@ -7,6 +7,8 @@ try:
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2
 
+common_service = SherlockCommonService_pb2
+
 
 def basic_str_validator(value: str, field_name: str):
     """Apply basic string validation."""
@@ -18,74 +20,77 @@ def basic_str_validator(value: str, field_name: str):
 class ListUnitsRequestUnitType:
     """Constants for Unit Type in the List Units request."""
 
-    ACCEL_DENSITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.ACCEL_DENSITY
+    __unit_type = common_service.ListUnitsRequest.UnitType
+    ACCEL_DENSITY = __unit_type.ACCEL_DENSITY
     "ACCEL_DENSITY"
-    ACCELERATION = SherlockCommonService_pb2.ListUnitsRequest.UnitType.ACCELERATION
+    ACCELERATION = __unit_type.ACCELERATION
     "ACCELERATION"
-    AREA = SherlockCommonService_pb2.ListUnitsRequest.UnitType.AREA
+    AREA = __unit_type.AREA
     "AREA"
-    BANDWIDTH = SherlockCommonService_pb2.ListUnitsRequest.UnitType.BANDWIDTH
+    BANDWIDTH = __unit_type.BANDWIDTH
     "BANDWIDTH"
-    CAPACITANCE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.CAPACITANCE
+    CAPACITANCE = __unit_type.CAPACITANCE
     "CAPACITANCE"
-    CTE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.CTE
+    CTE = __unit_type.CTE
     "CTE"
-    CURRENT = SherlockCommonService_pb2.ListUnitsRequest.UnitType.CURRENT
+    CURRENT = __unit_type.CURRENT
     "CURRENT"
-    DENSITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.DENSITY
+    DENSITY = __unit_type.DENSITY
     "DENSITY"
-    DISP_DENSITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.DISP_DENSITY
+    DISP_DENSITY = __unit_type.DISP_DENSITY
     "DISP_DENSITY"
-    FORCE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.FORCE
+    FORCE = __unit_type.FORCE
     "FORCE"
-    FREQUENCY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.FREQUENCY
+    FREQUENCY = __unit_type.FREQUENCY
     "FREQUENCY"
-    INDUCTANCE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.INDUCTANCE
+    INDUCTANCE = __unit_type.INDUCTANCE
     "INDUCTANCE"
-    LENGTH = SherlockCommonService_pb2.ListUnitsRequest.UnitType.LENGTH
+    LENGTH = __unit_type.LENGTH
     "LENGTH"
-    POWER = SherlockCommonService_pb2.ListUnitsRequest.UnitType.POWER
+    POWER = __unit_type.POWER
     "POWER"
-    RESISTANCE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.RESISTANCE
+    RESISTANCE = __unit_type.RESISTANCE
     "RESISTANCE"
-    SIZE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.SIZE
+    SIZE = __unit_type.SIZE
     "SIZE"
-    SPECIFIC_HEAT = SherlockCommonService_pb2.ListUnitsRequest.UnitType.SPECIFIC_HEAT
+    SPECIFIC_HEAT = __unit_type.SPECIFIC_HEAT
     "SPECIFIC_HEAT"
-    STRAIN = SherlockCommonService_pb2.ListUnitsRequest.UnitType.STRAIN
+    STRAIN = __unit_type.STRAIN
     "STRAIN"
-    STRESS = SherlockCommonService_pb2.ListUnitsRequest.UnitType.STRESS
+    STRESS = __unit_type.STRESS
     "STRESS"
-    TEMPERATURE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.TEMPERATURE
+    TEMPERATURE = __unit_type.TEMPERATURE
     "TEMPERATURE"
-    THERMAL_CONDUCTIVITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.THERMAL_CONDUCTIVITY
+    THERMAL_CONDUCTIVITY = __unit_type.THERMAL_CONDUCTIVITY
     "THERMAL_CONDUCTIVITY"
-    THERMAL_RESISTANCE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.THERMAL_RESISTANCE
+    THERMAL_RESISTANCE = __unit_type.THERMAL_RESISTANCE
     "THERMAL_RESISTANCE"
-    TIME = SherlockCommonService_pb2.ListUnitsRequest.UnitType.TIME
+    TIME = __unit_type.TIME
     "TIME"
-    VELOCITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.VELOCITY
+    VELOCITY = __unit_type.VELOCITY
     "VELOCITY"
-    VELOCITY_DENSITY = SherlockCommonService_pb2.ListUnitsRequest.UnitType.VELOCITY_DENSITY
+    VELOCITY_DENSITY = __unit_type.VELOCITY_DENSITY
     "VELOCITY_DENSITY"
-    VOLTAGE = SherlockCommonService_pb2.ListUnitsRequest.UnitType.VOLTAGE
+    VOLTAGE = __unit_type.VOLTAGE
     "VOLTAGE"
-    VOLUME = SherlockCommonService_pb2.ListUnitsRequest.UnitType.VOLUME
+    VOLUME = __unit_type.VOLUME
     "VOLUME"
-    WEIGHT = SherlockCommonService_pb2.ListUnitsRequest.UnitType.WEIGHT
+    WEIGHT = __unit_type.WEIGHT
     "WEIGHT"
 
 
 class TableDelimiter:
     """Types of delimiters that can be used for exporting tables."""
 
-    COMMA = SherlockCommonService_pb2.TableDelimiter.COMMA
+    __table_delimiter = SherlockCommonService_pb2.TableDelimiter
+
+    COMMA = __table_delimiter.COMMA
     "COMMA"
-    SPACE = SherlockCommonService_pb2.TableDelimiter.SPACE
+    SPACE = __table_delimiter.SPACE
     "SPACE"
-    TAB = SherlockCommonService_pb2.TableDelimiter.TAB
+    TAB = __table_delimiter.TAB
     "TAB"
-    SEMICOLON = SherlockCommonService_pb2.TableDelimiter.SEMICOLON
+    SEMICOLON = __table_delimiter.SEMICOLON
     "SEMICOLON"
 
 

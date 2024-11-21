@@ -354,7 +354,7 @@ class Lifecycle(GrpcStub):
             1.5,
             "sec",
             4.0,
-            "COUNT",
+            "COUNT"
         )
         """
         if self.CYCLE_TYPE_LIST is None:
@@ -491,7 +491,7 @@ class Lifecycle(GrpcStub):
             "PER MIN",
             "45,45",
             "Uniaxial",
-            "2,4,5",
+            "2,4,5"
         )
         """
         if self.CYCLE_TYPE_LIST is None:
@@ -804,7 +804,7 @@ class Lifecycle(GrpcStub):
             "Event1",
             4.0,
             "PER YEAR",
-            "STORAGE",
+            "STORAGE"
         )
         """
         if self.CYCLE_TYPE_LIST is None:
@@ -1114,7 +1114,7 @@ class Lifecycle(GrpcStub):
             5,
             "45,45",
             "Uniaxial",
-            "2,4,5",
+            "2,4,5"
         )
         """
         if self.CYCLE_TYPE_LIST is None:
@@ -1454,7 +1454,7 @@ class Lifecycle(GrpcStub):
             4.0,
             "PER MIN",
             "45,45",
-            "2,4,5",
+            "2,4,5"
         )
         """
         if self.CYCLE_TYPE_LIST is None:
@@ -1550,14 +1550,14 @@ class Lifecycle(GrpcStub):
             True,
             True,
             project="Test",
-            cca_name="Card",
+            cca_name="Card"
         )
 
         >>> sherlock.lifecycle.load_random_vibe_profile(
                 project="Tutorial",
                 phase_name="Phase 1",
                 event_name="Random Event",
-                file_path="TestProfile.dat",
+                file_path="TestProfile.dat"
         )
         """
         try:
@@ -1924,7 +1924,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             project="Test",
-            cca_name="Card",
+            cca_name="Card"
         )
 
         >>> loaded = sherlock.lifecycle.load_harmonic_profile(
@@ -2001,7 +2001,7 @@ class Lifecycle(GrpcStub):
             True,
             True,
             project="Test",
-            cca_name="Card",
+            cca_name="Card"
         )
 
         """
@@ -2074,7 +2074,7 @@ class Lifecycle(GrpcStub):
                 project="Tutorial",
                 phase_name="Phase 1",
                 event_name="Shock Event",
-                file_path="Test_Profile.dat",
+                file_path="Test_Profile.dat"
         )
 
         """

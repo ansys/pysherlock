@@ -8,6 +8,8 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 
 project_service = SherlockProjectService_pb2
+thermal_map_file = project_service.ThermalMapFile
+add_strain_map_request = project_service.AddStrainMapRequest
 
 
 class BoardBounds:
@@ -80,7 +82,7 @@ class LegendBounds:
 class LegendOrientation:
     """Constants for legend orientation in the update thermal maps request."""
 
-    __legend_orientation = project_service.ThermalMapFile.ImageFile.LegendOrientation
+    __legend_orientation = thermal_map_file.ImageFile.LegendOrientation
     HORIZONTAL = __legend_orientation.Horizontal
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
@@ -126,47 +128,42 @@ class ImageFile:
 class ThermalBoardSide:
     """Constants for thermal board side in the update thermal maps request."""
 
-    __thermal_board_side = project_service.ThermalMapFile.ThermalBoardSide
-    BOTTOM = __thermal_board_side.Bottom
+    BOTTOM = thermal_map_file.ThermalBoardSide.Bottom
     "Bottom"
-    BOTH = __thermal_board_side.Both
+    BOTH = thermal_map_file.ThermalBoardSide.Both
     "Both"
-    TOP = __thermal_board_side.Top
+    TOP = thermal_map_file.ThermalBoardSide.Top
     "Top"
 
 
 class ThermalMapsFileType:
     """Constants for File Type in the Update Thermal Maps request."""
 
-    __file_type = project_service.ThermalMapFile.FileType
-    CSV = __file_type.CSV
+    CSV = thermal_map_file.FileType.CSV
     "CSV"
-    EXCEL = __file_type.Excel
+    EXCEL = thermal_map_file.FileType.Excel
     "Excel"
-    IMAGE = __file_type.Image
+    IMAGE = thermal_map_file.FileType.Image
     "Image"
-    TMAP = __file_type.TMAP
+    TMAP = thermal_map_file.FileType.TMAP
     "Icepak Thermal Map (.TMAP)"
 
 
 class StrainMapsFileType:
     """Constants for File Type in the Add Strain Maps request."""
 
-    __file_type = project_service.AddStrainMapRequest.StrainMapFile.FileType
-    CSV = __file_type.CSV
+    CSV = add_strain_map_request.StrainMapFile.FileType.CSV
     "CSV"
-    EXCEL = __file_type.Excel
+    EXCEL = add_strain_map_request.StrainMapFile.FileType.Excel
     "Excel"
-    IMAGE = __file_type.Image
+    IMAGE = add_strain_map_request.StrainMapFile.FileType.Image
     "Image"
 
 
 class StrainMapLegendOrientation:
     """Constants for legend orientation in the add strain maps request."""
 
-    __legend_orientation = (
-        project_service.AddStrainMapRequest.StrainMapFile.StrainMapImageFile.LegendOrientation
-    )
+    __legend_orientation = add_strain_map_request.StrainMapFile.StrainMapImageFile.LegendOrientation
     HORIZONTAL = __legend_orientation.Horizontal
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical

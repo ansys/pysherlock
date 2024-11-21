@@ -35,7 +35,7 @@ def helper_test_list_units(common: Common):
             pytest.fail(str(e))
 
 
-def helper_test_get_solders(common):
+def helper_test_get_solders(common: Common):
     """Test get_solders API"""
 
     if common._is_connection_up():
@@ -46,7 +46,7 @@ def helper_test_get_solders(common):
             pytest.fail(str(e))
 
 
-def helper_test_get_sherlock_info(common):
+def helper_test_get_sherlock_info(common: Common):
     """Test get_sherlock_info API"""
 
     if common._is_connection_up():

@@ -829,7 +829,7 @@ class Parts(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        part_properties: list[dict[str, list[str] | list[dict[str, str]]]],
+        part_properties: list[dict[str, list[dict[str, str]] | list[str]]],
     ) -> int:
         """
         Update one or more properties of one or more parts in a parts list.
