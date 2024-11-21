@@ -334,7 +334,7 @@ class Project(GrpcStub):
             "Tutorial",
             "John Doe",
             "Example",
-            "Project Report.pdf",
+            "Project Report.pdf"
         )
         """
         try:
@@ -401,7 +401,7 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> ccas = project.list_ccas("AssemblyTutorial",["Main Board"])
+        >>> ccas = sherlock.project.list_ccas("AssemblyTutorial", ["Main Board"])
         """
         try:
             if project == "":
@@ -847,7 +847,9 @@ class Project(GrpcStub):
             raise e
 
     @require_version()
-    def list_strain_maps(self, project: str, cca_names: Optional[list[str]] = None) -> list:
+    def list_strain_maps(
+        self, project: str, cca_names: Optional[list[str]] = None
+    ) -> list[SherlockProjectService_pb2.ListStrainMapsResponse.CcaStrainMap]:
         """List the strain maps assigned to each CCA or given CCAs.
 
         Available Since: 2023R2
@@ -862,7 +864,7 @@ class Project(GrpcStub):
 
         Returns
         -------
-        list
+        list[SherlockProjectService_pb2.ListStrainMapsResponse.CcaStrainMap]
             All strain maps or strain maps for the specified CCAs.
 
         Examples
@@ -1322,7 +1324,20 @@ class Project(GrpcStub):
         project: str,
         add_thermal_map_files: list[
             dict[
-                str, str | list[dict[str, str | ThermalMapsFileType | ThermalBoardSide | list[str]]]
+                str,
+                list[
+                    dict[
+                        str,
+                        str
+                        | ThermalMapsFileType
+                        | ThermalBoardSide
+                        | CsvExcelFile
+                        | IcepakFile
+                        | ImageFile
+                        | list[str],
+                    ]
+                ]
+                | str,
             ]
         ],
     ) -> int:
@@ -1335,7 +1350,8 @@ class Project(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project to add thermal maps to.
-        add_thermal_map_files: list
+        add_thermal_map_files: list[dict[str, list[dict[str, str | ThermalMapsFileType\
+                | ThermalBoardSide | CsvExcelFile | IcepakFile | ImageFile | list[str]]] | str]]
             List of thermal map files consisting of these properties:
 
                 - thermal_map_file: str
@@ -1351,7 +1367,7 @@ class Project(GrpcStub):
                             Comment to associate with the file.
                         - thermal_board_side: ThermalBoardSide
                             Thermal board side.
-                        - file_data: CsvExcelFile|IcepakFile|ImageFile
+                        - file_data: CsvExcelFile | IcepakFile | ImageFile
                             The properties of the thermal map file to update.
                         - thermal_profiles: List of str
                             List of thermal profiles.
@@ -1781,7 +1797,7 @@ class Project(GrpcStub):
         export_file_dir: str,
         export_file_name: str,
         overwrite_existing_file: bool,
-    ):
+    ) -> int:
         """
         Export a sherlock project.
 
@@ -1877,7 +1893,7 @@ class Project(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        cca_from_mr_properties: list
+        cca_from_mr_properties: list[dict[str, bool | float | str]]
             CCAs to be created from modeling regions consisting of these properties:
 
             - cca_name: str
@@ -1920,7 +1936,7 @@ class Project(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> sherlock.project.create_cca_from_modeling_region()
+        >>> sherlock.project.create_cca_from_modeling_region(
             "Test",
             [{
                 'cca_name': 'Card',

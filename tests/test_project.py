@@ -1154,7 +1154,7 @@ def helper_test_list_strain_maps(project: Project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_project(project) -> str:
+def helper_test_add_project(project: Project) -> str:
     """Test add_project API"""
 
     try:
@@ -2978,7 +2978,7 @@ def clean_up_after_add(project: Project, project_name: str):
 def helper_test_export_project(project: Project):
     """Test method for export project"""
     try:
-        result = project.export_project(
+        project.export_project(
             project_name="",
             export_design_files=True,
             export_result_files=True,
@@ -2994,7 +2994,7 @@ def helper_test_export_project(project: Project):
         assert str(e) == "Export project error : Project name is invalid"
 
     try:
-        result = project.export_project(
+        project.export_project(
             project_name="Tutorial Project",
             export_design_files=True,
             export_result_files=True,
@@ -3010,7 +3010,7 @@ def helper_test_export_project(project: Project):
         assert str(e) == "Export project error : Export directory is invalid"
 
     try:
-        result = project.export_project(
+        project.export_project(
             project_name="Tutorial Project",
             export_design_files=True,
             export_result_files=True,
@@ -3027,7 +3027,7 @@ def helper_test_export_project(project: Project):
 
     if project._is_connection_up():
         try:
-            result = project.export_project(
+            project.export_project(
                 project_name="",
                 export_design_files=True,
                 export_result_files=True,
