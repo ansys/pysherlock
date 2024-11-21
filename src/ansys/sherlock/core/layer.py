@@ -32,6 +32,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPointsError,
+    SherlockListLayersError,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -1615,3 +1616,54 @@ class Layer(GrpcStub):
             raise e
 
         return response.value
+
+    def list_layers(self, project, cca_name):
+        """List all layers as seen in the Layer Viewer for a specific project CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA.
+
+        Returns
+        -------
+        list
+            The layers as seen in the Layer Viewer for the given project CCA.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.layer.list_layers(
+            project="Test",
+            cca_name="Card",
+        )
+        """
+
+        try:
+            if project == "":
+                raise SherlockListLayersError(message="Project name is invalid.")
+
+            if cca_name == "":
+                raise SherlockListLayersError(message="CCA name is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.ListLayersRequest(
+                project=project,
+                ccaName=cca_name
+            )
+
+            response = self.stub.listLayers(request)
+            if response.returnCode.value == -1:
+                raise SherlockListLayersError(response.returnCode.message)
+
+            return response.layer
+
+        except SherlockListLayersError as e:
+            LOG.error(str(e))
+            raise e

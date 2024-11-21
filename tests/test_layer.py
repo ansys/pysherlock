@@ -18,6 +18,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPointsError,
+    SherlockListLayersError,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -53,6 +54,7 @@ def test_all():
     region_id = helper_test_update_modeling_region(layer, region_id)
     helper_test_copy_modeling_region(layer, region_id)
     helper_test_delete_modeling_region(layer, region_id)
+    helper_test_list_layers(layer)
 
 
 def helper_test_add_potting_region(layer):
@@ -1271,6 +1273,33 @@ def helper_test_delete_modeling_region(layer, region_id):
         except Exception as e:
             pytest.fail(e.message)
 
+def helper_test_list_layers(layer):
+    """Test list_layers API"""
+
+    try:
+        layer.list_layers("Tutorial Project", "")
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockListLayersError as e:
+        assert str(e) == "CCA name is invalid."
+
+    try:
+        layer.list_layers("", "Main Board")
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockListLayersError as e:
+        assert str(e) == "Project name is invalid."
+
+    if layer._is_connection_up():
+        try:
+            layer.list_layers("Invalid Project Name", "")
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockListLayersError
+
+        try:
+            layer.list_layers("Tutorial Project", "Wrong Board Name")
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockListLayersError
 
 if __name__ == "__main__":
     test_all()
