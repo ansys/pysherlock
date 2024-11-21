@@ -1516,82 +1516,6 @@ class Lifecycle(GrpcStub):
             raise e
 
     @require_version()
-    def load_random_vibe_profile(
-        self, project: str, phase_name: str, event_name: str, file_path: str
-    ) -> int:
-        """Load random vibe profile from .csv or .dat file.
-
-        Available Since: 2023R1
-
-        Parameters
-        ----------
-        project: str
-            Name of the Sherlock project
-        phase_name: str
-            Name of the lifecycle phase to add this event to.
-        event_name: str
-            Name of the random vibe event.
-        file_path: str
-            File path for thermal profile .dat or .csv file
-
-        Returns
-        -------
-        int
-            Status code of the response. 0 for success.
-
-        Example
-        -------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card"
-        )
-
-        >>> sherlock.lifecycle.load_random_vibe_profile(
-                project="Tutorial",
-                phase_name="Phase 1",
-                event_name="Random Event",
-                file_path="TestProfile.dat"
-        )
-        """
-        try:
-            if project == "":
-                raise SherlockLoadRandomVibeProfileError(message="Project name is invalid.")
-            if phase_name == "":
-                raise SherlockLoadRandomVibeProfileError(message="Phase name is invalid.")
-            if event_name == "":
-                raise SherlockLoadRandomVibeProfileError(message="Event name is invalid.")
-            if file_path == "":
-                raise SherlockLoadRandomVibeProfileError(message="File path is invalid.")
-            if not self._is_connection_up():
-                raise SherlockNoGrpcConnectionException()
-
-            request = SherlockLifeCycleService_pb2.LoadRandomVibeProfileRequest(
-                project=project,
-                phaseName=phase_name,
-                eventName=event_name,
-                filePath=file_path,
-            )
-            response = self.stub.loadRandomVibeProfile(request)
-            return_code = response.returnCode
-            if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockLoadRandomVibeProfileError(error_array=response.errors)
-
-                raise SherlockLoadRandomVibeProfileError(message=return_code.message)
-
-            return return_code.value
-        except SherlockLoadRandomVibeProfileError as e:
-            LOG.error(str(e))
-            raise e
-
-    @require_version()
     def add_shock_profiles(
         self,
         project: str,
@@ -1809,6 +1733,82 @@ class Lifecycle(GrpcStub):
         except SherlockAddShockProfilesError as e:
             for error in e.str_itr():
                 LOG.error(error)
+            raise e
+
+    @require_version()
+    def load_random_vibe_profile(
+        self, project: str, phase_name: str, event_name: str, file_path: str
+    ) -> int:
+        """Load random vibe profile from .csv or .dat file.
+
+        Available Since: 2023R1
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project
+        phase_name: str
+            Name of the lifecycle phase to add this event to.
+        event_name: str
+            Name of the random vibe event.
+        file_path: str
+            File path for thermal profile .dat or .csv file
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card"
+        )
+
+        >>> sherlock.lifecycle.load_random_vibe_profile(
+                project="Tutorial",
+                phase_name="Phase 1",
+                event_name="Random Event",
+                file_path="TestProfile.dat"
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockLoadRandomVibeProfileError(message="Project name is invalid.")
+            if phase_name == "":
+                raise SherlockLoadRandomVibeProfileError(message="Phase name is invalid.")
+            if event_name == "":
+                raise SherlockLoadRandomVibeProfileError(message="Event name is invalid.")
+            if file_path == "":
+                raise SherlockLoadRandomVibeProfileError(message="File path is invalid.")
+            if not self._is_connection_up():
+                raise SherlockNoGrpcConnectionException()
+
+            request = SherlockLifeCycleService_pb2.LoadRandomVibeProfileRequest(
+                project=project,
+                phaseName=phase_name,
+                eventName=event_name,
+                filePath=file_path,
+            )
+            response = self.stub.loadRandomVibeProfile(request)
+            return_code = response.returnCode
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockLoadRandomVibeProfileError(error_array=response.errors)
+
+                raise SherlockLoadRandomVibeProfileError(message=return_code.message)
+
+            return return_code.value
+        except SherlockLoadRandomVibeProfileError as e:
+            LOG.error(str(e))
             raise e
 
     @require_version()

@@ -1116,7 +1116,8 @@ class Layer(GrpcStub):
         ----------
         project: str
             Name of the Sherlock project.
-        modeling_regions: list[dict]
+        modeling_regions: list[dict[str, bool | float | str | dict[str, bool | float | str]\
+                | dict[str, float | str]]]
             Modeling regions to add. Each dictionary should contain:
 
             - cca_name: str
