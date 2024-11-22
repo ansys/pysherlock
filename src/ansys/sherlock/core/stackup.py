@@ -117,7 +117,7 @@ class Stackup(GrpcStub):
             if fiber_material_response.returnCode.value == 0:
                 self.FIBER_MATERIAL_LIST = fiber_material_response.fiberMaterial
 
-    def _check_pcb_material_validity(self, manufacturer: str, grade, material):
+    def _check_pcb_material_validity(self, manufacturer: str, grade: str, material: str):
         """Check PCB arguments to see if they are valid.
 
         Available Since: 2021R1

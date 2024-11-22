@@ -7,8 +7,6 @@ try:
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2
 
-common_service = SherlockCommonService_pb2
-
 
 def basic_str_validator(value: str, field_name: str):
     """Apply basic string validation."""
@@ -20,7 +18,7 @@ def basic_str_validator(value: str, field_name: str):
 class ListUnitsRequestUnitType:
     """Constants for Unit Type in the List Units request."""
 
-    __unit_type = common_service.ListUnitsRequest.UnitType
+    __unit_type = SherlockCommonService_pb2.ListUnitsRequest.UnitType
     ACCEL_DENSITY = __unit_type.ACCEL_DENSITY
     "ACCEL_DENSITY"
     ACCELERATION = __unit_type.ACCELERATION

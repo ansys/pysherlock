@@ -55,38 +55,13 @@ class ImageBounds:
     def __init__(self, image_x: float, image_y: float, height: float, width: float):
         """Initialize the image bounds properties."""
         self.image_x = image_x
-        """float: coordinate of the upper left corner"""
+        """float: x coordinate of the upper left corner"""
         self.image_y = image_y
         """float: y coordinate of the upper left corner"""
         self.height = height
         """float: height of the image"""
         self.width = width
         """float: width of the image"""
-
-
-class LegendBounds:
-    """Contains the properties of the legend bounds."""
-
-    def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
-        """Initialize the legend bounds properties."""
-        self.legend_x = legend_x
-        """float: x coordinate of the upper left corner"""
-        self.legend_y = legend_y
-        """float: y coordinate of the upper left corner"""
-        self.height = height
-        """float: height of the legend"""
-        self.width = width
-        """float: width of the legend"""
-
-
-class LegendOrientation:
-    """Constants for legend orientation in the update thermal maps request."""
-
-    __legend_orientation = thermal_map_file.ImageFile.LegendOrientation
-    HORIZONTAL = __legend_orientation.Horizontal
-    "Horizontal"
-    VERTICAL = __legend_orientation.Vertical
-    "Vertical"
 
 
 class ImageFile:
@@ -123,6 +98,31 @@ class ImageFile:
         """float: min_temperature"""
         self.min_temperature_units = min_temperature_units
         """str: min_temperature_units"""
+
+
+class LegendBounds:
+    """Contains the properties of the legend bounds."""
+
+    def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
+        """Initialize the legend bounds properties."""
+        self.legend_x = legend_x
+        """float: x coordinate of the upper left corner"""
+        self.legend_y = legend_y
+        """float: y coordinate of the upper left corner"""
+        self.height = height
+        """float: height of the legend"""
+        self.width = width
+        """float: width of the legend"""
+
+
+class LegendOrientation:
+    """Constants for legend orientation in the update thermal maps request."""
+
+    __legend_orientation = thermal_map_file.ImageFile.LegendOrientation
+    HORIZONTAL = __legend_orientation.Horizontal
+    "Horizontal"
+    VERTICAL = __legend_orientation.Vertical
+    "Vertical"
 
 
 class ThermalBoardSide:
