@@ -5,6 +5,8 @@ try:
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 
+from unittest.mock import Mock
+
 import grpc
 import pytest
 
@@ -31,13 +33,14 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all life cycle APIs."""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    analysis = Analysis(channel)
+    analysis = Analysis(channel, SKIP_VERSION_CHECK)
     helper_test_run_analysis(analysis)
     helper_test_run_strain_map_analysis(analysis)
     helper_test_get_harmonic_vibe_input_fields(analysis)
@@ -47,6 +50,7 @@ def test_all():
     helper_test_get_random_vibe_input_fields(analysis)
     helper_test_translate_field_names(analysis)
     helper_test_update_harmonic_vibe_props(analysis)
+    helper_test_set_update_harmonic_vibe_props_request_properties(analysis)
     helper_test_update_ict_analysis_props(analysis)
     helper_test_update_mechanical_shock_props(analysis)
     helper_test_update_solder_fatigue_props(analysis)
@@ -617,13 +621,21 @@ def helper_test_update_harmonic_vibe_props(analysis):
             [
                 {
                     "cca_name": "Card",
+                    "model_source": ModelSource.STRAIN_MAP,
                     "harmonic_vibe_count": 2,
                     "harmonic_vibe_damping": "0.01, 0.05",
                     "part_validation_enabled": False,
                     "require_material_assignment_enabled": False,
                     "analysis_temp": 20,
                     "analysis_temp_units": "C",
+                    "force_model_rebuild": "AUTO",
                     "filter_by_event_frequency": False,
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 1000,
+                    "natural_freq_max_units": "Hz",
+                    "reuse_modal_analysis": False,
+                    "strain_map_natural_freq": 100.13,
                 },
             ],
         )
@@ -663,13 +675,21 @@ def helper_test_update_harmonic_vibe_props(analysis):
             "Test",
             [
                 {
+                    "model_source": ModelSource.STRAIN_MAP,
                     "harmonic_vibe_count": 2,
                     "harmonic_vibe_damping": "0.01, 0.05",
                     "part_validation_enabled": False,
                     "require_material_assignment_enabled": False,
                     "analysis_temp": 20,
                     "analysis_temp_units": "C",
+                    "force_model_rebuild": "AUTO",
                     "filter_by_event_frequency": False,
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 1000,
+                    "natural_freq_max_units": "Hz",
+                    "reuse_modal_analysis": False,
+                    "strain_map_natural_freq": 100.13,
                 },
             ],
         )
@@ -686,13 +706,21 @@ def helper_test_update_harmonic_vibe_props(analysis):
             [
                 {
                     "cca_name": "",
+                    "model_source": ModelSource.STRAIN_MAP,
                     "harmonic_vibe_count": 2,
                     "harmonic_vibe_damping": "0.01, 0.05",
                     "part_validation_enabled": False,
                     "require_material_assignment_enabled": False,
                     "analysis_temp": 20,
                     "analysis_temp_units": "C",
+                    "force_model_rebuild": "AUTO",
                     "filter_by_event_frequency": False,
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 1000,
+                    "natural_freq_max_units": "Hz",
+                    "reuse_modal_analysis": False,
+                    "strain_map_natural_freq": 100.13,
                 },
             ],
         )
@@ -709,13 +737,21 @@ def helper_test_update_harmonic_vibe_props(analysis):
             [
                 {
                     "cca_name": "Card",
+                    "model_source": ModelSource.STRAIN_MAP,
                     "harmonic_vibe_count": 2,
                     "harmonic_vibe_damping": "0.01, foo",
                     "part_validation_enabled": False,
                     "require_material_assignment_enabled": False,
                     "analysis_temp": 20,
                     "analysis_temp_units": "C",
+                    "force_model_rebuild": "AUTO",
                     "filter_by_event_frequency": False,
+                    "natural_freq_min": 10,
+                    "natural_freq_min_units": "Hz",
+                    "natural_freq_max": 1000,
+                    "natural_freq_max_units": "Hz",
+                    "reuse_modal_analysis": False,
+                    "strain_map_natural_freq": 100.13,
                 },
             ],
         )
@@ -733,13 +769,21 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 [
                     {
                         "cca_name": "Main Board",
+                        "model_source": ModelSource.STRAIN_MAP,
                         "harmonic_vibe_count": 2,
                         "harmonic_vibe_damping": "0.01, 0.02",
                         "part_validation_enabled": False,
                         "require_material_assignment_enabled": False,
                         "analysis_temp": 20,
                         "analysis_temp_units": "foo",
+                        "force_model_rebuild": "AUTO",
                         "filter_by_event_frequency": False,
+                        "natural_freq_min": 10,
+                        "natural_freq_min_units": "Hz",
+                        "natural_freq_max": 1000,
+                        "natural_freq_max_units": "Hz",
+                        "reuse_modal_analysis": False,
+                        "strain_map_natural_freq": 100.13,
                     },
                 ],
             )
@@ -753,19 +797,72 @@ def helper_test_update_harmonic_vibe_props(analysis):
                 [
                     {
                         "cca_name": "Main Board",
-                        "harmonic_vibe_count": 2,
-                        "harmonic_vibe_damping": "0.01, 0.02",
-                        "part_validation_enabled": False,
-                        "require_material_assignment_enabled": False,
-                        "analysis_temp": 20,
-                        "analysis_temp_units": "C",
-                        "filter_by_event_frequency": False,
+                        "model_source": ModelSource.STRAIN_MAP,
+                        "harmonic_vibe_count": 4,
+                        "harmonic_vibe_damping": "0.015, 0.025",
+                        "part_validation_enabled": True,
+                        "require_material_assignment_enabled": True,
+                        "analysis_temp": 30,
+                        "analysis_temp_units": "F",
+                        "force_model_rebuild": "FORCE",
+                        "filter_by_event_frequency": True,
+                        "natural_freq_min": 50,
+                        "natural_freq_min_units": "Hz",
+                        "natural_freq_max": 1000,
+                        "natural_freq_max_units": "Hz",
+                        "reuse_modal_analysis": True,
+                        "strain_map_natural_freq": 222.45,
                     },
                 ],
             )
             assert result == 0
         except SherlockUpdateHarmonicVibePropsError as e:
             pytest.fail(str(e))
+
+
+def helper_test_set_update_harmonic_vibe_props_request_properties(analysis):
+    properties = [
+        {
+            "cca_name": "Main Board",
+            "model_source": ModelSource.STRAIN_MAP,
+            "harmonic_vibe_count": 4,
+            "harmonic_vibe_damping": "0.015, 0.025",
+            "part_validation_enabled": True,
+            "require_material_assignment_enabled": True,
+            "analysis_temp": 30,
+            "analysis_temp_units": "F",
+            "force_model_rebuild": "FORCE",
+            "filter_by_event_frequency": True,
+            "natural_freq_min": 50,
+            "natural_freq_min_units": "Hz",
+            "natural_freq_max": 1000,
+            "natural_freq_max_units": "Hz",
+            "reuse_modal_analysis": True,
+            "strain_map_natural_freq": 222.45,
+        },
+    ]
+    mockRequest = Mock()
+    mockHvProperties = Mock()
+    mockRequest.harmonicVibeProperties.add.return_value = mockHvProperties
+
+    analysis._set_update_harmonic_vibe_props_request_properties(mockRequest, properties)
+
+    assert mockHvProperties.ccaName == "Main Board"
+    assert mockHvProperties.modelSource == ModelSource.STRAIN_MAP
+    assert mockHvProperties.harmonicVibeCount == 4
+    assert mockHvProperties.harmonicVibeDamping == "0.015, 0.025"
+    assert mockHvProperties.partValidationEnabled == True
+    assert mockHvProperties.requireMaterialAssignmentEnabled == True
+    assert mockHvProperties.analysisTemp == 30
+    assert mockHvProperties.analysisTempUnits == "F"
+    assert mockHvProperties.forceModelRebuild == "FORCE"
+    assert mockHvProperties.filterByEventFrequency == True
+    assert mockHvProperties.naturalFreqMin == 50
+    assert mockHvProperties.naturalFreqMinUnits == "Hz"
+    assert mockHvProperties.naturalFreqMax == 1000
+    assert mockHvProperties.naturalFreqMaxUnits == "Hz"
+    assert mockHvProperties.reuseModalAnalysis == True
+    assert mockHvProperties.strainMapNaturalFreq == 222.45
 
 
 def helper_test_update_ict_analysis_props(analysis):

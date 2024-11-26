@@ -39,6 +39,7 @@ from ansys.sherlock.core.types.project_types import (
     ThermalBoardSide,
     ThermalMapsFileType,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 PROJECT_ADD_NAME = "Delete This After Add"
 
@@ -47,7 +48,7 @@ def test_all():
     """Test all project APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    project = Project(channel)
+    project = Project(channel, SKIP_VERSION_CHECK)
 
     helper_test_add_strain_maps(project)
     helper_test_delete_project(project)

@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module for running the gRPC APIs in the Sherlock Common service."""
 try:
@@ -11,16 +11,18 @@ except ModuleNotFoundError:
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCommonServiceError
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Common(GrpcStub):
     """Contains methods from the Sherlock Common service."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for the Sherlock Common service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
+    @require_version()
     def check(self):
         """Perform a health check on the gRPC connection.
 
@@ -37,8 +39,11 @@ class Common(GrpcStub):
             LOG.info("Connection is healthy.")
             return True
 
+    @require_version()
     def is_sherlock_client_loading(self):
         """Check if the Sherlock client is opened and done initializing.
+
+        Available Since: 2023R2
 
         Returns
         -------
@@ -60,8 +65,11 @@ class Common(GrpcStub):
             LOG.error("Sherlock client has not finished initializing.")
             return False
 
+    @require_version()
     def exit(self, close_sherlock_client=False):
         """Close the gRPC connection.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -82,8 +90,11 @@ class Common(GrpcStub):
         except SherlockCommonServiceError as err:
             LOG.error("Exit error: ", str(err))
 
+    @require_version()
     def list_units(self, unitType):
         """List units for a unit type.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -114,8 +125,11 @@ class Common(GrpcStub):
 
         return response.units
 
+    @require_version()
     def list_solder_materials(self):
         """List valid solders.
+
+        Available Since: 2024R1
 
         Returns
         -------
@@ -136,3 +150,30 @@ class Common(GrpcStub):
         response = self.stub.getSolders(request)
 
         return response.solderName
+
+    @require_version(251)
+    def get_sherlock_info(self) -> str:
+        """Get server Sherlock version.
+
+        Returns
+        -------
+        SherlockInfoResponse
+            Sherlock information containing
+            releaseVersion, defaultProjectDir and isSingleProjectMode flag
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> release_version = sherlock.common.get_sherlock_info().releaseVersion
+        >>> default_dir = sherlock.common.get_sherlock_info().defaultProjectDir
+        >>> is_single_project = sherlock.common.get_sherlock_info().isSingleProjectMode
+        """
+        if not self._is_connection_up():
+            LOG.error("Not connected to a gRPC service.")
+            raise RuntimeError("Not connected to a gRPC service.")
+
+        request = SherlockCommonService_pb2.SherlockInfoRequest()
+        response = self.stub.getSherlockInfo(request)
+        if response is not None:
+            return response

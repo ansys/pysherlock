@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all stackup management capabilities."""
 
@@ -27,14 +27,15 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.stackup_types import StackupProperties
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Stackup(GrpcStub):
     """Contains all stackup management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for Sherlock Stackup service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockStackupService_pb2_grpc.SherlockStackupServiceStub(channel)
         self.LAMINATE_THICKNESS_UNIT_LIST = None
         self.LAMINATE_MATERIAL_MANUFACTURER_LIST = None
@@ -44,7 +45,10 @@ class Stackup(GrpcStub):
         self.FIBER_MATERIAL_LIST = None
 
     def _init_laminate_thickness_units(self):
-        """Initialize the list of units for the laminate thickness."""
+        """Initialize the list of units for the laminate thickness.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             laminate_thickness_unit_request = (
                 SherlockStackupService_pb2.ListLaminateThicknessUnitsRequest()
@@ -56,7 +60,10 @@ class Stackup(GrpcStub):
                 self.LAMINATE_THICKNESS_UNIT_LIST = laminate_thickness_unit_response.unit
 
     def _init_laminate_material_manufacturers(self):
-        """Initialize list of lamininate material manufacturers."""
+        """Initialize list of lamininate material manufacturers.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             laminate_material_manufacturer_request = (
                 SherlockStackupService_pb2.ListLaminateMaterialsManufacturersRequest()
@@ -70,7 +77,10 @@ class Stackup(GrpcStub):
                 )
 
     def _init_conductor_materials(self):
-        """Initialize list of conductor materials."""
+        """Initialize list of conductor materials.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             conductor_materials_request = SherlockStackupService_pb2.ListConductorMaterialsRequest()
             conductor_materials_response = self.stub.listConductorMaterials(
@@ -80,7 +90,10 @@ class Stackup(GrpcStub):
                 self.CONDUCTOR_MATERIAL_LIST = conductor_materials_response.conductorMaterial
 
     def _init_construction_styles(self):
-        """Initialize list of construction styles."""
+        """Initialize list of construction styles.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             construction_style_request = SherlockStackupService_pb2.ListConstructionStylesRequest()
             construction_style_response = self.stub.listConstructionStyles(
@@ -90,7 +103,10 @@ class Stackup(GrpcStub):
                 self.CONSTRUCTION_STYLE_LIST = construction_style_response.constructionStyle
 
     def _init_fiber_materials(self):
-        """Initialize list of fiber materials."""
+        """Initialize list of fiber materials.
+
+        Available Since: 2021R1
+        """
         if self._is_connection_up():
             fiber_material_request = SherlockStackupService_pb2.ListFiberMaterialsRequest()
             fiber_material_response = self.stub.listFiberMaterials(fiber_material_request)
@@ -98,7 +114,10 @@ class Stackup(GrpcStub):
                 self.FIBER_MATERIAL_LIST = fiber_material_response.fiberMaterial
 
     def _check_pcb_material_validity(self, manufacturer, grade, material):
-        """Check PCB arguments to see if they are valid."""
+        """Check PCB arguments to see if they are valid.
+
+        Available Since: 2021R1
+        """
         if (self.LAMINATE_MATERIAL_MANUFACTURER_LIST is not None) and (
             manufacturer not in self.LAMINATE_MATERIAL_MANUFACTURER_LIST
         ):
@@ -147,6 +166,7 @@ class Stackup(GrpcStub):
             layer.thickness = l[2]
             layer.thicknessUnit = l[3]
 
+    @require_version()
     def gen_stackup(
         self,
         project,
@@ -166,6 +186,8 @@ class Stackup(GrpcStub):
         power_layer_thickness_unit,
     ):
         """Generate a new stackup from given properties.
+
+        Available Since: 2021R2
 
         Parameters
         ----------
@@ -296,6 +318,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def update_conductor_layer(
         self,
         project,
@@ -309,6 +332,8 @@ class Stackup(GrpcStub):
         resin_material="",
     ):
         """Update a conductor layer with given properties.
+
+        Available Since: 2021R2
 
         Parameters
         ----------
@@ -430,6 +455,7 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def update_laminate_layer(
         self,
         project,
@@ -447,6 +473,8 @@ class Stackup(GrpcStub):
         conductor_percent="",
     ):
         """Update a laminate layer with given properties.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -614,8 +642,11 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def list_conductor_layers(self, project):
         """List CCA conductor layers.
+
+        Available Since: 2021R2
 
         Parameters
         ----------
@@ -670,8 +701,11 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def list_laminate_layers(self, project):
         """List all laminate layers and their properties.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
@@ -731,8 +765,11 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def get_layer_count(self, project, cca_name):
         """Get the number of CCA layers in a stackup.
+
+        Available Since: 2021R2
 
         Parameters
         ----------
@@ -785,8 +822,11 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def get_stackup_props(self, project, cca_name):
         """Get the stackup properties from a CCA.
+
+        Available Since: 2021R2
 
         Parameters
         ----------
@@ -840,8 +880,11 @@ class Stackup(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def get_total_conductor_thickness(self, project, cca_name, thickness_unit):
         """Return the total conductor thickness.
+
+        Available Since: 2021R2
 
         Parameters
         ----------

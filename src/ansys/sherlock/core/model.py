@@ -1,4 +1,4 @@
-# © 2023-2024 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all model generation capabilities."""
 import os.path
@@ -22,16 +22,18 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.common_types import Measurement
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Model(GrpcStub):
     """Contains all model generation capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for the Sherlock Model service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockModelService_pb2_grpc.SherlockModelServiceStub(channel)
 
+    @require_version()
     def export_trace_reinforcement_model(
         self,
         project_name,
@@ -52,6 +54,8 @@ class Model(GrpcStub):
         trace_drill_hole_max_edge_unit="mm",
     ):
         r"""Export a trace reinforcement model.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -204,6 +208,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @require_version()
     def generate_trace_model(
         self,
         project_name,
@@ -218,6 +223,8 @@ class Model(GrpcStub):
         use_snapshot_for_non_image_layer=False,
     ):
         r"""Generate one or more trace models for a project.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
@@ -306,6 +313,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @require_version(242)
     def export_aedb(
         self,
         project_name,
@@ -315,6 +323,8 @@ class Model(GrpcStub):
         display_model=False,
     ):
         r"""Export an Electronics Desktop model.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -377,8 +387,11 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @require_version(242)
     def exportTraceModel(self, layer_params):
         r"""Export a trace model to a specified output file.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
@@ -441,6 +454,7 @@ class Model(GrpcStub):
             LOG.error(str(e))
             raise
 
+    @require_version(242)
     def createExportTraceCopperLayerParams(
         self,
         project_name,

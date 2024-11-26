@@ -3,19 +3,24 @@
 """Module containing all layer management capabilities."""
 from ansys.sherlock.core.types.layer_types import (
     CircularShape,
+    CopyPottingRegionRequest,
+    DeletePottingRegionRequest,
     PCBShape,
     PolygonalShape,
     RectangularShape,
     SlotShape,
+    UpdatePottingRegionRequest,
 )
 
 try:
+    import SherlockCommonService_pb2
     import SherlockLayerService_pb2
     from SherlockLayerService_pb2 import ModelingRegion
     import SherlockLayerService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
 
 from typing import Dict, List, Union
@@ -39,22 +44,26 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateTestPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Layer(GrpcStub):
     """Module containing all the layer management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel, server_version):
         """Initialize a gRPC stub for SherlockLayerService."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
 
+    @require_version(241)
     def add_potting_region(
         self,
         project,
         potting_regions,
     ):
         """Add one or more potting regions to a given project.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -236,6 +245,174 @@ class Layer(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(251)
+    def update_potting_region(
+        self, request: UpdatePottingRegionRequest
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Update one or more potting regions in a specific project.
+
+        Available Since: 2025R1
+
+        Parameters
+        ----------
+        request: UpdatePottingRegionRequest
+            Contains all the information needed to update one or more potting regions per project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionUpdateData
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegion
+        >>> sherlock = launch_sherlock()
+        >>>
+        >>> update_request1 = PottingRegionUpdateData(
+            potting_region_id_to_update=potting_id,
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(
+                    points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+                    rotation=45.0
+                )
+            )
+        )
+        >>> update_request2 = PottingRegionUpdateData(
+            potting_region_id_to_update=potting_id,
+            potting_region=PottingRegionData(
+                cca_name=cca_name,
+                potting_id=potting_id,
+                potting_side=potting_side,
+                potting_material=potting_material,
+                potting_units=potting_units,
+                potting_thickness=potting_thickness,
+                potting_standoff=potting_standoff,
+                shape=PolygonalShape(
+                    points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+                    rotation=0.0
+                )
+            )
+        )
+        >>> potting_region_requests = [
+            update_request1,
+            update_request2
+        ]
+        >>> responses = sherlock.layer.update_potting_region(request)
+        """
+        update_request = request._convert_to_grpc()
+
+        responses = []
+        for grpc_return_code in self.stub.updatePottingRegion(update_request):
+            responses.append(grpc_return_code)
+        return responses
+
+    @require_version(251)
+    def copy_potting_region(
+        self, request: CopyPottingRegionRequest
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Copy one or more potting regions in a specific project.
+
+        Available Since: 2025R1
+
+        Parameters
+        ----------
+        request: CopyPottingRegionRequest
+             Contains all the information needed to copy one or more potting regions per project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import CopyPottingRegionRequest
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionCopyData
+        >>> sherlock = launch_sherlock()
+        >>>
+        >>> copy_request_example = CopyPottingRegionRequest(
+            project=project,
+            potting_region_copy_data=[
+                PottingRegionCopyData(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    copy_potting_id=new_id,
+                    center_x=center_x,
+                    center_y=center_y
+                ),
+                PottingRegionCopyData(
+                    cca_name=cca_name,
+                    potting_id=new_id,
+                    copy_potting_id=new_id+"1",
+                    center_x=center_x,
+                    center_y=center_y
+                )
+            ]
+        )
+        >>> responses_example = sherlock.layer.copy_potting_region(copy_request_example)
+        """
+        copy_request = request._convert_to_grpc()
+
+        responses = []
+        for grpc_return_code in self.stub.copyPottingRegion(copy_request):
+            responses.append(grpc_return_code)
+        return responses
+
+    @require_version(251)
+    def delete_potting_region(
+        self, request: DeletePottingRegionRequest
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Delete on or more potting regions in a specific project.
+
+        Available Since: 2025R1
+
+        Parameters
+        ----------
+        request: DeletePottingRegionRequest
+             Contains all the information needed to delete one or more potting regions per project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import DeletePottingRegionRequest
+        >>> from ansys.sherlock.core.types.layer_types import PottingRegionDeleteData
+        >>> sherlock = launch_sherlock()
+        >>>
+        >>> delete_request_example = DeletePottingRegionRequest(
+            project=project,
+            potting_region_delete_data=[
+                PottingRegionDeleteData(
+                    cca_name=cca_name,
+                    potting_id=potting_id
+                )
+            ]
+        )
+        >>> responses_example = sherlock.layer.delete_potting_region(delete_request_example)
+        """
+        delete_request = request._convert_to_grpc()
+
+        responses = []
+        for grpc_return_code in self.stub.deletePottingRegion(delete_request):
+            responses.append(grpc_return_code)
+        return responses
+
+    @require_version()
     def update_mount_points_by_file(
         self,
         project,
@@ -243,6 +420,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update mount point properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -317,8 +496,11 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(222)
     def delete_all_mount_points(self, project, cca_name):
         """Delete all mount points for a CCA.
+
+        Available Since: 2022R2
 
         Parameters
         ----------
@@ -378,8 +560,11 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def delete_all_ict_fixtures(self, project, cca_name):
         """Delete all ICT fixtures for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -439,8 +624,11 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def delete_all_test_points(self, project, cca_name):
         """Delete all test points for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -500,6 +688,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def update_test_points_by_file(
         self,
         project,
@@ -507,6 +696,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update test point properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -578,6 +769,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(231)
     def update_test_fixtures_by_file(
         self,
         project,
@@ -585,6 +777,8 @@ class Layer(GrpcStub):
         file_path,
     ):
         """Update test fixture properties of a CCA from a CSV file.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -656,6 +850,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(231)
     def export_all_test_points(
         self,
         project,
@@ -666,6 +861,8 @@ class Layer(GrpcStub):
         force_units="DEFAULT",
     ):
         """Export the test point properties for a CCA.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -744,6 +941,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(231)
     def export_all_test_fixtures(
         self,
         project,
@@ -821,6 +1019,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(222)
     def export_all_mount_points(
         self,
         project,
@@ -898,6 +1097,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(251)
     def add_modeling_region(
         self,
         project: str,
@@ -1164,6 +1364,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(251)
     def update_modeling_region(
         self,
         project: str,
@@ -1428,6 +1629,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(251)
     def copy_modeling_region(
         self,
         project: str,
@@ -1540,6 +1742,7 @@ class Layer(GrpcStub):
                 LOG.error(error)
             raise e
 
+    @require_version(251)
     def delete_modeling_region(self, project: str, delete_regions: List[Dict[str, str]]):
         """Delete one or more modeling regions for a specific project.
 

@@ -5,6 +5,7 @@ import platform
 import uuid
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.errors import (
@@ -27,24 +28,35 @@ from ansys.sherlock.core.errors import (
 from ansys.sherlock.core.layer import Layer
 from ansys.sherlock.core.types.layer_types import (
     CircularShape,
+    CopyPottingRegionRequest,
+    DeletePottingRegionRequest,
     PCBShape,
     PolygonalShape,
+    PottingRegion,
+    PottingRegionCopyData,
+    PottingRegionDeleteData,
+    PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
+    UpdatePottingRegionRequest,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all layer APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    layer = Layer(channel)
+    layer = Layer(channel, SKIP_VERSION_CHECK)
 
     helper_test_update_mount_points_by_file(layer)
     helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
+    helper_test_update_potting_region(layer)
+    helper_test_copy_potting_regions(layer)
+    helper_test_delete_potting_regions(layer)
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points_by_file(layer)
     helper_test_export_all_mount_points(layer)
@@ -181,71 +193,6 @@ def helper_test_add_potting_region(layer):
     except SherlockAddPottingRegionError as e:
         assert str(e) == "Add potting region error: Shape invalid for potting region 0."
 
-    try:
-        shape = PolygonalShape(points="INVALID", rotation=123.4)
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": shape,
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when polygonal points list is invalid.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Invalid points argument for potting region 0."
-
-    try:
-        invalid_point = "INVALID"
-        shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), invalid_point], rotation=123.4)
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": shape,
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when polygonal points list element is incorrect type.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Point 2 invalid for potting region 0."
-
-    try:
-        invalid_point = (4.4, 5.5, 10)
-        shape = PolygonalShape(points=[(1, 2), invalid_point, (1, 6)], rotation=123.4)
-        layer.add_potting_region(
-            "Test",
-            [
-                {
-                    "cca_name": "Test Card",
-                    "potting_id": "Test Region",
-                    "side": "TOP",
-                    "material": "epoxyencapsulant",
-                    "potting_units": "in",
-                    "thickness": 0.1,
-                    "standoff": 0.2,
-                    "shape": shape,
-                },
-            ],
-        )
-        pytest.fail("No exception thrown when polygonal points list element is incorrect length.")
-    except SherlockAddPottingRegionError as e:
-        assert str(e) == "Add potting region error: Point 1 invalid for potting region 0."
-
     if not layer._is_connection_up():
         return
 
@@ -282,7 +229,7 @@ def helper_test_add_potting_region(layer):
                     "potting_id": potting_id,
                     "side": "TOP",
                     "material": "epoxyencapsulant",
-                    "potting_units": "in",
+                    "potting_units": "mm",
                     "thickness": 0.1,
                     "standoff": 0.2,
                     "shape": shape,
@@ -292,6 +239,251 @@ def helper_test_add_potting_region(layer):
         assert result == 0
     except SherlockAddPottingRegionError as e:
         pytest.fail(str(e))
+
+
+def helper_test_update_potting_region(layer):
+    """Test update potting region API."""
+
+    project = "Tutorial Project"
+    # Add Potting region to update
+    potting_id = f"Test Region update {uuid.uuid4()}"
+    cca_name = "Main Board"
+    potting_side = "TOP"
+    potting_material = "epoxyencapsulant"
+    potting_units = "mm"
+    potting_thickness = 0.1
+    potting_standoff = 0.2
+
+    try:
+        potting_region = PottingRegion(
+            cca_name=cca_name,
+            potting_id=potting_id,
+            potting_side=potting_side,
+            potting_material=potting_material,
+            potting_units=potting_units,
+            potting_thickness=potting_thickness,
+            potting_standoff=potting_standoff,
+            shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=45.0),
+        )
+
+        PottingRegionUpdateData(
+            potting_region_id_to_update="",
+            potting_region=potting_region,
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Value error, potting_region_id_to_update is invalid because it is None or empty."
+        )
+
+    if layer._is_connection_up():
+
+        potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
+
+        layer.add_potting_region(
+            project,
+            [
+                {
+                    "cca_name": cca_name,
+                    "potting_id": potting_id,
+                    "side": potting_side,
+                    "material": potting_material,
+                    "potting_units": potting_units,
+                    "thickness": potting_thickness,
+                    "standoff": potting_standoff,
+                    "shape": potting_shape,
+                },
+            ],
+        )
+
+        # Update potting region that was added above
+        potting_regions = [
+            PottingRegionUpdateData(
+                potting_region_id_to_update=potting_id,
+                potting_region=PottingRegion(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    potting_side=potting_side,
+                    potting_material=potting_material,
+                    potting_units=potting_units,
+                    potting_thickness=potting_thickness,
+                    potting_standoff=potting_standoff,
+                    shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=45.0),
+                ),
+            ),
+            PottingRegionUpdateData(
+                potting_region_id_to_update=potting_id,
+                potting_region=PottingRegion(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    potting_side=potting_side,
+                    potting_material=potting_material,
+                    potting_units=potting_units,
+                    potting_thickness=potting_thickness,
+                    potting_standoff=potting_standoff,
+                    shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=0.0),
+                ),
+            ),
+        ]
+
+        request = UpdatePottingRegionRequest(
+            project=project, update_potting_regions=potting_regions
+        )
+
+        responses = layer.update_potting_region(request)
+
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == ""
+
+
+def helper_test_copy_potting_regions(layer):
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+    potting_id = f"Test orig Region {uuid.uuid4()}"
+    new_id = f"Test copy Region {uuid.uuid4()}"
+    center_x = 0
+    center_y = 0
+
+    potting_side = "TOP"
+    potting_material = "epoxyencapsulant"
+    potting_units = "mm"
+    potting_thickness = 0.1
+    potting_standoff = 0.2
+
+    try:
+        PottingRegionCopyData(
+            cca_name="",
+            potting_id=potting_id,
+            copy_potting_id=new_id,
+            center_x=center_x,
+            center_y=center_y,
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    try:
+        PottingRegionCopyData(
+            cca_name=cca_name,
+            potting_id="",
+            copy_potting_id=new_id,
+            center_x=center_x,
+            center_y=center_y,
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    try:
+        PottingRegionCopyData(
+            cca_name=cca_name,
+            potting_id=potting_id,
+            copy_potting_id="",
+            center_x=center_x,
+            center_y=center_y,
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    try:
+        PottingRegionCopyData(
+            cca_name=cca_name,
+            potting_id="same_id",
+            copy_potting_id="same_id",
+            center_x=center_x,
+            center_y=center_y,
+        )
+        pytest.fail("Potting IDs were the same and should not be.")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+        potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
+
+        layer.add_potting_region(
+            project,
+            [
+                {
+                    "cca_name": cca_name,
+                    "potting_id": potting_id,
+                    "side": potting_side,
+                    "material": potting_material,
+                    "potting_units": potting_units,
+                    "thickness": potting_thickness,
+                    "standoff": potting_standoff,
+                    "shape": potting_shape,
+                },
+            ],
+        )
+
+        request = CopyPottingRegionRequest(
+            project=project,
+            potting_region_copy_data=[
+                PottingRegionCopyData(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    copy_potting_id=new_id,
+                    center_x=center_x,
+                    center_y=center_y,
+                ),
+                PottingRegionCopyData(
+                    cca_name=cca_name,
+                    potting_id=new_id,
+                    copy_potting_id=new_id + "1",
+                    center_x=center_x,
+                    center_y=center_y,
+                ),
+            ],
+        )
+
+        responses = layer.copy_potting_region(request)
+
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == ""
+
+
+def helper_test_delete_potting_regions(layer):
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+    potting_id = f"Test Region {uuid.uuid4()}"
+    potting_side = "TOP"
+    potting_material = "epoxyencapsulant"
+    potting_units = "mm"
+    potting_thickness = 0.1
+    potting_standoff = 0.2
+
+    potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
+
+    if layer._is_connection_up():
+        layer.add_potting_region(
+            project,
+            [
+                {
+                    "cca_name": cca_name,
+                    "potting_id": potting_id,
+                    "side": potting_side,
+                    "material": potting_material,
+                    "potting_units": potting_units,
+                    "thickness": potting_thickness,
+                    "standoff": potting_standoff,
+                    "shape": potting_shape,
+                },
+            ],
+        )
+
+        request = DeletePottingRegionRequest(
+            project=project,
+            potting_region_delete_data=[
+                PottingRegionDeleteData(cca_name=cca_name, potting_id=potting_id)
+            ],
+        )
+        responses = layer.delete_potting_region(request)
+
+        for response in responses:
+            assert response.value == 0
 
 
 def helper_test_update_mount_points_by_file(layer):

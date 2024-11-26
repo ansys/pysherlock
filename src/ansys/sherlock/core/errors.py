@@ -1256,6 +1256,18 @@ class SherlockDeleteModelingRegionError(Exception):
         return f"Delete modeling region error: {self.message}"
 
 
+class SherlockVersionError(Exception):
+    """Contains the error raised when an incompatible Sherlock version is being used."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Sherlock Version Error: {self.message}"
+
+
 class SherlockListLayersError(Exception):
     """Contains the errors raised when layers for a project CCA cannot be listed."""
 
