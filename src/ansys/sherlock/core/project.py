@@ -110,12 +110,12 @@ class Project(GrpcStub):
         include_other_layers: bool,
         process_cutout_file: bool,
         guess_part_properties: bool,
-        ims_stackup: Optional[bool] = False,
+        ims_stackup: bool = False,
         project: Optional[str] = None,
         cca_name: Optional[str] = None,
-        polyline_simplification: Optional[bool] = False,
-        polyline_tolerance: Optional[float] = 0.1,
-        polyline_tolerance_units: Optional[str] = "mm",
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
     ) -> int:
         """Import an ODB++ archive file.
 
@@ -215,9 +215,9 @@ class Project(GrpcStub):
         guess_part_properties: bool,
         project: Optional[str] = None,
         cca_name: Optional[str] = None,
-        polyline_simplification: Optional[bool] = False,
-        polyline_tolerance: Optional[float] = 0.1,
-        polyline_tolerance_units: Optional[str] = "mm",
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
     ) -> int:
         """Import an IPC-2581 archive file.
 
@@ -638,7 +638,7 @@ class Project(GrpcStub):
                     )
                 ]
             )
-        >>> strain_map_image_properties = (
+        >>> properties = (
                 BoardBounds([
                     (1.0, 2.0),
                     (3.0, 4.0),
@@ -660,7 +660,7 @@ class Project(GrpcStub):
                         "StrainMap.jpg",
                         "This is the strain map image for the project",
                         StrainMapsFileType.IMAGE,
-                        strain_map_image_properties,
+                        properties,
                         ["Main Board"]
                     )
                 ]
@@ -1094,7 +1094,7 @@ class Project(GrpcStub):
             min_temperature=20.0,
             min_temperature_units="C"
         )
-        >>> thermal_map_files = [
+        >>> files = [
             {
                 "file_name": "thermal_map_file.jpg",
                 "file_type": ThermalMapsFileType.IMAGE,
@@ -1105,7 +1105,7 @@ class Project(GrpcStub):
                 "cca_names": ["CCA1", "CCA2"]
             },
         ]
-        >>> sherlock.project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        >>> sherlock.project.update_thermal_maps("Tutorial Project", files)
         """
         try:
             if project == "":
@@ -1407,7 +1407,7 @@ class Project(GrpcStub):
             max_temperature=50.0,
             max_temperature_units="C"
         )
-        >>> add_thermal_map_files = [
+        >>> files = [
             {
                 "thermal_map_file": "Thermal Image.jpg",
                 "thermal_map_file_properties": [
@@ -1423,7 +1423,7 @@ class Project(GrpcStub):
                 ]
             }
         ]
-        >>> sherlock.project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        >>> sherlock.project.add_thermal_maps("Tutorial Project", files)
         """
         try:
             if project == "":

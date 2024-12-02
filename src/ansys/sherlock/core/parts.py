@@ -1,8 +1,6 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
-from typing import Optional
-
 try:
     import SherlockPartsService_pb2
     import SherlockPartsService_pb2_grpc
@@ -205,7 +203,7 @@ class Parts(GrpcStub):
             "Card",
             "Sherlock Part Library",
             "Both",
-            PartsListSearchDuplicationMode.ERROR,
+            PartsListSearchDuplicationMode.ERROR
         )
         """
         try:
@@ -352,7 +350,7 @@ class Parts(GrpcStub):
 
     @require_version()
     def update_parts_locations_by_file(
-        self, project: str, cca_name: str, file_path: str, numeric_format: Optional[str] = ""
+        self, project: str, cca_name: str, file_path: str, numeric_format: str = ""
     ) -> int:
         """Update one or more part locations using a CSV file.
 
@@ -393,7 +391,7 @@ class Parts(GrpcStub):
         >>> sherlock.parts.update_parts_locations_by_file(
             "Test",
             "Card",
-            "Parts Locations.csv",
+            "Parts Locations.csv"
         )
         """
         try:
@@ -478,7 +476,7 @@ class Parts(GrpcStub):
             "Test",
             "Card",
             "Parts List.csv",
-            False,
+            False
         )
         """
         try:
@@ -550,7 +548,7 @@ class Parts(GrpcStub):
         >>> sherlock.parts.export_parts_list(
             "Test",
             "Card",
-            "Parts List.csv",
+            "Parts List.csv"
         )
         """
         try:
@@ -616,7 +614,7 @@ class Parts(GrpcStub):
         )
         >>> sherlock.parts.enable_lead_modeling(
             "Test",
-            "Card",
+            "Card"
         )
         """
         try:
@@ -961,9 +959,9 @@ class Parts(GrpcStub):
         project: str,
         cca_name: str,
         output_file: str,
-        col_delimiter: Optional[str] = TableDelimiter.COMMA,
-        overwrite_existing: Optional[bool] = False,
-        utf8_enabled: Optional[bool] = False,
+        col_delimiter: str = TableDelimiter.COMMA,
+        overwrite_existing: bool = False,
+        utf8_enabled: bool = False,
     ) -> int:
         """Export a net list to a delimited output file.
 

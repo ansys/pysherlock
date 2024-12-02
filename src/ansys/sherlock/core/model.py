@@ -16,8 +16,6 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
     from SherlockModelService_pb2 import MeshType, TraceOutputType
 
-from typing import Optional
-
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
     SherlockExportAEDBError,
@@ -44,19 +42,19 @@ class Model(GrpcStub):
         project_name: str,
         cca_name: str,
         export_file: str,
-        overwrite: Optional[bool] = True,
-        display_model: Optional[bool] = False,
-        generate_models_for_all_layers: Optional[bool] = False,
-        coordinate_units: Optional[str] = "mm",
-        trace_param_diameter_threshold_val: Optional[float] = 2,
-        trace_param_diameter_threshold_unit: Optional[str] = "mm",
-        trace_param_min_hole_diameter_val: Optional[float] = 0.25,
-        trace_param_min_hole_diameter_unit: Optional[str] = "mm",
-        trace_drill_hole_modeling: Optional[str] = "DISABLED",
-        trace_drill_hole_min_diameter_val: Optional[float] = 2,
-        trace_drill_hole_min_diameter_unit: Optional[str] = "mm",
-        trace_drill_hole_max_edge_val: Optional[float] = 1,
-        trace_drill_hole_max_edge_unit: Optional[str] = "mm",
+        overwrite: bool = True,
+        display_model: bool = False,
+        generate_models_for_all_layers: bool = False,
+        coordinate_units: str = "mm",
+        trace_param_diameter_threshold_val: float = 2,
+        trace_param_diameter_threshold_unit: str = "mm",
+        trace_param_min_hole_diameter_val: float = 0.25,
+        trace_param_min_hole_diameter_unit: str = "mm",
+        trace_drill_hole_modeling: str = "DISABLED",
+        trace_drill_hole_min_diameter_val: float = 2,
+        trace_drill_hole_min_diameter_unit: str = "mm",
+        trace_drill_hole_max_edge_val: float = 1,
+        trace_drill_hole_max_edge_unit: str = "mm",
     ) -> int:
         r"""Export a trace reinforcement model.
 
@@ -216,15 +214,15 @@ class Model(GrpcStub):
     def generate_trace_model(
         self,
         project_name,
-        cca_name: Optional[str] = "",
-        copper_layer_name: Optional[str] = "",
-        max_arc_segment: Optional[float] = 0.0,
-        max_arc_segment_units: Optional[str] = "mm",
-        min_trace_area: Optional[float] = 0.0,
-        min_trace_area_units: Optional[str] = "mm2",
-        min_hole_area: Optional[float] = 0.0,
-        min_hole_area_units: Optional[str] = "mm2",
-        use_snapshot_for_non_image_layer: Optional[bool] = False,
+        cca_name: str = "",
+        copper_layer_name: str = "",
+        max_arc_segment: float = 0.0,
+        max_arc_segment_units: str = "mm",
+        min_trace_area: float = 0.0,
+        min_trace_area_units: str = "mm2",
+        min_hole_area: float = 0.0,
+        min_hole_area_units: str = "mm2",
+        use_snapshot_for_non_image_layer: bool = False,
     ) -> int:
         r"""Generate one or more trace models for a project.
 
@@ -322,8 +320,8 @@ class Model(GrpcStub):
         project_name: str,
         cca_name: str,
         export_file: str,
-        overwrite: Optional[bool] = True,
-        display_model: Optional[bool] = False,
+        overwrite: bool = True,
+        display_model: bool = False,
     ) -> int:
         r"""Export an Electronics Desktop model.
 
@@ -462,23 +460,23 @@ class Model(GrpcStub):
         cca_name,
         output_file_path,
         copper_layer,
-        overwrite: Optional[bool] = False,
-        display_after: Optional[bool] = False,
-        clear_FEA_database: Optional[bool] = False,
-        use_FEA_model_ID: Optional[bool] = False,
-        coord_units: Optional[str] = "mm",
-        mesh_type: Optional[int] = MeshType.NONE,
-        is_modeling_region_enabled: Optional[bool] = False,
-        trace_output_type: Optional[int] = TraceOutputType.ALL_REGIONS,
-        element_order: Optional[ElementOrder] = ElementOrder.LINEAR,
-        max_mesh_size: Optional[float] = 1.0,
-        max_mesh_size_units: Optional[str] = "mm",
-        max_holes_per_trace: Optional[int] = 2,
-        is_drill_hole_modeling_enabled: Optional[bool] = False,
-        drill_hole_min_diameter: Optional[float] = 1.0,
-        drill_hole_min_diameter_units: Optional[str] = "mm",
-        drill_hole_max_edge_length: Optional[float] = 1.0,
-        drill_hole_max_edge_length_units: Optional[str] = "mm",
+        overwrite: bool = False,
+        display_after: bool = False,
+        clear_FEA_database: bool = False,
+        use_FEA_model_ID: bool = False,
+        coord_units: str = "mm",
+        mesh_type: int = MeshType.NONE,
+        is_modeling_region_enabled: bool = False,
+        trace_output_type: int = TraceOutputType.ALL_REGIONS,
+        element_order: ElementOrder = ElementOrder.LINEAR,
+        max_mesh_size: float = 1.0,
+        max_mesh_size_units: str = "mm",
+        max_holes_per_trace: int = 2,
+        is_drill_hole_modeling_enabled: bool = False,
+        drill_hole_min_diameter: float = 1.0,
+        drill_hole_min_diameter_units: str = "mm",
+        drill_hole_max_edge_length: float = 1.0,
+        drill_hole_max_edge_length_units: str = "mm",
     ) -> SherlockModelService_pb2.TraceModelExportParams:
         r"""Create a set of parameters to be used to export a single copper layer.
 

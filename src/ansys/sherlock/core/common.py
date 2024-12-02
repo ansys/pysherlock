@@ -1,7 +1,6 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module for running the gRPC APIs in the Sherlock Common service."""
-from typing import Optional
 
 import grpc
 
@@ -69,7 +68,7 @@ class Common(GrpcStub):
             return False
 
     @require_version()
-    def exit(self, close_sherlock_client: Optional[bool] = False):
+    def exit(self, close_sherlock_client: bool = False):
         """Close the gRPC connection.
 
         Available Since: 2023R1

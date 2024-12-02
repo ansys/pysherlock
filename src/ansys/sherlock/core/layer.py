@@ -1,8 +1,6 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all layer management capabilities."""
-from typing import Optional
-
 import grpc
 
 from ansys.sherlock.core.types.layer_types import (
@@ -320,7 +318,7 @@ class Layer(GrpcStub):
             update_request1,
             update_request2
         ]
-        >>> responses = sherlock.layer.update_potting_region(request)
+        >>> return_codes = sherlock.layer.update_potting_region(request)
         """
         update_request = request._convert_to_grpc()
 
@@ -863,9 +861,9 @@ class Layer(GrpcStub):
         project: str,
         cca_name: str,
         export_file: str,
-        length_units: Optional[str] = "DEFAULT",
-        displacement_units: Optional[str] = "DEFAULT",
-        force_units: Optional[str] = "DEFAULT",
+        length_units: str = "DEFAULT",
+        displacement_units: str = "DEFAULT",
+        force_units: str = "DEFAULT",
     ) -> int:
         """Export the test point properties for a CCA.
 
@@ -953,7 +951,7 @@ class Layer(GrpcStub):
         project: str,
         cca_name: str,
         export_file: str,
-        units: Optional[str] = "DEFAULT",
+        units: str = "DEFAULT",
     ) -> int:
         """Export the test fixture properties for a CCA.
 
@@ -1030,7 +1028,7 @@ class Layer(GrpcStub):
         project: str,
         cca_name: str,
         export_file: str,
-        units: Optional[str] = "DEFAULT",
+        units: str = "DEFAULT",
     ) -> int:
         """Export the mount point properties for a CCA.
 
@@ -1687,7 +1685,7 @@ class Layer(GrpcStub):
             project="Tutorial Project",
             cca_name="Card",
         )
-        >>> copy_regions = [
+        >>> modeling_regions = [
         >>>     {
         >>>         "cca_name": "Card",
         >>>         "region_id": "Region001",
@@ -1696,7 +1694,7 @@ class Layer(GrpcStub):
         >>>         "center_y": 20.0,
         >>>     }
         >>> ]
-        >>> result = sherlock.layer.copy_modeling_region("Tutorial Project", copy_regions)
+        >>> result = sherlock.layer.copy_modeling_region("Tutorial Project", modeling_regions)
         """
         try:
             if not project:
@@ -1782,8 +1780,8 @@ class Layer(GrpcStub):
                 project="Test",
                 cca_name="Card",
             )
-        >>> delete_regions = [{"cca_name": "Card", "region_id": "12345"}]
-        >>> sherlock.layer.delete_modeling_region("Test", delete_regions)
+        >>> modeling_regions = [{"cca_name": "Card", "region_id": "12345"}]
+        >>> sherlock.layer.delete_modeling_region("Test", modeling_regions)
         """
         try:
             if project == "":

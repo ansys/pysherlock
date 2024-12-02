@@ -2134,7 +2134,7 @@ class Analysis(GrpcStub):
             project="Test",
             cca_name="Card",
         )
-        >>> response = sherlock.analysis.get_parts_list_validation_analysis_props(
+        >>> analysis_props = sherlock.analysis.get_parts_list_validation_analysis_props(
             "Test", "Card"
         )
         """

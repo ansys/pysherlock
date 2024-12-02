@@ -21,9 +21,7 @@ SHERLOCK_DEFAULT_PORT = 9090
 sherlock_cmd_args = []
 
 
-def _is_port_available(
-    host: Optional[str] = LOCALHOST, port: Optional[int] = SHERLOCK_DEFAULT_PORT
-):
+def _is_port_available(host: str = LOCALHOST, port: int = SHERLOCK_DEFAULT_PORT):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         try:
             sock.bind((host, port))
@@ -36,10 +34,10 @@ def _is_port_available(
 
 
 def launch_sherlock(
-    host: Optional[str] = LOCALHOST,
-    port: Optional[int] = SHERLOCK_DEFAULT_PORT,
-    single_project_path: Optional[str] = "",
-    sherlock_command_args: Optional[str] = "",
+    host: str = LOCALHOST,
+    port: int = SHERLOCK_DEFAULT_PORT,
+    single_project_path: str = "",
+    sherlock_command_args: str = "",
     year: Optional[int] = None,
     release_number: Optional[int] = None,
 ) -> Sherlock:
@@ -123,9 +121,7 @@ def launch_sherlock(
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect_grpc_channel(
-    port: Optional[int] = SHERLOCK_DEFAULT_PORT, server_version: Optional[int] = None
-):
+def connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT, server_version: Optional[int] = None):
     """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
 
     The ``Sherlock`` connection object is used to invoke the APIs from their respective services.
@@ -135,7 +131,7 @@ def connect_grpc_channel(
     Parameters
     ----------
     port: int, optional
-        Port number for the connection.
+        Port number for the connection. Default is ``SHERLOCK_DEFAULT_PORT``.
 
     server_version: int, optional
         Version of Sherlock. Default is the newest version that is installed.

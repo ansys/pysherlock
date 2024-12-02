@@ -1,8 +1,6 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all life cycle management capabilities."""
-from typing import Optional
-
 try:
     import SherlockLifeCycleService_pb2
     import SherlockLifeCycleService_pb2_grpc
@@ -306,7 +304,7 @@ class Lifecycle(GrpcStub):
         duration_units: str,
         num_of_cycles: float,
         cycle_type: str,
-        description: Optional[str] = "",
+        description: str = "",
     ):
         """Create a life phase.
 
@@ -422,7 +420,7 @@ class Lifecycle(GrpcStub):
         orientation: str,
         profile_type: str,
         load_direction: str,
-        description: Optional[str] = "",
+        description: str = "",
     ) -> int:
         """Add a random vibe event to a life cycle phase.
 
@@ -749,7 +747,7 @@ class Lifecycle(GrpcStub):
         num_of_cycles: float,
         cycle_type: str,
         cycle_state: str,
-        description: Optional[str] = "",
+        description: str = "",
     ) -> int:
         """Add a thermal event to a life cycle phase.
 
@@ -1042,7 +1040,7 @@ class Lifecycle(GrpcStub):
         orientation: str,
         profile_type: str,
         load_direction: str,
-        description: Optional[str] = "",
+        description: str = "",
     ) -> int:
         """Add a harmonic event to a life cycle phase.
 
@@ -1388,7 +1386,7 @@ class Lifecycle(GrpcStub):
         cycle_type: str,
         orientation: str,
         load_direction: str,
-        description: Optional[str] = "",
+        description: str = "",
     ) -> int:
         """Add a shock event to a life cycle phase.
 
