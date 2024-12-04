@@ -67,7 +67,7 @@ def test_all():
     helper_test_delete_modeling_region(layer, region_id)
 
 
-def helper_test_add_potting_region(layer):
+def helper_test_add_potting_region(layer: Layer):
     """Test add_potting_region API."""
     try:
         shape = PCBShape()
@@ -239,7 +239,7 @@ def helper_test_add_potting_region(layer):
         pytest.fail(str(e))
 
 
-def helper_test_update_potting_region(layer):
+def helper_test_update_potting_region(layer: Layer):
     """Test update potting region API."""
 
     project = "Tutorial Project"
@@ -336,7 +336,7 @@ def helper_test_update_potting_region(layer):
             assert return_code.message == ""
 
 
-def helper_test_copy_potting_regions(layer):
+def helper_test_copy_potting_regions(layer: Layer):
 
     project = "Tutorial Project"
     cca_name = "Main Board"
@@ -442,7 +442,7 @@ def helper_test_copy_potting_regions(layer):
             assert return_code.message == ""
 
 
-def helper_test_delete_potting_regions(layer):
+def helper_test_delete_potting_regions(layer: Layer):
 
     project = "Tutorial Project"
     cca_name = "Main Board"
@@ -528,7 +528,7 @@ def helper_test_update_mount_points_by_file(layer):
             assert type(e) == SherlockUpdateMountPointsByFileError
 
 
-def helper_test_delete_all_mount_points(layer):
+def helper_test_delete_all_mount_points(layer: Layer):
     """Test delete_all_mount_points API."""
     try:
         layer.delete_all_mount_points(
@@ -569,7 +569,7 @@ def helper_test_delete_all_mount_points(layer):
             pytest.fail(e.message)
 
 
-def helper_test_delete_all_ict_fixtures(layer):
+def helper_test_delete_all_ict_fixtures(layer: Layer):
     """Test delete_all_ict_fixtures API."""
     try:
         layer.delete_all_ict_fixtures(
@@ -610,7 +610,7 @@ def helper_test_delete_all_ict_fixtures(layer):
             pytest.fail(e.message)
 
 
-def helper_test_delete_all_test_points(layer):
+def helper_test_delete_all_test_points(layer: Layer):
     """Test delete_all_test_points API."""
     try:
         layer.delete_all_test_points(
@@ -651,7 +651,7 @@ def helper_test_delete_all_test_points(layer):
             pytest.fail(e.message)
 
 
-def helper_test_update_test_points_by_file(layer):
+def helper_test_update_test_points_by_file(layer: Layer):
     """Test update_test_points_by_file API."""
     try:
         layer.update_test_points_by_file(
@@ -695,7 +695,7 @@ def helper_test_update_test_points_by_file(layer):
             assert type(e) == SherlockUpdateTestPointsByFileError
 
 
-def helper_test_update_test_fixtures_by_file(layer):
+def helper_test_update_test_fixtures_by_file(layer: Layer):
     """Test update_test_fixtures_by_file API."""
     try:
         layer.update_test_fixtures_by_file(
@@ -739,7 +739,7 @@ def helper_test_update_test_fixtures_by_file(layer):
             assert type(e) == SherlockUpdateTestFixturesByFileError
 
 
-def helper_test_export_all_test_points(layer):
+def helper_test_export_all_test_points(layer: Layer):
     """Tests export_all_test_points API."""
     try:
         layer.export_all_test_points(
@@ -801,7 +801,7 @@ def helper_test_export_all_test_points(layer):
             pytest.fail(str(e))
 
 
-def helper_test_export_all_test_fixtures(layer):
+def helper_test_export_all_test_fixtures(layer: Layer):
     """Tests export_all_test_fixtures API."""
     try:
         layer.export_all_test_fixtures(
@@ -863,7 +863,7 @@ def helper_test_export_all_test_fixtures(layer):
             pytest.fail(str(e))
 
 
-def helper_test_export_all_mount_points(layer):
+def helper_test_export_all_mount_points(layer: Layer):
     """Tests export_all_mount_points API."""
     try:
         layer.export_all_mount_points(
@@ -925,7 +925,7 @@ def helper_test_export_all_mount_points(layer):
             pytest.fail(e.message)
 
 
-def helper_test_add_modeling_region(layer):
+def helper_test_add_modeling_region(layer: Layer) -> str:
     modeling_region = [
         {
             "cca_name": "Card",
@@ -1117,7 +1117,7 @@ def helper_test_add_modeling_region(layer):
         return valid_region_id
 
 
-def helper_test_update_modeling_region(layer, region_id):
+def helper_test_update_modeling_region(layer: Layer, region_id: str) -> str:
     updated_region_id = f"UpdatedRegion{uuid.uuid4()}"
     modeling_region = [
         {
@@ -1309,7 +1309,7 @@ def helper_test_update_modeling_region(layer, region_id):
             pytest.fail(str(e))
 
 
-def helper_test_copy_modeling_region(layer, region_id):
+def helper_test_copy_modeling_region(layer: Layer, region_id: str):
     region_id_copy = f"RegionCopy{uuid.uuid4()}"
     copy_region_example = [
         {
@@ -1398,7 +1398,7 @@ def helper_test_copy_modeling_region(layer, region_id):
             pytest.fail(e.str_itr())
 
 
-def helper_test_delete_modeling_region(layer, region_id):
+def helper_test_delete_modeling_region(layer: Layer, region_id: str):
 
     # Invalid project name
     try:

@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Parts Service."""
 
@@ -11,7 +11,7 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 
 
-def deprecation(cls):
+def deprecation(cls: object):
     """Raise a DeprecationWarning when a deprecated class is used."""
     # if str(cls).find("PartsListSearchMatchingMode") != -1:
     message = f"{cls} is deprecated. Use a string with the value of the constant name \
@@ -24,42 +24,44 @@ def deprecation(cls):
 class PartsListSearchMatchingMode:
     """DEPRECATED. Constants for Matching Mode in Update Parts List & Update Parts from AVL."""
 
-    BOTH = SherlockCommonService_pb2.MatchingMode.Both
+    matching_mode = SherlockCommonService_pb2.MatchingMode
+    BOTH = matching_mode.Both
     """Both"""
-    PART = SherlockCommonService_pb2.MatchingMode.Part
+    PART = matching_mode.Part
     """Part"""
 
 
 class PartsListSearchDuplicationMode:
     """Constants for Duplication Mode in Update Parts List and Update Parts from AVL request."""
 
-    FIRST = SherlockPartsService_pb2.DuplicationMode.First
+    duplication_mode = SherlockPartsService_pb2.DuplicationMode
+    FIRST = duplication_mode.First
     """First"""
-    ERROR = SherlockPartsService_pb2.DuplicationMode.Error
+    ERROR = duplication_mode.Error
     """Error"""
-    IGNORE = SherlockPartsService_pb2.DuplicationMode.Ignore
+    IGNORE = duplication_mode.Ignore
     """Ignore"""
 
 
 class AVLPartNum:
     """Constants for AVLPartNum in the Update Parts List from AVL request."""
 
-    ASSIGN_INTERNAL_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum
+    avl_part_num = SherlockPartsService_pb2.AVLPartNum
+    ASSIGN_INTERNAL_PART_NUM = avl_part_num.AssignInternalPartNum
     """AssignInternalPartNum"""
-    ASSIGN_VENDOR_AND_PART_NUM = SherlockPartsService_pb2.AVLPartNum.AssignVendorAndPartNum
+    ASSIGN_VENDOR_AND_PART_NUM = avl_part_num.AssignVendorAndPartNum
     """AssignVendorAndPartNum"""
-    DO_NOT_CHANGE_VENDOR_OR_PART_NUM = (
-        SherlockPartsService_pb2.AVLPartNum.DoNotChangeVendorOrPartNum
-    )
+    DO_NOT_CHANGE_VENDOR_OR_PART_NUM = avl_part_num.DoNotChangeVendorOrPartNum
     """DoNotChangeVendorOrPartNum"""
 
 
 class AVLDescription:
     """Constants for AVLDescription in the Update Parts List from AVL request."""
 
-    ASSIGN_APPROVED_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription
+    avl_description = SherlockPartsService_pb2.AVLDescription
+    ASSIGN_APPROVED_DESCRIPTION = avl_description.AssignApprovedDescription
     """AssignApprovedDescription"""
-    DO_NOT_CHANGE_DESCRIPTION = SherlockPartsService_pb2.AVLDescription.DoNotChangeDescription
+    DO_NOT_CHANGE_DESCRIPTION = avl_description.DoNotChangeDescription
     """DoNotChangeDescription"""
 
 

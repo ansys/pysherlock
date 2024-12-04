@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2023-2024 ANSYS, Inc. All rights reserved
 
 """PySherlock logger."""
 from datetime import datetime
@@ -38,14 +38,10 @@ def _get_file_handler():
     return file_handler
 
 
-def __get_logger(logger_name):
-    return logging.get_logger(logger_name)
-
-
 class Logger:
     """Provides the PySherlock logger."""
 
-    def __init__(self, logger_name, level=logging.WARN):
+    def __init__(self, logger_name: str):
         """Initialize logger."""
         self.logger = logging.getLogger(logger_name)
         self.logger.setLevel(LOG_LEVEL)
@@ -57,7 +53,3 @@ class Logger:
         self.error = self.logger.error
         self.critical = self.logger.critical
         self.log = self.logger.log
-
-    def setLevel(self, level):
-        """Set the logging level."""
-        self.logger.setLevel(level)

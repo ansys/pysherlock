@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Project Service."""
 
@@ -8,39 +8,41 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 
 project_service = SherlockProjectService_pb2
+thermal_map_file = project_service.ThermalMapFile
+add_strain_map_request = project_service.AddStrainMapRequest
 
 
 class BoardBounds:
     """Contains the properties of the board bounds."""
 
-    def __init__(self, bounds):
+    def __init__(self, bounds: list[tuple[float, float]]):
         """Initialize the board bounds."""
         self.bounds = bounds
-        """bounds (two tuples of the form (x, y) : list[tuple[float, float]]"""
+        """list[tuple[float, float]]: bounds (two tuples of the form (x, y)"""
 
 
 class CsvExcelFile:
-    """Contains the properties for a thermal map csv or excel file."""
+    """Contains the properties for a thermal map, CSV, or Excel file."""
 
     def __init__(
         self,
-        header_row_count,
-        numeric_format,
-        reference_id_column,
-        temperature_column,
-        temperature_units,
+        header_row_count: int,
+        numeric_format: str,
+        reference_id_column: str,
+        temperature_column: str,
+        temperature_units: str,
     ):
-        """Initialize the thermal map csv or excel file properties."""
+        """Initialize the thermal map, CSV or Excel file properties."""
         self.header_row_count = header_row_count
-        """header_row_count: int"""
+        """int: header_row_count"""
         self.numeric_format = numeric_format
-        """numeric_format: string"""
+        """str: numeric_format"""
         self.reference_id_column = reference_id_column
-        """reference_id_column: string"""
+        """str: reference_id_column"""
         self.temperature_column = temperature_column
-        """temperature_column: string"""
+        """str: temperature_column"""
         self.temperature_units = temperature_units
-        """temperature_units: string"""
+        """str: temperature_units"""
 
 
 class IcepakFile:
@@ -50,16 +52,16 @@ class IcepakFile:
 class ImageBounds:
     """Contains the properties of the image bounds."""
 
-    def __init__(self, image_x, image_y, height, width):
+    def __init__(self, image_x: float, image_y: float, height: float, width: float):
         """Initialize the image bounds properties."""
         self.image_x = image_x
-        """x coordinate of the upper left corner : float"""
+        """float: x coordinate of the upper left corner"""
         self.image_y = image_y
-        """y coordinate of the upper left corner : float"""
+        """float: y coordinate of the upper left corner"""
         self.height = height
-        """height of the image : float"""
+        """float: height of the image"""
         self.width = width
-        """width of the image : float"""
+        """float: width of the image"""
 
 
 class ImageFile:
@@ -67,56 +69,56 @@ class ImageFile:
 
     def __init__(
         self,
-        board_bounds,
-        coordinate_units,
-        image_bounds,
-        legend_bounds,
-        legend_orientation,
-        max_temperature,
-        max_temperature_units,
-        min_temperature,
-        min_temperature_units,
+        board_bounds: BoardBounds,
+        coordinate_units: str,
+        image_bounds: ImageBounds,
+        legend_bounds: "LegendBounds",
+        legend_orientation: "LegendOrientation",
+        max_temperature: float,
+        max_temperature_units: str,
+        min_temperature: float,
+        min_temperature_units: str,
     ):
         """Initialize the thermal image file properties."""
         self.board_bounds = board_bounds
-        """board_bounds : BoardBounds"""
+        """BoardBounds: board_bounds"""
         self.coordinate_units = coordinate_units
-        """coordinate_units : string"""
+        """str: coordinate_units"""
         self.image_bounds = image_bounds
-        """image_bounds : ImageBounds"""
+        """ImageBounds: image_bounds"""
         self.legend_bounds = legend_bounds
-        """legend_bounds : LegendBounds"""
+        """LegendBounds: legend_bounds"""
         self.legend_orientation = legend_orientation
-        """legend_orientation : LegendOrientation"""
+        """LegendOrientation: legend_orientation"""
         self.max_temperature = max_temperature
-        """max_temperature : float"""
+        """float: max_temperature"""
         self.max_temperature_units = max_temperature_units
-        """max_temperature_units : string"""
+        """str: max_temperature_units"""
         self.min_temperature = min_temperature
-        """min_temperature : float"""
+        """float: min_temperature"""
         self.min_temperature_units = min_temperature_units
-        """min_temperature_units : string"""
+        """str: min_temperature_units"""
 
 
 class LegendBounds:
     """Contains the properties of the legend bounds."""
 
-    def __init__(self, legend_x, legend_y, height, width):
+    def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
         """Initialize the legend bounds properties."""
         self.legend_x = legend_x
-        """x coordinate of the upper left corner : float"""
+        """float: x coordinate of the upper left corner"""
         self.legend_y = legend_y
-        """y coordinate of the upper left corner : float"""
+        """float: y coordinate of the upper left corner"""
         self.height = height
-        """height of the legend : float"""
+        """float: height of the legend"""
         self.width = width
-        """width of the legend : float"""
+        """float: width of the legend"""
 
 
 class LegendOrientation:
     """Constants for legend orientation in the update thermal maps request."""
 
-    __legend_orientation = project_service.ThermalMapFile.ImageFile.LegendOrientation
+    __legend_orientation = thermal_map_file.ImageFile.LegendOrientation
     HORIZONTAL = __legend_orientation.Horizontal
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
@@ -126,47 +128,42 @@ class LegendOrientation:
 class ThermalBoardSide:
     """Constants for thermal board side in the update thermal maps request."""
 
-    __thermal_board_side = project_service.ThermalMapFile.ThermalBoardSide
-    BOTTOM = __thermal_board_side.Bottom
+    BOTTOM = thermal_map_file.ThermalBoardSide.Bottom
     "Bottom"
-    BOTH = __thermal_board_side.Both
+    BOTH = thermal_map_file.ThermalBoardSide.Both
     "Both"
-    TOP = __thermal_board_side.Top
+    TOP = thermal_map_file.ThermalBoardSide.Top
     "Top"
 
 
 class ThermalMapsFileType:
     """Constants for File Type in the Update Thermal Maps request."""
 
-    __file_type = project_service.ThermalMapFile.FileType
-    CSV = __file_type.CSV
+    CSV = thermal_map_file.FileType.CSV
     "CSV"
-    EXCEL = __file_type.Excel
+    EXCEL = thermal_map_file.FileType.Excel
     "Excel"
-    IMAGE = __file_type.Image
+    IMAGE = thermal_map_file.FileType.Image
     "Image"
-    TMAP = __file_type.TMAP
+    TMAP = thermal_map_file.FileType.TMAP
     "Icepak Thermal Map (.TMAP)"
 
 
 class StrainMapsFileType:
     """Constants for File Type in the Add Strain Maps request."""
 
-    __file_type = project_service.AddStrainMapRequest.StrainMapFile.FileType
-    CSV = __file_type.CSV
+    CSV = add_strain_map_request.StrainMapFile.FileType.CSV
     "CSV"
-    EXCEL = __file_type.Excel
+    EXCEL = add_strain_map_request.StrainMapFile.FileType.Excel
     "Excel"
-    IMAGE = __file_type.Image
+    IMAGE = add_strain_map_request.StrainMapFile.FileType.Image
     "Image"
 
 
 class StrainMapLegendOrientation:
     """Constants for legend orientation in the add strain maps request."""
 
-    __legend_orientation = (
-        project_service.AddStrainMapRequest.StrainMapFile.StrainMapImageFile.LegendOrientation
-    )
+    __legend_orientation = add_strain_map_request.StrainMapFile.StrainMapImageFile.LegendOrientation
     HORIZONTAL = __legend_orientation.Horizontal
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
