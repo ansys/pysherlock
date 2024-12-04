@@ -2018,18 +2018,12 @@ class Layer(GrpcStub):
             return_code = response.returnCode
 
             if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockExportLayerImageError(error_array=response.exportMessages)
-
                 raise SherlockExportLayerImageError(message=return_code.message)
-
             else:
                 for msg in response.exportMessages:
                     LOG.info(msg)
                 return return_code.value
 
         except SherlockExportLayerImageError as e:
-            for error in e.str_itr():
-                LOG.error(error)
+            LOG.error(str(e))
             raise e
-

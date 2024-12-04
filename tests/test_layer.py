@@ -1526,19 +1526,19 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: CCA name is invalid."
+        assert str(e) == "Export layer image error: CCA name is invalid."
 
     try:
         layer.export_layer_image("", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: Project name is invalid."
+        assert str(e) == "Export layer image error: Project name is invalid."
 
     try:
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: Axes Enabled is invalid."
+        assert str(e) == "Export layer image error: Axes Enabled is invalid."
 
     export_layers = [
         {
@@ -1558,7 +1558,7 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: Grid Enabled is invalid."
+        assert str(e) == "Export layer image error: Grid Enabled is invalid."
 
     export_layers = [
         {
@@ -1577,7 +1577,7 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: Layer is invalid."
+        assert str(e) == "Export layer image error: Layer is invalid."
 
     export_layers = [
         {
@@ -1597,7 +1597,7 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: File Path is invalid."
+        assert str(e) == "Export layer image error: File Path is invalid."
 
     export_layers = [
         {
@@ -1617,7 +1617,7 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: Image Height is invalid."
+        assert str(e) == "Export layer image error: Image Height is invalid."
 
     export_layers = [
         {
@@ -1637,7 +1637,7 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert e.str_itr()[0] == "Export layer image error: Image Width is invalid."
+        assert str(e) == "Export layer image error: Image Width is invalid."
 
     test_file_path = "C:\\temp\\SH-image.jpg"
     export_layers = [
@@ -1672,7 +1672,7 @@ def helper_test_export_layer_image(layer):
             result = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
             assert result == 0
         except Exception as e:
-            pytest.fail(e.message)
+            pytest.fail(str(e))
 
         export_layers = [
             {
@@ -1695,7 +1695,7 @@ def helper_test_export_layer_image(layer):
             result = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
             assert result == 0
         except Exception as e:
-            pytest.fail(e.message)
+            pytest.fail(str(e))
 
         if os.path.exists(test_file_path):
             os.remove(test_file_path)
