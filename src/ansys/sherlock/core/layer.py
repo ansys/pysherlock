@@ -37,6 +37,8 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPointsError,
+    SherlockExportLayerImageError,
+    SherlockListLayersError,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -1818,3 +1820,215 @@ class Layer(GrpcStub):
             raise e
 
         return response.value
+
+    def list_layers(self, project, cca_name):
+        """List all layers as seen in the Layer Viewer for a specific project CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA.
+
+        Returns
+        -------
+        list
+            The layers as seen in the Layer Viewer for the given project CCA.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Tutorial Project",
+            cca_name="Card"
+        )
+        >>> sherlock.layer.list_layers(
+            project="Tutorial Project",
+            cca_name="Card"
+        )
+        """
+
+        try:
+            if project == "":
+                raise SherlockListLayersError(message="Project name is invalid.")
+
+            if cca_name == "":
+                raise SherlockListLayersError(message="CCA name is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            request = SherlockLayerService_pb2.ListLayersRequest(
+                project=project,
+                ccaName=cca_name
+            )
+
+            response = self.stub.listLayers(request)
+            if response.returnCode.value == -1:
+                raise SherlockListLayersError(response.returnCode.message)
+
+            return response.layer
+
+        except SherlockListLayersError as e:
+            LOG.error(str(e))
+            raise e
+
+    def export_layer_image(
+            self,
+            project: str,
+            cca_name: str,
+            export_layers: List[Dict[str, Union[str, int, bool]]],
+    ):
+        """
+        Export one or more 2D Layer Viewer images from a project CCA.
+
+        Parameters
+        ----------
+        project : str
+            Name of the Sherlock project.
+        cca_name : str
+            Name of the CCA.
+        export_layers : export_layer_image_info
+            List of parameters for the export image specified.
+            Each dictionary should contain:
+
+            - components_enabled: bool, optional
+                Displays the components in the export image. Default to true when not provided.
+            - labels_enabled: bool, optional
+                Displays the component reference designators in the export image. Default to true when not provided.
+            - leads_enabled : bool, optional
+                Displays the component leads and solder balls in the export image. Default to true when not provided.
+            - axes_enabled : bool
+                Displays the x and y axes in the export image.
+            - grid_enabled : bool
+                Displays a grid in the export image.
+            - layer : list of str
+                List of names of the layers to be exported. This cannot be empty.
+            - file_path : str
+                Full file path of the export image.
+            - image_height : int
+                The export image height.
+            - image_width : int
+                The export image width.
+            - overwrite_existing_file : bool
+                If the file path already exists, overwrite the file if this is set to true.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Example
+        -------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Tutorial Project",
+            cca_name="Card"
+        )
+        >>> export_layers = [
+        >>> {
+            "components_enabled": True,
+            "labels_enabled": True,
+            "leads_enabled": True,
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer": [
+                "Components|comp-top",
+                "Mechanical Shock#|SH Disp @ 5.2ms"
+            ],
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 600,
+            "image_width": 800,
+            "overwrite_existing_file": True
+        >>> }
+        >>> ]
+        >>> sherlock.layer.export_layer_image("Tutorial Project", "Card", export_layers)
+        """
+        try:
+            if project == "":
+                raise SherlockExportLayerImageError(message="Project name is invalid.")
+
+            if cca_name == "":
+                raise SherlockExportLayerImageError(message="CCA name is invalid.")
+
+            for export_layer in export_layers:
+                if "axes_enabled" not in export_layer:
+                    raise SherlockExportLayerImageError(message="Axes Enabled is invalid.")
+                if "grid_enabled" not in export_layer:
+                    raise SherlockExportLayerImageError(message="Grid Enabled is invalid.")
+                if "layer" not in export_layer or len(export_layer["layer"]) == 0:
+                    raise SherlockExportLayerImageError(message="Layer is invalid.")
+                if "file_path" not in export_layer or export_layer["file_path"] == "":
+                    raise SherlockExportLayerImageError(message="File Path is invalid.")
+                if "image_height" not in export_layer or not isinstance(export_layer["image_height"], int):
+                    raise SherlockExportLayerImageError(message="Image Height is invalid.")
+                if "image_width" not in export_layer or not isinstance(export_layer["image_width"], int):
+                    raise SherlockExportLayerImageError(message="Image Width is invalid.")
+                if "overwrite_existing_file" not in export_layer:
+                    raise SherlockExportLayerImageError(message="Overwrite Existing File is invalid.")
+
+            if not self._is_connection_up():
+                LOG.error("There is no connection to a gRPC service.")
+                return
+
+            export_layer_image_request = []
+
+            for export_layer in export_layers:
+                components_enabled_val = export_layer["components_enabled"] if "components_enabled" in export_layer else None
+                labels_enabled_val = export_layer["labels_enabled"] if "labels_enabled" in export_layer else None
+                leads_enabled_val = export_layer["leads_enabled"] if "leads_enabled" in export_layer else None
+
+                export_layer_info = (
+                    SherlockLayerService_pb2.ExportLayerImageRequest.ExportLayerImageInfo (
+                        componentsEnabled=components_enabled_val,
+                        labelsEnabled=labels_enabled_val,
+                        leadsEnabled=leads_enabled_val,
+                        axesEnabled=export_layer["axes_enabled"],
+                        gridEnabled=export_layer["grid_enabled"],
+                        layer=export_layer["layer"],
+                        filePath=export_layer["file_path"],
+                        imageHeight=export_layer["image_height"],
+                        imageWidth=export_layer["image_width"],
+                        overwriteExistingFile=export_layer["overwrite_existing_file"]
+                    )
+                )
+                export_layer_image_request.append(export_layer_info)
+
+            request = SherlockLayerService_pb2.ExportLayerImageRequest (
+                project=project,
+                ccaName=cca_name,
+                exportLayers=export_layer_image_request
+            )
+
+            response = self.stub.exportLayerImage(request)
+            return_code = response.returnCode
+
+            if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockExportLayerImageError(error_array=response.exportMessages)
+
+                raise SherlockExportLayerImageError(message=return_code.message)
+
+            else:
+                LOG.info(return_code.message)
+                return return_code.value
+
+        except SherlockExportLayerImageError as e:
+            for error in e.str_itr():
+                LOG.error(error)
+            raise e
+

@@ -1266,3 +1266,32 @@ class SherlockVersionError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Sherlock Version Error: {self.message}"
+
+
+class SherlockListLayersError(Exception):
+    """Contains the errors raised when layers for a project CCA cannot be listed."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"List layers error: {self.message}"
+
+
+class SherlockExportLayerImageError(Exception):
+    """Contains the errors raised when 2D layer viewer image of CCA layers cannot be exported."""
+
+    def __init__(self, message=None, error_array=None):
+        """Initialize error message."""
+        self.message = message
+        self.error_array = error_array
+
+    def str_itr(self):
+        """Create list of error messages."""
+        if self.message is None:
+            return [f"Export layer image error: {error}" for error in self.error_array]
+
+        assert self.error_array is None
+        return [f"Export layer image error: {self.message}"]
