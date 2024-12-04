@@ -2024,7 +2024,8 @@ class Layer(GrpcStub):
                 raise SherlockExportLayerImageError(message=return_code.message)
 
             else:
-                LOG.info(return_code.message)
+                for msg in response.exportMessages:
+                    LOG.info(msg)
                 return return_code.value
 
         except SherlockExportLayerImageError as e:

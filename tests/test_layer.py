@@ -1671,10 +1671,34 @@ def helper_test_export_layer_image(layer):
         try:
             result = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
             assert result == 0
-            if os.path.exists(test_file_path):
-                os.remove(test_file_path)
         except Exception as e:
             pytest.fail(e.message)
+
+        export_layers = [
+            {
+                "axes_enabled": True,
+                "grid_enabled": True,
+                "layer": [
+                    "Components|comp-top",
+                    "Mechanical Shock#|SH Disp @ 5.2ms",
+                    "Mechanical Shock#|SH Strain Bot @ 5.2ms",
+                    "Random Vibe#|RV Strain RMS Bot"
+                ],
+                "file_path": test_file_path,
+                "image_height": 800,
+                "image_width": 800,
+                "overwrite_existing_file": True
+            }
+        ]
+
+        try:
+            result = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+            assert result == 0
+        except Exception as e:
+            pytest.fail(e.message)
+
+        if os.path.exists(test_file_path):
+            os.remove(test_file_path)
 
 if __name__ == "__main__":
     test_all()
