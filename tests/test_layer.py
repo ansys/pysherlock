@@ -1639,6 +1639,26 @@ def helper_test_export_layer_image(layer):
     except SherlockExportLayerImageError as e:
         assert str(e) == "Export layer image error: Image Width is invalid."
 
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer": [
+                "Components|comp-top",
+                "Mechanical Shock#|SH Disp @ 5.2ms"
+            ],
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 800,
+            "image_width": 800
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Overwrite Existing File is invalid."
+
     test_file_path = "C:\\temp\\SH-image.jpg"
     export_layers = [
         {
