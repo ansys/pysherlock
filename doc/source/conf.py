@@ -68,6 +68,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
+    "sphinx_design",
 ]
 
 autodoc_default_flags = ["members"]
@@ -116,3 +117,13 @@ latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 latex_elements = {"preamble": latex.generate_preamble(html_title)}
 
 linkcheck_ignore = ["https://www.ansys.com/*"]
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys/pysherlock/releases/tag/v{pysherlock.__version__}"
+    )
+
+# Suprpress warnings
+suppress_warnings = ["design.grid", "design.fa-build"]

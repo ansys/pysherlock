@@ -14,13 +14,14 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.model import Model
 from ansys.sherlock.core.types.common_types import Measurement
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 class TestModel(unittest.TestCase):
     def test_model_export_trace_reinforcement_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         if platform.system() == "Windows":
             temp_dir = os.environ.get("TEMP", "C:\\TEMP")
@@ -77,7 +78,7 @@ class TestModel(unittest.TestCase):
     def test_model_generate_trace_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
@@ -93,99 +94,6 @@ class TestModel(unittest.TestCase):
             pytest.fail("No exception raised when using an invalid parameter")
         except SherlockModelServiceError as e:
             assert str(e) == "Model service error: Project name is invalid."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name="",
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=max_arc_segment,
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: CCA name is invalid."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name="",
-                max_arc_segment=max_arc_segment,
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Copper layer name is required."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=None,
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Maximum arc segment is required."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=max_arc_segment,
-                max_arc_segment_units="",
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Maximum arc segment units are required."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=max_arc_segment,
-                min_trace_area=None,
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Minimum trace area is required."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=max_arc_segment,
-                min_trace_area_units="",
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Minimum trace area units are required."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=max_arc_segment,
-                min_hole_area=None,
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Minimum hole area is required."
-
-        try:
-            model.generate_trace_model(
-                project_name=project_name,
-                cca_name=cca_name,
-                copper_layer_name=copper_layer_name,
-                max_arc_segment=max_arc_segment,
-                min_hole_area_units="",
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except SherlockModelServiceError as e:
-            assert str(e) == "Model service error: Minimum hole area units are required."
 
         if model._is_connection_up():
             try:
@@ -214,7 +122,7 @@ class TestModel(unittest.TestCase):
     def test_model_export_aedb(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
@@ -284,7 +192,7 @@ class TestModel(unittest.TestCase):
     def test_model_export_trace_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         project_name = "Tutorial Project"
         cca_name = "Main Board"
@@ -371,7 +279,7 @@ class TestModel(unittest.TestCase):
     def test_export_FEA_model(self):
         channel_param = "127.0.0.1:9090"
         channel = grpc.insecure_channel(channel_param)
-        model = Model(channel)
+        model = Model(channel, SKIP_VERSION_CHECK)
 
         if platform.system() == "Windows":
             temp_dir = os.environ.get("TEMP", "C:\\TEMP")

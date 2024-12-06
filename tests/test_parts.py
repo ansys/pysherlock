@@ -1,8 +1,7 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 import os
 import platform
-import time
 
 import grpc
 import pytest
@@ -26,18 +25,17 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     PartsListSearchDuplicationMode,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all parts APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    parts = Parts(channel)
+    parts = Parts(channel, SKIP_VERSION_CHECK)
 
     helper_test_update_parts_list(parts)
-    time.sleep(1)
     helper_test_update_parts_list_properties(parts)
-    time.sleep(1)
     helper_test_update_parts_from_AVL(parts)
     helper_test_update_parts_locations(parts)
     helper_test_update_parts_locations_by_file(parts)
@@ -48,7 +46,7 @@ def test_all():
     helper_test_get_part_location(parts)
 
 
-def helper_test_update_parts_list(parts):
+def helper_test_update_parts_list(parts: Parts):
     """Test update_parts_list API."""
 
     if parts._is_connection_up():
@@ -61,8 +59,6 @@ def helper_test_update_parts_list(parts):
                 PartsListSearchDuplicationMode.ERROR,
             )
             assert result == 0
-            # wait for Sherlock to finish updating so subsequent tests don't fail
-            time.sleep(1)
         except Exception as e:
             pytest.fail(e.message)
 
@@ -115,7 +111,7 @@ def helper_test_update_parts_list(parts):
         assert str(e.str_itr()) == "['Update parts list error: Parts library is invalid.']"
 
 
-def helper_test_update_parts_from_AVL(parts):
+def helper_test_update_parts_from_AVL(parts: Parts):
     try:
         parts.update_parts_from_AVL(
             project="",
@@ -158,7 +154,7 @@ def helper_test_update_parts_from_AVL(parts):
             pytest.fail(e.message)
 
 
-def helper_test_update_parts_locations(parts):
+def helper_test_update_parts_locations(parts: Parts):
     """Test update_parts_locations API."""
 
     if parts._is_connection_up():
@@ -411,7 +407,7 @@ def helper_test_update_parts_locations(parts):
         )
 
 
-def helper_test_update_parts_locations_by_file(parts):
+def helper_test_update_parts_locations_by_file(parts: Parts):
     """Test update_parts_locations_by_file API."""
 
     if parts._is_connection_up():
@@ -449,7 +445,7 @@ def helper_test_update_parts_locations_by_file(parts):
         assert str(e.str_itr()) == "['Update parts locations by file error: CCA name is invalid.']"
 
 
-def helper_test_import_parts_list(parts):
+def helper_test_import_parts_list(parts: Parts):
     """Tests import_parts_list API."""
     if parts._is_connection_up():
         # happy path test missing because needs valid file
@@ -487,7 +483,7 @@ def helper_test_import_parts_list(parts):
         assert str(e) == "Import parts list error: CCA name is invalid."
 
 
-def helper_test_export_parts_list(parts):
+def helper_test_export_parts_list(parts: Parts):
     """Tests export_parts_list API."""
     try:
         parts.export_parts_list(
@@ -534,9 +530,6 @@ def helper_test_export_parts_list(parts):
                 parts_list_file,
             )
             assert os.path.exists(parts_list_file)
-            # may need to wait for a bit because the response may be returned
-            # before Sherlock finishes writing the file
-            time.sleep(0.5)
             assert result == 0
         except Exception as e:
             pytest.fail(e.message)
@@ -557,7 +550,7 @@ def helper_test_export_parts_list(parts):
             assert type(e) == SherlockExportPartsListError
 
 
-def helper_test_enable_lead_modeling(parts):
+def helper_test_enable_lead_modeling(parts: Parts):
     """Test enable_lead_modelign API."""
     if parts._is_connection_up():
         try:
@@ -597,7 +590,7 @@ def helper_test_enable_lead_modeling(parts):
         assert str(e) == "Enable lead modeling error: CCA name is invalid."
 
 
-def helper_test_get_part_location(parts):
+def helper_test_get_part_location(parts: Parts):
     """Test get_part_location API"""
 
     if parts._is_connection_up():
@@ -687,7 +680,7 @@ def helper_test_get_part_location(parts):
         assert str(e) == "Get part location error: Location unit is invalid."
 
 
-def helper_test_update_parts_list_properties(parts):
+def helper_test_update_parts_list_properties(parts: Parts):
     """Test update_parts_list_properties API"""
     try:
         parts.update_parts_list_properties(
@@ -842,7 +835,7 @@ def helper_test_update_parts_list_properties(parts):
         pytest.fail(e.message)
 
 
-def helper_test_export_net_list(parts):
+def helper_test_export_net_list(parts: Parts):
     """Test export_net_list API"""
 
     try:

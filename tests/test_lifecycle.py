@@ -21,13 +21,14 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all life cycle APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    lifecycle = Lifecycle(channel)
+    lifecycle = Lifecycle(channel, SKIP_VERSION_CHECK)
 
     phase_name = helper_test_create_life_phase(lifecycle)
     random_vibe_event_name = helper_test_add_random_vibe_event(lifecycle, phase_name)
@@ -45,7 +46,7 @@ def test_all():
     helper_test_load_shock_profile_pulses(lifecycle)
 
 
-def helper_test_create_life_phase(lifecycle):
+def helper_test_create_life_phase(lifecycle: Lifecycle):
     """Test create_life_phase API"""
 
     try:
@@ -115,7 +116,7 @@ def helper_test_create_life_phase(lifecycle):
         return phase_name
 
 
-def helper_test_add_random_vibe_event(lifecycle, phase_name):
+def helper_test_add_random_vibe_event(lifecycle: Lifecycle, phase_name: str) -> str:
     """Test add_random_vibe_event API"""
 
     try:
@@ -317,7 +318,7 @@ def helper_test_add_random_vibe_event(lifecycle, phase_name):
         return event_name
 
 
-def helper_test_add_random_vibe_profiles(lifecycle, event_name, phase_name):
+def helper_test_add_random_vibe_profiles(lifecycle: Lifecycle, event_name: str, phase_name: str):
     """Test the add_random_vibe_profiles API"""
 
     try:
@@ -463,7 +464,7 @@ def helper_test_add_random_vibe_profiles(lifecycle, event_name, phase_name):
             assert type(e) == SherlockAddRandomVibeProfilesError
 
 
-def helper_test_add_thermal_event(lifecycle, phase_name):
+def helper_test_add_thermal_event(lifecycle: Lifecycle, phase_name: str) -> str:
     """Test add_thermal_event API"""
 
     try:
@@ -549,7 +550,7 @@ def helper_test_add_thermal_event(lifecycle, phase_name):
         return event_name
 
 
-def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
+def helper_test_add_thermal_profiles(lifecycle: Lifecycle, phase_name: str, event_name: str):
     """Test add_thermal_profiles API."""
 
     try:
@@ -779,7 +780,7 @@ def helper_test_add_thermal_profiles(lifecycle, phase_name, event_name):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_harmonic_event(lifecycle, phase_name):
+def helper_test_add_harmonic_event(lifecycle: Lifecycle, phase_name: str) -> str:
     """Test add_harmonic_event API"""
 
     try:
@@ -1033,7 +1034,9 @@ def helper_test_add_harmonic_event(lifecycle, phase_name):
         return event_name
 
 
-def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_event_name):
+def helper_test_add_harmonic_vibe_profile(
+    lifecycle: Lifecycle, phase_name: str, harmonic_vibe_event_name: str
+):
     """Test add_harmonic_profiles API."""
 
     try:
@@ -1280,7 +1283,7 @@ def helper_test_add_harmonic_vibe_profile(lifecycle, phase_name, harmonic_vibe_e
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_shock_event(lifecycle, phase_name):
+def helper_test_add_shock_event(lifecycle: Lifecycle, phase_name: str) -> str:
     """Test add_shock_event API."""
 
     try:
@@ -1460,7 +1463,7 @@ def helper_test_add_shock_event(lifecycle, phase_name):
         return event_name
 
 
-def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
+def helper_test_add_shock_profile(lifecycle: Lifecycle, phase_name: str, shock_event_name: str):
     """Test add_shock_profiles API."""
 
     try:
@@ -1760,7 +1763,7 @@ def helper_test_add_shock_profile(lifecycle, phase_name, shock_event_name):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_load_random_vibe_profile(lifecycle):
+def helper_test_load_random_vibe_profile(lifecycle: Lifecycle):
     """Test load_random_vibe_profile."""
 
     try:
@@ -1821,7 +1824,7 @@ def helper_test_load_random_vibe_profile(lifecycle):
             assert type(e) == SherlockLoadRandomVibeProfileError
 
 
-def helper_test_load_harmonic_profile(lifecycle):
+def helper_test_load_harmonic_profile(lifecycle: Lifecycle):
     """Test load_harmonic_profile API."""
 
     try:
@@ -1862,7 +1865,7 @@ def helper_test_load_harmonic_profile(lifecycle):
             assert type(e) == SherlockLoadHarmonicProfileError
 
 
-def helper_test_load_thermal_profile(lifecycle):
+def helper_test_load_thermal_profile(lifecycle: Lifecycle):
     """Test load_thermal_profile API"""
 
     try:
@@ -1923,7 +1926,7 @@ def helper_test_load_thermal_profile(lifecycle):
             assert type(e) == SherlockLoadThermalProfileError
 
 
-def helper_test_load_shock_profile_dataset(lifecycle):
+def helper_test_load_shock_profile_dataset(lifecycle: Lifecycle):
     """Test load_shock_profile_dataset API"""
 
     try:
@@ -1984,7 +1987,7 @@ def helper_test_load_shock_profile_dataset(lifecycle):
             assert type(e) == SherlockLoadShockProfileDatasetError
 
 
-def helper_test_load_shock_profile_pulses(lifecycle):
+def helper_test_load_shock_profile_pulses(lifecycle: Lifecycle):
     """Test load_shock_profile_pulses API"""
     try:
         lifecycle.load_shock_profile_pulses(

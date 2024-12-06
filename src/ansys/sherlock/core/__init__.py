@@ -16,7 +16,7 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 # Ease import statements
 # ------------------------------------------------------------------------------
 
-from ansys.sherlock.core.logging import Logger
+from ansys.sherlock.core.pysherlock_logging import Logger
 
 LOG = Logger("sherlock")
 """PySherlock logger."""
