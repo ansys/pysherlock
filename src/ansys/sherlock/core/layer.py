@@ -1828,6 +1828,7 @@ class Layer(GrpcStub):
 
         return response.value
 
+    @require_version(252)
     def list_layers(self, project, cca_name):
         """List all layers as seen in the Layer Viewer for a specific project CCA.
 
@@ -1861,7 +1862,6 @@ class Layer(GrpcStub):
             cca_name="Card"
         )
         """
-
         try:
             if project == "":
                 raise SherlockListLayersError(message="Project name is invalid.")
@@ -1887,6 +1887,7 @@ class Layer(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(252)
     def export_layer_image(
             self,
             project: str,
@@ -1909,9 +1910,11 @@ class Layer(GrpcStub):
             - components_enabled: bool, optional
                 Displays the components in the export image. Default to true when not provided.
             - labels_enabled: bool, optional
-                Displays the component reference designators in the export image. Default to true when not provided.
+                Displays the component reference designators in the export image. Default to true
+                when not provided.
             - leads_enabled : bool, optional
-                Displays the component leads and solder balls in the export image. Default to true when not provided.
+                Displays the component leads and solder balls in the export image. Default to true
+                when not provided.
             - axes_enabled : bool
                 Displays the x and y axes in the export image.
             - grid_enabled : bool
@@ -1980,12 +1983,15 @@ class Layer(GrpcStub):
                     raise SherlockExportLayerImageError(message="Layer is invalid.")
                 if "file_path" not in export_layer or export_layer["file_path"] == "":
                     raise SherlockExportLayerImageError(message="File Path is invalid.")
-                if "image_height" not in export_layer or not isinstance(export_layer["image_height"], int):
+                if ("image_height" not in export_layer
+                        or not isinstance(export_layer["image_height"], int)):
                     raise SherlockExportLayerImageError(message="Image Height is invalid.")
-                if "image_width" not in export_layer or not isinstance(export_layer["image_width"], int):
+                if ("image_width" not in export_layer
+                        or not isinstance(export_layer["image_width"], int)):
                     raise SherlockExportLayerImageError(message="Image Width is invalid.")
                 if "overwrite_existing_file" not in export_layer:
-                    raise SherlockExportLayerImageError(message="Overwrite Existing File is invalid.")
+                    raise SherlockExportLayerImageError(message="Overwrite Existing File is "
+                                                                "invalid.")
 
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
@@ -1993,9 +1999,20 @@ class Layer(GrpcStub):
             export_layer_image_request = []
 
             for export_layer in export_layers:
-                components_enabled_val = export_layer["components_enabled"] if "components_enabled" in export_layer else None
-                labels_enabled_val = export_layer["labels_enabled"] if "labels_enabled" in export_layer else None
-                leads_enabled_val = export_layer["leads_enabled"] if "leads_enabled" in export_layer else None
+                if "components_enabled" in export_layer:
+                    components_enabled_val = export_layer["components_enabled"]
+                else:
+                    components_enabled_val = None
+
+                if "labels_enabled" in export_layer:
+                    labels_enabled_val = export_layer["labels_enabled"]
+                else:
+                    labels_enabled_val = None
+
+                if "leads_enabled" in export_layer:
+                    leads_enabled_val = export_layer["leads_enabled"]
+                else:
+                    leads_enabled_val = None
 
                 export_layer_info = (
                     SherlockLayerService_pb2.ExportLayerImageRequest.ExportLayerImageInfo (
