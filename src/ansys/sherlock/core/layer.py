@@ -1891,7 +1891,7 @@ class Layer(GrpcStub):
             self,
             project: str,
             cca_name: str,
-            export_layers: List[Dict[str, Union[str, int, bool]]],
+            export_layers: list[dict[str, bool | int | str]]
     ):
         """
         Export one or more 2D Layer Viewer images from a project CCA.
