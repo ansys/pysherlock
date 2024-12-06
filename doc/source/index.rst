@@ -1,30 +1,40 @@
 .. title:: PySherlock
 
-.. image:: /_static/logo/pysherlock-logo-light.png
-   :class: only-light
-   :alt: PySherlock Logo Light
-   :width: 580px
+.. figure:: _static/logo/logo.png
    :align: center
-
-.. image:: /_static/logo/pysherlock-logo-dark.png
-   :class: only-dark
-   :alt: PySherlock Logo Dark
-   :width: 580px
-   :align: center
+   :width: 640px
 
 Python API to interact with `Ansys Sherlock`_ (Reliability Engineering software) from **2022R2** and later versions.
 
-.. grid:: 3
+.. grid:: 1 1 3 3
 
     .. grid-item-card:: Getting started :fa:`person-running`
         :padding: 2 2 2 2
-        :link: _ref_getting_started
+        :link: ref_getting_started
         :link-type: ref
 
         Learn how to install and use PySherlock. Explains architecture
         and background.
 
         :bdg-primary-line:`Install` :bdg-primary-line:`Architecture`
+    
+    .. grid-item-card:: :fa:`list-alt` User guide
+      :link: ref_user_guide
+      :link-type: ref
+      :padding: 2 2 2 2
+
+      Understand how to use PySherlock to perform various tasks.
+
+      :bdg-primary-line:`Prerequisites` :bdg-primary-line:`Architecture`
+
+    .. grid-item-card:: API reference :fa:`book-bookmark`
+        :padding: 2 2 2 2
+        :link: ref_api_ref
+        :link-type: ref
+
+        Understand PySherlock API endpoints and their capabilities.
+
+        :bdg-primary-line:`Classes` :bdg-primary-line:`Methods` :bdg-primary-line:`Error handling`
 
     .. grid-item-card:: Examples :fa:`scroll`
         :padding: 2 2 2 2
@@ -35,18 +45,9 @@ Python API to interact with `Ansys Sherlock`_ (Reliability Engineering software)
 
         :bdg-primary-line:`Basic` :bdg-primary-line:`Technology-showcase` :bdg-primary-line:`Tips`
 
-    .. grid-item-card:: API reference :fa:`book-bookmark`
-        :padding: 2 2 2 2
-        :link: _ref_api_ref
-        :link-type: ref
-
-        Understand PySherlock API endpoints and their capabilities
-
-        :bdg-primary-line:`Classes` :bdg-primary-line:`Methods` :bdg-primary-line:`Error handling`
-
     .. grid-item-card:: Contribute :fa:`people-group`
         :padding: 2 2 2 2
-        :link: _ref_contributing
+        :link: ref_contributing
         :link-type: ref
 
         Learn how to contribute to the PySherlock codebase
@@ -58,8 +59,9 @@ Python API to interact with `Ansys Sherlock`_ (Reliability Engineering software)
    :hidden:
    :maxdepth: 3
 
-    getting_started/index
-    examples/index
-    api/index
-    contributing
-    changelog
+   getting_started/index
+   user_guide/index
+   api/index
+   examples/index
+   contributing
+   changelog

@@ -2,7 +2,11 @@
 
 from datetime import datetime
 import os
+from pathlib import Path
+import numpy as np
+import pyvista
 
+import ansys.tools.visualization_interface as viz_interface
 from ansys_sphinx_theme import (
     ansys_favicon,
     ansys_logo_white,
@@ -12,9 +16,13 @@ from ansys_sphinx_theme import (
     pyansys_logo_black,
     watermark,
 )
+
+from sphinx.application import Sphinx
+from sphinx.util import logging
 from sphinx.builders.latex import LaTeXBuilder
 from sphinx_gallery.sorting import FileNameSortKey
 
+from ansys.sherlock import core as pysherlock
 from ansys.sherlock.core import __version__
 
 LaTeXBuilder.supported_image_types = ["image/png", "image/pdf", "image/svg+xml"]
@@ -33,12 +41,51 @@ html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "PySherlock"
 html_favicon = ansys_favicon
 
+# Convert notebooks into Python scripts and include them in the output files
+logger = logging.getLogger(__name__)
+
+viz_interface.DOCUMENTATION_BUILD = True
+pyvista.BUILDING_GALLERY = True
+pyvista.OFF_SCREEN = True
+
+# Manage errors
+pyvista.set_error_output_file("errors.txt")
+
+# Ensure that offscreen rendering is used for docs generation
+
+# must be less than or equal to the XVFB window size
+try:
+    pyvista.global_theme.window_size = np.array([1024, 768])
+except AttributeError:
+    # for compatibility with pyvista < 0.40
+    pyvista.rcParams["window_size"] = np.array([1024, 768])
+
+# Save figures in specified directory
+pyvista.FIGURE_PATH = os.path.join(os.path.abspath("./images/"), "auto-generated/")
+if not os.path.exists(pyvista.FIGURE_PATH):
+    os.makedirs(pyvista.FIGURE_PATH)
+
+# necessary when building the sphinx gallery
+pyvista.BUILDING_GALLERY = True
+pysherlock.BUILDING_GALLERY = True
+
+DEFAULT_EXAMPLE_EXTENSION = "py"
+DOC_PATH = "doc/source"
+GALLERY_EXAMPLES_PATH = "examples/gallery_examples"
+EXAMPLES_ROOT = "examples"
+EXAMPLES_PATH_FOR_DOCS = f"../../{EXAMPLES_ROOT}/"
+
+SOURCE_PATH = Path(__file__).parent.resolve().absolute()
+pyansys_light_mode_logo = str(
+    os.path.join(SOURCE_PATH, "_static", "pyansys-logo-light_mode.png")
+)
+
 # specify the location of your github repo
 html_context = {
     "github_user": "ansys",
     "github_repo": "pysherlock",
     "github_version": "main",
-    "doc_path": "doc/source",
+    "doc_path": str(DOC_PATH),
 }
 html_theme_options = {
     "logo": "pyansys",
@@ -82,6 +129,7 @@ extensions = [
     "sphinx_design",
     "sphinx_gallery.gen_gallery",
     "sphinxemoji.sphinxemoji",
+    "ansys_sphinx_theme.extension.linkcode",
 ]
 
 autodoc_default_flags = ["members"]
@@ -144,7 +192,10 @@ if switcher_version != "dev":
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = [
+    "_build",
     "links.rst",
+    # because we include this in examples/index.rst
+    f"{GALLERY_EXAMPLES_PATH}/index.rst",
 ]
 
 # -- Sphinx Gallery Options ---------------------------------------------------
@@ -156,7 +207,7 @@ sphinx_gallery_conf = {
     # path where to save gallery generated examples
     "gallery_dirs": ["examples/gallery_examples"],
     # Pattern to search for example files
-    "filename_pattern": r"\.py",
+    "filename_pattern": r"\." + DEFAULT_EXAMPLE_EXTENSION,
     # Remove the "Download all examples" button from the top level gallery
     "download_all_examples": False,
     # Sort gallery example by file name instead of number of lines (default)
@@ -165,9 +216,12 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-sherlock-core",
-    "image_scrapers": ("matplotlib"),
+    "image_scrapers": ("pyvista"),
     "ignore_pattern": "flycheck*",
     "thumbnail_size": (350, 350),
+    "remove_config_comments": True,
+    "default_thumb_file": pyansys_light_mode_logo,
+    "show_signature": False,
 }
 
 # make rst_epilog a variable, so you can add other epilog parts to it
@@ -201,3 +255,5 @@ numpydoc_validation_checks = {
     "RT02",  # The first line of the Returns section should contain only the
     # type, unless multiple values are being returned"
 }
+
+suppress_warnings = ["label.*", "design.fa-build", "config.cache"]

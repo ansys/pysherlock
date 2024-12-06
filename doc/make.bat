@@ -12,8 +12,10 @@ set BUILDDIR=_build
 
 if "%1" == "" goto help
 if "%1" == "clean" goto clean
+if "%1" == "clean-examples" goto clean-examples
 if "%1" == "pdf" goto pdf
 if "%1" == "html" goto html
+if "%1" == "html-noexamples" goto html-noexamples
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
@@ -35,9 +37,19 @@ goto end
 %SPHINXBUILD% -M html %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end
 
+:html-noexamples
+%SPHINXBUILD% -D plot_gallery=0 -b html %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
+goto end
+
 :clean
 rmdir /s /q %BUILDDIR% > /NUL 2>&1
 for /d /r %SOURCEDIR% %%d in (_autosummary) do @if exist "%%d" rmdir /s /q "%%d"
+rmdir /s /q source\examples\gallery_examples > /NUL 2>&1
+goto end
+
+:clean-examples
+echo Cleaning examples
+rmdir /s /q source\examples\gallery_examples > /NUL 2>&1
 goto end
 
 :help
