@@ -1,6 +1,8 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all layer management capabilities."""
+import grpc
+
 from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
@@ -18,12 +20,10 @@ try:
     from SherlockLayerService_pb2 import ModelingRegion
     import SherlockLayerService_pb2_grpc
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2
     from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
-
-from typing import Dict, List, Union
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
@@ -37,6 +37,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPointsError,
+    SherlockNoGrpcConnectionException,
     SherlockExportLayerImageError,
     SherlockListLayersError,
     SherlockUpdateModelingRegionError,
@@ -51,7 +52,7 @@ from ansys.sherlock.core.utils.version_check import require_version
 class Layer(GrpcStub):
     """Module containing all the layer management capabilities."""
 
-    def __init__(self, channel, server_version):
+    def __init__(self, channel: grpc.Channel, server_version: int):
         """Initialize a gRPC stub for SherlockLayerService."""
         super().__init__(channel, server_version)
         self.stub = SherlockLayerService_pb2_grpc.SherlockLayerServiceStub(channel)
@@ -59,19 +60,31 @@ class Layer(GrpcStub):
     @require_version(241)
     def add_potting_region(
         self,
-        project,
-        potting_regions,
-    ):
+        project: str,
+        potting_regions: list[
+            dict[
+                str,
+                float
+                | str
+                | PolygonalShape
+                | RectangularShape
+                | SlotShape
+                | CircularShape
+                | PCBShape,
+            ]
+        ],
+    ) -> int:
         """Add one or more potting regions to a given project.
 
         Available Since: 2024R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        potting_regions : list
-            List of potting region properties consisting of these properties:
+        potting_regions: list[dict[str, float | str | PolygonalShape | RectangularShape | SlotShape\
+ | CircularShape | PCBShape]]
+            Potting region properties consisting of these properties:
 
             - cca_name: str
                 Name of the CCA.
@@ -231,8 +244,7 @@ class Layer(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.addPottingRegion(request)
 
@@ -308,7 +320,7 @@ class Layer(GrpcStub):
             update_request1,
             update_request2
         ]
-        >>> responses = sherlock.layer.update_potting_region(request)
+        >>> return_codes = sherlock.layer.update_potting_region(request)
         """
         update_request = request._convert_to_grpc()
 
@@ -416,21 +428,21 @@ class Layer(GrpcStub):
     @require_version()
     def update_mount_points_by_file(
         self,
-        project,
-        cca_name,
-        file_path,
-    ):
+        project: str,
+        cca_name: str,
+        file_path: str,
+    ) -> int:
         """Update mount point properties of a CCA from a CSV file.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        file_path : str
+        file_path: str
             Path for the CSV file with the mount point properties.
 
         Returns
@@ -454,7 +466,7 @@ class Layer(GrpcStub):
         >>> sherlock.layer.update_mount_points_by_file(
             "Test",
             "Card",
-            "MountPointImport.csv",
+            "MountPointImport.csv"
         )
         """
         try:
@@ -470,8 +482,7 @@ class Layer(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockLayerService_pb2.UpdateMountPointsByFileRequest(
             project=project,
@@ -498,16 +509,16 @@ class Layer(GrpcStub):
             raise e
 
     @require_version(222)
-    def delete_all_mount_points(self, project, cca_name):
+    def delete_all_mount_points(self, project: str, cca_name: str) -> int:
         """Delete all mount points for a CCA.
 
         Available Since: 2022R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
 
         Returns
@@ -542,8 +553,7 @@ class Layer(GrpcStub):
                 raise SherlockDeleteAllMountPointsError(message="CCA name is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.DeleteAllMountPointsRequest(
                 project=project,
@@ -562,16 +572,16 @@ class Layer(GrpcStub):
         return response.value
 
     @require_version(231)
-    def delete_all_ict_fixtures(self, project, cca_name):
+    def delete_all_ict_fixtures(self, project: str, cca_name: str) -> int:
         """Delete all ICT fixtures for a CCA.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
 
         Returns
@@ -606,8 +616,7 @@ class Layer(GrpcStub):
                 raise SherlockDeleteAllICTFixturesError(message="CCA name is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.DeleteAllICTFixturesRequest(
                 project=project,
@@ -626,16 +635,16 @@ class Layer(GrpcStub):
         return response.value
 
     @require_version(231)
-    def delete_all_test_points(self, project, cca_name):
+    def delete_all_test_points(self, project: str, cca_name: str) -> int:
         """Delete all test points for a CCA.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
 
         Returns
@@ -670,8 +679,7 @@ class Layer(GrpcStub):
                 raise SherlockDeleteAllTestPointsError(message="CCA name is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.DeleteAllTestPointsRequest(
                 project=project,
@@ -692,21 +700,21 @@ class Layer(GrpcStub):
     @require_version(231)
     def update_test_points_by_file(
         self,
-        project,
-        cca_name,
-        file_path,
-    ):
+        project: str,
+        cca_name: str,
+        file_path: str,
+    ) -> int:
         """Update test point properties of a CCA from a CSV file.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        file_path : str
+        file_path: str
             Path for the CSV file with the test point properties.
 
         Returns
@@ -730,7 +738,7 @@ class Layer(GrpcStub):
         >>> sherlock.layer.update_test_points_by_file(
             "Test",
             "Card",
-            "TestPointsImport.csv",
+            "TestPointsImport.csv"
         )
         """
         try:
@@ -742,8 +750,7 @@ class Layer(GrpcStub):
                 raise SherlockUpdateTestPointsByFileError(message="File path is required.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.UpdateTestPointsByFileRequest(
                 project=project,
@@ -773,21 +780,21 @@ class Layer(GrpcStub):
     @require_version(231)
     def update_test_fixtures_by_file(
         self,
-        project,
-        cca_name,
-        file_path,
-    ):
+        project: str,
+        cca_name: str,
+        file_path: str,
+    ) -> int:
         """Update test fixture properties of a CCA from a CSV file.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        file_path : str
+        file_path: str
             Path for the CSV file with the test fixture properties.
 
         Returns
@@ -811,7 +818,7 @@ class Layer(GrpcStub):
         >>> sherlock.layer.update_test_fixtures_by_file(
             "Test",
             "Card",
-            "TestFixturesImport.csv",
+            "TestFixturesImport.csv"
         )
         """
         try:
@@ -823,8 +830,7 @@ class Layer(GrpcStub):
                 raise SherlockUpdateTestFixturesByFileError(message="File path is required.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.UpdateICTFixturesByFileRequest(
                 project=project,
@@ -854,32 +860,32 @@ class Layer(GrpcStub):
     @require_version(231)
     def export_all_test_points(
         self,
-        project,
-        cca_name,
-        export_file,
-        length_units="DEFAULT",
-        displacement_units="DEFAULT",
-        force_units="DEFAULT",
-    ):
+        project: str,
+        cca_name: str,
+        export_file: str,
+        length_units: str = "DEFAULT",
+        displacement_units: str = "DEFAULT",
+        force_units: str = "DEFAULT",
+    ) -> int:
         """Export the test point properties for a CCA.
 
         Available Since: 2023R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        export_file : str
+        export_file: str
             Full path for the CSV file to export the test points list to.
-        length_units : str, optional
+        length_units: str, optional
             Length units to use when exporting the test points.
             The default is ``DEFAULT``.
-        displacement_units : str, optional
+        displacement_units: str, optional
             Displacement units to use when exporting the test points.
             The default is ``DEFAULT``.
-        force_units : str, optional
+        force_units: str, optional
             Force units to use when exporting the test points.
             The default is ``DEFAULT``.
 
@@ -907,7 +913,7 @@ class Layer(GrpcStub):
             "TestPointsExport.csv",
             "DEFAULT",
             "DEFAULT",
-            "DEFAULT",
+            "DEFAULT"
         )
         """
         try:
@@ -919,8 +925,7 @@ class Layer(GrpcStub):
                 raise SherlockExportAllTestPointsError(message="File path is required.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.ExportAllTestPointsRequest(
                 project=project,
@@ -945,22 +950,22 @@ class Layer(GrpcStub):
     @require_version(231)
     def export_all_test_fixtures(
         self,
-        project,
-        cca_name,
-        export_file,
-        units="DEFAULT",
-    ):
+        project: str,
+        cca_name: str,
+        export_file: str,
+        units: str = "DEFAULT",
+    ) -> int:
         """Export the test fixture properties for a CCA.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        export_file : str
+        export_file: str
             Full path for the CSV file to export the text fixtures list to.
-        units : str, optional
+        units: str, optional
             Units to use when exporting the test fixtures.
             The default is ``DEFAULT``.
 
@@ -987,7 +992,7 @@ class Layer(GrpcStub):
             "Tutorial Project",
             "Card",
             "TestFixturesExport.csv",
-            "DEFAULT",
+            "DEFAULT"
         )
         """
         try:
@@ -999,8 +1004,7 @@ class Layer(GrpcStub):
                 raise SherlockExportAllTestFixtures(message="File path is required.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.ExportAllICTFixturesRequest(
                 project=project,
@@ -1023,22 +1027,22 @@ class Layer(GrpcStub):
     @require_version(222)
     def export_all_mount_points(
         self,
-        project,
-        cca_name,
-        export_file,
-        units="DEFAULT",
-    ):
+        project: str,
+        cca_name: str,
+        export_file: str,
+        units: str = "DEFAULT",
+    ) -> int:
         """Export the mount point properties for a CCA.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        export_file : str
+        export_file: str
             Full path for the CSV file to export the mount points list to.
-        units : str, optional
+        units: str, optional
             Units to use when exporting the mount points.
             The default is ``DEFAULT``.
 
@@ -1065,7 +1069,7 @@ class Layer(GrpcStub):
             "Tutorial Project",
             "Card",
             "MountPointsExport.csv",
-            "DEFAULT",
+            "DEFAULT"
         )
         """
         try:
@@ -1077,8 +1081,7 @@ class Layer(GrpcStub):
                 raise SherlockExportAllMountPoints(message="File path is required.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.ExportAllMountPointsRequest(
                 project=project,
@@ -1102,46 +1105,49 @@ class Layer(GrpcStub):
     def add_modeling_region(
         self,
         project: str,
-        modeling_regions: List[Dict[str, Union[str, float, bool, dict]]],
-    ):
+        modeling_regions: list[
+            dict[str, bool | float | str | dict[str, bool | float | str] | dict[str, float | str]]
+        ],
+    ) -> int:
         """
         Add one or more modeling regions to a specific project.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        modeling_regions : list of dict
-            List of modeling regions to add. Each dictionary should contain:
+        modeling_regions: list[dict[str, bool | float | str | dict[str, bool | float | str]\
+                | dict[str, float | str]]]
+            Modeling regions to add. Each dictionary should contain:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
-            - region_id : str
+            - region_id: str
                 Unique region ID of the modeling region.
-            - region_units : str
+            - region_units: str
                 Units of the modeling region.
-            - model_mode : str
+            - model_mode: str
                 Mode that specifies how the region is used. Valid values are ``Enabled``,
                 ``Disabled`` and ``Excluded``.
             - shape: PolygonalShape|RectangularShape|SlotShape|CircularShape|PCBShape
                 The shape of the modeling region.
-            - pcb_model_props : list
-                List of the PCB model parameters consisting of these properties:
+            - pcb_model_props: dict[str, bool | float | str]
+                PCB model parameters consisting of these properties:
 
-                    - export_model_type : str
+                    - export_model_type: str
                         The type of model to be generated for a given modeling region.
                         Valid values are ``Default``, ``Sherlock``, ``Sweep`` and ``None``.
                     - elem_order: str
                         The type of 3D elements to be created for the PCB in the modeling region.
                         Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
-                    - max_mesh_size : float
+                    - max_mesh_size: float
                         The maximum size of the mesh to be used in the region.
-                    - max_mesh_size_units : str
+                    - max_mesh_size_units: str
                         Units for the maximum mesh size.
-                    - quads_preferred : bool
+                    - quads_preferred: bool
                         Whether to generate quad-shaped elements when creating the mesh if true.
-            - trace_model_props : list
-                List of the trace model parameters consisting of these properties:
+            - trace_model_props: dict[str, float | str]
+                Trace model parameters consisting of these properties:
 
                     - trace_model_type : str
                         The specification of whether trace modeling should be performed
@@ -1266,8 +1272,7 @@ class Layer(GrpcStub):
                         raise SherlockAddModelingRegionError(message="Trace model type is invalid.")
 
                 if not self._is_connection_up():
-                    LOG.error("There is no connection to a gRPC service.")
-                    return
+                    raise SherlockNoGrpcConnectionException()
 
                 add_modeling_region_request = SherlockLayerService_pb2.AddModelingRegionRequest()
                 add_modeling_region_request.project = project
@@ -1369,60 +1374,65 @@ class Layer(GrpcStub):
     def update_modeling_region(
         self,
         project: str,
-        modeling_regions: List[Dict[str, Union[str, float, bool, dict]]],
-    ):
+        modeling_regions: list[
+            dict[
+                str,
+                bool | float | str | dict[str, bool | float | str] | dict[str, bool | float | str],
+            ]
+        ],
+    ) -> int:
         """
         Update one or more modeling regions in a specific project.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        modeling_regions : list of dict
-            List of modeling regions to update. Each dictionary should contain:
+        modeling_regions : list[dict]
+            Modeling regions to update. Each dictionary should contain:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
-            - region_id : str
+            - region_id: str
                 Unique region ID of the modeling region.
-            - region_units : str
+            - region_units: str
                 Units of the modeling region.
-            - model_mode : str
+            - model_mode: str
                 Mode that specifies how the region is used. Valid values are ``Enabled``,
                 ``Disabled`` and ``Excluded``.
             - shape: PolygonalShape|RectangularShape|SlotShape|CircularShape|PCBShape
                 The shape of the modeling region.
-            - pcb_model_props : list
-                List of the PCB model parameters consisting of these properties:
+            - pcb_model_props: dict[str, bool | float | str]
+                PCB model parameters consisting of these properties:
 
-                    - export_model_type : str
+                    - export_model_type: str
                         The type of model to be generated for a given modeling region.
                         Valid values are ``Default``, ``Sherlock``, ``Sweep`` and ``None``.
                     - elem_order: str
                         The type of 3D elements to be created for the PCB in the modeling region.
                         Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
-                    - max_mesh_size : float
+                    - max_mesh_size: float
                         The maximum size of the mesh to be used in the region.
-                    - max_mesh_size_units : str
+                    - max_mesh_size_units: str
                         Units for the maximum mesh size.
-                    - quads_preferred : bool
+                    - quads_preferred: bool
                         Whether to generate quad-shaped elements when creating the mesh if true.
-            - trace_model_props : list
-                List of the trace model parameters consisting of these properties:
+            - trace_model_props: dict[str, float | str]
+                Trace model parameters consisting of these properties:
 
-                    - trace_model_type : str
+                    - trace_model_type: str
                         The specification of whether trace modeling should be performed
                         within the region. Valid values are ``Default``, ``Enabled`` and
                         ``Disabled``.
                     - elem_order: str, optional
                         The type of 3D elements to be created for the PCB in the modeling region.
                         Valid values are ``First_Order``, ``Second_Order`` and ``Solid_Shell``.
-                    - trace_mesh_size : float, optional
+                    - trace_mesh_size: float, optional
                         The maximum mesh size to be used in the region when trace modeling
                         is enabled.
                     - trace_mesh_size_units: str, optional
                         Units for the maximum mesh size when trace modeling is enabled.
-            - region_id_replacement : str, optional
+            - region_id_replacement: str, optional
                 Represents a unique region id that will replace the existing regionId value during
                 a modeling region update if a value exists.
 
@@ -1534,8 +1544,7 @@ class Layer(GrpcStub):
                         )
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             update_modeling_region_request = SherlockLayerService_pb2.UpdateModelingRegionRequest()
             update_modeling_region_request.project = project
@@ -1634,8 +1643,8 @@ class Layer(GrpcStub):
     def copy_modeling_region(
         self,
         project: str,
-        copy_regions: List[Dict[str, Union[str, float]]],
-    ):
+        copy_regions: list[dict[str, float | str]],
+    ) -> int:
         """
         Copy one or more modeling regions in a specific project.
 
@@ -1643,8 +1652,8 @@ class Layer(GrpcStub):
         ----------
         project : str
             Name of the Sherlock project.
-        copy_regions : list of dict
-            List of modeling regions to copy along with their corresponding "copy to" parameters.
+        copy_regions : list[dict[str, float | str]]
+            Modeling regions to copy along with their corresponding "copy to" parameters.
             Each dictionary should contain:
 
             - cca_name : str
@@ -1678,7 +1687,7 @@ class Layer(GrpcStub):
             project="Tutorial Project",
             cca_name="Card",
         )
-        >>> copy_regions = [
+        >>> modeling_regions = [
         >>>     {
         >>>         "cca_name": "Card",
         >>>         "region_id": "Region001",
@@ -1687,7 +1696,7 @@ class Layer(GrpcStub):
         >>>         "center_y": 20.0,
         >>>     }
         >>> ]
-        >>> result = sherlock.layer.copy_modeling_region("Tutorial Project", copy_regions)
+        >>> result = sherlock.layer.copy_modeling_region("Tutorial Project", modeling_regions)
         """
         try:
             if not project:
@@ -1709,8 +1718,7 @@ class Layer(GrpcStub):
                     raise SherlockCopyModelingRegionError(message="Center Y coordinate is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             copy_regions_request = []
 
@@ -1744,17 +1752,17 @@ class Layer(GrpcStub):
             raise e
 
     @require_version(251)
-    def delete_modeling_region(self, project: str, delete_regions: List[Dict[str, str]]):
+    def delete_modeling_region(self, project: str, delete_regions: list[dict[str, str]]) -> int:
         """Delete one or more modeling regions for a specific project.
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        delete_regions : list of dict
-            List of modeling regions to delete. Each dictionary should contain:
-            - "cca_name" : str, Name of the CCA.
-            - "region_id" : str, Unique region ID of the modeling region to delete.
+        delete_regions: list[dict[str, str]]
+            Modeling regions to delete. Each dictionary should contain:
+            - "cca_name": str, Name of the CCA.
+            - "region_id": str, Unique region ID of the modeling region to delete.
 
         Returns
         -------
@@ -1774,8 +1782,8 @@ class Layer(GrpcStub):
                 project="Test",
                 cca_name="Card",
             )
-        >>> delete_regions = [{"cca_name": "Card", "region_id": "12345"}]
-        >>> sherlock.layer.delete_modeling_region("Test", delete_regions)
+        >>> modeling_regions = [{"cca_name": "Card", "region_id": "12345"}]
+        >>> sherlock.layer.delete_modeling_region("Test", modeling_regions)
         """
         try:
             if project == "":
@@ -1796,8 +1804,7 @@ class Layer(GrpcStub):
                     raise SherlockDeleteModelingRegionError(message="Region ID is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             delete_regions_info = [
                 SherlockLayerService_pb2.DeleteModelingRegionRequest.DeleteModelingRegionInfo(
@@ -1863,8 +1870,7 @@ class Layer(GrpcStub):
                 raise SherlockListLayersError(message="CCA name is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockLayerService_pb2.ListLayersRequest(
                 project=project,
@@ -1982,8 +1988,7 @@ class Layer(GrpcStub):
                     raise SherlockExportLayerImageError(message="Overwrite Existing File is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             export_layer_image_request = []
 

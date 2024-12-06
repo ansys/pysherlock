@@ -11,14 +11,15 @@ Use the search feature or click links to view API documentation.
    :hidden:
 
    analysis
+   analysis_types
    common
    common_types
    launcher
    layer
+   layer_types
    lifecycle
    model
    parts
-   layer_types
    parts_types
    project
    project_types
@@ -27,13 +28,15 @@ Use the search feature or click links to view API documentation.
 .. autosummary::
 
    ansys.sherlock.core.analysis
+   ansys.sherlock.core.types.analysis_types
    ansys.sherlock.core.common
+   ansys.sherlock.core.types.common_types
    ansys.sherlock.core.launcher
    ansys.sherlock.core.layer
+   ansys.sherlock.core.types.layer_types
    ansys.sherlock.core.lifecycle
    ansys.sherlock.core.model
    ansys.sherlock.core.parts
-   ansys.sherlock.core.types.layer_types
    ansys.sherlock.core.types.parts_types
    ansys.sherlock.core.project
    ansys.sherlock.core.types.project_types

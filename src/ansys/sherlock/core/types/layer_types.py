@@ -109,7 +109,8 @@ class CircularShape(BaseModel):
 class PCBShape(BaseModel):
     """Contains the properties for a PCB shape."""
 
-    def _convert_to_grpc(self) -> SherlockLayerService_pb2.PCBShape:
+    @staticmethod
+    def _convert_to_grpc() -> SherlockLayerService_pb2.PCBShape:
         return SherlockLayerService_pb2.PCBShape()
 
 

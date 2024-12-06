@@ -1,6 +1,9 @@
 # Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all stackup management capabilities."""
+from typing import Optional
+
+from grpc import Channel
 
 try:
     import SherlockStackupService_pb2
@@ -22,6 +25,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidThicknessArgumentError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdateConductorLayerError,
     SherlockUpdateLaminateLayerError,
 )
@@ -33,7 +37,7 @@ from ansys.sherlock.core.utils.version_check import require_version
 class Stackup(GrpcStub):
     """Contains all stackup management capabilities."""
 
-    def __init__(self, channel, server_version):
+    def __init__(self, channel: Channel, server_version: int):
         """Initialize a gRPC stub for Sherlock Stackup service."""
         super().__init__(channel, server_version)
         self.stub = SherlockStackupService_pb2_grpc.SherlockStackupServiceStub(channel)
@@ -60,7 +64,7 @@ class Stackup(GrpcStub):
                 self.LAMINATE_THICKNESS_UNIT_LIST = laminate_thickness_unit_response.unit
 
     def _init_laminate_material_manufacturers(self):
-        """Initialize list of lamininate material manufacturers.
+        """Initialize list of laminate material manufacturers.
 
         Available Since: 2021R1
         """
@@ -113,7 +117,7 @@ class Stackup(GrpcStub):
             if fiber_material_response.returnCode.value == 0:
                 self.FIBER_MATERIAL_LIST = fiber_material_response.fiberMaterial
 
-    def _check_pcb_material_validity(self, manufacturer, grade, material):
+    def _check_pcb_material_validity(self, manufacturer: str, grade: str, material: str):
         """Check PCB arguments to see if they are valid.
 
         Available Since: 2021R1
@@ -141,15 +145,16 @@ class Stackup(GrpcStub):
                     raise SherlockInvalidMaterialError("Laminate grade is invalid.")
 
     @staticmethod
-    def _check_glass_construction_validity(input):
+    def _check_glass_construction_validity(glass_construction: list[tuple[str, float, float, str]]):
         """Check input to see if it is a valid glass construction argument."""
-        if not isinstance(input, list):
+        if not isinstance(glass_construction, list):
             raise SherlockInvalidGlassConstructionError(
                 message="glass_construction argument is invalid."
             )
 
+        i = 0
         try:
-            for i, layer in enumerate(input):
+            for i, layer in enumerate(glass_construction):
                 if len(layer) != 4:
                     raise SherlockInvalidGlassConstructionError(
                         message=f"Invalid layer {i}: Number of elements is wrong."
@@ -157,7 +162,11 @@ class Stackup(GrpcStub):
         except SherlockInvalidThicknessArgumentError as e:
             raise SherlockInvalidGlassConstructionError(message=f"Invalid layer {i}: {str(e)}")
 
-    def _add_glass_construction_layers(self, request, layers):
+    @staticmethod
+    def _add_glass_construction_layers(
+        request: SherlockStackupService_pb2.UpdateLaminateRequest,
+        layers: list[tuple[str, float, float, str]],
+    ):
         """Add the layers to the request."""
         for l in layers:
             layer = request.glassConstruction.add()
@@ -169,57 +178,57 @@ class Stackup(GrpcStub):
     @require_version()
     def gen_stackup(
         self,
-        project,
-        cca_name,
-        board_thickness,
-        board_thickness_unit,
-        pcb_material_manufacturer,
-        pcb_material_grade,
-        pcb_material,
-        conductor_layers_cnt,
-        signal_layer_thickness,
-        signal_layer_thickness_unit,
-        min_laminate_thickness,
-        min_laminate_thickness_unit,
-        maintain_symmetry,
-        power_layer_thickness,
-        power_layer_thickness_unit,
-    ):
+        project: str,
+        cca_name: str,
+        board_thickness: float,
+        board_thickness_unit: str,
+        pcb_material_manufacturer: str,
+        pcb_material_grade: str,
+        pcb_material: str,
+        conductor_layers_cnt: int,
+        signal_layer_thickness: float,
+        signal_layer_thickness_unit: str,
+        min_laminate_thickness: float,
+        min_laminate_thickness_unit: str,
+        maintain_symmetry: bool,
+        power_layer_thickness: float,
+        power_layer_thickness_unit: str,
+    ) -> int:
         """Generate a new stackup from given properties.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        board_thickness : float
+        board_thickness: float
             Board thickness.
-        board_thickness_unit : str
+        board_thickness_unit: str
             Units for the board thickness.
-        pcb_material_manufacturer : str
+        pcb_material_manufacturer: str
             Manufacturer for the PCB material.
-        pcb_material_grade : str
+        pcb_material_grade: str
             Grade for the PCB material.
-        pcb_material : str
+        pcb_material: str
             Material for the PCB.
-        conductor_layers_cnt : int32
+        conductor_layers_cnt: int32
             Number of conductor layers.
-        signal_layer_thickness : float
+        signal_layer_thickness: float
             Signal layer thickness.
-        signal_layer_thickness_unit : str
+        signal_layer_thickness_unit: str
             Units for the signal layer thickness.
-        min_laminate_thickness : float
+        min_laminate_thickness: float
             Minimum thickness of laminate layers.
-        min_laminate_thickness_unit : str
+        min_laminate_thickness_unit: str
             Units for the minimum thickness of laminate layers.
-        maintain_symmetry : bool
+        maintain_symmetry: bool
             Whether to maintain symmetry.
-        power_layer_thickness : float
+        power_layer_thickness: float
             Power layer thickness.
-        power_layer_thickness_unit : str
+        power_layer_thickness_unit: str
             Units for the power layer thickness.
 
         Returns
@@ -255,7 +264,7 @@ class Stackup(GrpcStub):
             "mil",
             False,
             1.0,
-            "mil",
+            "mil"
         )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
@@ -285,8 +294,7 @@ class Stackup(GrpcStub):
             raise SherlockGenStackupError(message=str(e))
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockStackupService_pb2.GenStackupRequest(
             project=project,
@@ -321,41 +329,41 @@ class Stackup(GrpcStub):
     @require_version()
     def update_conductor_layer(
         self,
-        project,
-        cca_name,
-        layer,
-        type="",
-        material="",
-        thickness=0,
-        thickness_unit="",
-        conductor_percent="",
-        resin_material="",
-    ):
+        project: str,
+        cca_name: str,
+        layer: str,
+        layer_type: str = "",
+        material: str = "",
+        thickness: float = 0,
+        thickness_unit: str = "",
+        conductor_percent: str = "",
+        resin_material: str = "",
+    ) -> int:
         """Update a conductor layer with given properties.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_name : str
+        cca_name: str
             Name of the CCA.
-        layer : str
+        layer: str
             Layer ID associated with the conductor layer.
-        type : str, optional
+        layer_type: str, optional
             Layer type. The default is ``""``. For example,
             ``"SIGNAL"``, ``"POWER"``, or ``"SUBSTRATE"``.
-        material : str, optional
+        material: str, optional
             Conductor material. The default is ``""``.
-        thickness : float, optional
+        thickness: float, optional
             Conductor layer thickness. The default is ``0``.
-        thickness_unit : str, optional
+        thickness_unit: str, optional
             Units for the conductor layer thickness. The
             default is ``""``.
-        conductor_percent : str, optional
+        conductor_percent: str, optional
             Conductor percentage. The default is ``""``.
-        resin_material : str, optional
+        resin_material: str, optional
             Resin material. The default is ``""``.
 
         Note
@@ -389,7 +397,7 @@ class Stackup(GrpcStub):
             1.0,
             "oz",
             "94.2",
-            "Generic FR-4 Generic FR-4",
+            "Generic FR-4 Generic FR-4"
         )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
@@ -402,7 +410,7 @@ class Stackup(GrpcStub):
                 raise SherlockUpdateConductorLayerError(message="Project name is invalid.")
             if cca_name == "":
                 raise SherlockUpdateConductorLayerError(message="CCA name is invalid.")
-            if (type != "") and type not in self.LAYER_TYPE_LIST:
+            if (layer_type != "") and layer_type not in self.LAYER_TYPE_LIST:
                 raise SherlockUpdateConductorLayerError(
                     message=(
                         "Conductor type is invalid. "
@@ -428,14 +436,13 @@ class Stackup(GrpcStub):
             raise SherlockUpdateConductorLayerError(message=str(e))
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockStackupService_pb2.UpdateConductorLayerRequest(
             project=project,
             ccaName=cca_name,
             layer=layer,
-            type=type,
+            type=layer_type,
             material=material,
             thickness=thickness,
             thicknessUnit=thickness_unit,
@@ -461,17 +468,17 @@ class Stackup(GrpcStub):
         project,
         cca_name,
         layer,
-        manufacturer="",
-        grade="",
-        material="",
-        thickness=0,
-        thickness_unit="",
-        construction_style="",
-        glass_construction=[],
-        fiber_material="",
-        conductor_material="",
-        conductor_percent="",
-    ):
+        manufacturer: str = "",
+        grade: str = "",
+        material: str = "",
+        thickness: float = 0,
+        thickness_unit: str = "",
+        construction_style: str = "",
+        glass_construction: Optional[list[tuple[str, float, float, str]]] = None,
+        fiber_material: str = "",
+        conductor_material: str = "",
+        conductor_percent: str = "",
+    ) -> int:
         """Update a laminate layer with given properties.
 
         Available Since: 2021R1
@@ -501,7 +508,7 @@ class Stackup(GrpcStub):
             Units for the laminate thickness. The default is ``""``.
         construction_style : str, optional
             Construction style. The default is ``""``.
-        glass_construction : list, optional
+        glass_construction : list[tuple[str, float, float, str]], optional
             List representing a glass construction. This list consists
             of objects with these properties:
 
@@ -559,7 +566,7 @@ class Stackup(GrpcStub):
             ],
             "E-GLASS",
             "COPPER",
-            "0.0",
+            "0.0"
         )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
@@ -572,6 +579,8 @@ class Stackup(GrpcStub):
             self._init_fiber_materials()
         if self.CONDUCTOR_MATERIAL_LIST is None:
             self._init_conductor_materials()
+        if glass_construction is None:
+            glass_construction = []
 
         try:
             if project == "":
@@ -610,8 +619,7 @@ class Stackup(GrpcStub):
             raise SherlockUpdateLaminateLayerError(message=str(e))
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockStackupService_pb2.UpdateLaminateRequest(
             project=project,
@@ -643,19 +651,21 @@ class Stackup(GrpcStub):
             raise e
 
     @require_version()
-    def list_conductor_layers(self, project):
+    def list_conductor_layers(
+        self, project: str
+    ) -> list[SherlockStackupService_pb2.ListConductorLayersResponse.CCAConductorLayerProp]:
         """List CCA conductor layers.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
 
         Returns
         -------
-        list
+        list[SherlockStackupService_pb2.ListConductorLayersResponse.CCAConductorLayerProp]
             The conductor layers of all CCAs in the project.
 
         Example
@@ -682,13 +692,13 @@ class Stackup(GrpcStub):
         if self.CONDUCTOR_MATERIAL_LIST is None:
             self._init_conductor_materials()
 
-        try:
-            if project == "":
-                raise SherlockListConductorLayersError(message="Project name is invalid.")
+        if project == "":
+            raise SherlockListConductorLayersError(message="Project name is invalid.")
 
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        try:
 
             request = SherlockStackupService_pb2.ListConductorLayersRequest(project=project)
             response = self.stub.listConductorLayers(request)
@@ -702,19 +712,21 @@ class Stackup(GrpcStub):
             raise e
 
     @require_version()
-    def list_laminate_layers(self, project):
+    def list_laminate_layers(
+        self, project: str
+    ) -> list[SherlockStackupService_pb2.ListLaminatesResponse.CCALaminateProp]:
         """List all laminate layers and their properties.
 
         Available Since: 2021R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
 
         Returns
         -------
-        list
+        list[SherlockStackupService_pb2.ListLaminatesResponse.CCALaminateProp]
             The laminate layers of all CCAs in the project.
 
         Example
@@ -747,13 +759,12 @@ class Stackup(GrpcStub):
         if self.CONDUCTOR_MATERIAL_LIST is None:
             self._init_conductor_materials()
 
-        try:
-            if project == "":
-                raise SherlockListLaminateLayersError(message="Project name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockListLaminateLayersError(message="Project name is invalid.")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
+        try:
             request = SherlockStackupService_pb2.ListLaminatesRequest(project=project)
             response = self.stub.listLaminates(request)
             if response.returnCode.value == -1:
@@ -766,16 +777,16 @@ class Stackup(GrpcStub):
             raise e
 
     @require_version()
-    def get_layer_count(self, project, cca_name):
+    def get_layer_count(self, project: str, cca_name: str) -> int:
         """Get the number of CCA layers in a stackup.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str, required
+        project: str
             Name of the Sherlock project.
-        cca_name : str, required
+        cca_name: str
             Name of the CCA.
 
         Returns
@@ -801,19 +812,16 @@ class Stackup(GrpcStub):
         >>>    cca_name="Card")
         >>> print(f"{conductor_layer_count}")
         """
-        try:
-            if project == "":
-                raise SherlockGetLayerCountError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetLayerCountError(message="CCA name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockGetLayerCountError(message="Project name is invalid.")
+        if cca_name == "":
+            raise SherlockGetLayerCountError(message="CCA name is invalid.")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockStackupService_pb2.GetLayerCountRequest(
-                project=project, ccaName=cca_name
-            )
-            response = self.stub.getLayerCount(request)
+        request = SherlockStackupService_pb2.GetLayerCountRequest(project=project, ccaName=cca_name)
+        response = self.stub.getLayerCount(request)
+        try:
             if response.returnCode.value == -1:
                 raise SherlockGetLayerCountError(response.returnCode.message)
 
@@ -823,16 +831,16 @@ class Stackup(GrpcStub):
             raise e
 
     @require_version()
-    def get_stackup_props(self, project, cca_name):
+    def get_stackup_props(self, project: str, cca_name: str) -> StackupProperties:
         """Get the stackup properties from a CCA.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str, required
+        project: str
             Name of the Sherlock project.
-        cca_name : str, required
+        cca_name: str
             Name of the CCA.
 
         Returns
@@ -859,19 +867,18 @@ class Stackup(GrpcStub):
             )
         >>> print(f"{stackup_props}")
         """
-        try:
-            if project == "":
-                raise SherlockGetStackupPropsError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetStackupPropsError(message="CCA name is invalid.")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockGetStackupPropsError(message="Project name is invalid.")
+        if cca_name == "":
+            raise SherlockGetStackupPropsError(message="CCA name is invalid.")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockStackupService_pb2.GetStackupPropsRequest(
-                project=project, ccaName=cca_name
-            )
-            response = self.stub.getStackupProps(request)
+        request = SherlockStackupService_pb2.GetStackupPropsRequest(
+            project=project, ccaName=cca_name
+        )
+        response = self.stub.getStackupProps(request)
+        try:
             if response.returnCode.value == -1:
                 raise SherlockGetLayerCountError(response.returnCode.message)
 
@@ -881,18 +888,20 @@ class Stackup(GrpcStub):
             raise e
 
     @require_version()
-    def get_total_conductor_thickness(self, project, cca_name, thickness_unit):
+    def get_total_conductor_thickness(
+        self, project: str, cca_name: str, thickness_unit: str
+    ) -> float:
         """Return the total conductor thickness.
 
         Available Since: 2021R2
 
         Parameters
         ----------
-        project : str, required
+        project: str
             Sherlock project name.
-        cca_name : str, required
+        cca_name: str
             The CCA name.
-        thickness_unit : str, optional
+        thickness_unit: str, optional
             Units for laminate thickness.
 
         Returns
@@ -918,21 +927,21 @@ class Stackup(GrpcStub):
                                                                  thickness_unit="oz")
         >>>print(f"{total_thickness}")
         """
-        try:
-            if project == "":
-                raise SherlockGetTotalConductorThicknessError(message="Invalid project name")
-            if cca_name == "":
-                raise SherlockGetTotalConductorThicknessError(message="Invalid CCA name")
-            if thickness_unit == "":
-                raise SherlockGetTotalConductorThicknessError(message="Invalid thickness unit")
-            if not self._is_connection_up():
-                LOG.error("Not connected to a gRPC service.")
-                return
+        if project == "":
+            raise SherlockGetTotalConductorThicknessError(message="Invalid project name")
+        if cca_name == "":
+            raise SherlockGetTotalConductorThicknessError(message="Invalid CCA name")
+        if thickness_unit == "":
+            raise SherlockGetTotalConductorThicknessError(message="Invalid thickness unit")
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockStackupService_pb2.GetTotalConductorThicknessRequest(
-                project=project, ccaName=cca_name, thicknessUnit=thickness_unit
-            )
-            response = self.stub.getTotalConductorThickness(request)
+        request = SherlockStackupService_pb2.GetTotalConductorThicknessRequest(
+            project=project, ccaName=cca_name, thicknessUnit=thickness_unit
+        )
+        response = self.stub.getTotalConductorThickness(request)
+
+        try:
             if response.returnCode.value == -1:
                 raise SherlockGetTotalConductorThicknessError(response.returnCode.message)
 

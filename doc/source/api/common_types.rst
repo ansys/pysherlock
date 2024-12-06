@@ -11,3 +11,5 @@ Constants
      :members:
 .. autoclass:: TableDelimiter
      :members:
+.. autoclass:: Measurement
+     :members:

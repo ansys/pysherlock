@@ -73,7 +73,7 @@ def test_all():
     helper_test_export_project(project)
 
 
-def helper_test_delete_project(project):
+def helper_test_delete_project(project: Project):
     """Test delete_project API"""
     try:
         project.delete_project("")
@@ -90,7 +90,7 @@ def helper_test_delete_project(project):
             assert type(e) == SherlockDeleteProjectError
 
 
-def helper_test_import_odb_archive(project):
+def helper_test_import_odb_archive(project: Project):
     """Test import_odb_archive API"""
     try:
         project.import_odb_archive("", True, True, True, True)
@@ -107,7 +107,7 @@ def helper_test_import_odb_archive(project):
             assert type(e) == SherlockImportODBError
 
 
-def helper_test_import_ipc2581_archive(project):
+def helper_test_import_ipc2581_archive(project: Project):
     """Test import_ipc2581_archive API"""
     try:
         project.import_ipc2581_archive("", True, True)
@@ -123,7 +123,7 @@ def helper_test_import_ipc2581_archive(project):
             assert type(e) == SherlockImportIpc2581Error
 
 
-def helper_test_generate_project_report(project):
+def helper_test_generate_project_report(project: Project):
     """Test generate_project_report API."""
     try:
         project.generate_project_report("", "John Doe", "Generic Co.", "C:/report.pdf")
@@ -172,7 +172,7 @@ def helper_test_generate_project_report(project):
             assert type(e) == SherlockGenerateProjectReportError
 
 
-def helper_test_list_ccas(project):
+def helper_test_list_ccas(project: Project):
     """Test list_ccas API"""
 
     try:
@@ -210,7 +210,7 @@ def helper_test_list_ccas(project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_cca(project):
+def helper_test_add_cca(project: Project):
     """Test add_cca API"""
 
     try:
@@ -335,7 +335,7 @@ def helper_test_add_cca(project):
         pytest.fail(str(e))
 
 
-def helper_test_add_strain_maps(project):
+def helper_test_add_strain_maps(project: Project):
     """Test add_strain_maps API"""
 
     try:
@@ -1108,7 +1108,7 @@ def helper_test_add_strain_maps(project):
             assert type(e) == SherlockAddStrainMapsError
 
 
-def helper_test_list_strain_maps(project):
+def helper_test_list_strain_maps(project: Project):
     """Test list_strain_maps API"""
 
     try:
@@ -1154,7 +1154,7 @@ def helper_test_list_strain_maps(project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_project(project):
+def helper_test_add_project(project: Project) -> str:
     """Test add_project API"""
 
     try:
@@ -1180,7 +1180,7 @@ def helper_test_add_project(project):
             pytest.fail(str(e))
 
 
-def helper_test_list_thermal_maps(project):
+def helper_test_list_thermal_maps(project: Project):
     """Test list_thermal_maps API"""
 
     expected_cca_name = "Main Board"
@@ -1243,7 +1243,7 @@ def helper_test_list_thermal_maps(project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_thermal_maps(project):
+def helper_test_add_thermal_maps(project: Project):
     """Test add_thermal_maps API"""
 
     try:
@@ -2162,7 +2162,7 @@ def helper_test_add_thermal_maps(project):
         assert type(e) == SherlockAddThermalMapsError
 
 
-def helper_test_update_thermal_maps(project):
+def helper_test_update_thermal_maps(project: Project):
     """Test update_thermal_maps API"""
 
     try:
@@ -2896,7 +2896,7 @@ def helper_test_update_thermal_maps(project):
         pytest.fail(str(e.str_itr()))
 
 
-def helper_test_import_project_zip_archive(project):
+def helper_test_import_project_zip_archive(project: Project):
     """Test import_project_zip_archive API"""
     try:
         project.import_project_zip_archive("", "Demos", "Tutorial Project.zip")
@@ -2926,7 +2926,7 @@ def helper_test_import_project_zip_archive(project):
             assert type(e) == SherlockImportProjectZipArchiveError
 
 
-def helper_test_import_project_zip_archive_single_mode(project):
+def helper_test_import_project_zip_archive_single_mode(project: Project):
     """Test import_project_zip_archive_single_mode API"""
     try:
         project.import_project_zip_archive_single_mode(
@@ -2970,15 +2970,15 @@ def helper_test_import_project_zip_archive_single_mode(project):
             assert type(e) == SherlockImportProjectZipArchiveSingleModeError
 
 
-def clean_up_after_add(project, project_name):
+def clean_up_after_add(project: Project, project_name: str):
     if project_name is not None:
         project.delete_project(project_name)
 
 
-def helper_test_export_project(project):
+def helper_test_export_project(project: Project):
     """Test method for export project"""
     try:
-        result = project.export_project(
+        project.export_project(
             project_name="",
             export_design_files=True,
             export_result_files=True,
@@ -2994,7 +2994,7 @@ def helper_test_export_project(project):
         assert str(e) == "Export project error : Project name is invalid"
 
     try:
-        result = project.export_project(
+        project.export_project(
             project_name="Tutorial Project",
             export_design_files=True,
             export_result_files=True,
@@ -3010,7 +3010,7 @@ def helper_test_export_project(project):
         assert str(e) == "Export project error : Export directory is invalid"
 
     try:
-        result = project.export_project(
+        project.export_project(
             project_name="Tutorial Project",
             export_design_files=True,
             export_result_files=True,
@@ -3027,7 +3027,7 @@ def helper_test_export_project(project):
 
     if project._is_connection_up():
         try:
-            result = project.export_project(
+            project.export_project(
                 project_name="",
                 export_design_files=True,
                 export_result_files=True,
@@ -3069,7 +3069,7 @@ def helper_test_export_project(project):
             pytest.fail(str(e))
 
 
-def helper_test_create_cca_from_modeling_region(project):
+def helper_test_create_cca_from_modeling_region(project: Project):
     """Test create_cca_from_modeling_region API"""
     try:
         project.create_cca_from_modeling_region(

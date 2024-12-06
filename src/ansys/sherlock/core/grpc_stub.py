@@ -13,7 +13,7 @@ import grpc
 class GrpcStub:
     """Provides the gRPC stub."""
 
-    def __init__(self, channel, server_version):
+    def __init__(self, channel: grpc.Channel, server_version: int):
         """Initialize the gRPC stub."""
         self.channel = channel
         self._server_version = server_version

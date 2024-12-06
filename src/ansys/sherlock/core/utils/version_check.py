@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
 """Module for version check done on api methods."""
 import functools
 
@@ -21,12 +21,12 @@ SKIP_VERSION_CHECK = "SKIP"
 def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version: int = None):
     """Check version of server against expected version."""
 
-    def decorate(func):
+    def decorate(func) -> callable:
         """Return wrapped function."""
 
         @functools.wraps(func)
         # Use functools to keep the doc string associated with the wrapped function, for Sphinx.
-        def wrapper(self, *args, **kwargs):
+        def wrapper(self, *args, **kwargs) -> callable:
             """Wrap outer function."""
             if not hasattr(self, "_server_version") or self._server_version is None:
                 raise SherlockVersionError(

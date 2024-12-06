@@ -1,4 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# © 2023-2024 ANSYS, Inc. All rights reserved
 
 import grpc
 import pytest
@@ -18,7 +18,7 @@ def test_all():
     helper_test_get_solders(common)
 
 
-def helper_test_list_units(common):
+def helper_test_list_units(common: Common):
     """Test list_units API"""
 
     if common._is_connection_up():
@@ -35,7 +35,7 @@ def helper_test_list_units(common):
             pytest.fail(str(e))
 
 
-def helper_test_get_solders(common):
+def helper_test_get_solders(common: Common):
     """Test get_solders API"""
 
     if common._is_connection_up():
@@ -46,7 +46,7 @@ def helper_test_get_solders(common):
             pytest.fail(str(e))
 
 
-def helper_test_get_sherlock_info(common):
+def helper_test_get_sherlock_info(common: Common):
     """Test get_sherlock_info API"""
 
     if common._is_connection_up():

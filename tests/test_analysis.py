@@ -29,6 +29,7 @@ from ansys.sherlock.core.types.analysis_types import (
     ElementOrder,
     ModelSource,
     RunAnalysisRequestAnalysisType,
+    RunStrainMapAnalysisRequestAnalysisType,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
@@ -63,7 +64,7 @@ def test_all():
     helper_test_get_parts_list_validation_analysis_props(analysis)
 
 
-def helper_test_run_analysis(analysis):
+def helper_test_run_analysis(analysis: Analysis):
     """Test run_analysis API."""
     natural_frequency_analysis_type = RunAnalysisRequestAnalysisType.NATURAL_FREQ
 
@@ -119,12 +120,8 @@ def helper_test_run_analysis(analysis):
         assert str(e) == "Run analysis error: One or more analyses are missing."
 
 
-def helper_test_run_strain_map_analysis(analysis):
+def helper_test_run_strain_map_analysis(analysis: Analysis):
     """Test run_strain_map_analysis API."""
-    analysis_type_enum = (
-        SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
-    )
-    random_vibe_analysis_type = analysis_type_enum.RandomVibe
     if analysis._is_connection_up():
         try:
             analysis.run_strain_map_analysis(
@@ -132,7 +129,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 "Invalid CCA",
                 [
                     [
-                        random_vibe_analysis_type,
+                        RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -157,7 +154,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 "Main Board",
                 [
                     [
-                        random_vibe_analysis_type,
+                        RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -182,7 +179,7 @@ def helper_test_run_strain_map_analysis(analysis):
                 "Main Board",
                 [
                     [
-                        analysis_type_enum.HarmonicVibe,
+                        RunStrainMapAnalysisRequestAnalysisType.HARMONIC_VIBE,
                         [
                             ["Phase 1", "Harmonic Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Harmonic Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -207,7 +204,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -226,7 +223,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -315,7 +312,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     event_strain_maps,
                 ]
             ],
@@ -334,7 +331,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     event_strain_maps,
                 ]
             ],
@@ -352,7 +349,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM"],
@@ -374,7 +371,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -396,7 +393,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -418,7 +415,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -426,7 +423,7 @@ def helper_test_run_strain_map_analysis(analysis):
                     ],
                 ],
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -449,7 +446,7 @@ def helper_test_run_strain_map_analysis(analysis):
             "Main Board",
             [
                 [
-                    random_vibe_analysis_type,
+                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -466,7 +463,7 @@ def helper_test_run_strain_map_analysis(analysis):
         )
 
 
-def helper_test_get_harmonic_vibe_input_fields(analysis):
+def helper_test_get_harmonic_vibe_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_harmonic_vibe_input_fields()
         assert "harmonic_vibe_count" in fields
@@ -483,7 +480,7 @@ def helper_test_get_harmonic_vibe_input_fields(analysis):
         assert "require_material_assignment_enabled" in fields
 
 
-def helper_test_get_ict_analysis_input_fields(analysis):
+def helper_test_get_ict_analysis_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_ict_analysis_input_fields()
         assert "ict_application_time" in fields
@@ -493,7 +490,7 @@ def helper_test_get_ict_analysis_input_fields(analysis):
         assert "model_source" not in fields
 
 
-def helper_test_get_mechanical_shock_input_fields(analysis):
+def helper_test_get_mechanical_shock_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_mechanical_shock_input_fields()
         assert "shock_result_count" in fields
@@ -520,7 +517,7 @@ def helper_test_get_mechanical_shock_input_fields(analysis):
         assert "natural_freq_max_units" in fields
 
 
-def helper_test_get_solder_fatigue_input_fields(analysis):
+def helper_test_get_solder_fatigue_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_solder_fatigue_input_fields()
         assert "solder_material" in fields
@@ -530,7 +527,7 @@ def helper_test_get_solder_fatigue_input_fields(analysis):
         assert "part_validation_enabled" in fields
 
 
-def helper_test_get_random_vibe_input_fields(analysis):
+def helper_test_get_random_vibe_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_random_vibe_input_fields()
         assert "part_validation_enabled" in fields
@@ -552,7 +549,7 @@ def helper_test_get_random_vibe_input_fields(analysis):
         assert "strain_map_natural_freqs" in fields
 
 
-def helper_test_translate_field_names(analysis):
+def helper_test_translate_field_names(analysis: Analysis):
     """Test translating the analysis field names."""
 
     results = analysis._translate_field_names(
@@ -614,7 +611,7 @@ def helper_test_translate_field_names(analysis):
     assert results == expected
 
 
-def helper_test_update_harmonic_vibe_props(analysis):
+def helper_test_update_harmonic_vibe_props(analysis: Analysis):
     try:
         analysis.update_harmonic_vibe_props(
             "",
@@ -820,7 +817,7 @@ def helper_test_update_harmonic_vibe_props(analysis):
             pytest.fail(str(e))
 
 
-def helper_test_set_update_harmonic_vibe_props_request_properties(analysis):
+def helper_test_set_update_harmonic_vibe_props_request_properties(analysis: Analysis):
     properties = [
         {
             "cca_name": "Main Board",
@@ -841,31 +838,31 @@ def helper_test_set_update_harmonic_vibe_props_request_properties(analysis):
             "strain_map_natural_freq": 222.45,
         },
     ]
-    mockRequest = Mock()
-    mockHvProperties = Mock()
-    mockRequest.harmonicVibeProperties.add.return_value = mockHvProperties
+    mock_request = Mock()
+    mock_hv_properties = Mock()
+    mock_request.harmonicVibeProperties.add.return_value = mock_hv_properties
 
-    analysis._set_update_harmonic_vibe_props_request_properties(mockRequest, properties)
+    analysis._set_update_harmonic_vibe_props_request_properties(mock_request, properties)
 
-    assert mockHvProperties.ccaName == "Main Board"
-    assert mockHvProperties.modelSource == ModelSource.STRAIN_MAP
-    assert mockHvProperties.harmonicVibeCount == 4
-    assert mockHvProperties.harmonicVibeDamping == "0.015, 0.025"
-    assert mockHvProperties.partValidationEnabled == True
-    assert mockHvProperties.requireMaterialAssignmentEnabled == True
-    assert mockHvProperties.analysisTemp == 30
-    assert mockHvProperties.analysisTempUnits == "F"
-    assert mockHvProperties.forceModelRebuild == "FORCE"
-    assert mockHvProperties.filterByEventFrequency == True
-    assert mockHvProperties.naturalFreqMin == 50
-    assert mockHvProperties.naturalFreqMinUnits == "Hz"
-    assert mockHvProperties.naturalFreqMax == 1000
-    assert mockHvProperties.naturalFreqMaxUnits == "Hz"
-    assert mockHvProperties.reuseModalAnalysis == True
-    assert mockHvProperties.strainMapNaturalFreq == 222.45
+    assert mock_hv_properties.ccaName == "Main Board"
+    assert mock_hv_properties.modelSource == ModelSource.STRAIN_MAP
+    assert mock_hv_properties.harmonicVibeCount == 4
+    assert mock_hv_properties.harmonicVibeDamping == "0.015, 0.025"
+    assert mock_hv_properties.partValidationEnabled == True
+    assert mock_hv_properties.requireMaterialAssignmentEnabled == True
+    assert mock_hv_properties.analysisTemp == 30
+    assert mock_hv_properties.analysisTempUnits == "F"
+    assert mock_hv_properties.forceModelRebuild == "FORCE"
+    assert mock_hv_properties.filterByEventFrequency == True
+    assert mock_hv_properties.naturalFreqMin == 50
+    assert mock_hv_properties.naturalFreqMinUnits == "Hz"
+    assert mock_hv_properties.naturalFreqMax == 1000
+    assert mock_hv_properties.naturalFreqMaxUnits == "Hz"
+    assert mock_hv_properties.reuseModalAnalysis == True
+    assert mock_hv_properties.strainMapNaturalFreq == 222.45
 
 
-def helper_test_update_ict_analysis_props(analysis):
+def helper_test_update_ict_analysis_props(analysis: Analysis):
     try:
         analysis.update_ict_analysis_props(
             "",
@@ -994,7 +991,7 @@ def helper_test_update_ict_analysis_props(analysis):
             pytest.fail(str(e))
 
 
-def helper_test_update_mechanical_shock_props(analysis):
+def helper_test_update_mechanical_shock_props(analysis: Analysis):
     try:
         analysis.update_mechanical_shock_props(
             "",
@@ -1158,7 +1155,7 @@ def helper_test_update_mechanical_shock_props(analysis):
         pytest.fail(str(e))
 
 
-def helper_test_update_solder_fatigue_props(analysis):
+def helper_test_update_solder_fatigue_props(analysis: Analysis):
     try:
         analysis.update_solder_fatigue_props(
             "",
@@ -1285,7 +1282,7 @@ def helper_test_update_solder_fatigue_props(analysis):
         pytest.fail(str(e))
 
 
-def helper_test_update_random_vibe_props(analysis):
+def helper_test_update_random_vibe_props(analysis: Analysis):
     try:
         analysis.update_random_vibe_props(
             "", "Card", random_vibe_damping="0.01, 0.05", analysis_temp=20, analysis_temp_units="C"
@@ -1353,7 +1350,7 @@ def helper_test_update_random_vibe_props(analysis):
             pytest.fail(e.message)
 
 
-def helper_test_get_natural_frequency_input_fields(analysis):
+def helper_test_get_natural_frequency_input_fields(analysis: Analysis):
     if analysis._is_connection_up():
         fields = analysis.get_natural_frequency_input_fields()
         assert "natural_freq_count" in fields
@@ -1365,7 +1362,7 @@ def helper_test_get_natural_frequency_input_fields(analysis):
         assert "require_material_assignment_enabled" in fields
 
 
-def helper_test_update_natural_frequency_props(analysis):
+def helper_test_update_natural_frequency_props(analysis: Analysis):
     try:
         analysis.update_natural_frequency_props(
             "",
@@ -1437,21 +1434,21 @@ def helper_test_update_natural_frequency_props(analysis):
             pytest.fail(e.message)
 
 
-def helper_test_update_pcb_modeling_props(analysis):
+def helper_test_update_pcb_modeling_props(analysis: Analysis):
     try:
         analysis.update_pcb_modeling_props(
             "",
             ["Main Board"],
             [
                 (
-                    "NaturalFreq",
-                    "Bonded",
+                    UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
+                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
                     True,
-                    "Uniform",
-                    "SolidShell",
-                    6,
+                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
+                    ElementOrder.SOLID_SHELL,
+                    6.5,
                     "mm",
-                    3,
+                    3.2,
                     "mm",
                     True,
                 )
@@ -1472,9 +1469,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                     True,
                     "Uniform",
                     "SolidShell",
-                    6,
+                    6.5,
                     "mm",
-                    3,
+                    3.2,
                     "mm",
                     True,
                 )
@@ -1506,9 +1503,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                         True,
                         UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED,
                         ElementOrder.SOLID_SHELL,
-                        6,
+                        6.5,
                         "mm",
-                        3,
+                        3.2,
                         "mm",
                         True,
                     )
@@ -1530,9 +1527,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                         True,
                         UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
                         ElementOrder.SOLID_SHELL,
-                        6,
+                        6.5,
                         "mm",
-                        3,
+                        3.2,
                         "mm",
                         True,
                     )
@@ -1553,9 +1550,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                         True,
                         UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
                         ElementOrder.SOLID_SHELL,
-                        6,
+                        6.5,
                         "mm",
-                        3,
+                        3.2,
                         "mm",
                         True,
                     )
@@ -1576,9 +1573,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                         True,
                         UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED,
                         ElementOrder.SOLID_SHELL,
-                        6,
+                        6.5,
                         "mm",
-                        3,
+                        3.2,
                         "mm",
                         True,
                     )
@@ -1600,9 +1597,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                         UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM_ELEMENTS,
                         94,
                         ElementOrder.SOLID_SHELL,
-                        6,
+                        6.5,
                         "mm",
-                        3,
+                        3.2,
                         "mm",
                         True,
                     )
@@ -1624,9 +1621,9 @@ def helper_test_update_pcb_modeling_props(analysis):
                         UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED_ELEMENTS,
                         94,
                         ElementOrder.SOLID_SHELL,
-                        6,
+                        6.5,
                         "mm",
-                        3,
+                        3.2,
                         "mm",
                         True,
                     )
@@ -1637,7 +1634,7 @@ def helper_test_update_pcb_modeling_props(analysis):
             assert pytest.fail(e.message)
 
 
-def helper_test_update_part_modeling_props(analysis):
+def helper_test_update_part_modeling_props(analysis: Analysis):
     try:
         analysis.update_part_modeling_props(
             "",
@@ -1781,7 +1778,7 @@ def helper_test_update_part_modeling_props(analysis):
         pytest.fail(str(e))
 
 
-def helper_test_update_parts_list_validation_props(analysis):
+def helper_test_update_parts_list_validation_props(analysis: Analysis):
     try:
         analysis.update_part_list_validation_analysis_props("Tutorial Project", "Main Board")
         pytest.fail("No exception raised when using an invalid parameter")
@@ -1906,7 +1903,7 @@ def helper_test_update_parts_list_validation_props(analysis):
         pytest.fail(str(e))
 
 
-def helper_test_get_parts_list_validation_analysis_props(analysis):
+def helper_test_get_parts_list_validation_analysis_props(analysis: Analysis):
     try:
         analysis.get_parts_list_validation_analysis_props("", "Main Board")
         pytest.fail("No exception raised when using an invalid parameter")
