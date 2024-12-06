@@ -37,9 +37,9 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPointsError,
-    SherlockNoGrpcConnectionException,
     SherlockExportLayerImageError,
     SherlockListLayersError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -1872,10 +1872,7 @@ class Layer(GrpcStub):
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
-            request = SherlockLayerService_pb2.ListLayersRequest(
-                project=project,
-                ccaName=cca_name
-            )
+            request = SherlockLayerService_pb2.ListLayersRequest(project=project, ccaName=cca_name)
 
             response = self.stub.listLayers(request)
             if response.returnCode.value == -1:
@@ -1889,12 +1886,9 @@ class Layer(GrpcStub):
 
     @require_version(252)
     def export_layer_image(
-            self,
-            project: str,
-            cca_name: str,
-            export_layers: list[dict[str, bool | int | str]]
+        self, project: str, cca_name: str, export_layers: list[dict[str, bool | int | str]]
     ):
-        """
+        r"""
         Export one or more 2D Layer Viewer images from a project CCA.
 
         Parameters
@@ -1983,15 +1977,18 @@ class Layer(GrpcStub):
                     raise SherlockExportLayerImageError(message="Layer is invalid.")
                 if "file_path" not in export_layer or export_layer["file_path"] == "":
                     raise SherlockExportLayerImageError(message="File Path is invalid.")
-                if ("image_height" not in export_layer
-                        or not isinstance(export_layer["image_height"], int)):
+                if "image_height" not in export_layer or not isinstance(
+                    export_layer["image_height"], int
+                ):
                     raise SherlockExportLayerImageError(message="Image Height is invalid.")
-                if ("image_width" not in export_layer
-                        or not isinstance(export_layer["image_width"], int)):
+                if "image_width" not in export_layer or not isinstance(
+                    export_layer["image_width"], int
+                ):
                     raise SherlockExportLayerImageError(message="Image Width is invalid.")
                 if "overwrite_existing_file" not in export_layer:
-                    raise SherlockExportLayerImageError(message="Overwrite Existing File is "
-                                                                "invalid.")
+                    raise SherlockExportLayerImageError(
+                        message="Overwrite Existing File is " "invalid."
+                    )
 
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
@@ -2015,7 +2012,7 @@ class Layer(GrpcStub):
                     leads_enabled_val = None
 
                 export_layer_info = (
-                    SherlockLayerService_pb2.ExportLayerImageRequest.ExportLayerImageInfo (
+                    SherlockLayerService_pb2.ExportLayerImageRequest.ExportLayerImageInfo(
                         componentsEnabled=components_enabled_val,
                         labelsEnabled=labels_enabled_val,
                         leadsEnabled=leads_enabled_val,
@@ -2025,15 +2022,13 @@ class Layer(GrpcStub):
                         filePath=export_layer["file_path"],
                         imageHeight=export_layer["image_height"],
                         imageWidth=export_layer["image_width"],
-                        overwriteExistingFile=export_layer["overwrite_existing_file"]
+                        overwriteExistingFile=export_layer["overwrite_existing_file"],
                     )
                 )
                 export_layer_image_request.append(export_layer_info)
 
-            request = SherlockLayerService_pb2.ExportLayerImageRequest (
-                project=project,
-                ccaName=cca_name,
-                exportLayers=export_layer_image_request
+            request = SherlockLayerService_pb2.ExportLayerImageRequest(
+                project=project, ccaName=cca_name, exportLayers=export_layer_image_request
             )
 
             response = self.stub.exportLayerImage(request)

@@ -1511,14 +1511,11 @@ def helper_test_export_layer_image(layer):
     export_layers = [
         {
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1543,14 +1540,11 @@ def helper_test_export_layer_image(layer):
     export_layers = [
         {
             "axes_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1564,12 +1558,11 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-            ],
+            "layer": [],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1583,13 +1576,10 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "image_height": 600,
             "image_width": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1603,13 +1593,10 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_width": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1623,13 +1610,10 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1643,13 +1627,10 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 800,
-            "image_width": 800
+            "image_width": 800,
         }
     ]
 
@@ -1664,14 +1645,11 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
             "file_path": test_file_path,
             "image_height": 800,
             "image_width": 800,
-            "overwrite_existing_file": True
+            "overwrite_existing_file": True,
         }
     ]
 
@@ -1702,12 +1680,12 @@ def helper_test_export_layer_image(layer):
                     "Components|comp-top",
                     "Mechanical Shock#|SH Disp @ 5.2ms",
                     "Mechanical Shock#|SH Strain Bot @ 5.2ms",
-                    "Random Vibe#|RV Strain RMS Bot"
+                    "Random Vibe#|RV Strain RMS Bot",
                 ],
                 "file_path": test_file_path,
                 "image_height": 800,
                 "image_width": 800,
-                "overwrite_existing_file": True
+                "overwrite_existing_file": True,
             }
         ]
 
@@ -1719,6 +1697,7 @@ def helper_test_export_layer_image(layer):
 
         if os.path.exists(test_file_path):
             os.remove(test_file_path)
+
 
 if __name__ == "__main__":
     test_all()
