@@ -54,4 +54,5 @@ test-output.xml
 PySherlock.log.*
 doc/build/
 
-doc/source/examples/gallery_examples/**
+doc/source/examples/gallery_examples/*
+doc/source/sg_execution_times.rst
