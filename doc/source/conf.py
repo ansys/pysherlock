@@ -122,7 +122,7 @@ linkcheck_ignore = ["https://www.ansys.com/*"]
 # available until the release is published.
 if switcher_version != "dev":
     linkcheck_ignore.append(
-        f"https://github.com/ansys/pysherlock/releases/tag/v{pysherlock.__version__}"
+        f"https://github.com/ansys/pysherlock/releases/tag/v{version}"
     )
 
 # Suprpress warnings
