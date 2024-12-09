@@ -15,7 +15,7 @@ if "%1" == "clean" goto clean
 if "%1" == "clean-examples" goto clean-examples
 if "%1" == "pdf" goto pdf
 if "%1" == "html" goto html
-if "%1" == "html-noexamples" goto html-noexamples
+if "%1" == "html-examples" goto html-examples
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
@@ -33,11 +33,11 @@ if errorlevel 9009 (
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end
 
-:html
+:html-examples
 %SPHINXBUILD% -M html %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end
 
-:html-noexamples
+:html
 %SPHINXBUILD% -D plot_gallery=0 -b html %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
 goto end
 
