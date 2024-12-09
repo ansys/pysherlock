@@ -35,3 +35,21 @@ Here are examples using Sherlock with the ``ansys-sherlock-core`` library.
       :link-type: ref
 
       Examples on how to run analyses using PySherlock.
+
+
+.. === DOWNLOAD EXAMPLES ===
+
+.. _ref_download_files:
+
+Download example files
+======================
+
+Each example should contain all the necessary resources to run the example.
+However in some cases, external files are needed. A link to those files is
+available at each example page.
+These links refers to the following GitHub repository where you can find all of them:
+
+`GitHub Example Data Repository <example_data_repo_>`_
+
+If you find a missing or broken link, open an issue in
+GitHub (`PySherlock Issues <pysherlock_issues_>`_).
