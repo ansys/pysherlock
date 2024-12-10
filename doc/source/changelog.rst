@@ -9,6 +9,22 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.1 <https://github.com/ansys/pysherlock/releases/tag/v0.8.1>`_ - 2024-12-10
+===============================================================================
+
+Fixed
+^^^^^
+
+- fix: conf.py issue `#467 <https://github.com/ansys/pysherlock/pull/467>`_
+- fix: import statements `#470 <https://github.com/ansys/pysherlock/pull/470>`_
+
+
+Documentation
+^^^^^^^^^^^^^
+
+- MAINT: Bump pytest from 8.3.3 to 8.3.4 `#459 <https://github.com/ansys/pysherlock/pull/459>`_
+- MAINT: Bump ansys-sphinx-theme from 1.2.1 to 1.2.3 `#463 <https://github.com/ansys/pysherlock/pull/463>`_
+
 `0.8.0 <https://github.com/ansys/pysherlock/releases/tag/v0.8.0>`_ - 2024-12-10
 ===============================================================================
 
