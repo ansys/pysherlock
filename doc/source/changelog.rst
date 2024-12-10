@@ -9,6 +9,14 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.0 <https://github.com/ansys/pysherlock/releases/tag/v0.8.0>`_ - 2024-12-10
+===============================================================================
+
+Fixed
+^^^^^
+
+- fix: conf.py issue `#467 <https://github.com/ansys/pysherlock/pull/467>`_
+
 `0.8.0 <https://github.com/ansys/pysherlock/releases/tag/v0.8.0>`_ - 2024-12-09
 ===============================================================================
 
