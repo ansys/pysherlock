@@ -13,8 +13,8 @@ try:
     import SherlockModelService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2
+    from ansys.api.sherlock.v0.SherlockModelService_pb2 import MeshType, TraceOutputType
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
-    from SherlockModelService_pb2 import MeshType, TraceOutputType
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
