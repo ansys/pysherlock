@@ -1,0 +1,10 @@
+.. vale off
+
+model\_fields
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegionCopyData.model_fields
+
+.. vale on
