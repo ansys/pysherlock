@@ -40,7 +40,8 @@ tests = [
 doc = [
     "ansys-sphinx-theme==1.4.2",
     "numpydoc==1.8.0",
-    "Sphinx==8.2.3", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
+    "pandas==2.2.3",
+    "Sphinx==8.2.0", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.6.1",
     "sphinx-gallery==0.19.0",
