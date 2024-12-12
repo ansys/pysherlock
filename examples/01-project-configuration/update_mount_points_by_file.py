@@ -17,34 +17,34 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_update_mount_points:
 
-==========================
-Export AEDB
-==========================
+=================================
+Update Mount Points by File
+=================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+update mount points using a file, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+Sherlock's gRPC API allows users to automate workflows such as updating mount points 
+for printed circuit boards (PCBs) using a CSV file. This script shows how to:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive.
-- Export an AEDB file.
+- Update mount points using a CSV file.
 - Properly close the gRPC connection.
 
-The exported AEDB file can be used for further analysis or integration with other software tools.
+The updated mount points can be used for further structural analysis and validation.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
+# sphinx_gallery_thumbnail_path = './images/update_mount_points_example.png'
 
 import os
 import time
 from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
+    SherlockUpdateMountPointsByFileError,
     SherlockImportODBError,
 )
 from ansys.sherlock.core import launcher
@@ -54,10 +54,8 @@ from ansys.sherlock.core import launcher
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -75,7 +73,7 @@ try:
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
-        project="Test",
+        project="Tutorial",
         cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
@@ -83,24 +81,21 @@ except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
+# Update Mount Points by File
+# ============================
+# Update the mount points for the "Card" of the "Tutorial" project using a CSV file.
 
-time.sleep(5)  # Allow time for the project to load completely
+csv_file_path = os.path.join(os.getcwd(), "updateMountPoints.csv")
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
+    sherlock.layer.update_mount_points_by_file(
+        project_name="Tutorial",
         cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+        file_path=csv_file_path,
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Mount points updated successfully using the CSV file.")
+except SherlockUpdateMountPointsByFileError as e:
+    print(f"Error updating mount points by file: {str(e)}")
 
 ###############################################################################
 # Exit Sherlock
