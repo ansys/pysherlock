@@ -17,35 +17,35 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_update_test_points:
 
-==========================
-Export AEDB
-==========================
+=================================
+Update Test Points by File
+=================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+update test points using a CSV file, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+Sherlock's gRPC API allows users to automate workflows such as updating test 
+points for printed circuit boards (PCBs) using a CSV file. This script shows how to:
 
 - Launch the Sherlock service.
-- Import an ODB++ archive.
-- Export an AEDB file.
+- Import a project zip archive.
+- Update test points using a CSV file.
 - Properly close the gRPC connection.
 
-The exported AEDB file can be used for further analysis or integration with other software tools.
+The updated test points ensure accurate validation during the testing phase.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
+# sphinx_gallery_thumbnail_path = './images/update_test_points_example.png'
 
 import os
 import time
 from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
-    SherlockImportODBError,
+    SherlockUpdateTestPointsByFileError,
+    SherlockImportProjectZipArchiveError,
 )
 from ansys.sherlock.core import launcher
 
@@ -54,53 +54,47 @@ from ansys.sherlock.core import launcher
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Project Zip Archive
+# ===========================
+# Import the project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
+    project_zip_path = os.path.join(
+        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
     )
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
-        project="Test",
-        cca_name="Card",
+    sherlock.project.import_project_zip_archive(
+        project_name="Tutorial Project",
+        project_dir="Demos",
+        zip_file_path=project_zip_path,
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Project zip archive imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {str(e)}")
 
 ###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
+# Update Test Points by File
+# ===========================
+# Update the test points for the "Main Board" of the "Tutorial Project" using a CSV file.
 
-time.sleep(5)  # Allow time for the project to load completely
+csv_file_path = os.path.join(
+    os.getenv('PARTSDIR'), "AM", "SHERLOCK", "TestPoints.csv"
+)
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
-        cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+    sherlock.layer.update_test_points_by_file(
+        project_name="Tutorial Project",
+        cca_name="Main Board",
+        file_path=csv_file_path,
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Test points updated successfully using the CSV file.")
+except SherlockUpdateTestPointsByFileError as e:
+    print(f"Error updating test points by file: {str(e)}")
 
 ###############################################################################
 # Exit Sherlock

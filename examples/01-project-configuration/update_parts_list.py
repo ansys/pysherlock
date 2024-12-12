@@ -17,35 +17,38 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_update_parts_list:
 
-==========================
-Export AEDB
-==========================
+==================================
+Update Parts List
+==================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+update the parts list, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+Sherlock's gRPC API allows users to automate workflows such as updating the 
+parts list for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive.
-- Export an AEDB file.
+- Update the parts list.
 - Properly close the gRPC connection.
 
-The exported AEDB file can be used for further analysis or integration with other software tools.
+The updated parts list ensures alignment with a specified library for consistency and accuracy.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
+# sphinx_gallery_thumbnail_path = './images/update_parts_list_example.png'
 
 import os
-import time
 from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
+    SherlockUpdatePartsListError,
     SherlockImportODBError,
+)
+from ansys.sherlock.core.types.parts_types import (
+    PartsListSearchMatchingMode,
+    PartsListSearchDuplicationMode,
 )
 from ansys.sherlock.core import launcher
 
@@ -54,10 +57,8 @@ from ansys.sherlock.core import launcher
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -83,24 +84,21 @@ except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
-
-time.sleep(5)  # Allow time for the project to load completely
+# Update Parts List
+# ==================
+# Update the parts list for the "Card" of the "Test" project.
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
+    sherlock.parts.update_parts_list(
+        project_name="Test",
         cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+        library_name="Sherlock Part Library",
+        matching_mode=PartsListSearchMatchingMode.BOTH,
+        duplication_mode=PartsListSearchDuplicationMode.ERROR,
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Parts list updated successfully.")
+except SherlockUpdatePartsListError as e:
+    print(f"Error updating parts list: {str(e)}")
 
 ###############################################################################
 # Exit Sherlock

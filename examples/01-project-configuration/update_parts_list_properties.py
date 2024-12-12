@@ -17,35 +17,36 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_update_parts_list_properties:
 
-==========================
-Export AEDB
-==========================
+============================================
+Update and Export Parts List Properties
+============================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+update the parts list properties, export the parts list, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+Sherlock's gRPC API allows users to automate workflows such as updating the 
+parts list properties and exporting the parts list for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive.
-- Export an AEDB file.
+- Update the parts list properties.
+- Export the parts list.
 - Properly close the gRPC connection.
 
-The exported AEDB file can be used for further analysis or integration with other software tools.
+The updated properties and exported list ensure consistency and provide documentation for further use.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
+# sphinx_gallery_thumbnail_path = './images/update_parts_list_properties_example.png'
 
 import os
-import time
 from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
+    SherlockUpdatePartsListPropertiesError,
     SherlockImportODBError,
+    SherlockExportPartsListError,
 )
 from ansys.sherlock.core import launcher
 
@@ -54,10 +55,8 @@ from ansys.sherlock.core import launcher
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -83,24 +82,62 @@ except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
-
-time.sleep(5)  # Allow time for the project to load completely
+# Update Parts List Properties
+# ============================
+# Update the parts list properties for the "Card" of the "Test" project.
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
+    parts_properties = [
+        {
+            "reference_designators": ["C1"],
+            "properties": [
+                {"name": "partType", "value": "RESISTOR"}
+            ]
+        },
+        {
+            "reference_designators": ["C2"],
+            "properties": [
+                {"name": "locX", "value": "1"},
+                {"name": "userNotes", "value": "test"}
+            ]
+        },
+        {
+            "reference_designators": ["U6"],
+            "properties": [
+                {"name": "userNotes", "value": "test2"}
+            ]
+        },
+        {
+            "reference_designators": ["U7"],
+            "properties": [
+                {"name": "leadBend", "value": "45"}
+            ]
+        }
+    ]
+    sherlock.parts.update_parts_list_properties(
+        project_name="Test",
         cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+        properties=parts_properties,
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Parts list properties updated successfully.")
+except SherlockUpdatePartsListPropertiesError as e:
+    print(f"Error updating parts list properties: {str(e)}")
+
+###############################################################################
+# Export Parts List
+# ==================
+# Export the parts list for the "Card" of the "Test" project to a CSV file.
+
+try:
+    export_path = os.path.join(os.getcwd(), 'exportedPartsList.csv')
+    sherlock.parts.export_parts_list(
+        project_name="Test",
+        cca_name="Card",
+        file_path=export_path,
+    )
+    print("Parts list exported successfully to", export_path)
+except SherlockExportPartsListError as e:
+    print(f"Error exporting parts list: {str(e)}")
 
 ###############################################################################
 # Exit Sherlock
