@@ -1,0 +1,158 @@
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"""
+.. _ref_update_thermal_maps:
+
+==================================
+Update Thermal Maps
+==================================
+
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+update thermal maps, and properly close the connection.
+
+Description
+-----------
+Sherlock's gRPC API allows users to automate workflows such as updating thermal maps for printed 
+circuit boards (PCBs). This script shows how to:
+
+- Launch the Sherlock service.
+- Import a project zip archive.
+- Update thermal maps.
+- Properly close the gRPC connection.
+
+The updated thermal maps ensure the accuracy of thermal profiles and board configurations.
+"""
+
+# sphinx_gallery_thumbnail_path = './images/update_thermal_maps_example.png'
+
+import os
+import time
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdateThermalMapsError,
+)
+from ansys.sherlock.core.types.project_types import (
+    BoardBounds,
+    ImageBounds,
+    ImageFile,
+    LegendBounds,
+    LegendOrientation,
+    ThermalBoardSide,
+    ThermalMapsFileType,
+)
+from ansys.sherlock.core import launcher
+
+###############################################################################
+# Launch PySherlock service
+# ==========================
+# Launch the Sherlock service and ensure proper initialization.
+
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+
+sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Import Project Zip Archive
+# ============================
+# Import the project zip archive from the Sherlock tutorial directory.
+
+try:
+    project_zip_path = os.path.join(
+        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
+    )
+    sherlock.project.import_project_zip_archive(
+        project_name="Tutorial Project",
+        demo_folder="Demos",
+        file_path=project_zip_path,
+    )
+    print("Project zip archive imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {str(e)}")
+
+# Wait for 10 seconds to ensure the project is properly imported
+time.sleep(10)
+
+###############################################################################
+# Update Thermal Maps
+# ===================
+# Update the thermal maps for the "Tutorial Project".
+
+try:
+    thermal_map_properties = ImageFile(
+        board_bounds=BoardBounds([
+            (1.0, 2.0),
+            (5.0, 1.0),
+            (5.0, 5.0),
+            (1.0, 5.0)
+        ]),
+        coordinate_units="mm",
+        image_bounds=ImageBounds(-95, -57, 114, 290),
+        legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
+        legend_orientation=LegendOrientation.VERTICAL,
+        min_temperature=17.0,
+        min_temperature_units="C",
+        max_temperature=90.0,
+        max_temperature_units="C",
+    )
+
+    add_thermal_map_files = [
+        {
+            "thermal_map_file": os.path.join(
+                ANSYS_ROOT, 'sherlock', 'tutorial', 'ThermalMaps', 'Thermal Image.jpg'
+            ),
+            "thermal_map_file_properties": [
+                {
+                    "file_name": 'Thermal Image.jpg',
+                    "file_type": ThermalMapsFileType.IMAGE,
+                    "file_comment": "Update thermal map",
+                    "thermal_board_side": ThermalBoardSide.BOTH,
+                    "file_data": thermal_map_properties,
+                    "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                    "cca_names": ["Main Board"],
+                },
+            ],
+        }
+    ]
+    sherlock.project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+
+    thermal_map_files = [
+        {
+            "file_name": "Thermal Image.jpg",
+            "file_type": ThermalMapsFileType.IMAGE,
+            "file_comment": "Update thermal map",
+            "thermal_board_side": ThermalBoardSide.TOP,
+            "file_data": thermal_map_properties,
+            "thermal_profiles": ["Environmental/1 - Temp Cycle - Max"],
+            "cca_names": ["Main Board"],
+        },
+    ]
+    sherlock.project.update_thermal_maps("Tutorial Project", thermal_map_files)
+
+    print("Thermal maps updated successfully.")
+except SherlockUpdateThermalMapsError as e:
+    print(f"Error updating thermal maps: {str(e)}")
+
+###############################################################################
+# Exit Sherlock
+# =============
+# Exit the gRPC connection and shut down Sherlock.
+
+sherlock.common.exit(True)
+print("Sherlock gRPC connection closed successfully.")

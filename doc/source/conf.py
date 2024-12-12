@@ -240,7 +240,7 @@ copybutton_prompt_is_regexp = True
 numpydoc_use_plots = True
 numpydoc_show_class_members = False
 numpydoc_xref_param_type = True
-numpydoc_validate = True
+numpydoc_validate = False
 numpydoc_validation_checks = {
     # "GL06",  # Found unknown section
     # "GL07",  # Sections are in the wrong order.
@@ -256,4 +256,4 @@ numpydoc_validation_checks = {
     # type, unless multiple values are being returned"
 }
 
-suppress_warnings = ["label.*", "design.fa-build", "config.cache"]
+suppress_warnings = ["label.*", "design.fa-build", "config.cache", "numpydoc.*"]

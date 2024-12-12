@@ -17,34 +17,34 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_add_cca_and_import_odb:
 
-==========================
-Export AEDB
-==========================
+==================================
+Add Component Circuits Assemblies
+==================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+add CCAs (Component Circuits Assemblies) to a project, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+Sherlock's gRPC API allows users to automate workflows such as adding CCAs to a project 
+and importing ODB++ archives. This script shows how to:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive.
-- Export an AEDB file.
+- Add CCAs to the project.
 - Properly close the gRPC connection.
 
-The exported AEDB file can be used for further analysis or integration with other software tools.
+The added CCAs allow for proper circuit analysis and component tracking within the project.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
+# sphinx_gallery_thumbnail_path = './images/add_cca_and_import_odb_example.png'
 
 import os
 import time
 from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
+    SherlockAddCCAError,
     SherlockImportODBError,
 )
 from ansys.sherlock.core import launcher
@@ -54,10 +54,8 @@ from ansys.sherlock.core import launcher
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -75,32 +73,56 @@ try:
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
-        project="Test",
-        cca_name="Card",
+        project="Tutorial",
+        cca_name="Card"
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
-###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
+# Wait for 5 seconds to ensure the import is complete
+time.sleep(5)
 
-time.sleep(5)  # Allow time for the project to load completely
+###############################################################################
+# Add CCAs to Project
+# ===================
+# Add two CCAs ("Card 2" and "Card 3") to the "Test" project.
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
-        cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+    sherlock.project.add_cca(
+        "Test",
+        [{
+            'cca_name': 'Card 2',
+            'description': 'Second CCA',
+            'default_solder_type': 'SAC305',
+            'default_stencil_thickness': 10,
+            'default_stencil_thickness_units': 'mm',
+            'default_part_temp_rise': 20,
+            'default_part_temp_rise_units': 'C',
+            'guess_part_properties_enabled': False,
+        }]
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Card 2 added successfully.")
+
+    sherlock.project.add_cca(
+        "Test",
+        [{
+            'cca_name': 'Card 3',
+            'description': 'Third CCA',
+            'default_solder_type': 'SAC305',
+            'default_stencil_thickness': 5,
+            'default_stencil_thickness_units': 'in',
+            'default_part_temp_rise': 20,
+            'default_part_temp_rise_units': 'K',
+            'guess_part_properties_enabled': False,
+        }]
+    )
+    print("Card 3 added successfully.")
+except SherlockAddCCAError as e:
+    print(f"Error adding CCA: {str(e)}")
+
+# Wait for 20 seconds before closing the connection
+time.sleep(20)
 
 ###############################################################################
 # Exit Sherlock
