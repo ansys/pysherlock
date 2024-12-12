@@ -17,34 +17,34 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_update_laminate_layer:
 
-==========================
-Export AEDB
-==========================
+================================
+Update Laminate Layer Properties
+================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+update laminate layer properties, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+Sherlock's gRPC API allows users to automate workflows such as updating laminate layer 
+properties for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive.
-- Export an AEDB file.
+- Update laminate layer properties.
 - Properly close the gRPC connection.
 
-The exported AEDB file can be used for further analysis or integration with other software tools.
+The updated properties can be used for further design validation and optimization.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
+# sphinx_gallery_thumbnail_path = './images/update_laminate_layer_example.png'
 
 import os
 import time
 from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
+    SherlockUpdateLaminateLayerError,
     SherlockImportODBError,
 )
 from ansys.sherlock.core import launcher
@@ -54,10 +54,8 @@ from ansys.sherlock.core import launcher
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -83,24 +81,28 @@ except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
-
-time.sleep(5)  # Allow time for the project to load completely
+# Update Laminate Layer Properties
+# =================================
+# Update the laminate layer properties for the "Card" of the "Test" project.
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
+    sherlock.stackup.update_laminate_layer(
+        project_name="Test",
         cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+        layer_number="2",
+        layer_material="Generic",
+        layer_type="FR-4",
+        layer_material_name="Generic FR-4",
+        layer_thickness=0.015,
+        layer_thickness_unit="in",
+        layer_glass_styles=[("106", 68.0, 0.015, "in")],
+        dielectric_material="E-GLASS",
+        conductive_material="COPPER",
+        conductive_thickness="0.0",
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Laminate layer properties updated successfully.")
+except SherlockUpdateLaminateLayerError as e:
+    print(f"Error updating laminate layer properties: {str(e)}")
 
 ###############################################################################
 # Exit Sherlock

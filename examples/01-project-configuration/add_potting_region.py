@@ -17,49 +17,43 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_aedb:
+.. _ref_add_potting_region:
 
-==========================
-Export AEDB
-==========================
+==========================================
+Add Potting Regions for PCB Analysis
+==========================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-and export an AEDB file for a printed circuit board (PCB).
+This example demonstrates how to use the Sherlock gRPC service to:
+
+- Import an ODB++ archive.
+- Add potting regions to a PCB model.
+- Define potting shapes and properties for simulation.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
-This script demonstrates how to:
+In this script, we launch the Sherlock gRPC service, import an ODB++ archive, 
+and create potting regions with specified shapes and properties for a PCB analysis.
 
-- Launch the Sherlock service.
-- Import an ODB++ archive.
-- Export an AEDB file.
-- Properly close the gRPC connection.
-
-The exported AEDB file can be used for further analysis or integration with other software tools.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
-
 import os
-import time
-from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
-    SherlockImportODBError,
-)
+from ansys.sherlock.core.errors import SherlockAddPottingRegionError, SherlockImportODBError
+from ansys.sherlock.core.types.layer_types import PolygonalShape
 from ansys.sherlock.core import launcher
+import time
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
+VERSION = '252'
+ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+# Wait for service to initialize
+time.sleep(5)
 
 ###############################################################################
 # Import ODB++ Archive
@@ -67,44 +61,48 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
     sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
+        file_path=os.path.join(ANSYS_ROOT, 'sherlock', 'tutorial', 'ODB++ Tutorial.tgz'),
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
         project="Test",
-        cca_name="Card",
+        cca_name="Card"
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
-
-time.sleep(5)  # Allow time for the project to load completely
+# Add Potting Region
+# ===================
+# Define a polygonal shape and add it as a potting region to the PCB.
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project="Test",
-        cca_name="Card",
-        export_file=aedb_export_path,
-        include_geometry=True,
-        include_annotations=False,
+    # Define the polygonal shape for the potting region
+    polygonal_shape = PolygonalShape(points=[(0, 0), (0, 6.35), (9.77, 0)], rotation=87.8)
+    
+    # Add the potting region
+    sherlock.layer.add_potting_region(
+        "Test",
+        [{
+            'cca_name': 'Card',
+            'potting_id': 'Test Region',
+            'side': 'TOP',
+            'material': 'epoxyencapsulant',
+            'potting_units': 'in',
+            'thickness': 0.1,
+            'standoff': 0.2,
+            'shape': polygonal_shape
+        }]
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
+    print("Potting region added successfully.")
+except SherlockAddPottingRegionError as e:
+    print(f"Error adding potting region: {str(e)}")
 
 ###############################################################################
 # Exit Sherlock
-# =============
+# ==============
 # Exit the gRPC connection and shut down Sherlock.
 
 sherlock.common.exit(True)
