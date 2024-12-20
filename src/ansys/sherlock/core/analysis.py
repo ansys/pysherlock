@@ -10,6 +10,7 @@ from ansys.sherlock.core.types.analysis_types import (
     ModelSource,
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
+    UpdateComponentFailureMechanismPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
@@ -18,7 +19,9 @@ from ansys.sherlock.core.types.analysis_types import (
 try:
     import SherlockAnalysisService_pb2
     import SherlockAnalysisService_pb2_grpc
+    import SherlockCommonService_pb2
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
     from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2_grpc
 
@@ -2166,3 +2169,68 @@ class Analysis(GrpcStub):
         except SherlockGetPartsListValidationAnalysisPropsError as e:
             LOG.error(str(e))
             raise e
+
+    @require_version(252)
+    def update_component_failure_mechanism_analysis_props(
+        self,
+        request: UpdateComponentFailureMechanismPropsRequest,
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        r"""Update properties for one or more Component Failure Mechanism analysis.
+
+        Parameters
+        ----------
+        request: UpdateComponentFailureMechanismPropsRequest
+            Contains all the information needed to update the properties for one or more component
+            failure mechanism analyses per project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.analysis_types import (
+            ComponentFailureMechanism,
+            UpdateComponentFailureMechanismPropsRequest,
+        )
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive(
+            project="Assembly Tutorial",
+            category="category",
+            archive_file=\
+                "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        )
+        >>> update_request1 = ComponentFailureMechanism(
+            cca_name="Main Board",
+            default_part_temp_rise=1.5,
+            default_part_temp_rise_units="K",
+            part_temp_rise_min_enabled=True,
+            part_validation_enabled=False,
+        )
+        >>> update_request2 = ComponentFailureMechanism(
+            cca_name="Memory Card 1",
+            default_part_temp_rise=-3.25,
+            default_part_temp_rise_units="F",
+            part_temp_rise_min_enabled=False,
+            part_validation_enabled=True,
+        )
+        >>> request = UpdateComponentFailureMechanismPropsRequest(
+            project="Test",
+            component_failure_mechanism_properties_per_cca=[
+                update_request1,
+                update_request2
+            ]
+        )
+        >>> return_codes = sherlock.analysis.\
+                update_component_failure_mechanism_analysis_props(request)
+        >>> for return_code in return_codes:
+                print(f"Return code: value={return_code.value}, message={return_code.message}")
+        """
+        update_request = request._convert_to_grpc()
+
+        responses = []
+        for return_code in self.stub.updateComponentFailureMechanismProps(update_request):
+            responses.append(return_code)
+        return responses

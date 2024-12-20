@@ -21,3 +21,7 @@ Constants
      :members:
 .. autoclass:: UpdatePcbModelingPropsRequestPcbModelType
      :members:
+.. autoclass:: ComponentFailureMechanism
+     :members:
+.. autoclass:: UpdateComponentFailureMechanismPropsRequest
+     :members:

@@ -2,6 +2,10 @@
 
 """Module containing types for the Analysis Service."""
 
+from pydantic import BaseModel, ValidationInfo, field_validator
+
+from ansys.sherlock.core.types.common_types import basic_str_validator
+
 try:
     import SherlockAnalysisService_pb2
 except ModuleNotFoundError:
@@ -114,3 +118,64 @@ class UpdatePcbModelingPropsRequestPcbModelType:
     __model_type = analysis_service.UpdatePcbModelingPropsRequest.Analysis.PcbModelType
     BONDED = __model_type.Bonded
     "BONDED"
+
+
+class ComponentFailureMechanism(BaseModel):
+    """Contains the properties of a component failure mechanism update request."""
+
+    cca_name: str
+    """Name of the CCA."""
+    default_part_temp_rise: float
+    """Default part temperature rise."""
+    default_part_temp_rise_units: str
+    """Default part temperature rise units."""
+    part_temp_rise_min_enabled: bool
+    """Whether part temperature rise value is applied to the minimum temperature defined in the
+    thermal cycle."""
+    part_validation_enabled: bool
+    """Whether part validation should be performed."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateComponentFailureMechanismPropsRequest.ComponentFailureMechanism:
+
+        grpc_data = (
+            analysis_service.UpdateComponentFailureMechanismPropsRequest.ComponentFailureMechanism()
+        )
+
+        grpc_data.ccaName = self.cca_name
+        grpc_data.defaultPartTempRise = self.default_part_temp_rise
+        grpc_data.defaultPartTempRiseUnits = self.default_part_temp_rise_units
+        grpc_data.partTempRiseMinEnabled = self.part_temp_rise_min_enabled
+        grpc_data.partValidationEnabled = self.part_validation_enabled
+        return grpc_data
+
+    @field_validator("cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdateComponentFailureMechanismPropsRequest(BaseModel):
+    """Contains the properties of a component failure mechanism update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    component_failure_mechanism_properties_per_cca: list[ComponentFailureMechanism]
+    """List of potting region data to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateComponentFailureMechanismPropsRequest:
+        request = analysis_service.UpdateComponentFailureMechanismPropsRequest()
+        request.project = self.project
+        for properties in self.component_failure_mechanism_properties_per_cca:
+            request.componentFailureMechanismProperties.append(properties._convert_to_grpc())
+        return request

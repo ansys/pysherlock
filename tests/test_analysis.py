@@ -8,6 +8,7 @@ except ModuleNotFoundError:
 from unittest.mock import Mock
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.analysis import Analysis
@@ -26,10 +27,12 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.types.analysis_types import (
+    ComponentFailureMechanism,
     ElementOrder,
     ModelSource,
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
+    UpdateComponentFailureMechanismPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
@@ -62,6 +65,7 @@ def test_all():
     helper_test_update_part_modeling_props(analysis)
     helper_test_update_parts_list_validation_props(analysis)
     helper_test_get_parts_list_validation_analysis_props(analysis)
+    helper_test_update_component_failure_mechanism_props(analysis)
 
 
 def helper_test_run_analysis(analysis: Analysis):
@@ -1940,6 +1944,86 @@ def helper_test_get_parts_list_validation_analysis_props(analysis: Analysis):
             assert response.avlRequireApprovedManufacturer is not None
         except SherlockGetPartsListValidationAnalysisPropsError as e:
             pytest.fail(str(e))
+
+
+def helper_test_update_component_failure_mechanism_props(analysis: Analysis):
+    """Test update component failure mechanism properties API."""
+    try:
+        ComponentFailureMechanism(
+            cca_name="",
+            default_part_temp_rise=0.1,
+            default_part_temp_rise_units="F",
+            part_temp_rise_min_enabled=True,
+            part_validation_enabled=False,
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateComponentFailureMechanismPropsRequest(
+            project="",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateComponentFailureMechanismPropsRequest(
+            project="Test",
+            component_failure_mechanism_properties_per_cca=["Not a ComponentFailureMechanism"],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Input should be a valid dictionary or instance of ComponentFailureMechanism"
+        )
+
+    component_failure_mechanism = ComponentFailureMechanism(
+        cca_name="Main Board",
+        default_part_temp_rise=1.2,
+        default_part_temp_rise_units="K",
+        part_temp_rise_min_enabled=False,
+        part_validation_enabled=False,
+    )
+    component_failure_mechanism2 = ComponentFailureMechanism(
+        cca_name="Memory Card 1",
+        default_part_temp_rise=2.1,
+        default_part_temp_rise_units="F",
+        part_temp_rise_min_enabled=False,
+        part_validation_enabled=False,
+    )
+    request = UpdateComponentFailureMechanismPropsRequest(
+        project="Invalid project",
+        component_failure_mechanism_properties_per_cca=[
+            component_failure_mechanism,
+            component_failure_mechanism2,
+        ],
+    )
+
+    if analysis._is_connection_up():
+        responses = analysis.update_component_failure_mechanism_analysis_props(request)
+
+        assert len(responses) == 2
+        for return_code in responses:
+            assert return_code.value == -1
+            assert return_code.message == f"Cannot find project: {request.project}"
+
+        request.project = "AssemblyTutorial"
+        responses = analysis.update_component_failure_mechanism_analysis_props(request)
+
+        assert len(responses) == 2
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == ""
 
 
 if __name__ == "__main__":
