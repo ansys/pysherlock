@@ -124,6 +124,7 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinx_design",
@@ -257,3 +258,6 @@ numpydoc_validation_checks = {
 }
 
 suppress_warnings = ["label.*", "design.fa-build", "config.cache", "numpydoc.*"]
+
+# Display todos by setting to True
+todo_include_todos = True
