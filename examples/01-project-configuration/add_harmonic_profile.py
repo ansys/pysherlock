@@ -82,7 +82,7 @@ except SherlockImportODBError as e:
 
 ###############################################################################
 # Create Lifecycle Phase and Add Harmonic Event
-# ============================================
+# ==============================================
 # Create a new lifecycle phase and add a harmonic event to it.
 
 try:
