@@ -37,6 +37,10 @@ locations for printed circuit boards (PCBs) using a CSV file. This script shows 
 - Properly close the gRPC connection.
 
 The updated part locations can ensure consistency across various PCB designs.
+
+.. todo::
+    Before running this script, download the file **partslist.csv** from the repository
+    `Project Configuration`_.
 """
 
 # sphinx_gallery_thumbnail_path = './images/update_part_location_file_example.png'
