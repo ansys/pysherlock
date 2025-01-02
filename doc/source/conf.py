@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 from pathlib import Path
 
-import ansys.tools.visualization_interface as viz_interface
 from ansys_sphinx_theme import (
     ansys_favicon,
     ansys_logo_white,
@@ -42,7 +41,6 @@ html_favicon = ansys_favicon
 # Convert notebooks into Python scripts and include them in the output files
 logger = logging.getLogger(__name__)
 
-viz_interface.DOCUMENTATION_BUILD = True
 pyvista.BUILDING_GALLERY = True
 pyvista.OFF_SCREEN = True
 
