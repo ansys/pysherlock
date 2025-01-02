@@ -19,8 +19,8 @@
 """
 .. _ref_sherlock_odb_import:
 
-=================================== 
-Sherlock ODB++ Import 
+===================================
+Sherlock ODB++ Import
 ===================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
@@ -40,6 +40,7 @@ This script demonstrates:
 
 import os
 import time
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportODBError
 
@@ -48,25 +49,27 @@ from ansys.sherlock.core.errors import SherlockImportODBError
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
 # Import ODB++ Archive
 # =====================
-# Import an ODB++ archive provided with the Sherlock installation. 
+# Import an ODB++ archive provided with the Sherlock installation.
 # Specify project and CCA (Circuit Card Assembly) name arguments.
 
 try:
-    odb_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
-        odb_path, include_components=True, include_nets=True,
-        include_parts=True, include_drcs=True,
-        project="Tutorial", cca_name="Card"
+        odb_path,
+        include_components=True,
+        include_nets=True,
+        include_parts=True,
+        include_drcs=True,
+        project="Tutorial",
+        cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:

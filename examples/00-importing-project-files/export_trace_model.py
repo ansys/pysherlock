@@ -19,11 +19,11 @@
 """
 .. _ref_sherlock_trace_model_export:
 
-===================================== 
-Sherlock Trace Model Export 
+=====================================
+Sherlock Trace Model Export
 =====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project archive,
 generate export parameters for copper layers, and export a trace model.
 
 Description
@@ -37,25 +37,26 @@ This script demonstrates:
 - Properly exiting the gRPC connection.
 """
 
-#sphinx_gallery_thumbnail_path = './images/sherlock_trace_model_export_example.png'
+# sphinx_gallery_thumbnail_path = './images/sherlock_trace_model_export_example.png'
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockModelServiceError,
-    SherlockImportProjectZipArchiveError,
-)
-from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
-from ansys.api.sherlock.v0 import SherlockModelService_pb2
+
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2, SherlockModelService_pb2
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockModelServiceError,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 TESTDIR = os.getcwd()
 
 sherlock = launcher.launch_sherlock(port=9092)
@@ -66,12 +67,8 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import a sample project ZIP archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
-    sherlock.project.import_project_zip_archive(
-        "Tutorial Project", "Demos", project_zip_path
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
+    sherlock.project.import_project_zip_archive("Tutorial Project", "Demos", project_zip_path)
     print("Project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project: {str(e)}")

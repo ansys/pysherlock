@@ -47,8 +47,9 @@ management. This script demonstrates:
 
 import os
 import time
-from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
 
 ###############################################################################
 # Launch PySherlock service
@@ -56,8 +57,8 @@ from ansys.sherlock.core import launcher
 #
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
 
@@ -70,12 +71,8 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import a tutorial project ZIP archive provided with Sherlock installation.
 
 try:
-    project_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
-    sherlock.project.import_project_zip_archive(
-        "Tutorial Project", "Demos", project_path
-    )
+    project_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
+    sherlock.project.import_project_zip_archive("Tutorial Project", "Demos", project_path)
     print("Project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project: {str(e)}")
