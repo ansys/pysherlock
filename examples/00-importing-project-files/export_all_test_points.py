@@ -19,16 +19,17 @@
 """
 .. _ref_sherlock_export_test_points:
 
-======================== 
+========================
 Export All Test Points
 ========================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
 and export all test points for a printed circuit board (PCB).
 
 Description
 -----------
-Sherlock's gRPC API enables users to automate various workflows, including exporting all test points for a PCB.
+Sherlock's gRPC API enables users to automate various workflows, including exporting all
+test points for a PCB.
 This script covers:
 
 - Launching the Sherlock service.
@@ -41,18 +42,19 @@ This script covers:
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockImportProjectZipArchiveError,
-    SherlockExportAllTestPointsError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockExportAllTestPointsError,
+    SherlockImportProjectZipArchiveError,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
+VERSION = "252"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
@@ -65,9 +67,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the tutorial project zip archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
         project="Tutorial Project", description="Demos", file_path=project_zip_path
     )

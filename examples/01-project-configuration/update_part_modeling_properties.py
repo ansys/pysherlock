@@ -23,12 +23,12 @@
 Update Part Modeling Properties
 ==========================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 update part modeling properties, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as updating part 
+Sherlock's gRPC API allows users to automate workflows such as updating part
 modeling properties for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
@@ -42,19 +42,17 @@ The updated properties ensure accurate simulation results for mechanical and the
 # sphinx_gallery_thumbnail_path = './images/update_part_modeling_props_example.png'
 
 import os
-from ansys.sherlock.core.errors import (
-    SherlockUpdatePartModelingPropsError,
-    SherlockImportODBError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePartModelingPropsError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -64,9 +62,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,
@@ -86,16 +82,16 @@ except SherlockImportODBError as e:
 
 try:
     modeling_props = {
-        'cca_name': 'Card',
-        'part_enabled': True,
-        'part_min_size': 1,
-        'part_min_size_units': 'in',
-        'part_elem_order': 'First Order (Linear)',
-        'part_max_edge_length': 1,
-        'part_max_edge_length_units': 'in',
-        'part_max_vertical': 1,
-        'part_max_vertical_units': 'in',
-        'part_results_filtered': True
+        "cca_name": "Card",
+        "part_enabled": True,
+        "part_min_size": 1,
+        "part_min_size_units": "in",
+        "part_elem_order": "First Order (Linear)",
+        "part_max_edge_length": 1,
+        "part_max_edge_length_units": "in",
+        "part_max_vertical": 1,
+        "part_max_vertical_units": "in",
+        "part_results_filtered": True,
     }
     sherlock.analysis.update_part_modeling_props(
         project_name="Test",

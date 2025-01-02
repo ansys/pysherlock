@@ -28,7 +28,8 @@ and configure ICT analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform ICT (In-Circuit Test) analysis. This script includes the following steps:
+Sherlock allows you to perform ICT (In-Circuit Test) analysis. This script includes
+the following steps:
 
 - Launch the Sherlock service.
 - Import ODB++ archive into the project.
@@ -41,17 +42,17 @@ For further details, refer to the official documentation on ICT analysis in Sher
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_ict_analysis_example.png'
 
 import os
-import time
-from ansys.sherlock.core.errors import SherlockUpdateICTAnalysisPropsError, SherlockImportODBError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateICTAnalysisPropsError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -63,8 +64,19 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
@@ -78,14 +90,16 @@ try:
     # Update properties for ICT analysis
     sherlock.analysis.update_ict_analysis_props(
         "Test",
-        [{
-            'cca_name': 'Card',
-            'ict_application_time': 2,
-            'ict_application_time_units': 'sec',
-            'ict_number_of_events': 10,
-            'part_validation_enabled': False,
-            'require_material_assignment_enabled': False,
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "ict_application_time": 2,
+                "ict_application_time_units": "sec",
+                "ict_number_of_events": 10,
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": False,
+            }
+        ],
     )
 except SherlockUpdateICTAnalysisPropsError as e:
     print(f"Error updating ICT analysis properties: {str(e)}")

@@ -28,30 +28,35 @@ and configure part list validation analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform part list validation analysis. This script includes the following steps:
+Sherlock allows you to perform part list validation analysis. This script includes
+the following steps:
 
 - Launch the Sherlock service.
 - Import ODB++ archive into the project.
 - Configure the properties for part list validation analysis.
 - Exit the gRPC connection after the configuration.
 
-For further details, refer to the official documentation on part list validation analysis in Sherlock.
+For further details, refer to the official documentation on part list validation
+analysis in Sherlock.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_part_list_validation_analysis_example.png'
 
 import os
-import time
+
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockUpdatePartListValidationAnalysisPropsError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockImportODBError,
+    SherlockUpdatePartListValidationAnalysisPropsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -63,8 +68,19 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
@@ -78,17 +94,19 @@ try:
     # Update properties for part list validation analysis
     sherlock.analysis.update_part_list_validation_analysis_props(
         "Test",
-        [{
-            "cca_name": "Card",
-            "process_use_avl": True,
-            "process_use_wizard": True,
-            "process_check_confirmed_properties": False,
-            "process_check_part_numbers": False,
-            "matching_mode": "Part",
-            "avl_require_internal_part_number": False,
-            "avl_require_approved_description": True,
-            "avl_require_approved_manufacturer": False,
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "process_use_avl": True,
+                "process_use_wizard": True,
+                "process_check_confirmed_properties": False,
+                "process_check_part_numbers": False,
+                "matching_mode": "Part",
+                "avl_require_internal_part_number": False,
+                "avl_require_approved_description": True,
+                "avl_require_approved_manufacturer": False,
+            }
+        ],
     )
 except SherlockUpdatePartListValidationAnalysisPropsError as e:
     print(f"Error updating part list validation analysis properties: {str(e)}")

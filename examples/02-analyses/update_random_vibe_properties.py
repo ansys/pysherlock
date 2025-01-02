@@ -28,7 +28,8 @@ and update random vibration properties.
 
 Description
 -----------
-Sherlock allows you to configure random vibration properties for specific PCBs. This script includes the following steps:
+Sherlock allows you to configure random vibration properties for specific PCBs. This script includes
+the following steps:
 
 - Launch the Sherlock service.
 - Import ODB++ archive into the project.
@@ -41,16 +42,17 @@ For further details, refer to the official documentation on random vibration pro
 # sphinx_gallery_thumbnail_path = './images/sherlock_update_random_vibe_props_example.png'
 
 import os
+
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockUpdateRandomVibePropsError, SherlockImportODBError
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateRandomVibePropsError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -62,8 +64,19 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
@@ -80,7 +93,7 @@ try:
         random_vibe_damping="0.01, 0.03",
         part_validation_enabled=False,
         require_material_assignment_enabled=False,
-        model_source="GENERATED"
+        model_source="GENERATED",
     )
 except SherlockUpdateRandomVibePropsError as e:
     print(f"Error updating random vibration properties: {str(e)}")

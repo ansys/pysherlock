@@ -28,7 +28,8 @@ and update solder fatigue properties.
 
 Description
 -----------
-This script shows how to configure solder fatigue properties for a PCB assembly. It includes the following steps:
+This script shows how to configure solder fatigue properties for a PCB assembly. It includes the
+following steps:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive into the project.
@@ -41,16 +42,17 @@ For further details, refer to the official documentation on solder fatigue prope
 # sphinx_gallery_thumbnail_path = './images/sherlock_update_solder_fatigue_props_example.png'
 
 import os
+
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockUpdateSolderFatiguePropsError, SherlockImportODBError
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateSolderFatiguePropsError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -61,8 +63,10 @@ sherlock = launcher.launch_sherlock(port=9092)
 
 try:
     # Import ODB++ archive into the project
-    odb_path = os.path.join(ANSYS_ROOT, 'sherlock', 'tutorial', 'ODB++ Tutorial.tgz')
-    sherlock.project.import_odb_archive(odb_path, True, True, True, True, project="Test", cca_name="Card")
+    odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
+    sherlock.project.import_odb_archive(
+        odb_path, True, True, True, True, project="Test", cca_name="Card"
+    )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
 
@@ -74,14 +78,16 @@ except SherlockImportODBError as e:
 try:
     sherlock.analysis.update_solder_fatigue_props(
         "Test",
-        [{
-            'cca_name': 'Card',
-            'solder_material': 'TIN-LEAD (63SN37PB)',
-            'part_temp': 70,
-            'part_temp_units': 'F',
-            'use_part_temp_rise_min': True,
-            'part_validation_enabled': True
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "solder_material": "TIN-LEAD (63SN37PB)",
+                "part_temp": 70,
+                "part_temp_units": "F",
+                "use_part_temp_rise_min": True,
+                "part_validation_enabled": True,
+            }
+        ],
     )
 except SherlockUpdateSolderFatiguePropsError as e:
     print(f"Error updating solder fatigue properties: {str(e)}")

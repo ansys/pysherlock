@@ -23,12 +23,12 @@
 Add Component Circuits Assemblies
 ==================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 add CCAs (Component Circuits Assemblies) to a project, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as adding CCAs to a project 
+Sherlock's gRPC API allows users to automate workflows such as adding CCAs to a project
 and importing ODB++ archives. This script shows how to:
 
 - Launch the Sherlock service.
@@ -43,19 +43,17 @@ The added CCAs allow for proper circuit analysis and component tracking within t
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockAddCCAError,
-    SherlockImportODBError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockAddCCAError, SherlockImportODBError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -65,16 +63,14 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
         project="Tutorial",
-        cca_name="Card"
+        cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
@@ -91,31 +87,35 @@ time.sleep(5)
 try:
     sherlock.project.add_cca(
         "Test",
-        [{
-            'cca_name': 'Card 2',
-            'description': 'Second CCA',
-            'default_solder_type': 'SAC305',
-            'default_stencil_thickness': 10,
-            'default_stencil_thickness_units': 'mm',
-            'default_part_temp_rise': 20,
-            'default_part_temp_rise_units': 'C',
-            'guess_part_properties_enabled': False,
-        }]
+        [
+            {
+                "cca_name": "Card 2",
+                "description": "Second CCA",
+                "default_solder_type": "SAC305",
+                "default_stencil_thickness": 10,
+                "default_stencil_thickness_units": "mm",
+                "default_part_temp_rise": 20,
+                "default_part_temp_rise_units": "C",
+                "guess_part_properties_enabled": False,
+            }
+        ],
     )
     print("Card 2 added successfully.")
 
     sherlock.project.add_cca(
         "Test",
-        [{
-            'cca_name': 'Card 3',
-            'description': 'Third CCA',
-            'default_solder_type': 'SAC305',
-            'default_stencil_thickness': 5,
-            'default_stencil_thickness_units': 'in',
-            'default_part_temp_rise': 20,
-            'default_part_temp_rise_units': 'K',
-            'guess_part_properties_enabled': False,
-        }]
+        [
+            {
+                "cca_name": "Card 3",
+                "description": "Third CCA",
+                "default_solder_type": "SAC305",
+                "default_stencil_thickness": 5,
+                "default_stencil_thickness_units": "in",
+                "default_part_temp_rise": 20,
+                "default_part_temp_rise_units": "K",
+                "guess_part_properties_enabled": False,
+            }
+        ],
     )
     print("Card 3 added successfully.")
 except SherlockAddCCAError as e:

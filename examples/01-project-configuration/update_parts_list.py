@@ -23,12 +23,12 @@
 Update Parts List
 ==================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 update the parts list, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as updating the 
+Sherlock's gRPC API allows users to automate workflows such as updating the
 parts list for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
@@ -42,23 +42,21 @@ The updated parts list ensures alignment with a specified library for consistenc
 # sphinx_gallery_thumbnail_path = './images/update_parts_list_example.png'
 
 import os
-from ansys.sherlock.core.errors import (
-    SherlockUpdatePartsListError,
-    SherlockImportODBError,
-)
-from ansys.sherlock.core.types.parts_types import (
-    PartsListSearchMatchingMode,
-    PartsListSearchDuplicationMode,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePartsListError
+from ansys.sherlock.core.types.parts_types import (
+    PartsListSearchDuplicationMode,
+    PartsListSearchMatchingMode,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -68,9 +66,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,
