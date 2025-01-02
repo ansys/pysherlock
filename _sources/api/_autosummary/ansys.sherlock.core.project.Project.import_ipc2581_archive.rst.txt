@@ -1,0 +1,6 @@
+﻿import\_ipc2581\_archive
+========================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.import_ipc2581_archive
