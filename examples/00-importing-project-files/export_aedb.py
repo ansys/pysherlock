@@ -23,7 +23,7 @@
 Export AEDB
 ==========================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 and export an AEDB file for a printed circuit board (PCB).
 
 Description
@@ -43,18 +43,16 @@ The exported AEDB file can be used for further analysis or integration with othe
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockExportAEDBError,
-    SherlockImportODBError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportODBError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '251'
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
@@ -67,9 +65,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,

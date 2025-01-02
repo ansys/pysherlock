@@ -17,7 +17,7 @@ Python API to interact with `Ansys Sherlock`_ (Reliability Engineering software)
         and background.
 
         :bdg-primary-line:`Install` :bdg-primary-line:`Architecture`
-    
+
     .. grid-item-card:: User guide :fa:`list-alt`
       :link: ref_user_guide
       :link-type: ref

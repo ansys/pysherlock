@@ -23,12 +23,12 @@
 Update Thermal Maps
 ==================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
 update thermal maps, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as updating thermal maps for printed 
+Sherlock's gRPC API allows users to automate workflows such as updating thermal maps for printed
 circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
@@ -43,6 +43,8 @@ The updated thermal maps ensure the accuracy of thermal profiles and board confi
 
 import os
 import time
+
+from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockUpdateThermalMapsError,
@@ -56,15 +58,14 @@ from ansys.sherlock.core.types.project_types import (
     ThermalBoardSide,
     ThermalMapsFileType,
 )
-from ansys.sherlock.core import launcher
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -74,9 +75,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the project zip archive from the Sherlock tutorial directory.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
         project_name="Tutorial Project",
         demo_folder="Demos",
@@ -96,12 +95,7 @@ time.sleep(10)
 
 try:
     thermal_map_properties = ImageFile(
-        board_bounds=BoardBounds([
-            (1.0, 2.0),
-            (5.0, 1.0),
-            (5.0, 5.0),
-            (1.0, 5.0)
-        ]),
+        board_bounds=BoardBounds([(1.0, 2.0), (5.0, 1.0), (5.0, 5.0), (1.0, 5.0)]),
         coordinate_units="mm",
         image_bounds=ImageBounds(-95, -57, 114, 290),
         legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
@@ -115,11 +109,11 @@ try:
     add_thermal_map_files = [
         {
             "thermal_map_file": os.path.join(
-                ANSYS_ROOT, 'sherlock', 'tutorial', 'ThermalMaps', 'Thermal Image.jpg'
+                ANSYS_ROOT, "sherlock", "tutorial", "ThermalMaps", "Thermal Image.jpg"
             ),
             "thermal_map_file_properties": [
                 {
-                    "file_name": 'Thermal Image.jpg',
+                    "file_name": "Thermal Image.jpg",
                     "file_type": ThermalMapsFileType.IMAGE,
                     "file_comment": "Update thermal map",
                     "thermal_board_side": ThermalBoardSide.BOTH,

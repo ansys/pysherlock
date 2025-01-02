@@ -19,11 +19,11 @@
 """
 .. _ref_sherlock_project_export:
 
-====================================== 
-Sherlock Project Export 
+======================================
+Sherlock Project Export
 ======================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project archive,
 and export the project in multiple configurations.
 
 Description
@@ -40,19 +40,20 @@ This script demonstrates:
 
 import os
 import time
+
+from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportProjectError,
     SherlockImportProjectZipArchiveError,
 )
-from ansys.sherlock.core import launcher
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
 
@@ -64,12 +65,8 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import a sample project ZIP archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
-    sherlock.project.import_project_zip_archive(
-        "Tutorial Project", "Demos", project_zip_path
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
+    sherlock.project.import_project_zip_archive("Tutorial Project", "Demos", project_zip_path)
     print("Project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project: {str(e)}")

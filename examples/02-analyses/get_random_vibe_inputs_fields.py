@@ -23,12 +23,12 @@
 Run Random Vibration Analysis
 ==============================
 
-This example demonstrates how to launch the Sherlock gRPC service, run a random vibration 
+This example demonstrates how to launch the Sherlock gRPC service, run a random vibration
 analysis, and retrieve the analysis input fields.
 
 Description
 -----------
-Sherlock provides the ability to run a random vibration analysis using its gRPC interface. This 
+Sherlock provides the ability to run a random vibration analysis using its gRPC interface. This
 script showcases how to:
 
 - Launch the Sherlock service.
@@ -42,9 +42,9 @@ For more details on vibration analysis in Sherlock, refer to the official docume
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_analysis_example.png'
 
-import os
-from ansys.sherlock.core.errors import SherlockRunAnalysisError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockRunAnalysisError
 
 ###############################################################################
 # Launch PySherlock service
