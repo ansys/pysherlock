@@ -44,20 +44,25 @@ For further details, refer to the official documentation on strain map analysis 
 
 import os
 import time
-import pandas as pd
-from ansys.sherlock.core.errors import SherlockRunStrainMapAnalysisError, SherlockImportODBError, SherlockAddStrainMapsError
-from ansys.sherlock.core.types.analysis_types import RunStrainMapAnalysisRequestAnalysisType, ModelSource
-from ansys.sherlock.core.types.project_types import StrainMapsFileType
-from ansys.api.sherlock.v0 import SherlockModelService_pb2
+
+from SherlockModelService_pb2 import RunStrainMapAnalysisRequest
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockAddStrainMapsError,
+    SherlockImportODBError,
+    SherlockRunStrainMapAnalysisError,
+)
+from ansys.sherlock.core.types.analysis_types import ModelSource
+from ansys.sherlock.core.types.project_types import StrainMapsFileType
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -69,18 +74,50 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
 
 try:
     # Add strain maps to the project
-    strain_map_path = ANSYS_ROOT + os.path.sep + "sherlock" + os.path.sep + "tutorial" + os.path.sep + "StrainMaps" + os.path.sep + "StrainMap.csv"
+    strain_map_path = (
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "StrainMaps"
+        + os.path.sep
+        + "StrainMap.csv"
+    )
     sherlock.project.add_strain_maps(
         "Test",
-        [(strain_map_path, "This is the strain map file for the project", StrainMapsFileType.CSV, 0, "SolidID", "PCB Strain", "µε", ["Card"])]
+        [
+            (
+                strain_map_path,
+                "This is the strain map file for the project",
+                StrainMapsFileType.CSV,
+                0,
+                "SolidID",
+                "PCB Strain",
+                "µε",
+                ["Card"],
+            )
+        ],
     )
 except SherlockAddStrainMapsError as e:
     print(f"Error adding strain maps: {str(e)}")
@@ -94,24 +131,26 @@ try:
     # Update properties for harmonic vibration analysis
     sherlock.analysis.update_harmonic_vibe_props(
         "Test",
-        [{
-            "cca_name": "Card",
-            "model_source": ModelSource.STRAIN_MAP,
-            "harmonic_vibe_count": 1,
-            "harmonic_vibe_damping": "0.01",
-            "part_validation_enabled": False,
-            "require_material_assignment_enabled": True,
-            "analysis_temp": 20,
-            "analysis_temp_units": "C",
-            "force_model_rebuild": "AUTO",
-            "filter_by_event_frequency": False,
-            "natural_freq_min": 10,
-            "natural_freq_min_units": "Hz",
-            "natural_freq_max": 1000,
-            "natural_freq_max_units": "KHz",
-            "reuse_modal_analysis": True,
-            "strain_map_natural_freq": 500,
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "model_source": ModelSource.STRAIN_MAP,
+                "harmonic_vibe_count": 1,
+                "harmonic_vibe_damping": "0.01",
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": True,
+                "analysis_temp": 20,
+                "analysis_temp_units": "C",
+                "force_model_rebuild": "AUTO",
+                "filter_by_event_frequency": False,
+                "natural_freq_min": 10,
+                "natural_freq_min_units": "Hz",
+                "natural_freq_max": 1000,
+                "natural_freq_max_units": "KHz",
+                "reuse_modal_analysis": True,
+                "strain_map_natural_freq": 500,
+            }
+        ],
     )
 except SherlockRunStrainMapAnalysisError as e:
     print(f"Error updating harmonic vibe properties: {str(e)}")
@@ -122,15 +161,21 @@ except SherlockRunStrainMapAnalysisError as e:
 # Run the strain map analysis, including harmonic vibration and other analysis types.
 
 try:
-    analysis_request = SherlockModelService_pb2.RunStrainMapAnalysisRequest
+    analysis_type_enum = RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
+
+    analysis_type = analysis_type_enum.HarmonicVibe
     sherlock.analysis.run_strain_map_analysis(
         "Test",
         "Card",
-        [[
-            SherlockModelService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.HarmonicVibe,
-            [["Phase 1", "Harmonic Event", "TOP", "StrainMap - Top"],
-             ["Phase 1", "Harmonic Event", "BOTTOM", "StrainMap - Bottom"]]
-        ]]
+        [
+            [
+                analysis_type,
+                [
+                    ["Phase 1", "Harmonic Event", "TOP", "StrainMap - Top"],
+                    ["Phase 1", "Harmonic Event", "BOTTOM", "StrainMap - Bottom"],
+                ],
+            ]
+        ],
     )
 except SherlockRunStrainMapAnalysisError as e:
     print(f"Error running strain map analysis: {str(e)}")

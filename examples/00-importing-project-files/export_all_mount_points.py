@@ -23,12 +23,13 @@
 Export All Mount Points
 ==========================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
 and export all mount points for a printed circuit board (PCB).
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate various workflows, including exporting all mount points for a PCB.
+Sherlock's gRPC API allows users to automate various workflows, including exporting all
+ mount points for a PCB.
 This script demonstrates how to:
 
 - Launch the Sherlock service.
@@ -43,18 +44,19 @@ The exported mount points can be used for further analysis or design purposes.
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockImportProjectZipArchiveError,
-    SherlockExportAllMountPoints,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockExportAllMountPoints,
+    SherlockImportProjectZipArchiveError,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
+VERSION = "252"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
@@ -67,9 +69,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
         project="Tutorial Project", description="Demos", file_path=project_zip_path
     )

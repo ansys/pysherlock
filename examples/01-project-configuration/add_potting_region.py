@@ -31,24 +31,25 @@ This example demonstrates how to use the Sherlock gRPC service to:
 
 Description
 -----------
-In this script, we launch the Sherlock gRPC service, import an ODB++ archive, 
+In this script, we launch the Sherlock gRPC service, import an ODB++ archive,
 and create potting regions with specified shapes and properties for a PCB analysis.
 
 """
 
 import os
+import time
+
+from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockAddPottingRegionError, SherlockImportODBError
 from ansys.sherlock.core.types.layer_types import PolygonalShape
-from ansys.sherlock.core import launcher
-import time
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -62,12 +63,12 @@ time.sleep(5)
 
 try:
     sherlock.project.import_odb_archive(
-        file_path=os.path.join(ANSYS_ROOT, 'sherlock', 'tutorial', 'ODB++ Tutorial.tgz'),
+        file_path=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
         project="Test",
-        cca_name="Card"
+        cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
@@ -81,20 +82,22 @@ except SherlockImportODBError as e:
 try:
     # Define the polygonal shape for the potting region
     polygonal_shape = PolygonalShape(points=[(0, 0), (0, 6.35), (9.77, 0)], rotation=87.8)
-    
+
     # Add the potting region
     sherlock.layer.add_potting_region(
         "Test",
-        [{
-            'cca_name': 'Card',
-            'potting_id': 'Test Region',
-            'side': 'TOP',
-            'material': 'epoxyencapsulant',
-            'potting_units': 'in',
-            'thickness': 0.1,
-            'standoff': 0.2,
-            'shape': polygonal_shape
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "potting_id": "Test Region",
+                "side": "TOP",
+                "material": "epoxyencapsulant",
+                "potting_units": "in",
+                "thickness": 0.1,
+                "standoff": 0.2,
+                "shape": polygonal_shape,
+            }
+        ],
     )
     print("Potting region added successfully.")
 except SherlockAddPottingRegionError as e:

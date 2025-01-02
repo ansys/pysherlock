@@ -19,11 +19,11 @@
 """
 .. _ref_sherlock_export_fea_model:
 
-================================= 
+=================================
 Export FEA Model
 =================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
 and export a Finite Element Analysis (FEA) model.
 
 Description
@@ -40,20 +40,21 @@ This script demonstrates:
 
 import os
 import time
+
+from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportFEAModelError,
     SherlockImportProjectZipArchiveError,
 )
 from ansys.sherlock.core.types.common_types import Measurement
-from ansys.sherlock.core import launcher
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
 
@@ -65,9 +66,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the tutorial project zip archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
         project="Tutorial Project", description="Demos", file_path=project_zip_path
     )
