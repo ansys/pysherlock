@@ -23,13 +23,14 @@
 Update and Export Parts List Properties
 ============================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 update the parts list properties, export the parts list, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as updating the 
-parts list properties and exporting the parts list for printed circuit boards (PCBs). This script shows how to:
+Sherlock's gRPC API allows users to automate workflows such as updating the
+parts list properties and exporting the parts list for printed circuit boards (PCBs).
+This script shows how to:
 
 - Launch the Sherlock service.
 - Import an ODB++ archive.
@@ -37,26 +38,28 @@ parts list properties and exporting the parts list for printed circuit boards (P
 - Export the parts list.
 - Properly close the gRPC connection.
 
-The updated properties and exported list ensure consistency and provide documentation for further use.
+The updated properties and exported list ensure consistency and provide
+documentation for further use.
 """
 
 # sphinx_gallery_thumbnail_path = './images/update_parts_list_properties_example.png'
 
 import os
-from ansys.sherlock.core.errors import (
-    SherlockUpdatePartsListPropertiesError,
-    SherlockImportODBError,
-    SherlockExportPartsListError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockExportPartsListError,
+    SherlockImportODBError,
+    SherlockUpdatePartsListPropertiesError,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -66,9 +69,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,
@@ -90,29 +91,14 @@ try:
     parts_properties = [
         {
             "reference_designators": ["C1"],
-            "properties": [
-                {"name": "partType", "value": "RESISTOR"}
-            ]
+            "properties": [{"name": "partType", "value": "RESISTOR"}],
         },
         {
             "reference_designators": ["C2"],
-            "properties": [
-                {"name": "locX", "value": "1"},
-                {"name": "userNotes", "value": "test"}
-            ]
+            "properties": [{"name": "locX", "value": "1"}, {"name": "userNotes", "value": "test"}],
         },
-        {
-            "reference_designators": ["U6"],
-            "properties": [
-                {"name": "userNotes", "value": "test2"}
-            ]
-        },
-        {
-            "reference_designators": ["U7"],
-            "properties": [
-                {"name": "leadBend", "value": "45"}
-            ]
-        }
+        {"reference_designators": ["U6"], "properties": [{"name": "userNotes", "value": "test2"}]},
+        {"reference_designators": ["U7"], "properties": [{"name": "leadBend", "value": "45"}]},
     ]
     sherlock.parts.update_parts_list_properties(
         project_name="Test",
@@ -129,7 +115,7 @@ except SherlockUpdatePartsListPropertiesError as e:
 # Export the parts list for the "Card" of the "Test" project to a CSV file.
 
 try:
-    export_path = os.path.join(os.getcwd(), 'exportedPartsList.csv')
+    export_path = os.path.join(os.getcwd(), "exportedPartsList.csv")
     sherlock.parts.export_parts_list(
         project_name="Test",
         cca_name="Card",

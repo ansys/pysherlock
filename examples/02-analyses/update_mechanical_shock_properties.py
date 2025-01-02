@@ -41,9 +41,12 @@ For further details, refer to the official documentation on mechanical shock ana
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_mechanical_shock_analysis_example.png'
 
 import os
-import time
+
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockUpdateMechanicalShockPropsError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockImportODBError,
+    SherlockUpdateMechanicalShockPropsError,
+)
 from ansys.sherlock.core.types.analysis_types import ModelSource
 
 ###############################################################################
@@ -51,8 +54,8 @@ from ansys.sherlock.core.types.analysis_types import ModelSource
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -64,8 +67,19 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
@@ -79,22 +93,24 @@ try:
     # Update properties for mechanical shock analysis
     sherlock.analysis.update_mechanical_shock_props(
         "Test",
-        [{
-            'cca_name': 'Card',
-            'model_source': ModelSource.GENERATED,
-            'shock_result_count': 3,
-            'critical_shock_strain': 5,
-            'critical_shock_strain_units': 'strain',
-            'part_validation_enabled': True,
-            'require_material_assignment_enabled': False,
-            'force_model_rebuild': 'AUTO',
-            'natural_freq_min': 5,
-            'natural_freq_min_units': 'Hz',
-            'natural_freq_max': 50,
-            'natural_freq_max_units': 'KHz',
-            'analysis_temp': 100,
-            'analysis_temp_units': 'F',
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "model_source": ModelSource.GENERATED,
+                "shock_result_count": 3,
+                "critical_shock_strain": 5,
+                "critical_shock_strain_units": "strain",
+                "part_validation_enabled": True,
+                "require_material_assignment_enabled": False,
+                "force_model_rebuild": "AUTO",
+                "natural_freq_min": 5,
+                "natural_freq_min_units": "Hz",
+                "natural_freq_max": 50,
+                "natural_freq_max_units": "KHz",
+                "analysis_temp": 100,
+                "analysis_temp_units": "F",
+            }
+        ],
     )
 except SherlockUpdateMechanicalShockPropsError as e:
     print(f"Error updating mechanical shock properties: {str(e)}")

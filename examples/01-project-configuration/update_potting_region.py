@@ -23,12 +23,12 @@
 Add and Update Potting Regions
 =============================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
 add potting regions, update existing potting regions, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as adding and updating potting 
+Sherlock's gRPC API allows users to automate workflows such as adding and updating potting
 regions for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
@@ -44,9 +44,11 @@ These updates ensure precise encapsulation and protection for PCB components dur
 
 import os
 import time
+
+from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
-    SherlockImportProjectZipArchiveError,
     SherlockAddPottingRegionError,
+    SherlockImportProjectZipArchiveError,
 )
 from ansys.sherlock.core.types.layer_types import (
     PolygonalShape,
@@ -54,15 +56,14 @@ from ansys.sherlock.core.types.layer_types import (
     PottingRegionUpdateData,
     UpdatePottingRegionRequest,
 )
-from ansys.sherlock.core import launcher
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -72,9 +73,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the project zip archive from the Sherlock tutorial directory.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
         project_name="Tutorial Project",
         project_dir="Demos",
@@ -104,14 +103,14 @@ try:
         project_name="Tutorial Project",
         potting_regions=[
             {
-                'cca_name': 'Main Board',
-                'potting_id': 'Test Region',
-                'side': 'TOP',
-                'material': 'epoxyencapsulant',
-                'potting_units': 'in',
-                'thickness': 0.1,
-                'standoff': 0.2,
-                'shape': polygonal_shape,
+                "cca_name": "Main Board",
+                "potting_id": "Test Region",
+                "side": "TOP",
+                "material": "epoxyencapsulant",
+                "potting_units": "in",
+                "thickness": 0.1,
+                "standoff": 0.2,
+                "shape": polygonal_shape,
             },
         ],
     )

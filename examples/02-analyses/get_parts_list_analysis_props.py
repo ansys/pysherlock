@@ -23,12 +23,12 @@
 Update Part List Validation Analysis
 =====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 update part list validation analysis properties, and retrieve those properties.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as validating and updating part list 
+Sherlock's gRPC API allows users to automate workflows such as validating and updating part list
 analysis properties for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
@@ -37,26 +37,28 @@ analysis properties for printed circuit boards (PCBs). This script shows how to:
 - Retrieve and print the updated part list validation analysis properties.
 - Properly close the gRPC connection.
 
-The retrieved analysis properties can be used for further validation or integration with other software tools.
+The retrieved analysis properties can be used for further validation or integration
+with other software tools.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_update_part_list_validation_analysis_example.png'
+# sphinx_gallery_thumbnail_path = './images/sherlock_update_part_list_valid_analysis_example.png'
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockUpdatePartListValidationAnalysisPropsError,
-    SherlockImportODBError,
-    SherlockGetPartsListValidationAnalysisPropsError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockGetPartsListValidationAnalysisPropsError,
+    SherlockImportODBError,
+    SherlockUpdatePartListValidationAnalysisPropsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
+VERSION = "252"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
@@ -69,9 +71,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,

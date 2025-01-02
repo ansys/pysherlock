@@ -3,8 +3,6 @@
 from datetime import datetime
 import os
 from pathlib import Path
-import numpy as np
-import pyvista
 
 import ansys.tools.visualization_interface as viz_interface
 from ansys_sphinx_theme import (
@@ -16,10 +14,10 @@ from ansys_sphinx_theme import (
     pyansys_logo_black,
     watermark,
 )
-
-from sphinx.application import Sphinx
-from sphinx.util import logging
+import numpy as np
+import pyvista
 from sphinx.builders.latex import LaTeXBuilder
+from sphinx.util import logging
 from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.sherlock import core as pysherlock
@@ -76,9 +74,7 @@ EXAMPLES_ROOT = "examples"
 EXAMPLES_PATH_FOR_DOCS = f"../../{EXAMPLES_ROOT}/"
 
 SOURCE_PATH = Path(__file__).parent.resolve().absolute()
-pyansys_light_mode_logo = str(
-    os.path.join(SOURCE_PATH, "_static", "pyansys-logo-light_mode.png")
-)
+pyansys_light_mode_logo = str(os.path.join(SOURCE_PATH, "_static", "pyansys-logo-light_mode.png"))
 
 # specify the location of your github repo
 html_context = {

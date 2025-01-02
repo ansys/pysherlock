@@ -23,12 +23,13 @@
 Import ODB++ Archive and Parts List
 =============================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 import parts lists, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as importing ODB++ archives and parts lists. 
+Sherlock's gRPC API allows users to automate workflows such as importing ODB++
+archives and parts lists.
 This script shows how to:
 
 - Launch the Sherlock service.
@@ -36,7 +37,8 @@ This script shows how to:
 - Import parts lists with different settings.
 - Properly close the gRPC connection.
 
-These functionalities enable users to prepare projects with ODB++ data and associated parts lists for further analysis.
+These functionalities enable users to prepare projects with ODB++ data and associated parts lists
+for further analysis.
 
 .. todo::
     Before running this script, download the file **partslist.csv** from the repository
@@ -47,16 +49,17 @@ These functionalities enable users to prepare projects with ODB++ data and assoc
 
 import os
 import time
-from ansys.sherlock.core.errors import SherlockImportPartsListError, SherlockImportODBError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockImportPartsListError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -66,9 +69,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import an ODB++ archive with specified project and CCA names.
 
 try:
-    odb_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_path,
         allow_subdirectories=True,
@@ -76,7 +77,7 @@ try:
         use_stackup=True,
         use_materials=True,
         project="Test",
-        cca_name="Card"
+        cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
@@ -89,13 +90,10 @@ except SherlockImportODBError as e:
 
 try:
     parts_list_path = os.path.join(os.getcwd(), "partslist.csv")
-    
+
     # Import parts list with validation enabled
     sherlock.parts.import_parts_list(
-        project="Test",
-        cca_name="Card",
-        file_path=parts_list_path,
-        validate=True
+        project="Test", cca_name="Card", file_path=parts_list_path, validate=True
     )
     print("Parts list imported successfully with validation.")
 except SherlockImportPartsListError as e:
@@ -104,10 +102,7 @@ except SherlockImportPartsListError as e:
 try:
     # Import parts list without validation
     sherlock.parts.import_parts_list(
-        project="Test",
-        cca_name="Card",
-        file_path=parts_list_path,
-        validate=False
+        project="Test", cca_name="Card", file_path=parts_list_path, validate=False
     )
     print("Parts list imported successfully without validation.")
 except SherlockImportPartsListError as e:
