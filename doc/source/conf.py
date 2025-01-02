@@ -103,6 +103,10 @@ extensions = [
     "ansys_sphinx_theme.extension.linkcode",
 ]
 
+# notfound.extension
+notfound_template = "404.rst"
+notfound_urls_prefix = "/../"
+
 autodoc_default_flags = ["members"]
 autosummary_generate = True
 
