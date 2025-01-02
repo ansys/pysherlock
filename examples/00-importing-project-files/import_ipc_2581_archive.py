@@ -23,19 +23,20 @@
 Import IPC-2581 Archive
 ===============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an IPC-2581 archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an IPC-2581 archive,
 and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as importing IPC-2581 archives. 
+Sherlock's gRPC API allows users to automate workflows such as importing IPC-2581 archives.
 This script shows how to:
 
 - Launch the Sherlock service.
 - Import an IPC-2581 archive without specifying a project or CCA name.
 - Properly close the gRPC connection.
 
-This functionality is useful for initializing projects with IPC-2581 data for further analysis and workflows.
+This functionality is useful for initializing projects with IPC-2581 data for further
+analysis and workflows.
 
 .. todo::
     Before running this script, download the file **IPC2581A-TestCase2.cvg** from the repository
@@ -46,16 +47,17 @@ This functionality is useful for initializing projects with IPC-2581 data for fu
 
 import os
 import time
-from ansys.sherlock.core.errors import SherlockImportIpc2581Error
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportIpc2581Error
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -65,11 +67,9 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import an IPC-2581 archive without specifying a project or CCA name.
 
 try:
-    ipc2581_path = os.path.join(os.getcwd(), 'IPC2581A-TestCase2.cvg')
+    ipc2581_path = os.path.join(os.getcwd(), "IPC2581A-TestCase2.cvg")
     sherlock.project.import_ipc2581_archive(
-        file_path=ipc2581_path,
-        allow_subdirectories=True,
-        include_layers=True
+        file_path=ipc2581_path, allow_subdirectories=True, include_layers=True
     )
     print("IPC-2581 archive imported successfully.")
 except SherlockImportIpc2581Error as e:

@@ -19,11 +19,11 @@
 """
 .. _ref_sherlock_export_parts_list:
 
-==================================== 
-Export Parts List 
+====================================
+Export Parts List
 ====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ project archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ project archive,
 and export the parts list associated with the imported project.
 
 Description
@@ -40,19 +40,17 @@ This script demonstrates:
 
 import os
 import time
-from ansys.sherlock.core.errors import (
-    SherlockExportPartsListError,
-    SherlockImportODBError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockExportPartsListError, SherlockImportODBError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
 
@@ -64,9 +62,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import an ODB++ project archive provided with the Sherlock installation.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         odb_archive_path,
         overwrite=True,

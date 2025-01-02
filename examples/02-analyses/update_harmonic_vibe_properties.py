@@ -28,7 +28,8 @@ and configure harmonic vibration analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform harmonic vibration analysis. This script includes the following steps:
+Sherlock allows you to perform harmonic vibration analysis. This script includes
+the following steps:
 
 - Launch the Sherlock service.
 - Import ODB++ archive into the project.
@@ -41,17 +42,17 @@ For further details, refer to the official documentation on harmonic vibration a
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_harmonic_vibe_analysis_example.png'
 
 import os
-import time
-from ansys.sherlock.core.errors import SherlockUpdateHarmonicVibePropsError, SherlockImportODBError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateHarmonicVibePropsError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -63,8 +64,19 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
@@ -78,16 +90,18 @@ try:
     # Update properties for harmonic vibration analysis
     sherlock.analysis.update_harmonic_vibe_props(
         "Test",
-        [{
-            'cca_name': 'Card',
-            'harmonic_vibe_count': 2,
-            'harmonic_vibe_damping': '0.01, 0.05',
-            'part_validation_enabled': False,
-            'require_material_assignment_enabled': False,
-            'analysis_temp': 20,
-            'analysis_temp_units': 'C',
-            'filter_by_event_frequency': False,
-        }]
+        [
+            {
+                "cca_name": "Card",
+                "harmonic_vibe_count": 2,
+                "harmonic_vibe_damping": "0.01, 0.05",
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": False,
+                "analysis_temp": 20,
+                "analysis_temp_units": "C",
+                "filter_by_event_frequency": False,
+            }
+        ],
     )
 except SherlockUpdateHarmonicVibePropsError as e:
     print(f"Error updating harmonic vibration properties: {str(e)}")

@@ -23,11 +23,12 @@
 Sherlock Project Import in Single Mode
 =======================================
 
-This example demonstrates how to launch the Sherlock gRPC service in single-project mode, import a project 
-archive, and handle common exceptions during the import process.
+This example demonstrates how to launch the Sherlock gRPC service in single-project mode,
+import a project archive, and handle common exceptions during the import process.
 
 Description
-Sherlock's gRPC API enables automation of various workflows, including project management. This script demonstrates:
+Sherlock's gRPC API enables automation of various workflows, including project management.
+This script demonstrates:
 
 - Launching the Sherlock service in single-project mode.
 - Importing a sample project archive.
@@ -39,16 +40,17 @@ Sherlock's gRPC API enables automation of various workflows, including project m
 
 import os
 import time
-from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleModeError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleModeError
 
 ###############################################################################
 # Launch PySherlock service in single-project mode
 # ================================================
 # Launch the Sherlock service using the specified project path and wait for initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 PROJECT_PATH = "C:\\temp"
 
 time.sleep(5)  # Allow time for environment setup
@@ -61,9 +63,7 @@ sherlock = launcher.launch_sherlock(port=9092, single_project_path=PROJECT_PATH)
 # Import a tutorial project ZIP archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip"
-    )
+    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive_single_mode(
         "Tutorial Project", "Demos", project_zip_path, os.getcwd()
     )

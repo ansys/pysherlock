@@ -32,9 +32,9 @@ This example demonstrates how to use the Sherlock gRPC service to:
 
 Description
 -----------
-In this script, we launch the Sherlock gRPC service, import an ODB++ archive, 
-and create modeling regions with different shapes for a PCB analysis. The script 
-shows how to configure the modeling region shapes, PCB properties, and trace 
+In this script, we launch the Sherlock gRPC service, import an ODB++ archive,
+and create modeling regions with different shapes for a PCB analysis. The script
+shows how to configure the modeling region shapes, PCB properties, and trace
 properties for each region.
 
 """
@@ -42,19 +42,24 @@ properties for each region.
 # sphinx_gallery_thumbnail_path = './images/add_modeling_region_example.png'
 
 import os
-from ansys.sherlock.core.errors import SherlockAddModelingRegionError, SherlockImportODBError
-from ansys.sherlock.core.types.layer_types import PolygonalShape, CircularShape, RectangularShape, SlotShape
-from ansys.api.sherlock.v0 import SherlockModelService_pb2
-from ansys.sherlock.core import launcher
 import time
+
+from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockAddModelingRegionError, SherlockImportODBError
+from ansys.sherlock.core.types.layer_types import (
+    CircularShape,
+    PolygonalShape,
+    RectangularShape,
+    SlotShape,
+)
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -68,12 +73,12 @@ time.sleep(5)
 
 try:
     sherlock.project.import_odb_archive(
-        file_path=os.path.join(ANSYS_ROOT, 'sherlock', 'tutorial', 'ODB++ Tutorial.tgz'),
+        file_path=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
         project="Test",
-        cca_name="Card"
+        cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
@@ -92,16 +97,22 @@ try:
     U9_package_width = 27.0  # Package Width in mm.
     tolerance = 2.0  # Dimension Tolerance in mm.
 
-    x_min = U9_x - (U9_package_width/2) - tolerance
-    x_max = U9_x + (U9_package_width/2) + tolerance
-    y_min = U9_y - (U9_package_length/2) - tolerance
-    y_max = U9_y + (U9_package_length/2) + tolerance
+    x_min = U9_x - (U9_package_width / 2) - tolerance
+    x_max = U9_x + (U9_package_width / 2) + tolerance
+    y_min = U9_y - (U9_package_length / 2) - tolerance
+    y_max = U9_y + (U9_package_length / 2) + tolerance
 
     # Define the region shapes
-    polygonal_shape = PolygonalShape(points=[(0, 0),(0, 6.35),(9.77, 0)], rotation=87.8)
-    rectangular_shape = RectangularShape(length=U9_package_length, width=U9_package_width, center_x=U9_x, center_y=U9_y, rotation=0.0)
-    slot_shape = SlotShape(length=5.0, width=5.0, node_count=6, center_x=U9_x, center_y=U9_y, rotation=0.0)
-    circular_shape = CircularShape(diameter=5.0, node_count=4, center_x=0.0, center_y=0.0, rotation=30.0)
+    polygonal_shape = PolygonalShape(points=[(0, 0), (0, 6.35), (9.77, 0)], rotation=87.8)
+    rectangular_shape = RectangularShape(
+        length=U9_package_length, width=U9_package_width, center_x=U9_x, center_y=U9_y, rotation=0.0
+    )
+    slot_shape = SlotShape(
+        length=5.0, width=5.0, node_count=6, center_x=U9_x, center_y=U9_y, rotation=0.0
+    )
+    circular_shape = CircularShape(
+        diameter=5.0, node_count=4, center_x=0.0, center_y=0.0, rotation=30.0
+    )
 
     # Create the modeling regions
     modeling_regions = [
@@ -116,14 +127,14 @@ try:
                 "elem_order": "First_Order",
                 "max_mesh_size": 0.5,
                 "max_mesh_size_units": "mm",
-                "quads_preferred": True
+                "quads_preferred": True,
             },
             "trace_model_props": {
                 "trace_model_type": "Enabled",
                 "elem_order": "Second_Order",
                 "trace_mesh_size": 0.3,
-                "trace_mesh_size_units": "mm"
-            }
+                "trace_mesh_size_units": "mm",
+            },
         },
         {
             "cca_name": "Card",
@@ -136,14 +147,14 @@ try:
                 "elem_order": "First_Order",
                 "max_mesh_size": 0.5,
                 "max_mesh_size_units": "mm",
-                "quads_preferred": True
+                "quads_preferred": True,
             },
             "trace_model_props": {
                 "trace_model_type": "Enabled",
                 "elem_order": "Second_Order",
                 "trace_mesh_size": 0.3,
-                "trace_mesh_size_units": "mm"
-            }
+                "trace_mesh_size_units": "mm",
+            },
         },
         {
             "cca_name": "Card",
@@ -156,14 +167,14 @@ try:
                 "elem_order": "First_Order",
                 "max_mesh_size": 0.5,
                 "max_mesh_size_units": "mm",
-                "quads_preferred": True
+                "quads_preferred": True,
             },
             "trace_model_props": {
                 "trace_model_type": "Enabled",
                 "elem_order": "Second_Order",
                 "trace_mesh_size": 0.3,
-                "trace_mesh_size_units": "mm"
-            }
+                "trace_mesh_size_units": "mm",
+            },
         },
         {
             "cca_name": "Card",
@@ -176,15 +187,15 @@ try:
                 "elem_order": "First_Order",
                 "max_mesh_size": 0.5,
                 "max_mesh_size_units": "mm",
-                "quads_preferred": True
+                "quads_preferred": True,
             },
             "trace_model_props": {
                 "trace_model_type": "Enabled",
                 "elem_order": "Second_Order",
                 "trace_mesh_size": 0.3,
-                "trace_mesh_size_units": "mm"
-            }
-        }
+                "trace_mesh_size_units": "mm",
+            },
+        },
     ]
 
     # Add modeling regions to the project

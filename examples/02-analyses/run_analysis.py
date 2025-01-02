@@ -23,16 +23,18 @@
 Run Advanced Analysis
 ========================
 
-This example demonstrates how to launch the Sherlock gRPC service and run multiple analysis types 
+This example demonstrates how to launch the Sherlock gRPC service and run multiple analysis types
 on a project, including part validation, natural frequency, thermal derating, and more.
 
 Description
 -----------
-Sherlock provides the ability to perform various types of analyses on a project. This script showcases how to:
+Sherlock provides the ability to perform various types of analyses on a project.
+This script showcases how to:
 
 - Launch the Sherlock service.
 - Import a project into Sherlock.
-- Run several types of analyses, such as part validation, mechanical shock, harmonic vibration, and others.
+- Run several types of analyses, such as part validation, mechanical shock, harmonic vibration,
+and others.
 - Properly close the gRPC connection after all analyses are complete.
 
 The example assumes you have already set up Sherlock and the necessary environment.
@@ -44,17 +46,21 @@ For more details on running specific analyses, refer to the official documentati
 
 import os
 import time
-from ansys.sherlock.core.errors import SherlockRunAnalysisError, SherlockImportODBError
-from ansys.sherlock.core.types.analysis_types import RunAnalysisRequestAnalysisType
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockRunAnalysisError,
+)
+from ansys.sherlock.core.types.analysis_types import RunAnalysisRequestAnalysisType
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -65,9 +71,15 @@ sherlock = launcher.launch_sherlock(port=9092)
 
 try:
     sherlock.project.import_project_zip_archive(
-        "Tutorial Project", 
-        "Demos", 
-        ANSYS_ROOT + os.path.sep + "sherlock" + os.path.sep + "tutorial" + os.path.sep + "Tutorial Project.zip"
+        "Tutorial Project",
+        "Demos",
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "Tutorial Project.zip",
     )
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project: {str(e)}")
@@ -84,16 +96,28 @@ try:
         (RunAnalysisRequestAnalysisType.NATURAL_FREQ, [("", [])]),
         (RunAnalysisRequestAnalysisType.PTH_FATIQUE, [("Environmental", ["1 - Temp Cycle"])]),
         (RunAnalysisRequestAnalysisType.ICT, [("", [])]),
-        (RunAnalysisRequestAnalysisType.SEMICINDUCTOR_WEAROUT, [("Environmental", ["1 - Temp Cycle"])]),
-        (RunAnalysisRequestAnalysisType.SOLDER_JOINT_FATIGUE, [("Environmental", ["1 - Temp Cycle"])]),
+        (
+            RunAnalysisRequestAnalysisType.SEMICINDUCTOR_WEAROUT,
+            [("Environmental", ["1 - Temp Cycle"])],
+        ),
+        (
+            RunAnalysisRequestAnalysisType.SOLDER_JOINT_FATIGUE,
+            [("Environmental", ["1 - Temp Cycle"])],
+        ),
         (RunAnalysisRequestAnalysisType.THERMAL_DERATING, [("Environmental", ["1 - Temp Cycle"])]),
-        (RunAnalysisRequestAnalysisType.COMPONENT_FAILURE_MODE, [("Environmental", ["1 - Temp Cycle"])]),
+        (
+            RunAnalysisRequestAnalysisType.COMPONENT_FAILURE_MODE,
+            [("Environmental", ["1 - Temp Cycle"])],
+        ),
         (RunAnalysisRequestAnalysisType.HARMONIC_VIBE, [("On The Road", ["5 - Harmonic Vibe"])]),
         (RunAnalysisRequestAnalysisType.RANDOM_VIBE, [("On The Road", ["1 - Vibration"])]),
-        (RunAnalysisRequestAnalysisType.MECHANICAL_SHOCK, [("Environmental", ["2 - Shopping Cart"])]),
-        (RunAnalysisRequestAnalysisType.THERMAL_MECH, [("Environmental", ["1 - Temp Cycle"])])
+        (
+            RunAnalysisRequestAnalysisType.MECHANICAL_SHOCK,
+            [("Environmental", ["2 - Shopping Cart"])],
+        ),
+        (RunAnalysisRequestAnalysisType.THERMAL_MECH, [("Environmental", ["1 - Temp Cycle"])]),
     ]
-    
+
     for analysis_type, params in analysis_types:
         sherlock.analysis.run_analysis("Tutorial Project", "Main Board", [(analysis_type, params)])
 

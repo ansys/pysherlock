@@ -23,12 +23,12 @@
 Update Laminate Layer Properties
 ================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 update laminate layer properties, and properly close the connection.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as updating laminate layer 
+Sherlock's gRPC API allows users to automate workflows such as updating laminate layer
 properties for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
@@ -42,20 +42,17 @@ The updated properties can be used for further design validation and optimizatio
 # sphinx_gallery_thumbnail_path = './images/update_laminate_layer_example.png'
 
 import os
-import time
-from ansys.sherlock.core.errors import (
-    SherlockUpdateLaminateLayerError,
-    SherlockImportODBError,
-)
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateLaminateLayerError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -65,9 +62,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"
-    )
+    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         file_path=odb_archive_path,
         allow_subdirectories=True,

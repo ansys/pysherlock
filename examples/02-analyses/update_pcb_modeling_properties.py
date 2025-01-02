@@ -28,7 +28,8 @@ and configure PCB modeling properties for various analysis types.
 
 Description
 -----------
-Sherlock allows you to configure PCB modeling properties for multiple analysis types. This script includes the following steps:
+Sherlock allows you to configure PCB modeling properties for multiple analysis types. This script
+includes the following steps:
 
 - Launch the Sherlock service.
 - Import ODB++ archive into the project.
@@ -41,13 +42,14 @@ For further details, refer to the official documentation on PCB modeling propert
 # sphinx_gallery_thumbnail_path = './images/sherlock_update_pcb_modeling_props_example.png'
 
 import os
+
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockUpdatePcbModelingPropsError, SherlockImportODBError
+from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePcbModelingPropsError
 from ansys.sherlock.core.types.analysis_types import (
+    ElementOrder,
     UpdatePcbModelingPropsRequestAnalysisType,
-    UpdatePcbModelingPropsRequestPcbModelType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
-    ElementOrder
+    UpdatePcbModelingPropsRequestPcbModelType,
 )
 
 ###############################################################################
@@ -55,8 +57,8 @@ from ansys.sherlock.core.types.analysis_types import (
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -68,8 +70,19 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     # Import ODB++ archive into the project
     sherlock.project.import_odb_archive(
-        ANSYS_ROOT + os.path.sep + 'sherlock' + os.path.sep + 'tutorial' + os.path.sep + 'ODB++ Tutorial.tgz',
-        True, True, True, True, project="Test", cca_name="Card"
+        ANSYS_ROOT
+        + os.path.sep
+        + "sherlock"
+        + os.path.sep
+        + "tutorial"
+        + os.path.sep
+        + "ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Test",
+        cca_name="Card",
     )
 except SherlockImportODBError as e:
     print(f"Error importing ODB archive: {str(e)}")
@@ -81,115 +94,115 @@ except SherlockImportODBError as e:
 
 try:
     sherlock.analysis.update_pcb_modeling_props(
-            "Test",
-            ["Card"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ],
-        )
+        "Test",
+        ["Card"],
+        [
+            (
+                UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
+                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                True,
+                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
+                ElementOrder.SOLID_SHELL,
+                6,
+                "mm",
+                3,
+                "mm",
+                True,
+            )
+        ],
+    )
     sherlock.analysis.update_pcb_modeling_props(
-            "Test",
-            ["Card"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ],
-        )
+        "Test",
+        ["Card"],
+        [
+            (
+                UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
+                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                True,
+                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
+                ElementOrder.SOLID_SHELL,
+                6,
+                "mm",
+                3,
+                "mm",
+                True,
+            )
+        ],
+    )
     sherlock.analysis.update_pcb_modeling_props(
-            "Test",
-            ["Card"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.ICT,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ],
-        )
+        "Test",
+        ["Card"],
+        [
+            (
+                UpdatePcbModelingPropsRequestAnalysisType.ICT,
+                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                True,
+                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
+                ElementOrder.SOLID_SHELL,
+                6,
+                "mm",
+                3,
+                "mm",
+                True,
+            )
+        ],
+    )
     sherlock.analysis.update_pcb_modeling_props(
-            "Test",
-            ["Card"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.MECHANICAL_SHOCK,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ],
-        )
+        "Test",
+        ["Card"],
+        [
+            (
+                UpdatePcbModelingPropsRequestAnalysisType.MECHANICAL_SHOCK,
+                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                True,
+                UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED,
+                ElementOrder.SOLID_SHELL,
+                6,
+                "mm",
+                3,
+                "mm",
+                True,
+            )
+        ],
+    )
     sherlock.analysis.update_pcb_modeling_props(
-            "Test",
-            ["Card"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.RANDOM_VIBE,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED_ELEMENTS,
-                    5,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ],
-        )
+        "Test",
+        ["Card"],
+        [
+            (
+                UpdatePcbModelingPropsRequestAnalysisType.RANDOM_VIBE,
+                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                True,
+                UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED_ELEMENTS,
+                5,
+                ElementOrder.SOLID_SHELL,
+                6,
+                "mm",
+                3,
+                "mm",
+                True,
+            )
+        ],
+    )
     sherlock.analysis.update_pcb_modeling_props(
-            "Test",
-            ["Card"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.THERMAL_MECH,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM_ELEMENTS,
-                    5,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ],
-        )
+        "Test",
+        ["Card"],
+        [
+            (
+                UpdatePcbModelingPropsRequestAnalysisType.THERMAL_MECH,
+                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                True,
+                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM_ELEMENTS,
+                5,
+                ElementOrder.SOLID_SHELL,
+                6,
+                "mm",
+                3,
+                "mm",
+                True,
+            )
+        ],
+    )
 except SherlockUpdatePcbModelingPropsError as e:
     print(f"Error updating PCB modeling properties: {str(e)}")
 

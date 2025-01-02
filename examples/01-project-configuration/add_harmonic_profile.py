@@ -23,12 +23,13 @@
 Add Harmonic Vibration Profiles
 =========================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, 
-create a lifecycle phase, add a harmonic event to the phase, and then add harmonic vibration profiles.
+This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
+create a lifecycle phase, add a harmonic event to the phase, and then add harmonic
+vibration profiles.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as adding harmonic vibration profiles 
+Sherlock's gRPC API allows users to automate workflows such as adding harmonic vibration profiles
 to lifecycle phases. This script shows how to:
 
 - Launch the Sherlock service.
@@ -46,16 +47,17 @@ The harmonic vibration profiles simulate the effects of vibration conditions on 
 
 import os
 import time
-from ansys.sherlock.core.errors import SherlockAddHarmonicVibeProfilesError, SherlockImportODBError
+
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockAddHarmonicVibeProfilesError, SherlockImportODBError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = '252'
-ANSYS_ROOT = os.getenv('AWP_ROOT' + VERSION)
+VERSION = "252"
+ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -69,12 +71,12 @@ time.sleep(5)
 
 try:
     sherlock.project.import_odb_archive(
-        file_path=os.path.join(ANSYS_ROOT, 'sherlock', 'tutorial', 'ODB++ Tutorial.tgz'),
+        file_path=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
         allow_subdirectories=True,
         include_layers=True,
         use_stackup=True,
         project="Tutorial",
-        cca_name="Card"
+        cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
@@ -93,7 +95,7 @@ try:
         time_duration=1.5,
         time_units="sec",
         cycle_count=4.0,
-        cycle_units="COUNT"
+        cycle_units="COUNT",
     )
     print("Lifecycle phase 'Example' created successfully.")
 
@@ -109,10 +111,10 @@ try:
         frequency=5,
         direction="45,45",
         load_type="Uniaxial",
-        components="2,4,5"
+        components="2,4,5",
     )
     print("Harmonic event 'Event1' added successfully.")
-    
+
 except SherlockAddHarmonicVibeProfilesError as e:
     print(f"Error adding harmonic event: {str(e)}")
 
@@ -124,15 +126,7 @@ except SherlockAddHarmonicVibeProfilesError as e:
 try:
     sherlock.lifecycle.add_harmonic_vibe_profiles(
         project="Test",
-        profiles=[(
-            "Example",
-            "Event1",
-            "Profile1",
-            "HZ",
-            "G",
-            [(10, 1), (1000, 1)],
-            ""
-        )]
+        profiles=[("Example", "Event1", "Profile1", "HZ", "G", [(10, 1), (1000, 1)], "")],
     )
     print("Harmonic vibration profiles added successfully.")
 except SherlockAddHarmonicVibeProfilesError as e:
