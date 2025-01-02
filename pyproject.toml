@@ -38,7 +38,9 @@ tests = [
     "pytest-cov==6.1.1",
 ]
 doc = [
-    "ansys-sphinx-theme==1.4.2",
+    "ansys-sphinx-theme==1.3.1",
+    "jupyter_sphinx==0.5.3",
+    "matplotlib==3.9.2",
     "numpydoc==1.8.0",
     "pandas==2.2.3",
     "Sphinx==8.2.0", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
