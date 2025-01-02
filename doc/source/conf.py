@@ -13,7 +13,6 @@ from ansys_sphinx_theme import (
     pyansys_logo_black,
     watermark,
 )
-import numpy as np
 from sphinx.builders.latex import LaTeXBuilder
 from sphinx.util import logging
 from sphinx_gallery.sorting import FileNameSortKey
