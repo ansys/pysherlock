@@ -314,11 +314,14 @@ class Layer(GrpcStub):
                 )
             )
         )
-        >>> potting_region_requests = [
-            update_request1,
-            update_request2
-        ]
-        >>> return_codes = sherlock.layer.update_potting_region(request)
+        >>> all_requests = UpdatePottingRegionRequest(
+            "project_name",
+            [
+                update_request1,
+                update_request2
+            ]
+            )
+        >>> return_codes = sherlock.layer.update_potting_region(all_requests)
         """
         update_request = request._convert_to_grpc()
 
