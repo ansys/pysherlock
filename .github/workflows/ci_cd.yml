@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  MAIN_PYTHON_VERSION: '3.10'
+  MAIN_PYTHON_VERSION: '3.13'
   PACKAGE_NAME: 'ansys-sherlock-core'
   PACKAGE_NAMESPACE: 'ansys.sherlock.core'
   DOCUMENTATION_CNAME: 'sherlock.docs.pyansys.com'
@@ -46,7 +46,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-        python-version: [ '3.10', '3.11', '3.12' ]
+        python-version: [ '3.10', '3.11', '3.12', '3.13' ]
         should-release:
           - ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
         exclude:
@@ -67,7 +67,7 @@ jobs:
     runs-on: [ self-hosted, pysherlock ]
     strategy:
       matrix:
-        python-version: [ '3.10', '3.11', '3.12' ]
+        python-version: [ '3.10', '3.11', '3.12', '3.13' ]
 
     steps:
       - uses: actions/checkout@v4
