@@ -56,7 +56,7 @@ from ansys.sherlock.core.errors import SherlockAddHarmonicVibeProfilesError, She
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "252"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
