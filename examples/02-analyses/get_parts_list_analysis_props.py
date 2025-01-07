@@ -58,7 +58,7 @@ from ansys.sherlock.core.errors import (
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "252"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
