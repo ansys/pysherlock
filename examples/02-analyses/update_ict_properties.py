@@ -51,7 +51,7 @@ from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateICT
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
+VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)

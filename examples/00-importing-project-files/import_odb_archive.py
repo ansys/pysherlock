@@ -49,7 +49,7 @@ from ansys.sherlock.core.errors import SherlockImportODBError
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "251"
+VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
