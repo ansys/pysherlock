@@ -53,7 +53,7 @@ from ansys.sherlock.core.types.common_types import Measurement
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "251"
+VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
