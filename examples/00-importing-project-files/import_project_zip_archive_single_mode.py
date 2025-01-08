@@ -49,7 +49,7 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleMode
 # ================================================
 # Launch the Sherlock service using the specified project path and wait for initialization.
 
-VERSION = "251"
+VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 PROJECT_PATH = "C:\\temp"
 
