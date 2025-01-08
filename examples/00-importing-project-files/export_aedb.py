@@ -52,7 +52,7 @@ from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportOD
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
+VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 time.sleep(5)  # Allow time for environment setup
