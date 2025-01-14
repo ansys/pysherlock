@@ -9,6 +9,8 @@ updates:
       - "dependencies"
     commit-message:
       prefix: "MAINT"
+    ignore:
+      - dependency-name: "grpcio"
 
   - package-ecosystem: "github-actions"
     directory: "/"
