@@ -46,7 +46,6 @@ management. This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_import_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
@@ -59,8 +58,6 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
 
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -83,6 +80,5 @@ except SherlockImportProjectZipArchiveError as e:
 #
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(10)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

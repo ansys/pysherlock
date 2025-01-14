@@ -46,7 +46,6 @@ analysis and workflows.
 # sphinx_gallery_thumbnail_path = './images/import_ipc2581_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportIpc2581Error
@@ -69,14 +68,18 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     ipc2581_path = os.path.join(os.getcwd(), "IPC2581A-TestCase2.cvg")
     sherlock.project.import_ipc2581_archive(
-        file_path=ipc2581_path, allow_subdirectories=True, include_layers=True
+        archive_file=ipc2581_path,
+        include_other_layers=True,
+        guess_part_properties=True,
+        project=None,
+        cca_name=None,
+        polyline_simplification=False,
+        polyline_tolerance=0.1,
+        polyline_tolerance_units="mm",
     )
     print("IPC-2581 archive imported successfully.")
 except SherlockImportIpc2581Error as e:
     print(f"Error importing IPC-2581 archive: {str(e)}")
-
-# Wait for 30 seconds to ensure all processes are completed.
-time.sleep(30)
 
 ###############################################################################
 # Exit Sherlock

@@ -39,7 +39,6 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_odb_import_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportODBError
@@ -63,11 +62,12 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
-        odb_path,
-        include_components=True,
-        include_nets=True,
-        include_parts=True,
-        include_drcs=True,
+        archive_file=odb_path,
+        process_layer_thickness=True,
+        include_other_layers=True,
+        process_cutout_file=True,
+        guess_part_properties=True,
+        ims_stackup=True,
         project="Tutorial",
         cca_name="Card",
     )
@@ -80,6 +80,5 @@ except SherlockImportODBError as e:
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

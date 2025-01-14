@@ -39,7 +39,6 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_project_export_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -54,8 +53,6 @@ from ansys.sherlock.core.errors import (
 
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-time.sleep(5)  # Allow time for environment setup
 
 sherlock = launcher.launch_sherlock(port=9092)
 
@@ -79,16 +76,16 @@ except SherlockImportProjectZipArchiveError as e:
 # Export with all options enabled
 try:
     sherlock.project.export_project(
-        "Tutorial Project",
-        export_dfr=True,
-        export_pcb_layers=True,
-        export_components=True,
-        export_nets=True,
-        export_simulations=True,
-        export_settings=True,
-        output_dir=os.getcwd(),
-        output_file="Exported_Project_All.zip",
-        overwrite=True,
+        project_name="Tutorial Project",
+        export_design_files=True,
+        export_result_files=True,
+        export_archive_results=True,
+        export_user_files=True,
+        export_log_files=True,
+        export_system_data=True,
+        export_file_dir=os.getcwd(),
+        export_file_name="Exported_Project_All.zip",
+        overwrite_existing_file=True,
     )
     print("Project exported successfully with all options enabled.")
 except SherlockExportProjectError as e:
@@ -97,44 +94,25 @@ except SherlockExportProjectError as e:
 # Export with limited options
 try:
     sherlock.project.export_project(
-        "Tutorial Project",
-        export_dfr=True,
-        export_pcb_layers=False,
-        export_components=False,
-        export_nets=False,
-        export_simulations=False,
-        export_settings=False,
-        output_dir=os.getcwd(),
-        output_file="Exported_Project_Limited.zip",
-        overwrite=True,
+        project_name="Tutorial Project",
+        export_design_files=True,
+        export_result_files=False,
+        export_archive_results=False,
+        export_user_files=False,
+        export_log_files=False,
+        export_system_data=False,
+        export_file_dir=os.getcwd(),
+        export_file_name="Exported_Project_Limited.zip",
+        overwrite_existing_file=True,
     )
     print("Project exported successfully with limited options.")
 except SherlockExportProjectError as e:
     print(f"Error exporting project (limited options): {str(e)}")
-
-# Export only the settings
-try:
-    sherlock.project.export_project(
-        "Tutorial Project",
-        export_dfr=False,
-        export_pcb_layers=False,
-        export_components=False,
-        export_nets=False,
-        export_simulations=False,
-        export_settings=True,
-        output_dir=os.getcwd(),
-        output_file="Exported_Project_Settings.zip",
-        overwrite=True,
-    )
-    print("Project exported successfully with settings only.")
-except SherlockExportProjectError as e:
-    print(f"Error exporting project (settings only): {str(e)}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(20)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

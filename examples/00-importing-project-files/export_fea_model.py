@@ -39,7 +39,6 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_fea_model_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -56,8 +55,6 @@ from ansys.sherlock.core.types.common_types import Measurement
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
@@ -68,7 +65,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
-        project="Tutorial Project", description="Demos", file_path=project_zip_path
+        project="Tutorial Project", category="Demos", archive_file=project_zip_path
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -104,7 +101,7 @@ try:
                 "aspectRatio": 2,
             }
         ],
-        display_model=True,
+        display_model=False,
         clear_FEA_database=True,
         use_FEA_model_id=True,
         coordinate_units="mm",
@@ -118,6 +115,5 @@ except SherlockExportFEAModelError as e:
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(120)  # Allow time for processing and export
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

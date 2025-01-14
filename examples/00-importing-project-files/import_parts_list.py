@@ -48,7 +48,6 @@ for further analysis.
 # sphinx_gallery_thumbnail_path = './images/import_odb_and_parts_list_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportODBError, SherlockImportPartsListError
@@ -71,13 +70,17 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
-        file_path=odb_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
-        use_materials=True,
+        archive_file=odb_path,
+        process_layer_thickness=True,
+        include_other_layers=True,
+        process_cutout_file=True,
+        guess_part_properties=True,
+        ims_stackup=True,
         project="Test",
         cca_name="Card",
+        polyline_simplification=True,
+        polyline_tolerance=0.2,
+        polyline_tolerance_units="mm",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
@@ -86,30 +89,18 @@ except SherlockImportODBError as e:
 ###############################################################################
 # Import Parts List
 # ==================
-# Import parts lists with different settings for the "Test" project and "Card" CCA.
+# Import parts list for the "Test" project and "Card" CCA.
 
 try:
     parts_list_path = os.path.join(os.getcwd(), "partslist.csv")
 
-    # Import parts list with validation enabled
     sherlock.parts.import_parts_list(
-        project="Test", cca_name="Card", file_path=parts_list_path, validate=True
+        project="Test", cca_name="Card", import_file=parts_list_path, import_as_user_src=True
     )
     print("Parts list imported successfully with validation.")
 except SherlockImportPartsListError as e:
     print(f"Error importing parts list with validation: {str(e)}")
 
-try:
-    # Import parts list without validation
-    sherlock.parts.import_parts_list(
-        project="Test", cca_name="Card", file_path=parts_list_path, validate=False
-    )
-    print("Parts list imported successfully without validation.")
-except SherlockImportPartsListError as e:
-    print(f"Error importing parts list without validation: {str(e)}")
-
-# Wait for 5 seconds to ensure all processes are completed.
-time.sleep(5)
 
 ###############################################################################
 # Exit Sherlock

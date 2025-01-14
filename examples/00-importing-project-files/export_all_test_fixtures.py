@@ -41,7 +41,6 @@ This script covers:
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_test_fixtures_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -57,8 +56,6 @@ from ansys.sherlock.core.errors import (
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
@@ -69,7 +66,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
-        project="Tutorial Project", description="Demos", file_path=project_zip_path
+        project="Tutorial Project", category="Demos", archive_file=project_zip_path
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -80,14 +77,12 @@ except SherlockImportProjectZipArchiveError as e:
 # =========================
 # Export all test fixtures for the "Main Board" to a CSV file.
 
-time.sleep(10)  # Allow time for the project to load completely
-
 try:
     test_fixtures_export_path = os.path.join(os.getcwd(), "TestFixturesExport.csv")
     sherlock.layer.export_all_test_fixtures(
         project="Tutorial Project",
         cca_name="Main Board",
-        file_path=test_fixtures_export_path,
+        export_file=test_fixtures_export_path,
         units="DEFAULT",
     )
     print(f"All test fixtures exported successfully to: {test_fixtures_export_path}")

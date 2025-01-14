@@ -43,7 +43,6 @@ The exported mount points can be used for further analysis or design purposes.
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_mount_points_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -59,8 +58,6 @@ from ansys.sherlock.core.errors import (
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
@@ -71,7 +68,7 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
-        project="Tutorial Project", description="Demos", file_path=project_zip_path
+        project="Tutorial Project", category="Demos", archive_file=project_zip_path
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -82,14 +79,12 @@ except SherlockImportProjectZipArchiveError as e:
 # ========================
 # Export all mount points for the "Main Board" to a CSV file.
 
-time.sleep(10)  # Allow time for the project to load completely
-
 try:
     mount_points_export_path = os.path.join(os.getcwd(), "MountPointsExport.csv")
     sherlock.layer.export_all_mount_points(
         project="Tutorial Project",
         cca_name="Main Board",
-        file_path=mount_points_export_path,
+        export_file=mount_points_export_path,
         units="DEFAULT",
     )
     print(f"All mount points exported successfully to: {mount_points_export_path}")

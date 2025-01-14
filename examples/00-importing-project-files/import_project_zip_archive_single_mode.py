@@ -39,7 +39,6 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_import_single_mode_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleModeError
@@ -51,11 +50,8 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleMode
 
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-PROJECT_PATH = "C:\\temp"
 
-time.sleep(5)  # Allow time for environment setup
-
-sherlock = launcher.launch_sherlock(port=9092, single_project_path=PROJECT_PATH)
+sherlock = launcher.launch_sherlock(port=9092, single_project_path=os.getcwd())
 
 ###############################################################################
 # Import Sherlock Project in Single Mode
@@ -76,6 +72,5 @@ except SherlockImportProjectZipArchiveSingleModeError as e:
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(10)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

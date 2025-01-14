@@ -39,7 +39,6 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_parts_list_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockExportPartsListError, SherlockImportODBError
@@ -52,8 +51,6 @@ from ansys.sherlock.core.errors import SherlockExportPartsListError, SherlockImp
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
@@ -64,11 +61,11 @@ sherlock = launcher.launch_sherlock(port=9092)
 try:
     odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
-        odb_archive_path,
-        overwrite=True,
-        create_project=True,
-        use_guidelines=True,
-        use_predefined_materials=True,
+        archive_file=odb_archive_path,
+        process_layer_thickness=True,
+        include_other_layers=True,
+        process_cutout_file=True,
+        guess_part_properties=True,
         project="Test",
         cca_name="Card",
     )
@@ -93,6 +90,5 @@ except SherlockExportPartsListError as e:
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")
