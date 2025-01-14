@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -43,15 +43,15 @@ For further details, refer to the official documentation on strain map analysis 
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_strain_map_analysis_example.png'
 
 import os
-import time
 
-from SherlockModelService_pb2 import RunStrainMapAnalysisRequest
+from SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
-    SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
+    SherlockUpdateHarmonicVibePropsError,
 )
 from ansys.sherlock.core.types.analysis_types import ModelSource
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
@@ -67,42 +67,24 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive and Strain Maps
-# ==================================
-# Import a project and add strain maps to the Sherlock project.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 try:
     # Add strain maps to the project
-    strain_map_path = (
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "StrainMaps"
-        + os.path.sep
-        + "StrainMap.csv"
+    strain_map_path = os.path.join(
+        ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
     )
     sherlock.project.add_strain_maps(
         "Test",
@@ -115,12 +97,13 @@ try:
                 "SolidID",
                 "PCB Strain",
                 "µε",
-                ["Card"],
+                ["Main Board"],
             )
         ],
     )
+    print("Strain maps added successfully.")
 except SherlockAddStrainMapsError as e:
-    print(f"Error adding strain maps: {str(e)}")
+    print(f"Error adding strain maps: {e}")
 
 ###############################################################################
 # Update Harmonic Vibration Properties
@@ -133,7 +116,7 @@ try:
         "Test",
         [
             {
-                "cca_name": "Card",
+                "cca_name": "Main Board",
                 "model_source": ModelSource.STRAIN_MAP,
                 "harmonic_vibe_count": 1,
                 "harmonic_vibe_damping": "0.01",
@@ -152,8 +135,9 @@ try:
             }
         ],
     )
-except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error updating harmonic vibe properties: {str(e)}")
+    print("Harmonic vibration properties updated successfully.")
+except SherlockUpdateHarmonicVibePropsError as e:
+    print(f"Error updating harmonic vibe properties: {e}")
 
 ###############################################################################
 # Run Strain Map Analysis
@@ -166,25 +150,25 @@ try:
     analysis_type = analysis_type_enum.HarmonicVibe
     sherlock.analysis.run_strain_map_analysis(
         "Test",
-        "Card",
+        "Main Board",
         [
             [
                 analysis_type,
                 [
-                    ["Phase 1", "Harmonic Event", "TOP", "StrainMap - Top"],
-                    ["Phase 1", "Harmonic Event", "BOTTOM", "StrainMap - Bottom"],
+                    ["On The Road", "5 - Harmonic Vibe", "TOP", "StrainMap - Top"],
+                    ["On The Road", "5 - Harmonic Vibe", "BOTTOM", "StrainMap - Bottom"],
                 ],
             ]
         ],
     )
+    print("Strain map analysis completed successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error running strain map analysis: {str(e)}")
+    print(f"Error running strain map analysis: {e}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

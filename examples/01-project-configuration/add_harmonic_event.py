@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,10 +44,13 @@ of various conditions on the board.
 # sphinx_gallery_thumbnail_path = './images/add_harmonic_event_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockAddHarmonicEventError
+from ansys.sherlock.core.errors import (
+    SherlockAddHarmonicEventError,
+    SherlockCreateLifePhaseError,
+    SherlockImportProjectZipArchiveError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -59,38 +62,41 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
-# Wait for 5 seconds to ensure service is running
-time.sleep(5)
-
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
-sherlock.project.import_odb_archive(
-    file_path=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
-    allow_subdirectories=True,
-    include_layers=True,
-    use_stackup=True,
-    project="Test",
-    cca_name="Card",
-)
-print("ODB++ archive imported successfully.")
+try:
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+    )
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
+
+phase_name = "Life Phase Example"
 
 ###############################################################################
 # Create Lifecycle Phase
 # =======================
 # Create a new lifecycle phase called "Example" in the "Test" project.
 
-sherlock.lifecycle.create_life_phase(
-    project="Test",
-    phase_name="Example",
-    time_duration=1.5,
-    time_units="sec",
-    cycle_count=4.0,
-    cycle_units="COUNT",
-)
-print("Lifecycle phase 'Example' created successfully.")
+try:
+    sherlock.lifecycle.create_life_phase(
+        project="Test",
+        phase_name=phase_name,
+        duration=1.5,
+        duration_units="sec",
+        num_of_cycles=4.0,
+        cycle_type="COUNT",
+        description="Example phase",
+    )
+    print("Lifecycle phase 'Example' created successfully.")
+except SherlockCreateLifePhaseError as e:
+    print(f"Error creating lifecycle phase: {e}")
 
 ###############################################################################
 # Add Harmonic Event to Lifecycle Phase
@@ -100,23 +106,21 @@ print("Lifecycle phase 'Example' created successfully.")
 try:
     sherlock.lifecycle.add_harmonic_event(
         project="Test",
-        phase_name="Example",
+        phase_name=phase_name,
         event_name="Event1",
-        time_duration=1.5,
-        time_units="sec",
-        cycle_count=4.0,
-        cycle_units="PER MIN",
-        frequency=5,
-        direction="45,45",
-        load_type="Uniaxial",
-        components="2,4,5",
+        duration=1.5,
+        duration_units="sec",
+        num_of_cycles=4.0,
+        cycle_type="PER MIN",
+        sweep_rate=5,
+        orientation="23.45, 34.56",
+        profile_type="Uniaxial",
+        load_direction="2,4,5",
+        description="Harmonic Event Example",
     )
     print("Harmonic event 'Event1' added successfully.")
 except SherlockAddHarmonicEventError as e:
     print(f"Error adding harmonic event: {str(e)}")
-
-# Wait for 5 seconds to ensure all processes are completed
-time.sleep(5)
 
 ###############################################################################
 # Exit Sherlock

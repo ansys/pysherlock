@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,10 +39,12 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_parts_list_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockExportPartsListError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockExportPartsListError,
+    SherlockImportProjectZipArchiveError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -52,29 +54,22 @@ from ansys.sherlock.core.errors import SherlockExportPartsListError, SherlockImp
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import an ODB++ project archive provided with the Sherlock installation.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        odb_archive_path,
-        overwrite=True,
-        create_project=True,
-        use_guidelines=True,
-        use_predefined_materials=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ project imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ project: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Export Parts List
@@ -83,16 +78,15 @@ except SherlockImportODBError as e:
 
 try:
     parts_list_path = os.path.join(os.getcwd(), "exportedParts.csv")
-    sherlock.parts.export_parts_list("Test", "Card", parts_list_path)
+    sherlock.parts.export_parts_list("Test", "Main Board", parts_list_path)
     print(f"Parts list exported successfully to: {parts_list_path}")
 except SherlockExportPartsListError as e:
-    print(f"Error exporting parts list: {str(e)}")
+    print(f"Error exporting parts list: {e}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")
