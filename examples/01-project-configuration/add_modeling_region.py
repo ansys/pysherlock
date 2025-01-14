@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,6 @@ properties for each region.
 # sphinx_gallery_thumbnail_path = './images/add_modeling_region_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockAddModelingRegionError, SherlockImportODBError
@@ -63,9 +62,6 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
-# Wait for service to initialize
-time.sleep(5)
-
 ###############################################################################
 # Import ODB++ Archive
 # =====================
@@ -73,16 +69,17 @@ time.sleep(5)
 
 try:
     sherlock.project.import_odb_archive(
-        file_path=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+        archive_file=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
+        process_layer_thickness=True,
+        include_other_layers=True,
+        process_cutout_file=True,
+        guess_part_properties=True,
         project="Test",
         cca_name="Card",
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print(f"Error importing ODB++ archive: {e}")
 
 ###############################################################################
 # Create Modeling Regions
@@ -202,7 +199,7 @@ try:
     sherlock.layer.add_modeling_region("Test", modeling_regions)
     print("Modeling regions added successfully.")
 except SherlockAddModelingRegionError as e:
-    print(f"Error adding modeling regions: {str(e)}")
+    print(f"Error adding modeling regions: {e}")
 
 ###############################################################################
 # Exit Sherlock

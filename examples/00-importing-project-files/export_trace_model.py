@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,6 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_trace_model_export_example.png'
 
 import os
-import time
 
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2, SherlockModelService_pb2
 
@@ -67,11 +66,14 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import a sample project ZIP archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
-    sherlock.project.import_project_zip_archive("Tutorial Project", "Demos", project_zip_path)
-    print("Project imported successfully.")
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+    )
+    print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {str(e)}")
+    print(f"Error importing project: {e}")
 
 ###############################################################################
 # Export Trace Model
@@ -80,59 +82,60 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     copper_1_layer = sherlock.model.createExportTraceCopperLayerParams(
-        project_name="Tutorial Project",
-        assembly_name="Main Board",
+        project_name="Test",
+        cca_name="Main Board",
         output_file_path=os.path.join(TESTDIR, "outputfile_path.stp"),
-        odb_file="copper-01.odb",
-        include_pins=True,
-        include_nets=False,
-        include_components=False,
-        include_drcs=False,
-        length_unit="mm",
+        copper_layer="copper-01.odb",
+        overwrite=True,
+        display_after=False,
+        clear_FEA_database=False,
+        use_FEA_model_ID=False,
+        coord_units="mm",
         mesh_type=SherlockModelService_pb2.MeshType.NONE,
-        include_solder_pads=False,
+        is_modeling_region_enabled=False,
         trace_output_type=SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
         element_order=SherlockAnalysisService_pb2.ElementOrder.Linear,
-        trace_thickness=1.0,
-        trace_thickness_unit="mm",
-        trace_simplification_factor=2,
-        include_vias=False,
-        via_diameter=1.0,
-        via_diameter_unit="mm",
-        via_height=1.0,
+        max_mesh_size=1.0,
+        max_mesh_size_units="mm",
+        max_holes_per_trace=3,
+        is_drill_hole_modeling_enabled=False,
+        drill_hole_min_diameter=1.0,
+        drill_hole_min_diameter_units="mm",
+        drill_hole_max_edge_length=1.0,
+        drill_hole_max_edge_length_units="mm",
     )
     copper_2_layer = sherlock.model.createExportTraceCopperLayerParams(
-        project_name="Tutorial Project",
-        assembly_name="Main Board",
+        project_name="Test",
+        cca_name="Main Board",
         output_file_path=os.path.join(TESTDIR, "outputfile_path2.stp"),
-        odb_file="copper-02.odb",
-        include_pins=True,
-        include_nets=False,
-        include_components=False,
-        include_drcs=False,
-        length_unit="mm",
+        copper_layer="copper-02.odb",
+        overwrite=True,
+        display_after=False,
+        clear_FEA_database=False,
+        use_FEA_model_ID=False,
+        coord_units="mm",
         mesh_type=SherlockModelService_pb2.MeshType.NONE,
-        include_solder_pads=False,
+        is_modeling_region_enabled=False,
         trace_output_type=SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
         element_order=SherlockAnalysisService_pb2.ElementOrder.Linear,
-        trace_thickness=1.0,
-        trace_thickness_unit="mm",
-        trace_simplification_factor=2,
-        include_vias=False,
-        via_diameter=1.0,
-        via_diameter_unit="mm",
-        via_height=1.0,
+        max_mesh_size=1.0,
+        max_mesh_size_units="mm",
+        max_holes_per_trace=3,
+        is_drill_hole_modeling_enabled=False,
+        drill_hole_min_diameter=1.0,
+        drill_hole_min_diameter_units="mm",
+        drill_hole_max_edge_length=1.0,
+        drill_hole_max_edge_length_units="mm",
     )
     sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
     print("Trace model exported successfully.")
 except SherlockModelServiceError as e:
-    print(f"Error exporting trace model: {str(e)}")
+    print(f"Error exporting trace model: {e}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

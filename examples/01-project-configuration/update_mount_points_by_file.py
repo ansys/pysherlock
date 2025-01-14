@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,10 @@ The updated mount points can be used for further structural analysis and validat
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateMountPointsByFileError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdateMountPointsByFileError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -61,23 +64,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
-        project="Tutorial",
-        cca_name="Card",
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Mount Points by File
@@ -88,13 +87,13 @@ csv_file_path = os.path.join(os.getcwd(), "updateMountPoints.csv")
 
 try:
     sherlock.layer.update_mount_points_by_file(
-        project_name="Tutorial",
-        cca_name="Card",
+        project="Test",
+        cca_name="Main Board",
         file_path=csv_file_path,
     )
     print("Mount points updated successfully using the CSV file.")
 except SherlockUpdateMountPointsByFileError as e:
-    print(f"Error updating mount points by file: {str(e)}")
+    print(f"Error updating mount points by file: {e}")
 
 ###############################################################################
 # Exit Sherlock

@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ The updated properties can be used for further design validation and optimizatio
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateLaminateLayerError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdateLaminateLayerError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -57,47 +60,45 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Laminate Layer Properties
 # =================================
-# Update the laminate layer properties for the "Card" of the "Test" project.
+# Update the laminate layer properties for the "Main Board" of the "Test" project.
 
 try:
     sherlock.stackup.update_laminate_layer(
-        project_name="Test",
-        cca_name="Card",
-        layer_number="2",
-        layer_material="Generic",
-        layer_type="FR-4",
-        layer_material_name="Generic FR-4",
-        layer_thickness=0.015,
-        layer_thickness_unit="in",
-        layer_glass_styles=[("106", 68.0, 0.015, "in")],
-        dielectric_material="E-GLASS",
-        conductive_material="COPPER",
-        conductive_thickness="0.0",
+        project="Test",
+        cca_name="Main Board",
+        layer="2",
+        manufacturer="Generic",
+        grade="Cyanate Ester",
+        material="Generic CE Quartz",
+        thickness=0.015,
+        thickness_unit="in",
+        construction_style="106",
+        glass_construction=[("106", 71.0, 0.015, "in")],
+        fiber_material="QUARTZ",
+        conductor_material="GOLD",
+        conductor_percent="10.0",
     )
+
     print("Laminate layer properties updated successfully.")
 except SherlockUpdateLaminateLayerError as e:
-    print(f"Error updating laminate layer properties: {str(e)}")
+    print(f"Error updating laminate layer properties: {e}")
 
 ###############################################################################
 # Exit Sherlock

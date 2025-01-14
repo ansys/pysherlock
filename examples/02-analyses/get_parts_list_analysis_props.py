@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,12 +44,11 @@ with other software tools.
 # sphinx_gallery_thumbnail_path = './images/sherlock_update_part_list_valid_analysis_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockGetPartsListValidationAnalysisPropsError,
-    SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockUpdatePartListValidationAnalysisPropsError,
 )
 
@@ -61,28 +60,22 @@ from ansys.sherlock.core.errors import (
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Part List Validation Analysis Properties
@@ -92,7 +85,7 @@ except SherlockImportODBError as e:
 try:
     update_props = [
         {
-            "cca_name": "Card",
+            "cca_name": "Main Board",
             "process_use_avl": True,
             "process_use_wizard": True,
             "process_check_confirmed_properties": False,
@@ -103,10 +96,13 @@ try:
             "avl_require_approved_manufacturer": False,
         }
     ]
-    sherlock.analysis.update_part_list_validation_analysis_props("Test", update_props)
+    sherlock.analysis.update_part_list_validation_analysis_props(
+        project="Test",
+        properties_per_cca=update_props,
+    )
     print("Part list validation analysis properties updated successfully.")
 except SherlockUpdatePartListValidationAnalysisPropsError as e:
-    print(f"Error updating part list validation analysis properties: {str(e)}")
+    print(f"Error updating part list validation analysis properties: {e}")
 
 ###############################################################################
 # Get Part List Validation Analysis Properties
@@ -114,11 +110,14 @@ except SherlockUpdatePartListValidationAnalysisPropsError as e:
 # Retrieve the updated part list validation analysis properties.
 
 try:
-    response = sherlock.analysis.get_parts_list_validation_analysis_props("Test", "Card")
+    response = sherlock.analysis.get_parts_list_validation_analysis_props(
+        project="Test",
+        cca_name="Main Board",
+    )
     print("Retrieved part list validation analysis properties:")
-    print(str(response))
+    print(f"Response: {response}")
 except SherlockGetPartsListValidationAnalysisPropsError as e:
-    print(f"Error retrieving part list validation analysis properties: {str(e)}")
+    print(f"Error retrieving part list validation analysis properties: {e}")
 
 ###############################################################################
 # Exit Sherlock

@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ import os
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportPartsListError,
-    SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockUpdatePartsListPropertiesError,
 )
 
@@ -64,23 +64,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Parts List Properties
@@ -101,13 +97,13 @@ try:
         {"reference_designators": ["U7"], "properties": [{"name": "leadBend", "value": "45"}]},
     ]
     sherlock.parts.update_parts_list_properties(
-        project_name="Test",
-        cca_name="Card",
-        properties=parts_properties,
+        project="Test",
+        cca_name="Main Board",
+        part_properties=parts_properties,
     )
     print("Parts list properties updated successfully.")
 except SherlockUpdatePartsListPropertiesError as e:
-    print(f"Error updating parts list properties: {str(e)}")
+    print(f"Error updating parts list properties: {e}")
 
 ###############################################################################
 # Export Parts List
@@ -115,15 +111,15 @@ except SherlockUpdatePartsListPropertiesError as e:
 # Export the parts list for the "Card" of the "Test" project to a CSV file.
 
 try:
-    export_path = os.path.join(os.getcwd(), "exportedPartsList.csv")
+    export_file = os.path.join(os.getcwd(), "exportedPartsList.csv")
     sherlock.parts.export_parts_list(
-        project_name="Test",
-        cca_name="Card",
-        file_path=export_path,
+        project="Test",
+        cca_name="Main Board",
+        export_file=export_file,
     )
-    print("Parts list exported successfully to", export_path)
+    print("Parts list exported successfully to", export_file)
 except SherlockExportPartsListError as e:
-    print(f"Error exporting parts list: {str(e)}")
+    print(f"Error exporting parts list: {e}")
 
 ###############################################################################
 # Exit Sherlock
