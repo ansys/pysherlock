@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,6 @@ This script covers:
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_test_points_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -57,8 +56,6 @@ from ansys.sherlock.core.errors import (
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
@@ -67,34 +64,33 @@ sherlock = launcher.launch_sherlock(port=9092)
 # Import the tutorial project zip archive provided with the Sherlock installation.
 
 try:
-    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
-        project="Tutorial Project", description="Demos", file_path=project_zip_path
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {str(e)}")
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Export All Test Points
 # =======================
 # Export all test points for the "Main Board" to a CSV file.
 
-time.sleep(10)  # Allow time for the project to load completely
-
 try:
     test_points_export_path = os.path.join(os.getcwd(), "TestPointsExport.csv")
     sherlock.layer.export_all_test_points(
-        project="Tutorial Project",
+        project="Test",
         cca_name="Main Board",
-        file_path=test_points_export_path,
-        units="DEFAULT",
-        delimiter="DEFAULT",
-        encoding="DEFAULT",
+        export_file=test_points_export_path,
+        length_units="DEFAULT",
+        displacement_units="DEFAULT",
+        force_units="DEFAULT",
     )
     print(f"All test points exported successfully to: {test_points_export_path}")
 except SherlockExportAllTestPointsError as e:
-    print(f"Error exporting all test points: {str(e)}")
+    print(f"Error exporting all test points: {e}")
 
 ###############################################################################
 # Exit Sherlock

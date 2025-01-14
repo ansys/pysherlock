@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ The updated properties ensure accurate simulation results for mechanical and the
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePartModelingPropsError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdatePartModelingPropsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -57,23 +60,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Part Modeling Properties
@@ -82,7 +81,7 @@ except SherlockImportODBError as e:
 
 try:
     modeling_props = {
-        "cca_name": "Card",
+        "cca_name": "Main Board",
         "part_enabled": True,
         "part_min_size": 1,
         "part_min_size_units": "in",
@@ -94,12 +93,12 @@ try:
         "part_results_filtered": True,
     }
     sherlock.analysis.update_part_modeling_props(
-        project_name="Test",
-        modeling_props=modeling_props,
+        project="Test",
+        part_modeling_props=modeling_props,
     )
     print("Part modeling properties updated successfully.")
 except SherlockUpdatePartModelingPropsError as e:
-    print(f"Error updating part modeling properties: {str(e)}")
+    print(f"Error updating part modeling properties: {e}")
 
 ###############################################################################
 # Exit Sherlock
