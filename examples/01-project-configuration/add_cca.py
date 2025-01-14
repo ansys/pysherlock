@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,6 @@ The added CCAs allow for proper circuit analysis and component tracking within t
 # sphinx_gallery_thumbnail_path = './images/add_cca_and_import_odb_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockAddCCAError, SherlockImportODBError
@@ -58,26 +57,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
-        project="Tutorial",
-        cca_name="Card",
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
+    print("Tutorial project imported successfully.")
 except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
-
-# Wait for 5 seconds to ensure the import is complete
-time.sleep(5)
 
 ###############################################################################
 # Add CCAs to Project
@@ -120,9 +112,6 @@ try:
     print("Card 3 added successfully.")
 except SherlockAddCCAError as e:
     print(f"Error adding CCA: {str(e)}")
-
-# Wait for 20 seconds before closing the connection
-time.sleep(20)
 
 ###############################################################################
 # Exit Sherlock

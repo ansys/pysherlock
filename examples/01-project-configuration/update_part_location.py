@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ The updated part locations can be used for accurate placement validation and opt
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePartsLocationsError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdatePartsLocationsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -57,23 +60,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Part Locations
@@ -86,13 +85,13 @@ try:
         ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
     ]
     sherlock.parts.update_parts_locations(
-        project_name="Test",
-        cca_name="Card",
-        parts_data=part_locations,
+        project="Test",
+        cca_name="Main Board",
+        part_loc=part_locations,
     )
     print("Part locations updated successfully.")
 except SherlockUpdatePartsLocationsError as e:
-    print(f"Error updating part locations: {str(e)}")
+    print(f"Error updating part locations: {e}")
 
 ###############################################################################
 # Exit Sherlock

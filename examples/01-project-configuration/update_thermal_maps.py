@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -42,13 +42,9 @@ The updated thermal maps ensure the accuracy of thermal profiles and board confi
 # sphinx_gallery_thumbnail_path = './images/update_thermal_maps_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import (
-    SherlockImportProjectZipArchiveError,
-    SherlockUpdateThermalMapsError,
-)
+from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
 from ansys.sherlock.core.types.project_types import (
     BoardBounds,
     ImageBounds,
@@ -70,23 +66,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import Project Zip Archive
-# ============================
-# Import the project zip archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
-        project_name="Tutorial Project",
-        demo_folder="Demos",
-        file_path=project_zip_path,
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("Project zip archive imported successfully.")
+    print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {str(e)}")
-
-# Wait for 10 seconds to ensure the project is properly imported
-time.sleep(10)
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Thermal Maps
@@ -124,7 +116,10 @@ try:
             ],
         }
     ]
-    sherlock.project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+    sherlock.project.add_thermal_maps(
+        project="Test",
+        add_thermal_map_files=add_thermal_map_files,
+    )
 
     thermal_map_files = [
         {
@@ -137,11 +132,14 @@ try:
             "cca_names": ["Main Board"],
         },
     ]
-    sherlock.project.update_thermal_maps("Tutorial Project", thermal_map_files)
+    sherlock.project.update_thermal_maps(
+        project="Test",
+        thermal_map_files=thermal_map_files,
+    )
 
     print("Thermal maps updated successfully.")
-except SherlockUpdateThermalMapsError as e:
-    print(f"Error updating thermal maps: {str(e)}")
+except Exception as e:
+    print(f"Error adding or updating thermal maps")
 
 ###############################################################################
 # Exit Sherlock

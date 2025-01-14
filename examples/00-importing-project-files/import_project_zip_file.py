@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -46,7 +46,6 @@ management. This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_import_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
@@ -60,22 +59,22 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
 VERSION = "242"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-time.sleep(5)  # Allow time for environment setup
-
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
 # Import Sherlock Project
 # ========================
-#
-# Import a tutorial project ZIP archive provided with Sherlock installation.
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    project_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
-    sherlock.project.import_project_zip_archive("Tutorial Project", "Demos", project_path)
-    print("Project imported successfully.")
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+    )
+    print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {str(e)}")
+    print(f"Error importing project: {e}")
 
 ###############################################################################
 # Exit Sherlock
@@ -83,6 +82,5 @@ except SherlockImportProjectZipArchiveError as e:
 #
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(10)  # Allow time for any remaining operations
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

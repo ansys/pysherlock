@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,6 @@ For more details on running specific analyses, refer to the official documentati
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_advanced_analysis_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -67,22 +66,17 @@ sherlock = launcher.launch_sherlock(port=9092)
 ###############################################################################
 # Import Tutorial Project
 # ========================
-# Import a tutorial project to run analyses on.
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
-        "Tutorial Project",
-        "Demos",
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "Tutorial Project.zip",
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
+    print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {str(e)}")
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Run Multiple Analyses
@@ -92,16 +86,9 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     # Run analyses
     analysis_types = [
-        (RunAnalysisRequestAnalysisType.PART_VALIDATION, [("", [])]),
-        (RunAnalysisRequestAnalysisType.NATURAL_FREQ, [("", [])]),
         (RunAnalysisRequestAnalysisType.PTH_FATIQUE, [("Environmental", ["1 - Temp Cycle"])]),
-        (RunAnalysisRequestAnalysisType.ICT, [("", [])]),
         (
             RunAnalysisRequestAnalysisType.SEMICINDUCTOR_WEAROUT,
-            [("Environmental", ["1 - Temp Cycle"])],
-        ),
-        (
-            RunAnalysisRequestAnalysisType.SOLDER_JOINT_FATIGUE,
             [("Environmental", ["1 - Temp Cycle"])],
         ),
         (RunAnalysisRequestAnalysisType.THERMAL_DERATING, [("Environmental", ["1 - Temp Cycle"])]),
@@ -109,26 +96,20 @@ try:
             RunAnalysisRequestAnalysisType.COMPONENT_FAILURE_MODE,
             [("Environmental", ["1 - Temp Cycle"])],
         ),
-        (RunAnalysisRequestAnalysisType.HARMONIC_VIBE, [("On The Road", ["5 - Harmonic Vibe"])]),
-        (RunAnalysisRequestAnalysisType.RANDOM_VIBE, [("On The Road", ["1 - Vibration"])]),
-        (
-            RunAnalysisRequestAnalysisType.MECHANICAL_SHOCK,
-            [("Environmental", ["2 - Shopping Cart"])],
-        ),
-        (RunAnalysisRequestAnalysisType.THERMAL_MECH, [("Environmental", ["1 - Temp Cycle"])]),
     ]
 
     for analysis_type, params in analysis_types:
-        sherlock.analysis.run_analysis("Tutorial Project", "Main Board", [(analysis_type, params)])
+        sherlock.analysis.run_analysis(
+            project="Test", cca_name="Main Board", analyses=[(analysis_type, params)]
+        )
 
 except SherlockRunAnalysisError as e:
-    print(f"Error running analysis: {str(e)}")
+    print(f"Error running analysis: {e}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

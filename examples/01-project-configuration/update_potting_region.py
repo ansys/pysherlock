@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,6 @@ These updates ensure precise encapsulation and protection for PCB components dur
 # sphinx_gallery_thumbnail_path = './images/update_potting_region_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -68,22 +67,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import Project Zip Archive
-# ===========================
-# Import the project zip archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    project_zip_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")
     sherlock.project.import_project_zip_archive(
-        project_name="Tutorial Project",
-        project_dir="Demos",
-        zip_file_path=project_zip_path,
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("Project zip archive imported successfully.")
+    print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {str(e)}")
-
-time.sleep(10)
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Add Potting Region
@@ -100,7 +96,7 @@ try:
         rotation=87.8,
     )
     sherlock.layer.add_potting_region(
-        project_name="Tutorial Project",
+        project="Test",
         potting_regions=[
             {
                 "cca_name": "Main Board",
@@ -116,7 +112,7 @@ try:
     )
     print("Potting region added successfully.")
 except SherlockAddPottingRegionError as e:
-    print(f"Error adding potting region: {str(e)}")
+    print(f"Error adding potting region: {e}")
 
 ###############################################################################
 # Update Potting Region
@@ -142,13 +138,13 @@ update_data = PottingRegionUpdateData(
 
 try:
     update_request = UpdatePottingRegionRequest(
-        project="Tutorial Project",
+        project="Test",
         update_potting_regions=[update_data],
     )
     sherlock.layer.update_potting_region(update_request)
     print("Potting region updated successfully.")
 except Exception as e:
-    print(f"Error updating potting region: {str(e)}")
+    print(f"Error updating potting region: {e}")
 
 ###############################################################################
 # Exit Sherlock

@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -48,10 +48,12 @@ for further analysis.
 # sphinx_gallery_thumbnail_path = './images/import_odb_and_parts_list_example.png'
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockImportPartsListError
+from ansys.sherlock.core.errors import (
+    SherlockImportPartsListError,
+    SherlockImportProjectZipArchiveError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -64,52 +66,35 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import an ODB++ archive with specified project and CCA names.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
-        use_materials=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Import Parts List
 # ==================
-# Import parts lists with different settings for the "Test" project and "Card" CCA.
+# Import parts list for the "Test" project and "Card" CCA.
 
 try:
     parts_list_path = os.path.join(os.getcwd(), "partslist.csv")
 
-    # Import parts list with validation enabled
     sherlock.parts.import_parts_list(
-        project="Test", cca_name="Card", file_path=parts_list_path, validate=True
+        project="Test", cca_name="Main Board", import_file=parts_list_path, import_as_user_src=True
     )
     print("Parts list imported successfully with validation.")
 except SherlockImportPartsListError as e:
-    print(f"Error importing parts list with validation: {str(e)}")
+    print(f"Error importing parts list with validation: {e}")
 
-try:
-    # Import parts list without validation
-    sherlock.parts.import_parts_list(
-        project="Test", cca_name="Card", file_path=parts_list_path, validate=False
-    )
-    print("Parts list imported successfully without validation.")
-except SherlockImportPartsListError as e:
-    print(f"Error importing parts list without validation: {str(e)}")
-
-# Wait for 5 seconds to ensure all processes are completed.
-time.sleep(5)
 
 ###############################################################################
 # Exit Sherlock

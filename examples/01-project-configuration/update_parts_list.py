@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ The updated parts list ensures alignment with a specified library for consistenc
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePartsListError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdatePartsListError,
+)
 from ansys.sherlock.core.types.parts_types import (
     PartsListSearchDuplicationMode,
     PartsListSearchMatchingMode,
@@ -61,23 +64,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        file_path=odb_archive_path,
-        allow_subdirectories=True,
-        include_layers=True,
-        use_stackup=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Parts List
@@ -86,15 +85,15 @@ except SherlockImportODBError as e:
 
 try:
     sherlock.parts.update_parts_list(
-        project_name="Test",
-        cca_name="Card",
-        library_name="Sherlock Part Library",
+        project="Test",
+        cca_name="Main Board",
+        part_library="Sherlock Part Library",
         matching_mode=PartsListSearchMatchingMode.BOTH,
         duplication_mode=PartsListSearchDuplicationMode.ERROR,
     )
     print("Parts list updated successfully.")
 except SherlockUpdatePartsListError as e:
-    print(f"Error updating parts list: {str(e)}")
+    print(f"Error updating parts list: {e}")
 
 ###############################################################################
 # Exit Sherlock

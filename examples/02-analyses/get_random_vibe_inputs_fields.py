@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,6 @@ For more details on vibration analysis in Sherlock, refer to the official docume
 
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockRunAnalysisError
 
 ###############################################################################
 # Launch PySherlock service
@@ -62,8 +61,8 @@ try:
     random_vibe_input_fields = sherlock.analysis.get_random_vibe_input_fields()
     print("Random vibration analysis input fields:")
     print(random_vibe_input_fields)
-except SherlockRunAnalysisError as e:
-    print(f"Error retrieving random vibration input fields: {str(e)}")
+except Exception as e:
+    print(f"Error retrieving random vibration input fields: {e}")
 
 ###############################################################################
 # Exit Sherlock
