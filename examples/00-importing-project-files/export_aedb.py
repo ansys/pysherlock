@@ -41,61 +41,44 @@ The exported AEDB file can be used for further analysis or integration with othe
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_aedb_example.png'
 
-import os
+# import os
+import time
 
-from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportODBError
+from ansys.sherlock.core import LOG, launcher
+
+# from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportODBError
 
 ###############################################################################
 # Launch PySherlock service
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "242"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
+LOG.info("******************** export_aedb.py ************************")
 
-sherlock = launcher.launch_sherlock(port=9092)
+# VERSION = "242"
+# ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
-###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+sherlock = launcher.launch_sherlock(port=9090)
 
-try:
-    odb_archive_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        archive_file=odb_archive_path,
-        process_layer_thickness=True,
-        include_other_layers=True,
-        process_cutout_file=True,
-        guess_part_properties=True,
-        project="Test",
-        cca_name="Card",
-    )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+# ------------ do this if Sherlock is already running and listening to port 9090 -------------
+# To launch sherlock to listen to port 9090, add the following command line option:
+# -grpcPort=9090
 
-###############################################################################
-# Export AEDB File
-# =================
-# Export the AEDB file for the "Card" of the "Test" project to the specified path.
+# VERSION = "252"
+# sherlock = launcher.connect_grpc_channel(port=9090, server_version=VERSION)
+#
+# count = 0
+# while sherlock.common.check() is False and count < 30:
+#     time.sleep(1)
+#     count = count + 1
+#
+# count = 0
+# while sherlock.common.is_sherlock_client_loading() is False and count < 5:
+#     time.sleep(1)
+#     count = count + 1
+#
+# sherlock.common.channel.close()
 
-try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
-    sherlock.model.export_aedb(
-        project_name="Test",
-        cca_name="Card",
-        export_file=aedb_export_path,
-    )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
-except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {str(e)}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
+time.sleep(1)
 sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")
+LOG.info("Sherlock gRPC connection closed successfully.")
