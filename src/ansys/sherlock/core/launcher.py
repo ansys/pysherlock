@@ -82,7 +82,7 @@ def launch_sherlock(
     try:
         _is_port_available(host, port)
     except Exception as e:
-        print(str(e))
+        LOG.error(str(e))
         raise e
 
     _server_version = None
@@ -95,8 +95,8 @@ def launch_sherlock(
             args.append("-singleProject")
             args.append(single_project_path)
         if sherlock_command_args != "":
-            args.append(f"{shlex.split(sherlock_command_args)}")
-        print(args)
+            args.extend(shlex.split(sherlock_command_args))
+        LOG.info(f"Command arguments: {args}")
         subprocess.Popen(args)
 
         sherlock = connect_grpc_channel(port, _server_version)
