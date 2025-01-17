@@ -38,8 +38,8 @@ def launch_sherlock(
     port: int = SHERLOCK_DEFAULT_PORT,
     single_project_path: str = "",
     sherlock_command_args: str = "",
-    year: Optional[int] = None,
-    release_number: Optional[int] = None,
+    year: Optional[int] = 2024,
+    release_number: Optional[int] = 2,
 ) -> Sherlock:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
@@ -104,7 +104,7 @@ def launch_sherlock(
         # Check that the gRPC connection is up (timeout after 3 minutes).
         count = 0
         while sherlock.common.check() is False and count < 90:
-            time.sleep(2)
+            time.sleep(1)
             count = count + 1
 
         if sherlock.common.check() is False:
@@ -112,8 +112,8 @@ def launch_sherlock(
 
         # Check that the Sherlock client has finished loading (timeout after 5 minutes).
         count = 0
-        while sherlock.common.is_sherlock_client_loading() is False and count < 150:
-            time.sleep(2)
+        while sherlock.common.is_sherlock_client_loading() is False and count < 30:
+            time.sleep(1)
             count = count + 1
 
         return sherlock
@@ -141,10 +141,35 @@ def connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT, server_version: Opti
     Sherlock
         The instance of sherlock.
     """
+    # if os.environ.get('https_proxy'):
+    #     del os.environ['https_proxy']
+    # if os.environ.get('http_proxy'):
+    #     del os.environ['http_proxy']
+
     channel_param = f"{LOCALHOST}:{port}"
-    channel = grpc.insecure_channel(channel_param)
+    # channel = grpc.insecure_channel(channel_param)
+    time.sleep(2)
+    channel = grpc.insecure_channel("127.0.0.1:9090")
+    LOG.info(f"Channel: {channel}")
+    # channel = grpc.insecure_channel(channel_param, options=(('grpc.enable_http_proxy', 0),))
+    channel.subscribe(_on_subscribe_callback)
+
+    # this was causing issues with creating Sherlock where sherloc.common was None
+    # try:
+    #     grpc.channel_ready_future(channel).result(timeout=10)
+    # except grpc.FutureTimeoutError:
+    #     LOG.error(f"Error connecting to gRPC channel: {channel_param}")
+    #     return None
+
+    if channel is None:
+        LOG.error("Error creating gRPC channel.")
+
     sherlock = Sherlock(channel, server_version)
     return sherlock
+
+
+def _on_subscribe_callback(channel_connectivity):
+    LOG.info(f"Connectivity: {channel_connectivity}")
 
 
 def _get_base_ansys(
