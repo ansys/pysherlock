@@ -179,3 +179,72 @@ class UpdateComponentFailureMechanismPropsRequest(BaseModel):
         for properties in self.component_failure_mechanism_properties_per_cca:
             request.componentFailureMechanismProperties.append(properties._convert_to_grpc())
         return request
+
+
+class SemiconductorWearoutAnalysis(BaseModel):
+    """Contains the properties of a semiconductor wearout analysis update request."""
+
+    cca_name: str
+    """Name of the CCA."""
+    max_feature_size: float
+    """Maximum feature size."""
+    max_feature_size_units: str
+    """Units of the maximum feature size."""
+    part_temp_rise: float
+    """Part temperature rise."""
+    part_temp_rise_units: str
+    """Units of the part temperature rise."""
+    part_temp_rise_min_enabled: bool
+    """Whether part temperature rise value is applied to the minimum temperature defined in the
+    thermal cycle."""
+    part_validation_enabled: bool
+    """Whether part validation should be performed."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> (
+        analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest.SemiconductorWearoutAnalysis
+    ):
+
+        request_class = analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest
+        semiconductor_wearout_analysis = request_class.SemiconductorWearoutAnalysis
+        grpc_data = semiconductor_wearout_analysis()
+
+        grpc_data.ccaName = self.cca_name
+        grpc_data.maxFeatureSize = self.max_feature_size
+        grpc_data.maxFeatureSizeUnits = self.max_feature_size_units
+        grpc_data.partTempRise = self.part_temp_rise
+        grpc_data.partTempRiseUnits = self.part_temp_rise_units
+        grpc_data.partTempRiseMinEnabled = self.part_temp_rise_min_enabled
+        grpc_data.partValidationEnabled = self.part_validation_enabled
+        return grpc_data
+
+    @field_validator("cca_name", "max_feature_size_units", "part_temp_rise_units")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
+    """Contains the properties of a semiconductor wearout analysis update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    semiconductor_wearout_analysis_properties: list[SemiconductorWearoutAnalysis]
+    """List of semiconductor wearout analysis properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest:
+        request = analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest()
+        request.project = self.project
+        for properties in self.semiconductor_wearout_analysis_properties:
+            request.semiconductorWearoutAnalysisProperties.append(properties._convert_to_grpc())
+        return request

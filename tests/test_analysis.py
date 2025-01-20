@@ -32,10 +32,12 @@ from ansys.sherlock.core.types.analysis_types import (
     ModelSource,
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
+    SemiconductorWearoutAnalysis,
     UpdateComponentFailureMechanismPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
+    UpdateSemiconductorWearoutAnalysisPropsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
@@ -2019,6 +2021,92 @@ def helper_test_update_component_failure_mechanism_props(analysis: Analysis):
 
         request.project = "AssemblyTutorial"
         responses = analysis.update_component_failure_mechanism_analysis_props(request)
+
+        assert len(responses) == 2
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == ""
+
+
+def helper_test_update_semiconductor_wearout_props(analysis: Analysis):
+    """Test update semiconductor wearout properties API."""
+    try:
+        SemiconductorWearoutAnalysis(
+            cca_name="",
+            max_feature_size=0.1,
+            max_feature_size_units="mm",
+            part_temp_rise=10.0,
+            part_temp_rise_units="C",
+            part_temp_rise_min_enabled=True,
+            part_validation_enabled=False,
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateSemiconductorWearoutAnalysisPropsRequest(
+            project="",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateSemiconductorWearoutAnalysisPropsRequest(
+            project="Test",
+            semiconductor_wearout_analysis_properties=["Not a SemiconductorWearoutAnalysis"],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Input should be a valid dictionary or instance of SemiconductorWearoutAnalysis"
+        )
+
+    semiconductor_wearout_analysis = SemiconductorWearoutAnalysis(
+        cca_name="Main Board",
+        max_feature_size=1.5,
+        max_feature_size_units="mm",
+        part_temp_rise=10.0,
+        part_temp_rise_units="C",
+        part_temp_rise_min_enabled=True,
+        part_validation_enabled=False,
+    )
+    semiconductor_wearout_analysis2 = SemiconductorWearoutAnalysis(
+        cca_name="Memory Card 1",
+        max_feature_size=2.0,
+        max_feature_size_units="mm",
+        part_temp_rise=15.0,
+        part_temp_rise_units="C",
+        part_temp_rise_min_enabled=False,
+        part_validation_enabled=True,
+    )
+    request = UpdateSemiconductorWearoutAnalysisPropsRequest(
+        project="Invalid project",
+        semiconductor_wearout_analysis_properties=[
+            semiconductor_wearout_analysis,
+            semiconductor_wearout_analysis2,
+        ],
+    )
+
+    if analysis._is_connection_up():
+        responses = analysis.update_semiconductor_wearout_props(request)
+
+        assert len(responses) == 2
+        for return_code in responses:
+            assert return_code.value == -1
+            assert return_code.message == f"Cannot find project: {request.project}"
+
+        request.project = "AssemblyTutorial"
+        responses = analysis.update_semiconductor_wearout_props(request)
 
         assert len(responses) == 2
         for return_code in responses:
