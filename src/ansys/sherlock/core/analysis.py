@@ -14,6 +14,7 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
+    UpdateSemiconductorWearoutAnalysisPropsRequest,
 )
 
 try:
@@ -2232,5 +2233,73 @@ class Analysis(GrpcStub):
 
         responses = []
         for return_code in self.stub.updateComponentFailureMechanismProps(update_request):
+            responses.append(return_code)
+        return responses
+
+    @require_version(252)
+    def update_semiconductor_wearout_props(
+        self,
+        request: UpdateSemiconductorWearoutAnalysisPropsRequest,
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        r"""Update properties for one or more Semiconductor Wearout Analysis.
+
+        Parameters
+        ----------
+        request: UpdateSemiconductorWearoutAnalysisPropsRequest
+            Contains all the information needed to update the properties for one or more
+            semiconductor wearout analyses per project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.analysis_types import (
+            SemiconductorWearoutAnalysis,
+            UpdateSemiconductorWearoutAnalysisPropsRequest,
+        )
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive(
+            project="Assembly Tutorial",
+            category="category",
+            archive_file=\
+                "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        )
+        >>> update_request1 = SemiconductorWearoutAnalysis(
+            cca_name="Main Board",
+            max_feature_size=1.5,
+            max_feature_size_units="mm",
+            part_temp_rise=10.0,
+            part_temp_rise_units="C",
+            part_temp_rise_min_enabled=True,
+            part_validation_enabled=False,
+        )
+        >>> update_request2 = SemiconductorWearoutAnalysis(
+            cca_name="Memory Card 1",
+            max_feature_size=2.0,
+            max_feature_size_units="mm",
+            part_temp_rise=15.0,
+            part_temp_rise_units="C",
+            part_temp_rise_min_enabled=False,
+            part_validation_enabled=True,
+        )
+        >>> request = UpdateSemiconductorWearoutAnalysisPropsRequest(
+            project="Test",
+            semiconductor_wearout_analysis_properties=[
+                update_request1,
+                update_request2
+            ]
+        )
+        >>> return_codes = sherlock.analysis.update_semiconductor_wearout_props(request)
+        >>> for return_code in return_codes:
+                print(f"Return code: value={return_code.value}, message={return_code.message}")
+        """
+        update_request = request._convert_to_grpc()
+
+        responses = []
+        for return_code in self.stub.updateSemiconductorWearoutAnalysisProps(update_request):
             responses.append(return_code)
         return responses
