@@ -9,6 +9,14 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.2 <https://github.com/ansys/pysherlock/releases/tag/v0.8.2>`_ - 2025-01-20
+===============================================================================
+
+Documentation
+^^^^^^^^^^^^^
+
+- fix: changed Launcher.launch_sherlock() to properly append sherlock_command_args `#487 <https://github.com/ansys/pysherlock/pull/487>`_
+
 `0.8.1 <https://github.com/ansys/pysherlock/releases/tag/v0.8.1>`_ - 2024-12-10
 ===============================================================================
 
