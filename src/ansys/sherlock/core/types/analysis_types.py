@@ -1,4 +1,4 @@
-# © 2023-2024 ANSYS, Inc. All rights reserved.
+# © 2023-2025 ANSYS, Inc. All rights reserved.
 
 """Module containing types for the Analysis Service."""
 
