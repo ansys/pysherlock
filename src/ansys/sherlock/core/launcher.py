@@ -38,8 +38,8 @@ def launch_sherlock(
     port: int = SHERLOCK_DEFAULT_PORT,
     single_project_path: str = "",
     sherlock_command_args: str = "",
-    year: Optional[int] = 2024,
-    release_number: Optional[int] = 2,
+    year: Optional[int] = None,
+    release_number: Optional[int] = None,
 ) -> Sherlock:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
