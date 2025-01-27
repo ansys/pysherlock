@@ -90,8 +90,8 @@ try:
         ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
     )
     sherlock.project.add_strain_maps(
-        "Test",
-        [
+        project="Test",
+        strain_maps=[
             (
                 strain_map_path,
                 "This is the strain map file for the project",
@@ -116,8 +116,8 @@ except SherlockAddStrainMapsError as e:
 try:
     # Update properties for mechanical shock analysis
     sherlock.analysis.update_mechanical_shock_props(
-        "Test",
-        [
+        project="Test",
+        mechanical_shock_properties=[
             {
                 "cca_name": "Main Board",
                 "model_source": ModelSource.STRAIN_MAP,
@@ -145,9 +145,9 @@ except SherlockRunStrainMapAnalysisError as e:
 
 try:
     sherlock.analysis.run_strain_map_analysis(
-        "Test",
-        "Main Board",
-        [
+        project="Test",
+        cca_name="Main Board",
+        strain_map_analyses=[
             [
                 RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.MechanicalShock,
                 [

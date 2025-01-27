@@ -82,8 +82,8 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     # Update properties for harmonic vibration analysis
     sherlock.analysis.update_harmonic_vibe_props(
-        "Test",
-        [
+        project="Test",
+        harmonic_vibe_properties=[
             {
                 "cca_name": "Main Board",
                 "harmonic_vibe_count": 2,
