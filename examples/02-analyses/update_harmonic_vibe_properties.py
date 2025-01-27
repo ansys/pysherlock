@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ For further details, refer to the official documentation on harmonic vibration a
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateHarmonicVibePropsError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdateHarmonicVibePropsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -57,29 +60,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive
-# ==================
-# Import a project into the Sherlock environment.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Harmonic Vibration Properties
@@ -92,19 +85,20 @@ try:
         "Test",
         [
             {
-                "cca_name": "Card",
+                "cca_name": "Main Board",
                 "harmonic_vibe_count": 2,
                 "harmonic_vibe_damping": "0.01, 0.05",
                 "part_validation_enabled": False,
                 "require_material_assignment_enabled": False,
-                "analysis_temp": 20,
+                "analysis_temp": 23.8,
                 "analysis_temp_units": "C",
                 "filter_by_event_frequency": False,
             }
         ],
     )
+    print("Harmonic vibration properties updated successfully.")
 except SherlockUpdateHarmonicVibePropsError as e:
-    print(f"Error updating harmonic vibration properties: {str(e)}")
+    print(f"Error updating harmonic vibration properties: {e}")
 
 ###############################################################################
 # Exit Sherlock
