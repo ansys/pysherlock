@@ -78,8 +78,8 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     sherlock.project.add_cca(
-        "Test",
-        [
+        project="Test",
+        cca_properties=[
             {
                 "cca_name": "Card 2",
                 "description": "Second CCA",
@@ -95,8 +95,8 @@ try:
     print("Card 2 added successfully.")
 
     sherlock.project.add_cca(
-        "Test",
-        [
+        project="Test",
+        cca_properties=[
             {
                 "cca_name": "Card 3",
                 "description": "Third CCA",

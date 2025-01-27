@@ -93,8 +93,8 @@ try:
         ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
     )
     sherlock.project.add_strain_maps(
-        "Test",
-        [
+        project="Test",
+        strain_maps=[
             (
                 strain_map_path,
                 "This is the strain map file for the project",
@@ -145,9 +145,9 @@ except SherlockRunStrainMapAnalysisError as e:
 try:
     analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
     sherlock.analysis.run_strain_map_analysis(
-        "Test",
-        "Main Board",
-        [
+        project="Test",
+        cca_name="Main Board",
+        strain_map_analyses=[
             [
                 RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                 [

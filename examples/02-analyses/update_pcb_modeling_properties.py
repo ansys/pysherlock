@@ -87,9 +87,9 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     sherlock.analysis.update_pcb_modeling_props(
-        "Test",
-        ["Main Board"],
-        [
+        project="Test",
+        cca_names=["Main Board"],
+        analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
                 UpdatePcbModelingPropsRequestPcbModelType.BONDED,
@@ -105,9 +105,9 @@ try:
         ],
     )
     sherlock.analysis.update_pcb_modeling_props(
-        "Test",
-        ["Main Board"],
-        [
+        project="Test",
+        cca_names=["Main Board"],
+        analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
                 UpdatePcbModelingPropsRequestPcbModelType.BONDED,
@@ -123,9 +123,9 @@ try:
         ],
     )
     sherlock.analysis.update_pcb_modeling_props(
-        "Test",
-        ["Main Board"],
-        [
+        project="Test",
+        cca_names=["Main Board"],
+        analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.ICT,
                 UpdatePcbModelingPropsRequestPcbModelType.BONDED,
@@ -141,9 +141,9 @@ try:
         ],
     )
     sherlock.analysis.update_pcb_modeling_props(
-        "Test",
-        ["Main Board"],
-        [
+        project="Test",
+        cca_names=["Main Board"],
+        analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.MECHANICAL_SHOCK,
                 UpdatePcbModelingPropsRequestPcbModelType.BONDED,
@@ -159,9 +159,9 @@ try:
         ],
     )
     sherlock.analysis.update_pcb_modeling_props(
-        "Test",
-        ["Main Board"],
-        [
+        project="Test",
+        cca_names=["Main Board"],
+        analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.RANDOM_VIBE,
                 UpdatePcbModelingPropsRequestPcbModelType.BONDED,
@@ -178,9 +178,9 @@ try:
         ],
     )
     sherlock.analysis.update_pcb_modeling_props(
-        "Test",
-        ["Main Board"],
-        [
+        project="Test",
+        cca_names=["Main Board"],
+        analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.THERMAL_MECH,
                 UpdatePcbModelingPropsRequestPcbModelType.BONDED,

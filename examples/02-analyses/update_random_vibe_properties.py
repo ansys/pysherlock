@@ -81,8 +81,8 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     sherlock.analysis.update_random_vibe_props(
-        "Test",
-        "Main Board",
+        project="Test",
+        cca_name="Main Board",
         random_vibe_damping="0.01, 0.03",
         part_validation_enabled=False,
         require_material_assignment_enabled=False,

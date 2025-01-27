@@ -83,8 +83,8 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     # Update properties for part list validation analysis
     sherlock.analysis.update_part_list_validation_analysis_props(
-        "Test",
-        [
+        project="Test",
+        properties_per_cca=[
             {
                 "cca_name": "Main Board",
                 "process_use_avl": True,

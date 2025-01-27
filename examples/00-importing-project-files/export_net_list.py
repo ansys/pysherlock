@@ -80,9 +80,9 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     net_list_path = os.path.join(os.getcwd(), "exportedNetList.csv")
     sherlock.parts.export_net_list(
-        "Test",
-        "Main Board",
-        net_list_path,
+        project="Test",
+        cca_name="Main Board",
+        output_file=net_list_path,
         col_delimiter=TableDelimiter.COMMA,
         overwrite_existing=True,
         utf8_enabled=True,

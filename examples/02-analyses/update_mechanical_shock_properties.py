@@ -82,8 +82,8 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     # Update properties for mechanical shock analysis
     sherlock.analysis.update_mechanical_shock_props(
-        "Test",
-        [
+        project="Test",
+        mechanical_shock_properties=[
             {
                 "cca_name": "Main Board",
                 "model_source": ModelSource.GENERATED,
