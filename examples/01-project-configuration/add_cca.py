@@ -44,7 +44,7 @@ The added CCAs allow for proper circuit analysis and component tracking within t
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockAddCCAError, SherlockImportODBError
+from ansys.sherlock.core.errors import SherlockAddCCAError, SherlockImportProjectZipArchiveError
 
 ###############################################################################
 # Launch PySherlock service
@@ -68,7 +68,7 @@ try:
         archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
     print("Tutorial project imported successfully.")
-except SherlockImportODBError as e:
+except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################

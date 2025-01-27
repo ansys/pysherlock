@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -43,14 +43,13 @@ For further details, refer to the official documentation on mechanical shock ana
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_mechanical_shock_analysis_example.png'
 
 import os
-import time
 
 from SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
-    SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
 )
 from ansys.sherlock.core.types.analysis_types import ModelSource
@@ -67,42 +66,28 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive and Strain Maps
-# ===================================
-# Import a project and add strain maps to the Sherlock project.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
+
+###############################################################################
+# Add Strain Map
+# ====================================
+# Add a strain map to the project.
 
 try:
-    # Add strain maps to the project
-    strain_map_path = (
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "StrainMaps"
-        + os.path.sep
-        + "StrainMap.csv"
+    strain_map_path = os.path.join(
+        ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
     )
     sherlock.project.add_strain_maps(
         "Test",
@@ -114,13 +99,14 @@ try:
                 0,
                 "SolidID",
                 "PCB Strain",
-                "\u03bc\u03b5",
-                ["Card"],
+                "µε",
+                ["Main Board"],
             )
         ],
     )
+    print("Strain maps added successfully.")
 except SherlockAddStrainMapsError as e:
-    print(f"Error adding strain maps: {str(e)}")
+    print(f"Error adding strain maps: {e}")
 
 ###############################################################################
 # Update Mechanical Shock Properties
@@ -133,7 +119,7 @@ try:
         "Test",
         [
             {
-                "cca_name": "Card",
+                "cca_name": "Main Board",
                 "model_source": ModelSource.STRAIN_MAP,
                 "shock_result_count": 1,
                 "part_validation_enabled": False,
@@ -148,8 +134,9 @@ try:
             }
         ],
     )
+    print("Mechanical shock properties updated successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error updating mechanical shock properties: {str(e)}")
+    print(f"Error updating mechanical shock properties: {e}")
 
 ###############################################################################
 # Run Mechanical Shock Analysis
@@ -159,25 +146,25 @@ except SherlockRunStrainMapAnalysisError as e:
 try:
     sherlock.analysis.run_strain_map_analysis(
         "Test",
-        "Card",
+        "Main Board",
         [
             [
                 RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.MechanicalShock,
                 [
-                    ["Phase 1", "Shock Event", "TOP", "StrainMap - Top"],
-                    ["Phase 1", "Shock Event", "BOTTOM", "StrainMap - Bottom"],
+                    ["On The Road", "2 - Pothole", "TOP", "StrainMap - Top"],
+                    ["On The Road", "3 - Collision", "BOTTOM", "StrainMap - Bottom"],
                 ],
             ]
         ],
     )
+    print("Mechanical shock analysis executed successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error running mechanical shock analysis: {str(e)}")
+    print(f"Error running mechanical shock analysis: {e}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

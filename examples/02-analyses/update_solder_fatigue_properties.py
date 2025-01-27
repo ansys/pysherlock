@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ For further details, refer to the official documentation on solder fatigue prope
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateSolderFatiguePropsError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdateSolderFatiguePropsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -57,18 +60,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive
-# ==================
-# Import a project into the Sherlock environment.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
-    sherlock.project.import_odb_archive(
-        odb_path, True, True, True, True, project="Test", cca_name="Card"
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Solder Fatigue Properties
@@ -80,7 +84,7 @@ try:
         "Test",
         [
             {
-                "cca_name": "Card",
+                "cca_name": "Main Board",
                 "solder_material": "TIN-LEAD (63SN37PB)",
                 "part_temp": 70,
                 "part_temp_units": "F",
@@ -89,8 +93,9 @@ try:
             }
         ],
     )
+    print("Solder fatigue properties updated successfully.")
 except SherlockUpdateSolderFatiguePropsError as e:
-    print(f"Error updating solder fatigue properties: {str(e)}")
+    print(f"Error updating solder fatigue properties: {e}")
 
 ###############################################################################
 # Exit Sherlock

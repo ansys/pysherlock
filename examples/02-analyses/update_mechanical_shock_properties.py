@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ import os
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
-    SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockUpdateMechanicalShockPropsError,
 )
 from ansys.sherlock.core.types.analysis_types import ModelSource
@@ -60,29 +60,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive
-# ==================
-# Import a project into the Sherlock environment.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Mechanical Shock Properties
@@ -95,7 +85,7 @@ try:
         "Test",
         [
             {
-                "cca_name": "Card",
+                "cca_name": "Main Board",
                 "model_source": ModelSource.GENERATED,
                 "shock_result_count": 3,
                 "critical_shock_strain": 5,
@@ -112,8 +102,9 @@ try:
             }
         ],
     )
+    print("Mechanical shock properties updated successfully.")
 except SherlockUpdateMechanicalShockPropsError as e:
-    print(f"Error updating mechanical shock properties: {str(e)}")
+    print(f"Error updating mechanical shock properties: {e}")
 
 ###############################################################################
 # Exit Sherlock

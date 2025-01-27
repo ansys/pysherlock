@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -43,14 +43,13 @@ For further details, refer to the official documentation on random vibration ana
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_random_vibe_analysis_example.png'
 
 import os
-import time
 
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
-    SherlockImportODBError,
+    SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
 )
 from ansys.sherlock.core.types.analysis_types import (
@@ -70,42 +69,28 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive and Strain Maps
-# ==================================
-# Import a project and add strain maps to the Sherlock project.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
+
+###############################################################################
+# Add Strain Map
+# ====================================
+# Add a strain map to the project.
 
 try:
-    # Add strain maps to the project
-    strain_map_path = (
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "StrainMaps"
-        + os.path.sep
-        + "StrainMap.csv"
+    strain_map_path = os.path.join(
+        ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
     )
     sherlock.project.add_strain_maps(
         "Test",
@@ -118,12 +103,13 @@ try:
                 "SolidID",
                 "PCB Strain",
                 "µε",
-                ["Card"],
+                ["Main Board"],
             )
         ],
     )
+    print("Strain maps added successfully.")
 except SherlockAddStrainMapsError as e:
-    print(f"Error adding strain maps: {str(e)}")
+    print(f"Error adding strain maps: {e}")
 
 ###############################################################################
 # Update Random Vibration Properties
@@ -131,10 +117,9 @@ except SherlockAddStrainMapsError as e:
 # Configure properties for random vibration analysis using strain maps.
 
 try:
-    # Update properties for random vibration analysis
     sherlock.analysis.update_random_vibe_props(
         project="Test",
-        cca_name="Card",
+        cca_name="Main Board",
         model_source=ModelSource.STRAIN_MAP,
         random_vibe_damping="0.01",
         part_validation_enabled=False,
@@ -150,7 +135,7 @@ try:
         strain_map_natural_freqs="100, 200, 300",
     )
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error updating random vibration properties: {str(e)}")
+    print(f"Error updating random vibration properties: {e}")
 
 ###############################################################################
 # Run Random Vibration Analysis
@@ -161,25 +146,24 @@ try:
     analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
     sherlock.analysis.run_strain_map_analysis(
         "Test",
-        "Card",
+        "Main Board",
         [
             [
                 RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
                 [
-                    ["Phase 1", "Random Event", "TOP", "StrainMap - Top"],
-                    ["Phase 1", "Random Event", "BOTTOM", "StrainMap - Bottom"],
+                    ["On The Road", "1 - Vibration", "TOP", "StrainMap - Top"],
+                    ["On The Road", "1 - Vibration", "BOTTOM", "StrainMap - Bottom"],
                 ],
             ]
         ],
     )
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error running random vibration analysis: {str(e)}")
+    print(f"Error running random vibration analysis: {e}")
 
 ###############################################################################
 # Exit Sherlock
 # =============
 # Exit the gRPC connection and shut down Sherlock.
 
-time.sleep(5)
 sherlock.common.exit(True)
 print("Sherlock gRPC connection closed successfully.")

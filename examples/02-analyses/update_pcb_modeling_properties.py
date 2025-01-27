@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ For further details, refer to the official documentation on PCB modeling propert
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdatePcbModelingPropsError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdatePcbModelingPropsError,
+)
 from ansys.sherlock.core.types.analysis_types import (
     ElementOrder,
     UpdatePcbModelingPropsRequestAnalysisType,
@@ -63,29 +66,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive
-# ==================
-# Import a project into the Sherlock environment.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update PCB Modeling Properties
@@ -95,7 +88,7 @@ except SherlockImportODBError as e:
 try:
     sherlock.analysis.update_pcb_modeling_props(
         "Test",
-        ["Card"],
+        ["Main Board"],
         [
             (
                 UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
@@ -113,7 +106,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         "Test",
-        ["Card"],
+        ["Main Board"],
         [
             (
                 UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
@@ -131,7 +124,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         "Test",
-        ["Card"],
+        ["Main Board"],
         [
             (
                 UpdatePcbModelingPropsRequestAnalysisType.ICT,
@@ -149,7 +142,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         "Test",
-        ["Card"],
+        ["Main Board"],
         [
             (
                 UpdatePcbModelingPropsRequestAnalysisType.MECHANICAL_SHOCK,
@@ -167,7 +160,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         "Test",
-        ["Card"],
+        ["Main Board"],
         [
             (
                 UpdatePcbModelingPropsRequestAnalysisType.RANDOM_VIBE,
@@ -186,7 +179,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         "Test",
-        ["Card"],
+        ["Main Board"],
         [
             (
                 UpdatePcbModelingPropsRequestAnalysisType.THERMAL_MECH,
@@ -203,8 +196,9 @@ try:
             )
         ],
     )
+    print("PCB modeling properties updated successfully.")
 except SherlockUpdatePcbModelingPropsError as e:
-    print(f"Error updating PCB modeling properties: {str(e)}")
+    print(f"Error updating PCB modeling properties: {e}")
 
 ###############################################################################
 # Exit Sherlock

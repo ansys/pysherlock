@@ -81,8 +81,12 @@ try:
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
 
+###############################################################################
+# Add Strain Map
+# ====================================
+# Add a strain map to the project.
+
 try:
-    # Add strain maps to the project
     strain_map_path = os.path.join(
         ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
     )
@@ -145,15 +149,12 @@ except SherlockUpdateHarmonicVibePropsError as e:
 # Run the strain map analysis, including harmonic vibration and other analysis types.
 
 try:
-    analysis_type_enum = RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
-
-    analysis_type = analysis_type_enum.HarmonicVibe
     sherlock.analysis.run_strain_map_analysis(
         "Test",
         "Main Board",
         [
             [
-                analysis_type,
+                RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.HarmonicVibe,
                 [
                     ["On The Road", "5 - Harmonic Vibe", "TOP", "StrainMap - Top"],
                     ["On The Road", "5 - Harmonic Vibe", "BOTTOM", "StrainMap - Bottom"],
