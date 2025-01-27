@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,10 @@ For further details, refer to the official documentation on random vibration pro
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportODBError, SherlockUpdateRandomVibePropsError
+from ansys.sherlock.core.errors import (
+    SherlockImportProjectZipArchiveError,
+    SherlockUpdateRandomVibePropsError,
+)
 
 ###############################################################################
 # Launch PySherlock service
@@ -57,29 +60,19 @@ ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
-# Import ODB Archive
-# ==================
-# Import a project into the Sherlock environment.
+# Import Tutorial Project
+# ========================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    # Import ODB++ archive into the project
-    sherlock.project.import_odb_archive(
-        ANSYS_ROOT
-        + os.path.sep
-        + "sherlock"
-        + os.path.sep
-        + "tutorial"
-        + os.path.sep
-        + "ODB++ Tutorial.tgz",
-        True,
-        True,
-        True,
-        True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
     )
-except SherlockImportODBError as e:
-    print(f"Error importing ODB archive: {str(e)}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Update Random Vibration Properties
@@ -89,14 +82,15 @@ except SherlockImportODBError as e:
 try:
     sherlock.analysis.update_random_vibe_props(
         "Test",
-        "Card",
+        "Main Board",
         random_vibe_damping="0.01, 0.03",
         part_validation_enabled=False,
         require_material_assignment_enabled=False,
         model_source="GENERATED",
     )
+    print("Random vibration properties updated successfully.")
 except SherlockUpdateRandomVibePropsError as e:
-    print(f"Error updating random vibration properties: {str(e)}")
+    print(f"Error updating random vibration properties: {e}")
 
 ###############################################################################
 # Exit Sherlock
