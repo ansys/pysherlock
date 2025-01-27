@@ -86,8 +86,8 @@ try:
 
     # Add the potting region
     sherlock.layer.add_potting_region(
-        "Test",
-        [
+        project="Test",
+        potting_regions=[
             {
                 "cca_name": "Card",
                 "potting_id": "Test Region",

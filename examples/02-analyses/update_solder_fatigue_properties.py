@@ -81,8 +81,8 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     sherlock.analysis.update_solder_fatigue_props(
-        "Test",
-        [
+        project="Test",
+        solder_fatigue_properties=[
             {
                 "cca_name": "Main Board",
                 "solder_material": "TIN-LEAD (63SN37PB)",
