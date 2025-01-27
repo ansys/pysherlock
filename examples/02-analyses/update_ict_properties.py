@@ -82,8 +82,8 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     # Update properties for ICT analysis
     sherlock.analysis.update_ict_analysis_props(
-        "Test",
-        [
+        project="Test",
+        ict_analysis_properties=[
             {
                 "cca_name": "Main Board",
                 "ict_application_time": 2,
