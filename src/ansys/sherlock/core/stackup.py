@@ -490,7 +490,7 @@ class Stackup(GrpcStub):
         cca_name : str
             Name of the CCA.
         layer : str
-            Layer ID associated with the conductor layer.
+            Layer ID associated with the laminate layer.
         manufacturer : str, optional
             Manufacturer of the material for the laminate layer.
             The default is ``""``. To update the material, the
