@@ -54,11 +54,22 @@ from ansys.sherlock.core.errors import (
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-TESTDIR = os.getcwd()
+TESTDIR = os.path.join(os.getcwd(), "temp")
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import Tutorial Project

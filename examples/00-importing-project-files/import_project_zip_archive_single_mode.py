@@ -39,16 +39,29 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_import_single_mode_example.png'
 
 import os
+import shutil
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleModeError
+
+###############################################################################
+# Clean temporary directory
+# ==============
+# Delete and create the directory for storing temp files.
+
+TEMP_DIR = os.path.join(os.getcwd(), "temp")
+try:
+    shutil.rmtree(TEMP_DIR, ignore_errors=True)
+    os.makedirs(TEMP_DIR)
+except Exception as e:
+    print(f"Error cleaning temporary directory: {e}")
 
 ###############################################################################
 # Launch PySherlock service in single-project mode
 # ================================================
 # Launch the Sherlock service using the specified project path and wait for initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092, single_project_path=os.getcwd())
@@ -63,7 +76,7 @@ try:
         project="Test",
         category="Demos",
         archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
-        destination_file_directory=os.getcwd(),
+        destination_file_directory=TEMP_DIR,
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveSingleModeError as e:
