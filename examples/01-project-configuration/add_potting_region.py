@@ -37,7 +37,6 @@ and create potting regions with specified shapes and properties for a PCB analys
 """
 
 import os
-import time
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockAddPottingRegionError, SherlockImportODBError
@@ -48,13 +47,21 @@ from ansys.sherlock.core.types.layer_types import PolygonalShape
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
 
-# Wait for service to initialize
-time.sleep(5)
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import ODB++ Archive

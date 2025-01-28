@@ -55,10 +55,36 @@ from ansys.sherlock.core.errors import SherlockImportIpc2581Error
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
+
+###############################################################################
+# Import Tutorial Project
+# ========================
+# Import a sample project ZIP archive provided with the Sherlock installation.
+
+try:
+    sherlock.project.import_project_zip_archive(
+        project="Test",
+        category="Demos",
+        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+    )
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project: {e}")
 
 ###############################################################################
 # Import IPC-2581 Archive
