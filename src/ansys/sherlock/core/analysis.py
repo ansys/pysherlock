@@ -14,6 +14,7 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
+    UpdatePTHFatiguePropsRequest,
     UpdateSemiconductorWearoutAnalysisPropsRequest,
 )
 
@@ -2301,5 +2302,78 @@ class Analysis(GrpcStub):
 
         responses = []
         for return_code in self.stub.updateSemiconductorWearoutAnalysisProps(update_request):
+            responses.append(return_code)
+        return responses
+
+    @require_version(252)
+    def update_PTH_fatigue_props(
+        self,
+        request: UpdatePTHFatiguePropsRequest,
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        r"""
+        Update properties for one or more Plated Through Hole (PTH) Fatigue Analyses.
+
+        Parameters
+        ----------
+        request: UpdatePTHFatiguePropsRequest
+            Contains all the information needed to update the properties for one or more
+            PTH fatigue analyses in a project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each update request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.analysis_types import (
+            PTHFatigueAnalysis,
+            UpdatePTHFatiguePropsRequest,
+        )
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive(
+            project="Assembly Tutorial",
+            category="category",
+            archive_file="C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\
+                Assembly Tutorial.zip",
+        )
+        >>> update_request1 = PTHFatigueAnalysis(
+            cca_name="Main Board",
+            qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
+            pth_quality_factor="1.5",
+            pth_wall_thickness=0.1,
+            pth_wall_thickness_units="mm",
+            min_hole_size=0.5,
+            min_hole_size_units="mm",
+            max_hole_size=1.0,
+            max_hole_size_units="mm",
+        )
+        >>> update_request2 = PTHFatigueAnalysis(
+            cca_name="Memory Card 1",
+            qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.Product,
+            pth_quality_factor="2.0",
+            pth_wall_thickness=0.2,
+            pth_wall_thickness_units="mil",
+            min_hole_size=0.7,
+            min_hole_size_units="mil",
+            max_hole_size=1.5,
+            max_hole_size_units="mil",
+        )
+        >>> request = UpdatePTHFatiguePropsRequest(
+            project="Test Project",
+            pth_fatigue_analysis_properties=[
+                update_request1,
+                update_request2
+            ]
+        )
+        >>> return_codes = sherlock.analysis.update_PTH_fatigue_props(request)
+        >>> for return_code in return_codes:
+            print(f"Return code: value={return_code.value}, message={return_code.message}")
+        """
+        update_request = request._convert_to_grpc()
+
+        responses = []
+        for return_code in self.stub.updatePTHFatigueProps(update_request):
             responses.append(return_code)
         return responses
