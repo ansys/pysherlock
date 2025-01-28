@@ -100,11 +100,11 @@ try:
     parts_list_path = os.path.join(os.getcwd(), "partslist.csv")
 
     sherlock.parts.import_parts_list(
-        project="Test", cca_name="Main Board", import_file=parts_list_path, import_as_user_src=True
+        project="Test", cca_name="Main Board", import_file=parts_list_path, import_as_user_src=False
     )
-    print("Parts list imported successfully with validation.")
+    print("Parts list imported successfully.")
 except SherlockImportPartsListError as e:
-    print(f"Error importing parts list with validation: {e}")
+    print(f"Error importing parts list: {e}")
 
 
 ###############################################################################
