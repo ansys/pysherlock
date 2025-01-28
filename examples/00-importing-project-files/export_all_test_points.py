@@ -53,10 +53,21 @@ from ansys.sherlock.core.errors import (
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import Tutorial Project
@@ -79,7 +90,7 @@ except SherlockImportProjectZipArchiveError as e:
 # Export all test points for the "Main Board" to a CSV file.
 
 try:
-    test_points_export_path = os.path.join(os.getcwd(), "TestPointsExport.csv")
+    test_points_export_path = os.path.join(os.getcwd(), "temp", "TestPointsExport.csv")
     sherlock.layer.export_all_test_points(
         project="Test",
         cca_name="Main Board",

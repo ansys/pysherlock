@@ -51,10 +51,21 @@ from ansys.sherlock.core.errors import (
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import Tutorial Project
@@ -77,7 +88,7 @@ except SherlockImportProjectZipArchiveError as e:
 # Export the parts list from the imported project.
 
 try:
-    parts_list_path = os.path.join(os.getcwd(), "exportedParts.csv")
+    parts_list_path = os.path.join(os.getcwd(), "temp", "exportedParts.csv")
     sherlock.parts.export_parts_list("Test", "Main Board", parts_list_path)
     print(f"Parts list exported successfully to: {parts_list_path}")
 except SherlockExportPartsListError as e:

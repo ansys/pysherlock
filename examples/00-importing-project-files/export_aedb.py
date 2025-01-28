@@ -51,10 +51,21 @@ from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportOD
 # ==========================
 # Launch the Sherlock service and ensure proper initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import ODB++ Archive
@@ -81,7 +92,7 @@ except SherlockImportODBError as e:
 # Export the AEDB file for the "Card" of the "Test" project to the specified path.
 
 try:
-    aedb_export_path = os.path.join(os.getcwd(), "test.aedb")
+    aedb_export_path = os.path.join(os.getcwd(), "temp", "test.aedb")
     sherlock.model.export_aedb(
         project_name="Test",
         cca_name="Card",

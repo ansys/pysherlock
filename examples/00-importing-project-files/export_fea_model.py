@@ -52,10 +52,21 @@ from ansys.sherlock.core.types.common_types import Measurement
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import Tutorial Project
@@ -78,7 +89,7 @@ except SherlockImportProjectZipArchiveError as e:
 # Export the FEA model with customized parameters.
 
 try:
-    fea_export_path = os.path.join(os.getcwd(), "export.wbjn")
+    fea_export_path = os.path.join(os.getcwd(), "temp", "export.wbjn")
     sherlock.model.export_FEA_model(
         project="Test",
         cca_name="Main Board",

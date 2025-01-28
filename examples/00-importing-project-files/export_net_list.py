@@ -52,10 +52,21 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 # ==========================
 # Launch the Sherlock service using the default port and wait for initialization.
 
-VERSION = "242"
+VERSION = "251"
 ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
 
 sherlock = launcher.launch_sherlock(port=9092)
+
+###############################################################################
+# Delete Project
+# ==============
+# Delete the project if it already exists.
+
+try:
+    sherlock.project.delete_project("Test")
+    print("Project deleted successfully.")
+except Exception:
+    pass
 
 ###############################################################################
 # Import Tutorial Project
@@ -78,7 +89,7 @@ except SherlockImportProjectZipArchiveError as e:
 # Export the net list from the imported project.
 
 try:
-    net_list_path = os.path.join(os.getcwd(), "exportedNetList.csv")
+    net_list_path = os.path.join(os.getcwd(), "temp", "exportedNetList.csv")
     sherlock.parts.export_net_list(
         project="Test",
         cca_name="Main Board",
