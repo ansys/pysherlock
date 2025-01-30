@@ -284,7 +284,7 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.types.layer_types import PottingRegion
         >>> sherlock = launch_sherlock()
         >>>
-        >>> update_request1 = PottingRegionUpdateData(
+        >>> update1 = PottingRegionUpdateData(
             potting_region_id_to_update=potting_id,
             potting_region=PottingRegionData(
                 cca_name=cca_name,
@@ -300,7 +300,7 @@ class Layer(GrpcStub):
                 )
             )
         )
-        >>> update_request2 = PottingRegionUpdateData(
+        >>> update2 = PottingRegionUpdateData(
             potting_region_id_to_update=potting_id,
             potting_region=PottingRegionData(
                 cca_name=cca_name,
@@ -316,11 +316,14 @@ class Layer(GrpcStub):
                 )
             )
         )
-        >>> potting_region_requests = [
-            update_request1,
-            update_request2
-        ]
-        >>> return_codes = sherlock.layer.update_potting_region(request)
+        >>> example_request = UpdatePottingRegionRequest(
+                "project_name",
+                [
+                    update1,
+                    update2
+                ]
+            )
+        >>> return_codes = sherlock.layer.update_potting_region(example_request)
         """
         update_request = request._convert_to_grpc()
 
