@@ -1841,8 +1841,11 @@ class Layer(GrpcStub):
 
         Returns
         -------
-        list
+        Layer_info: list[dict[str, list]]
             The layers as seen in the Layer Viewer for the given project CCA.
+            Each dictionary should contain:
+            - "layer_folder": str, Name of the layer_folder enum.
+            - "layer": list, list of names of layers under this folder
 
         Example
         -------
