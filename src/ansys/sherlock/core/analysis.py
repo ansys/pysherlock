@@ -2328,7 +2328,8 @@ class Analysis(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.analysis_types import (
-            PTHFatigueAnalysis,
+            PTHFatiguePropsAnalysis,
+            UpdatePTHFatiguePropsRequestAnalysisType,
             UpdatePTHFatiguePropsRequest,
         )
         >>> sherlock = launch_sherlock()
@@ -2338,7 +2339,7 @@ class Analysis(GrpcStub):
             archive_file="C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\
                 Assembly Tutorial.zip",
         )
-        >>> update_request1 = PTHFatigueAnalysis(
+        >>> update_request1 = PTHFatiguePropsAnalysis(
             cca_name="Main Board",
             qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
             pth_quality_factor="1.5",
@@ -2349,9 +2350,9 @@ class Analysis(GrpcStub):
             max_hole_size=1.0,
             max_hole_size_units="mm",
         )
-        >>> update_request2 = PTHFatigueAnalysis(
+        >>> update_request2 = PTHFatiguePropsAnalysis(
             cca_name="Memory Card 1",
-            qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.Product,
+            qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
             pth_quality_factor="2.0",
             pth_wall_thickness=0.2,
             pth_wall_thickness_units="mil",
