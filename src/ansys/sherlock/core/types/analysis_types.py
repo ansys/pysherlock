@@ -2,9 +2,10 @@
 
 """Module containing types for the Analysis Service."""
 
+from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
 
@@ -252,7 +253,7 @@ class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
         return request
 
 
-class UpdatePTHFatiguePropsRequestAnalysisType:
+class UpdatePTHFatiguePropsRequestAnalysisType(Enum):
     """Constants for qualification choices in the Update PTH Fatigue Properties request."""
 
     __qualification_choices = (
@@ -268,8 +269,10 @@ class UpdatePTHFatiguePropsRequestAnalysisType:
     "SUPPLIER"
 
 
-class PTHFatigueAnalysis(BaseModel):
+class PTHFatiguePropsAnalysis(BaseModel):
     """Contains the properties of a PTH fatigue analysis update request."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     cca_name: str
     """Name of the CCA."""
@@ -333,7 +336,7 @@ class UpdatePTHFatiguePropsRequest(BaseModel):
 
     project: str
     """Name of the Sherlock project."""
-    pth_fatigue_analysis_properties: list[PTHFatigueAnalysis]
+    pth_fatigue_analysis_properties: list[PTHFatiguePropsAnalysis]
     """List of PTH fatigue analysis properties to update."""
 
     @field_validator("project")
