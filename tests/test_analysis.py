@@ -30,6 +30,7 @@ from ansys.sherlock.core.types.analysis_types import (
     ComponentFailureMechanism,
     ElementOrder,
     ModelSource,
+    PTHFatiguePropsAnalysis,
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
     SemiconductorWearoutAnalysis,
@@ -2120,7 +2121,7 @@ def helper_test_update_semiconductor_wearout_props(analysis: Analysis):
 def helper_test_update_PTH_fatigue_props(analysis: Analysis):
     """Test update PTH fatigue properties API."""
     try:
-        PTHFatigueAnalysis(
+        PTHFatiguePropsAnalysis(
             cca_name="",
             pth_quality_factor="1.5",
             pth_wall_thickness=0.1,
@@ -2159,10 +2160,10 @@ def helper_test_update_PTH_fatigue_props(analysis: Analysis):
         assert isinstance(e, pydantic.ValidationError)
         assert (
             e.errors()[0]["msg"]
-            == "Input should be a valid dictionary or instance of PTHFatigueAnalysis"
+            == "Input should be a valid dictionary or instance of PTHFatiguePropsAnalysis"
         )
 
-    pth_fatigue_analysis1 = PTHFatigueAnalysis(
+    pth_fatigue_analysis1 = PTHFatiguePropsAnalysis(
         cca_name="Main Board",
         qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
         pth_quality_factor="1.5",
@@ -2173,9 +2174,10 @@ def helper_test_update_PTH_fatigue_props(analysis: Analysis):
         max_hole_size=1.0,
         max_hole_size_units="mm",
     )
-    pth_fatigue_analysis2 = PTHFatigueAnalysis(
+
+    pth_fatigue_analysis2 = PTHFatiguePropsAnalysis(
         cca_name="Memory Card 1",
-        qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.Product,
+        qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
         pth_quality_factor="2.0",
         pth_wall_thickness=0.2,
         pth_wall_thickness_units="mil",
