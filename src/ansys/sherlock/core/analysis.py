@@ -2341,8 +2341,8 @@ class Analysis(GrpcStub):
         )
         >>> update_request1 = PTHFatiguePropsAnalysis(
             cca_name="Main Board",
-            qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
-            pth_quality_factor="1.5",
+            qualification=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
+            pth_quality_factor="Good",
             pth_wall_thickness=0.1,
             pth_wall_thickness_units="mm",
             min_hole_size=0.5,
@@ -2352,8 +2352,8 @@ class Analysis(GrpcStub):
         )
         >>> update_request2 = PTHFatiguePropsAnalysis(
             cca_name="Memory Card 1",
-            qualification_choices=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
-            pth_quality_factor="2.0",
+            qualification=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
+            pth_quality_factor="Good",
             pth_wall_thickness=0.2,
             pth_wall_thickness_units="mil",
             min_hole_size=0.7,

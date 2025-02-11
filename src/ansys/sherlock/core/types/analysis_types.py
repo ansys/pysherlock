@@ -256,16 +256,14 @@ class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
 class UpdatePTHFatiguePropsRequestAnalysisType(Enum):
     """Constants for qualification choices in the Update PTH Fatigue Properties request."""
 
-    __qualification_choices = (
-        analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis.Qualification
-    )
-    NONE = __qualification_choices.NONE
+    __qualification = analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis.Qualification
+    NONE = __qualification.NONE
     "NONE"
-    PER_LOT = __qualification_choices.PER_LOT
+    PER_LOT = __qualification.PER_LOT
     "PER_LOT"
-    PRODUCT = __qualification_choices.PRODUCT
+    PRODUCT = __qualification.PRODUCT
     "PRODUCT"
-    SUPPLIER = __qualification_choices.SUPPLIER
+    SUPPLIER = __qualification.SUPPLIER
     "SUPPLIER"
 
 
@@ -276,7 +274,7 @@ class PTHFatiguePropsAnalysis(BaseModel):
 
     cca_name: str
     """Name of the CCA."""
-    qualification_choices: Optional[UpdatePTHFatiguePropsRequestAnalysisType] = None
+    qualification: Optional[UpdatePTHFatiguePropsRequestAnalysisType] = None
     """Qualification choice for IST/HATS."""  # noqa: E501
     pth_quality_factor: Optional[str] = None
     """Quality factor for PTH."""
@@ -299,8 +297,8 @@ class PTHFatiguePropsAnalysis(BaseModel):
         grpc_data = analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis()
 
         grpc_data.ccaName = self.cca_name
-        if self.qualification_choices is not None:
-            grpc_data.qualificationChoices = self.qualification_choices
+        if self.qualification is not None:
+            grpc_data.qualification = self.qualification.name
         if self.pth_quality_factor is not None:
             grpc_data.pthQualityFactor = self.pth_quality_factor
         if self.pth_wall_thickness is not None:
