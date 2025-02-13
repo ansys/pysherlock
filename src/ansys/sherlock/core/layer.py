@@ -1844,11 +1844,12 @@ class Layer(GrpcStub):
 
         Returns
         -------
-        Layer_info: list[dict[str, list]]
+        layer_infos: list[dict[str, list]]
             The layers as seen in the Layer Viewer for the given project CCA.
             Each dictionary should contain:
-            - "layer_folder": str, Name of the layer_folder enum.
-            - "layer": list, list of names of layers under this folder
+
+            - "layer_folder": str, name of layer_folder enum.
+            - "layers": list, list of names of layers under this folder
 
         Example
         -------
@@ -1884,7 +1885,7 @@ class Layer(GrpcStub):
             if response.returnCode.value == -1:
                 raise SherlockListLayersError(response.returnCode.message)
 
-            return response.layer
+            return response.layerInfos
 
         except SherlockListLayersError as e:
             LOG.error(str(e))
@@ -1892,8 +1893,11 @@ class Layer(GrpcStub):
 
     @require_version(252)
     def export_layer_image(
-        self, project: str, cca_name: str, export_layers: list[dict[str, bool | int | str]]
-    ):
+        self,
+        project: str,
+        cca_name: str,
+        export_layers: list[dict[str, bool | int | str] | SherlockLayerService_pb2.LayerInfo],
+    ) -> list[SherlockLayerService_pb2.ExportLayerImageResponse]:
         r"""
         Export one or more 2D Layer Viewer images from a project CCA.
 
@@ -1919,8 +1923,12 @@ class Layer(GrpcStub):
                 Displays the x and y axes in the export image.
             - grid_enabled : bool
                 Displays a grid in the export image.
-            - layer : list of str
-                List of names of the layers to be exported. This cannot be empty.
+            - layer_infos: list[dict[enum, list]]
+                The layers as seen in the Layer Viewer for the given project CCA.
+                Each dictionary should contain:
+
+                - "layer_folder": enum, layer_folder enum.
+                - "layers": list, list of names of layers under this folder
             - file_path : str
                 Full file path of the export image.
             - image_height : int
@@ -1948,6 +1956,12 @@ class Layer(GrpcStub):
             project="Tutorial Project",
             cca_name="Card"
         )
+        >>> layer_infos = [
+            { "layer_folder": "Components",
+              "layers": ["comp-top"]},
+            { "layer_folder": "Harmonic_Vibe",
+              "layers":["HV Disp @ 203.39 Hz"]}
+            ]
         >>> export_layers = [
         >>> {
             "components_enabled": True,
@@ -1955,10 +1969,7 @@ class Layer(GrpcStub):
             "leads_enabled": True,
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [
-                "Components|comp-top",
-                "Mechanical Shock#|SH Disp @ 5.2ms"
-            ],
+            "layer_infos": layer_infos,
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
@@ -1979,8 +1990,8 @@ class Layer(GrpcStub):
                     raise SherlockExportLayerImageError(message="Axes Enabled is invalid.")
                 if "grid_enabled" not in export_layer:
                     raise SherlockExportLayerImageError(message="Grid Enabled is invalid.")
-                if "layer" not in export_layer or len(export_layer["layer"]) == 0:
-                    raise SherlockExportLayerImageError(message="Layer is invalid.")
+                if "layer_infos" not in export_layer or len(export_layer["layer_infos"]) == 0:
+                    raise SherlockExportLayerImageError(message="Layer info is invalid.")
                 if "file_path" not in export_layer or export_layer["file_path"] == "":
                     raise SherlockExportLayerImageError(message="File Path is invalid.")
                 if "image_height" not in export_layer or not isinstance(
@@ -2017,6 +2028,13 @@ class Layer(GrpcStub):
                 else:
                     leads_enabled_val = None
 
+                layer_info_request = []
+                for layer in export_layer["layer_infos"]:
+                    layer_info = SherlockLayerService_pb2.LayerInfo(
+                        layerFolder=layer["layer_folder"], layers=layer["layers"]
+                    )
+                    layer_info_request.append(layer_info)
+
                 export_layer_info = (
                     SherlockLayerService_pb2.ExportLayerImageRequest.ExportLayerImageInfo(
                         componentsEnabled=components_enabled_val,
@@ -2024,7 +2042,7 @@ class Layer(GrpcStub):
                         leadsEnabled=leads_enabled_val,
                         axesEnabled=export_layer["axes_enabled"],
                         gridEnabled=export_layer["grid_enabled"],
-                        layer=export_layer["layer"],
+                        layerInfos=layer_info_request,
                         filePath=export_layer["file_path"],
                         imageHeight=export_layer["image_height"],
                         imageWidth=export_layer["image_width"],
@@ -2037,15 +2055,10 @@ class Layer(GrpcStub):
                 project=project, ccaName=cca_name, exportLayers=export_layer_image_request
             )
 
-            response = self.stub.exportLayerImage(request)
-            return_code = response.returnCode
-
-            if return_code.value == -1:
-                raise SherlockExportLayerImageError(message=return_code.message)
-            else:
-                for msg in response.exportMessages:
-                    LOG.info(msg)
-                return return_code.value
+            responses = []
+            for response in self.stub.exportLayerImage(request):
+                responses.append(response)
+            return responses
 
         except SherlockExportLayerImageError as e:
             LOG.error(str(e))

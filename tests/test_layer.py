@@ -1491,16 +1491,20 @@ def helper_test_list_layers(layer):
             assert type(e) == SherlockListLayersError
 
         try:
-            result = layer.list_layers("Tutorial Project", "Wrong Board Name")
-            assert result == -1
+            response = layer.list_layers("Tutorial Project", "Wrong Board Name")
         except Exception as e:
             assert str(e) == "List layers error: Cannot find CCA: Wrong Board Name"
             assert type(e) == SherlockListLayersError
 
         # Valid request
         try:
-            result = layer.list_layers("Tutorial Project", "Main Board")
-            assert len(result) == 84
+            response = layer.list_layers("Tutorial Project", "Main Board")
+            layer_count = 0
+            for layer_info in response:
+                layer_count += len(layer_info.layers)
+
+            # assert len(result) == 84
+            assert layer_count == 84
         except SherlockListLayersError as e:
             pytest.fail(e.message())
 
@@ -1508,10 +1512,14 @@ def helper_test_list_layers(layer):
 def helper_test_export_layer_image(layer):
     """Test export_layer_image API"""
 
+    layer_infos = [
+        {"layer_folder": "Components", "layers": ["comp-top"]},
+        {"layer_folder": "Mechanical_Shock", "layers": ["SH Disp @ 5.2ms"]},
+    ]
     export_layers = [
         {
             "grid_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
@@ -1540,7 +1548,7 @@ def helper_test_export_layer_image(layer):
     export_layers = [
         {
             "axes_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
@@ -1558,7 +1566,7 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": [],
+            "layer_infos": [],
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 600,
             "image_width": 800,
@@ -1570,13 +1578,13 @@ def helper_test_export_layer_image(layer):
         layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
         pytest.fail("No exception thrown when using an invalid parameter")
     except SherlockExportLayerImageError as e:
-        assert str(e) == "Export layer image error: Layer is invalid."
+        assert str(e) == "Export layer image error: Layer info is invalid."
 
     export_layers = [
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "image_height": 600,
             "image_width": 800,
             "overwrite_existing_file": True,
@@ -1593,7 +1601,7 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_width": 800,
             "overwrite_existing_file": True,
@@ -1610,7 +1618,7 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 800,
             "overwrite_existing_file": True,
@@ -1627,7 +1635,7 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
             "image_height": 800,
             "image_width": 800,
@@ -1645,7 +1653,7 @@ def helper_test_export_layer_image(layer):
         {
             "axes_enabled": True,
             "grid_enabled": True,
-            "layer": ["Components|comp-top", "Mechanical Shock#|SH Disp @ 5.2ms"],
+            "layer_infos": layer_infos,
             "file_path": test_file_path,
             "image_height": 800,
             "image_width": 800,
@@ -1661,27 +1669,33 @@ def helper_test_export_layer_image(layer):
             assert type(e) == SherlockExportLayerImageError
 
         try:
-            result = layer.export_layer_image("Tutorial Project", "Wrong Board Name", export_layers)
-            assert result == -1
+            results = layer.export_layer_image(
+                "Tutorial Project", "Wrong Board Name", export_layers
+            )
+            for result in results:
+                assert result.returnCode.value == -1
         except Exception as e:
             assert type(e) == SherlockExportLayerImageError
 
         try:
-            result = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
-            assert result == 0
+            results = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+            for result in results:
+                assert result.returnCode.value == 0
         except Exception as e:
             pytest.fail(str(e))
+
+        layer_infos = [
+            {"layer_folder": "Components", "layers": ["comp-top"]},
+            {"layer_folder": "Mechanical_Shock", "layers": ["SH Disp @ 5.2ms"]},
+            {"layer_folder": "Mechanical_Shock", "layers": ["SH Strain Bot @ 5.2ms"]},
+            {"layer_folder": "Random_Vibe", "layers": ["RV Strain RMS Bot"]},
+        ]
 
         export_layers = [
             {
                 "axes_enabled": True,
                 "grid_enabled": True,
-                "layer": [
-                    "Components|comp-top",
-                    "Mechanical Shock#|SH Disp @ 5.2ms",
-                    "Mechanical Shock#|SH Strain Bot @ 5.2ms",
-                    "Random Vibe#|RV Strain RMS Bot",
-                ],
+                "layer_infos": layer_infos,
                 "file_path": test_file_path,
                 "image_height": 800,
                 "image_width": 800,
@@ -1690,8 +1704,9 @@ def helper_test_export_layer_image(layer):
         ]
 
         try:
-            result = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
-            assert result == 0
+            results = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+            for result in results:
+                assert result.returnCode.value == 0
         except Exception as e:
             pytest.fail(str(e))
 
