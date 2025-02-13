@@ -10,3 +10,4 @@ Pythonic
 venv
 Makefile
 py
+IST
