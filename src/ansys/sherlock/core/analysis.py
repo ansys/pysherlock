@@ -2362,7 +2362,7 @@ class Analysis(GrpcStub):
             max_hole_size_units="mil",
         )
         >>> request = UpdatePTHFatiguePropsRequest(
-            project="Test Project",
+            project="Assembly Tutorial",
             pth_fatigue_analysis_properties=[
                 update_request1,
                 update_request2
