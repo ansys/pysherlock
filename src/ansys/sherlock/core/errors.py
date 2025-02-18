@@ -544,6 +544,18 @@ class SherlockGetPartLocationError(Exception):
         return f"Get part location error: {self.message}"
 
 
+class SherlockGetPartsListPropertiesError(Exception):
+    """Contains the error raised when getting part location results in an error."""
+
+    def __init__(self, message: str):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Get parts list properties error: {self.message}"
+
+
 class SherlockLoadThermalProfileError(Exception):
     """Contains the error raised when loading thermal profile."""
 

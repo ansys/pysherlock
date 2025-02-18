@@ -84,3 +84,14 @@ class PartLocation:
         """mirrored - ``True`` or ``False`` """
         self.ref_des = location.refDes
         """reference designator"""
+
+
+class PartProperties:
+    """Part Properties."""
+
+    def __init__(self, part_properties):
+        """Initialize members from the properties."""
+        self.ref_des = part_properties.refDes
+        """reference designator"""
+        self.properties = part_properties.properties
+        """properties"""
