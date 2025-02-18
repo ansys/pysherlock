@@ -30,6 +30,7 @@ from ansys.sherlock.core.types.analysis_types import (
     ComponentFailureMechanism,
     ElementOrder,
     ModelSource,
+    PTHFatiguePropsAnalysis,
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
     SemiconductorWearoutAnalysis,
@@ -37,6 +38,8 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
+    UpdatePTHFatiguePropsRequest,
+    UpdatePTHFatiguePropsRequestAnalysisType,
     UpdateSemiconductorWearoutAnalysisPropsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
@@ -68,6 +71,7 @@ def test_all():
     helper_test_update_parts_list_validation_props(analysis)
     helper_test_get_parts_list_validation_analysis_props(analysis)
     helper_test_update_component_failure_mechanism_props(analysis)
+    helper_test_update_PTH_fatigue_props(analysis)
 
 
 def helper_test_run_analysis(analysis: Analysis):
@@ -2107,6 +2111,99 @@ def helper_test_update_semiconductor_wearout_props(analysis: Analysis):
 
         request.project = "AssemblyTutorial"
         responses = analysis.update_semiconductor_wearout_props(request)
+
+        assert len(responses) == 2
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == ""
+
+
+def helper_test_update_PTH_fatigue_props(analysis: Analysis):
+    """Test update PTH fatigue properties API."""
+    try:
+        PTHFatiguePropsAnalysis(
+            cca_name="",
+            pth_quality_factor="Good",
+            pth_wall_thickness=0.1,
+            pth_wall_thickness_units="mm",
+            min_hole_size=0.5,
+            min_hole_size_units="mm",
+            max_hole_size=1.0,
+            max_hole_size_units="mm",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        UpdatePTHFatiguePropsRequest(
+            project="",
+            pth_fatigue_analysis_properties=[],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        UpdatePTHFatiguePropsRequest(
+            project="Test",
+            pth_fatigue_analysis_properties=["Not a PTHFatigueAnalysis"],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Input should be a valid dictionary or instance of PTHFatiguePropsAnalysis"
+        )
+
+    pth_fatigue_analysis1 = PTHFatiguePropsAnalysis(
+        cca_name="Main Board",
+        qualification=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
+        pth_quality_factor="Good",
+        pth_wall_thickness=0.1,
+        pth_wall_thickness_units="mm",
+        min_hole_size=0.5,
+        min_hole_size_units="mm",
+        max_hole_size=1.0,
+        max_hole_size_units="mm",
+    )
+
+    pth_fatigue_analysis2 = PTHFatiguePropsAnalysis(
+        cca_name="Memory Card 1",
+        qualification=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
+        pth_quality_factor="Good",
+        pth_wall_thickness=0.2,
+        pth_wall_thickness_units="mil",
+        min_hole_size=0.7,
+        min_hole_size_units="mil",
+        max_hole_size=1.5,
+        max_hole_size_units="mil",
+    )
+    request = UpdatePTHFatiguePropsRequest(
+        project="Invalid project",
+        pth_fatigue_analysis_properties=[
+            pth_fatigue_analysis1,
+            pth_fatigue_analysis2,
+        ],
+    )
+
+    if analysis._is_connection_up():
+        responses = analysis.update_PTH_fatigue_props(request)
+
+        assert len(responses) == 2
+        for return_code in responses:
+            assert return_code.value == -1
+            assert return_code.message == f"Cannot find project: {request.project}"
+
+        request.project = "AssemblyTutorial"
+        responses = analysis.update_PTH_fatigue_props(request)
 
         assert len(responses) == 2
         for return_code in responses:
