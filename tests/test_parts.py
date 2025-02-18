@@ -12,6 +12,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportNetListError,
     SherlockExportPartsListError,
     SherlockGetPartLocationError,
+    SherlockGetPartsListPropertiesError,
     SherlockImportPartsListError,
     SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
@@ -46,8 +47,8 @@ def test_all():
     helper_test_export_net_list(parts)
     helper_test_enable_lead_modeling(parts)
     helper_test_get_part_location(parts)
+    helper_test_get_parts_list_properties(parts)
     helper_test_update_pad_properties(parts)
-
 
 def helper_test_update_parts_list(parts: Parts):
     """Test update_parts_list API."""
@@ -681,6 +682,61 @@ def helper_test_get_part_location(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetPartLocationError as e:
         assert str(e) == "Get part location error: Location unit is invalid."
+
+
+def helper_test_get_parts_list_properties(parts: Parts):
+    """Test get_parts_list_properties API"""
+    try:
+        parts.get_parts_list_properties(
+            "",
+            "CCA_Name",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockGetPartsListPropertiesError as e:
+        assert str(e) == "Get parts list properties error: Project name is invalid."
+
+    try:
+        parts.get_parts_list_properties(
+            "Test",
+            "",
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockGetPartsListPropertiesError as e:
+        assert str(e) == "Get parts list properties error: CCA name is invalid."
+
+    if parts._is_connection_up():
+        try:
+            parts.get_parts_list_properties(
+                "Tutorial Project",
+                "Invalid CCA",
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockGetPartsListPropertiesError
+
+        try:
+            part_properties = parts.get_parts_list_properties(
+                "Tutorial Project",
+                "Main Board",
+            )
+            assert type(part_properties) == list
+            assert len(part_properties) == 221
+        except SherlockGetPartsListPropertiesError as e:
+            pytest.fail(str(e))
+
+        try:
+            part_properties = parts.get_parts_list_properties(
+                "Tutorial Project",
+                "Main Board",
+                reference_designators=["C1", "U9"],
+            )
+            assert len(part_properties) == 2
+            assert part_properties[0].ref_des == "C1"
+            assert len(part_properties[0].properties) == 61
+            assert part_properties[1].ref_des == "U9"
+            assert len(part_properties[1].properties) == 64
+        except SherlockGetPartsListPropertiesError as e:
+            pytest.fail(str(e))
 
 
 def helper_test_update_parts_list_properties(parts: Parts):

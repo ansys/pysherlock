@@ -20,3 +20,5 @@ Classes
 -------
 .. autoclass:: PartLocation
      :members:
+.. autoclass:: PartProperties
+     :members:
