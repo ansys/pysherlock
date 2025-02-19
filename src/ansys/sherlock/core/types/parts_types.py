@@ -89,7 +89,10 @@ class PartLocation:
 class PartProperties:
     """Part Properties."""
 
-    def __init__(self, part_properties):
+    def __init__(
+        self,
+        part_properties: SherlockPartsService_pb2.GetPartsListPropertiesResponse.PartProperties,
+    ):
         """Initialize members from the properties."""
         self.ref_des = part_properties.refDes
         """reference designator"""
