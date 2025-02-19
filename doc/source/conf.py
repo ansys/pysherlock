@@ -128,26 +128,6 @@ source_suffix = ".rst"
 # We have our own custom templates
 templates_path = ["_templates"]
 
-autodoc_mock_imports = [
-    "grpc",
-    "SherlockCommonService_pb2",
-    "SherlockCommonService_pb2_grpc",
-    "SherlockProjectService_pb2",
-    "SherlockProjectService_pb2_grpc",
-    "SherlockModelService_pb2",
-    "SherlockModelService_pb2_grpc",
-    "SherlockLifeCycleService_pb2",
-    "SherlockLifeCycleService_pb2_grpc",
-    "SherlockLayerService_pb2",
-    "SherlockLayerService_pb2_grpc",
-    "SherlockStackupService_pb2",
-    "SherlockStackupService_pb2_grpc",
-    "SherlockPartsService_pb2",
-    "SherlockPartsService_pb2_grpc",
-    "SherlockAnalysisService_pb2",
-    "SherlockAnalysisService_pb2_grpc",
-]
-
 # additional logos for the latex coverpage
 latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 
