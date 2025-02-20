@@ -122,7 +122,7 @@ except SherlockUpdatePartsListPropertiesError as e:
 # Export the parts list for the "Card" of the "Test" project to a CSV file.
 
 try:
-    export_file = os.path.join(os.getcwd(), "exportedPartsList.csv")
+    export_file = os.path.join(os.getcwd(), "temp", "exportedPartsList.csv")
     sherlock.parts.export_parts_list(
         project="Test",
         cca_name="Main Board",
