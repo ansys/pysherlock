@@ -161,7 +161,7 @@ def launch(
 
         return ansys_install_path
     except Exception as e:
-        LOG.error(f"Error encountered while starting or executing Sherlock. {e}")
+        LOG.error(f"Error launching Sherlock. {e}")
         raise e
 
 
