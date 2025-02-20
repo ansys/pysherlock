@@ -118,7 +118,7 @@ def launch_sherlock(
 
         return sherlock
     except Exception as e:
-        LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
+        LOG.error(f"Error launching Sherlock: {str(e)}")
 
 
 def connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT, server_version: Optional[int] = None):
