@@ -29,6 +29,7 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     PartLocation,
     PartsListSearchDuplicationMode,
+    UpdatePadPropertiesRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
 
@@ -1040,3 +1041,52 @@ class Parts(GrpcStub):
             raise e
 
         return response.value
+
+    @require_version(252)
+    def update_pad_properties(
+        self,
+        request: UpdatePadPropertiesRequest,
+    ) -> list[SherlockPartsService_pb2.UpdatePadPropertiesResponse]:
+        r"""Update pad properties for one or more parts in a parts list.
+
+        Parameters
+        ----------
+        request: UpdatePadPropertiesRequest
+            Contains all the information needed to update the pad properties for one or more parts
+            in a project's CCA.
+
+        Returns
+        -------
+        list[SherlockPartsService_pb2.UpdatePadPropertiesResponse]
+            Status of the pad properties update and any error messages.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.parts_types import (
+            UpdatePadPropertiesRequest,
+        )
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive(
+            project="Assembly Tutorial",
+            category="category",
+            archive_file=\
+                "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        )
+        >>> request = UpdatePadPropertiesRequest(
+            project="Assembly Tutorial",
+            cca_name="Main Board",
+            ref_des=["U1", "R2", "C3"]
+        )
+        >>> response = sherlock.parts.update_pad_properties(request)
+        >>> for res in response:
+                print(f"Return code: value={res.returnCode.value}, message={res.returnCode.message},
+                refDes={res.refDes}")
+        """
+        update_request = request._convert_to_grpc()
+        response_stream = self.stub.updatePadProperties(update_request)
+
+        if isinstance(response_stream, SherlockPartsService_pb2.UpdatePadPropertiesResponse):
+            return [response_stream]
+
+        return list(response_stream)
