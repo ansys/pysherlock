@@ -61,6 +61,26 @@ class TestLauncher(unittest.TestCase):
         launcher._get_base_ansys(year=2024, release_number=1)
         mock_extract_year.assert_called_once_with(2024)
 
+    def test_convert_to_server_version(self):
+        self.assertEqual(
+            241, launcher._convert_to_server_version(sherlock_release_version="2024 R1")
+        )
+
+    def test_convert_to_server_version_fails_for_two_digit_year(self):
+        try:
+            launcher._convert_to_server_version(sherlock_release_version="24 R1")
+            self.fail("Expected ValueError to be raised.")
+        except ValueError as e:
+            self.assertEqual("Year must be a 4-digit integer.", str(e))
+
+    def test_convert_to_server_version_fails_for_invalid_version(self):
+        version = "INVALID"
+        try:
+            launcher._convert_to_server_version(sherlock_release_version=version)
+            self.fail("Expected exception to be raised.")
+        except Exception as e:
+            self.assertEqual(f"invalid literal for int() with base 10: '{version}'", str(e))
+
 
 if __name__ == "__main__":
     unittest.main()
