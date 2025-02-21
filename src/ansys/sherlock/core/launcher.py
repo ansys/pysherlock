@@ -127,12 +127,12 @@ def connect_to_sherlock(port: int = SHERLOCK_DEFAULT_PORT):
     Examples
     --------
     >>> from ansys.sherlock.core import launcher
-    >>> sherlock = launcher.connect_to_sherlock()
+    >>> sherlock = launcher.connect_to_sherlock(port=9092)
     """
     try:
         channel = _connect_grpc_channel(port)
         # set the version to 2025 R1 to allow calling Common.get_sherlock_info()
-        common = Common(channel=channel, server_version=252)
+        common = Common(channel=channel, server_version=251)
         _wait_for_sherlock_grpc_ready(common)
         sherlock_info = common.get_sherlock_info()
         LOG.info(f"Connected to Sherlock version: {sherlock_info.releaseVersion}")
@@ -143,7 +143,8 @@ def connect_to_sherlock(port: int = SHERLOCK_DEFAULT_PORT):
 
 
 def _convert_to_server_version(sherlock_release_version: str) -> int:
-    # parse the version from "2025 R2" to 252
+    # convert the version returned from Sherlock (e.g. "2025 R1") to the version needed for
+    # the API (e.g. 251)
     tokens = sherlock_release_version.split(" ")
     year = _extract_sherlock_version_year(int(tokens[0]))
     minor_version = int(tokens[1][1:])
