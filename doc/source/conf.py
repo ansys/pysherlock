@@ -58,7 +58,7 @@ html_context = {
     "doc_path": str(DOC_PATH),
 }
 html_theme_options = {
-    "logo": "pyansys",
+    "logo": "pyansys_logo_black",
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
         "version_match": switcher_version,
