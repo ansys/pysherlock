@@ -12,6 +12,7 @@ from typing import Optional
 import grpc
 
 from ansys.sherlock.core import LOG
+from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
 from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
@@ -99,52 +100,76 @@ def launch_sherlock(
         LOG.info(f"Command arguments: {args}")
         subprocess.Popen(args)
 
-        sherlock = connect_grpc_channel(port, _server_version)
+        channel = _connect_grpc_channel(port)
 
-        # Check that the gRPC connection is up (timeout after 3 minutes).
-        count = 0
-        while sherlock.common.check() is False and count < 90:
-            time.sleep(2)
-            count = count + 1
+        common = Common(channel, _server_version)
+        _wait_for_sherlock_grpc_ready(common)
 
-        if sherlock.common.check() is False:
-            raise SherlockConnectionError(message="Error starting gRPC service")
-
-        # Check that the Sherlock client has finished loading (timeout after 5 minutes).
-        count = 0
-        while sherlock.common.is_sherlock_client_loading() is False and count < 150:
-            time.sleep(2)
-            count = count + 1
-
+        sherlock = Sherlock(channel, _server_version)
         return sherlock
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT, server_version: Optional[int] = None):
-    """Create a gRPC connection to a specified port and return the ``Sherlock`` connection object.
-
-    The ``Sherlock`` connection object is used to invoke the APIs from their respective services.
-    This can be used to connect to the Sherlock instance that is already running with the specified
-    port.
+def connect_to_sherlock(port: int = SHERLOCK_DEFAULT_PORT):
+    """Connect to the local instance of Sherlock version 2025 R1 or later.
 
     Parameters
     ----------
     port: int, optional
-        Port number for the connection. Default is ``SHERLOCK_DEFAULT_PORT``.
-
-    server_version: int, optional
-        Version of Sherlock. Default is the newest version that is installed.
+        Port number for the connection.
 
     Returns
     -------
     Sherlock
         The instance of sherlock.
+
+    Examples
+    --------
+    >>> from ansys.sherlock.core import launcher
+    >>> sherlock = launcher.connect_to_sherlock()
     """
+    try:
+        channel = _connect_grpc_channel(port)
+        # set the version to 2025 R1 to allow calling Common.get_sherlock_info()
+        common = Common(channel=channel, server_version=252)
+        _wait_for_sherlock_grpc_ready(common)
+        sherlock_info = common.get_sherlock_info()
+        LOG.info(f"Connected to Sherlock version: {sherlock_info.releaseVersion}")
+        server_version = _convert_to_server_version(sherlock_info.releaseVersion)
+        return Sherlock(channel, server_version)
+    except Exception as e:
+        LOG.error(f"Error encountered connecting to Sherlock: {str(e)}")
+
+
+def _convert_to_server_version(sherlock_release_version: str) -> int:
+    # parse the version from "2025 R2" to 252
+    tokens = sherlock_release_version.split(" ")
+    year = _extract_sherlock_version_year(int(tokens[0]))
+    minor_version = int(tokens[1][1:])
+    server_version = year * 10 + minor_version
+    return server_version
+
+
+def _connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT):
     channel_param = f"{LOCALHOST}:{port}"
     channel = grpc.insecure_channel(channel_param)
-    sherlock = Sherlock(channel, server_version)
-    return sherlock
+    return channel
+
+
+def _wait_for_sherlock_grpc_ready(common):
+    # Check that the gRPC connection is up (timeout after 3 minutes).
+    count = 0
+    while common.check() is False and count < 90:
+        time.sleep(2)
+        count = count + 1
+    if common.check() is False:
+        raise SherlockConnectionError(message="Error starting gRPC service")
+    # Check that the Sherlock client has finished loading (timeout after 5 minutes).
+    count = 0
+    while common.is_sherlock_client_loading() is False and count < 150:
+        time.sleep(2)
+        count = count + 1
 
 
 def _get_base_ansys(
