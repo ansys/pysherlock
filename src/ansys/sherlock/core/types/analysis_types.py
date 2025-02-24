@@ -2,7 +2,10 @@
 
 """Module containing types for the Analysis Service."""
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from enum import Enum
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
 
@@ -247,4 +250,104 @@ class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
         request.project = self.project
         for properties in self.semiconductor_wearout_analysis_properties:
             request.semiconductorWearoutAnalysisProperties.append(properties._convert_to_grpc())
+        return request
+
+
+class UpdatePTHFatiguePropsRequestAnalysisType(Enum):
+    """Constants for qualification choices in the Update PTH Fatigue Properties request."""
+
+    __qualification = analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis.Qualification
+    NONE = __qualification.NONE
+    "NONE"
+    PER_LOT = __qualification.PER_LOT
+    "PER_LOT"
+    PRODUCT = __qualification.PRODUCT
+    "PRODUCT"
+    SUPPLIER = __qualification.SUPPLIER
+    "SUPPLIER"
+
+
+class PTHFatiguePropsAnalysis(BaseModel):
+    """Contains the properties of a PTH fatigue analysis update request."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    cca_name: str
+    """Name of the CCA."""
+    qualification: Optional[UpdatePTHFatiguePropsRequestAnalysisType] = None
+    """Qualification choice for IST/HATS."""  # noqa: E501
+    pth_quality_factor: Optional[str] = None
+    """Quality factor for PTH."""
+    pth_wall_thickness: Optional[float] = None
+    """Wall thickness of PTH."""
+    pth_wall_thickness_units: Optional[str] = None
+    """Units for PTH wall thickness."""
+    min_hole_size: Optional[float] = None
+    """Minimum hole size."""
+    min_hole_size_units: Optional[str] = None
+    """Units for minimum hole size."""
+    max_hole_size: Optional[float] = None
+    """Maximum hole size."""
+    max_hole_size_units: Optional[str] = None
+    """Units for maximum hole size."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis:
+        grpc_data = analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis()
+
+        grpc_data.ccaName = self.cca_name
+        if self.qualification is not None:
+            grpc_data.qualification = self.qualification.value
+        if self.pth_quality_factor is not None:
+            grpc_data.pthQualityFactor = self.pth_quality_factor
+        if self.pth_wall_thickness is not None:
+            grpc_data.pthWallThickness = self.pth_wall_thickness
+        if self.pth_wall_thickness_units is not None:
+            grpc_data.pthWallThicknessUnits = self.pth_wall_thickness_units
+        if self.min_hole_size is not None:
+            grpc_data.minHoleSize = self.min_hole_size
+        if self.min_hole_size_units is not None:
+            grpc_data.minHoleSizeUnits = self.min_hole_size_units
+        if self.max_hole_size is not None:
+            grpc_data.maxHoleSize = self.max_hole_size
+        if self.max_hole_size_units is not None:
+            grpc_data.maxHoleSizeUnits = self.max_hole_size_units
+
+        return grpc_data
+
+    @field_validator(
+        "cca_name",
+        "pth_quality_factor",
+        "pth_wall_thickness_units",
+        "min_hole_size_units",
+        "max_hole_size_units",
+    )
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdatePTHFatiguePropsRequest(BaseModel):
+    """Contains the properties of a PTH fatigue analysis update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    pth_fatigue_analysis_properties: list[PTHFatiguePropsAnalysis]
+    """List of PTH fatigue analysis properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdatePTHFatiguePropsRequest:
+        request = analysis_service.UpdatePTHFatiguePropsRequest()
+        request.project = self.project
+        for properties in self.pth_fatigue_analysis_properties:
+            request.pthFatigueAnalysisProperties.append(properties._convert_to_grpc())
         return request
