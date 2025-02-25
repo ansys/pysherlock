@@ -211,8 +211,8 @@ def connect(port: int = SHERLOCK_DEFAULT_PORT, timeout=None):
 
 
 def _convert_to_server_version(sherlock_release_version: str) -> int:
-    # convert the version returned from Sherlock (e.g. "2025 R1") to the version needed for
-    # the API (e.g. 251)
+    # convert the version returned from Sherlock (e.g. "2025 R1")
+    # to the version needed for the API (e.g. 251)
     tokens = sherlock_release_version.split(" ")
     year = _extract_sherlock_version_year(int(tokens[0]))
     minor_version = int(tokens[1][1:])
