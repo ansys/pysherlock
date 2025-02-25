@@ -6,8 +6,8 @@ import os
 import shlex
 import socket
 import subprocess
-import time
 from typing import Optional
+import warnings
 
 import grpc
 
@@ -19,6 +19,7 @@ from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
 
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
+DEFAULT_CONNECT_TIMEOUT = 120
 sherlock_cmd_args = []
 
 
@@ -42,6 +43,69 @@ def launch_sherlock(
     year: Optional[int] = None,
     release_number: Optional[int] = None,
 ) -> Sherlock:
+    r""".. deprecated:: 2025 R2. Use :func:`launch` instead.
+
+    Launch Sherlock and start gRPC on a given host and port.
+
+    Parameters
+    ----------
+    host: str, optional
+        IP address to start gRPC on. The default is ``"127.0.0.1"``, which
+        is the IP address for the local host.
+    port: int, optional
+        Port number for the connection.
+    single_project_path : str, optional
+        Path to the Sherlock project if invoking Sherlock in the single-project mode.
+    sherlock_command_args : str, optional
+        Additional command arguments for launching Sherlock.
+    year: int, optional
+        4-digit year of the Sherlock release to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
+    release_number: int, optional
+        Release number of Sherlock to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
+
+    Returns
+    -------
+    Sherlock
+        The instance of sherlock.
+    str
+        Path to the Sherlock installation directory.
+
+    Examples
+    --------
+    >>> from ansys.sherlock.core import launcher
+    >>> launcher.launch_sherlock()
+
+    >>> from ansys.sherlock.core import launcher
+    >>> launcher.launch_sherlock(port=9092, year=2024, release_number=1)
+
+    >>> from ansys.sherlock.core import launcher
+    >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
+    >>> launcher.launch_sherlock(port=9092, single_project_path=project)
+
+    """
+    warnings.warn(
+        "launch_sherlock() is deprecated and will be removed in a future release. "
+        "Use launch() instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    sherlock, install_dir = launch(
+        host, port, single_project_path, sherlock_command_args, year, release_number
+    )
+    return sherlock
+
+
+def launch(
+    host: str = LOCALHOST,
+    port: int = SHERLOCK_DEFAULT_PORT,
+    single_project_path: str = "",
+    sherlock_command_args: str = "",
+    year: Optional[int] = None,
+    release_number: Optional[int] = None,
+) -> tuple[Sherlock, str]:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
     Parameters
@@ -66,18 +130,14 @@ def launch_sherlock(
     -------
     Sherlock
         The instance of sherlock.
+    str
+        Path to the Sherlock installation directory.
 
     Examples
     --------
     >>> from ansys.sherlock.core import launcher
-    >>> launcher.launch_sherlock()
-
-    >>> from ansys.sherlock.core import launcher
-    >>> launcher.launch_sherlock(port=9092, year=2024, release_number=1)
-
-    >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
-    >>> launcher.launch_sherlock(port=9092, single_project_path=project)
+    >>> sherlock, install_dir = launcher.launch(port=9092, year=2024, release_number=2)
 
     """
     try:
@@ -88,7 +148,7 @@ def launch_sherlock(
 
     _server_version = None
     try:
-        sherlock_launch_cmd, _server_version = _get_sherlock_exe_path(
+        sherlock_launch_cmd, _server_version, ansys_base = _get_sherlock_exe_path(
             year=year, release_number=release_number
         )
         args = [sherlock_launch_cmd, "-grpcPort=" + str(port)]
@@ -101,23 +161,24 @@ def launch_sherlock(
         subprocess.Popen(args)
 
         channel = _connect_grpc_channel(port)
+        _wait_for_sherlock_grpc_ready(channel)
 
-        common = Common(channel, _server_version)
-        _wait_for_sherlock_grpc_ready(common)
-
-        sherlock = Sherlock(channel, _server_version)
-        return sherlock
+        return Sherlock(channel, _server_version), ansys_base
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect_to_sherlock(port: int = SHERLOCK_DEFAULT_PORT):
-    """Connect to the local instance of Sherlock version 2025 R1 or later.
+def connect(port: int = SHERLOCK_DEFAULT_PORT, timeout=None):
+    """Connect to a local instance of Sherlock.
 
     Parameters
     ----------
     port: int, optional
         Port number for the connection.
+        Default is 9090.
+    timeout: int, optional
+        Timeout in seconds to wait to establish the connection to Sherlock.
+        Default is 120 seconds.
 
     Returns
     -------
@@ -127,17 +188,24 @@ def connect_to_sherlock(port: int = SHERLOCK_DEFAULT_PORT):
     Examples
     --------
     >>> from ansys.sherlock.core import launcher
-    >>> sherlock = launcher.connect_to_sherlock(port=9092)
+    >>> sherlock = launcher.connect(port=9092)
     """
     try:
         channel = _connect_grpc_channel(port)
-        # set the version to 2025 R1 to allow calling Common.get_sherlock_info()
-        common = Common(channel=channel, server_version=251)
-        _wait_for_sherlock_grpc_ready(common)
-        sherlock_info = common.get_sherlock_info()
-        LOG.info(f"Connected to Sherlock version: {sherlock_info.releaseVersion}")
-        server_version = _convert_to_server_version(sherlock_info.releaseVersion)
-        return Sherlock(channel, server_version)
+        _wait_for_sherlock_grpc_ready(channel, timeout)
+
+        # create Common without version since the version is unknown
+        common = Common(channel=channel, server_version=None)
+        server_version = None
+        try:
+            sherlock_info = common.get_sherlock_info()
+            if sherlock_info is not None:
+                LOG.info(f"Connected to Sherlock version: {sherlock_info.releaseVersion}")
+                server_version = _convert_to_server_version(sherlock_info.releaseVersion)
+        except Exception as e:
+            LOG.error(f"Error getting Sherlock version information. {str(e)}")
+
+        return Sherlock(channel=channel, server_version=server_version)
     except Exception as e:
         LOG.error(f"Error encountered connecting to Sherlock: {str(e)}")
 
@@ -158,19 +226,13 @@ def _connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT):
     return channel
 
 
-def _wait_for_sherlock_grpc_ready(common):
-    # Check that the gRPC connection is up (timeout after 3 minutes).
-    count = 0
-    while common.check() is False and count < 90:
-        time.sleep(2)
-        count = count + 1
-    if common.check() is False:
+def _wait_for_sherlock_grpc_ready(channel, timeout=DEFAULT_CONNECT_TIMEOUT):
+    # Check that the gRPC connection is up (default timeout is 2 minutes).
+    try:
+        LOG.info("Waiting for Sherlock gRPC service to start...")
+        grpc.channel_ready_future(channel).result(timeout)
+    except grpc.FutureTimeoutError:
         raise SherlockConnectionError(message="Error starting gRPC service")
-    # Check that the Sherlock client has finished loading (timeout after 5 minutes).
-    count = 0
-    while common.is_sherlock_client_loading() is False and count < 150:
-        time.sleep(2)
-        count = count + 1
 
 
 def _get_base_ansys(
@@ -214,15 +276,15 @@ def _get_ansys_version_from_awp_root(awp_root: str):
 
 def _get_sherlock_exe_path(
     year: Optional[int] = None, release_number: Optional[int] = None
-) -> tuple[str, int]:
+) -> tuple[str, int, str]:
     ansys_base, sherlock_version = _get_base_ansys(year=year, release_number=release_number)
     if not ansys_base:
-        return "", 0
+        return "", 0, ""
     if os.name == "nt":
         sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
     else:
         sherlock_bin = os.path.join(ansys_base, "sherlock", "runSherlock")
-    return sherlock_bin, sherlock_version
+    return sherlock_bin, sherlock_version, ansys_base
 
 
 def _extract_sherlock_version_year(year: int) -> int:
