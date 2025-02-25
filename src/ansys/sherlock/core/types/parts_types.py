@@ -100,7 +100,7 @@ class UpdatePadPropertiesRequest(BaseModel):
     """Name of the Sherlock project."""
     cca_name: str
     """Name of the CCA for which pad properties will be updated."""
-    ref_des: Optional[List[str]] = []
+    ref_des: Optional[List[str]] = None
     """Reference designators of the associated parts to be updated."""
 
     @field_validator("project", "cca_name")
@@ -113,5 +113,5 @@ class UpdatePadPropertiesRequest(BaseModel):
         request = parts_service.UpdatePadPropertiesRequest()
         request.project = self.project
         request.ccaName = self.cca_name
-        request.refDes.extend(self.ref_des or [])
+        request.refDes.extend(self.ref_des if self.ref_des is not None else [])
         return request
