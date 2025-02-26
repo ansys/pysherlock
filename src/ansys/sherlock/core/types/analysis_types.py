@@ -298,7 +298,7 @@ class PTHFatiguePropsAnalysis(BaseModel):
 
         grpc_data.ccaName = self.cca_name
         if self.qualification is not None:
-            grpc_data.qualification = self.qualification.name
+            grpc_data.qualification = self.qualification.value
         if self.pth_quality_factor is not None:
             grpc_data.pthQualityFactor = self.pth_quality_factor
         if self.pth_wall_thickness is not None:
