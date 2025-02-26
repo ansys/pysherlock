@@ -1,8 +1,13 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Parts Service."""
 
+from typing import List, Optional
 import warnings
+
+from pydantic import BaseModel, field_validator
+
+from ansys.sherlock.core.types.common_types import basic_str_validator
 
 try:
     import SherlockCommonService_pb2
@@ -86,15 +91,25 @@ class PartLocation:
         """reference designator"""
 
 
-class PartProperties:
-    """Part Properties."""
+class GetPartsListPropertiesRequest(BaseModel):
+    """Request for getting properties of parts in the parts list of a CCA."""
 
-    def __init__(
-        self,
-        part_properties: SherlockPartsService_pb2.GetPartsListPropertiesResponse.PartProperties,
-    ):
-        """Initialize members from the properties."""
-        self.ref_des = part_properties.refDes
-        """reference designator"""
-        self.properties = part_properties.properties
-        """properties"""
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the CCA with the parts."""
+    reference_designators: Optional[List[str]] = None
+    """Reference designators of the parts to retrieve properties for. Use None to get all parts."""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockPartsService_pb2.GetPartsListPropertiesRequest:
+        return SherlockPartsService_pb2.GetPartsListPropertiesRequest(
+            project=self.project,
+            ccaName=self.cca_name,
+            refDes=self.reference_designators,
+        )
