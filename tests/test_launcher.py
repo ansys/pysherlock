@@ -28,12 +28,15 @@ class TestLauncher(unittest.TestCase):
 
     @patch("ansys.sherlock.core.launcher._get_base_ansys")
     def test_get_sherlock_exe_path(self, mock_get_base_ansys):
-        mock_get_base_ansys.return_value = ("base_ansys_path", 223)
-        sherlock_path, version = launcher._get_sherlock_exe_path()
+        install_path = "C:\\Program Files\\ANSYS Inc\\v223"
+        mock_get_base_ansys.return_value = (install_path, 223)
+        sherlock_path, version, ansys_install_path = launcher._get_sherlock_exe_path()
         self.assertEqual(
-            os.path.join("base_ansys_path", "sherlock", "SherlockClient.exe"),
+            os.path.join(install_path, "sherlock", "SherlockClient.exe"),
             sherlock_path,
         )
+        self.assertEqual(223, version)
+        self.assertEqual(install_path, ansys_install_path)
 
     def test_extract_sherlock_version_year_with_two_digits(self):
         with self.assertRaises(ValueError) as context:

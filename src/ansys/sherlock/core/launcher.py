@@ -137,7 +137,8 @@ def launch(
     --------
     >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
-    >>> sherlock, install_dir = launcher.launch(port=9092, year=2024, release_number=2)
+    >>> sherlock, ansys_install_path = launcher.launch(
+    >>>     port=9092, single_project_path=project, year=2024, release_number=2)
 
     """
     try:
@@ -148,7 +149,7 @@ def launch(
 
     _server_version = None
     try:
-        sherlock_launch_cmd, _server_version, ansys_base = _get_sherlock_exe_path(
+        sherlock_launch_cmd, _server_version, ansys_install_path = _get_sherlock_exe_path(
             year=year, release_number=release_number
         )
         args = [sherlock_launch_cmd, "-grpcPort=" + str(port)]
@@ -163,7 +164,7 @@ def launch(
         channel = _connect_grpc_channel(port)
         _wait_for_sherlock_grpc_ready(channel)
 
-        return Sherlock(channel, _server_version), ansys_base
+        return Sherlock(channel, _server_version), ansys_install_path
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
