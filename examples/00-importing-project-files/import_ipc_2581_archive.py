@@ -48,7 +48,10 @@ analysis and workflows.
 import os
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockImportIpc2581Error
+from ansys.sherlock.core.errors import (
+    SherlockImportIpc2581Error,
+    SherlockImportProjectZipArchiveError,
+)
 
 ###############################################################################
 # Launch PySherlock service
