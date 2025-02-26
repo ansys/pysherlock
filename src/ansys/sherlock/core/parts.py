@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
 try:
@@ -14,7 +14,6 @@ from ansys.sherlock.core.errors import (
     SherlockExportNetListError,
     SherlockExportPartsListError,
     SherlockGetPartLocationError,
-    SherlockGetPartsListPropertiesError,
     SherlockImportPartsListError,
     SherlockNoGrpcConnectionException,
     SherlockUpdatePartsFromAVLError,
@@ -28,8 +27,8 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
+    GetPartsListPropertiesRequest,
     PartLocation,
-    PartProperties,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
@@ -725,73 +724,49 @@ class Parts(GrpcStub):
 
     @require_version(252)
     def get_parts_list_properties(
-        self, project: str, cca_name: str, reference_designators: list[str] = None
-    ) -> list[PartProperties]:
+        self, request: GetPartsListPropertiesRequest
+    ) -> list[SherlockPartsService_pb2.GetPartsListPropertiesResponse]:
         """Return the properties for one or more parts in the parts list for the CCA.
 
         Available Since: 2025R2
 
         Parameters
         ----------
-        project: str
-            Name of the Sherlock project.
-        cca_name: str
-            Name of the CCA.
-        reference_designators: list[str]
-            Reference designators of parts to retrieve properties for.
+        request: GetPartsListPropertiesRequest
+            Contains the information needed to retrieve the properties of parts in the parts list.
 
         Returns
         -------
-        list[PartProperties]
-            PartLocation for each part that corresponds to the reference designators.
+        list[SherlockPartsService_pb2.GetPartsListPropertiesResponse]
+            Properties for each part that corresponds to the reference designators.
 
         Examples
         --------
+        >>> from ansys.sherlock.core.types.parts_types import (GetPartsListPropertiesRequest)
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-
+        >>>    "ODB++ Tutorial.tgz",
+        >>>    True,
+        >>>    True,
+        >>>    True,
+        >>>    True,
+        >>>    project="Test",
+        >>>    cca_name="Card",
+        >>> )
         >>> part_properties = sherlock.parts.get_parts_list_properties(
-            project="Test",
-            cca_name="Card",
-            reference_designators=["C1","U9"],
-        )
+        >>>     GetPartsListPropertiesRequest(
+        >>>         project="Test",
+        >>>         cca_name="Card",
+        >>>         reference_designators=["C1","U9"]
+        >>>     )
+        >>> )
         >>> print(f"{part_properties}")
         """
-        try:
-            if project == "":
-                raise SherlockGetPartsListPropertiesError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetPartsListPropertiesError(message="CCA name is invalid.")
-            if not self._is_connection_up():
-                raise SherlockNoGrpcConnectionException()
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-            request = SherlockPartsService_pb2.GetPartsListPropertiesRequest(
-                project=project,
-                ccaName=cca_name,
-                refDes=reference_designators,
-            )
-            response = self.stub.getPartsListProperties(request)
-            return_code = response.returnCode
-
-            if return_code.value == -1:
-                raise SherlockGetPartsListPropertiesError(return_code.message)
-
-            part_properties = []
-            for properties in response.partProperties:
-                part_properties.append(PartProperties(properties))
-            return part_properties
-        except SherlockGetPartsListPropertiesError as e:
-            LOG.error(str(e))
-            raise e
+        return list(self.stub.getPartsListProperties(request._convert_to_grpc()))
 
     @require_version(241)
     def update_parts_from_AVL(
