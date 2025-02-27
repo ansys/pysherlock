@@ -44,7 +44,7 @@ For further details, refer to the official documentation on mechanical shock ana
 
 import os
 
-from SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
+from ansys.api.sherlock.v0.SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
