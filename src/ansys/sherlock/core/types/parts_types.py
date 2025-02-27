@@ -89,7 +89,7 @@ class PartLocation:
         """board side - ``"TOP"`` or ``"BOTTOM"`` """
         self.mirrored = location.mirrored
         """mirrored - ``True`` or ``False`` """
-        self.ref_des = location.refDes
+        self.reference_designators = location.refDes
         """reference designator"""
 
 
@@ -100,7 +100,7 @@ class UpdatePadPropertiesRequest(BaseModel):
     """Name of the Sherlock project."""
     cca_name: str
     """Name of the CCA for which pad properties will be updated."""
-    ref_des: Optional[List[str]] = None
+    reference_designators: Optional[List[str]] = None
     """Reference designators of the associated parts to be updated."""
 
     @field_validator("project", "cca_name")
@@ -113,5 +113,7 @@ class UpdatePadPropertiesRequest(BaseModel):
         request = parts_service.UpdatePadPropertiesRequest()
         request.project = self.project
         request.ccaName = self.cca_name
-        request.refDes.extend(self.ref_des if self.ref_des is not None else [])
+        request.refDes.extend(
+            self.reference_designators if self.reference_designators is not None else []
+        )
         return request

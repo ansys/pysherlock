@@ -876,7 +876,9 @@ def helper_test_export_net_list(parts: Parts):
 def helper_test_update_pad_properties(parts: Parts):
     """Test update pad properties API."""
     try:
-        UpdatePadPropertiesRequest(project="", cca_name="Main Board", ref_des=["C1", "C2", "C3"])
+        UpdatePadPropertiesRequest(
+            project="", cca_name="Main Board", reference_designators=["C1", "C2", "C3"]
+        )
         pytest.fail("No exception raised when using an invalid parameter")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
@@ -885,7 +887,9 @@ def helper_test_update_pad_properties(parts: Parts):
         )
 
     try:
-        UpdatePadPropertiesRequest(project="Test", cca_name="", ref_des=["C1", "C2", "C3"])
+        UpdatePadPropertiesRequest(
+            project="Test", cca_name="", reference_designators=["C1", "C2", "C3"]
+        )
         pytest.fail("No exception raised when using an invalid parameter")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
@@ -895,24 +899,22 @@ def helper_test_update_pad_properties(parts: Parts):
 
     try:
         request = UpdatePadPropertiesRequest(
-            project="Invalid project", cca_name="Main Board", ref_des=["C1", "C2"]
+            project="Invalid project", cca_name="Main Board", reference_designators=["C1", "C2"]
         )
 
         if parts._is_connection_up():
             responses = parts.update_pad_properties(request)
 
-            responses = list(responses) if isinstance(responses, (list, tuple)) else [responses]
-
-            assert responses[0].returnCode.value == -1
-            assert responses[0].returnCode.message == f"Cannot find project: {request.project}"
+            assert responses.returnCode.value == -1
+            assert responses.returnCode.message == f"Cannot find project: {request.project}"
 
             request.project = "Tutorial Project"
             responses = parts.update_pad_properties(request)
-            responses = list(responses) if isinstance(responses, (list, tuple)) else [responses]
+            responses = list(responses)
 
             for res in responses:
                 assert res.returnCode.value == 0
-                assert res.refDes in request.ref_des
+                assert res.refDes in request.reference_designators
     except Exception as e:
         pytest.fail(f"Unexpected exception raised: {e}")
 

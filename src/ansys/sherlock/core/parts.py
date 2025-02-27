@@ -1076,17 +1076,14 @@ class Parts(GrpcStub):
         >>> request = UpdatePadPropertiesRequest(
             project="Assembly Tutorial",
             cca_name="Main Board",
-            ref_des=["U1", "R2", "C3"]
+            reference_designators=["U1", "R2", "C3"]
         )
         >>> response = sherlock.parts.update_pad_properties(request)
         >>> for res in response:
                 print(f"Return code: value={res.returnCode.value}, message={res.returnCode.message},
-                refDes={res.refDes}")
+                reference_designators={res.reference_designators}")
         """
         update_request = request._convert_to_grpc()
         response_stream = self.stub.updatePadProperties(update_request)
 
-        if isinstance(response_stream, SherlockPartsService_pb2.UpdatePadPropertiesResponse):
-            return [response_stream]
-
-        return list(response_stream)
+        return response_stream
