@@ -1897,7 +1897,7 @@ class Layer(GrpcStub):
         project: str,
         cca_name: str,
         export_layers: list[dict[str, bool | int | str | list]]
-    ) -> list[SherlockLayerService_pb2.ExportLayerImageResponse]:
+    ) -> int:
         r"""
         Export one or more 2D Layer Viewer images from a project CCA.
 
