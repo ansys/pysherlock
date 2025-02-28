@@ -1,14 +1,21 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Parts Service."""
 
+from typing import List, Optional
 import warnings
+
+from pydantic import BaseModel, field_validator
+
+from ansys.sherlock.core.types.common_types import basic_str_validator
 
 try:
     import SherlockCommonService_pb2
     import SherlockPartsService_pb2
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
+
+parts_service = SherlockPartsService_pb2
 
 
 def deprecation(cls: object):
@@ -82,5 +89,31 @@ class PartLocation:
         """board side - ``"TOP"`` or ``"BOTTOM"`` """
         self.mirrored = location.mirrored
         """mirrored - ``True`` or ``False`` """
-        self.ref_des = location.refDes
+        self.reference_designators = location.refDes
         """reference designator"""
+
+
+class UpdatePadPropertiesRequest(BaseModel):
+    """Contains the properties to update pad properties for one or more parts in a parts list."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the CCA for which pad properties will be updated."""
+    reference_designators: Optional[List[str]] = None
+    """Reference designators of the associated parts to be updated."""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> parts_service.UpdatePadPropertiesRequest:
+        request = parts_service.UpdatePadPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        request.refDes.extend(
+            self.reference_designators if self.reference_designators is not None else []
+        )
+        return request
