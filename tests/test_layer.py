@@ -1503,7 +1503,6 @@ def helper_test_list_layers(layer):
             for layer_info in response:
                 layer_count += len(layer_info.layers)
 
-            # assert len(result) == 84
             assert layer_count == 84
         except SherlockListLayersError as e:
             pytest.fail(e.message())
@@ -1651,6 +1650,9 @@ def helper_test_export_layer_image(layer):
     test_file_path = "C:\\temp\\SH-image.jpg"
     export_layers = [
         {
+            "components_enabled": True,
+            "labels_enabled": True,
+            "leads_enabled": True,
             "axes_enabled": True,
             "grid_enabled": True,
             "layer_infos": layer_infos,
@@ -1693,6 +1695,9 @@ def helper_test_export_layer_image(layer):
 
         export_layers = [
             {
+                "components_enabled": True,
+                "labels_enabled": True,
+                "leads_enabled": True,
                 "axes_enabled": True,
                 "grid_enabled": True,
                 "layer_infos": layer_infos,
