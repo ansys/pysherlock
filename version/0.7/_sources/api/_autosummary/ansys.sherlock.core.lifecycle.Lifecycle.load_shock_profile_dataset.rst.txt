@@ -1,0 +1,6 @@
+load\_shock\_profile\_dataset
+=============================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.load_shock_profile_dataset
