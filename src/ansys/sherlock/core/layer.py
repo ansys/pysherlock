@@ -1832,7 +1832,7 @@ class Layer(GrpcStub):
         return response.value
 
     @require_version(252)
-    def list_layers(self, project, cca_name):
+    def list_layers(self, project, cca_name) -> list:
         """List all layers as seen in the Layer Viewer for a specific project CCA.
 
         Parameters
@@ -1893,10 +1893,7 @@ class Layer(GrpcStub):
 
     @require_version(252)
     def export_layer_image(
-        self,
-        project: str,
-        cca_name: str,
-        export_layers: list[dict[str, bool | int | str | list]]
+        self, project: str, cca_name: str, export_layers: list[dict[str, bool | int | str | list]]
     ) -> int:
         r"""
         Export one or more 2D Layer Viewer images from a project CCA.
