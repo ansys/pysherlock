@@ -89,7 +89,7 @@ class PartLocation:
         """board side - ``"TOP"`` or ``"BOTTOM"`` """
         self.mirrored = location.mirrored
         """mirrored - ``True`` or ``False`` """
-        self.reference_designators = location.refDes
+        self.ref_des = location.refDes
         """reference designator"""
 
 
