@@ -93,6 +93,30 @@ class PartLocation:
         """reference designator"""
 
 
+class GetPartsListPropertiesRequest(BaseModel):
+    """Request for getting properties of parts in the parts list of a CCA."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the CCA with the parts."""
+    reference_designators: Optional[List[str]] = None
+    """Reference designators of the parts to retrieve properties for. Use None to get all parts."""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockPartsService_pb2.GetPartsListPropertiesRequest:
+        return SherlockPartsService_pb2.GetPartsListPropertiesRequest(
+            project=self.project,
+            ccaName=self.cca_name,
+            refDes=self.reference_designators,
+        )
+
+
 class UpdatePadPropertiesRequest(BaseModel):
     """Contains the properties to update pad properties for one or more parts in a parts list."""
 

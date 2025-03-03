@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
 try:
@@ -27,6 +27,7 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
+    GetPartsListPropertiesRequest,
     PartLocation,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
@@ -682,8 +683,8 @@ class Parts(GrpcStub):
             cca_name="Card",
         )
         >>> part_locations = sherlock.parts.get_part_location(
-            project="Tutorial",
-            cca_name="Main Board",
+            project="Test",
+            cca_name="Card",
             ref_des="C1,C2",
             location_units="in",
         )
@@ -720,6 +721,52 @@ class Parts(GrpcStub):
         except SherlockGetPartLocationError as e:
             LOG.error(str(e))
             raise e
+
+    @require_version(252)
+    def get_parts_list_properties(
+        self, request: GetPartsListPropertiesRequest
+    ) -> list[SherlockPartsService_pb2.GetPartsListPropertiesResponse]:
+        """Return the properties for one or more parts in the parts list for the CCA.
+
+        Available Since: 2025R2
+
+        Parameters
+        ----------
+        request: GetPartsListPropertiesRequest
+            Contains the information needed to retrieve the properties of parts in the parts list.
+
+        Returns
+        -------
+        list[SherlockPartsService_pb2.GetPartsListPropertiesResponse]
+            Properties for each part that corresponds to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.parts_types import (GetPartsListPropertiesRequest)
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+        >>>    "ODB++ Tutorial.tgz",
+        >>>    True,
+        >>>    True,
+        >>>    True,
+        >>>    True,
+        >>>    project="Test",
+        >>>    cca_name="Card",
+        >>> )
+        >>> part_properties = sherlock.parts.get_parts_list_properties(
+        >>>     GetPartsListPropertiesRequest(
+        >>>         project="Test",
+        >>>         cca_name="Card",
+        >>>         reference_designators=["C1","U9"]
+        >>>     )
+        >>> )
+        >>> print(f"{part_properties}")
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return list(self.stub.getPartsListProperties(request._convert_to_grpc()))
 
     @require_version(241)
     def update_parts_from_AVL(
