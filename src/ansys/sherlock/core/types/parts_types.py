@@ -141,4 +141,3 @@ class UpdatePadPropertiesRequest(BaseModel):
             self.reference_designators if self.reference_designators is not None else []
         )
         return request
-

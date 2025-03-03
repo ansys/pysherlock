@@ -51,6 +51,7 @@ def test_all():
     helper_test_get_parts_list_properties(parts)
     helper_test_update_pad_properties(parts)
 
+
 def helper_test_update_parts_list(parts: Parts):
     """Test update_parts_list API."""
 
