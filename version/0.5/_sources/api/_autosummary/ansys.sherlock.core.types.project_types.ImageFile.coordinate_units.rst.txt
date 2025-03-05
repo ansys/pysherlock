@@ -1,0 +1,6 @@
+coordinate\_units
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.coordinate_units
