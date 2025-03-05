@@ -19,6 +19,8 @@ from ansys.sherlock.core.errors import (
     SherlockExportAllMountPoints,
     SherlockExportAllTestFixtures,
     SherlockExportAllTestPointsError,
+    SherlockExportLayerImageError,
+    SherlockListLayersError,
     SherlockUpdateModelingRegionError,
     SherlockUpdateMountPointsByFileError,
     SherlockUpdateTestFixturesByFileError,
@@ -65,6 +67,8 @@ def test_all():
     region_id = helper_test_update_modeling_region(layer, region_id)
     helper_test_copy_modeling_region(layer, region_id)
     helper_test_delete_modeling_region(layer, region_id)
+    helper_test_list_layers(layer)
+    helper_test_export_layer_image(layer)
 
 
 def helper_test_add_potting_region(layer: Layer):
@@ -1462,6 +1466,257 @@ def helper_test_delete_modeling_region(layer: Layer, region_id: str):
             assert result == 0
         except Exception as e:
             pytest.fail(e.message)
+
+
+def helper_test_list_layers(layer):
+    """Test list_layers API"""
+
+    try:
+        layer.list_layers("Tutorial Project", "")
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockListLayersError as e:
+        assert str(e) == "List layers error: CCA name is invalid."
+
+    try:
+        layer.list_layers("", "Main Board")
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockListLayersError as e:
+        assert str(e) == "List layers error: Project name is invalid."
+
+    if layer._is_connection_up():
+        try:
+            layer.list_layers("Invalid Project Name", "")
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockListLayersError
+
+        try:
+            response = layer.list_layers("Tutorial Project", "Wrong Board Name")
+        except Exception as e:
+            assert str(e) == "List layers error: Cannot find CCA: Wrong Board Name"
+            assert type(e) == SherlockListLayersError
+
+        # Valid request
+        try:
+            response = layer.list_layers("Tutorial Project", "Main Board")
+            layer_count = 0
+            for layer_info in response:
+                layer_count += len(layer_info.layers)
+
+            assert layer_count == 84
+        except SherlockListLayersError as e:
+            pytest.fail(e.message())
+
+
+def helper_test_export_layer_image(layer):
+    """Test export_layer_image API"""
+
+    layer_infos = [
+        {"layer_folder": "Components", "layers": ["comp-top"]},
+        {"layer_folder": "Mechanical_Shock", "layers": ["SH Disp @ 5.2ms"]},
+    ]
+    export_layers = [
+        {
+            "grid_enabled": True,
+            "layer_infos": layer_infos,
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 600,
+            "image_width": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: CCA name is invalid."
+
+    try:
+        layer.export_layer_image("", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Project name is invalid."
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Axes Enabled is invalid."
+
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "layer_infos": layer_infos,
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 600,
+            "image_width": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Grid Enabled is invalid."
+
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer_infos": [],
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 600,
+            "image_width": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Layer info is invalid."
+
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer_infos": layer_infos,
+            "image_height": 600,
+            "image_width": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: File Path is invalid."
+
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer_infos": layer_infos,
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_width": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Image Height is invalid."
+
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer_infos": layer_infos,
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Image Width is invalid."
+
+    export_layers = [
+        {
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer_infos": layer_infos,
+            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+            "image_height": 800,
+            "image_width": 800,
+        }
+    ]
+
+    try:
+        layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except SherlockExportLayerImageError as e:
+        assert str(e) == "Export layer image error: Overwrite Existing File is invalid."
+
+    test_file_path = "C:\\temp\\SH-image.jpg"
+    export_layers = [
+        {
+            "components_enabled": True,
+            "labels_enabled": True,
+            "leads_enabled": True,
+            "axes_enabled": True,
+            "grid_enabled": True,
+            "layer_infos": layer_infos,
+            "file_path": test_file_path,
+            "image_height": 800,
+            "image_width": 800,
+            "overwrite_existing_file": True,
+        }
+    ]
+
+    if layer._is_connection_up():
+        try:
+            layer.export_layer_image("Invalid Project Name", "", export_layers)
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportLayerImageError
+
+        try:
+            results = layer.export_layer_image(
+                "Tutorial Project", "Wrong Board Name", export_layers
+            )
+            for result in results:
+                assert result.returnCode.value == -1
+        except Exception as e:
+            assert type(e) == SherlockExportLayerImageError
+
+        try:
+            results = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+            for result in results:
+                assert result.returnCode.value == 0
+        except Exception as e:
+            pytest.fail(str(e))
+
+        layer_infos = [
+            {"layer_folder": "Components", "layers": ["comp-top"]},
+            {"layer_folder": "Mechanical_Shock", "layers": ["SH Disp @ 5.2ms"]},
+            {"layer_folder": "Mechanical_Shock", "layers": ["SH Strain Bot @ 5.2ms"]},
+            {"layer_folder": "Random_Vibe", "layers": ["RV Strain RMS Bot"]},
+        ]
+
+        export_layers = [
+            {
+                "components_enabled": True,
+                "labels_enabled": True,
+                "leads_enabled": True,
+                "axes_enabled": True,
+                "grid_enabled": True,
+                "layer_infos": layer_infos,
+                "file_path": test_file_path,
+                "image_height": 800,
+                "image_width": 800,
+                "overwrite_existing_file": True,
+            }
+        ]
+
+        try:
+            results = layer.export_layer_image("Tutorial Project", "Main Board", export_layers)
+            for result in results:
+                assert result.returnCode.value == 0
+        except Exception as e:
+            pytest.fail(str(e))
+
+        if os.path.exists(test_file_path):
+            os.remove(test_file_path)
 
 
 if __name__ == "__main__":
