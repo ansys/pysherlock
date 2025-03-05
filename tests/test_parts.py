@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 import os
 import platform
@@ -13,6 +13,7 @@ from ansys.sherlock.core.errors import (
     SherlockExportPartsListError,
     SherlockGetPartLocationError,
     SherlockImportPartsListError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdatePartsFromAVLError,
     SherlockUpdatePartsListError,
     SherlockUpdatePartsListPropertiesError,
@@ -24,6 +25,7 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
+    GetPartsListPropertiesRequest,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
@@ -46,6 +48,7 @@ def test_all():
     helper_test_export_net_list(parts)
     helper_test_enable_lead_modeling(parts)
     helper_test_get_part_location(parts)
+    helper_test_get_parts_list_properties(parts)
     helper_test_update_pad_properties(parts)
 
 
@@ -681,6 +684,70 @@ def helper_test_get_part_location(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockGetPartLocationError as e:
         assert str(e) == "Get part location error: Location unit is invalid."
+
+
+def helper_test_get_parts_list_properties(parts: Parts):
+    """Test get_parts_list_properties API"""
+    try:
+        GetPartsListPropertiesRequest(project="", cca_name="CCA Name")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        GetPartsListPropertiesRequest(project="Project Name", cca_name="")
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    if not parts._is_connection_up():
+        try:
+            responses = parts.get_parts_list_properties(
+                GetPartsListPropertiesRequest(project="Tutorial Project", cca_name="Invalid CCA")
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockNoGrpcConnectionException
+        return
+
+    # test error case
+    responses = parts.get_parts_list_properties(
+        GetPartsListPropertiesRequest(project="Tutorial Project", cca_name="Invalid CCA")
+    )
+    assert type(responses) == list
+    assert len(responses) == 1
+    assert responses[0].returnCode.value == -1
+    assert responses[0].returnCode.message == "Cannot find CCA: Invalid CCA"
+
+    # test all parts returned when no refDes is provided
+    responses = parts.get_parts_list_properties(
+        GetPartsListPropertiesRequest(project="Tutorial Project", cca_name="Main Board")
+    )
+    assert len(responses) == 221
+    for response in responses:
+        assert response.returnCode.value == 0
+        assert response.returnCode.message == ""
+
+    # test only specified parts are returned when refDes is provided
+    responses = parts.get_parts_list_properties(
+        GetPartsListPropertiesRequest(
+            project="Tutorial Project", cca_name="Main Board", reference_designators=["C1", "U9"]
+        )
+    )
+    assert len(responses) == 2
+    for response in responses:
+        assert response.returnCode.value == 0
+        assert response.returnCode.message == ""
+    assert responses[0].refDes == "C1"
+    assert len(responses[0].properties) == 61
+    assert responses[1].refDes == "U9"
+    assert len(responses[1].properties) == 64
 
 
 def helper_test_update_parts_list_properties(parts: Parts):
