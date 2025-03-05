@@ -20,7 +20,6 @@ parts_service = SherlockPartsService_pb2
 
 def deprecation(cls: object):
     """Raise a DeprecationWarning when a deprecated class is used."""
-    # if str(cls).find("PartsListSearchMatchingMode") != -1:
     message = f"{cls} is deprecated. Use a string with the value of the constant name \
     as defined in the proto file."
     warnings.warn(message, DeprecationWarning, stacklevel=2)
