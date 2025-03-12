@@ -1130,7 +1130,6 @@ class Parts(GrpcStub):
                 print(f"Return code: value={res.returnCode.value}, message={res.returnCode.message},
                 reference_designators={res.reference_designators}")
         """
-
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
 
