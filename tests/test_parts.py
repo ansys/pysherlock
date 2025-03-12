@@ -972,8 +972,8 @@ def helper_test_update_pad_properties(parts: Parts):
         if parts._is_connection_up():
             responses = parts.update_pad_properties(request)
 
-            assert responses.returnCode.value == -1
-            assert responses.returnCode.message == f"Cannot find project: {request.project}"
+            assert responses[0].returnCode.value == -1
+            assert responses[0].returnCode.message == f"Cannot find project: {request.project}"
 
             request.project = "Tutorial Project"
             responses = parts.update_pad_properties(request)
