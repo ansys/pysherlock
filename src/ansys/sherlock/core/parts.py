@@ -1130,7 +1130,9 @@ class Parts(GrpcStub):
                 print(f"Return code: value={res.returnCode.value}, message={res.returnCode.message},
                 reference_designators={res.reference_designators}")
         """
-        update_request = request._convert_to_grpc()
-        response_stream = self.stub.updatePadProperties(update_request)
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
 
-        return response_stream
+        update_request = request._convert_to_grpc()
+
+        return list(self.stub.updatePadProperties(update_request))

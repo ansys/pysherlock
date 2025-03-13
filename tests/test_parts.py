@@ -972,13 +972,17 @@ def helper_test_update_pad_properties(parts: Parts):
         if parts._is_connection_up():
             responses = parts.update_pad_properties(request)
 
-            assert responses.returnCode.value == -1
-            assert responses.returnCode.message == f"Cannot find project: {request.project}"
+            assert len(responses) == 1, "Expected exactly one response in the list"
+            assert responses[0].returnCode.value == -1
+            assert responses[0].returnCode.message == f"Cannot find project: {request.project}"
 
             request.project = "Tutorial Project"
             responses = parts.update_pad_properties(request)
             responses = list(responses)
 
+            assert len(responses) == len(
+                request.reference_designators
+            ), "Mismatch between responses and reference designators"
             for res in responses:
                 assert res.returnCode.value == 0
                 assert res.refDes in request.reference_designators

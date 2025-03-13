@@ -134,10 +134,8 @@ class UpdatePadPropertiesRequest(BaseModel):
         return basic_str_validator(value, info.field_name)
 
     def _convert_to_grpc(self) -> parts_service.UpdatePadPropertiesRequest:
-        request = parts_service.UpdatePadPropertiesRequest()
-        request.project = self.project
-        request.ccaName = self.cca_name
-        request.refDes.extend(
-            self.reference_designators if self.reference_designators is not None else []
+        return parts_service.UpdatePadPropertiesRequest(
+            project=self.project,
+            ccaName=self.cca_name,
+            refDes=self.reference_designators,
         )
-        return request
