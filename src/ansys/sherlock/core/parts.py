@@ -27,6 +27,7 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
+    DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
     PartLocation,
     PartsListSearchDuplicationMode,
@@ -1136,3 +1137,52 @@ class Parts(GrpcStub):
         update_request = request._convert_to_grpc()
 
         return list(self.stub.updatePadProperties(update_request))
+
+    @require_version(252)
+    def delete_parts_from_parts_list(
+        self,
+        request: DeletePartsFromPartsListRequest,
+    ) -> list[SherlockPartsService_pb2.DeletePartsFromPartsListResponse]:
+        r"""Delete parts from the parts list for a given project's CCA.
+
+        Parameters
+        ----------
+        request: DeletePartsFromPartsListRequest
+            Contains all the information needed to delete parts from the
+            parts list in a project's CCA.
+
+        Returns
+        -------
+        list[SherlockPartsService_pb2.DeletePartsFromPartsListResponse]
+            Status of the delete operation and any error messages.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.parts_types import (
+                DeletePartsFromPartsListRequest,
+            )
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_project_zip_archive(
+                project="Assembly Tutorial",
+                category="category",
+                archive_file=\
+                    "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+            )
+        >>> request = DeletePartsFromPartsListRequest(
+                project="Assembly Tutorial",
+                cca_name="Main Board",
+                reference_designators=["U1", "R2", "C3"],
+            )
+        >>> response = sherlock.parts.delete_parts_from_parts_list(request)
+        >>> for res in response:
+                print(f"Return code: value={res.returnCode.value},
+                message={res.returnCode.message}, "
+                    f"reference designator={res.reference_designators}")
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        delete_request = request._convert_to_grpc()
+
+        return list(self.stub.deletePartsFromPartsList(delete_request))

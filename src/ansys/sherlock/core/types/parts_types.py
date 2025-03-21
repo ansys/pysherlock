@@ -139,3 +139,27 @@ class UpdatePadPropertiesRequest(BaseModel):
             ccaName=self.cca_name,
             refDes=self.reference_designators,
         )
+
+
+class DeletePartsFromPartsListRequest(BaseModel):
+    """Contains the information to delete parts from the parts list for a given project's CCA."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the CCA for which parts will be deleted."""
+    reference_designators: Optional[List[str]] = None
+    """Reference designators of the associated parts to be deleted."""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> parts_service.DeletePartsFromPartsListRequest:
+        return parts_service.DeletePartsFromPartsListRequest(
+            project=self.project,
+            ccaName=self.cca_name,
+            refDes=self.reference_designators,
+        )

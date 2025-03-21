@@ -25,6 +25,7 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
     AVLDescription,
     AVLPartNum,
+    DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
@@ -978,6 +979,56 @@ def helper_test_update_pad_properties(parts: Parts):
 
             request.project = "Tutorial Project"
             responses = parts.update_pad_properties(request)
+            responses = list(responses)
+
+            assert len(responses) == len(
+                request.reference_designators
+            ), "Mismatch between responses and reference designators"
+            for res in responses:
+                assert res.returnCode.value == 0
+                assert res.refDes in request.reference_designators
+    except Exception as e:
+        pytest.fail(f"Unexpected exception raised: {e}")
+
+
+def helper_test_delete_parts_from_parts_list(parts: Parts):
+    """Test delete parts from parts list API."""
+    try:
+        DeletePartsFromPartsListRequest(
+            project="", cca_name="Main Board", reference_designators=["C1", "C2", "C3"]
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        DeletePartsFromPartsListRequest(
+            project="Test", cca_name="", reference_designators=["C1", "C2", "C3"]
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        request = DeletePartsFromPartsListRequest(
+            project="Invalid project", cca_name="Main Board", reference_designators=["C1", "C2"]
+        )
+
+        if parts._is_connection_up():
+            responses = parts.delete_parts_from_parts_list(request)
+
+            assert len(responses) == 1, "Expected exactly one response in the list"
+            assert responses[0].returnCode.value == -1
+            assert responses[0].returnCode.message == f"Cannot find project: {request.project}"
+
+            request.project = "Tutorial Project"
+            responses = parts.delete_parts_from_parts_list(request)
             responses = list(responses)
 
             assert len(responses) == len(
