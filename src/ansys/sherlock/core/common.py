@@ -175,3 +175,28 @@ class Common(GrpcStub):
         response = self.stub.getSherlockInfo(request)
         if response is not None:
             return response
+
+    @require_version(252)
+    def get_solder_info(self) -> SherlockCommonService_pb2.SolderInfoResponse:
+        """Get solder data from Sherlock.
+
+        Returns
+        --------
+        SolderInfoResponse
+            All solder information stored in Sherlock for each solder.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> solder_data = sherlock.get_solder_info()
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockCommonService_pb2.SolderInfoRequest()
+        try:
+            response = self.stub.getSolderInfo(request)
+        except Exception as e:
+            print(e)
+        return response
