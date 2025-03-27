@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all project management capabilities."""
 import os
@@ -1214,6 +1214,27 @@ class Project(GrpcStub):
                             f"Invalid temperature units for thermal map {i}."
                         )
 
+                # Validate IcepakFile specific fields
+                elif isinstance(thermal_map_file["file_data"], IcepakFile):
+                    file_data = thermal_map_file["file_data"]
+
+                    if not isinstance(file_data.temperature_offset, (float)):
+                        raise SherlockUpdateThermalMapsError(
+                            f"Invalid temperature offset for thermal map {i}."
+                        )
+                    if not isinstance(file_data.temperature_offset_units, str):
+                        raise SherlockUpdateThermalMapsError(
+                            f"Invalid temperature offset units for thermal map {i}."
+                        )
+
+                # Default values for IcepakFile
+                if isinstance(file_data, IcepakFile):
+                    if file_data.temperature_offset is None:
+                        file_data.temperature_offset = 0.0
+
+                    if not file_data.temperature_offset_units:
+                        file_data.temperature_offset_units = ""
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -1290,6 +1311,14 @@ class Project(GrpcStub):
                     thermal_map_file.imageFile.maxTemperatureUnits = thermal_map[
                         "file_data"
                     ].max_temperature_units
+
+                if isinstance(thermal_map["file_data"], IcepakFile):
+                    thermal_map_file.icepakFile.temperatureOffset = thermal_map[
+                        "file_data"
+                    ].temperature_offset
+                    thermal_map_file.icepakFile.temperatureOffsetUnits = thermal_map[
+                        "file_data"
+                    ].temperature_offset_units
 
                 thermal_profiles = thermal_map["thermal_profiles"]
                 for thermal_profile in thermal_profiles:
@@ -1555,6 +1584,27 @@ class Project(GrpcStub):
                                 f"Invalid temperature units for thermal map {j}."
                             )
 
+                    # Validate IcepakFile specific fields
+                    elif isinstance(thermal_map_file_property["file_data"], IcepakFile):
+                        file_data = thermal_map_file_property["file_data"]
+
+                        if not isinstance(file_data.temperature_offset, (float)):
+                            raise SherlockAddThermalMapsError(
+                                f"Invalid temperature offset for thermal map {i}."
+                            )
+                        if not isinstance(file_data.temperature_offset_units, str):
+                            raise SherlockAddThermalMapsError(
+                                f"Invalid temperature offset units for thermal map {i}."
+                            )
+
+                    # Default values for IcepakFile
+                    if isinstance(file_data, IcepakFile):
+                        if file_data.temperature_offset is None:
+                            file_data.temperature_offset = 0.0
+
+                        if not file_data.temperature_offset_units:
+                            file_data.temperature_offset_units = ""
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -1618,6 +1668,14 @@ class Project(GrpcStub):
                     image_file_properties.maxTemperature = image_properties.max_temperature
                     image_file_properties.maxTemperatureUnits = (
                         image_properties.max_temperature_units
+                    )
+
+                if isinstance(properties["file_data"], IcepakFile):
+                    icepak_file_properties = thermal_map_file.thermalMapFileProperties.icepakFile
+                    file_properties = properties["file_data"]
+                    icepak_file_properties.temperatureOffset = file_properties.temperature_offset
+                    icepak_file_properties.temperatureOffsetUnits = (
+                        file_properties.temperature_offset_units
                     )
 
                 thermal_profiles = properties["thermal_profiles"]
