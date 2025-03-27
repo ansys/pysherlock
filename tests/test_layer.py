@@ -1491,19 +1491,19 @@ def helper_test_list_layers(layer):
             assert type(e) == SherlockListLayersError
 
         try:
-            response = layer.list_layers("Tutorial Project", "Wrong Board Name")
+            response = layer.list_layers("Test Point Test Project", "Wrong Board Name")
         except Exception as e:
             assert str(e) == "List layers error: Cannot find CCA: Wrong Board Name"
             assert type(e) == SherlockListLayersError
 
         # Valid request
         try:
-            response = layer.list_layers("Tutorial Project", "Main Board")
+            response = layer.list_layers("Test Point Test Project", "Main Board")
             layer_count = 0
             for layer_info in response:
                 layer_count += len(layer_info.layers)
 
-            assert layer_count == 84
+            assert layer_count == 30
         except SherlockListLayersError as e:
             pytest.fail(e.message())
 
