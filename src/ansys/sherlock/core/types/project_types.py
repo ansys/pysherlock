@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2024-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Project Service."""
 
@@ -47,6 +47,17 @@ class CsvExcelFile:
 
 class IcepakFile:
     """Contains the properties for a thermal map Icepak file."""
+
+    def __init__(
+        self,
+        temperature_offset: float,
+        temperature_offset_units: str,
+    ):
+        """Initialize the thermal map Icepak file properties."""
+        self.temperature_offset = temperature_offset
+        """float: temperature_offset"""
+        self.temperature_offset_units = temperature_offset_units
+        """str: temperature_offset_units"""
 
 
 class ImageBounds:
