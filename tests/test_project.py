@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved
+# © 2024-2025 ANSYS, Inc. All rights reserved
 
 import os
 import platform
@@ -30,6 +30,7 @@ from ansys.sherlock.core.project import Project
 from ansys.sherlock.core.types.project_types import (
     BoardBounds,
     CsvExcelFile,
+    IcepakFile,
     ImageBounds,
     ImageFile,
     LegendBounds,
@@ -2121,6 +2122,58 @@ def helper_test_add_thermal_maps(project: Project):
             "['Add thermal maps error: Invalid minimum temperature units for thermal map 0.']"
         )
 
+    try:
+        file_data = IcepakFile(
+            temperature_offset="invalid_value", temperature_offset_units="C"  # invalid value
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.tmap",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.tmap",
+                        "file_type": ThermalMapsFileType.TMAP,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature offset for thermal map 0.']"
+        )
+
+    try:
+        file_data = IcepakFile(temperature_offset=5.0, temperature_offset_units=5)  # invalid value
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.tmap",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.tmap",
+                        "file_type": ThermalMapsFileType.TMAP,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature offset units for thermal map 0.']"
+        )
+
     if not project._is_connection_up():
         return
 
@@ -2841,6 +2894,52 @@ def helper_test_update_thermal_maps(project: Project):
     except SherlockUpdateThermalMapsError as e:
         assert str(e.str_itr()) == (
             "['Update thermal maps error: Invalid minimum temperature units for thermal map 0.']"
+        )
+
+    try:
+        file_data = IcepakFile(
+            temperature_offset="invalid value",  # invalid value
+            temperature_offset_units="C",
+        )
+        thermal_map_files = [
+            {
+                "file_name": "Thermal Map.tmap",
+                "file_type": ThermalMapsFileType.TMAP,
+                "file_comment": "Update",
+                "thermal_board_side": ThermalBoardSide.BOTTOM,
+                "file_data": file_data,
+                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                "cca_names": ["Main Board"],
+            }
+        ]
+        project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockUpdateThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Update thermal maps error: Invalid temperature offset for thermal map 0.']"
+        )
+
+    try:
+        file_data = IcepakFile(
+            temperature_offset=5.0,
+            temperature_offset_units=5,  # invalid value
+        )
+        thermal_map_files = [
+            {
+                "file_name": "Thermal Map.tmap",
+                "file_type": ThermalMapsFileType.TMAP,
+                "file_comment": "Update",
+                "thermal_board_side": ThermalBoardSide.BOTTOM,
+                "file_data": file_data,
+                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                "cca_names": ["Main Board"],
+            }
+        ]
+        project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockUpdateThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Update thermal maps error: Invalid temperature offset units for thermal map 0.']"
         )
 
     if not project._is_connection_up():
