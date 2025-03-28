@@ -9,6 +9,7 @@ Launcher
 .. autosummary::
      :toctree: _autosummary
 
+     launch
      launch_sherlock
-     connect_grpc_channel
+     connect
 
