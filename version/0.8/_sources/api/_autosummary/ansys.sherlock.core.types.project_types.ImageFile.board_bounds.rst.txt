@@ -1,0 +1,10 @@
+.. vale off
+
+board\_bounds
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.board_bounds
+
+.. vale on
