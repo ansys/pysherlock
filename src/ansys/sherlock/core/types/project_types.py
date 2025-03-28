@@ -2,6 +2,12 @@
 
 """Module containing types for the Project Service."""
 
+from typing import Optional
+
+from pydantic import BaseModel, field_validator
+
+from ansys.sherlock.core.types.common_types import basic_str_validator
+
 try:
     import SherlockProjectService_pb2
 except ModuleNotFoundError:
@@ -179,3 +185,55 @@ class StrainMapLegendOrientation:
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
     "Vertical"
+
+
+class ImportGDSIIRequest(BaseModel):
+    """Contains the information to import a GDSII project file and any optional config files."""
+
+    gdsii_file: str
+    """Full path to the GDSII file (.gds, .sf, or .strm) to be imported."""
+
+    technology_file: Optional[str] = None
+    """Full path to the optional technology file (.xml, .tech, or .layermap) to be imported."""
+
+    layer_map_file: Optional[str] = None
+    """Full path to the optional layer map file (.map) to be imported."""
+
+    project: Optional[str] = None
+    """Sherlock project name. If empty, the filename will be used for the project name."""
+
+    cca_name: Optional[str] = None
+    """Project CCA name. If empty, the filename will be used for the CCA name."""
+
+    guess_part_properties: Optional[bool] = False
+    """Option to guess part properties."""
+
+    polyline_simplification_enabled: Optional[bool] = False
+    """Option to enable polyline simplification."""
+
+    polyline_tolerance: Optional[float] = 0.0
+    """Polyline simplification tolerance, if enabled."""
+
+    polyline_tolerance_units: Optional[str] = None
+    """Polyline simplification tolerance units, if enabled."""
+
+    @field_validator("gdsii_file", "technology_file", "layer_map_file", "project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: Optional[str], info):
+        """Validate string fields listed."""
+        if value is None or value.strip() == "":
+            raise ValueError(f"{info.field_name} is invalid because it is None or empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> project_service.ImportGDSIIRequest:
+        return project_service.ImportGDSIIRequest(
+            gdsiiFile=self.gdsii_file,
+            technologyFile=self.technology_file or "",
+            layerMapFile=self.layer_map_file or "",
+            project=self.project or "",
+            ccaName=self.cca_name or "",
+            guessPartProperties=self.guess_part_properties,
+            polylineSimplificationEnabled=self.polyline_simplification_enabled,
+            polylineTolerance=self.polyline_tolerance,
+            polylineToleranceUnits=self.polyline_tolerance_units or "",
+        )
