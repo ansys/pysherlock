@@ -16,6 +16,8 @@ def test_all():
     common = Common(channel, SKIP_VERSION_CHECK)
     helper_test_list_units(common)
     helper_test_get_solders(common)
+    helper_test_get_sherlock_info(common)
+    helper_test_get_solder_info(common)
 
 
 def helper_test_list_units(common: Common):
@@ -53,6 +55,17 @@ def helper_test_get_sherlock_info(common: Common):
         try:
             sherlock_info_response = common.get_sherlock_info()
             assert sherlock_info_response is not None
+        except Exception as e:
+            pytest.fail(str(e))
+
+
+def helper_test_get_solder_info(common: Common):
+    """Test get_solder_info"""
+
+    if common._is_connection_up():
+        try:
+            response = common.get_solder_info()
+            assert len(response.solders) > 0
         except Exception as e:
             pytest.fail(str(e))
 
