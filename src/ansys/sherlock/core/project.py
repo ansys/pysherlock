@@ -1227,14 +1227,6 @@ class Project(GrpcStub):
                             f"Invalid temperature offset units for thermal map {i}."
                         )
 
-                # Default values for IcepakFile
-                if isinstance(file_data, IcepakFile):
-                    if file_data.temperature_offset is None:
-                        file_data.temperature_offset = 0.0
-
-                    if not file_data.temperature_offset_units:
-                        file_data.temperature_offset_units = ""
-
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -1596,14 +1588,6 @@ class Project(GrpcStub):
                             raise SherlockAddThermalMapsError(
                                 f"Invalid temperature offset units for thermal map {i}."
                             )
-
-                    # Default values for IcepakFile
-                    if isinstance(file_data, IcepakFile):
-                        if file_data.temperature_offset is None:
-                            file_data.temperature_offset = 0.0
-
-                        if not file_data.temperature_offset_units:
-                            file_data.temperature_offset_units = ""
 
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
