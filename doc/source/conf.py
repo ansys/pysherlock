@@ -68,7 +68,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
-    "sphinx-design",
+    "sphinx_design",
 ]
 
 autodoc_default_flags = ["members"]
