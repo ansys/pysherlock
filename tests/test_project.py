@@ -6,6 +6,7 @@ import time
 import uuid
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.errors import (
@@ -33,6 +34,7 @@ from ansys.sherlock.core.types.project_types import (
     IcepakFile,
     ImageBounds,
     ImageFile,
+    ImportGDSIIRequest,
     LegendBounds,
     LegendOrientation,
     StrainMapLegendOrientation,
@@ -65,6 +67,7 @@ def test_all():
     helper_test_update_thermal_maps(project)
     helper_test_list_thermal_maps(project)
     helper_test_create_cca_from_modeling_region(project)
+    helper_test_import_gdsii_file(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
@@ -3346,6 +3349,42 @@ def helper_test_create_cca_from_modeling_region(project: Project):
         pytest.fail("No exception raised when parameters are missing")
     except Exception as e:
         assert type(e) == SherlockCreateCCAFromModelingRegionError
+
+
+def helper_test_import_gdsii_file(project: Project):
+    """Test import GDSII file API."""
+    try:
+        # Test with an empty GDSII file path
+        ImportGDSIIRequest(gdsii_file="", project="TestProject", cca_name="MainCCA")
+        pytest.fail("No exception raised when using an invalid gdsii_file parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Value error, gdsii_file is invalid because it is None or empty."
+        )
+
+    try:
+        # Test with a invalid GDSII file path
+        request = ImportGDSIIRequest(
+            gdsii_file="valid/path/design.gds",
+            project="Tutorial Project",
+            cca_name="MainCCA",
+            guess_part_properties=True,
+            polyline_simplification_enabled=True,
+            polyline_tolerance=0.01,
+            polyline_tolerance_units="mm",
+        )
+
+        if project._is_connection_up():
+            return_code = project.import_GDSII_file(request)
+
+            # Check that an invalid gdsii_file returns an error
+            assert return_code.value == -1
+            assert return_code.message == f"Invalid GDSII file path: {request.gdsii_file}"
+
+    except Exception as e:
+        pytest.fail(f"Unexpected exception raised: {e}")
 
 
 if __name__ == "__main__":
