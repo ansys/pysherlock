@@ -1,7 +1,10 @@
-# © 2024 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all project management capabilities."""
 import os
+from typing import Optional
+
+import grpc
 
 try:
     import SherlockProjectService_pb2
@@ -16,7 +19,9 @@ from ansys.sherlock.core.errors import (
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
     SherlockDeleteProjectError,
+    SherlockExportProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
@@ -25,6 +30,7 @@ from ansys.sherlock.core.errors import (
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdateThermalMapsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
@@ -34,24 +40,32 @@ from ansys.sherlock.core.types.project_types import (
     IcepakFile,
     ImageBounds,
     ImageFile,
+    ImportGDSIIRequest,
     LegendBounds,
+    StrainMapsFileType,
+    ThermalBoardSide,
+    ThermalMapsFileType,
 )
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Project(GrpcStub):
     """Contains all project management capabilities."""
 
-    def __init__(self, channel):
+    def __init__(self, channel: grpc.Channel, server_version: int):
         """Initialize a gRPC stub for Sherlock Project service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockProjectService_pb2_grpc.SherlockProjectServiceStub(channel)
 
-    def delete_project(self, project):
+    @require_version()
+    def delete_project(self, project: str) -> int:
         """Delete a Sherlock project.
+
+        Available Since: 2022R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
 
         Returns
@@ -73,8 +87,7 @@ class Project(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockProjectService_pb2.DeleteProjectRequest(project=project)
 
@@ -90,31 +103,34 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def import_odb_archive(
         self,
-        archive_file,
-        process_layer_thickness,
-        include_other_layers,
-        process_cutout_file,
-        guess_part_properties,
-        ims_stackup=False,
-        project=None,
-        cca_name=None,
-        polyline_simplification=False,
-        polyline_tolerance=0.1,
-        polyline_tolerance_units="mm",
-    ):
+        archive_file: str,
+        process_layer_thickness: bool,
+        include_other_layers: bool,
+        process_cutout_file: bool,
+        guess_part_properties: bool,
+        ims_stackup: bool = False,
+        project: Optional[str] = None,
+        cca_name: Optional[str] = None,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+    ) -> int:
         """Import an ODB++ archive file.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
-        archive_file : str
+        archive_file: str
             Full path to the ODB++ archive file.
-        process_layer_thickness : bool
+        process_layer_thickness: bool
             Whether to assign stackup thickness.
-        include_other_layers : bool
+        include_other_layers: bool
             Whether to include other layers.
-        process_cutout_file : bool
+        process_cutout_file: bool
             Whether to process cutouts.
         guess_part_properties: bool
             Whether to guess part properties.
@@ -123,7 +139,7 @@ class Project(GrpcStub):
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which
             case the name of the ODB++ archive file is used for the project name.
-        cca_name : str, optional
+        cca_name: str, optional
             Name of the CCA name. The default is ``None``, in which case the
             name of the ODB++ archive file is used for the CCA name.
         polyline_simplification: bool, optional
@@ -159,8 +175,7 @@ class Project(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         if project is None:
             project = os.path.splitext(os.path.basename(archive_file))[0]
@@ -193,31 +208,34 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version()
     def import_ipc2581_archive(
         self,
-        archive_file,
-        include_other_layers,
-        guess_part_properties,
-        project=None,
-        cca_name=None,
-        polyline_simplification=False,
-        polyline_tolerance=0.1,
-        polyline_tolerance_units="mm",
-    ):
+        archive_file: str,
+        include_other_layers: bool,
+        guess_part_properties: bool,
+        project: Optional[str] = None,
+        cca_name: Optional[str] = None,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+    ) -> int:
         """Import an IPC-2581 archive file.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
-        archive_file : str
+        archive_file: str
             Full path to the IPC-2581 archive file.
-        include_other_layers : bool
+        include_other_layers: bool
             Whether to include other layers.
         guess_part_properties: bool
             Whether to guess part properties
         project: str, optional
             Name of the Sherlock project. The default is ``None``, in which case
             the name of the IPC-2581 archive file is used for the project name.
-        cca_name : str, optional
+        cca_name: str, optional
             Name of the CCA. The default is ``None``, in which case the name of
             the IPC-2581 archive file is used for the CCA name.
         polyline_simplification: bool, optional
@@ -251,8 +269,7 @@ class Project(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         if project is None:
             project = os.path.splitext(os.path.basename(archive_file))[0]
@@ -282,16 +299,21 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def generate_project_report(self, project, author, company, report_file):
+    @require_version()
+    def generate_project_report(
+        self, project: str, author: str, company: str, report_file: str
+    ) -> int:
         """Generate a project report.
+
+        Available Since: 2021R1
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        author : str
+        author: str
             Name of the author who is generating the report.
-        company : str
+        company: str
             Name of the author's company.
         report_file: str
             Full path to where to create the report.
@@ -313,7 +335,7 @@ class Project(GrpcStub):
             "Tutorial",
             "John Doe",
             "Example",
-            "Project Report.pdf",
+            "Project Report.pdf"
         )
         """
         try:
@@ -330,8 +352,7 @@ class Project(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockProjectService_pb2.GenReportRequest(
             project=project,
@@ -356,15 +377,20 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise SherlockGenerateProjectReportError(str(e))
 
-    def list_ccas(self, project, cca_names=None):
+    @require_version()
+    def list_ccas(
+        self, project: str, cca_names: Optional[list[str]] = None
+    ) -> dict[str, str | dict[str, str]]:
         """List CCAs and subassembly CCAs assigned to each CCA or given CCAs.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
         project: str
             Name of the Sherlock project.
-        cca_names : List of str, optional
-            List of CCA names. The default is ``None``, in which case all CCAs
+        cca_names: list[str], optional
+            CCA names. The default is ``None``, in which case all CCAs
             in the project are returned.
 
         Returns
@@ -376,7 +402,7 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> ccas = project.list_ccas("AssemblyTutorial",["Main Board"])
+        >>> ccas = sherlock.project.list_ccas("AssemblyTutorial", ["Main Board"])
         """
         try:
             if project == "":
@@ -386,8 +412,7 @@ class Project(GrpcStub):
                 raise SherlockListCCAsError(message="cca_names is not a list.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.ListCCAsRequest(project=project)
 
@@ -412,19 +437,22 @@ class Project(GrpcStub):
 
         return response.ccas
 
-    def add_cca(self, project, cca_properties):
+    @require_version(241)
+    def add_cca(self, project: str, cca_properties: list[dict[str, bool | float | str]]) -> int:
         """Add one or more CCAs to a project.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        cca_properties : list
+        cca_properties: list[dict[str, bool | float | str]]
             List of CCAs to be added consisting of these properties:
 
-            - cca_name : str
+            - cca_name: str
                 Name of the CCA.
-            - description : str
+            - description: str
                 Description of the CCA. The default is ``None``.
             - default_solder_type: str
                 The default solder type. The default is ``None``.
@@ -527,8 +555,7 @@ class Project(GrpcStub):
             raise e
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         response = self.stub.addCCA(request)
 
@@ -542,29 +569,40 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    def add_strain_maps(self, project, strain_maps):
-        """Add a CSV file with strain maps to the CCAs.
+    @require_version()
+    def add_strain_maps(
+        self,
+        project: str,
+        strain_maps: list,
+    ) -> int:
+        """Add strain map files to CCAs in a Sherlock project.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
         project: str
             Name of the Sherlock project to add strain maps to.
-        strain_maps : list
-            List of strain maps consisting of these properties:
+        strain_maps: list
+            Strain maps consisting of these properties:
 
-            - strain_map_file : str
+            - strain_map_file: str
                 Full path to the CSV file with the strain maps.
-            - file_comment : str
+            - file_comment: str
                 Comment to associate with the file.
-            - header_row_count : int
+            - file_type: StrainMapsFileType
+                Strain maps file type. Options are CSV, Excel, and Image.
+            - header_row_count: int
                 Number of rows before the file's column header.
-            - reference_id_column : str
+            - reference_id_column: str
                 Name of the column in the file with reference IDs.
-            - strain_column : str
+            - strain_column: str
                 Name of the column in the file with strain values.
-            - strain_units : str
+            - strain_units: str
                 Strain units. Options are ``µε`` and ``ε``.
-            - ccas : list, optional
+            - image_file: StrainMapImageFile, optional
+                The properties of the strain map file to add.
+            - ccas: list, optional
                 List of CCA names to assign the file to. When no list is
                 specified, the file is assigned to all CCAs in the project.
 
@@ -576,16 +614,58 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.project_types import (
+            BoardBounds,
+            ImageBounds,
+            ImageFile,
+            LegendBounds,
+            LegendOrientation,
+            StrainMapsFileType,
+            StrainMapLegendOrientation,
+        )
         >>> sherlock = launch_sherlock()
-        >>> sherlock.project.add_strain_maps("Tutorial Project",
-            [("StrainMap.csv",
-            "This is the strain map file for the project",
-            0,
-            "refDes",
-            "strain",
-            "µε"
-            ["Main Board"])
-            )],
+        >>> sherlock.project.add_strain_maps(
+            "Tutorial Project",
+                [
+                    (
+                        "StrainMap.csv",
+                        "This is the strain map file for the project",
+                        StrainMapsFileType.CSV,
+                        0,
+                        "refDes",
+                        "strain",
+                        "µε",
+                        ["Main Board"]
+                    )
+                ]
+            )
+        >>> properties = (
+                BoardBounds([
+                    (1.0, 2.0),
+                    (3.0, 4.0),
+                    (1.0, 2.0),
+                    (1.0, 2.0)
+                ]),
+                "in",
+                ImageBounds(0.0, 0.0, 10.0, 8.0),
+                LegendBounds(1.0, 2.0, 4.0, 2.0),
+                StrainMapLegendOrientation.VERTICAL,
+                20.0,
+                50.0,
+                "µε"
+            )
+        >>> sherlock.project.add_strain_maps(
+            "Tutorial Project",
+                [
+                    (
+                        "StrainMap.jpg",
+                        "This is the strain map image for the project",
+                        StrainMapsFileType.IMAGE,
+                        properties,
+                        ["Main Board"]
+                    )
+                ]
+            )
         """
         try:
             if project == "":
@@ -596,48 +676,107 @@ class Project(GrpcStub):
 
             # Validate first
             for i, strain_map in enumerate(strain_maps):
-                if len(strain_map) < 6 or len(strain_map) > 7:
-                    raise SherlockAddStrainMapsError(
-                        f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
-                    )
-                elif not isinstance(strain_map[0], str) or strain_map[0] == "":
-                    raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
-                elif not isinstance(strain_map[2], int) or strain_map[2] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Header row count is required for strain map {i}."
-                    )
-                elif strain_map[2] < 0:
-                    raise SherlockAddStrainMapsError(
-                        f"Header row count must be greater than or equal to 0 for strain map {i}."
-                    )
-                elif not isinstance(strain_map[3], str) or strain_map[3] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Reference ID column is required for strain map {i}."
-                    )
-                elif not isinstance(strain_map[4], str) or strain_map[4] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Strain column is required for strain map {i}."
-                    )
-                elif not isinstance(strain_map[5], str) or strain_map[5] == "":
-                    raise SherlockAddStrainMapsError(
-                        f"Strain units are required for strain map {i}."
-                    )
-                elif strain_map[5] != "µε" and strain_map[5] != "ε":
-                    raise SherlockAddStrainMapsError(
-                        f'Strain units "{strain_map[5]}" are invalid for strain map {i}.'
-                    )
-                elif (
-                    len(strain_map) == 7
-                    and strain_map[6] is not None
-                    and type(strain_map[6]) is not list
+                if (
+                    strain_map[2] == StrainMapsFileType.CSV
+                    or strain_map[2] == StrainMapsFileType.EXCEL
                 ):
-                    raise SherlockAddStrainMapsError(
-                        message=f"cca_names is not a list for strain map {i}."
-                    )
+                    if len(strain_map) < 7 or len(strain_map) > 8:
+                        raise SherlockAddStrainMapsError(
+                            f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
+                        )
+                    elif not isinstance(strain_map[0], str) or strain_map[0] == "":
+                        raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
+                    elif not isinstance(strain_map[3], int) or strain_map[3] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Header row count is required for strain map {i}."
+                        )
+                    elif strain_map[3] < 0:
+                        raise SherlockAddStrainMapsError(
+                            f"Header row count must be greater than or "
+                            f"equal to 0 for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[4], str) or strain_map[4] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Reference ID column is required for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[5], str) or strain_map[5] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Strain column is required for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[6], str) or strain_map[6] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"Strain units are required for strain map {i}."
+                        )
+                    elif strain_map[6] != "µε" and strain_map[6] != "ε":
+                        raise SherlockAddStrainMapsError(
+                            f'Strain units "{strain_map[6]}" are invalid for strain map {i}.'
+                        )
+                    elif (
+                        len(strain_map) == 8
+                        and strain_map[7] is not None
+                        and type(strain_map[7]) is not list
+                    ):
+                        raise SherlockAddStrainMapsError(
+                            message=f"cca_names is not a list " f"for strain map {i}."
+                        )
+
+                elif strain_map[2] == StrainMapsFileType.IMAGE:
+                    if len(strain_map) < 4 or len(strain_map) > 5:
+                        raise SherlockAddStrainMapsError(
+                            f"Number of elements ({str(len(strain_maps))}) "
+                            f"is wrong for strain map {i}."
+                        )
+                    elif not isinstance(strain_map[0], str) or strain_map[0] == "":
+                        raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
+                    elif not isinstance(strain_map[3], tuple) or strain_map[3] == "":
+                        raise SherlockAddStrainMapsError(
+                            f"image_file is not a list for strain map {i}."
+                        )
+
+                    image_file_properties = strain_map[3]
+
+                    if not isinstance(image_file_properties[0], BoardBounds):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid board bounds for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[1], (str, type(None))):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid coordinate units for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[2], ImageBounds):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid image bounds for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[3], LegendBounds):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid legend bounds for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[4], int):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid legend orientation for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[5], float):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid minimum strain for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[6], float):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid maximum strain for " f"strain map {i}."
+                        )
+
+                    if not isinstance(image_file_properties[7], str):
+                        raise SherlockAddStrainMapsError(
+                            f"Invalid strain units for " f"strain map {i}."
+                        )
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.AddStrainMapRequest(project=project)
 
@@ -646,17 +785,51 @@ class Project(GrpcStub):
                 strain_map = request.strainMapFiles.add()
                 strain_map.strainMapFile = s[0]
                 strain_map.fileComment = s[1]
-                strain_map.headerRowCount = s[2]
-                strain_map.referenceIDColumn = s[3]
-                strain_map.strainColumn = s[4]
-                strain_map.strainUnits = s[5]
+                strain_map.fileType = s[2]
 
-                """Add the CCA names to the request."""
-                if len(s) == 7:
-                    cca_names = s[6]
-                    if cca_names is not None:
-                        for cca_name in cca_names:
-                            strain_map.cca.append(cca_name)
+                if s[2] == StrainMapsFileType.CSV or s[2] == StrainMapsFileType.EXCEL:
+                    strain_map.headerRowCount = s[3]
+                    strain_map.referenceIDColumn = s[4]
+                    strain_map.strainColumn = s[5]
+                    strain_map.strainUnits = s[6]
+
+                    """Add the CCA names to the request."""
+                    if len(s) == 8:
+                        cca_names = s[7]
+                        if cca_names is not None:
+                            for cca_name in cca_names:
+                                strain_map.cca.append(cca_name)
+
+                elif s[2] == StrainMapsFileType.IMAGE:
+                    strain_map_image_properties = s[3]
+                    image_file_properties = strain_map.imageFile
+                    image_properties = strain_map_image_properties
+
+                    for vertex in image_properties[0].bounds:
+                        node_coordinate = strain_map.imageFile.boardBounds.add()
+                        node_coordinate.vertexX = vertex[0]
+                        node_coordinate.vertexY = vertex[1]
+
+                    image_file_properties.coordinateUnits = image_properties[1]
+                    image_file_properties.imageBounds.imageX = image_properties[2].image_x
+                    image_file_properties.imageBounds.imageY = image_properties[2].image_y
+                    image_file_properties.imageBounds.imageH = image_properties[2].height
+                    image_file_properties.imageBounds.imageW = image_properties[2].width
+                    image_file_properties.legendBounds.legendX = image_properties[3].legend_x
+                    image_file_properties.legendBounds.legendY = image_properties[3].legend_y
+                    image_file_properties.legendBounds.legendH = image_properties[3].height
+                    image_file_properties.legendBounds.legendW = image_properties[3].width
+                    image_file_properties.legendOrientation = image_properties[4]
+                    image_file_properties.minStrain = image_properties[5]
+                    image_file_properties.maxStrain = image_properties[6]
+                    image_file_properties.strainUnits = image_properties[7]
+
+                    """Add the CCA names to the request."""
+                    if len(s) == 5:
+                        cca_names = s[4]
+                        if cca_names is not None:
+                            for cca_name in cca_names:
+                                strain_map.cca.append(cca_name)
 
             response = self.stub.addStrainMap(request)
 
@@ -674,20 +847,25 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def list_strain_maps(self, project, cca_names=None):
+    @require_version()
+    def list_strain_maps(
+        self, project: str, cca_names: Optional[list[str]] = None
+    ) -> list[SherlockProjectService_pb2.ListStrainMapsResponse.CcaStrainMap]:
         """List the strain maps assigned to each CCA or given CCAs.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
         project: str
             Name of the Sherlock project.
-        cca_names : List of str, optional
-            List of CCA names to provide strain maps for. The default is ``None``,
+        cca_names: list[str], optional
+            CCA names to provide strain maps for. The default is ``None``,
             in which case all CCAs in the project are returned.
 
         Returns
         -------
-        list
+        list[SherlockProjectService_pb2.ListStrainMapsResponse.CcaStrainMap]
             All strain maps or strain maps for the specified CCAs.
 
         Examples
@@ -707,8 +885,7 @@ class Project(GrpcStub):
                 raise SherlockListStrainMapsError(message="cca_names is not a list.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.ListStrainMapsRequest(project=project)
 
@@ -733,8 +910,13 @@ class Project(GrpcStub):
 
         return response.ccaStrainMaps
 
-    def add_project(self, project_name: str, project_category: str, project_description: str):
+    @require_version(241)
+    def add_project(
+        self, project_name: str, project_category: str, project_description: str
+    ) -> int:
         """Add a sherlock project to sherlock.
+
+        Available Since: 2024R1
 
         Parameters
         ----------
@@ -763,8 +945,7 @@ class Project(GrpcStub):
             raise SherlockAddProjectError("Project name cannot be blank")
 
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockProjectService_pb2.AddProjectRequest(
             project=project_name, category=project_category, description=project_description
@@ -777,14 +958,17 @@ class Project(GrpcStub):
 
         return return_code.value
 
-    def list_thermal_maps(self, project, cca_names=None):
+    @require_version(242)
+    def list_thermal_maps(self, project: str, cca_names: Optional[list[str]] = None) -> list:
         """List the thermal map files and their type assigned to each CCA of given CCAs.
+
+        Available Since: 2024R2
 
         Parameters
         ----------
         project: str
             Name of the Sherlock project.
-        cca_names : List of str, optional
+        cca_names: List of str, optional
             List of CCA names to provide thermal maps for. The default is ``None``,
             in which case all CCAs in the project are returned.
 
@@ -810,8 +994,7 @@ class Project(GrpcStub):
                 raise SherlockListThermalMapsError(message="cca_names is not a list.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.ListThermalMapsRequest(project=project)
 
@@ -835,30 +1018,48 @@ class Project(GrpcStub):
 
         return response.ccaThermalMaps
 
-    def update_thermal_maps(self, project, thermal_map_files):
+    @require_version(242)
+    def update_thermal_maps(
+        self,
+        project: str,
+        thermal_map_files: list[
+            dict[
+                str,
+                str
+                | ThermalMapsFileType
+                | ThermalBoardSide
+                | CsvExcelFile
+                | IcepakFile
+                | ImageFile
+                | list[str],
+            ]
+        ],
+    ) -> int:
         """
         Update thermal map files to a Sherlock project.
 
+        Available Since: 2024R2
+
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project to update thermal maps to.
-        thermal_map_files : list
+        thermal_map_files: list
             List of thermal map files consisting of these properties:
 
-            - file_name : str
+            - file_name: str
                 Name of the thermal file to update.
-            - file_type : ThermalMapsFileType
+            - file_type: ThermalMapsFileType
                 Thermal maps file type.
-            - file_comment : str, optional
+            - file_comment: str, optional
                 Comment to associate with the file.
-            - thermal_board_side : ThermalBoardSide
+            - thermal_board_side: ThermalBoardSide
                 Thermal board side.
-            - file_data : CsvExcelFile|IcepakFile|ImageFile
+            - file_data: CsvExcelFile|IcepakFile|ImageFile
                 The properties of the thermal map file to update.
-            - thermal_profiles : List of str
+            - thermal_profiles: List of str
                 List of thermal profiles.
-            - cca_names : List of str, optional
+            - cca_names: List of str, optional
                 List of CCA names to provide thermal maps for. The default is ``None``,
                 in which case all CCAs in the project are returned.
 
@@ -894,7 +1095,7 @@ class Project(GrpcStub):
             min_temperature=20.0,
             min_temperature_units="C"
         )
-        >>> thermal_map_files = [
+        >>> files = [
             {
                 "file_name": "thermal_map_file.jpg",
                 "file_type": ThermalMapsFileType.IMAGE,
@@ -905,7 +1106,7 @@ class Project(GrpcStub):
                 "cca_names": ["CCA1", "CCA2"]
             },
         ]
-        >>> sherlock.project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        >>> sherlock.project.update_thermal_maps("Tutorial Project", files)
         """
         try:
             if project == "":
@@ -1014,9 +1215,21 @@ class Project(GrpcStub):
                             f"Invalid temperature units for thermal map {i}."
                         )
 
+                # Validate IcepakFile specific fields
+                elif isinstance(thermal_map_file["file_data"], IcepakFile):
+                    file_data = thermal_map_file["file_data"]
+
+                    if not isinstance(file_data.temperature_offset, (float)):
+                        raise SherlockUpdateThermalMapsError(
+                            f"Invalid temperature offset for thermal map {i}."
+                        )
+                    if not isinstance(file_data.temperature_offset_units, str):
+                        raise SherlockUpdateThermalMapsError(
+                            f"Invalid temperature offset units for thermal map {i}."
+                        )
+
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.UpdateThermalMapRequest(project=project)
 
@@ -1092,6 +1305,14 @@ class Project(GrpcStub):
                         "file_data"
                     ].max_temperature_units
 
+                if isinstance(thermal_map["file_data"], IcepakFile):
+                    thermal_map_file.icepakFile.temperatureOffset = thermal_map[
+                        "file_data"
+                    ].temperature_offset
+                    thermal_map_file.icepakFile.temperatureOffsetUnits = thermal_map[
+                        "file_data"
+                    ].temperature_offset_units
+
                 thermal_profiles = thermal_map["thermal_profiles"]
                 for thermal_profile in thermal_profiles:
                     thermal_map_file.thermalProfiles.append(thermal_profile)
@@ -1119,35 +1340,60 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def add_thermal_maps(self, project, add_thermal_map_files):
+    @require_version(242)
+    def add_thermal_maps(
+        self,
+        project: str,
+        add_thermal_map_files: list[
+            dict[
+                str,
+                list[
+                    dict[
+                        str,
+                        str
+                        | ThermalMapsFileType
+                        | ThermalBoardSide
+                        | CsvExcelFile
+                        | IcepakFile
+                        | ImageFile
+                        | list[str],
+                    ]
+                ]
+                | str,
+            ]
+        ],
+    ) -> int:
         """
         Add thermal map files to a Sherlock project.
 
+        Available Since: 2024R2
+
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project to add thermal maps to.
-        add_thermal_map_files : list
+        add_thermal_map_files: list[dict[str, list[dict[str, str | ThermalMapsFileType\
+                | ThermalBoardSide | CsvExcelFile | IcepakFile | ImageFile | list[str]]] | str]]
             List of thermal map files consisting of these properties:
 
-                - thermal_map_file : str
+                - thermal_map_file: str
                     Full path to the thermal map file to add.
-                - thermal_map_file_properties : list
+                - thermal_map_file_properties: list
                     List of thermal map properties consisting of these properties:
 
-                        - file_name : str
+                        - file_name: str
                             Name of the thermal file to update.
-                        - file_type : ThermalMapsFileType
+                        - file_type: ThermalMapsFileType
                             Thermal maps file type.
-                        - file_comment : str, optional
+                        - file_comment: str, optional
                             Comment to associate with the file.
-                        - thermal_board_side : ThermalBoardSide
+                        - thermal_board_side: ThermalBoardSide
                             Thermal board side.
-                        - file_data : CsvExcelFile|IcepakFile|ImageFile
+                        - file_data: CsvExcelFile | IcepakFile | ImageFile
                             The properties of the thermal map file to update.
-                        - thermal_profiles : List of str
+                        - thermal_profiles: List of str
                             List of thermal profiles.
-                        - cca_names : List of str, optional
+                        - cca_names: List of str, optional
                             List of CCA names to provide thermal maps for. The default is ``None``,
                             in which case all CCAs in the project are returned.
 
@@ -1183,7 +1429,7 @@ class Project(GrpcStub):
             max_temperature=50.0,
             max_temperature_units="C"
         )
-        >>> add_thermal_map_files = [
+        >>> files = [
             {
                 "thermal_map_file": "Thermal Image.jpg",
                 "thermal_map_file_properties": [
@@ -1199,7 +1445,7 @@ class Project(GrpcStub):
                 ]
             }
         ]
-        >>> sherlock.project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        >>> sherlock.project.add_thermal_maps("Tutorial Project", files)
         """
         try:
             if project == "":
@@ -1331,9 +1577,21 @@ class Project(GrpcStub):
                                 f"Invalid temperature units for thermal map {j}."
                             )
 
+                    # Validate IcepakFile specific fields
+                    elif isinstance(thermal_map_file_property["file_data"], IcepakFile):
+                        file_data = thermal_map_file_property["file_data"]
+
+                        if not isinstance(file_data.temperature_offset, (float)):
+                            raise SherlockAddThermalMapsError(
+                                f"Invalid temperature offset for thermal map {i}."
+                            )
+                        if not isinstance(file_data.temperature_offset_units, str):
+                            raise SherlockAddThermalMapsError(
+                                f"Invalid temperature offset units for thermal map {i}."
+                            )
+
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.AddThermalMapRequest(project=project)
 
@@ -1397,6 +1655,14 @@ class Project(GrpcStub):
                         image_properties.max_temperature_units
                     )
 
+                if isinstance(properties["file_data"], IcepakFile):
+                    icepak_file_properties = thermal_map_file.thermalMapFileProperties.icepakFile
+                    file_properties = properties["file_data"]
+                    icepak_file_properties.temperatureOffset = file_properties.temperature_offset
+                    icepak_file_properties.temperatureOffsetUnits = (
+                        file_properties.temperature_offset_units
+                    )
+
                 thermal_profiles = properties["thermal_profiles"]
                 for thermal_profile in thermal_profiles:
                     thermal_map_file.thermalMapFileProperties.thermalProfiles.append(
@@ -1426,22 +1692,27 @@ class Project(GrpcStub):
                 LOG.error(error)
             raise e
 
-    def import_project_zip_archive(self, project, category, archive_file):
+    @require_version(242)
+    def import_project_zip_archive(self, project: str, category: str, archive_file: str) -> int:
         """
         Import a zipped project archive -- multiple project mode.
 
+        Available Since: 2024R2
+
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        category : str
+        category: str
             Sherlock project category.
-        archive_file : str
+        archive_file: str
             Full path to the .zip archive file containing the project data.
+
         Returns
         -------
         int
             Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1460,8 +1731,7 @@ class Project(GrpcStub):
                 raise SherlockImportProjectZipArchiveError(message="Archive file path is invalid.")
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.ImportProjectZipRequest(
                 project=project, category=category, archiveFile=archive_file
@@ -1478,26 +1748,31 @@ class Project(GrpcStub):
 
         return response.value
 
+    @require_version(242)
     def import_project_zip_archive_single_mode(
-        self, project, category, archive_file, destination_file_directory
+        self, project: str, category: str, archive_file: str, destination_file_directory: str
     ):
         """
         Import a zipped project archive -- single project mode.
 
+        Available Since: 2024R2
+
         Parameters
         ----------
-        project : str
+        project: str
             Name of the Sherlock project.
-        category : str
+        category: str
             Sherlock project category.
-        archive_file : str
+        archive_file: str
             Full path to the .zip archive file containing the project data.
-        destination_file_directory : str
+        destination_file_directory: str
             Directory in which the Sherlock project folder will be created.
+
         Returns
         -------
         int
             Status code of the response. 0 for success.
+
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
@@ -1529,8 +1804,7 @@ class Project(GrpcStub):
                 )
 
             if not self._is_connection_up():
-                LOG.error("There is no connection to a gRPC service.")
-                return
+                raise SherlockNoGrpcConnectionException()
 
             request = SherlockProjectService_pb2.ImportProjectZipSingleModeRequest(
                 destFileDir=destination_file_directory
@@ -1552,3 +1826,306 @@ class Project(GrpcStub):
             raise e
 
         return response.value
+
+    @require_version(251)
+    def export_project(
+        self,
+        project_name: str,
+        export_design_files: bool,
+        export_result_files: bool,
+        export_archive_results: bool,
+        export_user_files: bool,
+        export_log_files: bool,
+        export_system_data: bool,
+        export_file_dir: str,
+        export_file_name: str,
+        overwrite_existing_file: bool,
+    ) -> int:
+        """
+        Export a sherlock project.
+
+        Available Since: 2025R1
+
+        Parameters
+        ----------
+        project_name: str
+            Name of the project being exported.
+        export_design_files: bool
+            Determines if design files should be exported.
+        export_result_files: bool
+            Determines if all analysis module result files should be exported.
+        export_archive_results: bool
+            Determines if all archive result files should be exported.
+        export_user_files: bool
+            Determines if user properties and custom data files should be exported.
+        export_log_files: bool
+            Determines if Sherlock console and application log files should be exported.
+        export_system_data: bool
+            Determines if system technical data should be exported.
+        export_file_dir: str
+            Destination of export file.
+        export_file_name: str
+            Name to be given to the exported file.
+        overwrite_existing_file: bool
+            Determines if exported file will overwrite a previously existing file.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.export_project("Tutorial Project",
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        "C:/Path/To/Exported/Project",
+        "Exported_Project",
+        True)
+        """
+        try:
+            if project_name == "":
+                raise SherlockExportProjectError(message="Project name is invalid")
+
+            if export_file_dir == "":
+                raise SherlockExportProjectError(message="Export directory is invalid")
+
+            if export_file_name == "":
+                raise SherlockExportProjectError(message="Export file name is invalid")
+
+            if not self._is_connection_up():
+                raise SherlockNoGrpcConnectionException()
+
+            request = SherlockProjectService_pb2.ExportProjectRequest(
+                project=project_name,
+                exportDesignFiles=export_design_files,
+                exportResultFiles=export_result_files,
+                exportArchivedResults=export_archive_results,
+                exportUserFiles=export_user_files,
+                exportLogFiles=export_log_files,
+                exportSystemData=export_system_data,
+                exportFileDirectory=export_file_dir,
+                exportFileName=export_file_name,
+                overwriteExistingFile=overwrite_existing_file,
+            )
+
+            response = self.stub.exportProject(request)
+
+            if response.value == -1:
+                raise SherlockExportProjectError(message=response.message)
+
+        except SherlockExportProjectError as e:
+            LOG.error(str(e))
+            raise e
+
+        return response.value
+
+    @require_version(251)
+    def create_cca_from_modeling_region(
+        self, project: str, cca_from_mr_properties: list[dict[str, bool | float | str]]
+    ) -> int:
+        """Create one or more CCAs from modeling regions in a given project.
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        cca_from_mr_properties: list[dict[str, bool | float | str]]
+            CCAs to be created from modeling regions consisting of these properties:
+
+            - cca_name: str
+                Name of the CCA.
+            - modeling_region_id: str
+                Name of the modeling region.
+            - description: str
+                Description of the CCA.
+            - default_solder_type: str
+                The default solder type. The default is ``None``.
+            - default_stencil_thickness: float
+                The default stencil thickness. The default is ``None``.
+            - default_stencil_thickness_units: str
+                Units for default stencil thickness. The default is ``None``.
+            - default_part_temp_rise: float
+                Default part temp rise. The default is ``None``.
+            - default_part_temp_rise_units: str
+                Units for default part temp rise. The default is ``None``.
+                Options are ``"C"``, ``"F"``, and ``"K"``.
+            - guess_part_properties: bool
+                Whether to enable guess part properties. The default is ``None``.
+            - generate_image_layers: bool
+                Whether to generate image layers or not.  The default is ``None``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> sherlock.project.import_odb_archive(
+            "ODB++ Tutorial.tgz",
+            True,
+            True,
+            True,
+            True,
+            project="Test",
+            cca_name="Card",
+        )
+        >>> sherlock.project.create_cca_from_modeling_region(
+            "Test",
+            [{
+                'cca_name': 'Card',
+                'modeling_region_id': 'MR1'
+                'description': 'Test',
+                'default_solder_type': 'SAC305',
+                'default_stencil_thickness': 10,
+                'default_stencil_thickness_units': 'mm',
+                'default_part_temp_rise': 20,
+                'default_part_temp_rise_units': 'C',
+                'guess_part_properties': False,
+                'generate_image_layers': False,
+            },
+            ]
+        )
+        """
+        try:
+            if project == "":
+                raise SherlockCreateCCAFromModelingRegionError(message="Project name is invalid.")
+
+            if not isinstance(cca_from_mr_properties, list):
+                raise SherlockCreateCCAFromModelingRegionError(
+                    message="CCA properties argument is invalid."
+                )
+
+            if len(cca_from_mr_properties) == 0:
+                raise SherlockCreateCCAFromModelingRegionError(
+                    message="One or more CCAs are required."
+                )
+
+            request = SherlockProjectService_pb2.CreateCcaFromModelingRegionRequest(project=project)
+
+            for i, cca in enumerate(cca_from_mr_properties):
+                cca_request = request.cCAsFromModelingRegions.add()
+
+                if not isinstance(cca, dict):
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"CCA properties are invalid for CCA {i}."
+                    )
+
+                if "cca_name" not in cca.keys():
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"CCA name is missing for CCA {i}."
+                    )
+
+                if "modeling_region_id" not in cca.keys():
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"Modeling Region ID is missing for CCA {i}."
+                    )
+
+                cca_request.ccaName = cca["cca_name"]
+                cca_request.modelingRegionID = cca["modeling_region_id"]
+
+                if cca_request.ccaName == "":
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"CCA name is invalid for CCA {i}."
+                    )
+
+                if cca_request.modelingRegionID == "":
+                    raise SherlockCreateCCAFromModelingRegionError(
+                        message=f"Modeling Region ID is invalid for CCA {i}."
+                    )
+
+                if "description" in cca.keys():
+                    cca_request.description = cca["description"]
+
+                if "default_solder_type" in cca.keys():
+                    cca_request.defaultSolderType = cca["default_solder_type"]
+
+                if "default_stencil_thickness" in cca.keys():
+                    cca_request.defaultStencilThickness = cca["default_stencil_thickness"]
+
+                if "default_stencil_thickness_units" in cca.keys():
+                    cca_request.defaultStencilThicknessUnits = cca[
+                        "default_stencil_thickness_units"
+                    ]
+
+                if "default_part_temp_rise" in cca.keys():
+                    cca_request.defaultPartTempRise = cca["default_part_temp_rise"]
+
+                if "default_part_temp_rise_units" in cca.keys():
+                    cca_request.defaultPartTempRiseUnits = cca["default_part_temp_rise_units"]
+
+                if "guess_part_properties" in cca.keys():
+                    cca_request.guessPartProperties = cca["guess_part_properties"]
+
+                if "generate_image_layers" in cca.keys():
+                    cca_request.generateImageLayers = cca["generate_image_layers"]
+
+        except SherlockCreateCCAFromModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.createCCAFromModelingRegion(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockCreateCCAFromModelingRegionError(response.message)
+            else:
+                LOG.info(response.message)
+                return response.value
+        except SherlockCreateCCAFromModelingRegionError as e:
+            LOG.error(str(e))
+            raise e
+
+    @require_version(252)
+    def import_GDSII_file(self, request: ImportGDSIIRequest) -> int:
+        """Import a GDSII project file and any optional config files.
+
+        Available Since: 2025R2
+
+        Parameters
+        ----------
+        request : ImportGDSIIRequest
+            Contains the information needed to import the GDSII project file and any optional
+            config files.
+
+        Returns
+        -------
+        ReturnCode
+            Status of the GDSII file import.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.project_types import ImportGDSIIRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> return_code = sherlock.project.import_GDSII_file(
+        >>>     ImportGDSIIRequest(
+        >>>         gdsii_file="path/to/design.gds",
+        >>>         technology_file="path/to/tech.xml",
+        >>>         layer_map_file="path/to/layer.map",
+        >>>         project="TestProject",
+        >>>         cca_name="TestCCA",
+        >>>         guess_part_properties=True,
+        >>>         polyline_simplification_enabled=True,
+        >>>         polyline_tolerance=0.01,
+        >>>         polyline_tolerance_units="mm",
+        >>>     )
+        >>> )
+        >>> print(f"Import result: {return_code}")
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.importGDSIIFile(request._convert_to_grpc())

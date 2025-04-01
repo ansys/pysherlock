@@ -1,0 +1,13 @@
+ANSYS
+[Aa]nsys
+PySherlock
+Sherlock
+APIs
+GitHub
+leaded
+ODB\+\+
+Pythonic
+venv
+Makefile
+py
+IST

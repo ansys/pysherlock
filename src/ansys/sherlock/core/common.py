@@ -1,6 +1,11 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 """Module for running the gRPC APIs in the Sherlock Common service."""
+
+import grpc
+
+from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
+
 try:
     import SherlockCommonService_pb2
     import SherlockCommonService_pb2_grpc
@@ -9,26 +14,27 @@ except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockCommonService_pb2_grpc
 
 from ansys.sherlock.core import LOG
-from ansys.sherlock.core.errors import SherlockCommonServiceError
+from ansys.sherlock.core.errors import SherlockCommonServiceError, SherlockNoGrpcConnectionException
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.utils.version_check import require_version
 
 
 class Common(GrpcStub):
     """Contains methods from the Sherlock Common service."""
 
-    def __init__(self, channel):
+    def __init__(self, channel: grpc.Channel, server_version: int):
         """Initialize a gRPC stub for the Sherlock Common service."""
-        super().__init__(channel)
+        super().__init__(channel, server_version)
         self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
-    def check(self):
+    @require_version()
+    def check(self) -> bool:
         """Perform a health check on the gRPC connection.
 
         Returns
         -------
         bool
             Whether the Sherlock client is connected via gRPC.
-
         """
         if not self._is_connection_up():
             LOG.error("Health check failed.")
@@ -37,18 +43,19 @@ class Common(GrpcStub):
             LOG.info("Connection is healthy.")
             return True
 
-    def is_sherlock_client_loading(self):
+    @require_version()
+    def is_sherlock_client_loading(self) -> bool:
         """Check if the Sherlock client is opened and done initializing.
+
+        Available Since: 2023R2
 
         Returns
         -------
         bool
             Whether the Sherlock client is opened and done initializing.
-
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         message = SherlockCommonService_pb2.IsSherlockClientLoadingRequest()
         response = self.stub.isSherlockClientLoading(message)
@@ -60,8 +67,11 @@ class Common(GrpcStub):
             LOG.error("Sherlock client has not finished initializing.")
             return False
 
-    def exit(self, close_sherlock_client=False):
+    @require_version()
+    def exit(self, close_sherlock_client: bool = False):
         """Close the gRPC connection.
+
+        Available Since: 2023R1
 
         Parameters
         ----------
@@ -71,8 +81,7 @@ class Common(GrpcStub):
             is closed.
         """
         if not self._is_connection_up():
-            LOG.error("There is no connection to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         try:
             exit_message = SherlockCommonService_pb2.ExitRequest()
@@ -82,12 +91,15 @@ class Common(GrpcStub):
         except SherlockCommonServiceError as err:
             LOG.error("Exit error: ", str(err))
 
-    def list_units(self, unitType):
+    @require_version()
+    def list_units(self, unit_type: ListUnitsRequestUnitType) -> str:
         """List units for a unit type.
+
+        Available Since: 2023R2
 
         Parameters
         ----------
-        unitType : ListUnitsRequestUnitType
+        unit_type : ListUnitsRequestUnitType
             Unit type.
 
         Returns
@@ -95,14 +107,13 @@ class Common(GrpcStub):
         str
             Units for the unit type.
         """
-        if unitType == "":
+        if unit_type == "":
             raise SherlockCommonServiceError(message="Unit type is missing.")
 
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
-            return ""
+            raise SherlockNoGrpcConnectionException()
 
-        request = SherlockCommonService_pb2.ListUnitsRequest(unitType=unitType)
+        request = SherlockCommonService_pb2.ListUnitsRequest(unitType=unit_type)
 
         try:
             response = self.stub.listUnits(request)
@@ -114,13 +125,16 @@ class Common(GrpcStub):
 
         return response.units
 
-    def list_solder_materials(self):
+    @require_version()
+    def list_solder_materials(self) -> list[str]:
         """List valid solders.
+
+        Available Since: 2024R1
 
         Returns
         -------
-        list
-            List of valid solder names.
+        list[str]
+            Valid solder names.
 
         Examples
         --------
@@ -129,10 +143,56 @@ class Common(GrpcStub):
         >>> sherlock.common.list_solder_materials()
         """
         if not self._is_connection_up():
-            LOG.error("Not connected to a gRPC service.")
-            return
+            raise SherlockNoGrpcConnectionException()
 
         request = SherlockCommonService_pb2.GetSoldersRequest()
         response = self.stub.getSolders(request)
 
         return response.solderName
+
+    @require_version(251)
+    def get_sherlock_info(self) -> str:
+        """Get server Sherlock version.
+
+        Returns
+        -------
+        SherlockInfoResponse
+            Sherlock information containing
+            releaseVersion, defaultProjectDir and isSingleProjectMode flag
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> release_version = sherlock.common.get_sherlock_info().releaseVersion
+        >>> default_dir = sherlock.common.get_sherlock_info().defaultProjectDir
+        >>> is_single_project = sherlock.common.get_sherlock_info().isSingleProjectMode
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockCommonService_pb2.SherlockInfoRequest()
+        response = self.stub.getSherlockInfo(request)
+
+        return response
+
+    @require_version(252)
+    def get_solder_info(self) -> SherlockCommonService_pb2.SolderInfoResponse:
+        """Get solder data from Sherlock.
+
+        Returns
+        --------
+        SolderInfoResponse
+            All solder information stored in Sherlock for each solder.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> solder_data = sherlock.get_solder_info()
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockCommonService_pb2.SolderInfoRequest()
+        return self.stub.getSolderInfo(request)

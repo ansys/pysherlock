@@ -1,6 +1,4 @@
-# © 2023 ANSYS, Inc. All rights reserved
-
-import time
+# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
 
 import grpc
 import pytest
@@ -16,13 +14,14 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateLaminateLayerError,
 )
 from ansys.sherlock.core.stackup import Stackup
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_all():
     """Test all stackup APIs."""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    stackup = Stackup(channel)
+    stackup = Stackup(channel, SKIP_VERSION_CHECK)
     helper_test_gen_stackup(stackup)
     helper_test_update_conductor_layer(stackup)
     helper_test_update_laminate_layer(stackup)
@@ -33,7 +32,7 @@ def test_all():
     helper_test_get_total_conductor_thickness(stackup)
 
 
-def helper_test_gen_stackup(stackup):
+def helper_test_gen_stackup(stackup: Stackup):
     """Test gen_stackup API."""
     try:
         stackup.gen_stackup(
@@ -167,13 +166,11 @@ def helper_test_gen_stackup(stackup):
                 "mil",
             )
             assert result == 0
-            # wait for the process to finish to allow tests that modify a layer to succeed
-            time.sleep(2)
         except SherlockGenStackupError as e:
             pytest.fail(str(e))
 
 
-def helper_test_update_conductor_layer(stackup):
+def helper_test_update_conductor_layer(stackup: Stackup):
     """Test update_conductor_layer API."""
     try:
         stackup.update_conductor_layer(
@@ -275,12 +272,11 @@ def helper_test_update_conductor_layer(stackup):
                 resin_material="Generic FR-4 Generic FR-4",
             )
             assert result == 0
-            time.sleep(1)
         except SherlockUpdateConductorLayerError as e:
             pytest.fail(str(e))
 
 
-def helper_test_update_laminate_layer(stackup):
+def helper_test_update_laminate_layer(stackup: Stackup):
     """Test update_laminate_layer API."""
 
     try:
@@ -465,12 +461,11 @@ def helper_test_update_laminate_layer(stackup):
                 "0.0",
             )
             assert result == 0
-            time.sleep(1)
         except SherlockUpdateLaminateLayerError as e:
             pytest.fail(str(e))
 
 
-def helper_test_list_conductor_layers(stackup):
+def helper_test_list_conductor_layers(stackup: Stackup):
     """Test list_conductor_layers API"""
     try:
         stackup.list_conductor_layers("")
@@ -499,7 +494,7 @@ def helper_test_list_conductor_layers(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_list_laminate_layers(stackup):
+def helper_test_list_laminate_layers(stackup: Stackup):
     """Test list_laminate_layers API"""
     try:
         stackup.list_laminate_layers("")
@@ -527,7 +522,7 @@ def helper_test_list_laminate_layers(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_get_layer_count(stackup):
+def helper_test_get_layer_count(stackup: Stackup):
     """Test get_layer_count API"""
     try:
         stackup.get_layer_count(project="", cca_name="Card")
@@ -628,7 +623,7 @@ def helper_test_get_stackup_props(stackup):
             pytest.fail(str(e))
 
 
-def helper_test_get_total_conductor_thickness(stackup):
+def helper_test_get_total_conductor_thickness(stackup: Stackup):
     try:
         stackup.get_total_conductor_thickness(project="", cca_name="Card", thickness_unit="oz")
         pytest.fail("No exception raised when using an invalid parameter")

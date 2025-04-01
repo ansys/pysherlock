@@ -9,4 +9,4 @@ Layer
 .. autosummary::
      :toctree: _autosummary
 
-     ansys.sherlock.core.layer.Layer
+     Layer

@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved
+# © 2024-2025 ANSYS, Inc. All rights reserved
 
 import os
 import platform
@@ -6,6 +6,7 @@ import time
 import uuid
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.errors import (
@@ -13,7 +14,9 @@ from ansys.sherlock.core.errors import (
     SherlockAddProjectError,
     SherlockAddStrainMapsError,
     SherlockAddThermalMapsError,
+    SherlockCreateCCAFromModelingRegionError,
     SherlockDeleteProjectError,
+    SherlockExportProjectError,
     SherlockGenerateProjectReportError,
     SherlockImportIpc2581Error,
     SherlockImportODBError,
@@ -28,13 +31,18 @@ from ansys.sherlock.core.project import Project
 from ansys.sherlock.core.types.project_types import (
     BoardBounds,
     CsvExcelFile,
+    IcepakFile,
     ImageBounds,
     ImageFile,
+    ImportGDSIIRequest,
     LegendBounds,
     LegendOrientation,
+    StrainMapLegendOrientation,
+    StrainMapsFileType,
     ThermalBoardSide,
     ThermalMapsFileType,
 )
+from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 PROJECT_ADD_NAME = "Delete This After Add"
 
@@ -43,7 +51,7 @@ def test_all():
     """Test all project APIs"""
     channel_param = "127.0.0.1:9090"
     channel = grpc.insecure_channel(channel_param)
-    project = Project(channel)
+    project = Project(channel, SKIP_VERSION_CHECK)
 
     helper_test_add_strain_maps(project)
     helper_test_delete_project(project)
@@ -58,14 +66,18 @@ def test_all():
     helper_test_add_thermal_maps(project)
     helper_test_update_thermal_maps(project)
     helper_test_list_thermal_maps(project)
+    helper_test_create_cca_from_modeling_region(project)
+    helper_test_import_gdsii_file(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
     finally:
         clean_up_after_add(project, project_name)
 
+    helper_test_export_project(project)
 
-def helper_test_delete_project(project):
+
+def helper_test_delete_project(project: Project):
     """Test delete_project API"""
     try:
         project.delete_project("")
@@ -82,7 +94,7 @@ def helper_test_delete_project(project):
             assert type(e) == SherlockDeleteProjectError
 
 
-def helper_test_import_odb_archive(project):
+def helper_test_import_odb_archive(project: Project):
     """Test import_odb_archive API"""
     try:
         project.import_odb_archive("", True, True, True, True)
@@ -99,7 +111,7 @@ def helper_test_import_odb_archive(project):
             assert type(e) == SherlockImportODBError
 
 
-def helper_test_import_ipc2581_archive(project):
+def helper_test_import_ipc2581_archive(project: Project):
     """Test import_ipc2581_archive API"""
     try:
         project.import_ipc2581_archive("", True, True)
@@ -115,7 +127,7 @@ def helper_test_import_ipc2581_archive(project):
             assert type(e) == SherlockImportIpc2581Error
 
 
-def helper_test_generate_project_report(project):
+def helper_test_generate_project_report(project: Project):
     """Test generate_project_report API."""
     try:
         project.generate_project_report("", "John Doe", "Generic Co.", "C:/report.pdf")
@@ -164,7 +176,7 @@ def helper_test_generate_project_report(project):
             assert type(e) == SherlockGenerateProjectReportError
 
 
-def helper_test_list_ccas(project):
+def helper_test_list_ccas(project: Project):
     """Test list_ccas API"""
 
     try:
@@ -175,7 +187,7 @@ def helper_test_list_ccas(project):
 
     try:
         project.list_ccas("Tutorial Project", "CCA names that is not a list")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockListCCAsError as e:
         assert str(e.str_itr()) == "['List CCAs error: cca_names is not a list.']"
 
@@ -202,7 +214,7 @@ def helper_test_list_ccas(project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_cca(project):
+def helper_test_add_cca(project: Project):
     """Test add_cca API"""
 
     try:
@@ -221,25 +233,25 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: Project name is invalid."
 
     try:
         project.add_cca("Test", "")
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA properties argument is invalid."
 
     try:
         project.add_cca("Test", [])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: One or more CCAs are required."
 
     try:
         project.add_cca("Test", [""])
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA properties are invalid for CCA 0."
 
@@ -258,7 +270,7 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA name is missing for CCA 0."
 
@@ -278,7 +290,7 @@ def helper_test_add_cca(project):
                 },
             ],
         )
-        assert False
+        pytest.fail("No exception raised when using an invalid parameter")
     except SherlockAddCCAError as e:
         assert str(e) == "Add CCA error: CCA name is invalid for CCA 0."
 
@@ -327,7 +339,7 @@ def helper_test_add_cca(project):
         pytest.fail(str(e))
 
 
-def helper_test_add_strain_maps(project):
+def helper_test_add_strain_maps(project: Project):
     """Test add_strain_maps API"""
 
     try:
@@ -337,6 +349,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "PCB Strain",
@@ -356,6 +369,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "PCB Strain",
@@ -375,6 +389,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     "0",  # Not an integer
                     "SolidID",
                     "PCB Strain",
@@ -397,6 +412,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     -1,
                     "SolidID",
                     "PCB Strain",
@@ -419,6 +435,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "",
                     "PCB Strain",
@@ -441,6 +458,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "",
@@ -463,6 +481,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "Strain",
@@ -485,6 +504,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "SolidID",
                     "Strain",
@@ -508,6 +528,7 @@ def helper_test_add_strain_maps(project):
                 (
                     "StrainMap.csv",
                     "",
+                    StrainMapsFileType.CSV,
                     0,
                     "refDes",
                     "Strain",
@@ -523,6 +544,500 @@ def helper_test_add_strain_maps(project):
             "cca_names is not a list for strain map 0.']"
         )
 
+    try:
+        project.add_strain_maps(
+            "",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert str(e.str_itr()) == "['Add strain maps error: Project name is invalid.']"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert str(e.str_itr()) == "['Add strain maps error: Path is required for strain map 0.']"
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    "0",  # Not an integer
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count is required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    -1,
+                    "SolidID",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Header row count must be greater than or equal to 0 for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "",
+                    "PCB Strain",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Reference ID column is required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "",
+                    "µε",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain column is required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "Strain",
+                    "",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Strain units are required for strain map 0.']"
+        )
+
+    try:
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "SolidID",
+                    "Strain",
+                    "BAD",
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == '[\'Add strain maps error: Strain units "BAD" '
+            "are invalid for strain map 0.']"
+        )
+
+    try:
+        cca_names_not_list = "Main Board"
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "StrainMap.xlsx",
+                    "",
+                    StrainMapsFileType.EXCEL,
+                    0,
+                    "refDes",
+                    "Strain",
+                    "µε",
+                    cca_names_not_list,
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "cca_names is not a list for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: " "Path is required for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = "Invalid list"
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "image_file is not a list for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            "BoardBounds",
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid board bounds for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            0,
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid coordinate units for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            "ImageBounds",
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid image bounds for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            "LegendBounds",
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid legend bounds for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            "StrainMapLegendOrientation.VERTICAL",
+            20.0,
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid legend orientation for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            "20.0",
+            50.0,
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid minimum strain for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            "50.0",
+            "µε",
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid maximum strain for strain map 0.']"
+        )
+
+    try:
+        strain_map_image_properties = (
+            BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+            "in",
+            ImageBounds(0.0, 0.0, 10.0, 8.0),
+            LegendBounds(1.0, 2.0, 4.0, 2.0),
+            StrainMapLegendOrientation.VERTICAL,
+            20.0,
+            50.0,
+            0,
+        )
+        project.add_strain_maps(
+            "Tutorial Project",
+            [
+                (
+                    "Strain Map.jpg",
+                    "This is the strain map image for the project",
+                    StrainMapsFileType.IMAGE,
+                    strain_map_image_properties,
+                    ["Main Board"],
+                )
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockAddStrainMapsError as e:
+        assert (
+            str(e.str_itr()) == "['Add strain maps error: "
+            "Invalid strain units for strain map 0.']"
+        )
+
     if project._is_connection_up():
         # happy path test missing because needs valid file
         try:
@@ -534,6 +1049,7 @@ def helper_test_add_strain_maps(project):
                         strain_map,
                         "File comment",
                         0,
+                        StrainMapsFileType.CSV,
                         "SolidID",
                         "PCB Strain",
                         "µε",
@@ -545,8 +1061,58 @@ def helper_test_add_strain_maps(project):
         except Exception as e:
             assert type(e) == SherlockAddStrainMapsError
 
+        try:
+            strain_map = "Missing strain map.xlsx"
+            project.add_strain_maps(
+                "Tutorial Project",
+                [
+                    (
+                        strain_map,
+                        "File comment",
+                        0,
+                        StrainMapsFileType.EXCEL,
+                        "SolidID",
+                        "PCB Strain",
+                        "µε",
+                        ["Main Board"],
+                    )
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockAddStrainMapsError
 
-def helper_test_list_strain_maps(project):
+        # happy path test missing because needs valid file
+        try:
+            strain_map = "Missing strain map.jpg"
+            strain_map_image_properties = (
+                BoardBounds([(1.0, 2.0), (3.0, 4.0), (1.0, 2.0), (1.0, 2.0)]),
+                "in",
+                ImageBounds(0.0, 0.0, 10.0, 8.0),
+                LegendBounds(1.0, 2.0, 4.0, 2.0),
+                StrainMapLegendOrientation.VERTICAL,
+                20.0,
+                50.0,
+                "µε",
+            )
+            project.add_strain_maps(
+                "Tutorial Project",
+                [
+                    (
+                        strain_map,
+                        "This is the strain map image for the project",
+                        StrainMapsFileType.IMAGE,
+                        strain_map_image_properties,
+                        ["Main Board"],
+                    )
+                ],
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockAddStrainMapsError
+
+
+def helper_test_list_strain_maps(project: Project):
     """Test list_strain_maps API"""
 
     try:
@@ -592,7 +1158,7 @@ def helper_test_list_strain_maps(project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_project(project):
+def helper_test_add_project(project: Project) -> str:
     """Test add_project API"""
 
     try:
@@ -618,7 +1184,7 @@ def helper_test_add_project(project):
             pytest.fail(str(e))
 
 
-def helper_test_list_thermal_maps(project):
+def helper_test_list_thermal_maps(project: Project):
     """Test list_thermal_maps API"""
 
     expected_cca_name = "Main Board"
@@ -681,7 +1247,7 @@ def helper_test_list_thermal_maps(project):
             pytest.fail(str(e.str_itr()))
 
 
-def helper_test_add_thermal_maps(project):
+def helper_test_add_thermal_maps(project: Project):
     """Test add_thermal_maps API"""
 
     try:
@@ -1559,6 +2125,58 @@ def helper_test_add_thermal_maps(project):
             "['Add thermal maps error: Invalid minimum temperature units for thermal map 0.']"
         )
 
+    try:
+        file_data = IcepakFile(
+            temperature_offset="invalid_value", temperature_offset_units="C"  # invalid value
+        )
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.tmap",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.tmap",
+                        "file_type": ThermalMapsFileType.TMAP,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature offset for thermal map 0.']"
+        )
+
+    try:
+        file_data = IcepakFile(temperature_offset=5.0, temperature_offset_units=5)  # invalid value
+        add_thermal_map_files = [
+            {
+                "thermal_map_file": "Thermal Map.tmap",
+                "thermal_map_file_properties": [
+                    {
+                        "file_name": "Thermal Map.tmap",
+                        "file_type": ThermalMapsFileType.TMAP,
+                        "file_comment": "Update",
+                        "thermal_board_side": ThermalBoardSide.BOTH,
+                        "file_data": file_data,
+                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                        "cca_names": ["Main Board"],
+                    },
+                ],
+            }
+        ]
+        project.add_thermal_maps("Tutorial Project", add_thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockAddThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Add thermal maps error: Invalid temperature offset units for thermal map 0.']"
+        )
+
     if not project._is_connection_up():
         return
 
@@ -1600,7 +2218,7 @@ def helper_test_add_thermal_maps(project):
         assert type(e) == SherlockAddThermalMapsError
 
 
-def helper_test_update_thermal_maps(project):
+def helper_test_update_thermal_maps(project: Project):
     """Test update_thermal_maps API"""
 
     try:
@@ -2281,6 +2899,52 @@ def helper_test_update_thermal_maps(project):
             "['Update thermal maps error: Invalid minimum temperature units for thermal map 0.']"
         )
 
+    try:
+        file_data = IcepakFile(
+            temperature_offset="invalid value",  # invalid value
+            temperature_offset_units="C",
+        )
+        thermal_map_files = [
+            {
+                "file_name": "Thermal Map.tmap",
+                "file_type": ThermalMapsFileType.TMAP,
+                "file_comment": "Update",
+                "thermal_board_side": ThermalBoardSide.BOTTOM,
+                "file_data": file_data,
+                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                "cca_names": ["Main Board"],
+            }
+        ]
+        project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockUpdateThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Update thermal maps error: Invalid temperature offset for thermal map 0.']"
+        )
+
+    try:
+        file_data = IcepakFile(
+            temperature_offset=5.0,
+            temperature_offset_units=5,  # invalid value
+        )
+        thermal_map_files = [
+            {
+                "file_name": "Thermal Map.tmap",
+                "file_type": ThermalMapsFileType.TMAP,
+                "file_comment": "Update",
+                "thermal_board_side": ThermalBoardSide.BOTTOM,
+                "file_data": file_data,
+                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+                "cca_names": ["Main Board"],
+            }
+        ]
+        project.update_thermal_maps("Tutorial Project", thermal_map_files)
+        pytest.fail("No exception raised when using an invalid temperature_offset")
+    except SherlockUpdateThermalMapsError as e:
+        assert str(e.str_itr()) == (
+            "['Update thermal maps error: Invalid temperature offset units for thermal map 0.']"
+        )
+
     if not project._is_connection_up():
         return
 
@@ -2334,7 +2998,7 @@ def helper_test_update_thermal_maps(project):
         pytest.fail(str(e.str_itr()))
 
 
-def helper_test_import_project_zip_archive(project):
+def helper_test_import_project_zip_archive(project: Project):
     """Test import_project_zip_archive API"""
     try:
         project.import_project_zip_archive("", "Demos", "Tutorial Project.zip")
@@ -2364,7 +3028,7 @@ def helper_test_import_project_zip_archive(project):
             assert type(e) == SherlockImportProjectZipArchiveError
 
 
-def helper_test_import_project_zip_archive_single_mode(project):
+def helper_test_import_project_zip_archive_single_mode(project: Project):
     """Test import_project_zip_archive_single_mode API"""
     try:
         project.import_project_zip_archive_single_mode(
@@ -2408,9 +3072,319 @@ def helper_test_import_project_zip_archive_single_mode(project):
             assert type(e) == SherlockImportProjectZipArchiveSingleModeError
 
 
-def clean_up_after_add(project, project_name):
+def clean_up_after_add(project: Project, project_name: str):
     if project_name is not None:
         project.delete_project(project_name)
+
+
+def helper_test_export_project(project: Project):
+    """Test method for export project"""
+    try:
+        project.export_project(
+            project_name="",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="/Test/Dir",
+            export_file_name="ExportedProject",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Project name is invalid"
+
+    try:
+        project.export_project(
+            project_name="Tutorial Project",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="",
+            export_file_name="ExportedProject",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Export directory is invalid"
+
+    try:
+        project.export_project(
+            project_name="Tutorial Project",
+            export_design_files=True,
+            export_result_files=True,
+            export_archive_results=True,
+            export_user_files=True,
+            export_log_files=True,
+            export_system_data=True,
+            export_file_dir="/Test/Dir",
+            export_file_name="",
+            overwrite_existing_file=True,
+        )
+    except SherlockExportProjectError as e:
+        assert str(e) == "Export project error : Export file name is invalid"
+
+    if project._is_connection_up():
+        try:
+            project.export_project(
+                project_name="",
+                export_design_files=True,
+                export_result_files=True,
+                export_archive_results=True,
+                export_user_files=True,
+                export_log_files=True,
+                export_system_data=True,
+                export_file_dir="/Test/Dir",
+                export_file_name="ExportedProject",
+                overwrite_existing_file=True,
+            )
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockExportProjectError
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        output_file_name = "ExportedProject"
+        try:
+            result = project.export_project(
+                project_name="Tutorial Project",
+                export_design_files=True,
+                export_result_files=True,
+                export_archive_results=True,
+                export_user_files=True,
+                export_log_files=True,
+                export_system_data=True,
+                export_file_dir=this_dir,
+                export_file_name=output_file_name,
+                overwrite_existing_file=True,
+            )
+            assert result == 0
+
+            # Clean up file
+            output_file = os.path.join(this_dir, output_file_name)
+            if os.path.exists(output_file):
+                os.remove(output_file)
+            else:
+                pytest.fail("Failed to generate export file.")
+        except SherlockExportProjectError as e:
+            pytest.fail(str(e))
+
+
+def helper_test_create_cca_from_modeling_region(project: Project):
+    """Test create_cca_from_modeling_region API"""
+    try:
+        project.create_cca_from_modeling_region(
+            "",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                    "description": "test MR1",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties_enabled": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: Project " "name is invalid."
+
+    try:
+        project.create_cca_from_modeling_region("Test", "")
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA "
+            "properties argument is invalid."
+        )
+
+    try:
+        project.create_cca_from_modeling_region("Test", [])
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: One or more CCAs are required."
+
+    try:
+        project.create_cca_from_modeling_region("Test", [""])
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: CCA properties "
+            "are invalid for CCA 0."
+        )
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "modeling_region_id": "MR1",
+                    "description": "tests MR1",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: CCA name is missing for CCA 0."
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "",
+                    "modeling_region_id": "MR1",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert str(e) == "Create CCA from modeling region error: CCA name is invalid for CCA 0."
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is missing for CCA 0."
+        )
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Test",
+            [
+                {
+                    "cca_name": "Card",
+                    "modeling_region_id": "",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "mm",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        assert False
+    except SherlockCreateCCAFromModelingRegionError as e:
+        assert (
+            str(e) == "Create CCA from modeling region error: Modeling Region ID"
+            " is invalid for CCA 0."
+        )
+
+    if not project._is_connection_up():
+        return
+
+    try:
+        project.create_cca_from_modeling_region(
+            "Tutorial Project",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                    "description": "Test",
+                    "default_solder_type": "SAC305",
+                    "default_stencil_thickness": 10,
+                    "default_stencil_thickness_units": "INVALID",
+                    "default_part_temp_rise": 20,
+                    "default_part_temp_rise_units": "C",
+                    "guess_part_properties": False,
+                    "generate_image_layers": False,
+                },
+            ],
+        )
+        pytest.fail("No exception raised when using an invalid parameter")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
+
+    try:
+        project.create_cca_from_modeling_region(
+            "ModelingRegion",
+            [
+                {
+                    "cca_name": "Main Board",
+                    "modeling_region_id": "MR1",
+                },
+            ],
+        )
+        pytest.fail("No exception raised when parameters are missing")
+    except Exception as e:
+        assert type(e) == SherlockCreateCCAFromModelingRegionError
+
+
+def helper_test_import_gdsii_file(project: Project):
+    """Test import GDSII file API."""
+    try:
+        # Test with an empty GDSII file path
+        ImportGDSIIRequest(gdsii_file="", project="TestProject", cca_name="MainCCA")
+        pytest.fail("No exception raised when using an invalid gdsii_file parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Value error, gdsii_file is invalid because it is None or empty."
+        )
+
+    try:
+        # Test with a invalid GDSII file path
+        request = ImportGDSIIRequest(
+            gdsii_file="valid/path/design.gds",
+            project="Tutorial Project",
+            cca_name="MainCCA",
+            guess_part_properties=True,
+            polyline_simplification_enabled=True,
+            polyline_tolerance=0.01,
+            polyline_tolerance_units="mm",
+        )
+
+        if project._is_connection_up():
+            return_code = project.import_GDSII_file(request)
+
+            # Check that an invalid gdsii_file returns an error
+            assert return_code.value == -1
+            assert return_code.message == f"Invalid GDSII file path: {request.gdsii_file}"
+
+    except Exception as e:
+        pytest.fail(f"Unexpected exception raised: {e}")
 
 
 if __name__ == "__main__":
