@@ -224,7 +224,7 @@ class ImportGDSIIRequest(BaseModel):
         if value is None or value.strip() == "":
             raise ValueError(f"{info.field_name} is invalid because it is None or empty.")
         return basic_str_validator(value, info.field_name)
-    
+
     @field_validator("project", "cca_name")
     @classmethod
     def optional_str_validation(cls, value: Optional[str], info):
