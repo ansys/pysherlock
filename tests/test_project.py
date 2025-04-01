@@ -3368,7 +3368,7 @@ def helper_test_import_gdsii_file(project: Project):
         # Test with a invalid GDSII file path
         request = ImportGDSIIRequest(
             gdsii_file="valid/path/design.gds",
-            project="InvalidProject",
+            project="Tutorial Project",
             cca_name="MainCCA",
             guess_part_properties=True,
             polyline_simplification_enabled=True,

@@ -2107,20 +2107,20 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.types.parts_types import ImportGDSIIRequest
+        >>> from ansys.sherlock.core.types.project_types import ImportGDSIIRequest
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
-        >>> return_code = sherlock.parts.import_gdsii_file(
+        >>> return_code = sherlock.project.import_GDSII_file(
         >>>     ImportGDSIIRequest(
-        >>>         gdsiiFile="path/to/design.gds",
-        >>>         technologyFile="path/to/tech.xml",
-        >>>         layerMapFile="path/to/layer.map",
+        >>>         gdsii_file="path/to/design.gds",
+        >>>         technology_file="path/to/tech.xml",
+        >>>         layer_map_file="path/to/layer.map",
         >>>         project="TestProject",
-        >>>         ccaName="TestCCA",
-        >>>         guessPartProperties=True,
-        >>>         polylineSimplificationEnabled=True,
-        >>>         polylineTolerance=0.01,
-        >>>         polylineToleranceUnits="mm",
+        >>>         cca_name="TestCCA",
+        >>>         guess_part_properties=True,
+        >>>         polyline_simplification_enabled=True,
+        >>>         polyline_tolerance=0.01,
+        >>>         polyline_tolerance_units="mm",
         >>>     )
         >>> )
         >>> print(f"Import result: {return_code}")
