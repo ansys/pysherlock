@@ -745,10 +745,40 @@ def helper_test_get_parts_list_properties(parts: Parts):
     for response in responses:
         assert response.returnCode.value == 0
         assert response.returnCode.message == ""
-    assert responses[0].refDes == "C1"
-    assert len(responses[0].properties) == 61
-    assert responses[1].refDes == "U9"
-    assert len(responses[1].properties) == 64
+
+    property_name = "partNumber"
+
+    ref_des = "C1"
+    property_name_value = "TMC1CBTTE106M"
+    properties = _find_properties(responses, ref_des)
+    assert properties, f"No properties found for {ref_des}"
+    property = _find_property(properties, property_name)
+    assert property, f"'{property_name}' property not found for {ref_des}"
+    assert property.value == property_name_value
+
+    ref_des = "U9"
+    property_name_value = "XCV405E-6FG676I"
+    properties = _find_properties(responses, ref_des)
+    assert properties, f"No properties found for {ref_des}"
+    property = _find_property(properties, property_name)
+    assert property, f"'{property_name}' property not found for {ref_des}"
+    assert property.value == property_name_value
+
+
+def _find_properties(get_parts_list_properties_responses, ref_des):
+    """Find the response for a given reference designator and return the properties"""
+    for response in get_parts_list_properties_responses:
+        if response.refDes == ref_des:
+            return response.properties
+    return None
+
+
+def _find_property(parts_list_properties, property_name):
+    """Find a property in the list of properties"""
+    for property in parts_list_properties:
+        if property.name == property_name:
+            return property
+    return None
 
 
 def helper_test_update_parts_list_properties(parts: Parts):
