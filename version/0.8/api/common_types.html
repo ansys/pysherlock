@@ -1,0 +1,944 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Common Types &#8212; PySherlock</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/ansys_sphinx_theme.css?v=77703c5e" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+  
+    <link href="../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../_static/documentation_options.js?v=4514dd13"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/table.js?v=b64f5182"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/common_types';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://sherlock.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Launcher" href="launcher.html" />
+    <link rel="prev" title="list_units" href="_autosummary/ansys.sherlock.core.common.Common.list_units.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.2" />
+  <link rel="canonical" href="https://sherlock.docs.pyansys.com/version/stable/api/common_types.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PySherlock - Home"/>
+    <img src="../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="PySherlock - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+</div>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock/discussions" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+</div>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(
+      (text) => (document.getElementById("announcement_msg").innerHTML = text),
+    )
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock/discussions" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis_types.html">Analysis Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Common Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launcher.html">Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layer.html">Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layer_types.html">Layer Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html">Lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts_types.html">Parts Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_types.html">Project Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stackup.html">Stackup</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">API reference</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Common Types</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-ansys.sherlock.core.types.common_types">
+<span id="common-types"></span><span id="ref-common-types"></span><h1>Common Types<a class="headerlink" href="#module-ansys.sherlock.core.types.common_types" title="Link to this heading">#</a></h1>
+<p>Module containing types for the Common Service.</p>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.common_types.</span></span><span class="sig-name descname"><span class="pre">ListUnitsRequestUnitType</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType" title="Link to this definition">#</a></dt>
+<dd><p>Constants for Unit Type in the List Units request.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.ACCELERATION">
+<span class="sig-name descname"><span class="pre">ACCELERATION</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.ACCELERATION" title="Link to this definition">#</a></dt>
+<dd><p>ACCELERATION</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.ACCEL_DENSITY">
+<span class="sig-name descname"><span class="pre">ACCEL_DENSITY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.ACCEL_DENSITY" title="Link to this definition">#</a></dt>
+<dd><p>ACCEL_DENSITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.AREA">
+<span class="sig-name descname"><span class="pre">AREA</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.AREA" title="Link to this definition">#</a></dt>
+<dd><p>AREA</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.BANDWIDTH">
+<span class="sig-name descname"><span class="pre">BANDWIDTH</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.BANDWIDTH" title="Link to this definition">#</a></dt>
+<dd><p>BANDWIDTH</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CAPACITANCE">
+<span class="sig-name descname"><span class="pre">CAPACITANCE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CAPACITANCE" title="Link to this definition">#</a></dt>
+<dd><p>CAPACITANCE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CTE">
+<span class="sig-name descname"><span class="pre">CTE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CTE" title="Link to this definition">#</a></dt>
+<dd><p>CTE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CURRENT">
+<span class="sig-name descname"><span class="pre">CURRENT</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CURRENT" title="Link to this definition">#</a></dt>
+<dd><p>CURRENT</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.DENSITY">
+<span class="sig-name descname"><span class="pre">DENSITY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.DENSITY" title="Link to this definition">#</a></dt>
+<dd><p>DENSITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.DISP_DENSITY">
+<span class="sig-name descname"><span class="pre">DISP_DENSITY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.DISP_DENSITY" title="Link to this definition">#</a></dt>
+<dd><p>DISP_DENSITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.FORCE">
+<span class="sig-name descname"><span class="pre">FORCE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.FORCE" title="Link to this definition">#</a></dt>
+<dd><p>FORCE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.FREQUENCY">
+<span class="sig-name descname"><span class="pre">FREQUENCY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.FREQUENCY" title="Link to this definition">#</a></dt>
+<dd><p>FREQUENCY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.INDUCTANCE">
+<span class="sig-name descname"><span class="pre">INDUCTANCE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.INDUCTANCE" title="Link to this definition">#</a></dt>
+<dd><p>INDUCTANCE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.LENGTH">
+<span class="sig-name descname"><span class="pre">LENGTH</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.LENGTH" title="Link to this definition">#</a></dt>
+<dd><p>LENGTH</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.POWER">
+<span class="sig-name descname"><span class="pre">POWER</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.POWER" title="Link to this definition">#</a></dt>
+<dd><p>POWER</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.RESISTANCE">
+<span class="sig-name descname"><span class="pre">RESISTANCE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.RESISTANCE" title="Link to this definition">#</a></dt>
+<dd><p>RESISTANCE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.SIZE">
+<span class="sig-name descname"><span class="pre">SIZE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.SIZE" title="Link to this definition">#</a></dt>
+<dd><p>SIZE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.SPECIFIC_HEAT">
+<span class="sig-name descname"><span class="pre">SPECIFIC_HEAT</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.SPECIFIC_HEAT" title="Link to this definition">#</a></dt>
+<dd><p>SPECIFIC_HEAT</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.STRAIN">
+<span class="sig-name descname"><span class="pre">STRAIN</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.STRAIN" title="Link to this definition">#</a></dt>
+<dd><p>STRAIN</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.STRESS">
+<span class="sig-name descname"><span class="pre">STRESS</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.STRESS" title="Link to this definition">#</a></dt>
+<dd><p>STRESS</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.TEMPERATURE">
+<span class="sig-name descname"><span class="pre">TEMPERATURE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.TEMPERATURE" title="Link to this definition">#</a></dt>
+<dd><p>TEMPERATURE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.THERMAL_CONDUCTIVITY">
+<span class="sig-name descname"><span class="pre">THERMAL_CONDUCTIVITY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.THERMAL_CONDUCTIVITY" title="Link to this definition">#</a></dt>
+<dd><p>THERMAL_CONDUCTIVITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.THERMAL_RESISTANCE">
+<span class="sig-name descname"><span class="pre">THERMAL_RESISTANCE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.THERMAL_RESISTANCE" title="Link to this definition">#</a></dt>
+<dd><p>THERMAL_RESISTANCE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.TIME">
+<span class="sig-name descname"><span class="pre">TIME</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.TIME" title="Link to this definition">#</a></dt>
+<dd><p>TIME</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VELOCITY">
+<span class="sig-name descname"><span class="pre">VELOCITY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VELOCITY" title="Link to this definition">#</a></dt>
+<dd><p>VELOCITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VELOCITY_DENSITY">
+<span class="sig-name descname"><span class="pre">VELOCITY_DENSITY</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VELOCITY_DENSITY" title="Link to this definition">#</a></dt>
+<dd><p>VELOCITY_DENSITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VOLTAGE">
+<span class="sig-name descname"><span class="pre">VOLTAGE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VOLTAGE" title="Link to this definition">#</a></dt>
+<dd><p>VOLTAGE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VOLUME">
+<span class="sig-name descname"><span class="pre">VOLUME</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VOLUME" title="Link to this definition">#</a></dt>
+<dd><p>VOLUME</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.WEIGHT">
+<span class="sig-name descname"><span class="pre">WEIGHT</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.WEIGHT" title="Link to this definition">#</a></dt>
+<dd><p>WEIGHT</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.TableDelimiter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.common_types.</span></span><span class="sig-name descname"><span class="pre">TableDelimiter</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.TableDelimiter" title="Link to this definition">#</a></dt>
+<dd><p>Types of delimiters that can be used for exporting tables.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.TableDelimiter.COMMA">
+<span class="sig-name descname"><span class="pre">COMMA</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.TableDelimiter.COMMA" title="Link to this definition">#</a></dt>
+<dd><p>COMMA</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.TableDelimiter.SEMICOLON">
+<span class="sig-name descname"><span class="pre">SEMICOLON</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.TableDelimiter.SEMICOLON" title="Link to this definition">#</a></dt>
+<dd><p>SEMICOLON</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.TableDelimiter.SPACE">
+<span class="sig-name descname"><span class="pre">SPACE</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.TableDelimiter.SPACE" title="Link to this definition">#</a></dt>
+<dd><p>SPACE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.TableDelimiter.TAB">
+<span class="sig-name descname"><span class="pre">TAB</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.TableDelimiter.TAB" title="Link to this definition">#</a></dt>
+<dd><p>TAB</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.Measurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.common_types.</span></span><span class="sig-name descname"><span class="pre">Measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.Measurement" title="Link to this definition">#</a></dt>
+<dd><p>Contains the properties of the measurement.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.Measurement.unit">
+<span class="sig-name descname"><span class="pre">unit</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.Measurement.unit" title="Link to this definition">#</a></dt>
+<dd><p>measurement units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.common_types.Measurement.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#ansys.sherlock.core.types.common_types.Measurement.value" title="Link to this definition">#</a></dt>
+<dd><p>measurement value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.ACCELERATION"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.ACCELERATION</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.ACCEL_DENSITY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.ACCEL_DENSITY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.AREA"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.AREA</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.BANDWIDTH"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.BANDWIDTH</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CAPACITANCE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.CAPACITANCE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CTE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.CTE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.CURRENT"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.CURRENT</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.DENSITY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.DENSITY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.DISP_DENSITY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.DISP_DENSITY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.FORCE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.FORCE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.FREQUENCY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.FREQUENCY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.INDUCTANCE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.INDUCTANCE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.LENGTH"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.LENGTH</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.POWER"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.POWER</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.RESISTANCE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.RESISTANCE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.SIZE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.SIZE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.SPECIFIC_HEAT"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.SPECIFIC_HEAT</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.STRAIN"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.STRAIN</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.STRESS"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.STRESS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.TEMPERATURE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.TEMPERATURE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.THERMAL_CONDUCTIVITY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.THERMAL_CONDUCTIVITY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.THERMAL_RESISTANCE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.THERMAL_RESISTANCE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.TIME"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.TIME</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VELOCITY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.VELOCITY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VELOCITY_DENSITY"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.VELOCITY_DENSITY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VOLTAGE"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.VOLTAGE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.VOLUME"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.VOLUME</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.ListUnitsRequestUnitType.WEIGHT"><code class="docutils literal notranslate"><span class="pre">ListUnitsRequestUnitType.WEIGHT</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.TableDelimiter"><code class="docutils literal notranslate"><span class="pre">TableDelimiter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.TableDelimiter.COMMA"><code class="docutils literal notranslate"><span class="pre">TableDelimiter.COMMA</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.TableDelimiter.SEMICOLON"><code class="docutils literal notranslate"><span class="pre">TableDelimiter.SEMICOLON</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.TableDelimiter.SPACE"><code class="docutils literal notranslate"><span class="pre">TableDelimiter.SPACE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.TableDelimiter.TAB"><code class="docutils literal notranslate"><span class="pre">TableDelimiter.TAB</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.Measurement"><code class="docutils literal notranslate"><span class="pre">Measurement</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.Measurement.unit"><code class="docutils literal notranslate"><span class="pre">Measurement.unit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.common_types.Measurement.value"><code class="docutils literal notranslate"><span class="pre">Measurement.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item"> 
+<div class="tocsection editthispage">
+  <a href="http://github.com/ansys/pysherlock/edit/main/ListUnitsRequestUnitType.py">
+    <i class="fa-solid fa-pencil"></i>
+       Edit
+    on GitHub  
+  </a>
+</div>
+
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/common_types.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+<link rel="stylesheet" href="../_static/css/fuse-search.css">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../_static/search.json";
+</script>
+
+
+<script src="../_static/js/search.js"></script>
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2025 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://sphinxdocs.ansys.com/version/stable/index.html"
+    >Ansys Sphinx Theme</a
+  >
+  1.2.3. <br />Last updated on
+  <span id="ast_build_date"></span>
+</p>
+<script>
+  var options = { day: "numeric", month: "long", year: "numeric" };
+  var ast_lastModifiedDate = new Date(document.lastModified);
+  var ast_build_date = lastModifiedDate.toLocaleDateString("en-US", options);
+  document.getElementById("ast_build_date").innerHTML = ast_build_date;
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
