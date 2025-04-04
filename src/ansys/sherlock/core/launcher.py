@@ -45,7 +45,8 @@ def launch_sherlock(
 ) -> Sherlock:
     r""".. deprecated:: 2025 R2. Use :func:`launch` instead.
 
-    Launch Sherlock and start gRPC on a given host and port.
+    Launch Sherlock and start gRPC on a given host and port. Wait up to two minutes to connect to
+    Sherlock.
 
     Parameters
     ----------
@@ -105,14 +106,15 @@ def launch(
     sherlock_command_args: str = "",
     year: Optional[int] = None,
     release_number: Optional[int] = None,
+    timeout: int = DEFAULT_CONNECT_TIMEOUT,
 ) -> tuple[Sherlock, str]:
     r"""Launch Sherlock and start gRPC on a given host and port.
 
     Parameters
     ----------
     host: str, optional
-        IP address to start gRPC on. The default is ``"127.0.0.1"``, which
-        is the IP address for the local host.
+        IP address to start gRPC on.
+        The default is ``"127.0.0.1"``, which is the IP address for the local host.
     port: int, optional
         Port number for the connection.
     single_project_path : str, optional
@@ -125,6 +127,9 @@ def launch(
     release_number: int, optional
         Release number of Sherlock to launch. If not provided,
         the latest installed version of Sherlock will be launched.
+    timeout: int, optional
+        Timeout in seconds to wait to establish the connection to Sherlock.
+        Default is 120 seconds.
 
     Returns
     -------
@@ -162,14 +167,14 @@ def launch(
         subprocess.Popen(args)
 
         channel = _connect_grpc_channel(port)
-        _wait_for_sherlock_grpc_ready(channel)
+        _wait_for_sherlock_grpc_ready(channel, timeout)
 
         return Sherlock(channel, _server_version), ansys_install_path
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect(port: int = SHERLOCK_DEFAULT_PORT, timeout=None):
+def connect(port: int = SHERLOCK_DEFAULT_PORT, timeout=DEFAULT_CONNECT_TIMEOUT):
     """Connect to a local instance of Sherlock.
 
     Parameters
@@ -227,8 +232,8 @@ def _connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT):
     return channel
 
 
-def _wait_for_sherlock_grpc_ready(channel, timeout=DEFAULT_CONNECT_TIMEOUT):
-    # Check that the gRPC connection is up (default timeout is 2 minutes).
+def _wait_for_sherlock_grpc_ready(channel, timeout):
+    # Check that the gRPC connection is up.
     try:
         LOG.info("Waiting for Sherlock gRPC service to start...")
         grpc.channel_ready_future(channel).result(timeout)
