@@ -9,7 +9,8 @@ Launcher
 .. autosummary::
      :toctree: _autosummary
 
+     launch_and_connect
      launch
-     launch_sherlock
      connect
+     launch_sherlock
 

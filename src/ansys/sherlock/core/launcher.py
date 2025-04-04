@@ -70,8 +70,6 @@ def launch_sherlock(
     -------
     Sherlock
         The instance of sherlock.
-    str
-        Path to the Sherlock installation directory.
 
     Examples
     --------
@@ -93,7 +91,7 @@ def launch_sherlock(
         stacklevel=2,
     )
 
-    sherlock, install_dir = launch(
+    sherlock, install_dir = launch_and_connect(
         host, port, single_project_path, sherlock_command_args, year, release_number
     )
     return sherlock
@@ -106,9 +104,8 @@ def launch(
     sherlock_command_args: str = "",
     year: Optional[int] = None,
     release_number: Optional[int] = None,
-    timeout: int = DEFAULT_CONNECT_TIMEOUT,
-) -> tuple[Sherlock, str]:
-    r"""Launch Sherlock and start gRPC on a given host and port.
+) -> str:
+    r"""Launch Sherlock using the specified host and port for the gRPC connection.
 
     Parameters
     ----------
@@ -127,14 +124,9 @@ def launch(
     release_number: int, optional
         Release number of Sherlock to launch. If not provided,
         the latest installed version of Sherlock will be launched.
-    timeout: int, optional
-        Timeout in seconds to wait to establish the connection to Sherlock.
-        Default is 120 seconds.
 
     Returns
     -------
-    Sherlock
-        The instance of sherlock.
     str
         Path to the Sherlock installation directory.
 
@@ -142,7 +134,7 @@ def launch(
     --------
     >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
-    >>> sherlock, ansys_install_path = launcher.launch(
+    >>> ansys_install_path = launcher.launch(
     >>>     port=9092, single_project_path=project, year=2024, release_number=2)
 
     """
@@ -166,15 +158,69 @@ def launch(
         LOG.info(f"Command arguments: {args}")
         subprocess.Popen(args)
 
-        channel = _connect_grpc_channel(port)
-        _wait_for_sherlock_grpc_ready(channel, timeout)
-
-        return Sherlock(channel, _server_version), ansys_install_path
+        return ansys_install_path
     except Exception as e:
         LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
 
 
-def connect(port: int = SHERLOCK_DEFAULT_PORT, timeout=DEFAULT_CONNECT_TIMEOUT):
+def launch_and_connect(
+    host: str = LOCALHOST,
+    port: int = SHERLOCK_DEFAULT_PORT,
+    single_project_path: str = "",
+    sherlock_command_args: str = "",
+    year: Optional[int] = None,
+    release_number: Optional[int] = None,
+    timeout: int = DEFAULT_CONNECT_TIMEOUT,
+) -> tuple[Sherlock, str]:
+    r"""Launch Sherlock, start gRPC on a given host and port, and wait until connected to Sherlock.
+
+    Parameters
+    ----------
+    host: str, optional
+        IP address to start gRPC on.
+        The default is ``"127.0.0.1"``, which is the IP address for the local host.
+    port: int, optional
+        Port number for the connection.
+    single_project_path : str, optional
+        Path to the Sherlock project if invoking Sherlock in the single-project mode.
+    sherlock_command_args : str, optional
+        Additional command arguments for launching Sherlock.
+    year: int, optional
+        4-digit year of the Sherlock release to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
+    release_number: int, optional
+        Release number of Sherlock to launch. If not provided,
+        the latest installed version of Sherlock will be launched.
+    timeout: int, optional
+        Maximum time (in seconds) to wait for the connection to Sherlock to be established.
+        Default is 120 seconds.
+
+    Returns
+    -------
+    Sherlock
+        The instance of sherlock.
+    str
+        Path to the Sherlock installation directory.
+
+    Examples
+    --------
+    >>> from ansys.sherlock.core import launcher
+    >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
+    >>> sherlock, ansys_install_path = launcher.launch_and_connect(
+    >>>     port=9092, single_project_path=project, year=2024, release_number=2, timeout=30)
+
+    """
+    ansys_install_path = launch(
+        host, port, single_project_path, sherlock_command_args, year, release_number
+    )
+    sherlock = connect(port, timeout)
+    return sherlock, ansys_install_path
+
+
+def connect(
+    port: int = SHERLOCK_DEFAULT_PORT,
+    timeout=DEFAULT_CONNECT_TIMEOUT,
+) -> Sherlock:
     """Connect to a local instance of Sherlock.
 
     Parameters
@@ -183,7 +229,7 @@ def connect(port: int = SHERLOCK_DEFAULT_PORT, timeout=DEFAULT_CONNECT_TIMEOUT):
         Port number for the connection.
         Default is 9090.
     timeout: int, optional
-        Timeout in seconds to wait to establish the connection to Sherlock.
+        Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
 
     Returns
