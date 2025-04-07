@@ -7,7 +7,7 @@ from ansys.sherlock.core.errors import SherlockVersionError
 _EARLIEST_SUPPORTED_VERSION = 211
 
 # Used in testing. Set this as the version and all version checks will be skipped.
-SKIP_VERSION_CHECK = "SKIP"
+SKIP_VERSION_CHECK = None
 
 # PySherlock release version to the best Sherlock counterpart version
 #  0.2.0 : 24R1
@@ -28,7 +28,7 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
         # Use functools to keep the doc string associated with the wrapped function, for Sphinx.
         def wrapper(self, *args, **kwargs) -> callable:
             """Wrap outer function."""
-            if not hasattr(self, "_server_version") or self._server_version is None:
+            if not hasattr(self, "_server_version"):
                 raise SherlockVersionError(
                     "Unable to detect which version of sherlock was launched."
                 )
