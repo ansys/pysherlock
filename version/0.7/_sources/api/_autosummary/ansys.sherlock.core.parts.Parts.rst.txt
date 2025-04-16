@@ -1,0 +1,52 @@
+﻿ansys.sherlock.core.parts.Parts
+===============================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. autoclass:: Parts
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Parts.enable_lead_modeling
+      
+      
+      Parts.export_net_list
+      
+      
+      Parts.export_parts_list
+      
+      
+      Parts.get_part_location
+      
+      
+      Parts.import_parts_list
+      
+      
+      Parts.update_parts_from_AVL
+      
+      
+      Parts.update_parts_list
+      
+      
+      Parts.update_parts_list_properties
+      
+      
+      Parts.update_parts_locations
+      
+      
+      Parts.update_parts_locations_by_file
+      
+   
+   
+
+   
+   
+   
