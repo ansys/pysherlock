@@ -43,7 +43,7 @@ def launch_sherlock(
     year: Optional[int] = None,
     release_number: Optional[int] = None,
 ) -> Sherlock:
-    r""".. deprecated:: 2025 R2. Use :func:`launch` instead.
+    r""".. deprecated:: 2025 R2. Use :func:`launch` or :func:`launch_and_connect` instead.
 
     Launch Sherlock and start gRPC on a given host and port. Wait up to two minutes to connect to
     Sherlock.
@@ -107,6 +107,8 @@ def launch(
 ) -> str:
     r"""Launch Sherlock using the specified host and port for the gRPC connection.
 
+    Available Since: 2025R2
+
     Parameters
     ----------
     host: str, optional
@@ -144,7 +146,6 @@ def launch(
         LOG.error(str(e))
         raise e
 
-    _server_version = None
     try:
         sherlock_launch_cmd, _server_version, ansys_install_path = _get_sherlock_exe_path(
             year=year, release_number=release_number
@@ -160,7 +161,8 @@ def launch(
 
         return ansys_install_path
     except Exception as e:
-        LOG.error("Error encountered while starting or executing Sherlock, error = %s" + str(e))
+        LOG.error(f"Error encountered while starting or executing Sherlock. {e}")
+        raise e
 
 
 def launch_and_connect(
@@ -173,6 +175,8 @@ def launch_and_connect(
     timeout: int = DEFAULT_CONNECT_TIMEOUT,
 ) -> tuple[Sherlock, str]:
     r"""Launch Sherlock, start gRPC on a given host and port, and wait until connected to Sherlock.
+
+    Available Since: 2025R2
 
     Parameters
     ----------
@@ -222,6 +226,8 @@ def connect(
     timeout=DEFAULT_CONNECT_TIMEOUT,
 ) -> Sherlock:
     """Connect to a local instance of Sherlock.
+
+    Available Since: 2025R2
 
     Parameters
     ----------
@@ -293,37 +299,50 @@ def _get_base_ansys(
     supported_installed_versions = {
         env_key: path
         for env_key, path in os.environ.items()
-        if env_key.startswith("AWP_ROOT") and os.path.isdir(path)
+        if env_key.startswith("AWP_ROOT")
+        and os.path.isdir(path)
+        and os.path.isfile(_get_sherlock_exe_file_path(path))
     }
 
-    if year is not None and release_number is not None:
-        try:
-            year = _extract_sherlock_version_year(year)
+    _sorted_installed_version_keys = sorted(supported_installed_versions, reverse=True)
 
-            sherlock_version = int(f"{year}{release_number}")
-            version_key = f"AWP_ROOT{sherlock_version}"
-            if version_key in supported_installed_versions:
-                return supported_installed_versions[version_key], sherlock_version
-            else:
-                raise ValueError(f"Sherlock {year} {release_number} is not installed.")
-        except ValueError as e:
-            LOG.error(f"Error extracting Sherlock version year: {e}")
-            raise e
-
-    for key in sorted(supported_installed_versions, reverse=True):
-        ansys_version = _get_ansys_version_from_awp_root(key)
-        sherlock_version = int(ansys_version)
-        if ansys_version >= _EARLIEST_SUPPORTED_VERSION:
-            return supported_installed_versions[key], sherlock_version
+    if year is not None:
+        two_digit_year = _extract_sherlock_version_year(year)
+        if release_number is None:
+            # If no release number is provided, find the latest version for the given year
+            for key in _sorted_installed_version_keys:
+                ansys_version = _get_ansys_version_from_awp_root(key)
+                ansys_year = (int)(ansys_version / 10)
+                if ansys_year == two_digit_year:
+                    return supported_installed_versions[key], ansys_version
+            raise ValueError(f"No versions of Sherlock are installed for year {year}.")
+        else:
+            try:
+                sherlock_version = int(f"{two_digit_year}{release_number}")
+                version_key = f"AWP_ROOT{sherlock_version}"
+                if version_key in supported_installed_versions:
+                    return supported_installed_versions[version_key], sherlock_version
+                else:
+                    raise ValueError(
+                        f"Sherlock {two_digit_year} {release_number} is not installed."
+                    )
+            except ValueError as e:
+                LOG.error(f"Error extracting Sherlock version year: {e}")
+                raise e
+    else:
+        for key in _sorted_installed_version_keys:
+            ansys_version = _get_ansys_version_from_awp_root(key)
+            if ansys_version >= _EARLIEST_SUPPORTED_VERSION:
+                return supported_installed_versions[key], ansys_version
 
     raise ValueError("Could not find any installed version of Sherlock.")
 
 
-def _get_ansys_version_from_awp_root(awp_root: str):
+def _get_ansys_version_from_awp_root(awp_root: str) -> int:
     if awp_root.find("AWP_ROOT") >= 0:
         return int(awp_root.replace("AWP_ROOT", ""))
 
-    return ""
+    return 0
 
 
 def _get_sherlock_exe_path(
@@ -332,11 +351,14 @@ def _get_sherlock_exe_path(
     ansys_base, sherlock_version = _get_base_ansys(year=year, release_number=release_number)
     if not ansys_base:
         return "", 0, ""
-    if os.name == "nt":
-        sherlock_bin = os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
-    else:
-        sherlock_bin = os.path.join(ansys_base, "sherlock", "runSherlock")
+    sherlock_bin = _get_sherlock_exe_file_path(ansys_base)
     return sherlock_bin, sherlock_version, ansys_base
+
+
+def _get_sherlock_exe_file_path(ansys_base):
+    if os.name == "nt":
+        return os.path.join(ansys_base, "sherlock", "SherlockClient.exe")
+    return os.path.join(ansys_base, "sherlock", "runSherlock")
 
 
 def _extract_sherlock_version_year(year: int) -> int:
