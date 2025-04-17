@@ -45,6 +45,7 @@ For further details, refer to the official documentation on mechanical shock ana
 import os
 
 from ansys.api.sherlock.v0.SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
+from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -56,14 +57,11 @@ from ansys.sherlock.core.types.analysis_types import ModelSource
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -85,7 +83,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -97,9 +95,7 @@ except SherlockImportProjectZipArchiveError as e:
 # Add a strain map to the project.
 
 try:
-    strain_map_path = os.path.join(
-        ANSYS_ROOT, "sherlock", "tutorial", "StrainMaps", "StrainMap.csv"
-    )
+    strain_map_path = os.path.join(get_sherlock_tutorial_path(), "StrainMaps", "StrainMap.csv")
     sherlock.project.add_strain_maps(
         project="Test",
         strain_maps=[
@@ -171,11 +167,3 @@ try:
     print("Mechanical shock analysis executed successfully.")
 except SherlockRunStrainMapAnalysisError as e:
     print(f"Error running mechanical shock analysis: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

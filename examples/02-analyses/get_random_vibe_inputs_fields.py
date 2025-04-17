@@ -46,11 +46,11 @@ For more details on vibration analysis in Sherlock, refer to the official docume
 from ansys.sherlock.core import launcher
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Get Random Vibration Input Fields
@@ -63,11 +63,3 @@ try:
     print(random_vibe_input_fields)
 except Exception as e:
     print(f"Error retrieving random vibration input fields: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

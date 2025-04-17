@@ -40,18 +40,17 @@ This script demonstrates:
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportODBError
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service using the default port and wait for initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -66,11 +65,11 @@ except Exception:
 
 ###############################################################################
 # Import ODB++ Archive
-# =====================
+# ====================
 # Import an ODB++ archive provided with the Sherlock installation.
 
 try:
-    odb_path = os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz")
+    odb_path = os.path.join(get_sherlock_tutorial_path(), "ODB++ Tutorial.tgz")
     sherlock.project.import_odb_archive(
         archive_file=odb_path,
         process_layer_thickness=True,
@@ -84,11 +83,3 @@ try:
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
     print(f"Error importing ODB++ archive: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

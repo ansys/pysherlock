@@ -47,6 +47,8 @@ The updated part locations can ensure consistency across various PCB designs.
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
@@ -54,14 +56,11 @@ from ansys.sherlock.core.errors import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -76,14 +75,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -91,7 +90,7 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Update Part Locations by File
-# ==============================
+# =============================
 # Update the part locations for the "Card" of the "Test" project using a CSV file.
 
 csv_file_path = os.path.join(os.getcwd(), "partslist.csv")
@@ -106,11 +105,3 @@ try:
     print("Part locations updated successfully using the CSV file.")
 except SherlockUpdatePartsLocationsByFileError as e:
     print(f"Error updating part locations by file: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

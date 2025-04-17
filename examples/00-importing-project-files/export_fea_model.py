@@ -40,6 +40,8 @@ This script demonstrates:
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportFEAModelError,
@@ -48,14 +50,11 @@ from ansys.sherlock.core.errors import (
 from ansys.sherlock.core.types.common_types import Measurement
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service using the default port and wait for initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -70,14 +69,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive provided with the Sherlock installation.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -85,11 +84,11 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Export FEA Model
-# =================
+# ================
 # Export the FEA model with customized parameters.
 
 try:
-    fea_export_path = os.path.join(os.getcwd(), "temp", "export.wbjn")
+    fea_export_path = os.path.join(get_temp_dir(), "export.wbjn")
     sherlock.model.export_FEA_model(
         project="Test",
         cca_name="Main Board",
@@ -121,11 +120,3 @@ try:
     print(f"FEA model exported successfully to: {fea_export_path}")
 except SherlockExportFEAModelError as e:
     print(f"Error exporting FEA model: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

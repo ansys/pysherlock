@@ -138,7 +138,6 @@ def launch(
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
     >>> ansys_install_path = launcher.launch(
     >>>     port=9092, single_project_path=project, year=2024, release_number=2)
-
     """
     try:
         _is_port_available(host, port)
@@ -211,7 +210,12 @@ def launch_and_connect(
     >>> from ansys.sherlock.core import launcher
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
     >>> sherlock, ansys_install_path = launcher.launch_and_connect(
-    >>>     port=9092, single_project_path=project, year=2024, release_number=2, timeout=30)
+    >>>     port=9092,
+    >>>     single_project_path=project,
+    >>>     sherlock_command_args="-noGUI",
+    >>>     year=2025,
+    >>>     release_number=1,
+    >>>     timeout=30)
 
     """
     ansys_install_path = launch(
@@ -266,6 +270,7 @@ def connect(
         return Sherlock(channel=channel, server_version=server_version)
     except Exception as e:
         LOG.error(f"Error encountered connecting to Sherlock: {str(e)}")
+        raise e
 
 
 def _convert_to_server_version(sherlock_release_version: str) -> int:

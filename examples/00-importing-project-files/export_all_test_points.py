@@ -42,6 +42,8 @@ This script covers:
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportAllTestPointsError,
@@ -49,14 +51,11 @@ from ansys.sherlock.core.errors import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service using the default port and wait for initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -78,7 +77,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -86,11 +85,11 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Export All Test Points
-# =======================
+# ======================
 # Export all test points for the "Main Board" to a CSV file.
 
 try:
-    test_points_export_path = os.path.join(os.getcwd(), "temp", "TestPointsExport.csv")
+    test_points_export_path = os.path.join(get_temp_dir(), "TestPointsExport.csv")
     sherlock.layer.export_all_test_points(
         project="Test",
         cca_name="Main Board",
@@ -102,11 +101,3 @@ try:
     print(f"All test points exported successfully to: {test_points_export_path}")
 except SherlockExportAllTestPointsError as e:
     print(f"Error exporting all test points: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

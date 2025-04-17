@@ -43,6 +43,8 @@ The updated part locations can be used for accurate placement validation and opt
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
@@ -50,14 +52,11 @@ from ansys.sherlock.core.errors import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -79,7 +78,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -87,7 +86,7 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Update Part Locations
-# ======================
+# =====================
 # Update the part locations for the "Card" of the "Test" project.
 
 try:
@@ -103,11 +102,3 @@ try:
     print("Part locations updated successfully.")
 except SherlockUpdatePartsLocationsError as e:
     print(f"Error updating part locations: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

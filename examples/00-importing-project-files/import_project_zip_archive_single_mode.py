@@ -39,44 +39,39 @@ This script demonstrates:
 # sphinx_gallery_thumbnail_path = './images/sherlock_import_single_mode_example.png'
 
 import os
-import shutil
+
+from examples.examples_globals import (
+    get_sherlock_tutorial_path,
+    get_temp_dir,
+    store_sherlock_tutorial_path,
+)
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleModeError
-
-###############################################################################
-# Clean temporary directory
-# ==============
-# Delete and create the directory for storing temp files.
-
-TEMP_DIR = os.path.join(os.getcwd(), "temp")
-try:
-    shutil.rmtree(TEMP_DIR, ignore_errors=True)
-    os.makedirs(TEMP_DIR)
-except Exception as e:
-    print(f"Error cleaning temporary directory: {e}")
 
 ###############################################################################
 # Launch PySherlock service in single-project mode
 # ================================================
 # Launch the Sherlock service using the specified project path and wait for initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092, single_project_path=os.getcwd())
+sherlock, ansys_install_path = launcher.launch_and_connect(
+    port=9093,
+    single_project_path=os.getcwd(),
+    # sherlock_command_args="-noGUI",
+)
+store_sherlock_tutorial_path(ansys_install_path)
 
 ###############################################################################
 # Import Sherlock Project in Single Mode
-# =======================================
+# ======================================
 # Import a tutorial project ZIP archive provided with the Sherlock installation.
 
 try:
     sherlock.project.import_project_zip_archive_single_mode(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
-        destination_file_directory=TEMP_DIR,
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        destination_file_directory=get_temp_dir(),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveSingleModeError as e:
@@ -88,4 +83,3 @@ except SherlockImportProjectZipArchiveSingleModeError as e:
 # Exit the gRPC connection and shut down Sherlock.
 
 sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

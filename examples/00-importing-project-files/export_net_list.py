@@ -40,6 +40,8 @@ This script demonstrates:
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportNetListError,
@@ -48,14 +50,11 @@ from ansys.sherlock.core.errors import (
 from ansys.sherlock.core.types.common_types import TableDelimiter
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service using the default port and wait for initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -70,14 +69,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -85,11 +84,11 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Export Net List
-# ================
+# ===============
 # Export the net list from the imported project.
 
 try:
-    net_list_path = os.path.join(os.getcwd(), "temp", "exportedNetList.csv")
+    net_list_path = os.path.join(get_temp_dir(), "exportedNetList.csv")
     sherlock.parts.export_net_list(
         project="Test",
         cca_name="Main Board",
@@ -101,11 +100,3 @@ try:
     print(f"Net list exported successfully to: {net_list_path}")
 except SherlockExportNetListError as e:
     print(f"Error exporting net list: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

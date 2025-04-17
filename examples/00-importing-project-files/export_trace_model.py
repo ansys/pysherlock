@@ -42,6 +42,7 @@ This script demonstrates:
 import os
 
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2, SherlockModelService_pb2
+from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -50,15 +51,11 @@ from ansys.sherlock.core.errors import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service using the default port and wait for initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-TESTDIR = os.path.join(os.getcwd(), "temp")
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -80,7 +77,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -88,14 +85,14 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Export Trace Model
-# ===================
+# ==================
 # Generate copper layer parameters and export a trace model.
 
 try:
     copper_1_layer = sherlock.model.createExportTraceCopperLayerParams(
         project_name="Test",
         cca_name="Main Board",
-        output_file_path=os.path.join(TESTDIR, "outputfile_path.stp"),
+        output_file_path=os.path.join(get_temp_dir(), "outputfile_path.stp"),
         copper_layer="copper-01.odb",
         overwrite=True,
         display_after=False,
@@ -118,7 +115,7 @@ try:
     copper_2_layer = sherlock.model.createExportTraceCopperLayerParams(
         project_name="Test",
         cca_name="Main Board",
-        output_file_path=os.path.join(TESTDIR, "outputfile_path2.stp"),
+        output_file_path=os.path.join(get_temp_dir(), "outputfile_path2.stp"),
         copper_layer="copper-02.odb",
         overwrite=True,
         display_after=False,
@@ -142,11 +139,3 @@ try:
     print("Trace model exported successfully.")
 except SherlockModelServiceError as e:
     print(f"Error exporting trace model: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")
