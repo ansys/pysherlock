@@ -43,6 +43,8 @@ properties for each region.
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockAddModelingRegionError, SherlockImportODBError
 from ansys.sherlock.core.types.layer_types import (
@@ -53,14 +55,11 @@ from ansys.sherlock.core.types.layer_types import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -80,7 +79,7 @@ except Exception:
 
 try:
     sherlock.project.import_odb_archive(
-        archive_file=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "ODB++ Project.zip"),
         process_layer_thickness=True,
         include_other_layers=True,
         process_cutout_file=True,
@@ -94,7 +93,7 @@ except SherlockImportODBError as e:
 
 ###############################################################################
 # Create Modeling Regions
-# ========================
+# =======================
 # Define different shapes (polygonal, rectangular, circular, and slot) for modeling regions.
 
 try:
@@ -211,11 +210,3 @@ try:
     print("Modeling regions added successfully.")
 except SherlockAddModelingRegionError as e:
     print(f"Error adding modeling regions: {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

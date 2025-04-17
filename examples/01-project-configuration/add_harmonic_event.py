@@ -45,7 +45,9 @@ of various conditions on the board.
 
 import os
 
-from ansys.sherlock.core import launcher
+from examples.examples_globals import get_sherlock_tutorial_path
+
+from ansys.sherlock.core import LOG, launcher
 from ansys.sherlock.core.errors import (
     SherlockAddHarmonicEventError,
     SherlockCreateLifePhaseError,
@@ -53,14 +55,12 @@ from ansys.sherlock.core.errors import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
+sherlock = launcher.connect(port=9092, timeout=10)
 
-sherlock = launcher.launch_sherlock(port=9092)
 
 ###############################################################################
 # Delete Project
@@ -69,30 +69,30 @@ sherlock = launcher.launch_sherlock(port=9092)
 
 try:
     sherlock.project.delete_project("Test")
-    print("Project deleted successfully.")
+    LOG.info("Project deleted successfully.")
 except Exception:
     pass
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
-    print("Tutorial project imported successfully.")
+    LOG.info("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    LOG.error(f"Error importing project zip archive: {e}")
 
 phase_name = "Life Phase Example"
 
 ###############################################################################
 # Create Lifecycle Phase
-# =======================
+# ======================
 # Create a new lifecycle phase called "Example" in the "Test" project.
 
 try:
@@ -105,9 +105,9 @@ try:
         cycle_type="COUNT",
         description="Example phase",
     )
-    print("Lifecycle phase 'Example' created successfully.")
+    LOG.info("Lifecycle phase 'Example' created successfully.")
 except SherlockCreateLifePhaseError as e:
-    print(f"Error creating lifecycle phase: {e}")
+    LOG.error(f"Error creating lifecycle phase: {e}")
 
 ###############################################################################
 # Add Harmonic Event to Lifecycle Phase
@@ -129,14 +129,6 @@ try:
         load_direction="2,4,5",
         description="Harmonic Event Example",
     )
-    print("Harmonic event 'Event1' added successfully.")
+    LOG.info("Harmonic event 'Event1' added successfully.")
 except SherlockAddHarmonicEventError as e:
-    print(f"Error adding harmonic event: {str(e)}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")
+    LOG.error(f"Error adding harmonic event: {str(e)}")

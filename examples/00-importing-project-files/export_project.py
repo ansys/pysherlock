@@ -40,6 +40,8 @@ This script demonstrates:
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockExportProjectError,
@@ -47,15 +49,11 @@ from ansys.sherlock.core.errors import (
 )
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service using the default port and wait for initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-TESTDIR = os.path.join(os.getcwd(), "temp")
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -70,14 +68,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import a sample project ZIP archive provided with the Sherlock installation.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=(os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "Tutorial Project.zip")),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -98,7 +96,7 @@ try:
         export_user_files=True,
         export_log_files=True,
         export_system_data=True,
-        export_file_dir=TESTDIR,
+        export_file_dir=get_temp_dir(),
         export_file_name="Exported_Project_All.zip",
         overwrite_existing_file=True,
     )
@@ -116,18 +114,10 @@ try:
         export_user_files=False,
         export_log_files=False,
         export_system_data=False,
-        export_file_dir=TESTDIR,
+        export_file_dir=get_temp_dir(),
         export_file_name="Exported_Project_Limited.zip",
         overwrite_existing_file=True,
     )
     print("Project exported successfully with limited options.")
 except SherlockExportProjectError as e:
     print(f"Error exporting project (limited options): {e}")
-
-###############################################################################
-# Exit Sherlock
-# =============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")

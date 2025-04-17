@@ -2,9 +2,12 @@
     :hidden:
     :maxdepth: 3
 
+    gallery_examples/00- setup/index.rst
     gallery_examples/00-importing-project-files/index.rst
     gallery_examples/01-project-configuration/index.rst
     gallery_examples/02-analyses/index.rst
+    gallery_examples/99-teardown/index.rst
+
 
 .. _ref_examples:
 

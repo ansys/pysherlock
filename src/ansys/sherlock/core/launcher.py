@@ -266,6 +266,7 @@ def connect(
         return Sherlock(channel=channel, server_version=server_version)
     except Exception as e:
         LOG.error(f"Error encountered connecting to Sherlock: {str(e)}")
+        raise e
 
 
 def _convert_to_server_version(sherlock_release_version: str) -> int:

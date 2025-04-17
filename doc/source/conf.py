@@ -176,6 +176,7 @@ sphinx_gallery_conf = {
     "remove_config_comments": True,
     "default_thumb_file": pyansys_light_mode_logo,
     "show_signature": False,
+    "ignore_pattern": r"examples_globals.py",
 }
 
 # make rst_epilog a variable, so you can add other epilog parts to it

@@ -38,19 +38,18 @@ and create potting regions with specified shapes and properties for a PCB analys
 
 import os
 
+from examples.examples_globals import get_sherlock_tutorial_path
+
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockAddPottingRegionError, SherlockImportODBError
 from ansys.sherlock.core.types.layer_types import PolygonalShape
 
 ###############################################################################
-# Launch PySherlock service
-# ==========================
-# Launch the Sherlock service and ensure proper initialization.
+# Connect to Sherlock
+# ===================
+# Connect to the Sherlock service and ensure proper initialization.
 
-VERSION = "251"
-ANSYS_ROOT = os.getenv("AWP_ROOT" + VERSION)
-
-sherlock = launcher.launch_sherlock(port=9092)
+sherlock = launcher.connect(port=9092, timeout=10)
 
 ###############################################################################
 # Delete Project
@@ -65,12 +64,12 @@ except Exception:
 
 ###############################################################################
 # Import ODB++ Archive
-# =====================
+# ====================
 # Import the ODB++ archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_odb_archive(
-        archive_file=os.path.join(ANSYS_ROOT, "sherlock", "tutorial", "ODB++ Tutorial.tgz"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "ODB++ Project.zip"),
         process_layer_thickness=True,
         include_other_layers=True,
         process_cutout_file=True,
@@ -84,7 +83,7 @@ except SherlockImportODBError as e:
 
 ###############################################################################
 # Add Potting Region
-# ===================
+# ==================
 # Define a polygonal shape and add it as a potting region to the PCB.
 
 try:
@@ -110,11 +109,3 @@ try:
     print("Potting region added successfully.")
 except SherlockAddPottingRegionError as e:
     print(f"Error adding potting region: {e}")
-
-###############################################################################
-# Exit Sherlock
-# ==============
-# Exit the gRPC connection and shut down Sherlock.
-
-sherlock.common.exit(True)
-print("Sherlock gRPC connection closed successfully.")
