@@ -64,6 +64,12 @@ class TestLauncher(unittest.TestCase):
 
         launcher._get_base_ansys(year=2024, release_number=1)
 
+        mock_os_path_isfile.assert_any_call(
+            os.path.join("C:\\Program Files\\ANSYS Inc\\v241", "sherlock", "SherlockClient.exe")
+        )
+        mock_os_path_isfile.assert_any_call(
+            os.path.join("C:\\Program Files\\ANSYS Inc\\v232", "sherlock", "SherlockClient.exe")
+        )
         mock_extract_year.assert_called_once_with(2024)
 
     def test_convert_to_server_version(self):
