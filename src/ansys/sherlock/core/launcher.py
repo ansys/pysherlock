@@ -299,18 +299,16 @@ def _get_base_ansys(
     supported_installed_versions = {
         env_key: path
         for env_key, path in os.environ.items()
-        if env_key.startswith("AWP_ROOT")
-        and os.path.isdir(path)
-        and os.path.isfile(_get_sherlock_exe_file_path(path))
+        if env_key.startswith("AWP_ROOT") and os.path.isfile(_get_sherlock_exe_file_path(path))
     }
 
-    _sorted_installed_version_keys = sorted(supported_installed_versions, reverse=True)
+    sorted_installed_version_keys = sorted(supported_installed_versions, reverse=True)
 
     if year is not None:
         two_digit_year = _extract_sherlock_version_year(year)
         if release_number is None:
             # If no release number is provided, find the latest version for the given year
-            for key in _sorted_installed_version_keys:
+            for key in sorted_installed_version_keys:
                 ansys_version = _get_ansys_version_from_awp_root(key)
                 ansys_year = (int)(ansys_version / 10)
                 if ansys_year == two_digit_year:
@@ -330,7 +328,7 @@ def _get_base_ansys(
                 LOG.error(f"Error extracting Sherlock version year: {e}")
                 raise e
     else:
-        for key in _sorted_installed_version_keys:
+        for key in sorted_installed_version_keys:
             ansys_version = _get_ansys_version_from_awp_root(key)
             if ansys_version >= _EARLIEST_SUPPORTED_VERSION:
                 return supported_installed_versions[key], ansys_version

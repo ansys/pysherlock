@@ -8,6 +8,7 @@ from ansys.sherlock.core import launcher
 
 
 class TestLauncher(unittest.TestCase):
+    @patch("os.path.isfile")
     @patch.dict(
         os.environ,
         {
@@ -17,10 +18,7 @@ class TestLauncher(unittest.TestCase):
         },
         clear=True,
     )
-    @patch("os.path.isdir")
-    @patch("os.path.isfile")
-    def test_base_ansys(self, mock_os_path_isdir, mock_os_path_isfile):
-        mock_os_path_isdir.return_value = True
+    def test_base_ansys(self, mock_os_path_isfile):
         mock_os_path_isfile.return_value = True
         self.assertEqual("C:\\Program Files\\ANSYS Inc\\v223", launcher._get_base_ansys()[0])
 
@@ -40,7 +38,7 @@ class TestLauncher(unittest.TestCase):
         self.assertEqual(223, version)
         self.assertEqual(install_path, ansys_install_path)
 
-    def test_extract_sherlock_version_year_with_two_digits(self):
+    def test_extract_sherlock_version_year_with_three_digits(self):
         with self.assertRaises(ValueError) as context:
             launcher._extract_sherlock_version_year(999)
         self.assertEqual(str(context.exception), "Year must be a 4-digit integer.")
@@ -48,6 +46,8 @@ class TestLauncher(unittest.TestCase):
     def test_extract_sherlock_version_year_with_four_digits(self):
         self.assertEqual(24, launcher._extract_sherlock_version_year(2024))
 
+    @patch("os.path.isfile")
+    @patch("ansys.sherlock.core.launcher._extract_sherlock_version_year")
     @patch.dict(
         os.environ,
         {
@@ -56,14 +56,20 @@ class TestLauncher(unittest.TestCase):
         },
         clear=True,
     )
-    @patch("os.path.isdir")
-    @patch("ansys.sherlock.core.launcher._extract_sherlock_version_year")
     def test_get_base_ansys_calls_extract_sherlock_version_year(
-        self, mock_extract_year, mock_os_path_isdir
+        self, mock_extract_year, mock_os_path_isfile
     ):
-        mock_os_path_isdir.return_value = True
         mock_extract_year.return_value = 24
+        mock_os_path_isfile.return_value = True
+
         launcher._get_base_ansys(year=2024, release_number=1)
+
+        mock_os_path_isfile.assert_any_call(
+            os.path.join("C:\\Program Files\\ANSYS Inc\\v241", "sherlock", "SherlockClient.exe")
+        )
+        mock_os_path_isfile.assert_any_call(
+            os.path.join("C:\\Program Files\\ANSYS Inc\\v232", "sherlock", "SherlockClient.exe")
+        )
         mock_extract_year.assert_called_once_with(2024)
 
     def test_convert_to_server_version(self):
