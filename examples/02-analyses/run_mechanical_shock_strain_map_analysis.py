@@ -23,19 +23,18 @@
 Run Mechanical Shock Analysis Example
 =====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 add strain maps, and run a mechanical shock analysis based on strain maps.
 
 Description
 -----------
 Sherlock provides tools to perform mechanical shock analysis using strain maps.
 This script includes the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive and strain map files into the project.
+- Connect to the Sherlock service.
+- Import a project.
+- Add a strain map file to the project.
 - Configure the analysis properties for mechanical shock.
 - Execute the mechanical shock analysis.
-- Exit the gRPC connection after the analysis is complete.
 
 For further details, refer to the official documentation on mechanical shock analysis in Sherlock.
 """
@@ -91,7 +90,7 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Add Strain Map
-# ====================================
+# ==============
 # Add a strain map to the project.
 
 try:
@@ -117,7 +116,7 @@ except SherlockAddStrainMapsError as e:
 
 ###############################################################################
 # Update Mechanical Shock Properties
-# ===================================
+# ==================================
 # Configure properties for mechanical shock analysis using strain maps.
 
 try:
@@ -132,7 +131,7 @@ try:
                 "part_validation_enabled": False,
                 "require_material_assignment_enabled": True,
                 "force_model_rebuild": "AUTO",
-                "natural_freq_min": 10,
+                "natural_freq_min": 1,
                 "natural_freq_min_units": "Hz",
                 "natural_freq_max": 100,
                 "natural_freq_max_units": "KHz",
@@ -147,7 +146,7 @@ except SherlockRunStrainMapAnalysisError as e:
 
 ###############################################################################
 # Run Mechanical Shock Analysis
-# ==============================
+# =============================
 # Execute the mechanical shock analysis based on strain maps.
 
 try:

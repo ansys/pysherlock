@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_project_export:
 
-======================================
+=======================
 Sherlock Project Export
-======================================
+=======================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and export the project in multiple configurations.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including project export.
-This script demonstrates:
-
-- Launching the Sherlock service.
-- Importing a tutorial project ZIP archive.
-- Exporting a project with different configurations.
-- Properly exiting the gRPC connection.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a tutorial project ZIP archive.
+- Export a project with different configurations.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_project_export_example.png'
@@ -75,7 +73,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:

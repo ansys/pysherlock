@@ -19,22 +19,21 @@
 """
 .. _ref_sherlock_export_aedb:
 
-==========================
+===========
 Export AEDB
-==========================
+===========
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-and export an AEDB file for a printed circuit board (PCB).
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and export an AEDB file for a CCA.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a PCB.
+Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB file for a CCA.
 This script demonstrates how to:
 
-- Launch the Sherlock service.
+- Connect to the Sherlock service.
 - Import an ODB++ archive.
 - Export an AEDB file.
-- Properly close the gRPC connection.
 
 The exported AEDB file can be used for further analysis or integration with other software tools.
 """
@@ -46,7 +45,7 @@ import os
 from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportODBError
+from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportProjectZipArchiveError
 
 ###############################################################################
 # Connect to Sherlock
@@ -67,23 +66,19 @@ except Exception:
     pass
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# =======================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    sherlock.project.import_odb_archive(
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "ODB++ Tutorial.tgz"),
-        process_layer_thickness=True,
-        include_other_layers=True,
-        process_cutout_file=True,
-        guess_part_properties=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {e}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Export AEDB File
@@ -94,7 +89,7 @@ try:
     aedb_export_path = os.path.join(get_temp_dir(), "test.aedb")
     sherlock.model.export_aedb(
         project_name="Test",
-        cca_name="Card",
+        cca_name="Auto Relay",
         export_file=aedb_export_path,
     )
     print(f"AEDB file exported successfully to: {aedb_export_path}")

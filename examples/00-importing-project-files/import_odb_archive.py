@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_odb_import:
 
-===================================
+=====================
 Sherlock ODB++ Import
-===================================
+=====================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 and handle common exceptions during the import process.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including importing ODB++ archives.
-This script demonstrates:
-
-- Launching the Sherlock service.
-- Importing an ODB++ archive with project and CCA name arguments.
-- Handling import errors gracefully.
-- Properly exiting the gRPC connection.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import an ODB++ archive with project and CCA name arguments.
+- Handle import errors gracefully.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_odb_import_example.png'

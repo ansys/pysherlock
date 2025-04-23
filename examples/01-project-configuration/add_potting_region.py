@@ -19,20 +19,19 @@
 """
 .. _ref_add_potting_region:
 
-==========================================
+====================================
 Add Potting Regions for PCB Analysis
-==========================================
+====================================
 
 This example demonstrates how to use the Sherlock gRPC service to:
-
-- Import an ODB++ archive.
+- Import a project.
 - Add potting regions to a PCB model.
-- Define potting shapes and properties for simulation.
+- Define potting shapes and properties.
 
 Description
 -----------
-In this script, we launch the Sherlock gRPC service, import an ODB++ archive,
-and create potting regions with specified shapes and properties for a PCB analysis.
+This script connects to the Sherlock gRPC service, imports a project,
+and creates potting regions.
 
 """
 
@@ -41,7 +40,10 @@ import os
 from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockAddPottingRegionError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockAddPottingRegionError,
+    SherlockImportProjectZipArchiveError,
+)
 from ansys.sherlock.core.types.layer_types import PolygonalShape
 
 ###############################################################################
@@ -63,23 +65,19 @@ except Exception:
     pass
 
 ###############################################################################
-# Import ODB++ Archive
-# ====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# =======================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    sherlock.project.import_odb_archive(
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "ODB++ Project.zip"),
-        process_layer_thickness=True,
-        include_other_layers=True,
-        process_cutout_file=True,
-        guess_part_properties=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {e}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Add Potting Region
@@ -95,7 +93,7 @@ try:
         project="Test",
         potting_regions=[
             {
-                "cca_name": "Card",
+                "cca_name": "Auto Relay",
                 "potting_id": "Test Region",
                 "side": "TOP",
                 "material": "epoxyencapsulant",

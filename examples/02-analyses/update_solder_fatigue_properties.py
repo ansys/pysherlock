@@ -19,22 +19,20 @@
 """
 .. _ref_sherlock_update_solder_fatigue_props:
 
-=========================================
+================================
 Update Solder Fatigue Properties
-=========================================
+================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and update solder fatigue properties.
 
 Description
 -----------
-This script shows how to configure solder fatigue properties for a PCB assembly. It includes the
-following steps:
-
-- Launch the Sherlock service.
-- Import an ODB++ archive into the project.
+This script shows how to configure solder fatigue properties for a PCB assembly.
+It performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
 - Update solder fatigue properties.
-- Exit the gRPC connection after the configuration.
 
 For further details, refer to the official documentation on solder fatigue properties in Sherlock.
 """
@@ -78,7 +76,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -94,7 +92,7 @@ try:
         project="Test",
         solder_fatigue_properties=[
             {
-                "cca_name": "Main Board",
+                "cca_name": "Auto Relay",
                 "solder_material": "TIN-LEAD (63SN37PB)",
                 "part_temp": 70,
                 "part_temp_units": "F",

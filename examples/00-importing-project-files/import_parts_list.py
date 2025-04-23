@@ -19,30 +19,24 @@
 """
 .. _ref_import_odb_and_parts_list:
 
-=============================================
+===================================
 Import ODB++ Archive and Parts List
-=============================================
+===================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-import parts lists, and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and import parts lists.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as importing ODB++
 archives and parts lists.
-This script shows how to:
-
-- Launch the Sherlock service.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Import an ODB++ archive with specified project and CCA names.
 - Import parts lists with different settings.
-- Properly close the gRPC connection.
 
 These functionalities enable users to prepare projects with ODB++ data and associated parts lists
 for further analysis.
-
-.. todo::
-    Before running this script, download the file **partslist.csv** from the repository
-    `Importing Project and Files`_.
 """
 
 # sphinx_gallery_thumbnail_path = './images/import_odb_and_parts_list_example.png'

@@ -19,24 +19,21 @@
 """
 .. _ref_update_parts_list_properties:
 
-============================================
+=======================================
 Update and Export Parts List Properties
-============================================
+=======================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 update the parts list properties, export the parts list, and properly close the connection.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as updating the
 parts list properties and exporting the parts list for printed circuit boards (PCBs).
-This script shows how to:
-
+This script demonstrates how to:
 - Launch the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Update the parts list properties.
-- Export the parts list.
-- Properly close the gRPC connection.
 
 The updated properties and exported list ensure consistency and provide
 documentation for further use.
@@ -50,7 +47,6 @@ from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
-    SherlockExportPartsListError,
     SherlockImportProjectZipArchiveError,
     SherlockUpdatePartsListPropertiesError,
 )
@@ -75,14 +71,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -96,37 +92,21 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     parts_properties = [
         {
-            "reference_designators": ["C1"],
+            "reference_designators": ["D1"],
             "properties": [{"name": "partType", "value": "RESISTOR"}],
         },
         {
-            "reference_designators": ["C2"],
+            "reference_designators": ["D2"],
             "properties": [{"name": "locX", "value": "1"}, {"name": "userNotes", "value": "test"}],
         },
-        {"reference_designators": ["U6"], "properties": [{"name": "userNotes", "value": "test2"}]},
-        {"reference_designators": ["U7"], "properties": [{"name": "leadBend", "value": "45"}]},
+        {"reference_designators": ["D3"], "properties": [{"name": "userNotes", "value": "test2"}]},
+        {"reference_designators": ["D4"], "properties": [{"name": "leadBend", "value": "45"}]},
     ]
     sherlock.parts.update_parts_list_properties(
         project="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
         part_properties=parts_properties,
     )
     print("Parts list properties updated successfully.")
 except SherlockUpdatePartsListPropertiesError as e:
     print(f"Error updating parts list properties: {e}")
-
-###############################################################################
-# Export Parts List
-# =================
-# Export the parts list for the "Card" of the "Test" project to a CSV file.
-
-try:
-    export_file = os.path.join(os.getcwd(), "temp", "exportedPartsList.csv")
-    sherlock.parts.export_parts_list(
-        project="Test",
-        cca_name="Main Board",
-        export_file=export_file,
-    )
-    print("Parts list exported successfully to", export_file)
-except SherlockExportPartsListError as e:
-    print(f"Error exporting parts list: {e}")

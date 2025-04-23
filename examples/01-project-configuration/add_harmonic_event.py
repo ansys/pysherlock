@@ -19,9 +19,9 @@
 """
 .. _ref_add_harmonic_event:
 
-=========================================
+=====================================
 Add Harmonic Event to Lifecycle Phase
-=========================================
+=====================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
 create a lifecycle phase, and add a harmonic event to the phase, then properly close the connection.
@@ -29,13 +29,12 @@ create a lifecycle phase, and add a harmonic event to the phase, then properly c
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as creating lifecycle phases
-and adding harmonic events. This script shows how to:
-
-- Launch the Sherlock service.
+and adding harmonic events.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Import an ODB++ archive.
 - Create a lifecycle phase.
 - Add a harmonic event to the lifecycle phase.
-- Properly close the gRPC connection.
 
 The harmonic event can be used for thermal analysis and helps in simulating the effects
 of various conditions on the board.
@@ -82,7 +81,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     LOG.info("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:

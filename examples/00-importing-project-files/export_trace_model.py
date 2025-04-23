@@ -19,22 +19,20 @@
 """
 .. _ref_sherlock_trace_model_export:
 
-=====================================
+===========================
 Sherlock Trace Model Export
-=====================================
+===========================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 generate export parameters for copper layers, and export a trace model.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including trace model exports.
-This script demonstrates:
-
-- Launching the Sherlock service.
-- Importing a tutorial project ZIP archive.
-- Generating copper layer parameters for trace model export.
-- Exporting a trace model with multiple copper layers.
-- Properly exiting the gRPC connection.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a tutorial project ZIP archive.
+- Generate copper layer parameters for trace model export.
+- Export a trace model with multiple copper layers.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_trace_model_export_example.png'
@@ -70,14 +68,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import a sample project ZIP archive provided with the Sherlock installation.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -86,14 +84,14 @@ except SherlockImportProjectZipArchiveError as e:
 ###############################################################################
 # Export Trace Model
 # ==================
-# Generate copper layer parameters and export a trace model.
+# Export a trace model.
 
 try:
     copper_1_layer = sherlock.model.createExportTraceCopperLayerParams(
         project_name="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
         output_file_path=os.path.join(get_temp_dir(), "outputfile_path.stp"),
-        copper_layer="copper-01.odb",
+        copper_layer="AutoRelayBot.gbr",
         overwrite=True,
         display_after=False,
         clear_FEA_database=False,
@@ -114,9 +112,9 @@ try:
     )
     copper_2_layer = sherlock.model.createExportTraceCopperLayerParams(
         project_name="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
         output_file_path=os.path.join(get_temp_dir(), "outputfile_path2.stp"),
-        copper_layer="copper-02.odb",
+        copper_layer="AutoRelayTop.gbr",
         overwrite=True,
         display_after=False,
         clear_FEA_database=False,
@@ -136,6 +134,6 @@ try:
         drill_hole_max_edge_length_units="mm",
     )
     sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
-    print("Trace model exported successfully.")
+    print("Trace models exported successfully.")
 except SherlockModelServiceError as e:
     print(f"Error exporting trace model: {e}")

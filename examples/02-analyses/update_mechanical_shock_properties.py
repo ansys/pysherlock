@@ -19,23 +19,20 @@
 """
 .. _ref_sherlock_run_mechanical_shock_analysis:
 
-=========================================
+=============================
 Run Mechanical Shock Analysis
-=========================================
+=============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and configure mechanical shock analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform mechanical shock analysis. This script includes the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive into the project.
+Sherlock allows you to perform mechanical shock analysis.
+This script performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
 - Configure the properties for mechanical shock analysis.
-- Exit the gRPC connection after the configuration.
-
-For further details, refer to the official documentation on mechanical shock analysis in Sherlock.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_mechanical_shock_analysis_example.png'
@@ -78,7 +75,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -95,7 +92,7 @@ try:
         project="Test",
         mechanical_shock_properties=[
             {
-                "cca_name": "Main Board",
+                "cca_name": "Auto Relay",
                 "model_source": ModelSource.GENERATED,
                 "shock_result_count": 3,
                 "critical_shock_strain": 5,

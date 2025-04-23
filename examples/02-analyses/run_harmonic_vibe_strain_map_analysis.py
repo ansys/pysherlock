@@ -19,23 +19,23 @@
 """
 .. _ref_sherlock_run_strain_map_analysis:
 
-========================
+=======================
 Run Strain Map Analysis
-========================
+=======================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 add strain maps, and run strain map analysis, including harmonic vibration analysis.
 
 Description
 -----------
 Sherlock allows you to perform strain map analysis, which can be applied in various contexts,
-such as harmonic vibration analysis on PCB strain maps. This script covers the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive and strain map files into the project.
+such as harmonic vibration analysis on PCB strain maps.
+This script performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
+- Add a strain map file to the project.
 - Configure the analysis properties for harmonic vibration.
 - Execute strain map analysis based on the configured properties.
-- Exit the gRPC connection after the analysis is complete.
 
 For further details, refer to the official documentation on strain map analysis in Sherlock.
 """
@@ -77,7 +77,7 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
@@ -92,7 +92,7 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Add Strain Map
-# ====================================
+# ==============
 # Add a strain map to the project.
 
 try:
@@ -137,7 +137,7 @@ try:
                 "analysis_temp_units": "C",
                 "force_model_rebuild": "AUTO",
                 "filter_by_event_frequency": False,
-                "natural_freq_min": 10,
+                "natural_freq_min": 1,
                 "natural_freq_min_units": "Hz",
                 "natural_freq_max": 1000,
                 "natural_freq_max_units": "KHz",

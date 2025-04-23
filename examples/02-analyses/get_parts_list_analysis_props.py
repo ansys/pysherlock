@@ -19,23 +19,21 @@
 """
 .. _ref_sherlock_update_part_list_validation_analysis:
 
-=====================================
+====================================
 Update Part List Validation Analysis
-=====================================
+====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 update part list validation analysis properties, and retrieve those properties.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as validating and updating part list
-analysis properties for printed circuit boards (PCBs). This script shows how to:
-
-- Launch the Sherlock service.
+analysis properties for CCAs.
+This script shows how to:
+- Connect to the Sherlock service.
 - Import an ODB++ archive.
-- Update the part list validation analysis properties.
 - Retrieve and print the updated part list validation analysis properties.
-- Properly close the gRPC connection.
 
 The retrieved analysis properties can be used for further validation or integration
 with other software tools.
@@ -51,7 +49,6 @@ from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockGetPartsListValidationAnalysisPropsError,
     SherlockImportProjectZipArchiveError,
-    SherlockUpdatePartListValidationAnalysisPropsError,
 )
 
 ###############################################################################
@@ -81,38 +78,11 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
-
-###############################################################################
-# Update Part List Validation Analysis Properties
-# =================================================
-# Update the part list validation analysis properties for the "Card" of the "Test" project.
-
-try:
-    update_props = [
-        {
-            "cca_name": "Main Board",
-            "process_use_avl": True,
-            "process_use_wizard": True,
-            "process_check_confirmed_properties": False,
-            "process_check_part_numbers": False,
-            "matching_mode": "Part",
-            "avl_require_internal_part_number": False,
-            "avl_require_approved_description": True,
-            "avl_require_approved_manufacturer": False,
-        }
-    ]
-    sherlock.analysis.update_part_list_validation_analysis_props(
-        project="Test",
-        properties_per_cca=update_props,
-    )
-    print("Part list validation analysis properties updated successfully.")
-except SherlockUpdatePartListValidationAnalysisPropsError as e:
-    print(f"Error updating part list validation analysis properties: {e}")
 
 ###############################################################################
 # Get Part List Validation Analysis Properties
@@ -122,7 +92,7 @@ except SherlockUpdatePartListValidationAnalysisPropsError as e:
 try:
     response = sherlock.analysis.get_parts_list_validation_analysis_props(
         project="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
     )
     print("Retrieved part list validation analysis properties:")
     print(f"Response: {response}")

@@ -19,24 +19,20 @@
 """
 .. _ref_sherlock_update_pcb_modeling_props:
 
-===========================================
+==============================
 Update PCB Modeling Properties
-===========================================
+==============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and configure PCB modeling properties for various analysis types.
 
 Description
 -----------
-Sherlock allows you to configure PCB modeling properties for multiple analysis types. This script
-includes the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive into the project.
+Sherlock allows you to configure PCB modeling properties for multiple analysis types.
+This script performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
 - Configure PCB modeling properties for several analysis types.
-- Exit the gRPC connection after the configuration.
-
-For further details, refer to the official documentation on PCB modeling properties in Sherlock.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_update_pcb_modeling_props_example.png'
@@ -77,14 +73,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -92,13 +88,13 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Update PCB Modeling Properties
-# ===============================
+# ==============================
 # Configure PCB modeling properties for various analysis types.
 
 try:
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
-        cca_names=["Main Board"],
+        cca_names=["Auto Relay"],
         analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
@@ -116,7 +112,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
-        cca_names=["Main Board"],
+        cca_names=["Auto Relay"],
         analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
@@ -134,7 +130,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
-        cca_names=["Main Board"],
+        cca_names=["Auto Relay"],
         analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.ICT,
@@ -152,7 +148,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
-        cca_names=["Main Board"],
+        cca_names=["Auto Relay"],
         analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.MECHANICAL_SHOCK,
@@ -170,7 +166,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
-        cca_names=["Main Board"],
+        cca_names=["Auto Relay"],
         analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.RANDOM_VIBE,
@@ -189,7 +185,7 @@ try:
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
-        cca_names=["Main Board"],
+        cca_names=["Auto Relay"],
         analyses=[
             (
                 UpdatePcbModelingPropsRequestAnalysisType.THERMAL_MECH,

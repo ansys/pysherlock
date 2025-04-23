@@ -19,25 +19,22 @@
 """
 .. _ref_update_potting_region:
 
-=============================================
+==============================
 Add and Update Potting Regions
-=============================================
+==============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 add potting regions, update existing potting regions, and properly close the connection.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as adding and updating potting
-regions for printed circuit boards (PCBs). This script shows how to:
-
-- Launch the Sherlock service.
-- Import a project zip archive.
+regions for CCAs.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a project.
 - Add a potting region.
 - Update an existing potting region.
-- Properly close the gRPC connection.
-
-These updates ensure precise encapsulation and protection for PCB components during operations.
 """
 
 # sphinx_gallery_thumbnail_path = './images/update_potting_region_example.png'
@@ -85,16 +82,18 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
 
+potting_region_id = "Test Region"
+
 ###############################################################################
 # Add Potting Region
 # ==================
-# Add a new potting region to the "Main Board" of the "Tutorial Project".
+# Add a new potting region to a CCA.
 
 try:
     polygonal_shape = PolygonalShape(
@@ -109,8 +108,8 @@ try:
         project="Test",
         potting_regions=[
             {
-                "cca_name": "Main Board",
-                "potting_id": "Test Region",
+                "cca_name": "Auto Relay",
+                "potting_id": potting_region_id,
                 "side": "TOP",
                 "material": "epoxyencapsulant",
                 "potting_units": "in",
@@ -127,10 +126,10 @@ except SherlockAddPottingRegionError as e:
 ###############################################################################
 # Update Potting Region
 # =====================
-# Update the existing potting region in the "Main Board" of the "Tutorial Project".
+# Update an existing potting region.
 
 update_data = PottingRegionUpdateData(
-    potting_region_id_to_update="Test Region",
+    potting_region_id_to_update=potting_region_id,
     potting_region=PottingRegion(
         cca_name="Main Board",
         potting_id="Updated Test Region",

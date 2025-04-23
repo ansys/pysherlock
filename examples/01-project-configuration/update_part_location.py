@@ -19,22 +19,21 @@
 """
 .. _ref_update_part_location:
 
-================================
+=====================
 Update Part Locations
-================================
+=====================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-update part locations, and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and update part locations.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as updating part
-locations for printed circuit boards (PCBs). This script shows how to:
-
-- Launch the Sherlock service.
+locations for CCAs.
+This script shows how to:
+- Connect to the Sherlock service.
 - Import an ODB++ archive.
 - Update part locations.
-- Properly close the gRPC connection.
 
 The updated part locations can be used for accurate placement validation and optimization.
 """

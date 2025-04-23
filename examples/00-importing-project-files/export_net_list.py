@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_export_net_list:
 
-====================================
+===============
 Export Net List
-====================================
+===============
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ project archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and export the net list associated with the imported project.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including net list export.
-This script demonstrates:
-
-- Launching the Sherlock service.
-- Importing an ODB++ archive.
-- Exporting the net list from the project.
-- Properly exiting the gRPC connection.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import an ODB++ archive.
+- Export the net list from the project.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_net_list_example.png'

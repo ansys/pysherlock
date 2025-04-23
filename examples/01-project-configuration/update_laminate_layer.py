@@ -23,18 +23,18 @@
 Update Laminate Layer Properties
 ================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-update laminate layer properties, and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and update laminate layer properties.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as updating laminate layer
-properties for printed circuit boards (PCBs). This script shows how to:
+properties for printed circuit boards (PCBs).
+This script demonstrates how to:
 
-- Launch the Sherlock service.
-- Import an ODB++ archive.
+- Connect to the Sherlock service.
+- Import a project.
 - Update laminate layer properties.
-- Properly close the gRPC connection.
 
 The updated properties can be used for further design validation and optimization.
 """
@@ -78,7 +78,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -92,7 +92,7 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     sherlock.stackup.update_laminate_layer(
         project="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
         layer="2",
         manufacturer="Generic",
         grade="Cyanate Ester",

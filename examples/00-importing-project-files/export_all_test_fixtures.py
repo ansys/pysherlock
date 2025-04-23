@@ -19,23 +19,22 @@
 """
 .. _ref_sherlock_export_test_fixtures:
 
-==========================
+========================
 Export All Test Fixtures
-==========================
+========================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
-and export all test fixtures for a printed circuit board (PCB).
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and export all test fixtures for a CCA.
 
 Description
 -----------
 Sherlock's gRPC API enables users to automate various workflows, including exporting all
-test fixtures for a PCB.
-This script covers:
+test fixtures for a CCA.
+This script demonstrates how to:
 
-- Launching the Sherlock service.
-- Importing a tutorial project.
-- Exporting all test fixtures to a CSV file.
-- Properly closing the gRPC connection.
+- Connect to the Sherlock service.
+- Import a tutorial project.
+- Export all test fixtures to a CSV file.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_test_fixtures_example.png'

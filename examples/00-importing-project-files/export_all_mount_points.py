@@ -19,12 +19,12 @@
 """
 .. _ref_sherlock_export_mount_points:
 
-==========================
+=======================
 Export All Mount Points
-==========================
+=======================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
-and export all mount points for a printed circuit board (PCB).
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and export all mount points for a CCA.
 
 Description
 -----------
@@ -32,10 +32,9 @@ Sherlock's gRPC API allows users to automate various workflows, including export
  mount points for a PCB.
 This script demonstrates how to:
 
-- Launch the Sherlock service.
+- Connect to the Sherlock service.
 - Import a tutorial project.
 - Export all mount points to a CSV file.
-- Properly close the gRPC connection.
 
 The exported mount points can be used for further analysis or design purposes.
 """
@@ -72,7 +71,7 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:

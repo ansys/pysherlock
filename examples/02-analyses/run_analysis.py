@@ -19,27 +19,22 @@
 """
 .. _ref_sherlock_run_advanced_analysis:
 
-========================
+=====================
 Run Advanced Analysis
-========================
+=====================
 
-This example demonstrates how to launch the Sherlock gRPC service and run multiple analysis types
-on a project, including part validation, natural frequency, thermal derating, and more.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and run various analyses on a project, including part validation, natural frequency,
+thermal derating, and more.
 
 Description
 -----------
 Sherlock provides the ability to perform various types of analyses on a project.
-This script showcases how to:
-
-- Launch the Sherlock service.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Import a project into Sherlock.
 - Run several types of analyses, such as part validation, mechanical shock, harmonic vibration,
 and others.
-- Properly close the gRPC connection after all analyses are complete.
-
-The example assumes you have already set up Sherlock and the necessary environment.
-
-For more details on running specific analyses, refer to the official documentation.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_advanced_analysis_example.png'
@@ -75,14 +70,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -95,22 +90,23 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     # Run analyses
+
     analysis_types = [
-        (RunAnalysisRequestAnalysisType.PTH_FATIQUE, [("Environmental", ["1 - Temp Cycle"])]),
+        (RunAnalysisRequestAnalysisType.PTH_FATIQUE, [("Phase 1", ["Thermal Event"])]),
         (
             RunAnalysisRequestAnalysisType.SEMICINDUCTOR_WEAROUT,
-            [("Environmental", ["1 - Temp Cycle"])],
+            [("Phase 1", ["Thermal Event"])],
         ),
-        (RunAnalysisRequestAnalysisType.THERMAL_DERATING, [("Environmental", ["1 - Temp Cycle"])]),
+        (RunAnalysisRequestAnalysisType.THERMAL_DERATING, [("Phase 1", ["Thermal Event"])]),
         (
             RunAnalysisRequestAnalysisType.COMPONENT_FAILURE_MODE,
-            [("Environmental", ["1 - Temp Cycle"])],
+            [("Phase 1", ["Thermal Event"])],
         ),
     ]
 
     for analysis_type, params in analysis_types:
         sherlock.analysis.run_analysis(
-            project="Test", cca_name="Main Board", analyses=[(analysis_type, params)]
+            project="Test", cca_name="Auto Relay", analyses=[(analysis_type, params)]
         )
 
 except SherlockRunAnalysisError as e:

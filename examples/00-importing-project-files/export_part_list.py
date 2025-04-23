@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_export_parts_list:
 
-====================================
+=================
 Export Parts List
-====================================
+=================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ project archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and export the parts list associated with the imported project.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including parts list export.
-This script demonstrates:
-
-- Launching the Sherlock service.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Importing an ODB++ archive.
 - Exporting the parts list from the project.
-- Properly exiting the gRPC connection.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_parts_list_example.png'

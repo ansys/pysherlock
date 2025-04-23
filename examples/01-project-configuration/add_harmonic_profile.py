@@ -19,25 +19,24 @@
 """
 .. _ref_add_harmonic_vibe_profiles:
 
-=========================================
+===============================
 Add Harmonic Vibration Profiles
-=========================================
+===============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-create a lifecycle phase, add a harmonic event to the phase, and then add harmonic
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+create a lifecycle phase, add a harmonic event to the phase, and add harmonic
 vibration profiles.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as adding harmonic vibration profiles
-to lifecycle phases. This script shows how to:
-
-- Launch the Sherlock service.
+to lifecycle phases.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Import an ODB++ archive.
 - Create a lifecycle phase.
 - Add a harmonic event to the lifecycle phase.
 - Add vibration profiles to the harmonic event.
-- Properly close the gRPC connection.
 
 The harmonic vibration profiles simulate the effects of vibration conditions on the board.
 
@@ -79,14 +78,11 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
-
-phase_name = "Life Phase Example"
-event_name = "Event1"
 
 ###############################################################################
 # Create Lifecycle Phase and Add Harmonic Event
@@ -94,6 +90,9 @@ event_name = "Event1"
 # Create a new lifecycle phase and add a harmonic event to it.
 
 try:
+    phase_name = "Life Phase Example"
+    event_name = "Example Harmonic Event"
+
     # Create lifecycle phase
     sherlock.lifecycle.create_life_phase(
         project="Test",
@@ -104,7 +103,7 @@ try:
         cycle_type="COUNT",
         description="Example lifecycle phase.",
     )
-    print(f"Lifecycle phase {phase_name} created successfully.")
+    print(f"Lifecycle phase '{phase_name}' created successfully.")
 
     # Add harmonic event to lifecycle phase
     sherlock.lifecycle.add_harmonic_event(
@@ -121,7 +120,7 @@ try:
         load_direction="2,4,5",
         description="Example harmonic event.",
     )
-    print("Harmonic event 'Event1' added successfully.")
+    print(f"Harmonic event '{event_name}' added successfully.")
 
     # Add harmonic vibration profiles to the lifecycle phase.
     sherlock.lifecycle.add_harmonic_vibe_profiles(
@@ -130,7 +129,7 @@ try:
             (phase_name, event_name, "Profile z axis", "HZ", "G", [(10, 1), (1000, 1)], "z")
         ],
     )
-    print("Harmonic vibration profiles added successfully.")
+    print("Harmonic vibration profile added successfully.")
 
 except Exception as e:
-    print("Error creating life phase, harmonic event, or harmonic vibe profiles")
+    print(f"Error creating life phase, harmonic event, or harmonic vibe profiles. {e}")

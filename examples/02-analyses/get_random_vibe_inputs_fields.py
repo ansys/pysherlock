@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_run_analysis:
 
-==============================
-Run Random Vibration Analysis
-==============================
+====================================
+Get Random Vibration Analysis inputs
+====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, run a random vibration
-analysis, and retrieve the analysis input fields.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and retrieve the analysis input fields.
 
 Description
 -----------
-Sherlock provides the ability to run a random vibration analysis using its gRPC interface. This
-script showcases how to:
-
-- Launch the Sherlock service.
+Sherlock provides the ability to run a random vibration analysis using its gRPC interface.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Retrieve the input fields required for random vibration analysis.
-- Properly close the gRPC connection after the operation.
 
 This example assumes you have already set up Sherlock and the necessary environment.
 

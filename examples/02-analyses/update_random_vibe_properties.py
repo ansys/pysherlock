@@ -19,22 +19,20 @@
 """
 .. _ref_sherlock_update_random_vibe_props:
 
-=========================================
+==================================
 Update Random Vibration Properties
-=========================================
+==================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and update random vibration properties.
 
 Description
 -----------
-Sherlock allows you to configure random vibration properties for specific PCBs. This script includes
-the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive into the project.
+Sherlock allows you to configure random vibration properties for specific PCBs.
+This script performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
 - Update random vibration properties.
-- Exit the gRPC connection after the configuration.
 
 For further details, refer to the official documentation on random vibration properties in Sherlock.
 """
@@ -71,14 +69,14 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -92,7 +90,7 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     sherlock.analysis.update_random_vibe_props(
         project="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
         random_vibe_damping="0.01, 0.03",
         part_validation_enabled=False,
         require_material_assignment_enabled=False,

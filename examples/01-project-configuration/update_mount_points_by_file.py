@@ -19,28 +19,23 @@
 """
 .. _ref_update_mount_points:
 
-=================================
+===========================
 Update Mount Points by File
-=================================
+===========================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 update mount points using a file, and properly close the connection.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as updating mount points
-for printed circuit boards (PCBs) using a CSV file. This script shows how to:
-
-- Launch the Sherlock service.
-- Import an ODB++ archive.
+for a CCA using a CSV file.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a project.
 - Update mount points using a CSV file.
-- Properly close the gRPC connection.
 
 The updated mount points can be used for further structural analysis and validation.
-
-.. todo::
-    Before running this script, download the file **updateMountPoints.csv** from the repository
-    `Project Configuration`_.
 """
 
 # sphinx_gallery_thumbnail_path = './images/update_mount_points_example.png'

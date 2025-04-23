@@ -23,21 +23,18 @@
 Run Random Vibration Analysis
 =============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 add strain maps, and run random vibration analysis.
 
 Description
 -----------
 Sherlock allows you to perform random vibration analysis using strain maps.
-This script includes the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive and strain map files into the project.
+This script performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
+- Add a strain map file to the project.
 - Configure the properties for random vibration analysis.
 - Execute random vibration analysis based on the configured properties.
-- Exit the gRPC connection after the analysis is complete.
-
-For further details, refer to the official documentation on random vibration analysis in Sherlock.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_random_vibe_analysis_example.png'
@@ -94,7 +91,7 @@ except SherlockImportProjectZipArchiveError as e:
 
 ###############################################################################
 # Add Strain Map
-# ====================================
+# ==============
 # Add a strain map to the project.
 
 try:

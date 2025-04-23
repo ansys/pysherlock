@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_project_import_single_mode:
 
-=======================================
+======================================
 Sherlock Project Import in Single Mode
-=======================================
+======================================
 
 This example demonstrates how to launch the Sherlock gRPC service in single-project mode,
-import a project archive, and handle common exceptions during the import process.
+import a project, and handle common exceptions during the import process.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including project management.
-This script demonstrates:
-
-- Launching the Sherlock service in single-project mode.
-- Importing a sample project archive.
-- Handling import errors gracefully.
-- Properly exiting the gRPC connection.
+This script demonstrates how to:
+- Connect to the Sherlock service in single-project mode.
+- Import a sample project archive.
+- Handle import errors gracefully.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_import_single_mode_example.png'
@@ -70,7 +68,7 @@ try:
     sherlock.project.import_project_zip_archive_single_mode(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
         destination_file_directory=get_temp_dir(),
     )
     print("Tutorial project imported successfully.")

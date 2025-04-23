@@ -19,28 +19,23 @@
 """
 .. _ref_update_part_location_file:
 
-=========================================
+=============================
 Update Part Locations by File
-=========================================
+=============================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-update part locations using a CSV file, and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and update part locations using a CSV file.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as updating part
-locations for printed circuit boards (PCBs) using a CSV file. This script shows how to:
-
-- Launch the Sherlock service.
-- Import an ODB++ archive.
+locations for printed circuit boards (PCBs) using a CSV file.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a project.
 - Update part locations using a CSV file.
-- Properly close the gRPC connection.
 
 The updated part locations can ensure consistency across various PCB designs.
-
-.. todo::
-    Before running this script, download the file **partslist.csv** from the repository
-    `Project Configuration`_.
 """
 
 # sphinx_gallery_thumbnail_path = './images/update_part_location_file_example.png'

@@ -19,22 +19,21 @@
 """
 .. _ref_add_cca_and_import_odb:
 
-==================================
+=================================
 Add Component Circuits Assemblies
-==================================
+=================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
-add CCAs (Component Circuits Assemblies) to a project, and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and add CCAs (Component Circuits Assemblies) to a project.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as adding CCAs to a project
-and importing ODB++ archives. This script shows how to:
-
-- Launch the Sherlock service.
+and importing ODB++ archives.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Import an ODB++ archive.
 - Add CCAs to the project.
-- Properly close the gRPC connection.
 
 The added CCAs allow for proper circuit analysis and component tracking within the project.
 """
@@ -75,16 +74,16 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing ODB++ archive: {str(e)}")
 
 ###############################################################################
-# Add CCAs to Project
+# Add CCA to Project
 # ===================
-# Add two CCAs ("Card 2" and "Card 3") to the "Test" project.
+# Add a CCA to a project.
 
 try:
     sherlock.project.add_cca(
@@ -103,22 +102,5 @@ try:
         ],
     )
     print("Card 2 added successfully.")
-
-    sherlock.project.add_cca(
-        project="Test",
-        cca_properties=[
-            {
-                "cca_name": "Card 3",
-                "description": "Third CCA",
-                "default_solder_type": "SAC305",
-                "default_stencil_thickness": 5,
-                "default_stencil_thickness_units": "in",
-                "default_part_temp_rise": 20,
-                "default_part_temp_rise_units": "K",
-                "guess_part_properties_enabled": False,
-            }
-        ],
-    )
-    print("Card 3 added successfully.")
 except SherlockAddCCAError as e:
     print(f"Error adding CCA: {str(e)}")

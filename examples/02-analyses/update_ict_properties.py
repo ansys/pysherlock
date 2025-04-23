@@ -19,22 +19,20 @@
 """
 .. _ref_sherlock_run_ict_analysis:
 
-=================================
+================
 Run ICT Analysis
-=================================
+================
 
-This example demonstrates how to launch the Sherlock gRPC service, import project data,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and configure ICT analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform ICT (In-Circuit Test) analysis. This script includes
-the following steps:
-
-- Launch the Sherlock service.
-- Import ODB++ archive into the project.
+Sherlock allows you to perform ICT (In-Circuit Test) analysis.
+This script performs the following steps:
+- Connect to the Sherlock service.
+- Import a project.
 - Configure the properties for ICT analysis.
-- Exit the gRPC connection after the configuration.
 
 For further details, refer to the official documentation on ICT analysis in Sherlock.
 """
@@ -78,7 +76,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -95,7 +93,7 @@ try:
         project="Test",
         ict_analysis_properties=[
             {
-                "cca_name": "Main Board",
+                "cca_name": "Auto Relay",
                 "ict_application_time": 2,
                 "ict_application_time_units": "sec",
                 "ict_number_of_events": 10,

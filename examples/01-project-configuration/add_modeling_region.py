@@ -24,18 +24,17 @@ Add Modeling Regions for PCB Analysis
 ======================================
 
 This example demonstrates how to use the Sherlock gRPC service to:
-
-- Import an ODB++ archive.
+- Import a project.
 - Add modeling regions to a PCB model.
 - Define different region shapes like polygonal, rectangular, circular, and slot shapes.
 - Configure PCB and trace model properties for simulation.
 
 Description
 -----------
-In this script, we launch the Sherlock gRPC service, import an ODB++ archive,
+Connect to the Sherlock gRPC service, import a project,
 and create modeling regions with different shapes for a PCB analysis. The script
-shows how to configure the modeling region shapes, PCB properties, and trace
-properties for each region.
+shows how to configure the modeling region shapes, PCB modeling properties, and trace
+modeling properties for each region.
 
 """
 
@@ -46,7 +45,10 @@ import os
 from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
-from ansys.sherlock.core.errors import SherlockAddModelingRegionError, SherlockImportODBError
+from ansys.sherlock.core.errors import (
+    SherlockAddModelingRegionError,
+    SherlockImportProjectZipArchiveError,
+)
 from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     PolygonalShape,
@@ -73,23 +75,19 @@ except Exception:
     pass
 
 ###############################################################################
-# Import ODB++ Archive
-# =====================
-# Import the ODB++ archive from the Sherlock tutorial directory.
+# Import Tutorial Project
+# =======================
+# Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
-    sherlock.project.import_odb_archive(
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "ODB++ Project.zip"),
-        process_layer_thickness=True,
-        include_other_layers=True,
-        process_cutout_file=True,
-        guess_part_properties=True,
+    sherlock.project.import_project_zip_archive(
         project="Test",
-        cca_name="Card",
+        category="Demos",
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
-    print("ODB++ archive imported successfully.")
-except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {e}")
+    print("Tutorial project imported successfully.")
+except SherlockImportProjectZipArchiveError as e:
+    print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
 # Create Modeling Regions
@@ -124,7 +122,7 @@ try:
     # Create the modeling regions
     modeling_regions = [
         {
-            "cca_name": "Card",
+            "cca_name": "Auto Relay",
             "region_id": "Region001",
             "region_units": "mm",
             "model_mode": "Enabled",
@@ -144,7 +142,7 @@ try:
             },
         },
         {
-            "cca_name": "Card",
+            "cca_name": "Auto Relay",
             "region_id": "Region002",
             "region_units": "mm",
             "model_mode": "Enabled",
@@ -164,7 +162,7 @@ try:
             },
         },
         {
-            "cca_name": "Card",
+            "cca_name": "Auto Relay",
             "region_id": "Region003",
             "region_units": "mm",
             "model_mode": "Enabled",
@@ -184,7 +182,7 @@ try:
             },
         },
         {
-            "cca_name": "Card",
+            "cca_name": "Auto Relay",
             "region_id": "Region004",
             "region_units": "mm",
             "model_mode": "Enabled",

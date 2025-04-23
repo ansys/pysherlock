@@ -19,28 +19,22 @@
 """
 .. _ref_import_ipc2581:
 
-===============================
+=======================
 Import IPC-2581 Archive
-===============================
+=======================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an IPC-2581 archive,
-and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service and import an
+IPC-2581 project,
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as importing IPC-2581 archives.
-This script shows how to:
-
-- Launch the Sherlock service.
+This script demonstrates how to:
+- Connect to the Sherlock service.
 - Import an IPC-2581 archive without specifying a project or CCA name.
-- Properly close the gRPC connection.
 
 This functionality is useful for initializing projects with IPC-2581 data for further
 analysis and workflows.
-
-.. todo::
-    Before running this script, download the file **IPC2581A-TestCase2.cvg** from the repository
-    `Importing Project and Files`_.
 """
 
 # sphinx_gallery_thumbnail_path = './images/import_ipc2581_example.png'

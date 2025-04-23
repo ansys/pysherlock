@@ -19,21 +19,19 @@
 """
 .. _ref_sherlock_export_fea_model:
 
-=================================
+================
 Export FEA Model
-=================================
+================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and export a Finite Element Analysis (FEA) model.
 
 Description
 Sherlock's gRPC API enables automation of various workflows, including exporting FEA models.
-This script demonstrates:
-
-- Launching the Sherlock service.
-- Importing a tutorial project.
-- Exporting an FEA model with specific parameters.
-- Properly exiting the gRPC connection.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a tutorial project.
+- Export an FEA model with specific parameters.
 """
 
 # sphinx_gallery_thumbnail_path = './images/sherlock_export_fea_model_example.png'
@@ -97,7 +95,7 @@ try:
         drill_hole_parameters=[
             {
                 "drill_hole_modeling": "ENABLED",
-                "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+                "min_hole_diameter": Measurement(value=1.0, unit="mm"),
                 "max_edge_length": Measurement(value=1.0, unit="mm"),
             }
         ],
@@ -106,8 +104,8 @@ try:
             {
                 "lead_modeling": "ENABLED",
                 "lead_element_order": "First Order (Linear)",
-                "max_mesh_size": Measurement(value=0.5, unit="mm"),
-                "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
+                "max_mesh_size": Measurement(value=1.0, unit="mm"),
+                "vertical_mesh_size": Measurement(value=0.5, unit="mm"),
                 "thicknessCount": 3,
                 "aspectRatio": 2,
             }

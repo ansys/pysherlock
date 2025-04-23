@@ -19,22 +19,21 @@
 """
 .. _ref_update_thermal_maps:
 
-==================================
+===================
 Update Thermal Maps
-==================================
+===================
 
-This example demonstrates how to launch the Sherlock gRPC service, import a project zip archive,
-update thermal maps, and properly close the connection.
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
+and update thermal maps.
 
 Description
 -----------
 Sherlock's gRPC API allows users to automate workflows such as updating thermal maps for printed
-circuit boards (PCBs). This script shows how to:
-
-- Launch the Sherlock service.
-- Import a project zip archive.
+circuit boards (PCBs).
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a project.
 - Update thermal maps.
-- Properly close the gRPC connection.
 
 The updated thermal maps ensure the accuracy of thermal profiles and board configurations.
 """

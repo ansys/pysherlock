@@ -23,9 +23,9 @@
 """
 .. _ref_sherlock_project_import:
 
-====================================
+=================================
 Sherlock Project Import with gRPC
-====================================
+=================================
 
 This example demonstrates how to launch the Sherlock gRPC service, import a
 project archive, and handle common exceptions during the import process.
@@ -34,12 +34,11 @@ Description
 ===========
 
 Sherlock's gRPC API enables automation of various workflows, including project
-management. This script demonstrates:
-
-* Launching the Sherlock service.
-* Importing a sample project archive.
-* Handling import errors gracefully.
-* Properly exiting the gRPC connection.
+management.
+This script demonstrates how to:
+- Connect to the Sherlock service.
+- Import a sample project archive.
+- Handle import errors gracefully.
 
 """
 
@@ -79,7 +78,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:

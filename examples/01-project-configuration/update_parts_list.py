@@ -19,11 +19,11 @@
 """
 .. _ref_update_parts_list:
 
-==================================
+=================
 Update Parts List
-==================================
+=================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
+This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 update the parts list, and properly close the connection.
 
 Description
@@ -82,7 +82,7 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
@@ -91,12 +91,12 @@ except SherlockImportProjectZipArchiveError as e:
 ###############################################################################
 # Update Parts List
 # =================
-# Update the parts list for the "Card" of the "Test" project.
+# Update the parts list for the "Auto Relay" CCA of the "Test" project.
 
 try:
     sherlock.parts.update_parts_list(
         project="Test",
-        cca_name="Main Board",
+        cca_name="Auto Relay",
         part_library="Sherlock Part Library",
         matching_mode=PartsListSearchMatchingMode.BOTH,
         duplication_mode=PartsListSearchDuplicationMode.ERROR,
