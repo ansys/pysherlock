@@ -2,11 +2,16 @@
 
 """Module containing types for the Project Service."""
 
-from typing import Optional
+from enum import Enum
+from typing import Optional, Union
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ValidationInfo, field_validator
 
-from ansys.sherlock.core.types.common_types import basic_str_validator
+from ansys.sherlock.core.types.common_types import (
+    basic_list_str_validator,
+    basic_str_validator,
+    optional_str_validator,
+)
 
 try:
     import SherlockProjectService_pb2
@@ -229,9 +234,7 @@ class ImportGDSIIRequest(BaseModel):
     @classmethod
     def optional_str_validation(cls, value: Optional[str], info):
         """Allow empty strings for project and cca_name."""
-        if value is None:
-            return ""
-        return value.strip()
+        return optional_str_validator(value, info.field_name)
 
     def _convert_to_grpc(self) -> project_service.ImportGDSIIRequest:
         return project_service.ImportGDSIIRequest(
@@ -245,3 +248,151 @@ class ImportGDSIIRequest(BaseModel):
             polylineTolerance=self.polyline_tolerance,
             polylineToleranceUnits=self.polyline_tolerance_units or "",
         )
+
+
+class OutlineFileType(Enum):
+    """Constants for File Type in the Update Outline request."""
+
+    CSV_EXCEL = project_service.OutlineFile.FileType.CsvExcel
+    "CSV Excel"
+    GERBER = project_service.OutlineFile.FileType.Gerber
+    "Gerber"
+    IPC2581 = project_service.OutlineFile.FileType.IPC2581
+    "IPC2581"
+
+
+class CsvExcelOutlineFile(BaseModel):
+    """Contains the properties for a CSV or Excel outline file."""
+
+    header_row_count: int
+    """Number of rows before the column header in the file"""
+    x_location_column: str
+    """X location column name"""
+    y_location_column: str
+    """Y location column name"""
+    location_units: str
+    """Units for location values"""
+
+    def _convert_to_grpc(self) -> project_service.OutlineFile.CsvExcelOutlineFile:
+        return project_service.OutlineFile.CsvExcelOutlineFile(
+            headerRowCount=self.header_row_count,
+            xLocationColumn=self.x_location_column,
+            yLocationColumn=self.y_location_column,
+            locationUnits=self.location_units,
+        )
+
+    @field_validator("header_row_count")
+    @classmethod
+    def non_negative_int_validation(cls, value: int, info: ValidationInfo):
+        """Validate integer fields listed contain non-negative values."""
+        if value < 0:
+            raise ValueError(f"{info.field_name} must be greater than or equal to 0.")
+        return value
+
+    @field_validator("x_location_column", "y_location_column", "location_units")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class GerberOutlineFile(BaseModel):
+    """Contains the properties for a Gerber outline file."""
+
+    parse_decimal_first: bool = False
+    """Indicates to parse decimals based on the length of the format specifier."""
+
+    def _convert_to_grpc(self) -> project_service.OutlineFile.GerberOutlineFile:
+        return project_service.OutlineFile.GerberOutlineFile(
+            parseDecimalFirst=self.parse_decimal_first,
+        )
+
+
+class OutlineFile(BaseModel):
+    """Contains the properties for an outline file."""
+
+    file_name: str
+    """The filename of the outline file."""
+    file_comment: Optional[str] = None
+    """The comment for the outline file."""
+    file_type: OutlineFileType
+    """The type of outline file."""
+    outline_file_data: Optional[Union[CsvExcelOutlineFile, GerberOutlineFile]] = None
+    """Specific outline file type properties"""
+    cca_name: list[str]
+    """The list of CCA names for the outline file."""
+
+    def _convert_to_grpc(self) -> project_service.OutlineFile:
+        grpc_outline_file = project_service.OutlineFile()
+
+        grpc_outline_file.fileName = self.file_name
+
+        if self.file_comment is not None:
+            grpc_outline_file.fileComment = self.file_comment
+
+        grpc_outline_file.fileType = self.file_type.value
+
+        grpc_outline_file.cca.extend(self.cca_name)
+
+        if self.file_type == OutlineFileType.CSV_EXCEL:
+            if self.outline_file_data is None or not isinstance(
+                self.outline_file_data, CsvExcelOutlineFile
+            ):
+                raise ValueError(
+                    "CsvExcel file outline file data is required for CSV Excel outline files."
+                )
+
+            grpc_outline_file.csvExcelFile.CopyFrom(self.outline_file_data._convert_to_grpc())
+
+        elif self.file_type == OutlineFileType.GERBER and (
+            self.outline_file_data is None
+            or not isinstance(self.outline_file_data, GerberOutlineFile)
+        ):
+            raise ValueError("Gerber file outline file data is required for Gerber outline files.")
+
+            grpc_outline_file.gerberFile.CopyFrom(self.outline_file_data._convert_to_grpc())
+
+        return grpc_outline_file
+
+    @field_validator("file_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("file_comment")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow empty strings for file_comment."""
+        return optional_str_validator(value, info.field_name)
+
+    @field_validator("cca_name")
+    @classmethod
+    def validate_non_empty_cca_name(cls, value: list[str], info: ValidationInfo):
+        """Validate cca_name contains at least one name and none are empty."""
+        return basic_list_str_validator(value, info.field_name)
+
+
+class AddOutlineFileRequest(BaseModel):
+    """Contains the information to add outline files to a project."""
+
+    project: str
+    """Sherlock project name."""
+    outline_files: list[OutlineFile]
+    """List of outline files to add."""
+
+    def _convert_to_grpc(self) -> project_service.AddOutlineFileRequest:
+        if not self.outline_files:
+            raise ValueError("At least one outline file is required.")
+
+        request = project_service.AddOutlineFileRequest()
+        request.project = self.project
+        for outline_file in self.outline_files:
+            request.outlineFiles.append(outline_file._convert_to_grpc())
+        return request
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)

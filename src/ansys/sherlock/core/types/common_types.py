@@ -1,4 +1,4 @@
-# © 2024 ANSYS, Inc. All rights reserved.
+# Copyright (C) 2024-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Common Service."""
 
@@ -12,6 +12,25 @@ def basic_str_validator(value: str, field_name: str):
     """Apply basic string validation."""
     if value is None or value == "":
         raise ValueError(field_name + " is invalid because it is None or empty.")
+    return value
+
+
+def optional_str_validator(value: str, field_name: str):
+    """Apply optional string validation."""
+    if value is None:
+        return ""
+    return value.strip()
+
+
+def basic_list_str_validator(value: list, field_name: str):
+    """Verify provided list contains at least one item and no empty strings."""
+    if not value:
+        raise ValueError(f"{field_name} must contain at least one item.")
+
+    for item in value:
+        if item is None or item.strip() == "":
+            raise ValueError(f"{field_name} is invalid because it is None or empty.")
+
     return value
 
 

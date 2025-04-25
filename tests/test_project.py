@@ -1,4 +1,4 @@
-# © 2024-2025 ANSYS, Inc. All rights reserved
+# Copyright (C) 2024-2025 ANSYS, Inc. and/or its affiliates.
 
 import os
 import platform
@@ -29,14 +29,19 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.project import Project
 from ansys.sherlock.core.types.project_types import (
+    AddOutlineFileRequest,
     BoardBounds,
     CsvExcelFile,
+    CsvExcelOutlineFile,
+    GerberOutlineFile,
     IcepakFile,
     ImageBounds,
     ImageFile,
     ImportGDSIIRequest,
     LegendBounds,
     LegendOrientation,
+    OutlineFile,
+    OutlineFileType,
     StrainMapLegendOrientation,
     StrainMapsFileType,
     ThermalBoardSide,
@@ -53,6 +58,7 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     project = Project(channel, SKIP_VERSION_CHECK)
 
+    helper_test_add_outline_file(project)
     helper_test_add_strain_maps(project)
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
@@ -3385,6 +3391,229 @@ def helper_test_import_gdsii_file(project: Project):
 
     except Exception as e:
         pytest.fail(f"Unexpected exception raised: {e}")
+
+
+def helper_test_add_outline_file(project: Project):
+    """Tests add outline file API"""
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board"],
+                        file_name="C:/Temp/ValidOutlineFile.xlsx",
+                        file_type=OutlineFileType.CSV_EXCEL,
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid outline_file_data")
+    except Exception as e:
+        assert str(e) == "CsvExcel file outline file data is required for CSV Excel outline files."
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board"],
+                        file_name="C:/Temp/ValidOutlineFile.xlsx",
+                        file_type=OutlineFileType.CSV_EXCEL,
+                        outline_file_data=GerberOutlineFile(
+                            parse_decimal_first=False,
+                        ),
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid outline_file_data")
+    except Exception as e:
+        assert str(e) == "CsvExcel file outline file data is required for CSV Excel outline files."
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board"],
+                        file_name="C:/Temp/ValidOutlineFile.gbr",
+                        file_type=OutlineFileType.GERBER,
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid outline_file_data")
+    except Exception as e:
+        assert str(e) == "Gerber file outline file data is required for Gerber outline files."
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board"],
+                        file_name="C:/Temp/ValidOutlineFile.gbr",
+                        file_type=OutlineFileType.GERBER,
+                        outline_file_data=CsvExcelOutlineFile(
+                            header_row_count=0,
+                            x_location_column="X",
+                            y_location_column="Y",
+                            location_units="mm",
+                        ),
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid outline_file_data")
+    except Exception as e:
+        assert str(e) == "Gerber file outline file data is required for Gerber outline files."
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board"],
+                        file_name="",
+                        file_type=OutlineFileType.CSV_EXCEL,
+                        outline_file_data=CsvExcelOutlineFile(
+                            header_row_count=0,
+                            x_location_column="X",
+                            y_location_column="Y",
+                            location_units="mm",
+                        ),
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid file name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, file_name is invalid because it is None or empty."
+        )
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=[],
+                        file_name="C:/Temp/ValidOutlineFile.gbr",
+                        file_type=OutlineFileType.CSV_EXCEL,
+                        outline_file_data=CsvExcelOutlineFile(
+                            header_row_count=0,
+                            x_location_column="X",
+                            y_location_column="Y",
+                            location_units="mm",
+                        ),
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid CCA list")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert e.errors()[0]["msg"] == "Value error, cca_name must contain at least one item."
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board", " "],
+                        file_name="C:/Temp/ValidOutlineFile.gbr",
+                        file_type=OutlineFileType.CSV_EXCEL,
+                        outline_file_data=CsvExcelOutlineFile(
+                            header_row_count=0,
+                            x_location_column="X",
+                            y_location_column="Y",
+                            location_units="mm",
+                        ),
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid CCA name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="",
+                outline_files=[
+                    OutlineFile(
+                        cca_name=["Main Board"],
+                        file_name="C:/Temp/ValidOutlineFile.gbr",
+                        file_type=OutlineFileType.CSV_EXCEL,
+                        outline_file_data=CsvExcelOutlineFile(
+                            header_row_count=0,
+                            x_location_column="X",
+                            y_location_column="Y",
+                            location_units="mm",
+                        ),
+                    ),
+                ],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid project")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        project.add_outline_file(
+            AddOutlineFileRequest(
+                project="Tutorial Project",
+                outline_files=[],
+            ),
+        )
+        pytest.fail("No exception raised when using an invalid outline files")
+    except Exception as e:
+        assert str(e) == "At least one outline file is required."
+
+    if project._is_connection_up():
+        try:
+            return_code = project.add_outline_file(
+                AddOutlineFileRequest(
+                    project="Tutorial Project",
+                    outline_files=[0
+                        OutlineFile(
+                            cca_name=["Main Board"],
+                            file_name="C:/Temp/InvalidOutlineFile.xlsx",
+                            file_type=OutlineFileType.CSV_EXCEL,
+                            outline_file_data=CsvExcelOutlineFile(
+                                header_row_count=0,
+                                x_location_column="X",
+                                y_location_column="Y",
+                                location_units="mm",
+                            ),
+                        ),
+                    ],
+                ),
+            )
+
+            # Check that an invalid outline file returns an error
+            assert return_code[0].value == -1
+            assert (
+                return_code[0].message == f"File C:\\Temp\\InvalidOutlineFile.xlsx does not exist"
+            )
+
+        except Exception as e:
+            pytest.fail(f"Unexpected exception raised: {e}")
 
 
 if __name__ == "__main__":
