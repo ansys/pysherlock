@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as exporting an AEDB
 This script demonstrates how to:
 
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Export an AEDB file.
 
 The exported AEDB file can be used for further analysis or integration with other software tools.

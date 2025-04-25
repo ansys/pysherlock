@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as validating and up
 analysis properties for CCAs.
 This script shows how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Retrieve and print the updated part list validation analysis properties.
 
 The retrieved analysis properties can be used for further validation or integration

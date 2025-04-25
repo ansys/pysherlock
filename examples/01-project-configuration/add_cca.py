@@ -19,12 +19,12 @@
 """
 .. _ref_add_cca_and_import_odb:
 
-=================================
-Add Component Circuits Assemblies
-=================================
+=========================
+Add Circuit Card Assembly
+=========================
 
 This example demonstrates how to connect to the Sherlock gRPC service, import a project,
-and add CCAs (Component Circuits Assemblies) to a project.
+and add a CCA (Circuit Card Assembly) to a project.
 
 Description
 -----------
@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as adding CCAs to a 
 and importing ODB++ archives.
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Add CCAs to the project.
 
 The added CCAs allow for proper circuit analysis and component tracking within the project.
@@ -78,7 +78,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing ODB++ archive: {str(e)}")
+    print(f"Error importing project: {str(e)}")
 
 ###############################################################################
 # Add CCA to Project

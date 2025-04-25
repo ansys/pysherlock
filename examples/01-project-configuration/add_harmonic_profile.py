@@ -33,7 +33,7 @@ Sherlock's gRPC API allows users to automate workflows such as adding harmonic v
 to lifecycle phases.
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Create a lifecycle phase.
 - Add a harmonic event to the lifecycle phase.
 - Add vibration profiles to the harmonic event.

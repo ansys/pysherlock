@@ -23,7 +23,7 @@
 Add Harmonic Event to Lifecycle Phase
 =====================================
 
-This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive,
+This example demonstrates how to launch the Sherlock gRPC service, import a project,
 create a lifecycle phase, and add a harmonic event to the phase, then properly close the connection.
 
 Description
@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as creating lifecycl
 and adding harmonic events.
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Create a lifecycle phase.
 - Add a harmonic event to the lifecycle phase.
 

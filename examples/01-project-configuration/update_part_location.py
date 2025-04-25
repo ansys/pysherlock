@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as updating part
 locations for CCAs.
 This script shows how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Update part locations.
 
 The updated part locations can be used for accurate placement validation and optimization.

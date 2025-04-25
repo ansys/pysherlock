@@ -30,7 +30,7 @@ Description
 Sherlock's gRPC API enables automation of various workflows, including net list export.
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Export the net list from the project.
 """
 

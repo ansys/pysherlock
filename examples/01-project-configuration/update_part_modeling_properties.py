@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as updating part
 modeling properties for printed circuit boards (PCBs).
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Update part modeling properties.
 
 The updated properties ensure accurate simulation results for mechanical and thermal analyses.

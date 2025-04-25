@@ -30,7 +30,7 @@ Description
 Sherlock's gRPC API enables automation of various workflows, including parts list export.
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Importing an ODB++ archive.
+- Import a project.
 - Exporting the parts list from the project.
 """
 

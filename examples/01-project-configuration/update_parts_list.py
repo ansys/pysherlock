@@ -32,7 +32,7 @@ Sherlock's gRPC API allows users to automate workflows such as updating the
 parts list for printed circuit boards (PCBs). This script shows how to:
 
 - Launch the Sherlock service.
-- Import an ODB++ archive.
+- Import a project.
 - Update the parts list.
 - Properly close the gRPC connection.
 

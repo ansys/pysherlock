@@ -17,11 +17,11 @@
 # SOFTWARE.
 
 """
-.. _ref_import_odb_and_parts_list:
+.. _ref_import_parts_list:
 
-===================================
-Import ODB++ Archive and Parts List
-===================================
+=================
+Import Parts List
+=================
 
 This example demonstrates how to connect to the Sherlock gRPC service, import a project,
 and import parts lists.
@@ -32,10 +32,10 @@ Sherlock's gRPC API allows users to automate workflows such as importing ODB++
 archives and parts lists.
 This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import an ODB++ archive with specified project and CCA names.
+- Import a project.
 - Import parts lists with different settings.
 
-These functionalities enable users to prepare projects with ODB++ data and associated parts lists
+These functionalities enable users to prepare projects with ECAD data and associated parts lists
 for further analysis.
 """
 

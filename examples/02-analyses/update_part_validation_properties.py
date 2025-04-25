@@ -31,7 +31,7 @@ Description
 Sherlock allows you to perform part list validation analysis.
 This script performs the following steps:
 - Connect to the Sherlock service.
-- Import ODB++ archive into the project.
+- Import a project.
 - Configure the properties for part list validation analysis.
 """
 
