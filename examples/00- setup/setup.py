@@ -19,9 +19,9 @@
 """
 .. _ref_setup:
 
-=========================================
+=====
 Setup
-=========================================
+=====
 
 This prepares the environment for running the examples.
 
