@@ -1442,28 +1442,27 @@ class Analysis(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card"
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card"
+        >>> )
         >>> sherlock.analysis.update_natural_frequency_props(
-            "Test",
-            "Card",
-            natural_freq_count=2,
-            natural_freq_min=10,
-            natural_freq_min_units="HZ",
-            natural_freq_max=100,
-            natural_freq_max_units="HZ",
-            part_validation_enabled=True,
-            require_material_assignment_enabled=False,
-            analysis_temp=25,
-            analysis_temp_units="C"
-        )
-
+        >>>     "Test",
+        >>>     "Card",
+        >>>     natural_freq_count=2,
+        >>>     natural_freq_min=10,
+        >>>     natural_freq_min_units="HZ",
+        >>>     natural_freq_max=100,
+        >>>     natural_freq_max_units="HZ",
+        >>>     part_validation_enabled=True,
+        >>>     require_material_assignment_enabled=False,
+        >>>     analysis_temp=25,
+        >>>     analysis_temp_units="C"
+        >>> )
         """
         try:
             if project == "":
@@ -2310,8 +2309,7 @@ class Analysis(GrpcStub):
         self,
         request: UpdatePTHFatiguePropsRequest,
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
-        r"""
-        Update properties for one or more Plated Through Hole (PTH) Fatigue Analyses.
+        r"""Update properties for one or more Plated Through Hole (PTH) Fatigue Analyses.
 
         Parameters
         ----------

@@ -116,34 +116,32 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> polygonal_shape = PolygonalShape(points=[
-                        (0, 0),
-                        (0, 6.35),
-                        (9.77, 0)
-                    ], rotation=87.8)
+        >>>     (0, 0),
+        >>>     (0, 6.35),
+        >>>     (9.77, 0)
+        >>> ], rotation=87.8)
         >>> sherlock.layer.add_potting_region(
-            "Test",
-            [{
-                'cca_name': 'Card',
-                'potting_id': 'Test Region',
-                'side': 'TOP',
-                'material': 'epoxyencapsulant',
-                'potting_units': 'in',
-                'thickness': 0.1,
-                'standoff': 0.2,
-                'shape': polygonal_shape
-            },
-            ]
-        )
-
+        >>> "Test",
+        >>> [{
+        >>>     'cca_name': 'Card',
+        >>>     'potting_id': 'Test Region',
+        >>>     'side': 'TOP',
+        >>>     'material': 'epoxyencapsulant',
+        >>>     'potting_units': 'in',
+        >>>     'thickness': 0.1,
+        >>>     'standoff': 0.2,
+        >>>     'shape': polygonal_shape
+        >>> },
+        >>> ])
         """
         try:
             if project == "":
@@ -285,44 +283,44 @@ class Layer(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>>
         >>> update1 = PottingRegionUpdateData(
-            potting_region_id_to_update=potting_id,
-            potting_region=PottingRegionData(
-                cca_name=cca_name,
-                potting_id=potting_id,
-                potting_side=potting_side,
-                potting_material=potting_material,
-                potting_units=potting_units,
-                potting_thickness=potting_thickness,
-                potting_standoff=potting_standoff,
-                shape=PolygonalShape(
-                    points=[(0, 1), (5, 1), (5, 5), (1, 5)],
-                    rotation=45.0
-                )
-            )
-        )
+        >>> potting_region_id_to_update=potting_id,
+        >>> potting_region=PottingRegionData(
+        >>>     cca_name=cca_name,
+        >>>     potting_id=potting_id,
+        >>>     potting_side=potting_side,
+        >>>     potting_material=potting_material,
+        >>>     potting_units=potting_units,
+        >>>     potting_thickness=potting_thickness,
+        >>>     potting_standoff=potting_standoff,
+        >>>     shape=PolygonalShape(
+        >>>         points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+        >>>         rotation=45.0
+        >>>     )
+        >>> )
+        >>> )
         >>> update2 = PottingRegionUpdateData(
-            potting_region_id_to_update=potting_id,
-            potting_region=PottingRegionData(
-                cca_name=cca_name,
-                potting_id=potting_id,
-                potting_side=potting_side,
-                potting_material=potting_material,
-                potting_units=potting_units,
-                potting_thickness=potting_thickness,
-                potting_standoff=potting_standoff,
-                shape=PolygonalShape(
-                    points=[(0, 1), (5, 1), (5, 5), (1, 5)],
-                    rotation=0.0
-                )
-            )
-        )
+        >>> potting_region_id_to_update=potting_id,
+        >>> potting_region=PottingRegionData(
+        >>>     cca_name=cca_name,
+        >>>     potting_id=potting_id,
+        >>>     potting_side=potting_side,
+        >>>     potting_material=potting_material,
+        >>>     potting_units=potting_units,
+        >>>     potting_thickness=potting_thickness,
+        >>>     potting_standoff=potting_standoff,
+        >>>     shape=PolygonalShape(
+        >>>         points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+        >>>         rotation=0.0
+        >>>     )
+        >>> )
+        >>> )
         >>> example_request = UpdatePottingRegionRequest(
-                "project_name",
-                [
-                    update1,
-                    update2
-                ]
-            )
+        >>>     "project_name",
+        >>>     [
+        >>>         update1,
+        >>>         update2
+        >>>     ]
+        >>> )
         >>> return_codes = sherlock.layer.update_potting_region(example_request)
         """
         update_request = request._convert_to_grpc()
@@ -358,24 +356,24 @@ class Layer(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>>
         >>> copy_request_example = CopyPottingRegionRequest(
-            project=project,
-            potting_region_copy_data=[
-                PottingRegionCopyData(
-                    cca_name=cca_name,
-                    potting_id=potting_id,
-                    copy_potting_id=new_id,
-                    center_x=center_x,
-                    center_y=center_y
-                ),
-                PottingRegionCopyData(
-                    cca_name=cca_name,
-                    potting_id=new_id,
-                    copy_potting_id=new_id+"1",
-                    center_x=center_x,
-                    center_y=center_y
-                )
-            ]
-        )
+        >>> project=project,
+        >>> potting_region_copy_data=[
+        >>>     PottingRegionCopyData(
+        >>>         cca_name=cca_name,
+        >>>         potting_id=potting_id,
+        >>>         copy_potting_id=new_id,
+        >>>         center_x=center_x,
+        >>>         center_y=center_y
+        >>>     ),
+        >>>     PottingRegionCopyData(
+        >>>         cca_name=cca_name,
+        >>>         potting_id=new_id,
+        >>>         copy_potting_id=new_id+"1",
+        >>>         center_x=center_x,
+        >>>         center_y=center_y
+        >>>     )
+        >>> ]
+        >>> )
         >>> responses_example = sherlock.layer.copy_potting_region(copy_request_example)
         """
         copy_request = request._convert_to_grpc()
@@ -411,14 +409,14 @@ class Layer(GrpcStub):
         >>> sherlock = launch_sherlock()
         >>>
         >>> delete_request_example = DeletePottingRegionRequest(
-            project=project,
-            potting_region_delete_data=[
-                PottingRegionDeleteData(
-                    cca_name=cca_name,
-                    potting_id=potting_id
-                )
-            ]
-        )
+        >>> project=project,
+        >>> potting_region_delete_data=[
+        >>>     PottingRegionDeleteData(
+        >>>         cca_name=cca_name,
+        >>>         potting_id=potting_id
+        >>>     )
+        >>> ]
+        >>> )
         >>> responses_example = sherlock.layer.delete_potting_region(delete_request_example)
         """
         delete_request = request._convert_to_grpc()
@@ -458,19 +456,19 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.update_mount_points_by_file(
-            "Test",
-            "Card",
-            "MountPointImport.csv"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "MountPointImport.csv"
+        >>> )
         """
         try:
             if project == "":
@@ -534,19 +532,19 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.update_mount_points_by_file(
-            "Test",
-            "Card",
-            "MountPointImport.csv",
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "MountPointImport.csv",
+        >>> )
         >>> sherlock.layer.delete_all_mount_points("Test", "Card")
         """
         try:
@@ -597,19 +595,19 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.update_ict_fixtures_by_file(
-            "Test",
-            "Card",
-            "ICTFixturesImport.csv",
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "ICTFixturesImport.csv",
+        >>> )
         >>> sherlock.layer.delete_all_ict_fixtures("Test", "Card")
         """
         try:
@@ -660,19 +658,19 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.update_test_points_by_file(
-            "Test",
-            "Card",
-            "TestPointsImport.csv",
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "TestPointsImport.csv",
+        >>> )
         >>> sherlock.layer.delete_all_test_points("Test", "Card")
         """
         try:
@@ -730,19 +728,19 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.update_test_points_by_file(
-            "Test",
-            "Card",
-            "TestPointsImport.csv"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "TestPointsImport.csv"
+        >>> )
         """
         try:
             if project == "":
@@ -810,19 +808,19 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.update_test_fixtures_by_file(
-            "Test",
-            "Card",
-            "TestFixturesImport.csv"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "TestFixturesImport.csv"
+        >>> )
         """
         try:
             if project == "":
@@ -902,22 +900,22 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.export_all_test_points(
-            "Tutorial Project",
-            "Card",
-            "TestPointsExport.csv",
-            "DEFAULT",
-            "DEFAULT",
-            "DEFAULT"
-        )
+        >>>     "Tutorial Project",
+        >>>     "Card",
+        >>>     "TestPointsExport.csv",
+        >>>     "DEFAULT",
+        >>>     "DEFAULT",
+        >>>     "DEFAULT"
+        >>> )
         """
         try:
             if project == "":
@@ -983,20 +981,20 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.export_all_test_fixtures(
-            "Tutorial Project",
-            "Card",
-            "TestFixturesExport.csv",
-            "DEFAULT"
-        )
+        >>>     "Tutorial Project",
+        >>>     "Card",
+        >>>     "TestFixturesExport.csv",
+        >>>     "DEFAULT"
+        >>> )
         """
         try:
             if project == "":
@@ -1060,20 +1058,20 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.layer.export_all_mount_points(
-            "Tutorial Project",
-            "Card",
-            "MountPointsExport.csv",
-            "DEFAULT"
-        )
+        >>>     "Tutorial Project",
+        >>>     "Card",
+        >>>     "MountPointsExport.csv",
+        >>>     "DEFAULT"
+        >>> )
         """
         try:
             if project == "":
@@ -1176,40 +1174,40 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card",
+        >>> )
         >>> modeling_regions = [
-            {
-                "cca_name": "Card",
-                "region_id": "Region001",
-                "region_units": "mm",
-                "model_mode": "Enabled",
-                "shape": PolygonalShape(points=[
-                    (0, 0),
-                    (0, 6.35),
-                    (9.77, 0)
-                ], rotation=87.8),
-                "pcb_model_props": {
-                    "export_model_type": "Sherlock",
-                    "elem_order": "First_Order",
-                    "max_mesh_size": 0.5,
-                    "max_mesh_size_units": "mm",
-                    "quads_preferred": True
-                },
-                "trace_model_props": {
-                    "trace_model_type": "Enabled",
-                    "elem_order": "Second_Order",
-                    "trace_mesh_size": 0.3,
-                    "trace_mesh_size_units": "mm"
-                }
-            }
-        ]
+        >>> {
+        >>>     "cca_name": "Card",
+        >>>     "region_id": "Region001",
+        >>>     "region_units": "mm",
+        >>>     "model_mode": "Enabled",
+        >>>     "shape": PolygonalShape(points=[
+        >>>         (0, 0),
+        >>>         (0, 6.35),
+        >>>         (9.77, 0)
+        >>>     ], rotation=87.8),
+        >>>     "pcb_model_props": {
+        >>>         "export_model_type": "Sherlock",
+        >>>         "elem_order": "First_Order",
+        >>>         "max_mesh_size": 0.5,
+        >>>         "max_mesh_size_units": "mm",
+        >>>         "quads_preferred": True
+        >>>     },
+        >>>     "trace_model_props": {
+        >>>         "trace_model_type": "Enabled",
+        >>>         "elem_order": "Second_Order",
+        >>>         "trace_mesh_size": 0.3,
+        >>>         "trace_mesh_size_units": "mm"
+        >>>     }
+        >>> }
+        >>> ]
         >>> result = sherlock.layer.add_modeling_region("Tutorial Project", modeling_regions)
         """
         try:
@@ -1444,19 +1442,18 @@ class Layer(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-         Example
+        Example
         -------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card",
+        >>> )
         >>> modeling_regions = [
         >>>     {
         >>>         "cca_name": "Card",
@@ -1682,14 +1679,14 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card",
+        >>> )
         >>> modeling_regions = [
         >>>     {
         >>>         "cca_name": "Card",
@@ -1777,14 +1774,14 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-                "ODB++ Tutorial.tgz",
-                True,
-                True,
-                True,
-                True,
-                project="Test",
-                cca_name="Card",
-            )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> modeling_regions = [{"cca_name": "Card", "region_id": "12345"}]
         >>> sherlock.layer.delete_modeling_region("Test", modeling_regions)
         """
@@ -1856,18 +1853,18 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card"
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card"
+        >>> )
         >>> sherlock.layer.list_layers(
-            project="Tutorial Project",
-            cca_name="Card"
-        )
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card"
+        >>> )
         """
         try:
             if project == "":
@@ -1945,32 +1942,32 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial Project",
-            cca_name="Card"
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Card"
+        >>> )
         >>> layer_infos = [
-            { "layer_folder": "Components",
-              "layers": ["comp-top"]},
-            { "layer_folder": "Harmonic_Vibe",
-              "layers":["HV Disp @ 203.39 Hz"]}
-            ]
+        >>> { "layer_folder": "Components",
+        >>>   "layers": ["comp-top"]},
+        >>> { "layer_folder": "Harmonic_Vibe",
+        >>>   "layers":["HV Disp @ 203.39 Hz"]}
+        >>> ]
         >>> export_layers = [
         >>> {
-            "components_enabled": True,
-            "labels_enabled": True,
-            "leads_enabled": True,
-            "axes_enabled": True,
-            "grid_enabled": True,
-            "layer_infos": layer_infos,
-            "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
-            "image_height": 600,
-            "image_width": 800,
-            "overwrite_existing_file": True
+        >>>     "components_enabled": True,
+        >>>     "labels_enabled": True,
+        >>>     "leads_enabled": True,
+        >>>     "axes_enabled": True,
+        >>>     "grid_enabled": True,
+        >>>     "layer_infos": layer_infos,
+        >>>     "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+        >>>     "image_height": 600,
+        >>>     "image_width": 800,
+        >>>     "overwrite_existing_file": True
         >>> }
         >>> ]
         >>> sherlock.layer.export_layer_image("Tutorial Project", "Card", export_layers)

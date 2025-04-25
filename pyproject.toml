@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==0.1.45",
+    "ansys-api-sherlock==0.1.46",
     "grpcio>=1.17, <1.68.0",
     "protobuf>=3.20",
     "pydantic>=2.9.2",
@@ -35,7 +35,7 @@ tests = [
     "grpcio>=1.17, <1.68.0",
     "protobuf==5.28.0",
     "pytest==8.3.5",
-    "pytest-cov==6.0.0",
+    "pytest-cov==6.1.1",
 ]
 doc = [
     "ansys-sphinx-theme==1.4.2",
