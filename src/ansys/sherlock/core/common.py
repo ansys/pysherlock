@@ -37,7 +37,7 @@ class Common(GrpcStub):
             Whether the Sherlock client is connected via gRPC.
         """
         if not self._is_connection_up():
-            LOG.error("Health check failed.")
+            LOG.warning("Health check failed.")
             return False
         else:
             LOG.info("Connection is healthy.")
