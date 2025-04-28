@@ -103,6 +103,10 @@ extensions = [
     "ansys_sphinx_theme.extension.linkcode",
 ]
 
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/", None),
+}
+
 # notfound.extension
 notfound_template = "404.rst"
 notfound_urls_prefix = "/../"

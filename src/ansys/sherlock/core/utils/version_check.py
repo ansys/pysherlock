@@ -1,4 +1,4 @@
-# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2024-2025 ANSYS, Inc. and/or its affiliates.
 """Module for version check done on api methods."""
 import functools
 
@@ -16,6 +16,8 @@ SKIP_VERSION_CHECK = None
 #  0.5.0 : 24R2
 #  0.6.0 : 24R2
 #  0.7.0 : 25R1
+#  0.8.0 : 25R1
+#  0.9.0 : 25R2
 
 
 def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version: int = None):

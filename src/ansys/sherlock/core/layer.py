@@ -1442,8 +1442,8 @@ class Layer(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -1674,8 +1674,8 @@ class Layer(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -1848,8 +1848,8 @@ class Layer(GrpcStub):
             - "layer_folder": str, name of layer_folder enum.
             - "layers": list, list of names of layers under this folder
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -1937,8 +1937,8 @@ class Layer(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(

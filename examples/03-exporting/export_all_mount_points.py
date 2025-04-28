@@ -17,36 +17,37 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_run_ict_analysis:
+.. _ref_sherlock_export_mount_points:
 
-================
-Run ICT Analysis
-================
+=======================
+Export All Mount Points
+=======================
 
 This example demonstrates how to connect to the Sherlock gRPC service, import a project,
-and configure ICT analysis properties.
+and export all mount points for a CCA.
 
 Description
 -----------
-Sherlock allows you to perform ICT (In-Circuit Test) analysis.
-This script performs the following steps:
+Sherlock's gRPC API allows users to automate various workflows, including exporting all
+mount points for a PCB.
+This script demonstrates how to:
 - Connect to the Sherlock service.
-- Import a project.
-- Configure the properties for ICT analysis.
+- Import a tutorial project.
+- Export all mount points to a CSV file.
 
-For further details, refer to the official documentation on ICT analysis in Sherlock.
+The exported mount points can be used for further analysis or design purposes.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_run_ict_analysis_example.png'
+# sphinx_gallery_thumbnail_path = './images/sherlock_export_mount_points_example.png'
 
 import os
 
-from examples.examples_globals import get_sherlock_tutorial_path
+from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
+    SherlockExportAllMountPoints,
     SherlockImportProjectZipArchiveError,
-    SherlockUpdateICTAnalysisPropsError,
 )
 
 ###############################################################################
@@ -69,39 +70,32 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# ========================
+# =======================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
-# Update ICT Analysis Properties
-# ==============================
-# Configure properties for ICT analysis.
+# Export All Mount Points
+# =======================
+# Export all mount points for the "Main Board" to a CSV file.
 
 try:
-    # Update properties for ICT analysis
-    sherlock.analysis.update_ict_analysis_props(
+    mount_points_export_path = os.path.join(get_temp_dir(), "MountPointsExport.csv")
+    sherlock.layer.export_all_mount_points(
         project="Test",
-        ict_analysis_properties=[
-            {
-                "cca_name": "Auto Relay",
-                "ict_application_time": 2,
-                "ict_application_time_units": "sec",
-                "ict_number_of_events": 10,
-                "part_validation_enabled": False,
-                "require_material_assignment_enabled": False,
-            }
-        ],
+        cca_name="Main Board",
+        export_file=mount_points_export_path,
+        units="DEFAULT",
     )
-    print("ICT analysis properties updated successfully.")
-except SherlockUpdateICTAnalysisPropsError as e:
-    print(f"Error updating ICT analysis properties: {e}")
+    print(f"All mount points exported successfully to: {mount_points_export_path}")
+except SherlockExportAllMountPoints as e:
+    print(f"Error exporting all mount points: {e}")
