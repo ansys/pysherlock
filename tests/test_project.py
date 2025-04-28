@@ -3590,7 +3590,7 @@ def helper_test_add_outline_file(project: Project):
             return_code = project.add_outline_file(
                 AddOutlineFileRequest(
                     project="Tutorial Project",
-                    outline_files=[0
+                    outline_files=[
                         OutlineFile(
                             cca_name=["Main Board"],
                             file_name="C:/Temp/InvalidOutlineFile.xlsx",
