@@ -3545,8 +3545,8 @@ def helper_test_add_outline_file(project: Project):
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
         assert (
-            e.errors()[0]["msg"]
-            == "Value error, cca_names is invalid because it contains an item that is None or empty."
+            e.errors()[0]["msg"] == "Value error, cca_names is invalid because it contains an"
+            " item that is None or empty."
         )
 
     try:
