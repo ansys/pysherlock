@@ -29,7 +29,9 @@ def basic_list_str_validator(value: list, field_name: str):
 
     for item in value:
         if item is None or item.strip() == "":
-            raise ValueError(f"{field_name} is invalid because it contains an item that is None or empty.")
+            raise ValueError(
+                f"{field_name} is invalid because it contains an item that is None or empty."
+            )
 
     return value
 
