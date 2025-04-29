@@ -319,7 +319,7 @@ class OutlineFile(BaseModel):
     """The type of outline file."""
     outline_file_data: Optional[Union[CsvExcelOutlineFile, GerberOutlineFile]] = None
     """Specific outline file type properties"""
-    cca_name: list[str]
+    cca_names: list[str]
     """The list of CCA names for the outline file."""
 
     def _convert_to_grpc(self) -> project_service.OutlineFile:
@@ -332,7 +332,7 @@ class OutlineFile(BaseModel):
 
         grpc_outline_file.fileType = self.file_type.value
 
-        grpc_outline_file.cca.extend(self.cca_name)
+        grpc_outline_file.cca.extend(self.cca_names)
 
         if self.file_type == OutlineFileType.CSV_EXCEL:
             if self.outline_file_data is None or not isinstance(
@@ -366,10 +366,10 @@ class OutlineFile(BaseModel):
         """Allow empty strings for file_comment."""
         return optional_str_validator(value, info.field_name)
 
-    @field_validator("cca_name")
+    @field_validator("cca_names")
     @classmethod
-    def validate_non_empty_cca_name(cls, value: list[str], info: ValidationInfo):
-        """Validate cca_name contains at least one name and none are empty."""
+    def validate_non_empty_cca_names(cls, value: list[str], info: ValidationInfo):
+        """Validate cca_names contains at least one name and none are empty."""
         return basic_list_str_validator(value, info.field_name)
 
 

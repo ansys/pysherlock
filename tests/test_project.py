@@ -3401,7 +3401,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board"],
+                        cca_names=["Main Board"],
                         file_name="C:/Temp/ValidOutlineFile.xlsx",
                         file_type=OutlineFileType.CSV_EXCEL,
                     ),
@@ -3418,7 +3418,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board"],
+                        cca_names=["Main Board"],
                         file_name="C:/Temp/ValidOutlineFile.xlsx",
                         file_type=OutlineFileType.CSV_EXCEL,
                         outline_file_data=GerberOutlineFile(
@@ -3438,7 +3438,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board"],
+                        cca_names=["Main Board"],
                         file_name="C:/Temp/ValidOutlineFile.gbr",
                         file_type=OutlineFileType.GERBER,
                     ),
@@ -3455,7 +3455,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board"],
+                        cca_names=["Main Board"],
                         file_name="C:/Temp/ValidOutlineFile.gbr",
                         file_type=OutlineFileType.GERBER,
                         outline_file_data=CsvExcelOutlineFile(
@@ -3478,7 +3478,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board"],
+                        cca_names=["Main Board"],
                         file_name="",
                         file_type=OutlineFileType.CSV_EXCEL,
                         outline_file_data=CsvExcelOutlineFile(
@@ -3504,7 +3504,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=[],
+                        cca_names=[],
                         file_name="C:/Temp/ValidOutlineFile.gbr",
                         file_type=OutlineFileType.CSV_EXCEL,
                         outline_file_data=CsvExcelOutlineFile(
@@ -3520,7 +3520,7 @@ def helper_test_add_outline_file(project: Project):
         pytest.fail("No exception raised when using an invalid CCA list")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
-        assert e.errors()[0]["msg"] == "Value error, cca_name must contain at least one item."
+        assert e.errors()[0]["msg"] == "Value error, cca_names must contain at least one item."
 
     try:
         project.add_outline_file(
@@ -3528,7 +3528,7 @@ def helper_test_add_outline_file(project: Project):
                 project="Tutorial Project",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board", " "],
+                        cca_names=["Main Board", " "],
                         file_name="C:/Temp/ValidOutlineFile.gbr",
                         file_type=OutlineFileType.CSV_EXCEL,
                         outline_file_data=CsvExcelOutlineFile(
@@ -3545,7 +3545,7 @@ def helper_test_add_outline_file(project: Project):
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
         assert (
-            e.errors()[0]["msg"] == "Value error, cca_name is invalid because it is None or empty."
+            e.errors()[0]["msg"] == "Value error, cca_names is invalid because it contains an item that is None or empty."
         )
 
     try:
@@ -3554,7 +3554,7 @@ def helper_test_add_outline_file(project: Project):
                 project="",
                 outline_files=[
                     OutlineFile(
-                        cca_name=["Main Board"],
+                        cca_names=["Main Board"],
                         file_name="C:/Temp/ValidOutlineFile.gbr",
                         file_type=OutlineFileType.CSV_EXCEL,
                         outline_file_data=CsvExcelOutlineFile(
@@ -3592,7 +3592,7 @@ def helper_test_add_outline_file(project: Project):
                     project="Tutorial Project",
                     outline_files=[
                         OutlineFile(
-                            cca_name=["Main Board"],
+                            cca_names=["Main Board"],
                             file_name="C:/Temp/InvalidOutlineFile.xlsx",
                             file_type=OutlineFileType.CSV_EXCEL,
                             outline_file_data=CsvExcelOutlineFile(

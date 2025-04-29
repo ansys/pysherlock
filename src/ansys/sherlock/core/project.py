@@ -2137,7 +2137,7 @@ class Project(GrpcStub):
     def add_outline_file(
         self, request: AddOutlineFileRequest
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
-        """Add an outline files to a Sherlock project.
+        """Add outline files to a Sherlock project.
 
         Available Since: 2025R2
 
@@ -2164,7 +2164,7 @@ class Project(GrpcStub):
         >>>         project="TestProject",
         >>>         outline_files = [
         >>>             OutlineFile(
-        >>>                 cca_name=["TestCCA"],
+        >>>                 cca_names=["TestCCA"],
         >>>                 file_name="path/to/outline.csv",
         >>>                 file_type=OutlineFileType.CSV_EXCEL,
         >>>                 outline_file_data=CsvExcelOutlineFile(
