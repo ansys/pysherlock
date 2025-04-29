@@ -17,38 +17,37 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_export_mount_points:
+.. _ref_sherlock_update_harmonic_vibe_props:
 
-=======================
-Export All Mount Points
-=======================
+=============================================
+Update Harmonic Vibration Analysis properties
+=============================================
 
 This example demonstrates how to connect to the Sherlock gRPC service, import a project,
-and export all mount points for a CCA.
+and configure harmonic vibration analysis properties.
 
 Description
 -----------
-Sherlock's gRPC API allows users to automate various workflows, including exporting all
- mount points for a PCB.
-This script demonstrates how to:
-
+Sherlock allows you to perform harmonic vibration analysis.
+This script performs the following steps:
 - Connect to the Sherlock service.
-- Import a tutorial project.
-- Export all mount points to a CSV file.
-
-The exported mount points can be used for further analysis or design purposes.
+- Import a project.
+- Configure the properties for harmonic vibration analysis.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_export_mount_points_example.png'
+"""
+ sphinx_gallery_thumbnail_path =
+ './images/sherlock_update_harmonic_vibe_analysis_props_example.png'
+"""
 
 import os
 
-from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
+from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
-    SherlockExportAllMountPoints,
     SherlockImportProjectZipArchiveError,
+    SherlockUpdateHarmonicVibePropsError,
 )
 
 ###############################################################################
@@ -78,25 +77,34 @@ try:
     sherlock.project.import_project_zip_archive(
         project="Test",
         category="Demos",
-        archive_file=os.path.join(get_sherlock_tutorial_path(), "Tutorial Project.zip"),
+        archive_file=os.path.join(get_sherlock_tutorial_path(), "Auto Relay Project.zip"),
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
-# Export All Mount Points
-# =======================
-# Export all mount points for the "Main Board" to a CSV file.
+# Update Harmonic Vibration Properties
+# ====================================
+# Configure properties for harmonic vibration analysis.
 
 try:
-    mount_points_export_path = os.path.join(get_temp_dir(), "MountPointsExport.csv")
-    sherlock.layer.export_all_mount_points(
+    # Update properties for harmonic vibration analysis
+    sherlock.analysis.update_harmonic_vibe_props(
         project="Test",
-        cca_name="Main Board",
-        export_file=mount_points_export_path,
-        units="DEFAULT",
+        harmonic_vibe_properties=[
+            {
+                "cca_name": "Auto Relay",
+                "harmonic_vibe_count": 2,
+                "harmonic_vibe_damping": "0.01, 0.05",
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": False,
+                "analysis_temp": 23.8,
+                "analysis_temp_units": "C",
+                "filter_by_event_frequency": False,
+            }
+        ],
     )
-    print(f"All mount points exported successfully to: {mount_points_export_path}")
-except SherlockExportAllMountPoints as e:
-    print(f"Error exporting all mount points: {e}")
+    print("Harmonic vibration properties updated successfully.")
+except SherlockUpdateHarmonicVibePropsError as e:
+    print(f"Error updating harmonic vibration properties: {e}")

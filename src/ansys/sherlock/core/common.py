@@ -181,7 +181,7 @@ class Common(GrpcStub):
         """Get solder data from Sherlock.
 
         Returns
-        --------
+        -------
         SolderInfoResponse
             All solder information stored in Sherlock for each solder.
 

@@ -43,16 +43,14 @@ The updated parts list ensures alignment with a specified library for consistenc
 
 import os
 
+import SherlockCommonService_pb2
+import SherlockPartsService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockUpdatePartsListError,
-)
-from ansys.sherlock.core.types.parts_types import (
-    PartsListSearchDuplicationMode,
-    PartsListSearchMatchingMode,
 )
 
 ###############################################################################
@@ -98,8 +96,8 @@ try:
         project="Test",
         cca_name="Auto Relay",
         part_library="Sherlock Part Library",
-        matching_mode=PartsListSearchMatchingMode.BOTH,
-        duplication_mode=PartsListSearchDuplicationMode.ERROR,
+        matching_mode=SherlockCommonService_pb2.MatchingMode.Both,
+        duplication_mode=SherlockPartsService_pb2.DuplicationMode.Error,
     )
     print("Parts list updated successfully.")
 except SherlockUpdatePartsListError as e:

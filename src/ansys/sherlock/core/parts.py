@@ -190,24 +190,26 @@ class Parts(GrpcStub):
 
         Examples
         --------
+        >>> import SherlockCommonService_pb2
+        >>> import SherlockPartsService_pb2
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>> "ODB++ Tutorial.tgz",
+        >>> True,
+        >>> True,
+        >>> True,
+        >>> True,
+        >>> project="Test",
+        >>> cca_name="Card",
+        >>> )
         >>> sherlock.parts.update_parts_list(
-            "Test",
-            "Card",
-            "Sherlock Part Library",
-            "Both",
-            PartsListSearchDuplicationMode.ERROR
-        )
+        >>> "Test",
+        >>> "Card",
+        >>> "Sherlock Part Library",
+        >>> SherlockCommonService_pb2.MatchingMode.Both,
+        >>> SherlockPartsService_pb2.DuplicationMode.Error,
+        >>> )
         """
         try:
             if project == "":

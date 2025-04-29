@@ -43,10 +43,11 @@ def launch_sherlock(
     year: Optional[int] = None,
     release_number: Optional[int] = None,
 ) -> Sherlock:
-    r""".. deprecated:: 2025 R2. Use :func:`launch` or :func:`launch_and_connect` instead.
+    r"""Launch Sherlock and start gRPC on a given host and port. Wait up to two minutes to connect.
 
-    Launch Sherlock and start gRPC on a given host and port. Wait up to two minutes to connect to
-    Sherlock.
+    .. deprecated:: 2025 R2
+
+    Use :func:`launch` or :func:`launch_and_connect` instead.
 
     Parameters
     ----------

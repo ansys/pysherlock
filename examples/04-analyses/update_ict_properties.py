@@ -17,25 +17,27 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_run_part_list_validation_analysis:
+.. _ref_sherlock_update_ict_props:
 
-=================================
-Run Part List Validation Analysis
-=================================
+================
+Run ICT Analysis
+================
 
 This example demonstrates how to connect to the Sherlock gRPC service, import a project,
-and configure part list validation analysis properties.
+and configure ICT analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform part list validation analysis.
+Sherlock allows you to perform ICT (In-Circuit Test) analysis.
 This script performs the following steps:
 - Connect to the Sherlock service.
 - Import a project.
-- Configure the properties for part list validation analysis.
+- Configure the properties for ICT analysis.
+
+For further details, refer to the official documentation on ICT analysis in Sherlock.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_run_part_list_validation_analysis_example.png'
+# sphinx_gallery_thumbnail_path = './images/sherlock_update_ict_analysis_props_example.png'
 
 import os
 
@@ -44,7 +46,7 @@ from examples.examples_globals import get_sherlock_tutorial_path
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
-    SherlockUpdatePartListValidationAnalysisPropsError,
+    SherlockUpdateICTAnalysisPropsError,
 )
 
 ###############################################################################
@@ -67,7 +69,7 @@ except Exception:
 
 ###############################################################################
 # Import Tutorial Project
-# =======================
+# ========================
 # Import the tutorial project zip archive from the Sherlock tutorial directory.
 
 try:
@@ -81,28 +83,25 @@ except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
-# Update Part List Validation Properties
-# ======================================
-# Configure properties for part list validation analysis.
+# Update ICT Analysis Properties
+# ==============================
+# Configure properties for ICT analysis.
 
 try:
-    # Update properties for part list validation analysis
-    sherlock.analysis.update_part_list_validation_analysis_props(
+    # Update properties for ICT analysis
+    sherlock.analysis.update_ict_analysis_props(
         project="Test",
-        properties_per_cca=[
+        ict_analysis_properties=[
             {
-                "cca_name": "Main Board",
-                "process_use_avl": True,
-                "process_use_wizard": True,
-                "process_check_confirmed_properties": False,
-                "process_check_part_numbers": False,
-                "matching_mode": "Part",
-                "avl_require_internal_part_number": False,
-                "avl_require_approved_description": True,
-                "avl_require_approved_manufacturer": False,
+                "cca_name": "Auto Relay",
+                "ict_application_time": 2,
+                "ict_application_time_units": "sec",
+                "ict_number_of_events": 10,
+                "part_validation_enabled": False,
+                "require_material_assignment_enabled": False,
             }
         ],
     )
-    print("Part list validation analysis properties updated successfully.")
-except SherlockUpdatePartListValidationAnalysisPropsError as e:
-    print(f"Error updating part list validation analysis properties: {e}")
+    print("ICT analysis properties updated successfully.")
+except SherlockUpdateICTAnalysisPropsError as e:
+    print(f"Error updating ICT analysis properties: {e}")

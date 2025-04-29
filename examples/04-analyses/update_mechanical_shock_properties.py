@@ -17,7 +17,7 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_run_mechanical_shock_analysis:
+.. _ref_sherlock_update_mechanical_shock_props:
 
 =============================
 Run Mechanical Shock Analysis
@@ -35,7 +35,10 @@ This script performs the following steps:
 - Configure the properties for mechanical shock analysis.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_run_mechanical_shock_analysis_example.png'
+"""
+sphinx_gallery_thumbnail_path =
+'./images/sherlock_update_mechanical_shock_analysis_props_example.png'
+"""
 
 import os
 
