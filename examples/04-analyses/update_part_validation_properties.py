@@ -17,25 +17,25 @@
 # SOFTWARE.
 
 """
-.. _ref_sherlock_run_harmonic_vibe_analysis:
+.. _ref_sherlock_update_part_list_validation_props:
 
-=============================================
-Update Harmonic Vibration Analysis properties
-=============================================
+=================================
+Run Part List Validation Analysis
+=================================
 
 This example demonstrates how to connect to the Sherlock gRPC service, import a project,
-and configure harmonic vibration analysis properties.
+and configure part list validation analysis properties.
 
 Description
 -----------
-Sherlock allows you to perform harmonic vibration analysis.
+Sherlock allows you to perform part list validation analysis.
 This script performs the following steps:
 - Connect to the Sherlock service.
 - Import a project.
-- Configure the properties for harmonic vibration analysis.
+- Configure the properties for part list validation analysis.
 """
 
-# sphinx_gallery_thumbnail_path = './images/sherlock_run_harmonic_vibe_analysis_example.png'
+# sphinx_gallery_thumbnail_path = './images/sherlock_update_part_list_validation_props_example.png'
 
 import os
 
@@ -44,7 +44,7 @@ from examples.examples_globals import get_sherlock_tutorial_path
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
-    SherlockUpdateHarmonicVibePropsError,
+    SherlockUpdatePartListValidationAnalysisPropsError,
 )
 
 ###############################################################################
@@ -81,27 +81,28 @@ except SherlockImportProjectZipArchiveError as e:
     print(f"Error importing project zip archive: {e}")
 
 ###############################################################################
-# Update Harmonic Vibration Properties
-# ====================================
-# Configure properties for harmonic vibration analysis.
+# Update Part List Validation Properties
+# ======================================
+# Configure properties for part list validation analysis.
 
 try:
-    # Update properties for harmonic vibration analysis
-    sherlock.analysis.update_harmonic_vibe_props(
+    # Update properties for part list validation analysis
+    sherlock.analysis.update_part_list_validation_analysis_props(
         project="Test",
-        harmonic_vibe_properties=[
+        properties_per_cca=[
             {
-                "cca_name": "Auto Relay",
-                "harmonic_vibe_count": 2,
-                "harmonic_vibe_damping": "0.01, 0.05",
-                "part_validation_enabled": False,
-                "require_material_assignment_enabled": False,
-                "analysis_temp": 23.8,
-                "analysis_temp_units": "C",
-                "filter_by_event_frequency": False,
+                "cca_name": "Main Board",
+                "process_use_avl": True,
+                "process_use_wizard": True,
+                "process_check_confirmed_properties": False,
+                "process_check_part_numbers": False,
+                "matching_mode": "Part",
+                "avl_require_internal_part_number": False,
+                "avl_require_approved_description": True,
+                "avl_require_approved_manufacturer": False,
             }
         ],
     )
-    print("Harmonic vibration properties updated successfully.")
-except SherlockUpdateHarmonicVibePropsError as e:
-    print(f"Error updating harmonic vibration properties: {e}")
+    print("Part list validation analysis properties updated successfully.")
+except SherlockUpdatePartListValidationAnalysisPropsError as e:
+    print(f"Error updating part list validation analysis properties: {e}")

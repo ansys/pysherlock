@@ -2,10 +2,11 @@
     :hidden:
     :maxdepth: 3
 
-    gallery_examples/00- setup/index.rst
-    gallery_examples/00-importing-project-files/index.rst
+    gallery_examples/00-setup/index.rst
     gallery_examples/01-project-configuration/index.rst
-    gallery_examples/02-analyses/index.rst
+    gallery_examples/02-importing/index.rst
+    gallery_examples/03-exporting/index.rst
+    gallery_examples/04-analyses/index.rst
     gallery_examples/99-teardown/index.rst
 
 
@@ -21,20 +22,26 @@ Here are examples using Sherlock with the ``ansys-sherlock-core`` library.
    :padding: 1 2 3 3
 
 
-   .. grid-item-card:: Importing Projects and Files
-      :link: sphx_glr_examples_gallery_examples_00-importing-project-files
-      :link-type: ref
-
-      Examples on how to import projects and files using PySherlock.
-
    .. grid-item-card:: Project Configuration
       :link: sphx_glr_examples_gallery_examples_01-project-configuration
       :link-type: ref
 
       Examples on how to configure a project using PySherlock.
 
+   .. grid-item-card:: Importing Projects and Files
+      :link: sphx_glr_examples_gallery_examples_02-importing
+      :link-type: ref
+
+      Examples on how to import projects and files using PySherlock.
+
+   .. grid-item-card:: Exporting Projects and Files
+      :link: sphx_glr_examples_gallery_examples_03-exporting
+      :link-type: ref
+
+      Examples on how to import projects and files using PySherlock.
+
    .. grid-item-card:: Running Analyses
-      :link: sphx_glr_examples_gallery_examples_02-analyses
+      :link: sphx_glr_examples_gallery_examples_04-analyses
       :link-type: ref
 
       Examples on how to run analyses using PySherlock.
