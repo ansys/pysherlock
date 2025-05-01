@@ -764,8 +764,8 @@ class Lifecycle(GrpcStub):
         num_of_cycles: float
             Number of cycles for the thermal event.
         cycle_type: str
-            Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
-            ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
+            Cycle type. Options are ``"COUNT"``, ``"DUTY CYCLE"``, ``"PER YEAR"``,
+            ``"PER DAY"``, ``"PER HOUR"``, ``"PER MIN"``, and ``"PER SEC"``.
         cycle_state: str
             Life cycle state. Options are ``"OPERATING"`` and ``"STORAGE"``.
         description: str, optional
