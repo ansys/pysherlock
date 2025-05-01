@@ -408,32 +408,33 @@ class Model(GrpcStub):
         >>> from ansys.sherlock.core.types.analysis_types import ElementOrder
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.api.sherlock.v0 import SherlockModelService_pb2
-        >>> sherlock = launcher.launch_sherlock()
+        >>> sherlock, ansys_install_path = launcher.launch_and_connect()
         >>> list_of_params_for_layers = []
         >>> list_of_params_for_layers.append(
-                sherlock.model.createExportTraceCopperLayerParams(
-                    "Tutorial Project",
-                    "Main Board",
-                    ".\\outputfile_path.stp",
-                    "copper-01.odb",
-                    False,
-                    False,
-                    False,
-                    False,
-                    "mm",
-                    SherlockModelService_pb2.MeshType.NONE,
-                    False,
-                    SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-                    ElementOrder.LINEAR,
-                    1.0,
-                    "mm".
-                    1,
-                    False,
-                    1.0,
-                    "mm",
-                    1.0
-                )
-            )
+        >>>     sherlock.model.createExportTraceCopperLayerParams(
+        >>>         project_name="Tutorial Project",
+        >>>         cca_name="Main Board",
+        >>>         output_file_path=".\\outputfile_path.stp",
+        >>>         copper_layer="copper-01.odb",
+        >>>         overwrite=True,
+        >>>         display_after=False,
+        >>>         clear_FEA_database=False,
+        >>>         use_FEA_model_ID=False,
+        >>>         coord_units="mm",
+        >>>         mesh_type=SherlockModelService_pb2.MeshType.NONE,
+        >>>         is_modeling_region_enabled=False,
+        >>>         trace_output_type=SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
+        >>>         element_order=ElementOrder.LINEAR,
+        >>>         max_mesh_size=1.0,
+        >>>         max_mesh_size_units="mm",
+        >>>         max_holes_per_trace=2,
+        >>>         is_drill_hole_modeling_enabled=False,
+        >>>         drill_hole_min_diameter=1.0,
+        >>>         drill_hole_min_diameter_units="mm",
+        >>>         drill_hole_max_edge_length=1.0,
+        >>>         drill_hole_max_edge_length_units="mm",
+        >>>     )
+        >>> )
         >>> sherlock.model.exportTraceModel(list_of_params_for_layers)
         """
         try:
