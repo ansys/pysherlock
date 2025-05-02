@@ -375,8 +375,8 @@ class Stackup(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -490,7 +490,7 @@ class Stackup(GrpcStub):
         cca_name : str
             Name of the CCA.
         layer : str
-            Layer ID associated with the conductor layer.
+            Layer ID associated with the laminate layer.
         manufacturer : str, optional
             Manufacturer of the material for the laminate layer.
             The default is ``""``. To update the material, the
@@ -538,8 +538,8 @@ class Stackup(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -668,8 +668,8 @@ class Stackup(GrpcStub):
         list[SherlockStackupService_pb2.ListConductorLayersResponse.CCAConductorLayerProp]
             The conductor layers of all CCAs in the project.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -729,8 +729,8 @@ class Stackup(GrpcStub):
         list[SherlockStackupService_pb2.ListLaminatesResponse.CCALaminateProp]
             The laminate layers of all CCAs in the project.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -794,8 +794,8 @@ class Stackup(GrpcStub):
         int
             The number of layers of the CCA in the project.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -848,8 +848,8 @@ class Stackup(GrpcStub):
         StackupProperties
             Object containing the properties of the stackup.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -909,8 +909,8 @@ class Stackup(GrpcStub):
         float
             The conductor thickness of the CCA in the specified units.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(

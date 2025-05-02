@@ -1,58 +1,67 @@
-
-.. title:: PySherlock documentation
+.. title:: PySherlock
 
 .. figure:: _static/logo/logo.png
    :align: center
    :width: 640px
 
-PySherlock is a Python client library for the Ansys Sherlock product. You are
-viewing version |version|.
+Python API to interact with `Ansys Sherlock`_ (Reliability Engineering software) from **2022R2** and later versions.
 
 .. grid:: 1 1 3 3
 
-  .. grid-item-card:: :fa:`power-off` Getting started
-      :link: getting_started/index
-      :link-type: doc
-      :padding: 2 2 2 2
+    .. grid-item-card:: Getting started :fa:`person-running`
+        :padding: 2 2 2 2
+        :link: ref_getting_started
+        :link-type: ref
 
-      Learn about PySherlock and how to get started.
+        Learn how to install and use PySherlock. Explains architecture
+        and background.
 
-  .. grid-item-card:: :fa:`list-alt` User guide
-      :link: user_guide/index
-      :link-type: doc
+        :bdg-primary-line:`Install` :bdg-primary-line:`Architecture`
+
+    .. grid-item-card:: User guide :fa:`list-alt`
+      :link: ref_user_guide
+      :link-type: ref
       :padding: 2 2 2 2
 
       Understand how to use PySherlock to perform various tasks.
 
-  .. grid-item-card:: :fa:`wrench` API reference
-      :link: api/index
-      :link-type: doc
-      :padding: 2 2 2 2
+      :bdg-primary-line:`Prerequisites` :bdg-primary-line:`Architecture`
 
-      A detailed guide describing the API of PySherlock.
+    .. grid-item-card:: API reference :fa:`book-bookmark`
+        :padding: 2 2 2 2
+        :link: ref_api_ref
+        :link-type: ref
 
-  .. grid-item-card:: :fa:`user-group` Contribute
-     :link: contributing
-     :link-type: doc
-     :padding: 2 2 2 2
+        Understand PySherlock API endpoints and their capabilities.
 
-     Learn how to contribute to the project and become a part of the PySherlock
-     community.
+        :bdg-primary-line:`Classes` :bdg-primary-line:`Methods` :bdg-primary-line:`Error handling`
 
-  .. grid-item-card:: Examples :fa:`scroll`
-     :link: changelog
-     :link-type: doc
-     :padding: 2 2 2 2
+    .. grid-item-card:: Examples :fa:`scroll`
+        :padding: 2 2 2 2
+        :link: ref_examples
+        :link-type: ref
 
-     View the changelog to see what's new in the latest version of PySherlock.
+        Dive into examples created using PySherlock.
 
+        :bdg-primary-line:`Basic` :bdg-primary-line:`Technology-showcase` :bdg-primary-line:`Tips`
+
+    .. grid-item-card:: Contribute :fa:`people-group`
+        :padding: 2 2 2 2
+        :link: ref_contributing
+        :link-type: ref
+
+        Learn how to contribute to the PySherlock codebase
+        or documentation.
+
+        :bdg-primary-line:`Test` :bdg-primary-line:`Documentation` :bdg-primary-line:`Issues`
 
 .. toctree::
-    :maxdepth: 3
-    :hidden:
+   :hidden:
+   :maxdepth: 3
 
-    getting_started/index
-    user_guide/index
-    api/index
-    contributing
-    changelog
+   getting_started/index
+   user_guide/index
+   api/index
+   examples/index
+   contributing
+   changelog

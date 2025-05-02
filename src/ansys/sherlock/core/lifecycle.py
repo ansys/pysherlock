@@ -764,8 +764,8 @@ class Lifecycle(GrpcStub):
         num_of_cycles: float
             Number of cycles for the thermal event.
         cycle_type: str
-            Cycle type. Options are ``"COUNT"``, ``"DUTY_CYCLE"``, ``"PER_YEAR"``,
-            ``"PER_DAY"``, ``"PER_HOUR"``, ``"PER_MIN"``, and ``"PER_SEC"``.
+            Cycle type. Options are ``"COUNT"``, ``"DUTY CYCLE"``, ``"PER YEAR"``,
+            ``"PER DAY"``, ``"PER HOUR"``, ``"PER MIN"``, and ``"PER SEC"``.
         cycle_state: str
             Life cycle state. Options are ``"OPERATING"`` and ``"STORAGE"``.
         description: str, optional
@@ -1228,10 +1228,10 @@ class Lifecycle(GrpcStub):
                     Frequency of the harmonic profile expressed in frequency units.
                 - load: float
                     Load of the harmonic profile expressed in load units.
-                - triaxial_axis: str
-                    Axis that this profile should be assigned to if the harmonic
-                    profile type is ``"Triaxial"``. Options are: ``"x"``, ``"y"``,
-                    and ``"z"``.
+            - triaxial_axis: str
+                Axis that this profile should be assigned to if the harmonic
+                profile type is ``"Triaxial"``. Options are: ``"x"``, ``"y"``,
+                and ``"z"``.
 
         Returns
         -------
@@ -1757,8 +1757,8 @@ class Lifecycle(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -1833,8 +1833,8 @@ class Lifecycle(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -1911,8 +1911,8 @@ class Lifecycle(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -1988,8 +1988,8 @@ class Lifecycle(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(
@@ -2055,8 +2055,8 @@ class Lifecycle(GrpcStub):
         int
             Status code of the response. 0 for success.
 
-        Example
-        -------
+        Examples
+        --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> sherlock = launch_sherlock()
         >>> sherlock.project.import_odb_archive(

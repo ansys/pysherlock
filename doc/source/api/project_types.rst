@@ -12,14 +12,19 @@ Classes used for the Project API.
 
      BoardBounds
      CsvExcelFile
+     CsvExcelOutlineFile
+     GerberOutlineFile
      IcepakFile
      ImageBounds
      ImageFile
      LegendBounds
+     OutlineFile
 
 Constants
 ---------
 .. autoclass:: LegendOrientation
+     :members:
+.. autoclass:: OutlineFileType
      :members:
 .. autoclass:: StrainMapsFileType
      :members:

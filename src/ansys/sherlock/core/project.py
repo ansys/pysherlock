@@ -7,9 +7,11 @@ from typing import Optional
 import grpc
 
 try:
+    import SherlockCommonService_pb2
     import SherlockProjectService_pb2
     import SherlockProjectService_pb2_grpc
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2
     from ansys.api.sherlock.v0 import SherlockProjectService_pb2_grpc
 
@@ -35,6 +37,7 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.project_types import (
+    AddOutlineFileRequest,
     BoardBounds,
     CsvExcelFile,
     IcepakFile,
@@ -2129,3 +2132,55 @@ class Project(GrpcStub):
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.importGDSIIFile(request._convert_to_grpc())
+
+    @require_version(252)
+    def add_outline_file(
+        self, request: AddOutlineFileRequest
+    ) -> list[SherlockCommonService_pb2.ReturnCode]:
+        """Add outline files to a Sherlock project.
+
+        Available Since: 2025R2
+
+        Parameters
+        ----------
+        request : AddOutlineFileRequest
+            Contains the information needed to add an outline file to a Sherlock project.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.ReturnCode]
+            Return codes for each request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.project_types import AddOutlineFileRequest
+        >>> from ansys.sherlock.core.types.project_types import CsvExcelOutlineFile
+        >>> from ansys.sherlock.core.types.project_types import OutlineFile
+        >>> from ansys.sherlock.core.types.project_types import OutlineFileType
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> responses = sherlock.project.add_outline_file(
+        >>>     AddOutlineFileRequest(
+        >>>         project="TestProject",
+        >>>         outline_files = [
+        >>>             OutlineFile(
+        >>>                 cca_names=["TestCCA"],
+        >>>                 file_name="path/to/outline.csv",
+        >>>                 file_type=OutlineFileType.CSV_EXCEL,
+        >>>                 outline_file_data=CsvExcelOutlineFile(
+        >>>                     header_row_count=0,
+        >>>                     location_units="mm",
+        >>>                     x_location_column="X",
+        >>>                     y_location_column="Y",
+        >>>                 )
+        >>>             )
+        >>>         ]
+        >>>     )
+        >>> )
+        """
+        add_outline_files_request = request._convert_to_grpc()
+
+        responses = []
+        for grpc_return_code in self.stub.addOutlineFiles(add_outline_files_request):
+            responses.append(grpc_return_code)
+        return responses
