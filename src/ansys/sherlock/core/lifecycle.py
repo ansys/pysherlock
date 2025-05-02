@@ -2097,9 +2097,13 @@ class Lifecycle(GrpcStub):
             response = self.stub.loadShockProfilePulses(request)
             return_code = response.returnCode
             if return_code.value == -1:
-                raise SherlockLoadShockProfilePulsesError(return_code.message)
+                if return_code.message == "":
+                    raise SherlockLoadShockProfilePulsesError(error_array=response.errors)
+
+                raise SherlockLoadShockProfilePulsesError(message=return_code.message)
 
             return return_code.value
         except SherlockLoadShockProfilePulsesError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
