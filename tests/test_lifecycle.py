@@ -1,4 +1,5 @@
 # © 2023 ANSYS, Inc. All rights reserved
+from typing import cast
 import uuid
 
 import grpc
@@ -2045,6 +2046,8 @@ def helper_test_load_shock_profile_pulses(lifecycle: Lifecycle):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockLoadShockProfilePulsesError
+            load_error = cast(SherlockLoadShockProfilePulsesError, e)
+            assert len(load_error.error_array) == 1
 
 
 if __name__ == "__main__":

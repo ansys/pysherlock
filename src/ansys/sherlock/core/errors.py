@@ -770,18 +770,6 @@ class SherlockInvalidConductorPercentError(Exception):
         return self.message
 
 
-class SherlockInvalidThicknessArgumentError(Exception):
-    """Contains the error raised when the thickness is invalid."""
-
-    def __init__(self, message: str):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return self.message
-
-
 class SherlockInvalidGlassConstructionError(Exception):
     """Contains the error raised when the glass construction is invalid."""
 

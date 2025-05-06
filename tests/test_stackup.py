@@ -411,16 +411,17 @@ def helper_test_update_laminate_layer(stackup: Stackup):
             0.015,
             "in",
             "106",
-            [("106", 0.015, "in")],
+            [("106", 0.015, "in")],  # 3 elements instead of 4
             "E-GLASS",
             "COPPER",
             "0.0",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdateLaminateLayerError as e:
+        error = str(e)
         assert (
-            str(e) == "Update laminate layer error: "
-            "Invalid layer 0: Number of elements is wrong."
+            error == "Update laminate layer error: "
+            "Invalid glass construction layer 0: Number of elements in parameter is wrong."
         )
 
     if stackup._is_connection_up():

@@ -22,7 +22,6 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidGlassConstructionError,
     SherlockInvalidLayerIDError,
     SherlockInvalidMaterialError,
-    SherlockInvalidThicknessArgumentError,
     SherlockListConductorLayersError,
     SherlockListLaminateLayersError,
     SherlockNoGrpcConnectionException,
@@ -153,14 +152,13 @@ class Stackup(GrpcStub):
             )
 
         i = 0
-        try:
-            for i, layer in enumerate(glass_construction):
-                if len(layer) != 4:
-                    raise SherlockInvalidGlassConstructionError(
-                        message=f"Invalid layer {i}: Number of elements is wrong."
-                    )
-        except SherlockInvalidThicknessArgumentError as e:
-            raise SherlockInvalidGlassConstructionError(message=f"Invalid layer {i}: {str(e)}")
+        for i, layer in enumerate(glass_construction):
+            if len(layer) != 4:
+                error = (
+                    f"Invalid glass construction layer {i}: "
+                    "Number of elements in parameter is wrong."
+                )
+                raise SherlockInvalidGlassConstructionError(message=error)
 
     @staticmethod
     def _add_glass_construction_layers(
@@ -289,7 +287,7 @@ class Stackup(GrpcStub):
         except SherlockGenStackupError as e:
             LOG.error(str(e))
             raise e
-        except (SherlockInvalidMaterialError, SherlockInvalidThicknessArgumentError) as e:
+        except SherlockInvalidMaterialError as e:
             LOG.error(f"Generate stackup error: {str(e)}")
             raise SherlockGenStackupError(message=str(e))
 
@@ -430,7 +428,6 @@ class Stackup(GrpcStub):
         except (
             SherlockInvalidLayerIDError,
             SherlockInvalidConductorPercentError,
-            SherlockInvalidThicknessArgumentError,
         ) as e:
             LOG.error(f"Update conductor layer error: {str(e)}")
             raise SherlockUpdateConductorLayerError(message=str(e))
@@ -607,12 +604,11 @@ class Stackup(GrpcStub):
                     raise SherlockUpdateLaminateLayerError(message="Conductor material is invalid.")
         except SherlockUpdateLaminateLayerError as e:
             LOG.error(str(e))
-            raise e
+            raise
         except (
             SherlockInvalidLayerIDError,
             SherlockInvalidMaterialError,
             SherlockInvalidConductorPercentError,
-            SherlockInvalidThicknessArgumentError,
             SherlockInvalidGlassConstructionError,
         ) as e:
             LOG.error(f"Update laminate layer error: %s", {str(e)})
