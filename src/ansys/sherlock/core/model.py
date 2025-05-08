@@ -213,7 +213,7 @@ class Model(GrpcStub):
     @require_version()
     def generate_trace_model(
         self,
-        project_name,
+        project_name: str,
         cca_name: str = "",
         copper_layer_name: str = "",
         max_arc_segment: float = 0.0,
@@ -457,10 +457,10 @@ class Model(GrpcStub):
     @require_version(242)
     def createExportTraceCopperLayerParams(
         self,
-        project_name,
-        cca_name,
-        output_file_path,
-        copper_layer,
+        project_name: str,
+        cca_name: str,
+        output_file_path: str,
+        copper_layer: str,
         overwrite: bool = False,
         display_after: bool = False,
         clear_FEA_database: bool = False,

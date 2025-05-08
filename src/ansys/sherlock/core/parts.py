@@ -240,6 +240,9 @@ class Parts(GrpcStub):
 
         try:
             if return_code.value == -1:
+                if return_code.message == "":
+                    raise SherlockUpdatePartsListError(error_array=response.errors)
+
                 raise SherlockUpdatePartsListError(message=return_code.message)
             else:
                 LOG.info(return_code.message)
