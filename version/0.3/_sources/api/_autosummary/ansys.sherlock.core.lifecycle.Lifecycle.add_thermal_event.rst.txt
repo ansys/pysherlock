@@ -1,0 +1,6 @@
+﻿add\_thermal\_event
+===================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.add_thermal_event

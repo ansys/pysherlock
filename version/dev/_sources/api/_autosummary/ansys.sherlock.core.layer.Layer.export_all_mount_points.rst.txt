@@ -1,0 +1,10 @@
+.. vale off
+
+export\_all\_mount\_points
+==========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.export_all_mount_points
+
+.. vale on
