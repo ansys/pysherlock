@@ -1,0 +1,6 @@
+﻿generate\_project\_report
+=========================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.generate_project_report
