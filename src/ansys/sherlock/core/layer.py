@@ -2069,33 +2069,28 @@ class Layer(GrpcStub):
 
         Parameters
         ----------
-        project: str
-            Name of the Sherlock project.
-        cca_name: str
-            Name of the CCA.
-        test_point_ids: Optional[str]
-            Optional parameter: A comma-separated list of test point ids representing one or more
-            test points. If this string is not included, then the entire list of test points for a
-            given CCA will have their properties returned.
+        request: GetTestPointPropertiesRequest
+             Contains all the information needed to return the properties for one or more test
+             points.
 
         Returns
         -------
-         list[SherlockCommonService_pb2.GetTestPointPropertiesResponse]
+        list[SherlockCommonService_pb2.GetTestPointPropertiesResponse]
             Each successful response in the list represents the properties for a specific test
             point id and its ReturnCode; if the response was unsuccessful then just a failure
             ReturnCode is returned.
 
         Examples
         --------
-        from ansys.sherlock.core import launcher
-        sherlock = launcher.launch_sherlock()
-        from ansys.sherlock.core.types.layer_types import GetTestPropertiesRequest
-        request = layer_types.GetTestPointPropertiesRequest(
-            project = "Test Point Test Project"
-            cca_name = "Main Board"
-            test_point_ids = "TP1,TP2"
-        )
-        responses = layer.get_test_point_props(request)
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetTestPointPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetTestPointPropertiesRequest(
+        >>>    project = "Test Point Test Project"
+        >>>    cca_name = "Main Board"
+        >>>    test_point_ids = "TP1,TP2"
+        >>> )
+        >>> responses = layer.get_test_point_props(request)
         """
         get_test_point_props_request = request._convert_to_grpc()
         responses = []
