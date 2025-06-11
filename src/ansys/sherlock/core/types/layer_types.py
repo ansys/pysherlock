@@ -2,13 +2,13 @@
 """Module containing types for the Layer Service."""
 
 
-from typing import Union
+from typing import Optional, Union
 
 from ansys.api.sherlock.v0 import SherlockLayerService_pb2
 from pydantic import BaseModel, ValidationInfo, field_validator, model_validator
 from typing_extensions import Self
 
-from ansys.sherlock.core.types.common_types import basic_str_validator
+from ansys.sherlock.core.types.common_types import basic_str_validator, optional_str_validator
 
 
 class PolygonalShape(BaseModel):
@@ -331,4 +331,38 @@ class DeletePottingRegionRequest(BaseModel):
         request.project = self.project
         for delete_data in self.potting_region_delete_data:
             request.pottingRegionDeleteData.append(delete_data._convert_to_grpc())
+        return request
+
+
+class GetTestPointPropertiesRequest(BaseModel):
+    """Return the properties for each test point given a comma-separated list of test point ids."""
+
+    project: str
+    """Name of the project."""
+    cca_name: str
+    """Name of the CCA containing the test point properties to return."""
+    test_point_ids: Optional[str] = None
+    """Optional Param: Comma-separated list of test point ids representing one or more test points.
+        If this string is not included, then the entire list of test points for a given CCA will
+        have their properties returned.
+    """
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("test_point_ids")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow empty strings for test_point_ids."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetTestPointPropertiesRequest:
+        request = SherlockLayerService_pb2.GetTestPointPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.test_point_ids is not None:
+            request.testPointIDs = self.test_point_ids
         return request

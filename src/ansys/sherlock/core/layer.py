@@ -7,6 +7,7 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
     RectangularShape,
@@ -2057,3 +2058,49 @@ class Layer(GrpcStub):
         except SherlockExportLayerImageError as e:
             LOG.error(str(e))
             raise e
+
+    @require_version(261)
+    def get_test_point_props(
+        self, request: GetTestPointPropertiesRequest
+    ) -> list[SherlockLayerService_pb2.GetTestPointPropertiesResponse]:
+        """Return the properties for each test point given a comma-separated list of test point ids.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA.
+        test_point_ids: Optional[str]
+            Optional parameter: A comma-separated list of test point ids representing one or more
+            test points. If this string is not included, then the entire list of test points for a
+            given CCA will have their properties returned.
+
+        Returns
+        -------
+         list[SherlockCommonService_pb2.GetTestPointPropertiesResponse]
+            Each successful response in the list represents the properties for a specific test
+            point id and its ReturnCode; if the response was unsuccessful then just a failure
+            ReturnCode is returned.
+
+        Examples
+        --------
+        from ansys.sherlock.core import launcher
+        sherlock = launcher.launch_sherlock()
+        from ansys.sherlock.core.types.layer_types import GetTestPropertiesRequest
+        request = layer_types.GetTestPointPropertiesRequest(
+            project = "Test Point Test Project"
+            cca_name = "Main Board"
+            test_point_ids = "TP1,TP2"
+        )
+        responses = layer.get_test_point_props(request)
+        """
+        get_test_point_props_request = request._convert_to_grpc()
+        responses = []
+        for get_test_point_props_response in self.stub.getTestPointProperties(
+            get_test_point_props_request
+        ):
+            responses.append(get_test_point_props_response)
+        return responses
