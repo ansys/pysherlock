@@ -15,9 +15,9 @@ class PolygonalShape(BaseModel):
     """Contains the properties for a polygonal shape."""
 
     points: list[tuple[float, float]]
-    """points (length two tuples of the form (x, y)) : list[tuple[float, float]]"""
+    """Points (length two tuples of the form (x, y)) : list[tuple[float, float]]"""
     rotation: float
-    """rotation (in degrees) : float"""
+    """Rotation (in degrees) : float"""
 
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.PolygonalShape:
         grpc_polygonal_shape = SherlockLayerService_pb2.PolygonalShape()
@@ -33,15 +33,15 @@ class RectangularShape(BaseModel):
     """Contains the properties for a rectangular shape."""
 
     length: float
-    """length : float"""
+    """Length : float"""
     width: float
-    """width : float"""
+    """Width : float"""
     center_x: float
-    """x coordinate of center : float"""
+    """X coordinate of center : float"""
     center_y: float
-    """y coordinate of center : float"""
+    """Y coordinate of center : float"""
     rotation: float
-    """rotation (in degrees) : float"""
+    """Rotation (in degrees) : float"""
 
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.RectangularShape:
         grpc_rectangular_shape = SherlockLayerService_pb2.RectangularShape()
@@ -57,17 +57,17 @@ class SlotShape(BaseModel):
     """Contains the properties for a slot shape."""
 
     length: float
-    """length : float"""
+    """Length : float"""
     width: float
-    """width : float"""
+    """Width : float"""
     node_count: int
-    """node count : int"""
+    """Node count : int"""
     center_x: float
-    """x coordinate of center : float"""
+    """X coordinate of center : float"""
     center_y: float
-    """y coordinate of center : float"""
+    """Y coordinate of center : float"""
     rotation: float
-    """rotation (in degrees) : float"""
+    """Rotation (in degrees) : float"""
 
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.SlotShape:
         grpc_slot_shape = SherlockLayerService_pb2.SlotShape()
@@ -86,15 +86,15 @@ class CircularShape(BaseModel):
     """Contains the properties for a circular shape."""
 
     diameter: float
-    """diameter : float"""
+    """Diameter : float"""
     node_count: int
-    """node count : int"""
+    """Node count : int"""
     center_x: float
-    """x coordinate of center : float"""
+    """X coordinate of center : float"""
     center_y: float
-    """y coordinate of center : float"""
+    """Y coordinate of center : float"""
     rotation: float
-    """rotation (in degrees) : float"""
+    """Rotation (in degrees) : float"""
 
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.CircularShape:
         grpc_circular_shape = SherlockLayerService_pb2.CircularShape()
@@ -171,7 +171,7 @@ class PottingRegionUpdateData(BaseModel):
     """Contains the properties of a potting region update request."""
 
     potting_region_id_to_update: str
-    """Id of the potting region to update."""
+    """ID of the potting region to update."""
     potting_region: PottingRegion
     """Potting region data used to update the potting region."""
 
@@ -224,9 +224,9 @@ class PottingRegionCopyData(BaseModel):
     cca_name: str
     """Name of the cca."""
     potting_id: str
-    """Id to assign to the new potting region."""
+    """ID to assign to the new potting region."""
     copy_potting_id: str
-    """Id of the potting region to copy."""
+    """ID of the potting region to copy."""
     center_x: float
     """X coordinate for the center of the new potting region."""
     center_y: float

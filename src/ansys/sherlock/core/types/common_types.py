@@ -119,6 +119,6 @@ class Measurement:
     def __init__(self, value: float, unit: str):
         """Initialize the measurement properties."""
         self.value = value
-        """float: measurement value"""
+        """float: Measurement value"""
         self.unit = unit
-        """str: measurement units"""
+        """str: Measurement units"""
