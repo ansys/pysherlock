@@ -1541,6 +1541,17 @@ def helper_test_get_test_point_props(layer):
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
 
+    # test_point_ids is the empty string
+    try:
+        GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid test_point_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
     if layer._is_connection_up():
 
         # Bad project name
@@ -1551,15 +1562,11 @@ def helper_test_get_test_point_props(layer):
         )
 
         badProjectResponses = layer.get_test_point_props(badProjectRequest)
-        count = 0
-        for badProjectResponse in badProjectResponses:
-            count += 1
-            assert badProjectResponse.returnCode.value == -1
-            assert (
-                badProjectResponse.returnCode.message == "Cannot find project: Invalid Project Name"
-            )
-
-        assert count == 1
+        assert len(badProjectResponses) == 1
+        assert badProjectResponses[0].returnCode.value == -1
+        assert (
+            badProjectResponses[0].returnCode.message == "Cannot find project: Invalid Project Name"
+        )
 
         # Bad CCA name
         badCCARequest = GetTestPointPropertiesRequest(
@@ -1569,13 +1576,9 @@ def helper_test_get_test_point_props(layer):
         )
 
         badCCAResponses = layer.get_test_point_props(badCCARequest)
-        count = 0
-        for badCCAResponse in badCCAResponses:
-            count += 1
-            assert badCCAResponse.returnCode.value == -1
-            assert badCCAResponse.returnCode.message == "Cannot find CCA: Invalid CCA Name"
-
-        assert count == 1
+        assert len(badCCAResponses) == 1
+        assert badCCAResponses[0].returnCode.value == -1
+        assert badCCAResponses[0].returnCode.message == "Cannot find CCA: Invalid CCA Name"
 
         # Test request with valid test point ids.
         request = GetTestPointPropertiesRequest(
@@ -1585,32 +1588,26 @@ def helper_test_get_test_point_props(layer):
         )
 
         responses = layer.get_test_point_props(request)
+        assert len(responses) == 2
+        assert responses[0].testPointProperties.ID == "TP1"
+        assert responses[0].testPointProperties.side == "TOP"
+        assert responses[0].testPointProperties.units == "mm"
+        assert responses[0].testPointProperties.centerX == 53.09614010443865
+        assert responses[0].testPointProperties.centerY == 10.578305680323764
+        assert responses[0].testPointProperties.radius == 1
+        assert responses[0].testPointProperties.loadType == 0
+        assert responses[0].testPointProperties.loadValue == 0.36
+        assert responses[0].testPointProperties.loadUnits == "N"
 
-        count = 0
-        for response in responses:
-            count += 1
-            if count == 1:
-                assert response.testPointProperties.ID == "TP1"
-                assert response.testPointProperties.side == "TOP"
-                assert response.testPointProperties.units == "mm"
-                assert response.testPointProperties.centerX == 53.09614010443865
-                assert response.testPointProperties.centerY == 10.578305680323764
-                assert response.testPointProperties.radius == 1
-                assert response.testPointProperties.loadType == 0
-                assert response.testPointProperties.loadValue == 0.36
-                assert response.testPointProperties.loadUnits == "N"
-            if count == 2:
-                assert response.testPointProperties.ID == "TP2"
-                assert response.testPointProperties.side == "TOP"
-                assert response.testPointProperties.units == "mm"
-                assert response.testPointProperties.centerX == 71.21625140992168
-                assert response.testPointProperties.centerY == 10.718771659436035
-                assert response.testPointProperties.radius == 1
-                assert response.testPointProperties.loadType == 0
-                assert response.testPointProperties.loadValue == 0.36
-                assert response.testPointProperties.loadUnits == "N"
-
-        assert count == 2
+        assert responses[1].testPointProperties.ID == "TP2"
+        assert responses[1].testPointProperties.side == "TOP"
+        assert responses[1].testPointProperties.units == "mm"
+        assert responses[1].testPointProperties.centerX == 71.21625140992168
+        assert responses[1].testPointProperties.centerY == 10.718771659436035
+        assert responses[1].testPointProperties.radius == 1
+        assert responses[1].testPointProperties.loadType == 0
+        assert responses[1].testPointProperties.loadValue == 0.36
+        assert responses[1].testPointProperties.loadUnits == "N"
 
         # Test a mix of valid test points and invalid ones.
         mixedRequest = GetTestPointPropertiesRequest(
@@ -1619,38 +1616,33 @@ def helper_test_get_test_point_props(layer):
             test_point_ids=good_bad_test_point_ids,
         )
 
-        count = 0
         mixedResponses = layer.get_test_point_props(mixedRequest)
-
-        for mixedResponse in mixedResponses:
-            count += 1
-            if count == 1:
-                assert mixedResponse.returnCode.value == -1
-            elif count == 2:
-                assert mixedResponse.returnCode.value == -1
-            elif count == 3:
-                assert mixedResponse.testPointProperties.ID == "TP1"
-                assert mixedResponse.testPointProperties.side == "TOP"
-                assert mixedResponse.testPointProperties.units == "mm"
-                assert mixedResponse.testPointProperties.centerX == 53.09614010443865
-                assert mixedResponse.testPointProperties.centerY == 10.578305680323764
-                assert mixedResponse.testPointProperties.radius == 1
-                assert mixedResponse.testPointProperties.loadType == 0
-                assert mixedResponse.testPointProperties.loadValue == 0.36
-                assert mixedResponse.testPointProperties.loadUnits == "N"
-            elif count == 4:
-                assert mixedResponse.testPointProperties.ID == "TP2"
-                assert mixedResponse.testPointProperties.side == "TOP"
-                assert mixedResponse.testPointProperties.units == "mm"
-                assert mixedResponse.testPointProperties.centerX == 71.21625140992168
-                assert mixedResponse.testPointProperties.centerY == 10.718771659436035
-                assert mixedResponse.testPointProperties.radius == 1
-                assert mixedResponse.testPointProperties.loadType == 0
-                assert mixedResponse.testPointProperties.loadValue == 0.36
-                assert mixedResponse.testPointProperties.loadUnits == "N"
-
         # 2 good test points, 2 bad test points
-        assert count == 4
+        assert len(mixedResponses) == 4
+
+        assert mixedResponses[0].returnCode.value == -1
+
+        assert mixedResponses[1].returnCode.value == -1
+
+        assert mixedResponses[2].testPointProperties.ID == "TP1"
+        assert mixedResponses[2].testPointProperties.side == "TOP"
+        assert mixedResponses[2].testPointProperties.units == "mm"
+        assert mixedResponses[2].testPointProperties.centerX == 53.09614010443865
+        assert mixedResponses[2].testPointProperties.centerY == 10.578305680323764
+        assert mixedResponses[2].testPointProperties.radius == 1
+        assert mixedResponses[2].testPointProperties.loadType == 0
+        assert mixedResponses[2].testPointProperties.loadValue == 0.36
+        assert mixedResponses[2].testPointProperties.loadUnits == "N"
+
+        assert mixedResponses[3].testPointProperties.ID == "TP2"
+        assert mixedResponses[3].testPointProperties.side == "TOP"
+        assert mixedResponses[3].testPointProperties.units == "mm"
+        assert mixedResponses[3].testPointProperties.centerX == 71.21625140992168
+        assert mixedResponses[3].testPointProperties.centerY == 10.718771659436035
+        assert mixedResponses[3].testPointProperties.radius == 1
+        assert mixedResponses[3].testPointProperties.loadType == 0
+        assert mixedResponses[3].testPointProperties.loadValue == 0.36
+        assert mixedResponses[3].testPointProperties.loadUnits == "N"
 
         # Test that no test_point_ids param will return all of the test points in the project.
         allPointsRequest = GetTestPointPropertiesRequest(
@@ -1658,53 +1650,47 @@ def helper_test_get_test_point_props(layer):
             cca_name=cca_name,
         )
 
-        count = 0
         allPointsResponses = layer.get_test_point_props(allPointsRequest)
+        assert len(allPointsResponses) == 4
 
-        for allPointsResponse in allPointsResponses:
-            count += 1
-            if count == 1:
-                assert allPointsResponse.testPointProperties.ID == "TP1"
-                assert allPointsResponse.testPointProperties.side == "TOP"
-                assert allPointsResponse.testPointProperties.units == "mm"
-                assert allPointsResponse.testPointProperties.centerX == 53.09614010443865
-                assert allPointsResponse.testPointProperties.centerY == 10.578305680323764
-                assert allPointsResponse.testPointProperties.radius == 1
-                assert allPointsResponse.testPointProperties.loadType == 0
-                assert allPointsResponse.testPointProperties.loadValue == 0.36
-                assert allPointsResponse.testPointProperties.loadUnits == "N"
-            elif count == 2:
-                assert allPointsResponse.testPointProperties.side == "TOP"
-                assert allPointsResponse.testPointProperties.units == "mm"
-                assert allPointsResponse.testPointProperties.centerX == 71.21625140992168
-                assert allPointsResponse.testPointProperties.centerY == 10.718771659436035
-                assert allPointsResponse.testPointProperties.radius == 1
-                assert allPointsResponse.testPointProperties.loadType == 0
-                assert allPointsResponse.testPointProperties.loadValue == 0.36
-                assert allPointsResponse.testPointProperties.loadUnits == "N"
-            elif count == 3:
-                assert allPointsResponse.testPointProperties.ID == "TP3"
-                assert allPointsResponse.testPointProperties.side == "TOP"
-                assert allPointsResponse.testPointProperties.units == "mm"
-                assert allPointsResponse.testPointProperties.centerX == 71.21625140992168
-                assert allPointsResponse.testPointProperties.centerY == -10.632057165629243
-                assert allPointsResponse.testPointProperties.radius == 1
-                assert allPointsResponse.testPointProperties.loadType == 0
-                assert allPointsResponse.testPointProperties.loadValue == 0.36
-                assert allPointsResponse.testPointProperties.loadUnits == "N"
-            elif count == 4:
-                assert allPointsResponse.testPointProperties.ID == "TP4"
-                assert allPointsResponse.testPointProperties.side == "TOP"
-                assert allPointsResponse.testPointProperties.units == "mm"
-                assert allPointsResponse.testPointProperties.centerX == 53.09614010443865
-                assert allPointsResponse.testPointProperties.centerY == -10.632057165629243
-                assert allPointsResponse.testPointProperties.radius == 1
-                assert allPointsResponse.testPointProperties.loadType == 0
-                assert allPointsResponse.testPointProperties.loadValue == 0.36
-                assert allPointsResponse.testPointProperties.loadUnits == "N"
+        assert allPointsResponses[0].testPointProperties.ID == "TP1"
+        assert allPointsResponses[0].testPointProperties.side == "TOP"
+        assert allPointsResponses[0].testPointProperties.units == "mm"
+        assert allPointsResponses[0].testPointProperties.centerX == 53.09614010443865
+        assert allPointsResponses[0].testPointProperties.centerY == 10.578305680323764
+        assert allPointsResponses[0].testPointProperties.radius == 1
+        assert allPointsResponses[0].testPointProperties.loadType == 0
+        assert allPointsResponses[0].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[0].testPointProperties.loadUnits == "N"
 
-        # 4 total test points in CCA
-        assert count == 4
+        assert allPointsResponses[1].testPointProperties.side == "TOP"
+        assert allPointsResponses[1].testPointProperties.units == "mm"
+        assert allPointsResponses[1].testPointProperties.centerX == 71.21625140992168
+        assert allPointsResponses[1].testPointProperties.centerY == 10.718771659436035
+        assert allPointsResponses[1].testPointProperties.radius == 1
+        assert allPointsResponses[1].testPointProperties.loadType == 0
+        assert allPointsResponses[1].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[1].testPointProperties.loadUnits == "N"
+
+        assert allPointsResponses[2].testPointProperties.ID == "TP3"
+        assert allPointsResponses[2].testPointProperties.side == "TOP"
+        assert allPointsResponses[2].testPointProperties.units == "mm"
+        assert allPointsResponses[2].testPointProperties.centerX == 71.21625140992168
+        assert allPointsResponses[2].testPointProperties.centerY == -10.632057165629243
+        assert allPointsResponses[2].testPointProperties.radius == 1
+        assert allPointsResponses[2].testPointProperties.loadType == 0
+        assert allPointsResponses[2].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[2].testPointProperties.loadUnits == "N"
+
+        assert allPointsResponses[3].testPointProperties.ID == "TP4"
+        assert allPointsResponses[3].testPointProperties.side == "TOP"
+        assert allPointsResponses[3].testPointProperties.units == "mm"
+        assert allPointsResponses[3].testPointProperties.centerX == 53.09614010443865
+        assert allPointsResponses[3].testPointProperties.centerY == -10.632057165629243
+        assert allPointsResponses[3].testPointProperties.radius == 1
+        assert allPointsResponses[3].testPointProperties.loadType == 0
+        assert allPointsResponses[3].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[3].testPointProperties.loadUnits == "N"
 
 
 def helper_test_export_layer_image(layer):

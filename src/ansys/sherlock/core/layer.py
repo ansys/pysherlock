@@ -2063,7 +2063,7 @@ class Layer(GrpcStub):
     def get_test_point_props(
         self, request: GetTestPointPropertiesRequest
     ) -> list[SherlockLayerService_pb2.GetTestPointPropertiesResponse]:
-        """Return the properties for each test point given a comma-separated list of test point ids.
+        """Return the properties for each test point given a comma-separated list of test point IDs.
 
         Available Since: 2026R1
 
@@ -2076,9 +2076,7 @@ class Layer(GrpcStub):
         Returns
         -------
         list[SherlockCommonService_pb2.GetTestPointPropertiesResponse]
-            Each successful response in the list represents the properties for a specific test
-            point id and its ReturnCode; if the response was unsuccessful then just a failure
-            ReturnCode is returned.
+            Properties for each test point that correspond to the reference designators.
 
         Examples
         --------

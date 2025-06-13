@@ -343,11 +343,11 @@ class GetTestPointPropertiesRequest(BaseModel):
     """Name of the CCA containing the test point properties to return."""
     test_point_ids: Optional[str] = None
     """Optional Param: Comma-separated list of test point ids representing one or more test points.
-        If this string is not included, then the entire list of test points for a given CCA will
+        If this parameter is not included, then the entire list of test points for a given CCA will
         have their properties returned.
     """
 
-    @field_validator("project", "cca_name")
+    @field_validator("project", "cca_name", "test_point_ids")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -356,7 +356,7 @@ class GetTestPointPropertiesRequest(BaseModel):
     @field_validator("test_point_ids")
     @classmethod
     def optional_str_validation(cls, value: Optional[str], info):
-        """Allow empty strings for test_point_ids."""
+        """Allow the test_point_ids to not be set, i.e., None."""
         return optional_str_validator(value, info.field_name)
 
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetTestPointPropertiesRequest:
