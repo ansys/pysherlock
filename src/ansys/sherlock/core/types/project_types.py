@@ -1,4 +1,4 @@
-# Copyright (C) 2024-2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Project Service."""
 
