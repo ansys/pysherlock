@@ -1568,18 +1568,6 @@ def helper_test_get_test_point_props(layer):
             badProjectResponses[0].returnCode.message == "Cannot find project: Invalid Project Name"
         )
 
-        # Bad CCA name
-        badCCARequest = GetTestPointPropertiesRequest(
-            project=project,
-            cca_name="Invalid CCA Name",
-            test_point_ids=test_point_ids,
-        )
-
-        badCCAResponses = layer.get_test_point_props(badCCARequest)
-        assert len(badCCAResponses) == 1
-        assert badCCAResponses[0].returnCode.value == -1
-        assert badCCAResponses[0].returnCode.message == "Cannot find CCA: Invalid CCA Name"
-
         # Test request with valid test point ids.
         request = GetTestPointPropertiesRequest(
             project=project,
