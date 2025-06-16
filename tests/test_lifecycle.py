@@ -1,4 +1,5 @@
-# © 2023 ANSYS, Inc. All rights reserved
+# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+
 from typing import cast
 import uuid
 
