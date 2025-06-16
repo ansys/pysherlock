@@ -34,15 +34,15 @@ dependencies = [
 tests = [
     "grpcio>=1.17, <1.68.0",
     "protobuf==5.28.0",
-    "pytest==8.3.5",
-    "pytest-cov==6.1.1",
+    "pytest==8.4.0",
+    "pytest-cov==6.2.1",
 ]
 doc = [
-    "ansys-sphinx-theme==1.5.0",
+    "ansys-sphinx-theme==1.5.2",
     "jupyter_sphinx==0.5.3",
     "matplotlib==3.10.3",
     "numpydoc==1.8.0",
-    "pandas==2.2.3",
+    "pandas==2.3.0",
     "Sphinx==8.1.3", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
     "sphinxemoji==0.3.1",
     "sphinx-autodoc-typehints==3.0.1",

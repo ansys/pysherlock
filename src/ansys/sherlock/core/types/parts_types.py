@@ -77,19 +77,19 @@ class PartLocation:
     def __init__(self, location):
         """Initialize members from the location."""
         self.x = location.x
-        """x coordinate"""
+        """X coordinate"""
         self.y = location.y
-        """y coordinate"""
+        """Y coordinate"""
         self.rotation = location.rotation
-        """rotation (in degrees)"""
+        """Rotation (in degrees)"""
         self.location_units = location.locationUnits
-        """units for location coordinates"""
+        """Units for location coordinates"""
         self.board_side = location.boardSide
-        """board side - ``"TOP"`` or ``"BOTTOM"`` """
+        """Board side - ``"TOP"`` or ``"BOTTOM"`` """
         self.mirrored = location.mirrored
-        """mirrored - ``True`` or ``False`` """
+        """Mirrored - ``True`` or ``False`` """
         self.ref_des = location.refDes
-        """reference designator"""
+        """Reference designator"""
 
 
 class GetPartsListPropertiesRequest(BaseModel):
