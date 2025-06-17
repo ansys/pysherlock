@@ -436,23 +436,53 @@ class ImageCopperFileType(Enum):
     FOREGROUND = project_service.CopperFile.ImageType.Foreground
     "Foreground"
 
+
 class CopperGerberFile(BaseModel):
+    """Properties specific to a Gerber copper file."""
+
     parse_decimal_first_enabled: Optional[bool] = False
+    """Whether to parse decimal values before other formats in the Gerber file."""
+
 
 class CopperImageFile(BaseModel):
+    """Properties specific to an image-based copper file."""
+
     image_type: Optional[ImageCopperFileType] = None
+    """Indicates whether the image represents a background or foreground layer."""
+
     image_color: Optional[str] = ""
+    """Optional color description or label for the image (e.g., 'black', 'white')."""
+
 
 class CopperFile(BaseModel):
+    """Metadata and options for a copper file to be imported into a project."""
+
     file_name: str
+    """The name of the file being imported."""
+
     file_type: CopperFileType
+    """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
+
     file_comment: Optional[str] = ""
+    """Optional comment or description for the copper file."""
+
     copper_layer: str
+    """The name of the copper layer this file is associated with."""
+
     polarity: CopperFilePolarity
+    """Indicates whether the copper file uses positive or negative polarity."""
+
     layer_snapshot_enabled: Optional[bool] = False
+    """Enable or disable the generation of a layer snapshot for this copper file."""
+
     cca: List[str] = []
+    """List of CCA (circuit card assembly) names associated with this copper file."""
+
     gerber_file: Optional[CopperGerberFile] = None
+    """Optional settings specific to Gerber file import."""
+
     image_file: Optional[CopperImageFile] = None
+    """Optional settings specific to image-based file import."""
 
     def _convert_to_grpc(self) -> project_service.CopperFile:
         copper_file_msg = project_service.CopperFile()
@@ -477,12 +507,18 @@ class CopperFile(BaseModel):
 
 
 class ImportCopperFile(BaseModel):
+    """Representation of a copper file and its associated metadata for import."""
+
     copper_file: str
+    """The path to the copper file being imported."""
+
     copper_file_properties: CopperFile
+    """Metadata and configuration options for this copper file."""
 
     @field_validator("copper_file")
     @classmethod
     def copper_file_validator(cls, value: str, info):
+        """Validate that the file path is not empty."""
         if value.strip() == "":
             raise ValueError(f"{info.field_name} cannot be empty.")
         return basic_str_validator(value, info.field_name)
@@ -497,12 +533,18 @@ class ImportCopperFile(BaseModel):
 
 
 class ImportCopperFilesRequest(BaseModel):
+    """Request to import multiple copper files into a given project."""
+
     project: str
+    """The name of the project into which the copper files will be imported."""
+
     copper_files: List[ImportCopperFile]
+    """List of copper files with metadata to import into the project."""
 
     @field_validator("project")
     @classmethod
     def project_validator(cls, value: str, info):
+        """Validate that the project name is not empty."""
         if value.strip() == "":
             raise ValueError(f"{info.field_name} cannot be empty.")
         return basic_str_validator(value, info.field_name)
@@ -513,4 +555,3 @@ class ImportCopperFilesRequest(BaseModel):
         for copper_file in self.copper_files:
             request.copperFiles.append(copper_file._convert_to_grpc())
         return request
-

@@ -3629,17 +3629,11 @@ def helper_test_import_copper_files(project):
 
     # Test 1: Project is empty
     try:
-        ImportCopperFilesRequest(
-            project="",
-            copper_files=[]
-        )
+        ImportCopperFilesRequest(project="", copper_files=[])
         pytest.fail("No exception raised when using an empty project")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
-        assert (
-            e.errors()[0]["msg"]
-            == "Value error, project cannot be empty."
-        )
+        assert e.errors()[0]["msg"] == "Value error, project cannot be empty."
 
     # Test 2: Copper file path is empty
     try:
@@ -3651,16 +3645,13 @@ def helper_test_import_copper_files(project):
                 file_comment="Test file",
                 copper_layer="Top Layer",
                 polarity=CopperFilePolarity.POSITIVE,
-                cca=["Main Board"]
-            )
+                cca=["Main Board"],
+            ),
         )
         pytest.fail("No exception raised when using an empty copper_file path")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
-        assert (
-            e.errors()[0]["msg"]
-            == "Value error, copper_file cannot be empty."
-        )
+        assert e.errors()[0]["msg"] == "Value error, copper_file cannot be empty."
 
     # Tests 3: project doesn't exist then valid IMAGE import
     try:
@@ -3676,12 +3667,10 @@ def helper_test_import_copper_files(project):
                         copper_layer="Top",
                         polarity=CopperFilePolarity.POSITIVE,
                         cca=["Main Board"],
-                        gerber_file=CopperGerberFile(
-                            parse_decimal_first_enabled=True
-                        )
-                    )
+                        gerber_file=CopperGerberFile(parse_decimal_first_enabled=True),
+                    ),
                 )
-            ]
+            ],
         )
 
         if project._is_connection_up():
