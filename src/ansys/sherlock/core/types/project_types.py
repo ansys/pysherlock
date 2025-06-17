@@ -398,45 +398,6 @@ class AddOutlineFileRequest(BaseModel):
         return basic_str_validator(value, info.field_name)
 
 
-class CopperFileType(Enum):
-    """Constants for Copper File Type in the import copper files request."""
-
-    CADIF = project_service.CopperFile.FileType.CADIF
-    "CADIF"
-    EDB = project_service.CopperFile.FileType.EDB
-    "EDB"
-    GERBER = project_service.CopperFile.FileType.Gerber
-    "Gerber"
-    IPC2581 = project_service.CopperFile.FileType.IPC2581
-    "IPC2581"
-    IMAGE = project_service.CopperFile.FileType.Image
-    "Image"
-    ODB_XML = project_service.CopperFile.FileType.ODB_XML
-    "ODB XML"
-    ODB_PLUS = project_service.CopperFile.FileType.ODB_PLUS
-    "ODB++"
-    TRACE = project_service.CopperFile.FileType.Trace
-    "Trace"
-
-
-class CopperFilePolarity(Enum):
-    """Constants for Copper File Polarity."""
-
-    POSITIVE = project_service.CopperFile.Polarity.Positive
-    "Positive"
-    NEGATIVE = project_service.CopperFile.Polarity.Negative
-    "Negative"
-
-
-class ImageCopperFileType(Enum):
-    """Constants for Copper File Image Type."""
-
-    BACKGROUND = project_service.CopperFile.ImageType.Background
-    "Background"
-    FOREGROUND = project_service.CopperFile.ImageType.Foreground
-    "Foreground"
-
-
 class CopperGerberFile(BaseModel):
     """Properties specific to a Gerber copper file."""
 
@@ -447,7 +408,7 @@ class CopperGerberFile(BaseModel):
 class CopperImageFile(BaseModel):
     """Properties specific to an image-based copper file."""
 
-    image_type: Optional[ImageCopperFileType] = None
+    image_type: Optional[project_service.CopperFile.ImageType] = None
     """Indicates whether the image represents a background or foreground layer."""
 
     image_color: Optional[str] = ""
@@ -460,7 +421,7 @@ class CopperFile(BaseModel):
     file_name: str
     """The name of the file being imported."""
 
-    file_type: CopperFileType
+    file_type: project_service.CopperFile.FileType
     """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
 
     file_comment: Optional[str] = ""
@@ -469,7 +430,7 @@ class CopperFile(BaseModel):
     copper_layer: str
     """The name of the copper layer this file is associated with."""
 
-    polarity: CopperFilePolarity
+    polarity: project_service.CopperFile.Polarity
     """Indicates whether the copper file uses positive or negative polarity."""
 
     layer_snapshot_enabled: Optional[bool] = False

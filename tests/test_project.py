@@ -5,6 +5,7 @@ import platform
 import time
 import uuid
 
+from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 import grpc
 import pydantic
 import pytest
@@ -32,8 +33,6 @@ from ansys.sherlock.core.types.project_types import (
     AddOutlineFileRequest,
     BoardBounds,
     CopperFile,
-    CopperFilePolarity,
-    CopperFileType,
     CopperGerberFile,
     CsvExcelFile,
     CsvExcelOutlineFile,
@@ -54,6 +53,8 @@ from ansys.sherlock.core.types.project_types import (
     ThermalMapsFileType,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+
+project_service = SherlockProjectService_pb2
 
 PROJECT_ADD_NAME = "Delete This After Add"
 
@@ -3641,10 +3642,10 @@ def helper_test_import_copper_files(project):
             copper_file="",
             copper_file_properties=CopperFile(
                 file_name="test.gbr",
-                file_type=CopperFileType.GERBER,
+                file_type=project_service.CopperFile.FileType.Gerber,
                 file_comment="Test file",
                 copper_layer="Top Layer",
-                polarity=CopperFilePolarity.POSITIVE,
+                polarity=project_service.CopperFile.Polarity.Positive,
                 cca=["Main Board"],
             ),
         )
@@ -3663,10 +3664,10 @@ def helper_test_import_copper_files(project):
                     copper_file=invalid_path,
                     copper_file_properties=CopperFile(
                         file_name="test.gbr",
-                        file_type=CopperFileType.GERBER,
+                        file_type=project_service.CopperFile.FileType.Gerber,
                         file_comment="Test Gerber",
                         copper_layer="Top",
-                        polarity=CopperFilePolarity.POSITIVE,
+                        polarity=project_service.CopperFile.Polarity.Positive,
                         cca=["Main Board"],
                         gerber_file=CopperGerberFile(parse_decimal_first_enabled=True),
                     ),
