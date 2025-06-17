@@ -35,7 +35,6 @@ from ansys.sherlock.core.types.project_types import (
     CopperFilePolarity,
     CopperFileType,
     CopperGerberFile,
-    CopperImageFile,
     CsvExcelFile,
     CsvExcelOutlineFile,
     GerberOutlineFile,
@@ -44,7 +43,6 @@ from ansys.sherlock.core.types.project_types import (
     ImageFile,
     ImportCopperFile,
     ImportCopperFilesRequest,
-    ImageCopperFileType,
     ImportGDSIIRequest,
     LegendBounds,
     LegendOrientation,
@@ -66,22 +64,22 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     project = Project(channel, SKIP_VERSION_CHECK)
 
-    # helper_test_add_outline_file(project)
-    # helper_test_add_strain_maps(project)
-    # helper_test_delete_project(project)
-    # helper_test_import_odb_archive(project)
-    # helper_test_import_ipc2581_archive(project)
-    # helper_test_import_project_zip_archive(project)
-    # helper_test_import_project_zip_archive_single_mode(project)
-    # helper_test_generate_project_report(project)
-    # helper_test_list_ccas(project)
-    # helper_test_add_cca(project)
-    # helper_test_list_strain_maps(project)
-    # helper_test_add_thermal_maps(project)
-    # helper_test_update_thermal_maps(project)
-    # helper_test_list_thermal_maps(project)
-    # helper_test_create_cca_from_modeling_region(project)
-    # helper_test_import_gdsii_file(project)
+    helper_test_add_outline_file(project)
+    helper_test_add_strain_maps(project)
+    helper_test_delete_project(project)
+    helper_test_import_odb_archive(project)
+    helper_test_import_ipc2581_archive(project)
+    helper_test_import_project_zip_archive(project)
+    helper_test_import_project_zip_archive_single_mode(project)
+    helper_test_generate_project_report(project)
+    helper_test_list_ccas(project)
+    helper_test_add_cca(project)
+    helper_test_list_strain_maps(project)
+    helper_test_add_thermal_maps(project)
+    helper_test_update_thermal_maps(project)
+    helper_test_list_thermal_maps(project)
+    helper_test_create_cca_from_modeling_region(project)
+    helper_test_import_gdsii_file(project)
     helper_test_import_copper_files(project)
     project_name = None
     try:
@@ -3688,7 +3686,7 @@ def helper_test_import_copper_files(project):
 
         if project._is_connection_up():
             responses = project.import_copper_files(request)
-            #responses = list(responses)
+            responses = list(responses)
 
             assert len(responses) == 1, "Expected exactly one response"
             assert responses[0].returnCode.value == -1
