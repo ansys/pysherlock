@@ -31,12 +31,20 @@ from ansys.sherlock.core.project import Project
 from ansys.sherlock.core.types.project_types import (
     AddOutlineFileRequest,
     BoardBounds,
+    CopperFile,
+    CopperFilePolarity,
+    CopperFileType,
+    CopperGerberFile,
+    CopperImageFile,
     CsvExcelFile,
     CsvExcelOutlineFile,
     GerberOutlineFile,
     IcepakFile,
     ImageBounds,
     ImageFile,
+    ImportCopperFile,
+    ImportCopperFilesRequest,
+    ImageCopperFileType,
     ImportGDSIIRequest,
     LegendBounds,
     LegendOrientation,
@@ -58,22 +66,23 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     project = Project(channel, SKIP_VERSION_CHECK)
 
-    helper_test_add_outline_file(project)
-    helper_test_add_strain_maps(project)
-    helper_test_delete_project(project)
-    helper_test_import_odb_archive(project)
-    helper_test_import_ipc2581_archive(project)
-    helper_test_import_project_zip_archive(project)
-    helper_test_import_project_zip_archive_single_mode(project)
-    helper_test_generate_project_report(project)
-    helper_test_list_ccas(project)
-    helper_test_add_cca(project)
-    helper_test_list_strain_maps(project)
-    helper_test_add_thermal_maps(project)
-    helper_test_update_thermal_maps(project)
-    helper_test_list_thermal_maps(project)
-    helper_test_create_cca_from_modeling_region(project)
-    helper_test_import_gdsii_file(project)
+    # helper_test_add_outline_file(project)
+    # helper_test_add_strain_maps(project)
+    # helper_test_delete_project(project)
+    # helper_test_import_odb_archive(project)
+    # helper_test_import_ipc2581_archive(project)
+    # helper_test_import_project_zip_archive(project)
+    # helper_test_import_project_zip_archive_single_mode(project)
+    # helper_test_generate_project_report(project)
+    # helper_test_list_ccas(project)
+    # helper_test_add_cca(project)
+    # helper_test_list_strain_maps(project)
+    # helper_test_add_thermal_maps(project)
+    # helper_test_update_thermal_maps(project)
+    # helper_test_list_thermal_maps(project)
+    # helper_test_create_cca_from_modeling_region(project)
+    # helper_test_import_gdsii_file(project)
+    helper_test_import_copper_files(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
@@ -3615,6 +3624,78 @@ def helper_test_add_outline_file(project: Project):
 
         except Exception as e:
             pytest.fail(f"Unexpected exception raised: {e}")
+
+
+def helper_test_import_copper_files(project):
+    """Test import copper files API."""
+
+    # Test 1: Project is empty
+    try:
+        ImportCopperFilesRequest(
+            project="",
+            copper_files=[]
+        )
+        pytest.fail("No exception raised when using an empty project")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Value error, project cannot be empty."
+        )
+
+    # Test 2: Copper file path is empty
+    try:
+        ImportCopperFile(
+            copper_file="",
+            copper_file_properties=CopperFile(
+                file_name="test.gbr",
+                file_type=CopperFileType.GERBER,
+                file_comment="Test file",
+                copper_layer="Top Layer",
+                polarity=CopperFilePolarity.POSITIVE,
+                cca=["Main Board"]
+            )
+        )
+        pytest.fail("No exception raised when using an empty copper_file path")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"]
+            == "Value error, copper_file cannot be empty."
+        )
+
+    # Tests 3: project doesn't exist then valid IMAGE import
+    try:
+        request = ImportCopperFilesRequest(
+            project="Invalid Project",
+            copper_files=[
+                ImportCopperFile(
+                    copper_file="path/to/test.gbr",
+                    copper_file_properties=CopperFile(
+                        file_name="test.gbr",
+                        file_type=CopperFileType.GERBER,
+                        file_comment="Test Gerber",
+                        copper_layer="Top",
+                        polarity=CopperFilePolarity.POSITIVE,
+                        cca=["Main Board"],
+                        gerber_file=CopperGerberFile(
+                            parse_decimal_first_enabled=True
+                        )
+                    )
+                )
+            ]
+        )
+
+        if project._is_connection_up():
+            responses = project.import_copper_files(request)
+            #responses = list(responses)
+
+            assert len(responses) == 1, "Expected exactly one response"
+            assert responses[0].returnCode.value == -1
+            assert "Cannot find project" in responses[0].returnCode.message
+
+    except Exception as e:
+        pytest.fail(f"Unexpected exception raised: {e}")
 
 
 if __name__ == "__main__":

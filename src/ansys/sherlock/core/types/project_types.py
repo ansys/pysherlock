@@ -3,7 +3,7 @@
 """Module containing types for the Project Service."""
 
 from enum import Enum
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from pydantic import BaseModel, ValidationInfo, field_validator
 
@@ -396,3 +396,121 @@ class AddOutlineFileRequest(BaseModel):
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
+
+
+class CopperFileType(Enum):
+    """Constants for Copper File Type in the import copper files request."""
+
+    CADIF = project_service.CopperFile.FileType.CADIF
+    "CADIF"
+    EDB = project_service.CopperFile.FileType.EDB
+    "EDB"
+    GERBER = project_service.CopperFile.FileType.Gerber
+    "Gerber"
+    IPC2581 = project_service.CopperFile.FileType.IPC2581
+    "IPC2581"
+    IMAGE = project_service.CopperFile.FileType.Image
+    "Image"
+    ODB_XML = project_service.CopperFile.FileType.ODB_XML
+    "ODB XML"
+    ODB_PLUS = project_service.CopperFile.FileType.ODB_PLUS
+    "ODB++"
+    TRACE = project_service.CopperFile.FileType.Trace
+    "Trace"
+
+
+class CopperFilePolarity(Enum):
+    """Constants for Copper File Polarity."""
+
+    POSITIVE = project_service.CopperFile.Polarity.Positive
+    "Positive"
+    NEGATIVE = project_service.CopperFile.Polarity.Negative
+    "Negative"
+
+
+class ImageCopperFileType(Enum):
+    """Constants for Copper File Image Type."""
+
+    BACKGROUND = project_service.CopperFile.ImageType.Background
+    "Background"
+    FOREGROUND = project_service.CopperFile.ImageType.Foreground
+    "Foreground"
+
+class CopperGerberFile(BaseModel):
+    parse_decimal_first_enabled: Optional[bool] = False
+
+class CopperImageFile(BaseModel):
+    image_type: Optional[ImageCopperFileType] = None
+    image_color: Optional[str] = ""
+
+class CopperFile(BaseModel):
+    file_name: str
+    file_type: CopperFileType
+    file_comment: Optional[str] = ""
+    copper_layer: str
+    polarity: CopperFilePolarity
+    layer_snapshot_enabled: Optional[bool] = False
+    cca: List[str] = []
+    gerber_file: Optional[CopperGerberFile] = None
+    image_file: Optional[CopperImageFile] = None
+
+    def _convert_to_grpc(self) -> project_service.CopperFile:
+        copper_file_msg = project_service.CopperFile()
+        copper_file_msg.fileName = self.file_name
+        copper_file_msg.fileType = self.file_type.value
+        copper_file_msg.fileComment = self.file_comment or ""
+        copper_file_msg.copperLayer = self.copper_layer
+        copper_file_msg.polarity = self.polarity.value
+        copper_file_msg.layerSnapshotEnabled = self.layer_snapshot_enabled
+        copper_file_msg.cca.extend(self.cca)
+
+        if self.gerber_file:
+            copper_file_msg.gerberFile.parseDecimalFirstEnabled = (
+                self.gerber_file.parse_decimal_first_enabled
+            )
+
+        if self.image_file:
+            copper_file_msg.imageFile.imageType = self.image_file.image_type.value
+            copper_file_msg.imageFile.imageColor = self.image_file.image_color or ""
+
+        return copper_file_msg
+
+
+class ImportCopperFile(BaseModel):
+    copper_file: str
+    copper_file_properties: CopperFile
+
+    @field_validator("copper_file")
+    @classmethod
+    def copper_file_validator(cls, value: str, info):
+        if value.strip() == "":
+            raise ValueError(f"{info.field_name} cannot be empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> project_service.ImportCopperFilesRequest.ImportCopperFile:
+        grpc_import_copper_file = project_service.ImportCopperFilesRequest.ImportCopperFile()
+        grpc_import_copper_file.copperFile = self.copper_file
+        grpc_import_copper_file.copperFileProperties.CopyFrom(
+            self.copper_file_properties._convert_to_grpc()
+        )
+        return grpc_import_copper_file
+
+
+class ImportCopperFilesRequest(BaseModel):
+    project: str
+    copper_files: List[ImportCopperFile]
+
+    @field_validator("project")
+    @classmethod
+    def project_validator(cls, value: str, info):
+        if value.strip() == "":
+            raise ValueError(f"{info.field_name} cannot be empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> project_service.ImportCopperFilesRequest:
+        request = project_service.ImportCopperFilesRequest()
+        request.project = self.project
+        for copper_file in self.copper_files:
+            request.copperFiles.append(copper_file._convert_to_grpc())
+        return request
+
