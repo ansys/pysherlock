@@ -3653,13 +3653,14 @@ def helper_test_import_copper_files(project):
         assert isinstance(e, pydantic.ValidationError)
         assert e.errors()[0]["msg"] == "Value error, copper_file cannot be empty."
 
-    # Tests 3: project doesn't exist then valid IMAGE import
+    # Tests 3: path doesn't exist
     try:
+        invalid_path = "file.gbr"
         request = ImportCopperFilesRequest(
-            project="Invalid Project",
+            project="Tutorial Project",
             copper_files=[
                 ImportCopperFile(
-                    copper_file="path/to/test.gbr",
+                    copper_file=invalid_path,
                     copper_file_properties=CopperFile(
                         file_name="test.gbr",
                         file_type=CopperFileType.GERBER,
@@ -3679,7 +3680,10 @@ def helper_test_import_copper_files(project):
 
             assert len(responses) == 1, "Expected exactly one response"
             assert responses[0].returnCode.value == -1
-            assert "Cannot find project" in responses[0].returnCode.message
+            assert invalid_path in responses[0].returnCode.message, (
+                f"Expected the error message to mention the invalid path, "
+                f"got: {responses[0].returnCode.message}"
+            )
 
     except Exception as e:
         pytest.fail(f"Unexpected exception raised: {e}")
