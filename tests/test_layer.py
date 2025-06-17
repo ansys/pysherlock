@@ -1,4 +1,5 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+
 import copy
 import os
 import platform
