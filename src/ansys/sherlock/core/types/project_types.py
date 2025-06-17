@@ -410,7 +410,7 @@ class CopperGerberFile(BaseModel):
 class CopperImageFile(BaseModel):
     """Properties specific to an image-based copper file."""
 
-    image_type: Optional[int] = ImageType.Background
+    image_type: Optional[project_service.CopperFile.ImageType] = None
     """Indicates whether the image represents a background or foreground layer."""
 
     image_color: Optional[str] = ""
@@ -426,7 +426,7 @@ class CopperFile(BaseModel):
     file_name: str
     """The name of the file being imported."""
 
-    file_type: Optional[int] = FileType.EDB
+    file_type: project_service.CopperFile.FileType
     """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
 
     file_comment: Optional[str] = ""
@@ -435,7 +435,7 @@ class CopperFile(BaseModel):
     copper_layer: str
     """The name of the copper layer this file is associated with."""
 
-    polarity: Optional[int] = Polarity.Positive
+    polarity: project_service.CopperFile.Polarity
     """Indicates whether the copper file uses positive or negative polarity."""
 
     layer_snapshot_enabled: Optional[bool] = False
