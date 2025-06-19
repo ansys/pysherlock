@@ -44,6 +44,7 @@ from ansys.sherlock.core.types.layer_types import (
     UpdatePottingRegionRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+from tests.test_utils import assert_float_equals
 
 
 def test_all():
@@ -1581,12 +1582,8 @@ def helper_test_get_test_point_props(layer):
         assert responses[0].testPointProperties.ID == "TP1"
         assert responses[0].testPointProperties.side == "TOP"
         assert responses[0].testPointProperties.units == "mm"
-        assert responses[0].testPointProperties.centerX == pytest.approx(
-            53.09614010443865, abs=1e-13
-        )
-        assert responses[0].testPointProperties.centerY == pytest.approx(
-            10.578305680323764, abs=1e-13
-        )
+        assert_float_equals(53.09614010443865, responses[0].testPointProperties.centerX)
+        assert_float_equals(10.578305680323764, responses[0].testPointProperties.centerY)
         assert responses[0].testPointProperties.radius == 1
         assert responses[0].testPointProperties.loadType == 0
         assert responses[0].testPointProperties.loadValue == 0.36
@@ -1595,12 +1592,8 @@ def helper_test_get_test_point_props(layer):
         assert responses[1].testPointProperties.ID == "TP2"
         assert responses[1].testPointProperties.side == "TOP"
         assert responses[1].testPointProperties.units == "mm"
-        assert responses[1].testPointProperties.centerX == pytest.approx(
-            71.21625140992168, abs=1e-13
-        )
-        assert responses[1].testPointProperties.centerY == pytest.approx(
-            10.718771659436035, abs=1e-13
-        )
+        assert_float_equals(71.21625140992168, responses[1].testPointProperties.centerX)
+        assert_float_equals(10.718771659436035, responses[1].testPointProperties.centerY)
         assert responses[1].testPointProperties.radius == 1
         assert responses[1].testPointProperties.loadType == 0
         assert responses[1].testPointProperties.loadValue == 0.36
@@ -1624,12 +1617,8 @@ def helper_test_get_test_point_props(layer):
         assert mixedResponses[2].testPointProperties.ID == "TP1"
         assert mixedResponses[2].testPointProperties.side == "TOP"
         assert mixedResponses[2].testPointProperties.units == "mm"
-        assert mixedResponses[2].testPointProperties.centerX == pytest.approx(
-            53.09614010443865, abs=1e-13
-        )
-        assert mixedResponses[2].testPointProperties.centerY == pytest.approx(
-            10.578305680323764, abs=1e-13
-        )
+        assert_float_equals(53.09614010443865, mixedResponses[2].testPointProperties.centerX)
+        assert_float_equals(10.578305680323764, mixedResponses[2].testPointProperties.centerY)
         assert mixedResponses[2].testPointProperties.radius == 1
         assert mixedResponses[2].testPointProperties.loadType == 0
         assert mixedResponses[2].testPointProperties.loadValue == 0.36
@@ -1638,12 +1627,8 @@ def helper_test_get_test_point_props(layer):
         assert mixedResponses[3].testPointProperties.ID == "TP2"
         assert mixedResponses[3].testPointProperties.side == "TOP"
         assert mixedResponses[3].testPointProperties.units == "mm"
-        assert mixedResponses[3].testPointProperties.centerX == pytest.approx(
-            71.21625140992168, abs=1e-13
-        )
-        assert mixedResponses[3].testPointProperties.centerY == pytest.approx(
-            10.718771659436035, abs=1e-13
-        )
+        assert_float_equals(71.21625140992168, mixedResponses[3].testPointProperties.centerX)
+        assert_float_equals(10.718771659436035, mixedResponses[3].testPointProperties.centerY)
         assert mixedResponses[3].testPointProperties.radius == 1
         assert mixedResponses[3].testPointProperties.loadType == 0
         assert mixedResponses[3].testPointProperties.loadValue == 0.36
@@ -1661,12 +1646,8 @@ def helper_test_get_test_point_props(layer):
         assert allPointsResponses[0].testPointProperties.ID == "TP1"
         assert allPointsResponses[0].testPointProperties.side == "TOP"
         assert allPointsResponses[0].testPointProperties.units == "mm"
-        assert allPointsResponses[0].testPointProperties.centerX == pytest.approx(
-            53.09614010443865, abs=1e-13
-        )
-        assert allPointsResponses[0].testPointProperties.centerY == pytest.approx(
-            10.578305680323764, abs=1e-13
-        )
+        assert_float_equals(53.09614010443865, allPointsResponses[0].testPointProperties.centerX)
+        assert_float_equals(10.578305680323764, allPointsResponses[0].testPointProperties.centerY)
         assert allPointsResponses[0].testPointProperties.radius == 1
         assert allPointsResponses[0].testPointProperties.loadType == 0
         assert allPointsResponses[0].testPointProperties.loadValue == 0.36
@@ -1674,12 +1655,8 @@ def helper_test_get_test_point_props(layer):
 
         assert allPointsResponses[1].testPointProperties.side == "TOP"
         assert allPointsResponses[1].testPointProperties.units == "mm"
-        assert allPointsResponses[1].testPointProperties.centerX == pytest.approx(
-            71.21625140992168, abs=1e-13
-        )
-        assert allPointsResponses[1].testPointProperties.centerY == pytest.approx(
-            10.718771659436035, abs=1e-13
-        )
+        assert_float_equals(71.21625140992168, allPointsResponses[1].testPointProperties.centerX)
+        assert_float_equals(10.718771659436035, allPointsResponses[1].testPointProperties.centerY)
         assert allPointsResponses[1].testPointProperties.radius == 1
         assert allPointsResponses[1].testPointProperties.loadType == 0
         assert allPointsResponses[1].testPointProperties.loadValue == 0.36
@@ -1688,12 +1665,8 @@ def helper_test_get_test_point_props(layer):
         assert allPointsResponses[2].testPointProperties.ID == "TP3"
         assert allPointsResponses[2].testPointProperties.side == "TOP"
         assert allPointsResponses[2].testPointProperties.units == "mm"
-        assert allPointsResponses[2].testPointProperties.centerX == pytest.approx(
-            71.21625140992168, abs=1e-13
-        )
-        assert allPointsResponses[2].testPointProperties.centerY == pytest.approx(
-            -10.632057165629243, abs=1e-13
-        )
+        assert_float_equals(71.21625140992168, allPointsResponses[2].testPointProperties.centerX)
+        assert_float_equals(-10.632057165629243, allPointsResponses[2].testPointProperties.centerY)
         assert allPointsResponses[2].testPointProperties.radius == 1
         assert allPointsResponses[2].testPointProperties.loadType == 0
         assert allPointsResponses[2].testPointProperties.loadValue == 0.36
@@ -1702,12 +1675,8 @@ def helper_test_get_test_point_props(layer):
         assert allPointsResponses[3].testPointProperties.ID == "TP4"
         assert allPointsResponses[3].testPointProperties.side == "TOP"
         assert allPointsResponses[3].testPointProperties.units == "mm"
-        assert allPointsResponses[3].testPointProperties.centerX == pytest.approx(
-            53.09614010443865, abs=1e-13
-        )
-        assert allPointsResponses[3].testPointProperties.centerY == pytest.approx(
-            -10.632057165629243, abs=1e-13
-        )
+        assert_float_equals(53.09614010443865, allPointsResponses[3].testPointProperties.centerX)
+        assert_float_equals(-10.632057165629243, allPointsResponses[3].testPointProperties.centerY)
         assert allPointsResponses[3].testPointProperties.radius == 1
         assert allPointsResponses[3].testPointProperties.loadType == 0
         assert allPointsResponses[3].testPointProperties.loadValue == 0.36
