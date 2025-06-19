@@ -5,7 +5,7 @@
 from enum import Enum
 from typing import List, Optional, Union
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import BaseModel, SkipValidation, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import (
     basic_list_str_validator,
@@ -21,6 +21,15 @@ except ModuleNotFoundError:
 project_service = SherlockProjectService_pb2
 thermal_map_file = project_service.ThermalMapFile
 add_strain_map_request = project_service.AddStrainMapRequest
+
+
+class SherlockBaseModel(BaseModel):
+    """Base model allowing Protobuf and gRPC types by enabling arbitrary types."""
+
+    class Config:
+        """Allow non-standard types like Protobuf enums in Pydantic models."""
+
+        arbitrary_types_allowed = True
 
 
 class BoardBounds:
@@ -398,30 +407,30 @@ class AddOutlineFileRequest(BaseModel):
         return basic_str_validator(value, info.field_name)
 
 
-class CopperGerberFile(BaseModel):
+class CopperGerberFile(SherlockBaseModel):
     """Properties specific to a Gerber copper file."""
 
     parse_decimal_first_enabled: Optional[bool] = False
     """Whether to parse decimal values before other formats in the Gerber file."""
 
 
-class CopperImageFile(BaseModel):
+class CopperImageFile(SherlockBaseModel):
     """Properties specific to an image-based copper file."""
 
-    image_type: Optional[project_service.CopperFile.ImageType] = None
+    image_type: Optional[SkipValidation[project_service.CopperFile.ImageType]] = None
     """Indicates whether the image represents a background or foreground layer."""
 
     image_color: Optional[str] = ""
     """Optional color description or label for the image (e.g., 'black', 'white')."""
 
 
-class CopperFile(BaseModel):
+class CopperFile(SherlockBaseModel):
     """Metadata and options for a copper file to be imported into a project."""
 
     file_name: str
     """The name of the file being imported."""
 
-    file_type: project_service.CopperFile.FileType
+    file_type: SkipValidation[project_service.CopperFile.FileType]
     """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
 
     file_comment: Optional[str] = ""
@@ -430,7 +439,7 @@ class CopperFile(BaseModel):
     copper_layer: str
     """The name of the copper layer this file is associated with."""
 
-    polarity: project_service.CopperFile.Polarity
+    polarity: SkipValidation[project_service.CopperFile.Polarity]
     """Indicates whether the copper file uses positive or negative polarity."""
 
     layer_snapshot_enabled: Optional[bool] = False
@@ -448,10 +457,10 @@ class CopperFile(BaseModel):
     def _convert_to_grpc(self) -> project_service.CopperFile:
         copper_file_msg = project_service.CopperFile()
         copper_file_msg.fileName = self.file_name
-        copper_file_msg.fileType = self.file_type.value
+        copper_file_msg.fileType = self.file_type
         copper_file_msg.fileComment = self.file_comment or ""
         copper_file_msg.copperLayer = self.copper_layer
-        copper_file_msg.polarity = self.polarity.value
+        copper_file_msg.polarity = self.polarity
         copper_file_msg.layerSnapshotEnabled = self.layer_snapshot_enabled
         copper_file_msg.cca.extend(self.cca)
 
@@ -461,13 +470,13 @@ class CopperFile(BaseModel):
             )
 
         if self.image_file:
-            copper_file_msg.imageFile.imageType = self.image_file.image_type.value
+            copper_file_msg.imageFile.imageType = self.image_file.image_type
             copper_file_msg.imageFile.imageColor = self.image_file.image_color or ""
 
         return copper_file_msg
 
 
-class ImportCopperFile(BaseModel):
+class ImportCopperFile(SherlockBaseModel):
     """Representation of a copper file and its associated metadata for import."""
 
     copper_file: str
@@ -493,7 +502,7 @@ class ImportCopperFile(BaseModel):
         return grpc_import_copper_file
 
 
-class ImportCopperFilesRequest(BaseModel):
+class ImportCopperFilesRequest(SherlockBaseModel):
     """Request to import multiple copper files into a given project."""
 
     project: str
