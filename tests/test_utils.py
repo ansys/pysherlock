@@ -26,5 +26,9 @@ def test_version_check():
             pytest.fail("Unexpected exception " + str(e))
 
 
+def assert_float_equals(expected, actual):
+    assert pytest.approx(expected, abs=1e-14) == pytest.approx(actual, abs=1e-14)
+
+
 if __name__ == "__main__":
     test_all()
