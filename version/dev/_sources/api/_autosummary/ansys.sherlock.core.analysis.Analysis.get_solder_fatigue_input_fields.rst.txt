@@ -1,0 +1,10 @@
+.. vale off
+
+get\_solder\_fatigue\_input\_fields
+===================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.get_solder_fatigue_input_fields
+
+.. vale on
