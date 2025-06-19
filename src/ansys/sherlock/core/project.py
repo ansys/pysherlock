@@ -2212,14 +2212,13 @@ class Project(GrpcStub):
         >>>     ImportCopperFilesRequest,
         >>>     ImportCopperFile,
         >>>     CopperFile,
-        >>>     CopperFileType,
-        >>>     CopperFilePolarity,
         >>>     CopperGerberFile,
         >>>     CopperImageFile,
-        >>>     ImageCopperFileType
         >>> )
+        >>> from ansys.api.sherlock.v0 import SherlockProjectService_pb2
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>>
+        >>> project_service = SherlockProjectService_pb2
         >>> sherlock = launch_sherlock()
         >>> return_codes = sherlock.project.import_copper_files(
         >>>     ImportCopperFilesRequest(
@@ -2230,10 +2229,10 @@ class Project(GrpcStub):
         >>>                 copper_file="path/to/bottom_copper.gbr",
         >>>                 copper_file_properties=CopperFile(
         >>>                     file_name="bottom_copper.gbr",
-        >>>                     file_type=CopperFileType.GERBER,
+        >>>                     file_type=project_service.CopperFile.FileType.Gerber,
         >>>                     file_comment="Gerber bottom layer",
         >>>                     copper_layer="Bottom Layer",
-        >>>                     polarity=CopperFilePolarity.POSITIVE,
+        >>>                     polarity=project_service.CopperFile.Polarity.Positive,
         >>>                     layer_snapshot_enabled=True,
         >>>                     cca=["Main Board"],
         >>>                     gerber_file=CopperGerberFile(
@@ -2245,14 +2244,14 @@ class Project(GrpcStub):
         >>>                 copper_file="path/to/top_image.png",
         >>>                 copper_file_properties=CopperFile(
         >>>                     file_name="top_image.png",
-        >>>                     file_type=CopperFileType.IMAGE,
+        >>>                     file_type=project_service.CopperFile.FileType.Image,
         >>>                     file_comment="Top image copper layer",
         >>>                     copper_layer="Top Layer",
-        >>>                     polarity=CopperFilePolarity.NEGATIVE,
+        >>>                     polarity=project_service.CopperFile.Polarity.Positive,
         >>>                     layer_snapshot_enabled=False,
         >>>                     cca=["Main Board"],
         >>>                     image_file=CopperImageFile(
-        >>>                         image_type=ImageCopperFileType.FOREGROUND,
+        >>>                         image_type=project_service.CopperFile.ImageType.Foreground,
         >>>                         image_color="black"
         >>>                     )
         >>>                 )
