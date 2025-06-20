@@ -23,15 +23,6 @@ thermal_map_file = project_service.ThermalMapFile
 add_strain_map_request = project_service.AddStrainMapRequest
 
 
-class SherlockBaseModel(BaseModel):
-    """Base model allowing Protobuf and gRPC types by enabling arbitrary types."""
-
-    class Config:
-        """Allow non-standard types like Protobuf enums in Pydantic models."""
-
-        arbitrary_types_allowed = True
-
-
 class BoardBounds:
     """Contains the properties of the board bounds."""
 
@@ -407,14 +398,14 @@ class AddOutlineFileRequest(BaseModel):
         return basic_str_validator(value, info.field_name)
 
 
-class CopperGerberFile(SherlockBaseModel):
+class CopperGerberFile(BaseModel):
     """Properties specific to a Gerber copper file."""
 
     parse_decimal_first_enabled: Optional[bool] = False
     """Whether to parse decimal values before other formats in the Gerber file."""
 
 
-class CopperImageFile(SherlockBaseModel):
+class CopperImageFile(BaseModel):
     """Properties specific to an image-based copper file."""
 
     image_type: Optional[SkipValidation[project_service.CopperFile.ImageType]] = None
@@ -423,8 +414,11 @@ class CopperImageFile(SherlockBaseModel):
     image_color: Optional[str] = ""
     """Optional color description or label for the image (e.g., 'black', 'white')."""
 
+    """Allow non-standard types like Protobuf enums in Pydantic models."""
+    model_config = {"arbitrary_types_allowed": True}
 
-class CopperFile(SherlockBaseModel):
+
+class CopperFile(BaseModel):
     """Metadata and options for a copper file to be imported into a project."""
 
     file_name: str
@@ -454,6 +448,9 @@ class CopperFile(SherlockBaseModel):
     image_file: Optional[CopperImageFile] = None
     """Optional settings specific to image-based file import."""
 
+    """Allow non-standard types like Protobuf enums in Pydantic models."""
+    model_config = {"arbitrary_types_allowed": True}
+
     def _convert_to_grpc(self) -> project_service.CopperFile:
         copper_file_msg = project_service.CopperFile()
         copper_file_msg.fileName = self.file_name
@@ -476,7 +473,7 @@ class CopperFile(SherlockBaseModel):
         return copper_file_msg
 
 
-class ImportCopperFile(SherlockBaseModel):
+class ImportCopperFile(BaseModel):
     """Representation of a copper file and its associated metadata for import."""
 
     copper_file: str
@@ -502,7 +499,7 @@ class ImportCopperFile(SherlockBaseModel):
         return grpc_import_copper_file
 
 
-class ImportCopperFilesRequest(SherlockBaseModel):
+class ImportCopperFilesRequest(BaseModel):
     """Request to import multiple copper files into a given project."""
 
     project: str
