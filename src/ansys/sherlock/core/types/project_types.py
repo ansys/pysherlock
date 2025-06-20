@@ -3,7 +3,7 @@
 """Module containing types for the Project Service."""
 
 from enum import Enum
-from typing import Annotated, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from pydantic import BaseModel, SkipValidation, ValidationInfo, field_validator
 
@@ -408,7 +408,7 @@ class CopperGerberFile(BaseModel):
 class CopperImageFile(BaseModel):
     """Properties specific to an image-based copper file."""
 
-    image_type: Optional[Annotated[project_service.CopperFile.ImageType, SkipValidation()]] = None
+    image_type: SkipValidation[Any] = None
     """Indicates whether the image represents a background or foreground layer."""
 
     image_color: Optional[str] = ""
@@ -424,7 +424,7 @@ class CopperFile(BaseModel):
     file_name: str
     """The name of the file being imported."""
 
-    file_type: Annotated[project_service.CopperFile.FileType, SkipValidation()]
+    file_type: SkipValidation[Any]
     """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
 
     file_comment: Optional[str] = ""
@@ -433,7 +433,7 @@ class CopperFile(BaseModel):
     copper_layer: str
     """The name of the copper layer this file is associated with."""
 
-    polarity: Annotated[project_service.CopperFile.Polarity, SkipValidation()]
+    polarity: SkipValidation[Any]
     """Indicates whether the copper file uses positive or negative polarity."""
 
     layer_snapshot_enabled: Optional[bool] = False
