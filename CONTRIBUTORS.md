@@ -20,6 +20,7 @@
 * [Kathy Pippert](https://github.com/PipKat)
 * [Keith Hanson](https://github.com/anskhanson)
 * [khanson](https://github.com/khanson)
+* [Kristine Petsche](https://github.com/anskpetsche)
 * [Maxime Rey](https://github.com/MaxJPRey)
 * [Miu Lin Edson](https://github.com/ansmedson-ext)
 * [Nayane Fernandes](https://github.com/ansnfernand)
