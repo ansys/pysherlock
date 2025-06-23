@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all layer management capabilities."""
 import grpc
@@ -7,6 +7,7 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
     RectangularShape,
@@ -2057,3 +2058,42 @@ class Layer(GrpcStub):
         except SherlockExportLayerImageError as e:
             LOG.error(str(e))
             raise e
+
+    @require_version(261)
+    def get_test_point_props(
+        self, request: GetTestPointPropertiesRequest
+    ) -> list[SherlockLayerService_pb2.GetTestPointPropertiesResponse]:
+        """Return the properties for each test point given a comma-separated list of test point IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetTestPointPropertiesRequest
+             Contains all the information needed to return the properties for one or more test
+             points.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.GetTestPointPropertiesResponse]
+            Properties for each test point that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetTestPointPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetTestPointPropertiesRequest(
+        >>>    project = "Test Point Test Project"
+        >>>    cca_name = "Main Board"
+        >>>    test_point_ids = "TP1,TP2"
+        >>> )
+        >>> responses = layer.get_test_point_props(request)
+        """
+        get_test_point_props_request = request._convert_to_grpc()
+        responses = []
+        for get_test_point_props_response in self.stub.getTestPointProperties(
+            get_test_point_props_request
+        ):
+            responses.append(get_test_point_props_response)
+        return responses

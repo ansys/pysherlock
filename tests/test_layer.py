@@ -1,4 +1,5 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+
 import copy
 import os
 import platform
@@ -31,6 +32,7 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
     PottingRegion,
@@ -42,6 +44,7 @@ from ansys.sherlock.core.types.layer_types import (
     UpdatePottingRegionRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+from tests.test_utils import assert_float_equals
 
 
 def test_all():
@@ -68,6 +71,7 @@ def test_all():
     helper_test_copy_modeling_region(layer, region_id)
     helper_test_delete_modeling_region(layer, region_id)
     helper_test_list_layers(layer)
+    helper_test_get_test_point_props(layer)
     helper_test_export_layer_image(layer)
 
 
@@ -1506,6 +1510,177 @@ def helper_test_list_layers(layer):
             assert layer_count == 30
         except SherlockListLayersError as e:
             pytest.fail(e.message())
+
+
+def helper_test_get_test_point_props(layer):
+    """Test get_test_point_props API."""
+
+    project = "Test Point Test Project"
+    cca_name = "Main Board"
+    test_point_ids = "TP1,TP2"
+
+    good_bad_test_point_ids = "TP1,Bad1,Bad2,TP2"
+
+    # Missing project name
+    try:
+        GetTestPointPropertiesRequest(
+            project="",
+            cca_name=cca_name,
+            test_point_ids=test_point_ids,
+        )
+        pytest.fail("No exception raised when using an invalid project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # Missing CCA name
+    try:
+        GetTestPointPropertiesRequest(
+            project=project,
+            cca_name="",
+            test_point_ids=test_point_ids,
+        )
+        pytest.fail("No exception raised when using an invalid cca_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # test_point_ids is the empty string
+    try:
+        GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid test_point_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+
+        # Bad project name
+        badProjectRequest = GetTestPointPropertiesRequest(
+            project="Invalid Project Name",
+            cca_name=cca_name,
+            test_point_ids=test_point_ids,
+        )
+
+        badProjectResponses = layer.get_test_point_props(badProjectRequest)
+        assert len(badProjectResponses) == 1
+        assert badProjectResponses[0].returnCode.value == -1
+        assert (
+            badProjectResponses[0].returnCode.message == "Cannot find project: Invalid Project Name"
+        )
+
+        # Test request with valid test point ids.
+        request = GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids=test_point_ids,
+        )
+
+        responses = layer.get_test_point_props(request)
+        assert len(responses) == 2
+        assert responses[0].testPointProperties.ID == "TP1"
+        assert responses[0].testPointProperties.side == "TOP"
+        assert responses[0].testPointProperties.units == "mm"
+        assert_float_equals(53.09614010443865, responses[0].testPointProperties.centerX)
+        assert_float_equals(10.578305680323764, responses[0].testPointProperties.centerY)
+        assert responses[0].testPointProperties.radius == 1
+        assert responses[0].testPointProperties.loadType == 0
+        assert responses[0].testPointProperties.loadValue == 0.36
+        assert responses[0].testPointProperties.loadUnits == "N"
+
+        assert responses[1].testPointProperties.ID == "TP2"
+        assert responses[1].testPointProperties.side == "TOP"
+        assert responses[1].testPointProperties.units == "mm"
+        assert_float_equals(71.21625140992168, responses[1].testPointProperties.centerX)
+        assert_float_equals(10.718771659436035, responses[1].testPointProperties.centerY)
+        assert responses[1].testPointProperties.radius == 1
+        assert responses[1].testPointProperties.loadType == 0
+        assert responses[1].testPointProperties.loadValue == 0.36
+        assert responses[1].testPointProperties.loadUnits == "N"
+
+        # Test a mix of valid test points and invalid ones.
+        mixedRequest = GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids=good_bad_test_point_ids,
+        )
+
+        mixedResponses = layer.get_test_point_props(mixedRequest)
+        # 2 good test points, 2 bad test points
+        assert len(mixedResponses) == 4
+
+        assert mixedResponses[0].returnCode.value == -1
+
+        assert mixedResponses[1].returnCode.value == -1
+
+        assert mixedResponses[2].testPointProperties.ID == "TP1"
+        assert mixedResponses[2].testPointProperties.side == "TOP"
+        assert mixedResponses[2].testPointProperties.units == "mm"
+        assert_float_equals(53.09614010443865, mixedResponses[2].testPointProperties.centerX)
+        assert_float_equals(10.578305680323764, mixedResponses[2].testPointProperties.centerY)
+        assert mixedResponses[2].testPointProperties.radius == 1
+        assert mixedResponses[2].testPointProperties.loadType == 0
+        assert mixedResponses[2].testPointProperties.loadValue == 0.36
+        assert mixedResponses[2].testPointProperties.loadUnits == "N"
+
+        assert mixedResponses[3].testPointProperties.ID == "TP2"
+        assert mixedResponses[3].testPointProperties.side == "TOP"
+        assert mixedResponses[3].testPointProperties.units == "mm"
+        assert_float_equals(71.21625140992168, mixedResponses[3].testPointProperties.centerX)
+        assert_float_equals(10.718771659436035, mixedResponses[3].testPointProperties.centerY)
+        assert mixedResponses[3].testPointProperties.radius == 1
+        assert mixedResponses[3].testPointProperties.loadType == 0
+        assert mixedResponses[3].testPointProperties.loadValue == 0.36
+        assert mixedResponses[3].testPointProperties.loadUnits == "N"
+
+        # Test that no test_point_ids param will return all of the test points in the project.
+        allPointsRequest = GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+        )
+
+        allPointsResponses = layer.get_test_point_props(allPointsRequest)
+        assert len(allPointsResponses) == 4
+
+        assert allPointsResponses[0].testPointProperties.ID == "TP1"
+        assert allPointsResponses[0].testPointProperties.side == "TOP"
+        assert allPointsResponses[0].testPointProperties.units == "mm"
+        assert_float_equals(53.09614010443865, allPointsResponses[0].testPointProperties.centerX)
+        assert_float_equals(10.578305680323764, allPointsResponses[0].testPointProperties.centerY)
+        assert allPointsResponses[0].testPointProperties.radius == 1
+        assert allPointsResponses[0].testPointProperties.loadType == 0
+        assert allPointsResponses[0].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[0].testPointProperties.loadUnits == "N"
+
+        assert allPointsResponses[1].testPointProperties.side == "TOP"
+        assert allPointsResponses[1].testPointProperties.units == "mm"
+        assert_float_equals(71.21625140992168, allPointsResponses[1].testPointProperties.centerX)
+        assert_float_equals(10.718771659436035, allPointsResponses[1].testPointProperties.centerY)
+        assert allPointsResponses[1].testPointProperties.radius == 1
+        assert allPointsResponses[1].testPointProperties.loadType == 0
+        assert allPointsResponses[1].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[1].testPointProperties.loadUnits == "N"
+
+        assert allPointsResponses[2].testPointProperties.ID == "TP3"
+        assert allPointsResponses[2].testPointProperties.side == "TOP"
+        assert allPointsResponses[2].testPointProperties.units == "mm"
+        assert_float_equals(71.21625140992168, allPointsResponses[2].testPointProperties.centerX)
+        assert_float_equals(-10.632057165629243, allPointsResponses[2].testPointProperties.centerY)
+        assert allPointsResponses[2].testPointProperties.radius == 1
+        assert allPointsResponses[2].testPointProperties.loadType == 0
+        assert allPointsResponses[2].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[2].testPointProperties.loadUnits == "N"
+
+        assert allPointsResponses[3].testPointProperties.ID == "TP4"
+        assert allPointsResponses[3].testPointProperties.side == "TOP"
+        assert allPointsResponses[3].testPointProperties.units == "mm"
+        assert_float_equals(53.09614010443865, allPointsResponses[3].testPointProperties.centerX)
+        assert_float_equals(-10.632057165629243, allPointsResponses[3].testPointProperties.centerY)
+        assert allPointsResponses[3].testPointProperties.radius == 1
+        assert allPointsResponses[3].testPointProperties.loadType == 0
+        assert allPointsResponses[3].testPointProperties.loadValue == 0.36
+        assert allPointsResponses[3].testPointProperties.loadUnits == "N"
 
 
 def helper_test_export_layer_image(layer):
