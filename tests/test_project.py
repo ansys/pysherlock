@@ -3654,29 +3654,30 @@ def helper_test_import_copper_files(project):
         assert isinstance(e, pydantic.ValidationError)
         assert e.errors()[0]["msg"] == "Value error, copper_file cannot be empty."
 
-    # Tests 3: path doesn't exist
-    try:
-        invalid_path = "file.gbr"
-        request = ImportCopperFilesRequest(
-            project="Tutorial Project",
-            copper_files=[
-                ImportCopperFile(
-                    copper_file=invalid_path,
-                    copper_file_properties=CopperFile(
-                        file_name="test.gbr",
-                        file_type=project_service.CopperFile.FileType.Gerber,
-                        file_comment="Test Gerber",
-                        copper_layer="Top",
-                        polarity=project_service.CopperFile.Polarity.Positive,
-                        cca=["Main Board"],
-                        gerber_file=CopperGerberFile(parse_decimal_first_enabled=True),
-                    ),
-                )
-            ],
-        )
+    if project._is_connection_up():
+        # Tests 3: path doesn't exist
+        try:
+            invalid_path = "file.gbr"
 
-        if project._is_connection_up():
-            responses = project.import_copper_files(request)
+            responses = project.import_copper_files(
+                ImportCopperFilesRequest(
+                    project="Tutorial Project",
+                    copper_files=[
+                        ImportCopperFile(
+                            copper_file=invalid_path,
+                            copper_file_properties=CopperFile(
+                                file_name="test.gbr",
+                                file_type=project_service.CopperFile.FileType.Gerber,
+                                file_comment="Test Gerber",
+                                copper_layer="Top",
+                                polarity=project_service.CopperFile.Polarity.Positive,
+                                cca=["Main Board"],
+                                gerber_file=CopperGerberFile(parse_decimal_first_enabled=True),
+                            ),
+                        )
+                    ],
+                )
+            )
             responses = list(responses)
 
             assert len(responses) == 1, "Expected exactly one response"
@@ -3686,8 +3687,8 @@ def helper_test_import_copper_files(project):
                 f"got: {responses[0].returnCode.message}"
             )
 
-    except Exception as e:
-        pytest.fail(f"Unexpected exception raised: {e}")
+        except Exception as e:
+            pytest.fail(f"Unexpected exception raised: {e}")
 
 
 if __name__ == "__main__":
