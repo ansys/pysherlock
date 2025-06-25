@@ -3,7 +3,7 @@
 """Module containing types for the Project Service."""
 
 from enum import Enum
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from pydantic import BaseModel, ValidationInfo, field_validator
 
@@ -396,3 +396,135 @@ class AddOutlineFileRequest(BaseModel):
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
+
+
+class CopperGerberFile(BaseModel):
+    """Properties specific to a Gerber copper file."""
+
+    parse_decimal_first_enabled: Optional[bool] = False
+    """Whether to parse decimal values before other formats in the Gerber file."""
+
+
+class CopperImageFile(BaseModel):
+    """Properties specific to an image-based copper file."""
+
+    image_type: Optional[project_service.CopperFile.ImageType.ValueType] = (
+        project_service.CopperFile.ImageType.Background
+    )
+    """Indicates whether the image represents a background or foreground layer."""
+
+    image_color: Optional[str] = ""
+    """Optional color description or label for the image (e.g., 'black', 'white')."""
+
+    """Allow non-standard types like Protobuf enums in Pydantic models."""
+    model_config = {"arbitrary_types_allowed": True}
+
+
+class CopperFile(BaseModel):
+    """Metadata and options for a copper file to be imported into a project."""
+
+    file_name: str
+    """The name of the file being imported."""
+
+    file_type: Optional[project_service.CopperFile.FileType.ValueType] = (
+        project_service.CopperFile.FileType.EDB
+    )
+    """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
+
+    file_comment: Optional[str] = ""
+    """Optional comment or description for the copper file."""
+
+    copper_layer: str
+    """The name of the copper layer this file is associated with."""
+
+    polarity: Optional[project_service.CopperFile.Polarity.ValueType] = (
+        project_service.CopperFile.Polarity.Positive
+    )
+    """Indicates whether the copper file uses positive or negative polarity."""
+
+    layer_snapshot_enabled: Optional[bool] = False
+    """Enable or disable the generation of a layer snapshot for this copper file."""
+
+    cca: List[str] = []
+    """List of CCA (circuit card assembly) names associated with this copper file."""
+
+    gerber_file: Optional[CopperGerberFile] = None
+    """Optional settings specific to Gerber file import."""
+
+    image_file: Optional[CopperImageFile] = None
+    """Optional settings specific to image-based file import."""
+
+    """Allow non-standard types like Protobuf enums in Pydantic models."""
+    model_config = {"arbitrary_types_allowed": True}
+
+    def _convert_to_grpc(self) -> project_service.CopperFile:
+        copper_file_msg = project_service.CopperFile()
+        copper_file_msg.fileName = self.file_name
+        copper_file_msg.fileType = self.file_type
+        copper_file_msg.fileComment = self.file_comment or ""
+        copper_file_msg.copperLayer = self.copper_layer
+        copper_file_msg.polarity = self.polarity
+        copper_file_msg.layerSnapshotEnabled = self.layer_snapshot_enabled
+        copper_file_msg.cca.extend(self.cca)
+
+        if self.gerber_file:
+            copper_file_msg.gerberFile.parseDecimalFirstEnabled = (
+                self.gerber_file.parse_decimal_first_enabled
+            )
+
+        if self.image_file:
+            copper_file_msg.imageFile.imageType = self.image_file.image_type
+            copper_file_msg.imageFile.imageColor = self.image_file.image_color or ""
+
+        return copper_file_msg
+
+
+class ImportCopperFile(BaseModel):
+    """Representation of a copper file and its associated metadata for import."""
+
+    copper_file: str
+    """The path to the copper file being imported."""
+
+    copper_file_properties: CopperFile
+    """Metadata and configuration options for this copper file."""
+
+    @field_validator("copper_file")
+    @classmethod
+    def copper_file_validator(cls, value: str, info):
+        """Validate that the file path is not empty."""
+        if value.strip() == "":
+            raise ValueError(f"{info.field_name} cannot be empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> project_service.ImportCopperFilesRequest.ImportCopperFile:
+        grpc_import_copper_file = project_service.ImportCopperFilesRequest.ImportCopperFile()
+        grpc_import_copper_file.copperFile = self.copper_file
+        grpc_import_copper_file.copperFileProperties.CopyFrom(
+            self.copper_file_properties._convert_to_grpc()
+        )
+        return grpc_import_copper_file
+
+
+class ImportCopperFilesRequest(BaseModel):
+    """Request to import multiple copper files into a given project."""
+
+    project: str
+    """The name of the project into which the copper files will be imported."""
+
+    copper_files: List[ImportCopperFile]
+    """List of copper files with metadata to import into the project."""
+
+    @field_validator("project")
+    @classmethod
+    def project_validator(cls, value: str, info):
+        """Validate that the project name is not empty."""
+        if value.strip() == "":
+            raise ValueError(f"{info.field_name} cannot be empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> project_service.ImportCopperFilesRequest:
+        request = project_service.ImportCopperFilesRequest()
+        request.project = self.project
+        for copper_file in self.copper_files:
+            request.copperFiles.append(copper_file._convert_to_grpc())
+        return request

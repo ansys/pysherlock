@@ -43,6 +43,7 @@ from ansys.sherlock.core.types.project_types import (
     IcepakFile,
     ImageBounds,
     ImageFile,
+    ImportCopperFilesRequest,
     ImportGDSIIRequest,
     LegendBounds,
     StrainMapsFileType,
@@ -2184,3 +2185,84 @@ class Project(GrpcStub):
         for grpc_return_code in self.stub.addOutlineFiles(add_outline_files_request):
             responses.append(grpc_return_code)
         return responses
+
+    @require_version(261)
+    def import_copper_files(
+        self,
+        request: ImportCopperFilesRequest,
+    ) -> list[SherlockProjectService_pb2.ImportCopperFilesResponse]:
+        """Import copper layer files to a Sherlock project.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : ImportCopperFilesRequest
+            Contains the information needed to import copper layer files and their associated
+            properties.
+
+        Returns
+        -------
+        list[SherlockProjectService_pb2.ImportCopperFilesResponse]
+            Status and metadata for each copper file imported.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.project_types import (
+        >>>     ImportCopperFilesRequest,
+        >>>     ImportCopperFile,
+        >>>     CopperFile,
+        >>>     CopperGerberFile,
+        >>>     CopperImageFile,
+        >>> )
+        >>> from ansys.api.sherlock.v0 import SherlockProjectService_pb2
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>>
+        >>> project_service = SherlockProjectService_pb2
+        >>> sherlock = launch_sherlock()
+        >>> return_codes = sherlock.project.import_copper_files(
+        >>>     ImportCopperFilesRequest(
+        >>>         project="TestProject",
+        >>>         copper_files=[
+        >>>             # Example 1: Gerber file
+        >>>             ImportCopperFile(
+        >>>                 copper_file="path/to/bottom_copper.gbr",
+        >>>                 copper_file_properties=CopperFile(
+        >>>                     file_name="bottom_copper.gbr",
+        >>>                     file_type=project_service.CopperFile.FileType.Gerber,
+        >>>                     file_comment="Gerber bottom layer",
+        >>>                     copper_layer="Bottom Layer",
+        >>>                     polarity=project_service.CopperFile.Polarity.Positive,
+        >>>                     layer_snapshot_enabled=True,
+        >>>                     cca=["Main Board"],
+        >>>                     gerber_file=CopperGerberFile(
+        >>>                         parse_decimal_first_enabled=True
+        >>>                     )
+        >>>                 )
+        >>>             ),
+        >>>             ImportCopperFile(
+        >>>                 copper_file="path/to/top_image.png",
+        >>>                 copper_file_properties=CopperFile(
+        >>>                     file_name="top_image.png",
+        >>>                     file_type=project_service.CopperFile.FileType.Image,
+        >>>                     file_comment="Top image copper layer",
+        >>>                     copper_layer="Top Layer",
+        >>>                     polarity=project_service.CopperFile.Polarity.Positive,
+        >>>                     layer_snapshot_enabled=False,
+        >>>                     cca=["Main Board"],
+        >>>                     image_file=CopperImageFile(
+        >>>                         image_type=project_service.CopperFile.ImageType.Foreground,
+        >>>                         image_color="black"
+        >>>                     )
+        >>>                 )
+        >>>             )
+        >>>         ]
+        >>>     )
+        >>> )
+        >>> for response in return_codes:
+        >>>     print(f"File: {response.fileName}, Status: {response.returnCode}")
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return list(self.stub.importCopperFiles(request._convert_to_grpc()))

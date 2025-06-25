@@ -11,6 +11,9 @@ Classes used for the Project API.
      :toctree: _autosummary
 
      BoardBounds
+     CopperFile
+     CopperGerberFile
+     CopperImageFile
      CsvExcelFile
      CsvExcelOutlineFile
      GerberOutlineFile
