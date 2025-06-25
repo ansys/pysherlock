@@ -5,6 +5,7 @@ import platform
 import time
 import uuid
 
+from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 import grpc
 import pydantic
 import pytest
@@ -31,12 +32,16 @@ from ansys.sherlock.core.project import Project
 from ansys.sherlock.core.types.project_types import (
     AddOutlineFileRequest,
     BoardBounds,
+    CopperFile,
+    CopperGerberFile,
     CsvExcelFile,
     CsvExcelOutlineFile,
     GerberOutlineFile,
     IcepakFile,
     ImageBounds,
     ImageFile,
+    ImportCopperFile,
+    ImportCopperFilesRequest,
     ImportGDSIIRequest,
     LegendBounds,
     LegendOrientation,
@@ -48,6 +53,8 @@ from ansys.sherlock.core.types.project_types import (
     ThermalMapsFileType,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+
+project_service = SherlockProjectService_pb2
 
 PROJECT_ADD_NAME = "Delete This After Add"
 
@@ -74,6 +81,7 @@ def test_all():
     helper_test_list_thermal_maps(project)
     helper_test_create_cca_from_modeling_region(project)
     helper_test_import_gdsii_file(project)
+    helper_test_import_copper_files(project)
     project_name = None
     try:
         project_name = helper_test_add_project(project)
@@ -3611,6 +3619,72 @@ def helper_test_add_outline_file(project: Project):
             assert return_code[0].value == -1
             assert (
                 return_code[0].message == f"File C:\\Temp\\InvalidOutlineFile.xlsx does not exist"
+            )
+
+        except Exception as e:
+            pytest.fail(f"Unexpected exception raised: {e}")
+
+
+def helper_test_import_copper_files(project):
+    """Test import copper files API."""
+
+    # Test 1: Project is empty
+    try:
+        ImportCopperFilesRequest(project="", copper_files=[])
+        pytest.fail("No exception raised when using an empty project")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert e.errors()[0]["msg"] == "Value error, project cannot be empty."
+
+    # Test 2: Copper file path is empty
+    try:
+        ImportCopperFile(
+            copper_file="",
+            copper_file_properties=CopperFile(
+                file_name="test.gbr",
+                file_type=project_service.CopperFile.FileType.Gerber,
+                file_comment="Test file",
+                copper_layer="Top Layer",
+                polarity=project_service.CopperFile.Polarity.Positive,
+                cca=["Main Board"],
+            ),
+        )
+        pytest.fail("No exception raised when using an empty copper_file path")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert e.errors()[0]["msg"] == "Value error, copper_file cannot be empty."
+
+    if project._is_connection_up():
+        # Tests 3: path doesn't exist
+        try:
+            invalid_path = "file.gbr"
+
+            responses = project.import_copper_files(
+                ImportCopperFilesRequest(
+                    project="Tutorial Project",
+                    copper_files=[
+                        ImportCopperFile(
+                            copper_file=invalid_path,
+                            copper_file_properties=CopperFile(
+                                file_name="test.gbr",
+                                file_type=project_service.CopperFile.FileType.Gerber,
+                                file_comment="Test Gerber",
+                                copper_layer="Top",
+                                polarity=project_service.CopperFile.Polarity.Positive,
+                                cca=["Main Board"],
+                                gerber_file=CopperGerberFile(parse_decimal_first_enabled=True),
+                            ),
+                        )
+                    ],
+                )
+            )
+            responses = list(responses)
+
+            assert len(responses) == 1, "Expected exactly one response"
+            assert responses[0].returnCode.value == -1
+            assert invalid_path in responses[0].returnCode.message, (
+                f"Expected the error message to mention the invalid path, "
+                f"got: {responses[0].returnCode.message}"
             )
 
         except Exception as e:
