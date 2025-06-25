@@ -1,0 +1,6 @@
+center\_x
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: CircularShape.center_x
