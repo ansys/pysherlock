@@ -1,0 +1,73 @@
+
+:orphan:
+
+.. _sphx_glr_examples_gallery_examples_04-analyses_sg_execution_times:
+
+
+Computation times
+=================
+**00:00.000** total execution time for 13 files **from examples\gallery_examples\04-analyses**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_get_parts_list_analysis_props.py` (``get_parts_list_analysis_props.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_get_random_vibe_inputs_fields.py` (``get_random_vibe_inputs_fields.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_analysis.py` (``run_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_harmonic_vibe_strain_map_analysis.py` (``run_harmonic_vibe_strain_map_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_mechanical_shock_strain_map_analysis.py` (``run_mechanical_shock_strain_map_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_random_vibe_strain_map_analysis.py` (``run_random_vibe_strain_map_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_harmonic_vibe_properties.py` (``update_harmonic_vibe_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_ict_properties.py` (``update_ict_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_mechanical_shock_properties.py` (``update_mechanical_shock_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_part_validation_properties.py` (``update_part_validation_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_pcb_modeling_properties.py` (``update_pcb_modeling_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_random_vibe_properties.py` (``update_random_vibe_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_solder_fatigue_properties.py` (``update_solder_fatigue_properties.py``)
+     - 00:00.000
+     - 0.0
