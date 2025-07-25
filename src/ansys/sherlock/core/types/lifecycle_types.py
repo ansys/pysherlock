@@ -73,21 +73,15 @@ class ImportThermalSignalRequest(BaseModel):
     time_removal: bool
     """Option to indicate that time results with shorter half-cycle durations are removed."""
     load_range_percentage: float
-    """Defines the fraction of the range near peaks and valleys considered as a dwell region."""
+    """Defines the fraction of the range near peaks and valleys considered as a dwell region"""
     number_of_bins: int
-    """Number of bins for binning cycles, 0 for no binning."""
-    temperature_range_filtering_limit: float
-    """Minimum cycle range to include in results, 0 for not filtering."""
-    time_filtering_limit: float
-    """Maximum cycle time to include in results, default is 72 hours."""
-    time_filtering_limit_units: str
-    """Units of the time filtering limit."""
+    """Number of bins for binning cycles, 0 for no binning"""
+    filtering_limit: float
+    """Minimum cycle range to include in results, 0 for not filtering"""
     generated_cycles_label: str
     """Label used to define the name of all generated thermal events."""
 
-    @field_validator(
-        "file_name", "project", "phase_name", "time_filtering_limit_units", "generated_cycles_label"
-    )
+    @field_validator("file_name", "project", "phase_name", "generated_cycles_label")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -111,8 +105,6 @@ class ImportThermalSignalRequest(BaseModel):
             timeRemoval=self.time_removal,
             loadRangePercentage=self.load_range_percentage,
             numberOfBins=self.number_of_bins,
-            temperatureRangeFilteringLimit=self.temperature_range_filtering_limit,
-            timeFilteringLimit=self.time_filtering_limit,
-            timeFilteringLimitUnits=self.time_filtering_limit_units,
+            filteringLimit=self.filtering_limit,
             generatedCyclesLabel=self.generated_cycles_label,
         )

@@ -2152,9 +2152,7 @@ class Lifecycle(GrpcStub):
         >>>         time_removal= False,
         >>>         load_range_percentage=0.25,
         >>>         number_of_bins=0,
-        >>>         temperature_range_filtering_limit=0.0,
-        >>>         time_filtering_limit=72.0,
-        >>>         time_filtering_limit_units="hr",
+        >>>         filtering_limit=0.0,
         >>>         generated_cycles_label="Second Generated Cycles from Python",
         >>>     )
         >>> )
