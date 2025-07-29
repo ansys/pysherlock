@@ -1686,14 +1686,10 @@ def helper_test_get_test_point_props(layer):
 
 
 def helper_test_get_ict_fixtures_props(layer):
-    """Test get_ict_fixtures_props API."""
+    """Test get_ict_fixtures_props API"""
 
     project = "Tutorial Project"
     cca_name = "Main Board"
-
-    #TODO idk if I need these or not
-    #ict_fixtures_ids = "TP1,TP2"
-    #good_bad_test_point_ids = "TP1,Bad1,Bad2,TP2"
 
     # Missing project name
     try:

@@ -2116,7 +2116,7 @@ class Layer(GrpcStub):
 
         Returns
         -------
-        list[SherlockCommonService_pb2.GetICTFixturesPropertiesResponse]
+        SherlockCommonService_pb2.GetICTFixturesPropertiesResponse
             Properties for each ICT fixture that correspond to the reference designators.
 
         Examples
@@ -2127,18 +2127,12 @@ class Layer(GrpcStub):
         >>> request = layer_types.GetICTFixturesPropertiesRequest(
         >>>    project = "Tutorial Project"
         >>>    cca_name = "Main Board"
-        >>>    test_point_ids = "F1,F2"
+        >>>    ict_fixtures_ids = "F1,F2"
         >>> )
-        >>> responses = layer.get_ict_fixtures_props(request)
+        >>> response = layer.get_ict_fixtures_props(request)
         """
         get_ict_fixture_props_request = request._convert_to_grpc()
         response = self.stub.getICTFixturesProperties(get_ict_fixture_props_request)
 
-        return response  # TODO Wrap in list to match return type
-        # responses = []
-        # for get_ict_fixture_props_response in self.stub.getICTFixturesProperties(
-        #         get_ict_fixture_props_request
-        # ):
-        #     responses.append(get_ict_fixture_props_response)
-        # return responses
+        return response
 
