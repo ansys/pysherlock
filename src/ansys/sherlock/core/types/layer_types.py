@@ -368,3 +368,36 @@ class GetTestPointPropertiesRequest(BaseModel):
         if self.test_point_ids is not None:
             request.testPointIDs = self.test_point_ids
         return request
+
+class GetICTFixturesPropertiesRequest(BaseModel):
+    """Return the properties for each ICT fixture given a comma-separated list of ICT fixture ids."""
+
+    project: str
+    """Name of the project."""
+    cca_name: str
+    """Name of the CCA containing the ict fixture properties to return."""
+    ict_fixtures_ids: Optional[str] = None
+    """Optional Param: Comma-separated list of ict fixture ids representing one or more test points.
+        If this parameter is not included, then the entire list of ict fixtures for a given CCA will
+        have their properties returned.
+    """
+
+    @field_validator("project", "cca_name", "ict_fixtures_ids")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("ict_fixtures_ids")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the ict_fixtures_ids to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetICTFixturesPropertiesRequest:
+        request = SherlockLayerService_pb2.GetICTFixturesPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.ict_fixtures_ids is not None:
+            request.ICTFixtureIDs = self.ict_fixtures_ids
+        return request
