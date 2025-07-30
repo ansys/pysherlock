@@ -32,6 +32,7 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
     GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
@@ -71,6 +72,7 @@ def test_all():
     helper_test_copy_modeling_region(layer, region_id)
     helper_test_delete_modeling_region(layer, region_id)
     helper_test_list_layers(layer)
+    helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
     helper_test_export_layer_image(layer)
 
@@ -1681,6 +1683,168 @@ def helper_test_get_test_point_props(layer):
         assert allPointsResponses[3].testPointProperties.loadType == 0
         assert allPointsResponses[3].testPointProperties.loadValue == 0.36
         assert allPointsResponses[3].testPointProperties.loadUnits == "N"
+
+
+def helper_test_get_ict_fixtures_props(layer):
+    """Test get_ict_fixtures_props API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    # Missing project name
+    try:
+        GetICTFixturesPropertiesRequest(
+            project="",
+            cca_name=cca_name,
+            ict_fixtures_ids="F1",
+        )
+        pytest.fail("No exception raised when using an invalid project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # Missing CCA name
+    try:
+        GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name="",
+            ict_fixtures_ids="F1",
+        )
+        pytest.fail("No exception raised when using an invalid cca_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # ict_fixtures_ids is the empty string
+    try:
+        GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid ict_fixtures_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+
+        # Bad project name
+        bad_project_request = GetICTFixturesPropertiesRequest(
+            project="Invalid Project Name",
+            cca_name=cca_name,
+            ict_fixtures_ids="F1, F1",
+        )
+        bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
+        assert bad_project_response.returnCode.value == -1
+        assert (
+            bad_project_response.returnCode.message == "Cannot find project: Invalid Project Name"
+        )
+
+        bad_project_request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name="Invalid CCA Name",
+            ict_fixtures_ids="F1, F1",
+        )
+        bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
+        assert bad_project_response.returnCode.value == -1
+        assert bad_project_response.returnCode.message == "Cannot find CCA: Invalid CCA Name"
+
+        # Test request with valid ict fixture ids.
+        request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="F1, F1,",
+        )
+
+        response = layer.get_ict_fixtures_props(request)
+        assert response.returnCode.value == 0
+        assert len(response.ICTFixtureProperties) == 2
+
+        # First requested ID of F1
+        assert response.ICTFixtureProperties[0].ID == "F1"
+        assert response.ICTFixtureProperties[0].type == "Mount Pad"
+        assert response.ICTFixtureProperties[0].units == "mm"
+        assert response.ICTFixtureProperties[0].side == "BOTTOM"
+        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
+        assert response.ICTFixtureProperties[0].material == "ALLOY42"
+        assert response.ICTFixtureProperties[0].state == "ENABLED"
+
+        assert response.ICTFixtureProperties[0].shape == "Rectangular"
+        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
+        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
+        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
+        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
+        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
+
+        assert response.ICTFixtureProperties[0].boundary == "Outline"
+        assert (
+            response.ICTFixtureProperties[0].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
+        assert response.ICTFixtureProperties[0].polygon == ""
+        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
+
+        # Second requested ID of F1
+        assert response.ICTFixtureProperties[1].ID == "F1"
+        assert response.ICTFixtureProperties[1].type == "Mount Pad"
+        assert response.ICTFixtureProperties[1].units == "mm"
+        assert response.ICTFixtureProperties[1].side == "BOTTOM"
+        assert_float_equals(-5.0, float(response.ICTFixtureProperties[1].height))
+        assert response.ICTFixtureProperties[1].material == "ALLOY42"
+        assert response.ICTFixtureProperties[1].state == "ENABLED"
+
+        assert response.ICTFixtureProperties[1].shape == "Rectangular"
+        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[1].x))
+        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[1].y))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].length))
+        assert_float_equals(74.6564, float(response.ICTFixtureProperties[1].width))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].diameter))
+        assert_float_equals(4, int(response.ICTFixtureProperties[1].nodes))
+        assert_float_equals(0.0, float(response.ICTFixtureProperties[1].rotation))
+
+        assert response.ICTFixtureProperties[1].boundary == "Outline"
+        assert (
+            response.ICTFixtureProperties[1].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
+        assert response.ICTFixtureProperties[1].polygon == ""
+        assert response.ICTFixtureProperties[1].chassisMaterial == "ALUMINUM"
+
+        # Test request with a mix of valid and invalid ict fixture ids.
+        mixed_request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="invalid, F1, invalid",
+        )
+
+        mixed_response = layer.get_ict_fixtures_props(mixed_request)
+        assert mixed_response.returnCode.value == -1
+        assert len(mixed_response.ICTFixtureProperties) == 1
+
+        assert response.ICTFixtureProperties[0].ID == "F1"
+        assert response.ICTFixtureProperties[0].type == "Mount Pad"
+        assert response.ICTFixtureProperties[0].units == "mm"
+        assert response.ICTFixtureProperties[0].side == "BOTTOM"
+        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
+        assert response.ICTFixtureProperties[0].material == "ALLOY42"
+        assert response.ICTFixtureProperties[0].state == "ENABLED"
+
+        assert response.ICTFixtureProperties[0].shape == "Rectangular"
+        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
+        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
+        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
+        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
+        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
+
+        assert response.ICTFixtureProperties[0].boundary == "Outline"
+        assert (
+            response.ICTFixtureProperties[0].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
+        assert response.ICTFixtureProperties[0].polygon == ""
+        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
 
 
 def helper_test_export_layer_image(layer):

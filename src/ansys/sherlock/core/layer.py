@@ -7,6 +7,7 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
     GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
@@ -2097,3 +2098,39 @@ class Layer(GrpcStub):
         ):
             responses.append(get_test_point_props_response)
         return responses
+
+    @require_version(261)
+    def get_ict_fixtures_props(
+        self, request: GetICTFixturesPropertiesRequest
+    ) -> SherlockLayerService_pb2.GetICTFixturesPropertiesResponse:
+        """Return the properties for each ICT fixture given a comma-separated list of fixture IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetICTFixturesPropertiesRequest
+             Contains all the information needed to return the properties for one or more ICT
+             fixtures.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.GetICTFixturesPropertiesResponse
+            Properties for each ICT fixture that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetICTFixturesPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetICTFixturesPropertiesRequest(
+        >>>    project = "Tutorial Project"
+        >>>    cca_name = "Main Board"
+        >>>    ict_fixtures_ids = "F1,F2"
+        >>> )
+        >>> response = layer.get_ict_fixtures_props(request)
+        """
+        get_ict_fixture_props_request = request._convert_to_grpc()
+        response = self.stub.getICTFixturesProperties(get_ict_fixture_props_request)
+
+        return response
