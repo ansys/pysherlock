@@ -368,3 +368,33 @@ class GetTestPointPropertiesRequest(BaseModel):
         if self.test_point_ids is not None:
             request.testPointIDs = self.test_point_ids
         return request
+
+
+class UpdateTestPointsRequest(BaseModel):
+    """Contains the properties of a test points update per project."""
+    project: str
+    """Name of the Sherlock project."""
+    update_test_points: list[]
+
+# class UpdatePottingRegionRequest(BaseModel):
+#     """Contains the properties of a potting region update per project."""
+#
+#     project: str
+#     """Name of the Sherlock project."""
+#     update_potting_regions: list[PottingRegionUpdateData]
+#     """List of potting region data to update."""
+#
+#     @field_validator("project")
+#     @classmethod
+#     def str_validation(cls, value: str, info: ValidationInfo):
+#         """Validate string fields listed."""
+#         return basic_str_validator(value, info.field_name)
+#
+#     def _convert_to_grpc(
+#         self,
+#     ) -> SherlockLayerService_pb2.UpdatePottingRegionRequest:
+#         request = SherlockLayerService_pb2.UpdatePottingRegionRequest()
+#         request.project = self.project
+#         for update_potting_region in self.update_potting_regions:
+#             request.updatePottingRegions.append(update_potting_region._convert_to_grpc())
+#         return request

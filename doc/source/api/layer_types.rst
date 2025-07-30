@@ -24,6 +24,7 @@ Classes used for the Layer API.
      PottingRegionDeleteData
      PottingRegionUpdateData
      UpdatePottingRegionRequest
+     UpdateTestPointsRequest
 
 
 
