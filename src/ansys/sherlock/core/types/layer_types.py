@@ -369,17 +369,17 @@ class GetTestPointPropertiesRequest(BaseModel):
             request.testPointIDs = self.test_point_ids
         return request
 
+
 class GetICTFixturesPropertiesRequest(BaseModel):
-    """Return the properties for each ICT fixture given a comma-separated list of ICT fixture
-    ids."""
+    """Return the properties for each ICT fixture given a comma-separated list of fixture ids."""
 
     project: str
     """Name of the project."""
     cca_name: str
     """Name of the CCA containing the ict fixture properties to return."""
     ict_fixtures_ids: Optional[str] = None
-    """Optional Param: Comma-separated list of ict fixture ids representing one or more ict 
-        fixtures.   If this parameter is not included, then the entire list of ict fixtures 
+    """Optional Param: Comma-separated list of ict fixture ids representing one or more ict
+        fixtures.   If this parameter is not included, then the entire list of ict fixtures
         for a given CCA will have their properties returned.
     """
 

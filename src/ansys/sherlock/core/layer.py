@@ -2099,13 +2099,11 @@ class Layer(GrpcStub):
             responses.append(get_test_point_props_response)
         return responses
 
-
     @require_version(261)
     def get_ict_fixtures_props(
-            self, request: GetICTFixturesPropertiesRequest
+        self, request: GetICTFixturesPropertiesRequest
     ) -> SherlockLayerService_pb2.GetICTFixturesPropertiesResponse:
-        """Return the properties for each ICT fixture given a comma-separated list of ICT fixture
-        IDs.
+        """Return the properties for each ICT fixture given a comma-separated list of fixture IDs.
 
         Available Since: 2026R1
 
@@ -2136,4 +2134,3 @@ class Layer(GrpcStub):
         response = self.stub.getICTFixturesProperties(get_ict_fixture_props_request)
 
         return response
-

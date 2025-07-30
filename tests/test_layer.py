@@ -1745,9 +1745,7 @@ def helper_test_get_ict_fixtures_props(layer):
         )
         bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
         assert bad_project_response.returnCode.value == -1
-        assert (
-                bad_project_response.returnCode.message == "Cannot find CCA: Invalid CCA Name"
-        )
+        assert bad_project_response.returnCode.message == "Cannot find CCA: Invalid CCA Name"
 
         # Test request with valid ict fixture ids.
         request = GetICTFixturesPropertiesRequest(
@@ -1779,7 +1777,10 @@ def helper_test_get_ict_fixtures_props(layer):
         assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
 
         assert response.ICTFixtureProperties[0].boundary == "Outline"
-        assert response.ICTFixtureProperties[0].constraints == "X-axis translation|Y-axis translation|Z-axis translation"
+        assert (
+            response.ICTFixtureProperties[0].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
         assert response.ICTFixtureProperties[0].polygon == ""
         assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
 
@@ -1802,8 +1803,10 @@ def helper_test_get_ict_fixtures_props(layer):
         assert_float_equals(0.0, float(response.ICTFixtureProperties[1].rotation))
 
         assert response.ICTFixtureProperties[1].boundary == "Outline"
-        assert response.ICTFixtureProperties[
-                   1].constraints == "X-axis translation|Y-axis translation|Z-axis translation"
+        assert (
+            response.ICTFixtureProperties[1].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
         assert response.ICTFixtureProperties[1].polygon == ""
         assert response.ICTFixtureProperties[1].chassisMaterial == "ALUMINUM"
 
@@ -1836,10 +1839,13 @@ def helper_test_get_ict_fixtures_props(layer):
         assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
 
         assert response.ICTFixtureProperties[0].boundary == "Outline"
-        assert response.ICTFixtureProperties[
-                   0].constraints == "X-axis translation|Y-axis translation|Z-axis translation"
+        assert (
+            response.ICTFixtureProperties[0].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
         assert response.ICTFixtureProperties[0].polygon == ""
         assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
+
 
 def helper_test_export_layer_image(layer):
     """Test export_layer_image API"""
