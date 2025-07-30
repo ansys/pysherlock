@@ -370,31 +370,65 @@ class GetTestPointPropertiesRequest(BaseModel):
         return request
 
 
-class UpdateTestPointsRequest(BaseModel):
-    """Contains the properties of a test points update per project."""
-    project: str
-    """Name of the Sherlock project."""
-    update_test_points: list[]
+class GetICTFixturesPropertiesRequest(BaseModel):
+    """Return the properties for each ICT fixture given a comma-separated list of fixture ids."""
 
-# class UpdatePottingRegionRequest(BaseModel):
-#     """Contains the properties of a potting region update per project."""
-#
-#     project: str
-#     """Name of the Sherlock project."""
-#     update_potting_regions: list[PottingRegionUpdateData]
-#     """List of potting region data to update."""
-#
-#     @field_validator("project")
-#     @classmethod
-#     def str_validation(cls, value: str, info: ValidationInfo):
-#         """Validate string fields listed."""
-#         return basic_str_validator(value, info.field_name)
-#
-#     def _convert_to_grpc(
-#         self,
-#     ) -> SherlockLayerService_pb2.UpdatePottingRegionRequest:
-#         request = SherlockLayerService_pb2.UpdatePottingRegionRequest()
-#         request.project = self.project
-#         for update_potting_region in self.update_potting_regions:
-#             request.updatePottingRegions.append(update_potting_region._convert_to_grpc())
-#         return request
+    project: str
+    """Name of the project."""
+    cca_name: str
+    """Name of the CCA containing the ict fixture properties to return."""
+    ict_fixtures_ids: Optional[str] = None
+    """Optional Param: Comma-separated list of ict fixture ids representing one or more ict
+        fixtures.   If this parameter is not included, then the entire list of ict fixtures
+        for a given CCA will have their properties returned.
+    """
+
+    @field_validator("project", "cca_name", "ict_fixtures_ids")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("ict_fixtures_ids")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the ict_fixtures_ids to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetICTFixturesPropertiesRequest:
+        request = SherlockLayerService_pb2.GetICTFixturesPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.ict_fixtures_ids is not None:
+            request.ICTFixtureIDs = self.ict_fixtures_ids
+        return request
+
+    class UpdateTestPointsRequest(BaseModel):
+        """Contains the properties of a test points update per project."""
+        project: str
+        """Name of the Sherlock project."""
+        #
+
+    # class UpdatePottingRegionRequest(BaseModel):
+    #     """Contains the properties of a potting region update per project."""
+    #
+    #     project: str
+    #     """Name of the Sherlock project."""
+    #     update_potting_regions: list[PottingRegionUpdateData]
+    #     """List of potting region data to update."""
+    #
+    #     @field_validator("project")
+    #     @classmethod
+    #     def str_validation(cls, value: str, info: ValidationInfo):
+    #         """Validate string fields listed."""
+    #         return basic_str_validator(value, info.field_name)
+    #
+    #     def _convert_to_grpc(
+    #         self,
+    #     ) -> SherlockLayerService_pb2.UpdatePottingRegionRequest:
+    #         request = SherlockLayerService_pb2.UpdatePottingRegionRequest()
+    #         request.project = self.project
+    #         for update_potting_region in self.update_potting_regions:
+    #             request.updatePottingRegions.append(update_potting_region._convert_to_grpc())
+    #         return request
+

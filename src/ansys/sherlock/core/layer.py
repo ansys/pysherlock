@@ -7,13 +7,13 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
     GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
     RectangularShape,
     SlotShape,
     UpdatePottingRegionRequest,
-    UpdateTestPointsRequest,
 )
 
 try:
@@ -2059,6 +2059,81 @@ class Layer(GrpcStub):
         except SherlockExportLayerImageError as e:
             LOG.error(str(e))
             raise e
+
+    @require_version(261)
+    def get_test_point_props(
+        self, request: GetTestPointPropertiesRequest
+    ) -> list[SherlockLayerService_pb2.GetTestPointPropertiesResponse]:
+        """Return the properties for each test point given a comma-separated list of test point IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetTestPointPropertiesRequest
+             Contains all the information needed to return the properties for one or more test
+             points.
+
+        Returns
+        -------
+        list[SherlockCommonService_pb2.GetTestPointPropertiesResponse]
+            Properties for each test point that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetTestPointPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetTestPointPropertiesRequest(
+        >>>    project = "Test Point Test Project"
+        >>>    cca_name = "Main Board"
+        >>>    test_point_ids = "TP1,TP2"
+        >>> )
+        >>> responses = layer.get_test_point_props(request)
+        """
+        get_test_point_props_request = request._convert_to_grpc()
+        responses = []
+        for get_test_point_props_response in self.stub.getTestPointProperties(
+            get_test_point_props_request
+        ):
+            responses.append(get_test_point_props_response)
+        return responses
+
+    @require_version(261)
+    def get_ict_fixtures_props(
+        self, request: GetICTFixturesPropertiesRequest
+    ) -> SherlockLayerService_pb2.GetICTFixturesPropertiesResponse:
+        """Return the properties for each ICT fixture given a comma-separated list of fixture IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetICTFixturesPropertiesRequest
+             Contains all the information needed to return the properties for one or more ICT
+             fixtures.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.GetICTFixturesPropertiesResponse
+            Properties for each ICT fixture that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetICTFixturesPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetICTFixturesPropertiesRequest(
+        >>>    project = "Tutorial Project"
+        >>>    cca_name = "Main Board"
+        >>>    ict_fixtures_ids = "F1,F2"
+        >>> )
+        >>> response = layer.get_ict_fixtures_props(request)
+        """
+        get_ict_fixture_props_request = request._convert_to_grpc()
+        response = self.stub.getICTFixturesProperties(get_ict_fixture_props_request)
+
+        return response
 
     @require_version(261)
     def get_test_point_props(
