@@ -2104,7 +2104,8 @@ class Layer(GrpcStub):
     def get_ict_fixtures_props(
             self, request: GetICTFixturesPropertiesRequest
     ) -> SherlockLayerService_pb2.GetICTFixturesPropertiesResponse:
-        """Return the properties for each ICT fixture given a comma-separated list of ICT fixture IDs.
+        """Return the properties for each ICT fixture given a comma-separated list of ICT fixture
+        IDs.
 
         Available Since: 2026R1
 
