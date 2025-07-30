@@ -2,9 +2,11 @@
 
 """Module containing all life cycle management capabilities."""
 try:
+    import SherlockCommonService_pb2
     import SherlockLifeCycleService_pb2
     import SherlockLifeCycleService_pb2_grpc
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2_grpc
 
@@ -35,6 +37,7 @@ from ansys.sherlock.core.errors import (
     SherlockNoGrpcConnectionException,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
 from ansys.sherlock.core.utils.version_check import require_version
 
 
@@ -2107,3 +2110,56 @@ class Lifecycle(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+    @require_version(261)
+    def import_thermal_signal(
+        self, request: ImportThermalSignalRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Import a thermal signal to a life cycle phase.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: ImportThermalSignalRequest
+            Request object containing the information needed to import a thermal signal.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
+        >>> from ansys.sherlock.core.types.lifecycle_types import ThermalSignalFileProperties
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.import_thermal_signal(
+        >>> ImportThermalSignalRequest(
+        >>>         file_name="/path/to/thermal_signal_file.csv",
+        >>>         project="TestProject",
+        >>>         thermal_signal_file_properties=ThermalSignalFileProperties(
+        >>>             header_row_count=0,
+        >>>             numeric_format="English",
+        >>>             column_delimiter=",",
+        >>>             time_column="Time",
+        >>>             time_units="sec",
+        >>>             temperature_column="Temperature",
+        >>>             temperature_units="C"
+        >>>         ),
+        >>>         phase_name=phaseName,
+        >>>         time_removal= False,
+        >>>         load_range_percentage=0.25,
+        >>>         number_of_bins=0,
+        >>>         filtering_limit=0.0,
+        >>>         generated_cycles_label="Second Generated Cycles from Python",
+        >>>     )
+        >>> )
+        """
+        import_thermal_signal_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.importThermalSignal(import_thermal_signal_request)
