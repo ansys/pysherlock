@@ -13,6 +13,7 @@ Classes used for the Layer API.
 
      CopyPottingRegionRequest
      DeletePottingRegionRequest
+     GetICTFixturesPropertiesRequest
      GetTestPointPropertiesRequest
      PolygonalShape
      RectangularShape
