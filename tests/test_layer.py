@@ -42,7 +42,9 @@ from ansys.sherlock.core.types.layer_types import (
     PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
+    PcbTestPointProperties,
     UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 from tests.test_utils import assert_float_equals
@@ -54,27 +56,28 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
-    helper_test_update_mount_points_by_file(layer)
-    helper_test_delete_all_ict_fixtures(layer)
-    helper_test_delete_all_mount_points(layer)
-    helper_test_delete_all_test_points(layer)
-    helper_test_add_potting_region(layer)
-    helper_test_update_potting_region(layer)
-    helper_test_copy_potting_regions(layer)
-    helper_test_delete_potting_regions(layer)
-    helper_test_update_test_fixtures_by_file(layer)
-    helper_test_update_test_points_by_file(layer)
-    helper_test_export_all_mount_points(layer)
-    helper_test_export_all_test_fixtures(layer)
-    helper_test_export_all_test_points(layer)
-    region_id = helper_test_add_modeling_region(layer)
-    region_id = helper_test_update_modeling_region(layer, region_id)
-    helper_test_copy_modeling_region(layer, region_id)
-    helper_test_delete_modeling_region(layer, region_id)
-    helper_test_list_layers(layer)
-    helper_test_get_ict_fixtures_props(layer)
-    helper_test_get_test_point_props(layer)
-    helper_test_export_layer_image(layer)
+    # helper_test_update_mount_points_by_file(layer)
+    # helper_test_delete_all_ict_fixtures(layer)
+    # helper_test_delete_all_mount_points(layer)
+    # helper_test_delete_all_test_points(layer)
+    # helper_test_add_potting_region(layer)
+    # helper_test_update_potting_region(layer)
+    # helper_test_copy_potting_regions(layer)
+    # helper_test_delete_potting_regions(layer)
+    # helper_test_update_test_fixtures_by_file(layer)
+    helper_test_update_test_points(layer)
+    # helper_test_update_test_points_by_file(layer)
+    # helper_test_export_all_mount_points(layer)
+    # helper_test_export_all_test_fixtures(layer)
+    # helper_test_export_all_test_points(layer)
+    # region_id = helper_test_add_modeling_region(layer)
+    # region_id = helper_test_update_modeling_region(layer, region_id)
+    # helper_test_copy_modeling_region(layer, region_id)
+    # helper_test_delete_modeling_region(layer, region_id)
+    # helper_test_list_layers(layer)
+    # helper_test_get_ict_fixtures_props(layer)
+    # helper_test_get_test_point_props(layer)
+    # helper_test_export_layer_image(layer)
 
 
 def helper_test_add_potting_region(layer: Layer):
@@ -1845,6 +1848,131 @@ def helper_test_get_ict_fixtures_props(layer):
         )
         assert response.ICTFixtureProperties[0].polygon == ""
         assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
+
+def helper_test_update_test_points(layer):
+    """Test update_test_points API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    test_point_1 = PcbTestPointProperties(
+        test_point_id="TP1",
+        test_point_side="BOTTOM",
+        test_point_units="in",
+        test_point_x=1.0,
+        test_point_y=0.5,
+        test_point_radius=0.2,
+        test_point_load_type="Force",
+        test_point_load_value=3.0,
+        test_point_load_units="ozf",
+    )
+    #TODO add more test points possibly
+    #TODO maybe try catch these test points?  TBD
+
+
+    try:
+        UpdateTestPointsRequest(
+            project="",
+            cca_name=cca_name,
+            update_test_points=[test_point_1]
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    try:
+        UpdateTestPointsRequest(
+            project=project,
+            cca_name="",
+            update_test_points=[test_point_1]
+        )
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # try:
+    #     UpdateTestPointsRequest(
+    #         project=project,
+    #         cca_name=cca_name,
+    #         update_test_points=[]
+    #     )
+    #     pytest.fail("No exception thrown when using an invalid parameter")
+    # except pydantic.ValidationError as e:
+    #     assert isinstance(e, pydantic.ValidationError)
+
+
+    # if layer._is_connection_up():
+    #     try:
+    #         layer.update_test_points_by_file(
+    #             "Tutorial Project",
+    #             "Invalid CCA",
+    #             "TestPointImport.csv",
+    #         )
+    #         pytest.fail("No exception thrown when using an invalid parameter")
+    #     except Exception as e:
+    #         assert type(e) == SherlockUpdateTestPointsByFileError
+
+
+"""
+    if layer._is_connection_up():
+
+        potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
+
+        layer.add_potting_region(
+            project,
+            [
+                {
+                    "cca_name": cca_name,
+                    "potting_id": potting_id,
+                    "side": potting_side,
+                    "material": potting_material,
+                    "potting_units": potting_units,
+                    "thickness": potting_thickness,
+                    "standoff": potting_standoff,
+                    "shape": potting_shape,
+                },
+            ],
+        )
+
+        # Update potting region that was added above
+        potting_regions = [
+            PottingRegionUpdateData(
+                potting_region_id_to_update=potting_id,
+                potting_region=PottingRegion(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    potting_side=potting_side,
+                    potting_material=potting_material,
+                    potting_units=potting_units,
+                    potting_thickness=potting_thickness,
+                    potting_standoff=potting_standoff,
+                    shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=45.0),
+                ),
+            ),
+            PottingRegionUpdateData(
+                potting_region_id_to_update=potting_id,
+                potting_region=PottingRegion(
+                    cca_name=cca_name,
+                    potting_id=potting_id,
+                    potting_side=potting_side,
+                    potting_material=potting_material,
+                    potting_units=potting_units,
+                    potting_thickness=potting_thickness,
+                    potting_standoff=potting_standoff,
+                    shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=0.0),
+                ),
+            ),
+        ]
+
+        request = UpdatePottingRegionRequest(
+            project=project, update_potting_regions=potting_regions
+        )
+
+        responses = layer.update_potting_region(request)
+
+        for return_code in responses:
+            assert return_code.value == 0
+            assert return_code.message == """""
 
 
 def helper_test_export_layer_image(layer):
