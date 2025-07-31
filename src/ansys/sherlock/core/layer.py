@@ -14,6 +14,7 @@ from ansys.sherlock.core.types.layer_types import (
     RectangularShape,
     SlotShape,
     UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
 )
 
 try:
@@ -2137,12 +2138,12 @@ class Layer(GrpcStub):
 
     @require_version(261)
     def update_test_points(self, request: UpdateTestPointsRequest) \
-            -> list[SherlockLayerService_pb2.ReturnCode]:
+            -> SherlockLayerService_pb2.UpdateTestPointsResponse:
         """Update test point properties of a CCA from input parameters.
 
                 Available Since: 2026R1
 
-                Parameters
+                Parameters TODO commenting this
                 ----------
                 project: str
                     Name of the Sherlock project.
@@ -2176,82 +2177,5 @@ class Layer(GrpcStub):
                 >>> )
                 """
         update_request = request._convert_to_grpc()
-        responses = []
-        for grpc_return_code in self.stub.updateTestPoints(update_request):
-            responses.append(grpc_return_code)
-        return responses
-
-"""
-    @require_version(251)
-    def update_potting_region(
-        self, request: UpdatePottingRegionRequest
-    ) -> list[SherlockCommonService_pb2.ReturnCode]:
-        Update one or more potting regions in a specific project.
-
-        Available Since: 2025R1
-
-        Parameters
-        ----------
-        request: UpdatePottingRegionRequest
-            Contains all the information needed to update one or more potting regions per project.
-
-        Returns
-        -------
-        list[SherlockCommonService_pb2.ReturnCode]
-            Return codes for each request.
-
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
-        >>> from ansys.sherlock.core.types.layer_types import PottingRegionUpdateData
-        >>> from ansys.sherlock.core.types.layer_types import PottingRegion
-        >>> sherlock = launch_sherlock()
-        >>>
-        >>> update1 = PottingRegionUpdateData(
-        >>> potting_region_id_to_update=potting_id,
-        >>> potting_region=PottingRegionData(
-        >>>     cca_name=cca_name,
-        >>>     potting_id=potting_id,
-        >>>     potting_side=potting_side,
-        >>>     potting_material=potting_material,
-        >>>     potting_units=potting_units,
-        >>>     potting_thickness=potting_thickness,
-        >>>     potting_standoff=potting_standoff,
-        >>>     shape=PolygonalShape(
-        >>>         points=[(0, 1), (5, 1), (5, 5), (1, 5)],
-        >>>         rotation=45.0
-        >>>     )
-        >>> )
-        >>> )
-        >>> update2 = PottingRegionUpdateData(
-        >>> potting_region_id_to_update=potting_id,
-        >>> potting_region=PottingRegionData(
-        >>>     cca_name=cca_name,
-        >>>     potting_id=potting_id,
-        >>>     potting_side=potting_side,
-        >>>     potting_material=potting_material,
-        >>>     potting_units=potting_units,
-        >>>     potting_thickness=potting_thickness,
-        >>>     potting_standoff=potting_standoff,
-        >>>     shape=PolygonalShape(
-        >>>         points=[(0, 1), (5, 1), (5, 5), (1, 5)],
-        >>>         rotation=0.0
-        >>>     )
-        >>> )
-        >>> )
-        >>> example_request = UpdatePottingRegionRequest(
-        >>>     "project_name",
-        >>>     [
-        >>>         update1,
-        >>>         update2
-        >>>     ]
-        >>> )
-        >>> return_codes = sherlock.layer.update_potting_region(example_request)
-
-        update_request = request._convert_to_grpc()
-
-        responses = []
-        for grpc_return_code in self.stub.updatePottingRegion(update_request):
-            responses.append(grpc_return_code)
-        return responses"""
+        response = self.stub.updateTestPoints(update_request)
+        return response

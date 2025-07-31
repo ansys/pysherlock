@@ -42,7 +42,7 @@ from ansys.sherlock.core.types.layer_types import (
     PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
-    PcbTestPointProperties,
+    TestPointProperties,
     UpdatePottingRegionRequest,
     UpdateTestPointsRequest,
 )
@@ -1855,7 +1855,7 @@ def helper_test_update_test_points(layer):
     project = "Tutorial Project"
     cca_name = "Main Board"
 
-    test_point_1 = PcbTestPointProperties(
+    test_point_1 = TestPointProperties(
         test_point_id="TP1",
         test_point_side="BOTTOM",
         test_point_units="in",
@@ -1899,6 +1899,18 @@ def helper_test_update_test_points(layer):
     #     pytest.fail("No exception thrown when using an invalid parameter")
     # except pydantic.ValidationError as e:
     #     assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+
+        successful_request = UpdateTestPointsRequest(
+            project=project,
+            cca_name=cca_name,
+            update_test_points=[test_point_1],
+        )
+        successful_response = layer.update_test_points(successful_request)
+        assert successful_response.returnCode.value == 0
+        # assert len(successful_response.TestPointProperties) == 1
+
 
 
     # if layer._is_connection_up():

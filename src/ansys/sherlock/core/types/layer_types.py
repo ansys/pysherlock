@@ -403,32 +403,89 @@ class GetICTFixturesPropertiesRequest(BaseModel):
             request.ICTFixtureIDs = self.ict_fixtures_ids
         return request
 
-    class UpdateTestPointsRequest(BaseModel):
-        """Contains the properties of a test points update per project."""
-        project: str
-        """Name of the Sherlock project."""
-        #
+class TestPointProperties(BaseModel):
+    __test__ = False  # This line is to notify pytest that this is not a test class
+    """Contains the properties of a test point."""
 
-    # class UpdatePottingRegionRequest(BaseModel):
-    #     """Contains the properties of a potting region update per project."""
-    #
-    #     project: str
-    #     """Name of the Sherlock project."""
-    #     update_potting_regions: list[PottingRegionUpdateData]
-    #     """List of potting region data to update."""
-    #
-    #     @field_validator("project")
-    #     @classmethod
-    #     def str_validation(cls, value: str, info: ValidationInfo):
-    #         """Validate string fields listed."""
-    #         return basic_str_validator(value, info.field_name)
-    #
-    #     def _convert_to_grpc(
-    #         self,
-    #     ) -> SherlockLayerService_pb2.UpdatePottingRegionRequest:
-    #         request = SherlockLayerService_pb2.UpdatePottingRegionRequest()
-    #         request.project = self.project
-    #         for update_potting_region in self.update_potting_regions:
-    #             request.updatePottingRegions.append(update_potting_region._convert_to_grpc())
-    #         return request
+    test_point_id: str
+    """The test point ID"""
+    test_point_side: str
+    """The test point side"""
+    test_point_units: str
+    """The test point units"""
+    test_point_x: float
+    """The test point center x-value"""
+    test_point_y: float
+    """The test point center y-value"""
+    test_point_radius: float
+    """The test point radius"""
+    test_point_load_type: str #TODO maybe change to enum later
+    """The test point load type"""
+    test_point_load_value: float
+    """The test point load value"""
+    test_point_load_units: str
+    """The test point load units"""
 
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.TestPointProperties:
+        grpc_test_point_data = SherlockLayerService_pb2.TestPointProperties()
+
+        grpc_test_point_data.ID = self.test_point_id
+        grpc_test_point_data.side = self.test_point_side
+        grpc_test_point_data.units = self.test_point_units
+        grpc_test_point_data.centerX = self.test_point_x
+        grpc_test_point_data.centerY = self.test_point_y
+        grpc_test_point_data.radius = self.test_point_radius
+        grpc_test_point_data.loadType = self.test_point_load_type
+        grpc_test_point_data.loadValue = self.test_point_load_value
+        grpc_test_point_data.loadUnits = self.test_point_load_units
+
+        return grpc_test_point_data
+
+    @field_validator("test_point_id", "test_point_side", "test_point_units",
+                        "test_point_load_type")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    #     TODO delete this.  Only for reference ATM
+    #     shape: Union[CircularShape, PCBShape, PolygonalShape, RectangularShape, SlotShape]
+    #     """The shape of the potting region."""
+    #
+    #         if isinstance(self.shape, CircularShape):
+    #             grpc_potting_region_data.circularShape.CopyFrom(self.shape._convert_to_grpc())
+    #         elif isinstance(self.shape, PCBShape):
+    #             grpc_potting_region_data.pCBShape.CopyFrom(self.shape._convert_to_grpc())
+    #         elif isinstance(self.shape, PolygonalShape):
+    #             grpc_potting_region_data.polygonalShape.CopyFrom(self.shape._convert_to_grpc())
+    #         elif isinstance(self.shape, RectangularShape):
+    #             grpc_potting_region_data.rectangularShape.CopyFrom(self.shape._convert_to_grpc())
+    #         elif isinstance(self.shape, SlotShape):
+    #             grpc_potting_region_data.slotShape.CopyFrom(self.shape._convert_to_grpc())
+    #         else:
+    #             raise ValueError("Unsupported shape given '" + type(self.shape).__name__ + "'")
+
+
+class UpdateTestPointsRequest(BaseModel):
+    """Contains the properties of a test points update per project."""
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    update_test_points: list[TestPointProperties]
+    """List of test points with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateTestPointsRequest:
+        request = SherlockLayerService_pb2.UpdateTestPointsRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.update_test_points is not None:
+            for update_test_point in self.update_test_points:
+                request.testPointProperties.append(update_test_point._convert_to_grpc())
+        return request
