@@ -441,7 +441,7 @@ class TestPointProperties(BaseModel):
 
         return grpc_test_point_data
 
-    @field_validator("test_point_id", "test_point_side", "test_point_units",
+    @field_validator("test_point_side", "test_point_units",
                         "test_point_load_type")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):

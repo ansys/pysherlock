@@ -1866,6 +1866,18 @@ def helper_test_update_test_points(layer):
         test_point_load_value=3.0,
         test_point_load_units="ozf",
     )
+
+    test_point_2 = TestPointProperties(
+        test_point_id="",
+        test_point_side="TOP",
+        test_point_units="mm",
+        test_point_x=-30,
+        test_point_y=-10,
+        test_point_radius=5,
+        test_point_load_type="Displacement",
+        test_point_load_value=0,
+        test_point_load_units="in",
+    )
     #TODO add more test points possibly
     #TODO maybe try catch these test points?  TBD
 
@@ -1905,11 +1917,14 @@ def helper_test_update_test_points(layer):
         successful_request = UpdateTestPointsRequest(
             project=project,
             cca_name=cca_name,
-            update_test_points=[test_point_1],
+            update_test_points=[test_point_1, test_point_2],
         )
         successful_response = layer.update_test_points(successful_request)
         assert successful_response.returnCode.value == 0
-        # assert len(successful_response.TestPointProperties) == 1
+
+        assert successful_response.TestPointProperties[0].ID == "TP1"
+
+    #TODO mixed test and failed test
 
 
 
