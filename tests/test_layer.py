@@ -57,7 +57,6 @@ def test_all():
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
     # helper_test_update_mount_points_by_file(layer)
-    # helper_test_delete_all_ict_fixtures(layer)
     # helper_test_delete_all_mount_points(layer)
     # helper_test_delete_all_test_points(layer)
     # helper_test_add_potting_region(layer)
@@ -78,6 +77,8 @@ def test_all():
     # helper_test_get_ict_fixtures_props(layer)
     # helper_test_get_test_point_props(layer)
     # helper_test_export_layer_image(layer)
+    # helper_test_delete_all_ict_fixtures(layer)
+
 
 
 def helper_test_add_potting_region(layer: Layer):
@@ -1878,7 +1879,19 @@ def helper_test_update_test_points(layer):
         test_point_load_value=0,
         test_point_load_units="in",
     )
-    #TODO add more test points possibly
+
+    invalid_test_point = TestPointProperties(
+        test_point_id="TP2",
+        test_point_side="invalid",
+        test_point_units="mm",
+        test_point_x=60,
+        test_point_y=-40,
+        test_point_radius=4,
+        test_point_load_type="Force",
+        test_point_load_value=5,
+        test_point_load_units="N",
+    )
+
     #TODO maybe try catch these test points?  TBD
 
 
@@ -1902,18 +1915,20 @@ def helper_test_update_test_points(layer):
     except pydantic.ValidationError as e:
         assert isinstance(e, pydantic.ValidationError)
 
-    # try:
-    #     UpdateTestPointsRequest(
-    #         project=project,
-    #         cca_name=cca_name,
-    #         update_test_points=[]
-    #     )
-    #     pytest.fail("No exception thrown when using an invalid parameter")
-    # except pydantic.ValidationError as e:
-    #     assert isinstance(e, pydantic.ValidationError)
-
     if layer._is_connection_up():
 
+        # Invalid test point test
+        invalid_request = UpdateTestPointsRequest(
+            project=project,
+            cca_name=cca_name,
+            update_test_points=[invalid_test_point],
+        )
+        invalid_response = layer.update_test_points(invalid_request)
+        assert invalid_response.returnCode.value == -1
+        assert invalid_response.returnCode.message == "Update test points completed with issues"
+
+
+        # Successful test point test
         successful_request = UpdateTestPointsRequest(
             project=project,
             cca_name=cca_name,
@@ -1921,86 +1936,36 @@ def helper_test_update_test_points(layer):
         )
         successful_response = layer.update_test_points(successful_request)
         assert successful_response.returnCode.value == 0
+        assert successful_response.returnCode.message == "Update test points completed successfully"
 
-        assert successful_response.TestPointProperties[0].ID == "TP1"
-
-    #TODO mixed test and failed test
-
-
-
-    # if layer._is_connection_up():
-    #     try:
-    #         layer.update_test_points_by_file(
-    #             "Tutorial Project",
-    #             "Invalid CCA",
-    #             "TestPointImport.csv",
-    #         )
-    #         pytest.fail("No exception thrown when using an invalid parameter")
-    #     except Exception as e:
-    #         assert type(e) == SherlockUpdateTestPointsByFileError
-
-
-"""
-    if layer._is_connection_up():
-
-        potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
-
-        layer.add_potting_region(
-            project,
-            [
-                {
-                    "cca_name": cca_name,
-                    "potting_id": potting_id,
-                    "side": potting_side,
-                    "material": potting_material,
-                    "potting_units": potting_units,
-                    "thickness": potting_thickness,
-                    "standoff": potting_standoff,
-                    "shape": potting_shape,
-                },
-            ],
+        properties_request = GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids="TP1, TP5",
         )
+        properties_responses = layer.get_test_point_props(properties_request)
 
-        # Update potting region that was added above
-        potting_regions = [
-            PottingRegionUpdateData(
-                potting_region_id_to_update=potting_id,
-                potting_region=PottingRegion(
-                    cca_name=cca_name,
-                    potting_id=potting_id,
-                    potting_side=potting_side,
-                    potting_material=potting_material,
-                    potting_units=potting_units,
-                    potting_thickness=potting_thickness,
-                    potting_standoff=potting_standoff,
-                    shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=45.0),
-                ),
-            ),
-            PottingRegionUpdateData(
-                potting_region_id_to_update=potting_id,
-                potting_region=PottingRegion(
-                    cca_name=cca_name,
-                    potting_id=potting_id,
-                    potting_side=potting_side,
-                    potting_material=potting_material,
-                    potting_units=potting_units,
-                    potting_thickness=potting_thickness,
-                    potting_standoff=potting_standoff,
-                    shape=PolygonalShape(points=[(0, 1), (5, 1), (5, 5), (1, 5)], rotation=0.0),
-                ),
-            ),
-        ]
+        # Tests updated properties for TP1
+        assert properties_responses[0].testPointProperties.ID == "TP1"
+        assert properties_responses[0].testPointProperties.side == "BOTTOM"
+        assert properties_responses[0].testPointProperties.units == "in"
+        assert_float_equals(1.0, properties_responses[0].testPointProperties.centerX)
+        assert_float_equals(0.5, properties_responses[0].testPointProperties.centerY)
+        assert properties_responses[0].testPointProperties.radius == 0.2
+        assert properties_responses[0].testPointProperties.loadType == 0
+        assert properties_responses[0].testPointProperties.loadValue == 3.0
+        assert properties_responses[0].testPointProperties.loadUnits == "ozf"
 
-        request = UpdatePottingRegionRequest(
-            project=project, update_potting_regions=potting_regions
-        )
-
-        responses = layer.update_potting_region(request)
-
-        for return_code in responses:
-            assert return_code.value == 0
-            assert return_code.message == """""
-
+        # Tests updated properties for TP5
+        assert properties_responses[1].testPointProperties.ID == "TP5"
+        assert properties_responses[1].testPointProperties.side == "TOP"
+        assert properties_responses[1].testPointProperties.units == "mm"
+        assert_float_equals(-30.0, properties_responses[1].testPointProperties.centerX)
+        assert_float_equals(-10.0, properties_responses[1].testPointProperties.centerY)
+        assert properties_responses[1].testPointProperties.radius == 5.0
+        assert properties_responses[1].testPointProperties.loadType == 1
+        assert properties_responses[1].testPointProperties.loadValue == 0.0
+        assert properties_responses[1].testPointProperties.loadUnits == "in"
 
 def helper_test_export_layer_image(layer):
     """Test export_layer_image API"""
