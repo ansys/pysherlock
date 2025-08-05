@@ -419,7 +419,7 @@ class TestPointProperties(BaseModel):
     """The test point center y-value"""
     test_point_radius: float
     """The test point radius"""
-    test_point_load_type: str #TODO maybe change to enum later
+    test_point_load_type: str
     """The test point load type"""
     test_point_load_value: float
     """The test point load value"""
@@ -447,24 +447,6 @@ class TestPointProperties(BaseModel):
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
-
-    #     TODO delete this.  Only for reference ATM
-    #     shape: Union[CircularShape, PCBShape, PolygonalShape, RectangularShape, SlotShape]
-    #     """The shape of the potting region."""
-    #
-    #         if isinstance(self.shape, CircularShape):
-    #             grpc_potting_region_data.circularShape.CopyFrom(self.shape._convert_to_grpc())
-    #         elif isinstance(self.shape, PCBShape):
-    #             grpc_potting_region_data.pCBShape.CopyFrom(self.shape._convert_to_grpc())
-    #         elif isinstance(self.shape, PolygonalShape):
-    #             grpc_potting_region_data.polygonalShape.CopyFrom(self.shape._convert_to_grpc())
-    #         elif isinstance(self.shape, RectangularShape):
-    #             grpc_potting_region_data.rectangularShape.CopyFrom(self.shape._convert_to_grpc())
-    #         elif isinstance(self.shape, SlotShape):
-    #             grpc_potting_region_data.slotShape.CopyFrom(self.shape._convert_to_grpc())
-    #         else:
-    #             raise ValueError("Unsupported shape given '" + type(self.shape).__name__ + "'")
-
 
 class UpdateTestPointsRequest(BaseModel):
     """Contains the properties of a test points update per project."""

@@ -2143,38 +2143,41 @@ class Layer(GrpcStub):
 
                 Available Since: 2026R1
 
-                Parameters TODO commenting this
+                Parameters
                 ----------
-                project: str
-                    Name of the Sherlock project.
-                cca_name: str
-                    Name of the CCA.
-                file_path: str
-                    Path for the CSV file with the test point properties.
+                request: UpdateTestPointsRequest
+                    Contains all the information needed to update the properties for one or more
+                    test points.
 
                 Returns
                 -------
-                int
-                    Status code of the response. 0 for success.
+                SherlockCommonService_pb2.UpdateTestPointsResponse
+                    A status code and message for the update test points request.
 
                 Examples
                 --------
                 >>> from ansys.sherlock.core.launcher import launch_sherlock
+                >>> from ansys.sherlock.core.types.layer_types import UpdateTestPointsRequest, TestPointProperties
                 >>> sherlock = launch_sherlock()
-                >>> sherlock.project.import_odb_archive(
-                >>>     "ODB++ Tutorial.tgz",
-                >>>     True,
-                >>>     True,
-                >>>     True,
-                >>>     True,
-                >>>     project="Test",
-                >>>     cca_name="Card",
+                >>>
+                >>> test_point = TestPointProperties(
+                >>> test_point_id="TP1",
+                >>> test_point_side="BOTTOM",
+                >>> test_point_units="in",
+                >>> test_point_x=1.0,
+                >>> test_point_y=0.5,
+                >>> test_point_radius=0.2,
+                >>> test_point_load_type="Force",
+                >>> test_point_load_value=3.0,
+                >>> test_point_load_units="ozf",
                 >>> )
-                >>> sherlock.layer.update_test_points_by_file(
-                >>>     "Test",
-                >>>     "Card",
-                >>>     "TestPointsImport.csv"
+                >>>
+                >>> request = layer_types.UpdateTestPointsRequest(
+                >>> project = "Tutorial Project"
+                >>> cca_name = "Main Board"
+                >>> update_test_points = [test_point]
                 >>> )
+                >>> response = layer.update_test_points(request)
                 """
         update_request = request._convert_to_grpc()
         response = self.stub.updateTestPoints(update_request)
