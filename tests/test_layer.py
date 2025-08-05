@@ -56,28 +56,29 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
-    # helper_test_update_mount_points_by_file(layer)
-    # helper_test_delete_all_mount_points(layer)
-    # helper_test_delete_all_test_points(layer)
-    # helper_test_add_potting_region(layer)
-    # helper_test_update_potting_region(layer)
-    # helper_test_copy_potting_regions(layer)
-    # helper_test_delete_potting_regions(layer)
-    # helper_test_update_test_fixtures_by_file(layer)
+    helper_test_update_mount_points_by_file(layer)
+    helper_test_add_potting_region(layer)
+    helper_test_update_potting_region(layer)
+    helper_test_copy_potting_regions(layer)
+    helper_test_delete_potting_regions(layer)
+    helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points(layer)
-    # helper_test_update_test_points_by_file(layer)
-    # helper_test_export_all_mount_points(layer)
-    # helper_test_export_all_test_fixtures(layer)
-    # helper_test_export_all_test_points(layer)
-    # region_id = helper_test_add_modeling_region(layer)
-    # region_id = helper_test_update_modeling_region(layer, region_id)
-    # helper_test_copy_modeling_region(layer, region_id)
-    # helper_test_delete_modeling_region(layer, region_id)
-    # helper_test_list_layers(layer)
-    # helper_test_get_ict_fixtures_props(layer)
-    # helper_test_get_test_point_props(layer)
-    # helper_test_export_layer_image(layer)
-    # helper_test_delete_all_ict_fixtures(layer)
+    helper_test_update_test_points_by_file(layer)
+    helper_test_export_all_mount_points(layer)
+    helper_test_export_all_test_fixtures(layer)
+    helper_test_export_all_test_points(layer)
+    region_id = helper_test_add_modeling_region(layer)
+    region_id = helper_test_update_modeling_region(layer, region_id)
+    helper_test_copy_modeling_region(layer, region_id)
+    helper_test_delete_modeling_region(layer, region_id)
+    helper_test_list_layers(layer)
+    helper_test_get_ict_fixtures_props(layer)
+    helper_test_get_test_point_props(layer)
+    helper_test_export_layer_image(layer)
+    # Delete APIs must be called last so that test for update/properties APIs pass
+    helper_test_delete_all_ict_fixtures(layer)
+    helper_test_delete_all_mount_points(layer)
+    helper_test_delete_all_test_points(layer)
 
 
 
@@ -1850,6 +1851,7 @@ def helper_test_get_ict_fixtures_props(layer):
         assert response.ICTFixtureProperties[0].polygon == ""
         assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
 
+
 def helper_test_update_test_points(layer):
     """Test update_test_points API"""
 
@@ -1892,9 +1894,7 @@ def helper_test_update_test_points(layer):
         test_point_load_units="N",
     )
 
-    #TODO maybe try catch these test points?  TBD
-
-
+    # Missing Project Name
     try:
         UpdateTestPointsRequest(
             project="",
@@ -1905,6 +1905,7 @@ def helper_test_update_test_points(layer):
     except pydantic.ValidationError as e:
         assert isinstance(e, pydantic.ValidationError)
 
+    # Missing CCA Name
     try:
         UpdateTestPointsRequest(
             project=project,
