@@ -403,9 +403,11 @@ class GetICTFixturesPropertiesRequest(BaseModel):
             request.ICTFixtureIDs = self.ict_fixtures_ids
         return request
 
+
 class TestPointProperties(BaseModel):
-    __test__ = False  # This line is to notify pytest that this is not a test class
     """Contains the properties of a test point."""
+
+    __test__ = False  # This line is to notify pytest that this is not a test class.
 
     test_point_id: str
     """The test point ID"""
@@ -441,15 +443,16 @@ class TestPointProperties(BaseModel):
 
         return grpc_test_point_data
 
-    @field_validator("test_point_side", "test_point_units",
-                        "test_point_load_type")
+    @field_validator("test_point_side", "test_point_units", "test_point_load_type")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
 
+
 class UpdateTestPointsRequest(BaseModel):
     """Contains the properties of a test points update per project."""
+
     project: str
     """Name of the Sherlock project."""
     cca_name: str

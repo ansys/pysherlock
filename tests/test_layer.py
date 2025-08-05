@@ -81,7 +81,6 @@ def test_all():
     helper_test_delete_all_test_points(layer)
 
 
-
 def helper_test_add_potting_region(layer: Layer):
     """Test add_potting_region API."""
     try:
@@ -1896,22 +1895,14 @@ def helper_test_update_test_points(layer):
 
     # Missing Project Name
     try:
-        UpdateTestPointsRequest(
-            project="",
-            cca_name=cca_name,
-            update_test_points=[test_point_1]
-        )
+        UpdateTestPointsRequest(project="", cca_name=cca_name, update_test_points=[test_point_1])
         pytest.fail("No exception thrown when using an invalid parameter")
     except pydantic.ValidationError as e:
         assert isinstance(e, pydantic.ValidationError)
 
     # Missing CCA Name
     try:
-        UpdateTestPointsRequest(
-            project=project,
-            cca_name="",
-            update_test_points=[test_point_1]
-        )
+        UpdateTestPointsRequest(project=project, cca_name="", update_test_points=[test_point_1])
         pytest.fail("No exception thrown when using an invalid parameter")
     except pydantic.ValidationError as e:
         assert isinstance(e, pydantic.ValidationError)
@@ -1927,7 +1918,6 @@ def helper_test_update_test_points(layer):
         invalid_response = layer.update_test_points(invalid_request)
         assert invalid_response.returnCode.value == -1
         assert invalid_response.returnCode.message == "Update test points completed with issues"
-
 
         # Successful test point test
         successful_request = UpdateTestPointsRequest(
@@ -1967,6 +1957,7 @@ def helper_test_update_test_points(layer):
         assert properties_responses[1].testPointProperties.loadType == 1
         assert properties_responses[1].testPointProperties.loadValue == 0.0
         assert properties_responses[1].testPointProperties.loadUnits == "in"
+
 
 def helper_test_export_layer_image(layer):
     """Test export_layer_image API"""
