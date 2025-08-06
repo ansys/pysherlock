@@ -1,0 +1,10 @@
+.. vale off
+
+list\_ccas
+==========
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.list_ccas
+
+.. vale on
