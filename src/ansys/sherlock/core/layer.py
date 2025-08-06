@@ -2162,7 +2162,7 @@ class Layer(GrpcStub):
         >>> TestPointProperties
         >>> sherlock = connect()
         >>> test_point = TestPointProperties(
-        >>> ID="TP1",
+        >>> id="TP1",
         >>> side="BOTTOM",
         >>> units="in",
         >>> center_x=1.0,

@@ -409,7 +409,7 @@ class TestPointProperties(BaseModel):
 
     __test__ = False  # This line is to notify pytest that this is not a test class.
 
-    ID: str
+    id: str
     """ID"""
     side: str
     """Side"""
@@ -431,7 +431,7 @@ class TestPointProperties(BaseModel):
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.TestPointProperties:
         grpc_test_point_data = SherlockLayerService_pb2.TestPointProperties()
 
-        grpc_test_point_data.ID = self.ID
+        grpc_test_point_data.ID = self.id
         grpc_test_point_data.side = self.side
         grpc_test_point_data.units = self.units
         grpc_test_point_data.centerX = self.center_x

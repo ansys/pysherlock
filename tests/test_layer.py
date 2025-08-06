@@ -1858,7 +1858,7 @@ def helper_test_update_test_points(layer):
     cca_name = "Main Board"
 
     test_point_1 = TestPointProperties(
-        ID="TP1",
+        id="TP1",
         side="BOTTOM",
         units="in",
         center_x=1.0,
@@ -1870,7 +1870,7 @@ def helper_test_update_test_points(layer):
     )
 
     test_point_2 = TestPointProperties(
-        ID="",
+        id="",
         side="TOP",
         units="mm",
         center_x=-30,
@@ -1882,7 +1882,7 @@ def helper_test_update_test_points(layer):
     )
 
     invalid_test_point = TestPointProperties(
-        ID="TP2",
+        id="TP2",
         side="invalid",
         units="mm",
         center_x=60,
