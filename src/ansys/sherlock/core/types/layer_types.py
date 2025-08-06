@@ -431,19 +431,19 @@ class TestPointProperties(BaseModel):
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.TestPointProperties:
         grpc_test_point_data = SherlockLayerService_pb2.TestPointProperties()
 
-        grpc_test_point_data.ID = self.test_point_id
-        grpc_test_point_data.side = self.test_point_side
-        grpc_test_point_data.units = self.test_point_units
-        grpc_test_point_data.centerX = self.test_point_x
-        grpc_test_point_data.centerY = self.test_point_y
-        grpc_test_point_data.radius = self.test_point_radius
-        grpc_test_point_data.loadType = self.test_point_load_type
-        grpc_test_point_data.loadValue = self.test_point_load_value
-        grpc_test_point_data.loadUnits = self.test_point_load_units
+        grpc_test_point_data.ID = self.ID
+        grpc_test_point_data.side = self.side
+        grpc_test_point_data.units = self.units
+        grpc_test_point_data.centerX = self.center_x
+        grpc_test_point_data.centerY = self.center_y
+        grpc_test_point_data.radius = self.radius
+        grpc_test_point_data.loadType = self.load_type
+        grpc_test_point_data.loadValue = self.load_value
+        grpc_test_point_data.loadUnits = self.load_units
 
         return grpc_test_point_data
 
-    @field_validator("test_point_side", "test_point_units", "test_point_load_type")
+    @field_validator("side", "units", "load_type")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
