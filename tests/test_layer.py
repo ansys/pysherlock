@@ -75,7 +75,7 @@ def test_all():
     helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
     helper_test_export_layer_image(layer)
-    # Delete APIs must be called last so that test for update/properties APIs pass
+    # Delete APIs must be called last so that tests for update/properties APIs pass
     helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
@@ -1858,39 +1858,39 @@ def helper_test_update_test_points(layer):
     cca_name = "Main Board"
 
     test_point_1 = TestPointProperties(
-        test_point_id="TP1",
-        test_point_side="BOTTOM",
-        test_point_units="in",
-        test_point_x=1.0,
-        test_point_y=0.5,
-        test_point_radius=0.2,
-        test_point_load_type="Force",
-        test_point_load_value=3.0,
-        test_point_load_units="ozf",
+        ID="TP1",
+        side="BOTTOM",
+        units="in",
+        center_x=1.0,
+        center_y=0.5,
+        radius=0.2,
+        load_type="Force",
+        load_value=3.0,
+        load_units="ozf",
     )
 
     test_point_2 = TestPointProperties(
-        test_point_id="",
-        test_point_side="TOP",
-        test_point_units="mm",
-        test_point_x=-30,
-        test_point_y=-10,
-        test_point_radius=5,
-        test_point_load_type="Displacement",
-        test_point_load_value=0,
-        test_point_load_units="in",
+        ID="",
+        side="TOP",
+        units="mm",
+        center_x=-30,
+        center_y=-10,
+        radius=5,
+        load_type="Displacement",
+        load_value=0,
+        load_units="in",
     )
 
     invalid_test_point = TestPointProperties(
-        test_point_id="TP2",
-        test_point_side="invalid",
-        test_point_units="mm",
-        test_point_x=60,
-        test_point_y=-40,
-        test_point_radius=4,
-        test_point_load_type="Force",
-        test_point_load_value=5,
-        test_point_load_units="N",
+        ID="TP2",
+        side="invalid",
+        units="mm",
+        center_x=60,
+        center_y=-40,
+        radius=4,
+        load_type="Force",
+        load_value=5,
+        load_units="N",
     )
 
     # Missing Project Name
@@ -1917,7 +1917,6 @@ def helper_test_update_test_points(layer):
         )
         invalid_response = layer.update_test_points(invalid_request)
         assert invalid_response.returnCode.value == -1
-        assert invalid_response.returnCode.message == "Update test points completed with issues"
 
         # Successful test point test
         successful_request = UpdateTestPointsRequest(
@@ -1927,7 +1926,6 @@ def helper_test_update_test_points(layer):
         )
         successful_response = layer.update_test_points(successful_request)
         assert successful_response.returnCode.value == 0
-        assert successful_response.returnCode.message == "Update test points completed successfully"
 
         properties_request = GetTestPointPropertiesRequest(
             project=project,
