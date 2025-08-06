@@ -2162,15 +2162,15 @@ class Layer(GrpcStub):
         >>> TestPointProperties
         >>> sherlock = connect()
         >>> test_point = TestPointProperties(
-        >>> test_point_id="TP1",
-        >>> test_point_side="BOTTOM",
-        >>> test_point_units="in",
-        >>> test_point_x=1.0,
-        >>> test_point_y=0.5,
-        >>> test_point_radius=0.2,
-        >>> test_point_load_type="Force",
-        >>> test_point_load_value=3.0,
-        >>> test_point_load_units="ozf",
+        >>> ID="TP1",
+        >>> side="BOTTOM",
+        >>> units="in",
+        >>> center_x=1.0,
+        >>> center_y=0.5,
+        >>> radius=0.2,
+        >>> load_type="Force",
+        >>> load_value=3.0,
+        >>> load_units="ozf",
         >>> )
         >>> response = sherlock.layer.update_test_points(UpdateTestPointsRequest(
         >>> project="Tutorial Project",

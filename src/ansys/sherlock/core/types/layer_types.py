@@ -409,24 +409,24 @@ class TestPointProperties(BaseModel):
 
     __test__ = False  # This line is to notify pytest that this is not a test class.
 
-    test_point_id: str
-    """The test point ID"""
-    test_point_side: str
-    """The test point side"""
-    test_point_units: str
-    """The test point units"""
-    test_point_x: float
-    """The test point center x-value"""
-    test_point_y: float
-    """The test point center y-value"""
-    test_point_radius: float
-    """The test point radius"""
-    test_point_load_type: str
-    """The test point load type"""
-    test_point_load_value: float
-    """The test point load value"""
-    test_point_load_units: str
-    """The test point load units"""
+    ID: str
+    """ID"""
+    side: str
+    """Side"""
+    units: str
+    """Units"""
+    center_x: float
+    """Center x-value"""
+    center_y: float
+    """Center y-value"""
+    radius: float
+    """Radius"""
+    load_type: str
+    """Load type"""
+    load_value: float
+    """Load value"""
+    load_units: str
+    """Load units"""
 
     def _convert_to_grpc(self) -> SherlockLayerService_pb2.TestPointProperties:
         grpc_test_point_data = SherlockLayerService_pb2.TestPointProperties()
