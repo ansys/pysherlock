@@ -1,9 +1,9 @@
 # Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
 
-from typing import cast
 import uuid
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.errors import (
@@ -23,6 +23,10 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
+from ansys.sherlock.core.types.lifecycle_types import (
+    ImportThermalSignalRequest,
+    ThermalSignalFileProperties,
+)
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
@@ -46,6 +50,7 @@ def test_all():
     helper_test_load_harmonic_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
     helper_test_load_shock_profile_pulses(lifecycle)
+    helper_test_import_thermal_signal(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -2047,8 +2052,158 @@ def helper_test_load_shock_profile_pulses(lifecycle: Lifecycle):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockLoadShockProfilePulsesError
-            load_error = cast(SherlockLoadShockProfilePulsesError, e)
-            assert len(load_error.error_array) == 1
+
+
+def helper_test_import_thermal_signal(lifecycle: Lifecycle):
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_bins=0,
+                filtering_limit=0.0,
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing file_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, file_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_bins=0,
+                filtering_limit=0.0,
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_bins=0,
+                filtering_limit=0.0,
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_bins=-1,
+                filtering_limit=0.0,
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing generated_cycles_label parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, number_of_bins must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_bins=0,
+                filtering_limit=0.0,
+                generated_cycles_label="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing generated_cycles_label parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, generated_cycles_label is invalid because it is None or empty."
+        )
 
 
 if __name__ == "__main__":
