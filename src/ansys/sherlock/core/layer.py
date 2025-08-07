@@ -13,6 +13,7 @@ from ansys.sherlock.core.types.layer_types import (
     PolygonalShape,
     RectangularShape,
     SlotShape,
+    UpdateICTFixturesRequest,
     UpdatePottingRegionRequest,
     UpdateTestPointsRequest,
 )
@@ -2180,4 +2181,50 @@ class Layer(GrpcStub):
         """
         update_request = request._convert_to_grpc()
         response = self.stub.updateTestPoints(update_request)
+        return response
+
+    @require_version(261)
+    def update_ict_fixtures(
+        self, request: UpdateICTFixturesRequest
+    ) -> SherlockLayerService_pb2.UpdateICTFixturesResponse:
+        """Update ict fixture properties of a CCA from input parameters.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateICTFixturesRequest
+            Contains all the information needed to update the properties for one or more
+            ict fixtures.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.UpdateICTFixturesResponse
+            A status code and message for the update ict fixtures request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import UpdateTestPointsRequest,
+        >>> TestPointProperties
+        >>> sherlock = connect()
+        >>> test_point = TestPointProperties(
+        >>> id="TP1",
+        >>> side="BOTTOM",
+        >>> units="in",
+        >>> center_x=1.0,
+        >>> center_y=0.5,
+        >>> radius=0.2,
+        >>> load_type="Force",
+        >>> load_value=3.0,
+        >>> load_units="ozf",
+        >>> )
+        >>> response = sherlock.layer.update_test_points(UpdateTestPointsRequest(
+        >>> project="Tutorial Project",
+        >>> cca_name="Main Board",
+        >>> update_test_points=[test_point],
+        >>> ))
+        """
+        update_request = request._convert_to_grpc()
+        response = self.stub.updateICTFixtures(update_request)
         return response
