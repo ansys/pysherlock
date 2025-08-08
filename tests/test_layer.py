@@ -68,6 +68,7 @@ def test_all():
     helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
     helper_test_export_layer_image(layer)
+
     # Update APIs must be called after properties APIs so all pass
     helper_test_update_ict_fixtures(layer)
     helper_test_update_mount_points_by_file(layer)
@@ -77,8 +78,9 @@ def test_all():
     helper_test_update_test_points_by_file(layer)
     region_id = helper_test_update_modeling_region(layer, region_id)
     helper_test_copy_modeling_region(layer, region_id)
+
     # Delete APIs must be called last so that tests for update/properties APIs pass
-    # helper_test_delete_all_ict_fixtures(layer)
+    helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
     helper_test_delete_modeling_region(layer, region_id)

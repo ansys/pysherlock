@@ -2205,24 +2205,34 @@ class Layer(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> from ansys.sherlock.core.types.layer_types import UpdateTestPointsRequest,
-        >>> TestPointProperties
+        >>> from ansys.sherlock.core.types.layer_types import UpdateICTFixturesRequest,
+        >>> ICTFixtureProperties
         >>> sherlock = connect()
-        >>> test_point = TestPointProperties(
-        >>> id="TP1",
-        >>> side="BOTTOM",
+        >>> fixture = ICTFixtureProperties(
+        >>> id="F1",
+        >>> type="Mount Hole",
         >>> units="in",
-        >>> center_x=1.0,
-        >>> center_y=0.5,
-        >>> radius=0.2,
-        >>> load_type="Force",
-        >>> load_value=3.0,
-        >>> load_units="ozf",
+        >>> side="TOP",
+        >>> height="0.0",
+        >>> material="GOLD",
+        >>> state="DISABLED",
+        >>> shape="Slot",
+        >>> x="0.3",
+        >>> y="-0.4",
+        >>> length="1.0",
+        >>> width="0.2",
+        >>> diameter="0.0",
+        >>> nodes="10",
+        >>> rotation="15",
+        >>> polygon="",
+        >>> boundary="Outline",
+        >>> constraints="X-axis translation|Z-axis translation",
+        >>> chassis_material="SILVER",
         >>> )
-        >>> response = sherlock.layer.update_test_points(UpdateTestPointsRequest(
+        >>> response = sherlock.layer.update_ict_fixtures(UpdateICTFixturesRequest(
         >>> project="Tutorial Project",
         >>> cca_name="Main Board",
-        >>> update_test_points=[test_point],
+        >>> update_fixtures=[fixture],
         >>> ))
         """
         update_request = request._convert_to_grpc()

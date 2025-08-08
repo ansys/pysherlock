@@ -543,25 +543,7 @@ class ICTFixtureProperties(BaseModel):
 
         return grpc_fixture_data
 
-    @field_validator(
-        "type",
-        "units",
-        "side",
-        "height",
-        "material",
-        "state",
-        "shape",
-        "x",
-        "y",
-        "length",
-        "width",
-        "diameter",
-        "nodes",
-        "rotation",
-        "boundary",
-        "constraints",
-        "chassis_material",
-    )
+    @field_validator("type", "units", "side", "state", "shape")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
