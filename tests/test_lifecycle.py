@@ -2204,10 +2204,10 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="",
-                generated_cycles_label="",
+                generated_cycles_label="Generated Cycles from pySherlock",
             )
         )
-        pytest.fail("No exception raised when using a missing time_filtering_limit parameter")
+        pytest.fail("No exception raised when using a missing time_filtering_limit_units parameter")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
         assert (
