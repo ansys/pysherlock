@@ -402,3 +402,75 @@ class GetICTFixturesPropertiesRequest(BaseModel):
         if self.ict_fixtures_ids is not None:
             request.ICTFixtureIDs = self.ict_fixtures_ids
         return request
+
+
+class TestPointProperties(BaseModel):
+    """Contains the properties of a test point."""
+
+    __test__ = False  # This line is to notify pytest that this is not a test class.
+
+    id: str
+    """ID"""
+    side: str
+    """Side"""
+    units: str
+    """Units"""
+    center_x: float
+    """Center x-value"""
+    center_y: float
+    """Center y-value"""
+    radius: float
+    """Radius"""
+    load_type: str
+    """Load type"""
+    load_value: float
+    """Load value"""
+    load_units: str
+    """Load units"""
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.TestPointProperties:
+        grpc_test_point_data = SherlockLayerService_pb2.TestPointProperties()
+
+        grpc_test_point_data.ID = self.id
+        grpc_test_point_data.side = self.side
+        grpc_test_point_data.units = self.units
+        grpc_test_point_data.centerX = self.center_x
+        grpc_test_point_data.centerY = self.center_y
+        grpc_test_point_data.radius = self.radius
+        grpc_test_point_data.loadType = self.load_type
+        grpc_test_point_data.loadValue = self.load_value
+        grpc_test_point_data.loadUnits = self.load_units
+
+        return grpc_test_point_data
+
+    @field_validator("side", "units", "load_type")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdateTestPointsRequest(BaseModel):
+    """Contains the properties of a test points update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    update_test_points: list[TestPointProperties]
+    """List of test points with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateTestPointsRequest:
+        request = SherlockLayerService_pb2.UpdateTestPointsRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.update_test_points is not None:
+            for update_test_point in self.update_test_points:
+                request.testPointProperties.append(update_test_point._convert_to_grpc())
+        return request
