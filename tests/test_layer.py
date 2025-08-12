@@ -42,7 +42,9 @@ from ansys.sherlock.core.types.layer_types import (
     PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
+    TestPointProperties,
     UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 from tests.test_utils import assert_float_equals
@@ -55,14 +57,12 @@ def test_all():
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
     helper_test_update_mount_points_by_file(layer)
-    helper_test_delete_all_ict_fixtures(layer)
-    helper_test_delete_all_mount_points(layer)
-    helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
     helper_test_update_potting_region(layer)
     helper_test_copy_potting_regions(layer)
     helper_test_delete_potting_regions(layer)
     helper_test_update_test_fixtures_by_file(layer)
+    helper_test_update_test_points(layer)
     helper_test_update_test_points_by_file(layer)
     helper_test_export_all_mount_points(layer)
     helper_test_export_all_test_fixtures(layer)
@@ -75,6 +75,10 @@ def test_all():
     helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
     helper_test_export_layer_image(layer)
+    # Delete APIs must be called last so that tests for update/properties APIs pass
+    helper_test_delete_all_ict_fixtures(layer)
+    helper_test_delete_all_mount_points(layer)
+    helper_test_delete_all_test_points(layer)
 
 
 def helper_test_add_potting_region(layer: Layer):
@@ -1845,6 +1849,112 @@ def helper_test_get_ict_fixtures_props(layer):
         )
         assert response.ICTFixtureProperties[0].polygon == ""
         assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
+
+
+def helper_test_update_test_points(layer):
+    """Test update_test_points API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    test_point_1 = TestPointProperties(
+        id="TP1",
+        side="BOTTOM",
+        units="in",
+        center_x=1.0,
+        center_y=0.5,
+        radius=0.2,
+        load_type="Force",
+        load_value=3.0,
+        load_units="ozf",
+    )
+
+    test_point_2 = TestPointProperties(
+        id="",
+        side="TOP",
+        units="mm",
+        center_x=-30,
+        center_y=-10,
+        radius=5,
+        load_type="Displacement",
+        load_value=0,
+        load_units="in",
+    )
+
+    invalid_test_point = TestPointProperties(
+        id="TP2",
+        side="invalid",
+        units="mm",
+        center_x=60,
+        center_y=-40,
+        radius=4,
+        load_type="Force",
+        load_value=5,
+        load_units="N",
+    )
+
+    # Missing Project Name
+    try:
+        UpdateTestPointsRequest(project="", cca_name=cca_name, update_test_points=[test_point_1])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # Missing CCA Name
+    try:
+        UpdateTestPointsRequest(project=project, cca_name="", update_test_points=[test_point_1])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+
+        # Invalid test point test
+        invalid_request = UpdateTestPointsRequest(
+            project=project,
+            cca_name=cca_name,
+            update_test_points=[invalid_test_point],
+        )
+        invalid_response = layer.update_test_points(invalid_request)
+        assert invalid_response.returnCode.value == -1
+
+        # Successful test point test
+        successful_request = UpdateTestPointsRequest(
+            project=project,
+            cca_name=cca_name,
+            update_test_points=[test_point_1, test_point_2],
+        )
+        successful_response = layer.update_test_points(successful_request)
+        assert successful_response.returnCode.value == 0
+
+        properties_request = GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids="TP1, TP5",
+        )
+        properties_responses = layer.get_test_point_props(properties_request)
+
+        # Tests updated properties for TP1
+        assert properties_responses[0].testPointProperties.ID == "TP1"
+        assert properties_responses[0].testPointProperties.side == "BOTTOM"
+        assert properties_responses[0].testPointProperties.units == "in"
+        assert_float_equals(1.0, properties_responses[0].testPointProperties.centerX)
+        assert_float_equals(0.5, properties_responses[0].testPointProperties.centerY)
+        assert properties_responses[0].testPointProperties.radius == 0.2
+        assert properties_responses[0].testPointProperties.loadType == 0
+        assert properties_responses[0].testPointProperties.loadValue == 3.0
+        assert properties_responses[0].testPointProperties.loadUnits == "ozf"
+
+        # Tests updated properties for TP5
+        assert properties_responses[1].testPointProperties.ID == "TP5"
+        assert properties_responses[1].testPointProperties.side == "TOP"
+        assert properties_responses[1].testPointProperties.units == "mm"
+        assert_float_equals(-30.0, properties_responses[1].testPointProperties.centerX)
+        assert_float_equals(-10.0, properties_responses[1].testPointProperties.centerY)
+        assert properties_responses[1].testPointProperties.radius == 5.0
+        assert properties_responses[1].testPointProperties.loadType == 1
+        assert properties_responses[1].testPointProperties.loadValue == 0.0
+        assert properties_responses[1].testPointProperties.loadUnits == "in"
 
 
 def helper_test_export_layer_image(layer):
