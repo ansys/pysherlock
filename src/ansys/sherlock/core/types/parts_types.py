@@ -162,3 +162,30 @@ class DeletePartsFromPartsListRequest(BaseModel):
             ccaName=self.cca_name,
             refDes=self.reference_designators,
         )
+
+
+class ImportPartsToAVLRequest(BaseModel):
+    """Request to import parts into the Approved Vendor List (AVL)."""
+
+    import_file: str
+    """Full file path to the AVL file."""
+
+    import_type: parts_service.AVLImportType
+    """Import mode to use for AVL data."""
+
+    """Allow non-standard types like Protobuf enums in Pydantic models."""
+    model_config = {"arbitrary_types_allowed": True}
+
+    @field_validator("import_file")
+    @classmethod
+    def import_file_validator(cls, value: str, info):
+        """Validate that the import file path is not empty."""
+        if value.strip() == "":
+            raise ValueError(f"{info.field_name} cannot be empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> parts_service.ImportPartsToAVLRequest:
+        request = parts_service.ImportPartsToAVLRequest()
+        request.importFile = self.import_file
+        request.importType = self.import_type
+        return request

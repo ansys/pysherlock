@@ -2,9 +2,11 @@
 
 """Module containing all parts management capabilities."""
 try:
+    import SherlockCommonService_pb2
     import SherlockPartsService_pb2
     import SherlockPartsService_pb2_grpc
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2_grpc
 
@@ -29,6 +31,7 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
+    ImportPartsToAVLRequest,
     PartLocation,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
@@ -1191,3 +1194,41 @@ class Parts(GrpcStub):
         delete_request = request._convert_to_grpc()
 
         return list(self.stub.deletePartsFromPartsList(delete_request))
+
+    @require_version(261)
+    def import_parts_to_avl(
+        self,
+        request: ImportPartsToAVLRequest,
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Import a parts list into the Approved Vendor List (AVL).
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : ImportPartsToAVLRequest
+            Contains the file path and import mode to use for the AVL parts import.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Return code indicating the result of the AVL parts import.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.project_types import ImportPartsToAVLRequest
+        >>> from ansys.api.sherlock.v0 import SherlockPartsService_pb2
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>>
+        >>> sherlock = launch_sherlock()
+        >>> return_code = sherlock.project.import_parts_to_avl(
+        >>>     ImportPartsToAVLRequest(
+        >>>         import_file="C:/path/to/AVL_parts_file.xls",
+        >>>         import_type=SherlockPartsService_pb2.AVLImportType.Update
+        >>>     )
+        >>> )
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.importPartsToAVL(request._convert_to_grpc())
