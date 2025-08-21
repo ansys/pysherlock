@@ -5,6 +5,7 @@ import os
 import platform
 import uuid
 
+from ansys.api.sherlock.v0 import SherlockLayerService_pb2
 import grpc
 import pydantic
 import pytest
@@ -1870,7 +1871,7 @@ def helper_test_update_test_points(layer):
         center_x=1.0,
         center_y=0.5,
         radius=0.2,
-        load_type="Force",
+        load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
         load_value=3.0,
         load_units="ozf",
     )
@@ -1882,7 +1883,7 @@ def helper_test_update_test_points(layer):
         center_x=-30,
         center_y=-10,
         radius=5,
-        load_type="Displacement",
+        load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Displacement,
         load_value=0,
         load_units="in",
     )
@@ -1894,7 +1895,7 @@ def helper_test_update_test_points(layer):
         center_x=60,
         center_y=-40,
         radius=4,
-        load_type="Force",
+        load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
         load_value=5,
         load_units="N",
     )

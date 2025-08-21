@@ -2161,6 +2161,7 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import UpdateTestPointsRequest,
         >>> TestPointProperties
+        >>> from ansys.api.sherlock.v0 import SherlockLayerService_pb2
         >>> sherlock = connect()
         >>> test_point = TestPointProperties(
         >>> id="TP1",
@@ -2169,7 +2170,7 @@ class Layer(GrpcStub):
         >>> center_x=1.0,
         >>> center_y=0.5,
         >>> radius=0.2,
-        >>> load_type="Force",
+        >>> load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
         >>> load_value=3.0,
         >>> load_units="ozf",
         >>> )
