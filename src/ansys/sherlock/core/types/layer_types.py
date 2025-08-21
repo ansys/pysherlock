@@ -421,7 +421,7 @@ class TestPointProperties(BaseModel):
     """Center y-value"""
     radius: float
     """Radius"""
-    load_type: str
+    load_type: SherlockLayerService_pb2.TestPointProperties.LoadType.ValueType
     """Load type"""
     load_value: float
     """Load value"""
