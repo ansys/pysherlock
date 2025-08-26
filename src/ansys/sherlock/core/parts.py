@@ -1216,7 +1216,7 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.types.project_types import ImportPartsToAVLRequest
+        >>> from ansys.sherlock.core.types.part_types import ImportPartsToAVLRequest
         >>> from ansys.api.sherlock.v0 import SherlockPartsService_pb2
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>>
