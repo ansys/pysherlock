@@ -2073,7 +2073,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_removal=False,
                 load_range_percentage=0.25,
                 number_of_bins=0,
-                filtering_limit=0.0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
             )
         )
@@ -2103,7 +2105,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_removal=False,
                 load_range_percentage=0.25,
                 number_of_bins=0,
-                filtering_limit=0.0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
             )
         )
@@ -2133,7 +2137,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_removal=False,
                 load_range_percentage=0.25,
                 number_of_bins=0,
-                filtering_limit=0.0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
             )
         )
@@ -2163,7 +2169,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_removal=False,
                 load_range_percentage=0.25,
                 number_of_bins=-1,
-                filtering_limit=0.0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
             )
         )
@@ -2193,7 +2201,41 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_removal=False,
                 load_range_percentage=0.25,
                 number_of_bins=0,
-                filtering_limit=0.0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing time_filtering_limit_units parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, time_filtering_limit_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
                 generated_cycles_label="",
             )
         )

@@ -421,7 +421,7 @@ class TestPointProperties(BaseModel):
     """Center y-value"""
     radius: float
     """Radius"""
-    load_type: str
+    load_type: SherlockLayerService_pb2.TestPointProperties.LoadType.ValueType
     """Load type"""
     load_value: float
     """Load value"""
@@ -473,4 +473,104 @@ class UpdateTestPointsRequest(BaseModel):
         if self.update_test_points is not None:
             for update_test_point in self.update_test_points:
                 request.testPointProperties.append(update_test_point._convert_to_grpc())
+        return request
+
+
+class ICTFixtureProperties(BaseModel):
+    """Contains the properties of an ict fixture."""
+
+    id: str
+    """ID"""
+    type: str
+    """Type"""
+    units: str
+    """Units"""
+    side: str
+    """Side"""
+    height: str
+    """Height"""
+    material: str
+    """Material"""
+    state: str
+    """State"""
+    shape: str
+    """Shape type"""
+    x: str
+    """Center X"""
+    y: str
+    """Center Y"""
+    length: str
+    """Length"""
+    width: str
+    """Width"""
+    diameter: str
+    """Diameter"""
+    nodes: str
+    """Number of nodes"""
+    rotation: str
+    """Degrees of rotation"""
+    polygon: str
+    """Coordinates of points"""
+    boundary: str
+    """Boundary point(s)"""
+    constraints: str
+    """FEA constraints"""
+    chassis_material: str
+    """Chassis material"""
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.ICTFixtureProperties:
+        grpc_fixture_data = SherlockLayerService_pb2.ICTFixtureProperties()
+
+        grpc_fixture_data.ID = self.id
+        grpc_fixture_data.type = self.type
+        grpc_fixture_data.units = self.units
+        grpc_fixture_data.side = self.side
+        grpc_fixture_data.height = self.height
+        grpc_fixture_data.material = self.material
+        grpc_fixture_data.state = self.state
+        grpc_fixture_data.shape = self.shape
+        grpc_fixture_data.x = self.x
+        grpc_fixture_data.y = self.y
+        grpc_fixture_data.length = self.length
+        grpc_fixture_data.width = self.width
+        grpc_fixture_data.diameter = self.diameter
+        grpc_fixture_data.nodes = self.nodes
+        grpc_fixture_data.rotation = self.rotation
+        grpc_fixture_data.polygon = self.polygon
+        grpc_fixture_data.boundary = self.boundary
+        grpc_fixture_data.constraints = self.constraints
+        grpc_fixture_data.chassisMaterial = self.chassis_material
+
+        return grpc_fixture_data
+
+    @field_validator("type", "units", "side", "state", "shape")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdateICTFixturesRequest(BaseModel):
+    """Contains the properties of an ict fixtures update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    update_fixtures: list[ICTFixtureProperties]
+    """List of ict fixtures with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateICTFixturesRequest:
+        request = SherlockLayerService_pb2.UpdateICTFixturesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.update_fixtures is not None:
+            for update_fixture in self.update_fixtures:
+                request.ICTFixtureProperties.append(update_fixture._convert_to_grpc())
         return request
