@@ -56,7 +56,7 @@ html_context = {
     "github_repo": "pysherlock",
     "github_version": "main",
     "doc_path": str(DOC_PATH),
-    "pyansys_tags": ['Electronics', 'Multiphysics', 'Structures'],
+    "pyansys_tags": ["Electronics", "Multiphysics", "Structures"],
 }
 html_theme_options = {
     "logo": "pyansys",
