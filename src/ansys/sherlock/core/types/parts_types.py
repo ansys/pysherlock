@@ -170,7 +170,7 @@ class ImportPartsToAVLRequest(BaseModel):
     import_file: str
     """Full file path to the AVL file."""
 
-    import_type: parts_service.AVLImportType
+    import_type: parts_service.AVLImportType.ValueType
     """Import mode to use for AVL data."""
 
     """Allow non-standard types like Protobuf enums in Pydantic models."""

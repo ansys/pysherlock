@@ -55,6 +55,7 @@ def test_all():
     helper_test_get_part_location(parts)
     helper_test_get_parts_list_properties(parts)
     helper_test_update_pad_properties(parts)
+    helper_test_import_parts_to_avl(parts)
 
 
 def helper_test_update_parts_list(parts: Parts):
