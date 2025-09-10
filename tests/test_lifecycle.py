@@ -2072,7 +2072,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 phase_name="Environmental",
                 time_removal=False,
                 load_range_percentage=0.25,
-                number_of_bins=0,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
@@ -2104,7 +2106,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 phase_name="Environmental",
                 time_removal=False,
                 load_range_percentage=0.25,
-                number_of_bins=0,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
@@ -2136,7 +2140,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 phase_name="",
                 time_removal=False,
                 load_range_percentage=0.25,
-                number_of_bins=0,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
@@ -2168,19 +2174,21 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 phase_name="Environmental",
                 time_removal=False,
                 load_range_percentage=0.25,
-                number_of_bins=-1,
+                number_of_range_bins=-1,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
             )
         )
-        pytest.fail("No exception raised when using a missing generated_cycles_label parameter")
+        pytest.fail("No exception raised when using invalid number_of_range_bins parameter")
     except Exception as e:
         assert isinstance(e, pydantic.ValidationError)
         assert (
             str(e.errors()[0]["msg"])
-            == "Value error, number_of_bins must be greater than or equal to 0."
+            == "Value error, number_of_range_bins must be greater than or equal to 0."
         )
 
     try:
@@ -2200,7 +2208,77 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 phase_name="Environmental",
                 time_removal=False,
                 load_range_percentage=0.25,
-                number_of_bins=0,
+                number_of_range_bins=0,
+                number_of_mean_bins=-1,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using invalid number_of_mean_bins parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, number_of_mean_bins must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=-1,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using invalid number_of_dwell_bins parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, number_of_dwell_bins must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="",
@@ -2232,7 +2310,9 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 phase_name="Environmental",
                 time_removal=False,
                 load_range_percentage=0.25,
-                number_of_bins=0,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
                 temperature_range_filtering_limit=0.0,
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
