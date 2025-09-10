@@ -74,8 +74,12 @@ class ImportThermalSignalRequest(BaseModel):
     """Option to indicate that time results with shorter half-cycle durations are removed."""
     load_range_percentage: float
     """Defines the fraction of the range near peaks and valleys considered as a dwell region."""
-    number_of_bins: int
-    """Number of bins for binning cycles, 0 for no binning."""
+    number_of_range_bins: int
+    """Number of range bins for binning cycles, 0 for no range binning."""
+    number_of_mean_bins: int
+    """Number of mean bins for binning cycles, 0 for no mean binning."""
+    number_of_dwell_bins: int
+    """Number of dwell bins for binning cycles, 0 for no dwell binning."""
     temperature_range_filtering_limit: float
     """Minimum cycle range to include in results, 0 for not filtering."""
     time_filtering_limit: float
@@ -93,7 +97,7 @@ class ImportThermalSignalRequest(BaseModel):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
 
-    @field_validator("number_of_bins")
+    @field_validator("number_of_range_bins", "number_of_mean_bins", "number_of_dwell_bins")
     @classmethod
     def non_negative_int_validation(cls, value: int, info: ValidationInfo):
         """Validate integer fields listed contain non-negative values."""
@@ -110,7 +114,9 @@ class ImportThermalSignalRequest(BaseModel):
             fileProperties=self.thermal_signal_file_properties._convert_to_grpc(),
             timeRemoval=self.time_removal,
             loadRangePercentage=self.load_range_percentage,
-            numberOfBins=self.number_of_bins,
+            numberOfRangeBins=self.number_of_range_bins,
+            numberOfMeanBins=self.number_of_mean_bins,
+            numberOfDwellBins=self.number_of_dwell_bins,
             temperatureRangeFilteringLimit=self.temperature_range_filtering_limit,
             timeFilteringLimit=self.time_filtering_limit,
             timeFilteringLimitUnits=self.time_filtering_limit_units,
