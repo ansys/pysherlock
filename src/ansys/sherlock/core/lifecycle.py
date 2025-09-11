@@ -35,9 +35,16 @@ from ansys.sherlock.core.errors import (
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
     SherlockNoGrpcConnectionException,
+    SherlockSaveProfileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
-from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
+from ansys.sherlock.core.types.lifecycle_types import (
+    ImportThermalSignalRequest,
+    SaveHarmonicProfileRequest,
+    SaveRandomVibeProfileRequest,
+    SaveShockPulseProfileRequest,
+    SaveThermalProfileRequest,
+)
 from ansys.sherlock.core.utils.version_check import require_version
 
 
@@ -2167,3 +2174,182 @@ class Lifecycle(GrpcStub):
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.importThermalSignal(import_thermal_signal_request)
+
+    @require_version(261)
+    def save_harmonic_profile(
+        self, request: SaveHarmonicProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a harmonic life cycle event profile to a .dat or .csv file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveHarmonicProfileRequest
+            Request object containing the information needed to save a harmonic profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveHarmonicProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_harmonic_profile(
+        >>>     SaveHarmonicProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="DurabilityPhase",
+        >>>         event_name="Harmonic_100Hz",
+        >>>         triaxial_axis="x",
+        >>>         file_path="/tmp/Harmonic_100Hz.csv",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveHarmonicProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+        return response
+
+    @require_version(261)
+    def save_random_vibe_profile(
+        self, request: SaveRandomVibeProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a random vibe life cycle event profile to a .dat or .csv file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveRandomVibeProfileRequest
+            Request object containing the information needed to save a random vibe profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveRandomVibeProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_random_vibe_profile(
+        >>>     SaveRandomVibeProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="RandomVibePhase",
+        >>>         event_name="RV_Event_01",
+        >>>         file_path="/tmp/RV_Event_01.dat",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveRandomVibeProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+    @require_version(261)
+    def save_shock_pulse_profile(
+        self, request: SaveShockPulseProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a shock pulse life cycle event profile to a .dat or .csv file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveShockPulseProfileRequest
+            Request object containing the information needed to save a shock pulse profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveShockPulseProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_shock_pulse_profile(
+        >>>     SaveShockPulseProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ShockPhase",
+        >>>         event_name="Pulse_200g",
+        >>>         file_path="/tmp/Pulse_200g.csv",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveShockPulseProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+    @require_version(261)
+    def save_thermal_profile(
+        self, request: SaveThermalProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a thermal life cycle event profile to a .dat or .csv file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveThermalProfileRequest
+            Request object containing the information needed to save a thermal profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveThermalProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_thermal_profile(
+        >>>     SaveThermalProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ThermalPhase",
+        >>>         event_name="ThermalCycle_A",
+        >>>         file_path="/tmp/ThermalCycle_A.dat",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveThermalProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)

@@ -21,10 +21,15 @@ from ansys.sherlock.core.errors import (
     SherlockLoadShockProfileDatasetError,
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
+    SherlockSaveProfileError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 from ansys.sherlock.core.types.lifecycle_types import (
     ImportThermalSignalRequest,
+    SaveHarmonicProfileRequest,
+    SaveRandomVibeProfileRequest,
+    SaveShockPulseProfileRequest,
+    SaveThermalProfileRequest,
     ThermalSignalFileProperties,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
@@ -51,6 +56,11 @@ def test_all():
     helper_test_load_shock_profile_dataset(lifecycle)
     helper_test_load_shock_profile_pulses(lifecycle)
     helper_test_import_thermal_signal(lifecycle)
+
+    helper_test_save_harmonic_profile(lifecycle)
+    helper_test_save_random_vibe_profile(lifecycle)
+    helper_test_save_shock_pulse_profile(lifecycle)
+    helper_test_save_thermal_profile(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -2326,6 +2336,286 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
             str(e.errors()[0]["msg"])
             == "Value error, generated_cycles_label is invalid because it is None or empty."
         )
+
+
+def helper_test_save_harmonic_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_harmonic_profile(
+            SaveHarmonicProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="5 - Harmonic Event",
+                triaxial_axis="x",
+                file_path="C:/Temp/Harmonic.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_harmonic_profile(
+            SaveHarmonicProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="5 - Harmonic Event",
+                triaxial_axis="x",
+                file_path="C:/Temp/Harmonic.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_harmonic_profile(
+            SaveHarmonicProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                triaxial_axis="x",
+                file_path="C:/Temp/Harmonic.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid triaxial_axis
+        try:
+            lifecycle.save_harmonic_profile(
+                SaveHarmonicProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="5 - Harmonic Event",
+                    triaxial_axis="a",
+                    file_path="C:/Temp/Harmonic.dat",
+                )
+            )
+            pytest.fail("No exception raised when using a missing triaxial_axis parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_save_random_vibe_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_random_vibe_profile(
+            SaveRandomVibeProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="RV_Event_01",
+                file_path="C:/Temp/RV_Event_01.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_random_vibe_profile(
+            SaveRandomVibeProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="1 - Vibration",
+                file_path="C:/Temp/1 - Vibration.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_random_vibe_profile(
+            SaveRandomVibeProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                file_path="C:/Temp/1 - Vibration.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid file_path
+        try:
+            lifecycle.save_random_vibe_profile(
+                SaveRandomVibeProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="1 - Vibration",
+                    file_path="C:/Temp/RV_Event_01.txt",
+                )
+            )
+            pytest.fail("No exception raised when using an invalid file_path parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_save_shock_pulse_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_shock_pulse_profile(
+            SaveShockPulseProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="3 - Collision",
+                file_path="C:/Temp/3 - Collision.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_shock_pulse_profile(
+            SaveShockPulseProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="3 - Collision",
+                file_path="C:/Temp/3 - Collision.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_shock_pulse_profile(
+            SaveShockPulseProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                file_path="C:/Temp/3 - Collision.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid file_path
+        try:
+            lifecycle.save_shock_pulse_profile(
+                SaveShockPulseProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="3 - Collision",
+                    file_path="C:/Temp/3 - Collision.txt",
+                )
+            )
+            pytest.fail("No exception raised when using an invalid file_path parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_save_thermal_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_thermal_profile(
+            SaveThermalProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="ThermalCycle_A",
+                file_path="C:/Temp/ThermalCycle_A.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_thermal_profile(
+            SaveThermalProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="ThermalCycle_A",
+                file_path="C:/Temp/ThermalCycle_A.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_thermal_profile(
+            SaveThermalProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                file_path="C:/Temp/ThermalCycle_A.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid file_path
+        try:
+            lifecycle.save_thermal_profile(
+                SaveThermalProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="ThermalCycle_A",
+                    file_path="C:/Temp/ThermalCycle_A.txt",
+                )
+            )
+            pytest.fail("No exception raised when using an invalid file_path parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
 
 
 if __name__ == "__main__":
