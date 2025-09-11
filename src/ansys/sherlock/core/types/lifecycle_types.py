@@ -122,3 +122,133 @@ class ImportThermalSignalRequest(BaseModel):
             timeFilteringLimitUnits=self.time_filtering_limit_units,
             generatedCyclesLabel=self.generated_cycles_label,
         )
+
+
+class SaveHarmonicProfileRequest(BaseModel):
+    """Request to save a harmonic life cycle event profile to a .dat or .csv file."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """The name of the life cycle phase this event is associated with."""
+
+    event_name: str
+    """Harmonic event name."""
+
+    triaxial_axis: str | None = None
+    """If the harmonic profile type is 'Triaxial', the axis this profile should be assigned to.
+    Valid values are: x, y, z.
+    """
+
+    file_path: str
+    """Full destination path for the .dat or .csv file."""
+
+    @field_validator("project", "phase_name", "event_name", "file_path", "triaxial_axis")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.SaveHarmonicProfileRequest:
+        """Convert to gRPC SaveHarmonicProfileRequest."""
+        return SherlockLifeCycleService_pb2.SaveHarmonicProfileRequest(
+            project=self.project,
+            phaseName=self.phase_name,
+            eventName=self.event_name,
+            triaxialAxis=self.triaxial_axis or "",
+            filePath=self.file_path,
+        )
+
+
+class SaveRandomVibeProfileRequest(BaseModel):
+    """Request to save a random vibe life cycle event profile to a .dat or .csv file."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """The name of the life cycle phase this event is associated with."""
+
+    event_name: str
+    """Random vibe event name."""
+
+    file_path: str
+    """Full destination path for the .dat or .csv file."""
+
+    @field_validator("project", "phase_name", "event_name", "file_path")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.SaveRandomVibeProfileRequest:
+        """Convert to gRPC SaveRandomVibeProfileRequest."""
+        return SherlockLifeCycleService_pb2.SaveRandomVibeProfileRequest(
+            project=self.project,
+            phaseName=self.phase_name,
+            eventName=self.event_name,
+            filePath=self.file_path,
+        )
+
+
+class SaveShockPulseProfileRequest(BaseModel):
+    """Request to save a shock pulse life cycle event profile to a .dat or .csv file."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """The name of the life cycle phase this event is associated with."""
+
+    event_name: str
+    """Shock event name."""
+
+    file_path: str
+    """Full destination path for the .dat or .csv file."""
+
+    @field_validator("project", "phase_name", "event_name", "file_path")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.SaveShockPulseProfileRequest:
+        """Convert to gRPC SaveShockPulseProfileRequest."""
+        return SherlockLifeCycleService_pb2.SaveShockPulseProfileRequest(
+            project=self.project,
+            phaseName=self.phase_name,
+            eventName=self.event_name,
+            filePath=self.file_path,
+        )
+
+
+class SaveThermalProfileRequest(BaseModel):
+    """Request to save a thermal life cycle event profile to a .dat or .csv file."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """The name of the life cycle phase this event is associated with."""
+
+    event_name: str
+    """Thermal event name."""
+
+    file_path: str
+    """Full destination path for the .dat or .csv file."""
+
+    @field_validator("project", "phase_name", "event_name", "file_path")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.SaveThermalProfileRequest:
+        """Convert to gRPC SaveThermalProfileRequest."""
+        return SherlockLifeCycleService_pb2.SaveThermalProfileRequest(
+            project=self.project,
+            phaseName=self.phase_name,
+            eventName=self.event_name,
+            filePath=self.file_path,
+        )
