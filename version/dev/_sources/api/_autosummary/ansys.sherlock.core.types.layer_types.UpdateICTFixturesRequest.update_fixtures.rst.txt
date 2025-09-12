@@ -1,0 +1,10 @@
+.. vale off
+
+update\_fixtures
+================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: UpdateICTFixturesRequest.update_fixtures
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_side
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegion.potting_side
+
+.. vale on
