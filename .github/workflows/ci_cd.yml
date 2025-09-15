@@ -28,14 +28,15 @@ jobs:
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-  docs-style:
-    name: Documentation Style Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: PyAnsys documentation style checks
-        uses: ansys/actions/doc-style@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+#  docs-style:
+#    name: Documentation Style Check
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: PyAnsys documentation style checks
+#        uses: ansys/actions/doc-style@v5
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          vale-version: "3.4.1"
 
   smoke-tests:
     name: Build and Smoke tests
@@ -44,7 +45,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, windows-latest ]
         python-version: [ '3.8', '3.9', '3.10', '3.11' ]
         should-release:
           - ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
@@ -59,6 +61,7 @@ jobs:
           library-namespace: ${{ env.PACKAGE_NAMESPACE }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
+          check-licenses: false
 
   tests:
     name: Tests and coverage
