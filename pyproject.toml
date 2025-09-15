@@ -34,11 +34,11 @@ dependencies = [
 tests = [
     "grpcio>=1.17, <1.68.0",
     "protobuf==5.28.0",
-    "pytest==8.4.1",
+    "pytest==8.4.2",
     "pytest-cov==7.0.0",
 ]
 doc = [
-    "ansys-sphinx-theme==1.6.0",
+    "ansys-sphinx-theme==1.6.1",
     "jupyter_sphinx==0.5.3",
     "matplotlib==3.10.6",
     "numpydoc==1.9.0",
