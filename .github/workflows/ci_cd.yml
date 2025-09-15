@@ -113,7 +113,7 @@ jobs:
 
   docs:
     name: Documentation
-    needs: [ docs-style ]
+#    needs: [ docs-style ]
     runs-on: ubuntu-latest
     steps:
       - name: Run documentation building action
