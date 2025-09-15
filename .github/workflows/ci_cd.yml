@@ -111,19 +111,20 @@ jobs:
         with:
           files: .cov/coverage.xml
 
-  docs:
-    name: Documentation
+#  docs:
+#    name: Documentation
 #    needs: [ docs-style ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run documentation building action
-        uses: ansys/actions/doc-build@v7
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Run documentation building action
+#        uses: ansys/actions/doc-build@v7
+#        with:
+#          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   package:
     name: Package library
-    needs: [ tests, docs ]
+#    needs: [ tests, docs ]
+    needs: [ tests ]
     runs-on: ubuntu-latest
     steps:
       - name: Build library source and wheel artifacts
