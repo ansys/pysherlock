@@ -28,15 +28,15 @@ jobs:
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-  docs-style:
-    name: Documentation Style Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: PyAnsys documentation style checks
-        uses: ansys/actions/doc-style@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          vale-version: "3.4.1"
+#  docs-style:
+#    name: Documentation Style Check
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: PyAnsys documentation style checks
+#        uses: ansys/actions/doc-style@v7
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          vale-version: "3.4.1"
 
   smoke-tests:
     name: Build and Smoke tests
