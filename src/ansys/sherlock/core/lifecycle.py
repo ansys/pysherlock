@@ -23,6 +23,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockDeleteError,
     SherlockInvalidHarmonicProfileEntriesError,
     SherlockInvalidLoadDirectionError,
     SherlockInvalidOrientationError,
@@ -39,6 +40,8 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.lifecycle_types import (
+    DeleteEventRequest,
+    DeletePhaseRequest,
     ImportThermalSignalRequest,
     SaveHarmonicProfileRequest,
     SaveRandomVibeProfileRequest,
@@ -2353,3 +2356,86 @@ class Lifecycle(GrpcStub):
         # Raise error if save failed
         if response.value != 0:
             raise SherlockSaveProfileError(response.message)
+
+    @require_version(261)
+    def delete_event(self, request: DeleteEventRequest) -> SherlockCommonService_pb2.ReturnCode:
+        """Delete a life cycle event from a given phase in a project.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : DeleteEventRequest
+            Request object containing project, phase name, and event name.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import DeleteEventRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.delete_event(
+        >>>     DeleteEventRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ThermalPhase",
+        >>>         event_name="ThermalCycle_A",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.deleteEvent(grpc_request)
+
+        if response.value != 0:
+            raise SherlockDeleteError(response.message)
+
+        return response
+
+    @require_version(261)
+    def delete_phase(self, request: DeletePhaseRequest) -> SherlockCommonService_pb2.ReturnCode:
+        """Delete a life cycle phase from a project.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : DeletePhaseRequest
+            Request object containing project and phase name.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import DeletePhaseRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.delete_phase(
+        >>>     DeletePhaseRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ThermalPhase",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.deletePhase(grpc_request)
+
+        if response.value != 0:
+            raise SherlockDeleteError(response.message)
+
+        return response
