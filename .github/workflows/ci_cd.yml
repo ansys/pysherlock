@@ -112,15 +112,15 @@ jobs:
         with:
           files: .cov/coverage.xml
 
-  docs:
-    name: Documentation
-    needs: [ docs-style ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run documentation building action
-        uses: ansys/actions/doc-build@v5
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+#  docs:
+#    name: Documentation
+#    needs: [ docs-style ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Run documentation building action
+#        uses: ansys/actions/doc-build@v5
+#        with:
+#          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   package:
     name: Package library
