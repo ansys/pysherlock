@@ -153,6 +153,8 @@ jobs:
           library-name: ${{ env.PACKAGE_NAME }}
           # disable requiring docs for release
           only-code: true
+          # set token for deploying to GitHub
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   upload_dev_docs:
     name: Upload dev documentation
