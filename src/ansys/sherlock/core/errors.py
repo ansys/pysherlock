@@ -1292,3 +1292,15 @@ class SherlockExportLayerImageError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Export layer image error: {self.message}"
+
+
+class SherlockSaveProfileError(Exception):
+    """Contains the errors raised when a profile for an existing event cannot be saved."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Save profile error: {self.message}"

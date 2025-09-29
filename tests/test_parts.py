@@ -3,6 +3,7 @@
 import os
 import platform
 
+from ansys.api.sherlock.v0 import SherlockPartsService_pb2
 import grpc
 import pydantic
 import pytest
@@ -27,10 +28,13 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
+    ImportPartsToAVLRequest,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+
+parts_service = SherlockPartsService_pb2
 
 
 def test_all():
@@ -51,6 +55,7 @@ def test_all():
     helper_test_get_part_location(parts)
     helper_test_get_parts_list_properties(parts)
     helper_test_update_pad_properties(parts)
+    helper_test_import_parts_to_avl(parts)
 
 
 def helper_test_update_parts_list(parts: Parts):
@@ -1067,6 +1072,34 @@ def helper_test_delete_parts_from_parts_list(parts: Parts):
             for res in responses:
                 assert res.returnCode.value == 0
                 assert res.refDes in request.reference_designators
+    except Exception as e:
+        pytest.fail(f"Unexpected exception raised: {e}")
+
+
+def helper_test_import_parts_to_avl(parts: Parts):
+    """Test import parts to AVL API."""
+    try:
+        # Test with an empty import_file path
+        ImportPartsToAVLRequest(import_file="", import_type=parts_service.AVLImportType.Replace)
+        pytest.fail("No exception raised when using an empty import_file parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert e.errors()[0]["msg"] == "Value error, import_file cannot be empty."
+
+    try:
+        # Test with a invalid AVL file path
+        request = ImportPartsToAVLRequest(
+            import_file="invalid/path/parts_list.csv",
+            import_type=parts_service.AVLImportType.Add,
+        )
+
+        if parts._is_connection_up():
+            return_code = parts.import_parts_to_avl(request)
+
+            # Check that an invalid import_file returns an error
+            assert return_code.value == -1
+            assert return_code.message == "File Not Found"
+
     except Exception as e:
         pytest.fail(f"Unexpected exception raised: {e}")
 
