@@ -9,11 +9,15 @@ from ansys.sherlock.core.types.analysis_types import ElementOrder
 
 try:
     import SherlockModelService_pb2
-    from SherlockModelService_pb2 import MeshType, TraceOutputType
+    from SherlockModelService_pb2 import MeshType, PcbMaterialElasticity, TraceOutputType
     import SherlockModelService_pb2_grpc
 except ModuleNotFoundError:
     from ansys.api.sherlock.v0 import SherlockModelService_pb2
-    from ansys.api.sherlock.v0.SherlockModelService_pb2 import MeshType, TraceOutputType
+    from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
+        MeshType,
+        PcbMaterialElasticity,
+        TraceOutputType,
+    )
     from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
 
 from ansys.sherlock.core import LOG
@@ -652,6 +656,7 @@ class Model(GrpcStub):
         clear_FEA_database: bool,
         use_FEA_model_id: bool,
         coordinate_units: str,
+        pcb_material_elasticity: PcbMaterialElasticity = PcbMaterialElasticity.Isotropic,
     ) -> int:
         """
         Export a FEA model.
@@ -711,6 +716,9 @@ class Model(GrpcStub):
             Whether to use FEA model ID.
         coordinate_units: str
             Units of the model coordinates to use when exporting a model.
+        pcb_material_elasticity: PcbMaterialElasticity
+            The type of PCB material elasticity to use when exporting a model. The default value is
+            ``PcbMaterialElasticity.Isotropic``.
 
 
         Returns
@@ -720,6 +728,7 @@ class Model(GrpcStub):
 
         Examples
         --------
+        >>> from ansys.api.sherlock.v0.SherlockModelService_pb2 import PcbMaterialElasticity
         >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.common_types import (
             Measurement,
@@ -751,7 +760,8 @@ class Model(GrpcStub):
                 display_model=True,
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
-                coordinate_units="mm"
+                coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic
             )
         """
         try:
@@ -834,6 +844,7 @@ class Model(GrpcStub):
             export_request.clearFEADatabase = clear_FEA_database
             export_request.useFEAModelID = use_FEA_model_id
             export_request.coordinateUnits = coordinate_units
+            export_request.pcbMaterialElasticity = pcb_material_elasticity
 
             return_code = self.stub.exportFEAModel(export_request)
             if return_code.value != 0:
