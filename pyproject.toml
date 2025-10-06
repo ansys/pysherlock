@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ansys-sherlock-core"
-version = "1.0.0"
+version = "2.0.0"
 description = "A python wrapper for Ansys Sherlock"
 readme = "README.rst"
 requires-python = ">=3.10,<4"
