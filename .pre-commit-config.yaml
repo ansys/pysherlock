@@ -59,13 +59,13 @@ repos:
   hooks:
   - id: check-github-workflows
 
-# Temporarily disabled due to Windows symlink permissions
-# - repo: https://github.com/ansys/pre-commit-hooks
-#   rev: v0.5.2
-#   hooks:
-#   - id: add-license-headers
-#     args:
-#     - --start_year=2021
+# Ansys pre-commit hooks for license headers and version management
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: v0.5.2
+  hooks:
+  - id: add-license-headers
+    args:
+    - --start_year=2021
 
 # Automatic version increment on pre-push
 - repo: local
