@@ -314,6 +314,10 @@ def should_skip_version_increment() -> bool:
         log("ℹ️  No changes detected, skipping auto-increment", Colors.YELLOW)
         return True
 
+    # Always allow version increment in test branches
+    if "optimization/version-check" in current_branch:
+        return False
+
     # Check if version was already manually updated
     success, output = run_git_command(
         ["diff", "origin/main..HEAD", "--name-only", "pyproject.toml"]
