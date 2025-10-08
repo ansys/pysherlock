@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 import errno
@@ -15,8 +15,10 @@ from ansys.sherlock.core import LOG
 from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
+from ansys.sherlock.core.utils.cyberchannel import create_channel
 from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
 
+ANSYS_GRPC_CERTIFICATES = "ANSYS_GRPC_CERTIFICATES"
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
 DEFAULT_CONNECT_TIMEOUT = 120
@@ -105,6 +107,10 @@ def launch(
     sherlock_command_args: str = "",
     year: Optional[int] = None,
     release_number: Optional[int] = None,
+    transport_mode: str = "mtls",
+    certs_dir: str = None,
+    uds_dir: str = None,
+    uds_id: str = None,
 ) -> str:
     r"""Launch Sherlock using the specified host and port for the gRPC connection.
 
@@ -127,6 +133,15 @@ def launch(
     release_number: int, optional
         Release number of Sherlock to launch. If not provided,
         the latest installed version of Sherlock will be launched.
+    transport_mode: str, optional
+        gRPC transport mode. Supported values are "insecure", "mtls", "wnua", and "uds".
+        Default is "mtls".
+    certs_dir: str, optional
+        Directory containing the mTLS certificates. Default is "./certs".
+    uds_dir: str, optional
+        Directory for the UDS socket file. Default is "$HOME/.conn".
+    uds_id: str, optional
+        Identifier for the UDS socket file name. Default is no identifier.
 
     Returns
     -------
@@ -150,12 +165,30 @@ def launch(
         sherlock_launch_cmd, _server_version, ansys_install_path = _get_sherlock_exe_path(
             year=year, release_number=release_number
         )
-        args = [sherlock_launch_cmd, "-grpcPort=" + str(port)]
-        if single_project_path != "":
+        args = [sherlock_launch_cmd]
+
+        # Add gRPC options
+        if transport_mode in ["insecure", "mtls", "wnua"]:
+            args.append(f"-grpcHost={host}")
+            args.append(f"-grpcPort={port}")
+        args.append(f"--transport-mode={transport_mode}")
+        if transport_mode == "mtls":
+            if not certs_dir:
+                certs_dir = os.getenv(ANSYS_GRPC_CERTIFICATES, "./certs")
+            args.append(f"--certs-dir={certs_dir}")
+        if transport_mode == "uds":
+            if uds_dir:
+                args.append(f"--uds-dir={uds_dir}")
+            if uds_id:
+                args.append(f"--uds-id={uds_id}")
+
+        # Add other options
+        if single_project_path:
             args.append("-singleProject")
             args.append(single_project_path)
-        if sherlock_command_args != "":
+        if sherlock_command_args:
             args.extend(shlex.split(sherlock_command_args))
+
         LOG.info(f"Command arguments: {args}")
         subprocess.Popen(args)
 
@@ -173,8 +206,13 @@ def launch_and_connect(
     year: Optional[int] = None,
     release_number: Optional[int] = None,
     timeout: int = DEFAULT_CONNECT_TIMEOUT,
+    transport_mode: str = "mtls",
+    certs_dir: str = None,
+    uds_dir: str = None,
+    uds_id: str = None,
 ) -> tuple[Sherlock, str]:
-    r"""Launch Sherlock, start gRPC on a given host and port, and wait until connected to Sherlock.
+    """
+    Launch Sherlock, start gRPC on a given host and port, and wait until connected to Sherlock.
 
     Available Since: 2025R2
 
@@ -198,37 +236,54 @@ def launch_and_connect(
     timeout: int, optional
         Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
+    transport_mode: str, optional
+        gRPC transport mode. Supported values are "insecure", "mtls", "wnua", and "uds".
+        Default is "mtls".
+    certs_dir: str, optional
+        Directory containing the mTLS certificates. Default is "./certs".
+    uds_dir: str, optional
+        Directory for the UDS socket file. Default is "$HOME/.conn".
+    uds_id: str, optional
+        Identifier for the UDS socket file name. Default is no identifier.
 
     Returns
     -------
-    Sherlock
-        The instance of sherlock.
-    str
-        Path to the Sherlock installation directory.
-
-    Examples
-    --------
-    >>> from ansys.sherlock.core import launcher
-    >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
-    >>> sherlock, ansys_install_path = launcher.launch_and_connect(
-    >>>     port=9092,
-    >>>     single_project_path=project,
-    >>>     sherlock_command_args="-noGUI",
-    >>>     year=2025,
-    >>>     release_number=1,
-    >>>     timeout=30)
-
+    tuple[Sherlock, str]
+        Sherlock gRPC connection object and the installation directory.
     """
     ansys_install_path = launch(
-        host, port, single_project_path, sherlock_command_args, year, release_number
+        host,
+        port,
+        single_project_path,
+        sherlock_command_args,
+        year,
+        release_number,
+        transport_mode=transport_mode,
+        certs_dir=certs_dir,
+        uds_dir=uds_dir,
+        uds_id=uds_id,
     )
-    sherlock = connect(port, timeout)
-    return sherlock, ansys_install_path
+    try:
+        sherlock = connect(
+            port=port,
+            timeout=timeout,
+            transport_mode=transport_mode,
+            uds_dir=uds_dir,
+            uds_id=uds_id,
+        )
+        return sherlock, ansys_install_path
+    except Exception as e:
+        LOG.error(f"Error connecting to Sherlock after launch: {e}")
+        raise RuntimeError(f"Error connecting to Sherlock after launch: {e}")
 
 
 def connect(
     port: int = SHERLOCK_DEFAULT_PORT,
     timeout=DEFAULT_CONNECT_TIMEOUT,
+    transport_mode: str = "mtls",
+    certs_dir: str = None,
+    uds_dir: str = None,
+    uds_id: str = None,
 ) -> Sherlock:
     """Connect to a local instance of Sherlock.
 
@@ -237,27 +292,41 @@ def connect(
     Parameters
     ----------
     port: int, optional
-        Port number for the connection.
+        Port number for the connection (ignored if transport_mode is "uds").
         Default is 9090.
     timeout: int, optional
         Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
+    transport_mode : str, optional
+        Transport mode to use:
+            - "insecure" : unencrypted connection (default)
+            - "mtls" : mutual TLS authentication
+            - "uds" : Unix Domain Socket
+            - "wnua" : Windows Named User Authentication
+    certs_dir: str, optional
+        Directory containing the mTLS certificates. Default is "./certs".
+    uds_dir : str, optional
+        Directory for the UDS socket file.
+    uds_id : str, optional
+        Optional ID for the UDS socket file.
 
     Returns
     -------
     Sherlock
-        The instance of sherlock.
-
-    Examples
-    --------
-    >>> from ansys.sherlock.core import launcher
-    >>> sherlock = launcher.connect(port=9092)
+        The instance of Sherlock.
     """
     try:
-        channel = _connect_grpc_channel(port)
+        channel = _connect_grpc_channel(
+            host=LOCALHOST,
+            port=port,
+            uds_dir=uds_dir,
+            uds_id=uds_id,
+            transport_mode=transport_mode,
+            certs_dir=certs_dir,
+        )
         _wait_for_sherlock_grpc_ready(channel, timeout)
 
-        # create Common without version since the version is unknown
+        # Create Common without version since the version is unknown
         common = Common(channel=channel, server_version=None)
         server_version = None
         try:
@@ -265,8 +334,10 @@ def connect(
             if sherlock_info is not None:
                 LOG.info(f"Connected to Sherlock version: {sherlock_info.releaseVersion}")
                 server_version = _convert_to_server_version(sherlock_info.releaseVersion)
-        except Exception as e:
-            LOG.error(f"Error getting Sherlock version information. {str(e)}")
+        except grpc.RpcError as e:
+            error_message = e.details() if e.details() else "Unknown error occurred."
+            LOG.error(f"Server validation error: {error_message}")
+            raise SherlockConnectionError(message=error_message)
 
         return Sherlock(channel=channel, server_version=server_version)
     except Exception as e:
@@ -284,10 +355,55 @@ def _convert_to_server_version(sherlock_release_version: str) -> int:
     return server_version
 
 
-def _connect_grpc_channel(port: int = SHERLOCK_DEFAULT_PORT):
-    channel_param = f"{LOCALHOST}:{port}"
-    channel = grpc.insecure_channel(channel_param)
-    return channel
+def _connect_grpc_channel(
+    host: str = LOCALHOST,
+    port: int = SHERLOCK_DEFAULT_PORT,
+    uds_dir: str = None,
+    uds_id: str = None,
+    transport_mode: str = "mtls",
+    certs_dir: str = None,
+) -> grpc.Channel:
+    """
+    Connect to Sherlock gRPC via UDS, TCP, or other transport modes.
+
+    Parameters
+    ----------
+    host : str
+        Hostname or IP address for TCP connection (ignored for UDS).
+    port : int
+        Port number for TCP connection.
+    uds_dir : str, optional
+        Directory for the UDS socket file.
+    uds_id : str, optional
+        Optional ID for the UDS socket file.
+    transport_mode : str
+        Transport mode (e.g., "insecure", "wnua", "mtls", "uds").
+    certs_dir: str, optional
+        Directory containing the mTLS certificates. Default is "./certs".
+
+    Returns
+    -------
+    grpc.Channel
+        A gRPC channel connected to Sherlock.
+    """
+    try:
+        channel = create_channel(
+            transport_mode=transport_mode,
+            host=host,
+            port=port,
+            uds_dir=uds_dir,
+            uds_id=uds_id,
+            certs_dir=certs_dir,
+            grpc_options=[
+                ("grpc.max_send_message_length", 100 * 1024 * 1024),
+                ("grpc.max_receive_message_length", 100 * 1024 * 1024),
+            ],
+        )
+        LOG.info(f"gRPC channel created successfully using transport mode: {transport_mode}")
+        return channel
+    except Exception as e:
+        LOG.error(f"Failed to create gRPC channel with mode '{transport_mode}': {e}")
+        raise
 
 
 def _wait_for_sherlock_grpc_ready(channel, timeout):
