@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023-2025 ANSYS, Inc. and/or its affiliates.
 
 """Module for shared methods for the gRPC stubs."""
 try:
@@ -17,11 +17,13 @@ class GrpcStub:
         """Initialize the gRPC stub."""
         self.channel = channel
         self._server_version = server_version
+        # Stub is created once per channel
+        self.stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(channel)
 
-    def _is_connection_up(self):
+    def _is_connection_up(self) -> bool:
+        """Check if the gRPC connection is alive."""
         try:
-            stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(self.channel)
-            stub.check(SherlockCommonService_pb2.HealthCheckRequest())
+            self.stub.check(SherlockCommonService_pb2.HealthCheckRequest())
             return True
         except grpc.RpcError:
             return False
