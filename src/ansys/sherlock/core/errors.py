@@ -1304,3 +1304,15 @@ class SherlockSaveProfileError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Save profile error: {self.message}"
+
+
+class SherlockDeleteError(Exception):
+    """Contains the errors raised when an event or a phase cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete error: {self.message}"
