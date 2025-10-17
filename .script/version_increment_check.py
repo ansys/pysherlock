@@ -33,13 +33,12 @@ def run_git_command(command: list) -> Tuple[bool, str]:
 def get_current_version() -> Optional[str]:
     """Get current version from pyproject.toml."""
     try:
-        with open("pyproject.toml", "rb") as f:
-            if hasattr(tomllib, "load"):
-                data = tomllib.load(f)
-            else:
-                # For toml library compatibility
-                content = f.read().decode("utf-8")
-                data = tomllib.loads(content)
+        with open("pyproject.toml", "r", encoding="utf-8") as f:
+            content = f.read()
+            # Use toml library for compatibility
+            import toml
+
+            data = toml.loads(content)
             return data.get("project", {}).get("version")
     except Exception as e:
         print(f"[ERROR] Error reading pyproject.toml: {e}")
@@ -53,7 +52,9 @@ def get_main_branch_version() -> Optional[str]:
         if not success:
             return None
 
-        data = tomllib.loads(output)
+        import toml
+
+        data = toml.loads(output)
         return data.get("project", {}).get("version")
     except Exception as e:
         print(f"[ERROR] Error reading version from main branch: {e}")
@@ -62,29 +63,6 @@ def get_main_branch_version() -> Optional[str]:
 
 def should_skip_version_check() -> bool:
     """Check if version check should be skipped."""
-    import os
-
-    # Check for environment variable to skip version check
-    if os.environ.get("SKIP_VERSION_CHECK", "").lower() in ["true", "1", "yes"]:
-        print("[INFO] SKIP_VERSION_CHECK environment variable set, skipping version check")
-        return True
-
-    # Check for skip markers in commit messages
-    success, commits = run_git_command(["log", "origin/main..HEAD", "--oneline"])
-    if success and commits:
-        skip_markers = [
-            "[skip version]",
-            "[no version]",
-            "[skip-version]",
-            "[no-version]",
-            "--skip-version",
-            "--no-version",
-        ]
-
-        if any(marker in commits.lower() for marker in skip_markers):
-            print("[INFO] Skip version marker found in commit message, skipping version check")
-            return True
-
     # Skip on main branch
     success, output = run_git_command(["rev-parse", "--abbrev-ref", "HEAD"])
     if success and output in ["main", "master"]:
@@ -155,7 +133,8 @@ def main():
         return 1
 
     # Check if we should skip version check
-    if should_skip_version_check():
+    should_skip = should_skip_version_check()
+    if should_skip:
         return 0
 
     # Get current version
@@ -181,12 +160,8 @@ def main():
     elif main_version == current_version:
         print(f"[WARNING] Version was not changed from {main_version}")
         print("[INFO] Consider incrementing the version in pyproject.toml to reflect your changes")
-        print(
-            "[INFO] To skip this check, use commit message with [skip version] "
-            "or set SKIP_VERSION_CHECK=true"
-        )
-        print("[SUCCESS] Proceeding anyway (warning only)")
-        return 0
+        print("[FAIL] Version check failed - version not incremented")
+        return 1  # Actually fail instead of warning
     else:
         print(f"[ERROR] Version was decreased: {main_version} -> {current_version}")
         print("[ERROR] This is not recommended and may cause issues")
