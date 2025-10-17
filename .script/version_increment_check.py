@@ -91,10 +91,29 @@ def should_skip_version_check() -> bool:
         print("[INFO] On main branch, skipping version check")
         return True
 
-    # Skip if no changes since main
-    success, output = run_git_command(["diff", "--name-only", "origin/main..HEAD"])
-    if not success or not output.strip():
-        print("[INFO] No changes detected, skipping version check")
+    # Check for changes - include both committed and staged changes
+    has_changes = False
+
+    # Check for committed changes since main
+    success, committed_changes = run_git_command(["diff", "--name-only", "origin/main..HEAD"])
+    if success and committed_changes.strip():
+        print(f"[INFO] Found committed changes: {len(committed_changes.split())} files")
+        has_changes = True
+
+    # Check for staged changes
+    success, staged_changes = run_git_command(["diff", "--name-only", "--cached"])
+    if success and staged_changes.strip():
+        print(f"[INFO] Found staged changes: {len(staged_changes.split())} files")
+        has_changes = True
+
+    # Check for unstaged changes
+    success, unstaged_changes = run_git_command(["diff", "--name-only"])
+    if success and unstaged_changes.strip():
+        print(f"[INFO] Found unstaged changes: {len(unstaged_changes.split())} files")
+        has_changes = True
+
+    if not has_changes:
+        print("[INFO] No changes detected (committed, staged, or unstaged), skipping version check")
         return True
 
     return False

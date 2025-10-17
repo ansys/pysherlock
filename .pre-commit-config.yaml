@@ -47,7 +47,7 @@ repos:
     files: ^src/
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v4.6.0
   hooks:
   - id: check-merge-conflict
   - id: debug-statements
@@ -67,14 +67,14 @@ repos:
     args:
     - --start_year=2021
 
+# Automatic version increment check on pre-push
 - repo: local
   hooks:
   - id: version-increment-check
     name: Version Increment Check
     entry: python .script/pre_push_version_check.py
     language: system
-    stages: [pre-commit]
+    stages: [commit]
     always_run: true
     pass_filenames: false
     description: "Check if version was incremented appropriately by developer"
-    verbose: true
