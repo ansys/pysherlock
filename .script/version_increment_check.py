@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""
+Simple Version Increment Checker for PySherlock
+
+This script simply checks if the version in pyproject.toml has been incremented
+compared to the main branch. It's a basic check to ensure developers update
+the version when making changes.
+"""
+
+from pathlib import Path
+import subprocess
+import sys
+from typing import Optional, Tuple
+
+try:
+    import tomllib
+except ImportError:
+    try:
+        import tomli as tomllib
+    except ImportError:
+        import toml as tomllib
+
+
+def run_git_command(command: list) -> Tuple[bool, str]:
+    """Run git command and return success status and output."""
+    try:
+        result = subprocess.run(["git"] + command, capture_output=True, text=True, check=True)
+        return True, result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        return False, e.stderr.strip() if e.stderr else str(e)
+
+
+def get_current_version() -> Optional[str]:
+    """Get current version from pyproject.toml."""
+    try:
+        with open("pyproject.toml", "rb") as f:
+            if hasattr(tomllib, "load"):
+                data = tomllib.load(f)
+            else:
+                # For toml library compatibility
+                content = f.read().decode("utf-8")
+                data = tomllib.loads(content)
+            return data.get("project", {}).get("version")
+    except Exception as e:
+        print(f"[ERROR] Error reading pyproject.toml: {e}")
+        return None
+
+
+def get_main_branch_version() -> Optional[str]:
+    """Get version from main branch pyproject.toml."""
+    try:
+        success, output = run_git_command(["show", "origin/main:pyproject.toml"])
+        if not success:
+            return None
+
+        data = tomllib.loads(output)
+        return data.get("project", {}).get("version")
+    except Exception as e:
+        print(f"[ERROR] Error reading version from main branch: {e}")
+        return None
+
+
+def should_skip_version_check() -> bool:
+    """Check if version check should be skipped."""
+    import os
+
+    # Check for environment variable to skip version check
+    if os.environ.get("SKIP_VERSION_CHECK", "").lower() in ["true", "1", "yes"]:
+        print("[INFO] SKIP_VERSION_CHECK environment variable set, skipping version check")
+        return True
+
+    # Check for skip markers in commit messages
+    success, commits = run_git_command(["log", "origin/main..HEAD", "--oneline"])
+    if success and commits:
+        skip_markers = [
+            "[skip version]",
+            "[no version]",
+            "[skip-version]",
+            "[no-version]",
+            "--skip-version",
+            "--no-version",
+        ]
+
+        if any(marker in commits.lower() for marker in skip_markers):
+            print("[INFO] Skip version marker found in commit message, skipping version check")
+            return True
+
+    # Skip on main branch
+    success, output = run_git_command(["rev-parse", "--abbrev-ref", "HEAD"])
+    if success and output in ["main", "master"]:
+        print("[INFO] On main branch, skipping version check")
+        return True
+
+    # Skip if no changes since main
+    success, output = run_git_command(["diff", "--name-only", "origin/main..HEAD"])
+    if not success or not output.strip():
+        print("[INFO] No changes detected, skipping version check")
+        return True
+
+    return False
+
+
+def version_incremented(version1: str, version2: str) -> bool:
+    """Check if version2 is greater than version1."""
+
+    def parse_version(version_str: str) -> tuple:
+        # Handle dev versions like "0.12.dev0"
+        if ".dev" in version_str:
+            version_str = version_str.split(".dev")[0]
+
+        # Parse semantic version
+        parts = version_str.split(".")
+        major = int(parts[0]) if len(parts) > 0 else 0
+        minor = int(parts[1]) if len(parts) > 1 else 0
+        patch = int(parts[2]) if len(parts) > 2 else 0
+        return major, minor, patch
+
+    v1_major, v1_minor, v1_patch = parse_version(version1)
+    v2_major, v2_minor, v2_patch = parse_version(version2)
+
+    return (v2_major, v2_minor, v2_patch) > (v1_major, v1_minor, v1_patch)
+
+
+def main():
+    """Main entry point for simple version increment checker."""
+    print("[INFO] Simple Version Increment Checker for PySherlock")
+
+    # Check if we're in a git repository
+    if not Path(".git").exists():
+        print("[ERROR] Not in a git repository")
+        return 1
+
+    # Check if pyproject.toml exists
+    if not Path("pyproject.toml").exists():
+        print("[ERROR] pyproject.toml not found")
+        return 1
+
+    # Check if we should skip version check
+    if should_skip_version_check():
+        return 0
+
+    # Get current version
+    current_version = get_current_version()
+    if not current_version:
+        print("[ERROR] Could not read current version")
+        return 1
+
+    # Get main branch version
+    main_version = get_main_branch_version()
+    if not main_version:
+        print("[ERROR] Could not read version from main branch")
+        return 1
+
+    print(f"[INFO] Main branch version: {main_version}")
+    print(f"[INFO] Current branch version: {current_version}")
+
+    # Simple check: was version incremented?
+    if version_incremented(main_version, current_version):
+        print(f"[SUCCESS] Version was incremented: {main_version} -> {current_version}")
+        print("[SUCCESS] Version check passed!")
+        return 0
+    elif main_version == current_version:
+        print(f"[WARNING] Version was not changed from {main_version}")
+        print("[INFO] Consider incrementing the version in pyproject.toml to reflect your changes")
+        print(
+            "[INFO] To skip this check, use commit message with [skip version] "
+            "or set SKIP_VERSION_CHECK=true"
+        )
+        print("[SUCCESS] Proceeding anyway (warning only)")
+        return 0
+    else:
+        print(f"[ERROR] Version was decreased: {main_version} -> {current_version}")
+        print("[ERROR] This is not recommended and may cause issues")
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -59,9 +59,22 @@ repos:
   hooks:
   - id: check-github-workflows
 
+# Ansys pre-commit hooks for license headers and version management
 - repo: https://github.com/ansys/pre-commit-hooks
   rev: v0.5.2
   hooks:
   - id: add-license-headers
     args:
     - --start_year=2021
+
+- repo: local
+  hooks:
+  - id: version-increment-check
+    name: Version Increment Check
+    entry: python .script/pre_push_version_check.py
+    language: system
+    stages: [pre-commit]
+    always_run: true
+    pass_filenames: false
+    description: "Check if version was incremented appropriately by developer"
+    verbose: true
