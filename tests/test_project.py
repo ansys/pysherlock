@@ -65,7 +65,7 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     project = Project(channel, SKIP_VERSION_CHECK)
 
-    # helper_test_add_outline_file(project)
+    helper_test_add_outline_file(project)
     helper_test_add_strain_maps(project)
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
@@ -74,7 +74,7 @@ def test_all():
     helper_test_import_project_zip_archive_single_mode(project)
     helper_test_generate_project_report(project)
     helper_test_list_ccas(project)
-    # helper_test_add_cca(project)
+    helper_test_add_cca(project)
     helper_test_list_strain_maps(project)
     helper_test_add_thermal_maps(project)
     helper_test_update_thermal_maps(project)
