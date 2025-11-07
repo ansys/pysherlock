@@ -105,7 +105,8 @@ class Lifecycle(GrpcStub):
     def _init_ampl_units(self):
         """Initialize the list for amplitude units.
 
-        Available Since: 2021R1
+        .. deprecated:: 2026 R1
+
         """
         if self._is_connection_up():
             ampl_unit_request = SherlockLifeCycleService_pb2.ListAmplUnitsRequest()
@@ -127,7 +128,8 @@ class Lifecycle(GrpcStub):
     def _init_load_units(self):
         """Initialize the list for load units.
 
-        Available Since: 2021R1
+        .. deprecated:: 2026 R1
+
         """
         if self._is_connection_up():
             load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()

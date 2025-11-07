@@ -50,7 +50,8 @@ class Stackup(GrpcStub):
     def _init_laminate_thickness_units(self):
         """Initialize the list of units for the laminate thickness.
 
-        Available Since: 2021R1
+        .. deprecated:: 2026 R1
+
         """
         if self._is_connection_up():
             laminate_thickness_unit_request = (
