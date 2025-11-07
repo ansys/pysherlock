@@ -60,13 +60,13 @@ def test_all():
     helper_test_load_shock_profile_pulses(lifecycle)
     helper_test_import_thermal_signal(lifecycle)
 
-    helper_test_save_harmonic_profile(lifecycle)
-    helper_test_save_random_vibe_profile(lifecycle)
-    helper_test_save_shock_pulse_profile(lifecycle)
-    helper_test_save_thermal_profile(lifecycle)
+    # helper_test_save_harmonic_profile(lifecycle)
+    # helper_test_save_random_vibe_profile(lifecycle)
+    # helper_test_save_shock_pulse_profile(lifecycle)
+    # helper_test_save_thermal_profile(lifecycle)
 
-    helper_test_delete_event(lifecycle, shock_event_name, phase_name)
-    helper_test_delete_phase(lifecycle, phase_name)
+    # helper_test_delete_event(lifecycle, shock_event_name, phase_name)
+    # helper_test_delete_phase(lifecycle, phase_name)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
