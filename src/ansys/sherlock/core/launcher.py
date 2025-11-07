@@ -5,7 +5,7 @@ import errno
 import os
 import shlex
 import socket
-import subprocess
+import subprocess  # nosec B404
 from typing import Optional
 import warnings
 
@@ -157,7 +157,9 @@ def launch(
         if sherlock_command_args != "":
             args.extend(shlex.split(sherlock_command_args))
         LOG.info(f"Command arguments: {args}")
-        subprocess.Popen(args)
+        # subprocess is used safely here to launch a trusted local executable (Sherlock).
+        # Input arguments are internally constructed and shell=False prevents injection.
+        subprocess.Popen(args, shell=False)  # nosec B603
 
         return ansys_install_path
     except Exception as e:

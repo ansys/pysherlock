@@ -430,16 +430,15 @@ class Project(GrpcStub):
             return_code = response.returnCode
 
             if return_code.value == -1:
-                if return_code.message == "":
+                if not return_code.message:
                     raise SherlockListCCAsError(error_array=response.errors)
-
                 raise SherlockListCCAsError(message=return_code.message)
 
-        except SherlockListCCAsError as e:
-            LOG.error(str(e))
-            raise e
+            return response.ccas
 
-        return response.ccas
+        except SherlockListCCAsError as e:
+            LOG.error(str(e.str_itr()))
+            raise e
 
     @require_version(241)
     def add_cca(self, project: str, cca_properties: list[dict[str, bool | float | str]]) -> int:
