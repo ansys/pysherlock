@@ -795,9 +795,10 @@ class Parts(GrpcStub):
                     raise SherlockUpdatePartsFromAVLError(error_array=response.updateErrors)
                 raise SherlockUpdatePartsFromAVLError(message=return_code.message)
 
-            return response
+            return return_code.value
         except SherlockUpdatePartsFromAVLError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version(242)

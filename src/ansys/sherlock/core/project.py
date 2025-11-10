@@ -908,7 +908,8 @@ class Project(GrpcStub):
                 raise SherlockListStrainMapsError(message=return_code.message)
 
         except Exception as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
         return response.ccaStrainMaps
@@ -1016,7 +1017,8 @@ class Project(GrpcStub):
                 raise SherlockListThermalMapsError(message=return_code.message)
 
         except SherlockListThermalMapsError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
         return response.ccaThermalMaps

@@ -961,7 +961,7 @@ class SherlockAddThermalMapsError(Exception):
         if self.error_array is not None:
             return [f"Add thermal maps error: {error}" for error in self.error_array]
 
-        elif self.error_array is not None:
+        elif self.message is not None:
             return [f"Add thermal maps error: {self.message}"]
 
 
