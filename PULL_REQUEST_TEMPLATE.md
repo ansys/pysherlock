@@ -19,4 +19,5 @@
 		- Click on "API Reference" at the top.
 		- Verify HTML for API changes.
 - [] Check that test code coverage is at least 80% when Sherlock is running
+- [] Check vulnerabilities locally
 - [] Make sure that the title of the pull request follows [Commit naming conventions](https://dev.docs.pyansys.com/how-to/contributing.html#commit-naming-conventions) (e.g. ``feat: adding new PySherlock command``)
