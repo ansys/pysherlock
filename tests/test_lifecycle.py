@@ -16,6 +16,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockDeleteError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
@@ -25,6 +26,8 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 from ansys.sherlock.core.types.lifecycle_types import (
+    DeleteEventRequest,
+    DeletePhaseRequest,
     ImportThermalSignalRequest,
     SaveHarmonicProfileRequest,
     SaveRandomVibeProfileRequest,
@@ -61,6 +64,9 @@ def test_all():
     helper_test_save_random_vibe_profile(lifecycle)
     helper_test_save_shock_pulse_profile(lifecycle)
     helper_test_save_thermal_profile(lifecycle)
+
+    helper_test_delete_event(lifecycle, shock_event_name, phase_name)
+    helper_test_delete_phase(lifecycle, phase_name)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -2616,6 +2622,134 @@ def helper_test_save_thermal_profile(lifecycle: Lifecycle):
             pytest.fail("No exception raised when using an invalid file_path parameter")
         except Exception as e:
             assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_delete_event(lifecycle: Lifecycle, event_name: str, phase_name: str):
+    # project missing
+    try:
+        lifecycle.delete_event(
+            DeleteEventRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="ThermalCycle_A",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.delete_event(
+            DeleteEventRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="ThermalCycle_A",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.delete_event(
+            DeleteEventRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false event_name
+        try:
+            lifecycle.delete_event(
+                DeleteEventRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="NonExistingEvent",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockDeleteError)
+
+        # valid request with actual event
+        response = lifecycle.delete_event(
+            DeleteEventRequest(
+                project="Tutorial Project",
+                phase_name=phase_name,
+                event_name=event_name,
+            )
+        )
+        assert response.value == 0
+
+
+def helper_test_delete_phase(lifecycle: Lifecycle, phase_name: str):
+    # project missing
+    try:
+        lifecycle.delete_phase(
+            DeletePhaseRequest(
+                project="",
+                phase_name="SomePhase",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.delete_phase(
+            DeletePhaseRequest(
+                project="Tutorial Project",
+                phase_name="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false phase_name
+        try:
+            lifecycle.delete_phase(
+                DeletePhaseRequest(
+                    project="Tutorial Project",
+                    phase_name="NonExistingPhase",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockDeleteError)
+
+        # valid request with actual phase
+        response = lifecycle.delete_phase(
+            DeletePhaseRequest(
+                project="Tutorial Project",
+                phase_name=phase_name,
+            )
+        )
+        assert response.value == 0
 
 
 if __name__ == "__main__":

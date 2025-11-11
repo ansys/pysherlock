@@ -252,3 +252,53 @@ class SaveThermalProfileRequest(BaseModel):
             eventName=self.event_name,
             filePath=self.file_path,
         )
+
+
+class DeleteEventRequest(BaseModel):
+    """Request to delete a life cycle event from a project phase."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """The name of the life cycle phase from which to delete this event."""
+
+    event_name: str
+    """Name of the event to be deleted."""
+
+    @field_validator("project", "phase_name", "event_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.DeleteEventRequest:
+        """Convert to gRPC DeleteEventRequest."""
+        return SherlockLifeCycleService_pb2.DeleteEventRequest(
+            project=self.project,
+            phaseName=self.phase_name,
+            eventName=self.event_name,
+        )
+
+
+class DeletePhaseRequest(BaseModel):
+    """Request to delete a life cycle phase from a project."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """Name of the life cycle phase to be deleted."""
+
+    @field_validator("project", "phase_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.DeletePhaseRequest:
+        """Convert to gRPC DeletePhaseRequest."""
+        return SherlockLifeCycleService_pb2.DeletePhaseRequest(
+            project=self.project,
+            phaseName=self.phase_name,
+        )

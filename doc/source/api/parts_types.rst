@@ -18,7 +18,5 @@ Constants
 
 Classes
 -------
-.. autoclass:: PartLocation
-     :members:
 .. autoclass:: GetPartsListPropertiesRequest
      :members:
