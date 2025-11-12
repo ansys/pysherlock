@@ -4,6 +4,7 @@ import os
 import platform
 import unittest
 
+from ansys.api.sherlock.v0.SherlockModelService_pb2 import PcbMaterialElasticity
 import grpc
 import pytest
 
@@ -315,6 +316,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
             pytest.fail("No exception raised for invalid project name")
         except SherlockExportFEAModelError as e:
@@ -348,8 +350,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid CCA name")
         except SherlockExportFEAModelError as e:
             assert str(e) == "Export FEA model error: CCA name is invalid."
 
@@ -381,8 +384,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid file path")
         except SherlockExportFEAModelError as e:
             assert str(e) == "Export FEA model error: Export file path is invalid."
 
@@ -414,8 +418,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid file directory")
         except SherlockExportFEAModelError as e:
             assert str(e) == f'Export FEA model error: Export file directory "test" does not exist.'
 
@@ -447,8 +452,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid minimum hole diameter")
         except SherlockExportFEAModelError as e:
             assert str(e) == "Export FEA model error: Minimum hole diameter is invalid."
 
@@ -480,8 +486,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid maximum edge length")
         except SherlockExportFEAModelError as e:
             assert str(e) == "Export FEA model error: Maximum edge length is invalid."
 
@@ -513,8 +520,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid maximum mesh size")
         except SherlockExportFEAModelError as e:
             assert str(e) == "Export FEA model error: Maximum mesh size is invalid."
 
@@ -546,8 +554,9 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
+                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
             )
-            pytest.fail("No exception raised for invalid project name")
+            pytest.fail("No exception raised for invalid vertical mesh size")
         except SherlockExportFEAModelError as e:
             assert str(e) == "Export FEA model error: Vertical mesh size is invalid."
 
@@ -580,8 +589,9 @@ class TestModel(unittest.TestCase):
                     clear_FEA_database=True,
                     use_FEA_model_id=True,
                     coordinate_units="mm",
+                    pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
                 )
-                pytest.fail("No exception raised for invalid project name")
+                pytest.fail("No exception raised for invalid CCA name")
             except Exception as e:
                 assert type(e) == SherlockExportFEAModelError
 
@@ -613,6 +623,7 @@ class TestModel(unittest.TestCase):
                     clear_FEA_database=False,
                     use_FEA_model_id=False,
                     coordinate_units="mm",
+                    pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
                 )
                 assert result == 0
 
