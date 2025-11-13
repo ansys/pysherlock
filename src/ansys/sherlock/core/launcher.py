@@ -5,7 +5,6 @@ import errno
 import os
 import shlex
 import socket
-import subprocess  # nosec B404
 from typing import Optional
 import warnings
 
@@ -140,6 +139,9 @@ def launch(
     >>> ansys_install_path = launcher.launch(
     >>>     port=9092, single_project_path=project, year=2024, release_number=2)
     """
+    # Moved import here since it's only used in this function
+    import subprocess  # nosec B404
+
     try:
         _is_port_available(host, port)
     except Exception as e:
