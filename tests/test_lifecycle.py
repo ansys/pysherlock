@@ -1798,7 +1798,7 @@ def helper_test_load_random_vibe_profile(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: Project name is invalid.']"
+        assert str(e.message) == "Project name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1809,7 +1809,7 @@ def helper_test_load_random_vibe_profile(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: Phase name is invalid.']"
+        assert str(e.message) == "Phase name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1820,7 +1820,7 @@ def helper_test_load_random_vibe_profile(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: Event name is invalid.']"
+        assert str(e.message) == "Event name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
@@ -1831,7 +1831,7 @@ def helper_test_load_random_vibe_profile(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: File path is invalid.']"
+        assert str(e.message) == "File path is invalid."
 
     if lifecycle._is_connection_up():
         # happy path test missing because needs valid file

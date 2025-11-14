@@ -133,7 +133,13 @@ class Stackup(GrpcStub):
             response = self.stub.listLaminateMaterials(request)
             if response.returnCode.value == 0:
                 manufacturer_materials = response.manufacturerMaterials[0]
-                assert manufacturer_materials.manufacturer == manufacturer
+                if manufacturer_materials.manufacturer != manufacturer:
+                    raise SherlockInvalidMaterialError(
+                        message=(
+                            f"Unexpected manufacturer returned: "
+                            f"{manufacturer_materials.manufacturer}"
+                        )
+                    )
 
                 for grade_material in manufacturer_materials.gradeMaterials:
                     if grade == grade_material.grade:

@@ -1814,12 +1814,10 @@ class Lifecycle(GrpcStub):
             response = self.stub.loadRandomVibeProfile(request)
             return_code = response.returnCode
             if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockLoadRandomVibeProfileError(error_array=response.errors)
-
-                raise SherlockLoadRandomVibeProfileError(message=return_code.message)
+                raise SherlockLoadRandomVibeProfileError(message=response.errors)
 
             return return_code.value
+
         except SherlockLoadRandomVibeProfileError as e:
             LOG.error(str(e))
             raise e
@@ -1976,7 +1974,8 @@ class Lifecycle(GrpcStub):
 
             return return_code.value
         except SherlockLoadHarmonicProfileError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version()
@@ -2039,11 +2038,14 @@ class Lifecycle(GrpcStub):
             response = self.stub.loadShockProfileDataset(request)
             return_code = response.returnCode
             if return_code.value == -1:
-                raise SherlockLoadShockProfileDatasetError(return_code.message)
+                if return_code.message == "":
+                    raise SherlockLoadShockProfileDatasetError(error_array=response.errors)
+                raise SherlockLoadShockProfileDatasetError(message=return_code.message)
 
             return return_code.value
         except SherlockLoadShockProfileDatasetError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version()
