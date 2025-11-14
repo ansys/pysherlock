@@ -93,11 +93,10 @@ class SherlockListCCAsError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.message is not None:
+            return [f"List CCAs error: {self.message}"]
+        elif self.error_array is not None:
             return [f"List CCAs error: {error}" for error in self.error_array]
-
-        assert self.error_array is None
-        return [f"List CCAs error: {self.message}"]
 
 
 class SherlockListConductorLayersError(Exception):
@@ -170,11 +169,11 @@ class SherlockAddStrainMapsError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add strain maps error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add strain maps error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add strain maps error: {self.message}"]
 
 
 class SherlockListStrainMapsError(Exception):
@@ -187,11 +186,10 @@ class SherlockListStrainMapsError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.message is not None:
+            return [f"List strain maps error: {self.message}"]
+        elif self.error_array is not None:
             return [f"List strain maps error: {error}" for error in self.error_array]
-
-        assert self.error_array is None
-        return [f"List strain maps error: {self.message}"]
 
 
 class SherlockGenerateProjectReportError(Exception):
@@ -216,28 +214,24 @@ class SherlockCreateLifePhaseError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
-            return [f"Create life phase error: {error}" for error in self.error_array]
+        if self.message is not None:
+            return [f"Create life phase error: {self.message}"]
 
-        assert self.error_array is None
-        return [f"Create life phase error: {self.message}"]
+        elif self.error_array is not None:
+            return [f"Create life phase error: {error}" for error in self.error_array]
 
 
 class SherlockAddRandomVibeEventError(Exception):
     """Contains the errors raised when a random vibe event cannot be added."""
 
-    def __init__(self, message: Optional[str] = None, error_array: Optional[list[str]] = None):
+    def __init__(self, message: str):
         """Initialize error message."""
         self.message = message
-        self.error_array = error_array
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
-            return [f"Add random vibe event error: {error}" for error in self.error_array]
-
-        assert self.error_array is None
-        return [f"Add random vibe event error: {self.message}"]
+        if self.message is not None:
+            return [f"Add random vibe event error: {self.message}"]
 
 
 class SherlockAddRandomVibeProfilesError(Exception):
@@ -250,11 +244,11 @@ class SherlockAddRandomVibeProfilesError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add random vibe profiles error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add random vibe profiles error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add random vibe profiles error: {self.message}"]
 
 
 class SherlockAddThermalEventError(Exception):
@@ -267,11 +261,11 @@ class SherlockAddThermalEventError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add thermal event error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add thermal event error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add thermal event error: {self.message}"]
 
 
 class SherlockAddThermalProfilesError(Exception):
@@ -284,11 +278,11 @@ class SherlockAddThermalProfilesError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add thermal profiles error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add thermal profiles error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add thermal profiles error: {self.message}"]
 
 
 class SherlockAddHarmonicEventError(Exception):
@@ -301,11 +295,11 @@ class SherlockAddHarmonicEventError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add harmonic event error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add harmonic event error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add harmonic event error: {self.message}"]
 
 
 class SherlockAddHarmonicVibeProfilesError(Exception):
@@ -318,11 +312,11 @@ class SherlockAddHarmonicVibeProfilesError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add harmonic vibe profiles error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add harmonic vibe profiles error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add harmonic vibe profiles error: {self.message}"]
 
 
 class SherlockAddShockEventError(Exception):
@@ -335,11 +329,11 @@ class SherlockAddShockEventError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add shock event error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add shock event error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add shock event error: {self.message}"]
 
 
 class SherlockAddShockProfilesError(Exception):
@@ -352,28 +346,23 @@ class SherlockAddShockProfilesError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add shock profiles error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add shock profiles error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add shock profiles error: {self.message}"]
 
 
 class SherlockLoadRandomVibeProfileError(Exception):
     """Contains the error raised when loading random vibe properties."""
 
-    def __init__(self, message: Optional[str] = None, error_array: Optional[list[str]] = None):
+    def __init__(self, message: str):
         """Initialize error message."""
         self.message = message
-        self.error_array = error_array
 
-    def str_itr(self):
-        """Create list of error messages."""
-        if self.message is None:
-            return [f"Load random vibe profile error: {error}" for error in self.error_array]
-
-        assert self.error_array is None
-        return [f"Load random vibe profile error: {self.message}"]
+    def __str__(self):
+        """Format error message."""
+        return f"Load random vibe profile error: {self.message}"
 
 
 class SherlockLoadHarmonicProfileError(Exception):
@@ -386,11 +375,11 @@ class SherlockLoadHarmonicProfileError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Load harmonic profile error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Load harmonic profile error: {self.message}"]
+        elif self.message is not None:
+            return [f"Load harmonic profile error: {self.message}"]
 
 
 class SherlockUpdateMountPointsByFileError(Exception):
@@ -403,11 +392,11 @@ class SherlockUpdateMountPointsByFileError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update mount points by file error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update mount points by file error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update mount points by file error: {self.message}"]
 
 
 class SherlockGenStackupError(Exception):
@@ -456,11 +445,11 @@ class SherlockUpdatePartsListError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update parts list error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update parts list error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update parts list error: {self.message}"]
 
 
 class SherlockUpdatePartsLocationsError(Exception):
@@ -473,11 +462,11 @@ class SherlockUpdatePartsLocationsError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update parts locations error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update parts locations error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update parts locations error: {self.message}"]
 
 
 class SherlockUpdatePartsLocationsByFileError(Exception):
@@ -490,11 +479,11 @@ class SherlockUpdatePartsLocationsByFileError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update parts locations by file error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update parts locations by file error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update parts locations by file error: {self.message}"]
 
 
 class SherlockImportPartsListError(Exception):
@@ -533,18 +522,6 @@ class SherlockEnableLeadModelingError(Exception):
         return f"Enable lead modeling error: {self.message}"
 
 
-class SherlockGetPartLocationError(Exception):
-    """Contains the error raised when getting part location results in an error."""
-
-    def __init__(self, message: str):
-        """Initialize error message."""
-        self.message = message
-
-    def __str__(self):
-        """Format error message."""
-        return f"Get part location error: {self.message}"
-
-
 class SherlockLoadThermalProfileError(Exception):
     """Contains the error raised when loading thermal profile."""
 
@@ -555,11 +532,11 @@ class SherlockLoadThermalProfileError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Load thermal profile error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Load thermal profile error: {self.message}"]
+        elif self.message is not None:
+            return [f"Load thermal profile error: {self.message}"]
 
 
 class SherlockRunAnalysisError(Exception):
@@ -608,11 +585,11 @@ class SherlockLoadShockProfileDatasetError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Load shock profile dataset error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Load shock profile dataset error: {self.message}"]
+        elif self.message is not None:
+            return [f"Load shock profile dataset error: {self.message}"]
 
 
 class SherlockUpdateNaturalFrequencyPropsError(Exception):
@@ -793,11 +770,11 @@ class SherlockLoadShockProfilePulsesError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Load shock profile pulses error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Load shock profile pulses error: {self.message}"]
+        elif self.message is not None:
+            return [f"Load shock profile pulses error: {self.message}"]
 
 
 class SherlockUpdatePcbModelingPropsError(Exception):
@@ -930,11 +907,11 @@ class SherlockUpdatePartsFromAVLError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update part from AVL error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update part from AVL error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update part from AVL error: {self.message}"]
 
 
 class SherlockListThermalMapsError(Exception):
@@ -947,11 +924,11 @@ class SherlockListThermalMapsError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"List thermal maps error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"List thermal maps error: {self.message}"]
+        elif self.message is not None:
+            return [f"List thermal maps error: {self.message}"]
 
 
 class SherlockUpdateThermalMapsError(Exception):
@@ -964,11 +941,11 @@ class SherlockUpdateThermalMapsError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update thermal maps error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update thermal maps error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update thermal maps error: {self.message}"]
 
 
 class SherlockAddThermalMapsError(Exception):
@@ -981,11 +958,11 @@ class SherlockAddThermalMapsError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add thermal maps error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add thermal maps error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add thermal maps error: {self.message}"]
 
 
 class SherlockImportProjectZipArchiveError(Exception):
@@ -1022,11 +999,11 @@ class SherlockUpdatePartsListPropertiesError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update parts list properties error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update parts list properties error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update parts list properties error: {self.message}"]
 
 
 class SherlockExportNetListError(Exception):
@@ -1099,11 +1076,11 @@ class SherlockUpdateTestPointsByFileError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update test points by file error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update test points by file error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update test points by file error: {self.message}"]
 
 
 class SherlockUpdateTestFixturesByFileError(Exception):
@@ -1116,11 +1093,11 @@ class SherlockUpdateTestFixturesByFileError(Exception):
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update test fixtures by file error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update test fixtures by file error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update test fixtures by file error: {self.message}"]
 
 
 class SherlockExportAllTestPointsError(Exception):
@@ -1193,11 +1170,11 @@ class SherlockAddModelingRegionError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Add modeling region error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Add modeling region error: {self.message}"]
+        elif self.message is not None:
+            return [f"Add modeling region error: {self.message}"]
 
 
 class SherlockUpdateModelingRegionError(Exception):
@@ -1210,11 +1187,11 @@ class SherlockUpdateModelingRegionError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Update modeling region error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Update modeling region error: {self.message}"]
+        elif self.message is not None:
+            return [f"Update modeling region error: {self.message}"]
 
 
 class SherlockCopyModelingRegionError(Exception):
@@ -1227,11 +1204,11 @@ class SherlockCopyModelingRegionError(Exception):
 
     def str_itr(self):
         """Format error message."""
-        if self.message is None:
+        if self.error_array is not None:
             return [f"Copy modeling region error: {error}" for error in self.error_array]
 
-        assert self.error_array is None
-        return [f"Copy modeling region error: {self.message}"]
+        elif self.message is not None:
+            return [f"Copy modeling region error: {self.message}"]
 
 
 class SherlockGetPartsListValidationAnalysisPropsError(Exception):
@@ -1304,3 +1281,15 @@ class SherlockSaveProfileError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Save profile error: {self.message}"
+
+
+class SherlockDeleteError(Exception):
+    """Contains the errors raised when an event or a phase cannot be deleted."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Delete error: {self.message}"

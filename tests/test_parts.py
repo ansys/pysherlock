@@ -12,7 +12,6 @@ from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportNetListError,
     SherlockExportPartsListError,
-    SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockNoGrpcConnectionException,
     SherlockUpdatePartsFromAVLError,
@@ -52,7 +51,6 @@ def test_all():
     helper_test_export_parts_list(parts)
     helper_test_export_net_list(parts)
     helper_test_enable_lead_modeling(parts)
-    helper_test_get_part_location(parts)
     helper_test_get_parts_list_properties(parts)
     helper_test_update_pad_properties(parts)
     helper_test_import_parts_to_avl(parts)
@@ -600,96 +598,6 @@ def helper_test_enable_lead_modeling(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockEnableLeadModelingError as e:
         assert str(e) == "Enable lead modeling error: CCA name is invalid."
-
-
-def helper_test_get_part_location(parts: Parts):
-    """Test get_part_location API"""
-
-    if parts._is_connection_up():
-        try:
-            parts.get_part_location(
-                "Tutorial Project",
-                "Invalid CCA",
-                "C1",
-                "in",
-            )
-            pytest.fail("No exception raised when using an invalid parameter")
-        except Exception as e:
-            assert type(e) == SherlockGetPartLocationError
-
-        try:
-            locations = parts.get_part_location(
-                "Tutorial Project",
-                "Main Board",
-                "C1, C3",
-                "in",
-            )
-
-            assert len(locations) == 2, "Incorrect number of locations"
-            location_c1 = locations[0]
-            assert location_c1.ref_des == "C1", "Incorrect refDes"
-            assert location_c1.x == -2.7, "Incorrect X coordinate for C1"
-            assert location_c1.y == -1.65, "Incorrect Y coordinate for C1"
-            assert location_c1.rotation == 0, "Incorrect rotation for C1"
-            assert location_c1.location_units == "in", "Incorrect location units for C1"
-            assert location_c1.board_side == "TOP", "Incorrect board side for C1"
-            assert location_c1.mirrored is False, "Incorrect mirrored for C1"
-
-            location_c3 = locations[1]
-            assert location_c3.ref_des == "C3", "Incorrect refDes"
-            assert location_c3.x == -2.4, "Incorrect X coordinate for C3"
-            assert location_c3.y == -1.9, "Incorrect Y coordinate for C3"
-            assert location_c3.rotation == 180, "Incorrect rotation for C3"
-            assert location_c3.location_units == "in", "Incorrect location units for C3"
-            assert location_c3.board_side == "TOP", "Incorrect board side for C3"
-            assert location_c3.mirrored is False, "Incorrect mirrored for C3"
-
-        except SherlockGetPartLocationError as e:
-            pytest.fail(e.message)
-
-    try:
-        parts.get_part_location(
-            "",
-            "Card",
-            "C1",
-            "in",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Project name is invalid."
-
-    try:
-        parts.get_part_location(
-            "Test",
-            "",
-            "C1",
-            "in",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: CCA name is invalid."
-
-    try:
-        parts.get_part_location(
-            "Test",
-            "Card",
-            "",
-            "in",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Ref Des is invalid."
-
-    try:
-        parts.get_part_location(
-            "Test",
-            "Card",
-            "C1",
-            "",
-        )
-        pytest.fail("No exception raised when using an invalid parameter")
-    except SherlockGetPartLocationError as e:
-        assert str(e) == "Get part location error: Location unit is invalid."
 
 
 def helper_test_get_parts_list_properties(parts: Parts):
