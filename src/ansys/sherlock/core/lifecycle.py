@@ -1832,7 +1832,7 @@ class Lifecycle(GrpcStub):
             else:
                 if csv_file_properties is not None:
                     raise SherlockLoadRandomVibeProfileError(
-                        "CSV file properties are not used for " "non-CSV random vibe profile files."
+                        "CSV file properties are not used for non-CSV random vibe profile files."
                     )
 
             if not self._is_connection_up():
