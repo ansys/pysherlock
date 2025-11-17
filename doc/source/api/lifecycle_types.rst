@@ -7,6 +7,16 @@ LifeCycle Types
 
 Constants
 ---------
+.. autoclass:: HarmonicVibeProfileCsvFileProperties
+     :members:
+.. autoclass:: RandomVibeProfileCsvFileProperties
+     :members:
+.. autoclass:: ShockProfileDatasetCsvFileProperties
+     :members:
+.. autoclass:: ShockProfilePulsesCsvFileProperties
+     :members:
+.. autoclass:: ThermalProfileCsvFileProperties
+     :members:
 .. autoclass:: ThermalSignalFileProperties
      :members:
 .. autoclass:: ImportThermalSignalRequest
