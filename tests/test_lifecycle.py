@@ -2257,6 +2257,7 @@ def helper_test_load_harmonic_profile(lifecycle: Lifecycle):
                 "Phase 1",
                 "Harmonic Event",
                 "Test_Profile.dat",
+                "x",
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
