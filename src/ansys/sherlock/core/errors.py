@@ -224,13 +224,17 @@ class SherlockCreateLifePhaseError(Exception):
 class SherlockAddRandomVibeEventError(Exception):
     """Contains the errors raised when a random vibe event cannot be added."""
 
-    def __init__(self, message: str):
+    def __init__(self, message: Optional[str] = None, error_array: Optional[list[str]] = None):
         """Initialize error message."""
         self.message = message
+        self.error_array = error_array
 
     def str_itr(self):
         """Create list of error messages."""
-        if self.message is not None:
+        if self.error_array is not None:
+            return [f"Add random vibe event error: {error}" for error in self.error_array]
+
+        elif self.message is not None:
             return [f"Add random vibe event error: {self.message}"]
 
 
