@@ -34,8 +34,10 @@ from ansys.sherlock.core.types.layer_types import (
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
     GetICTFixturesPropertiesRequest,
+    GetMountPointsPropertiesRequest,
     GetTestPointPropertiesRequest,
     ICTFixtureProperties,
+    MountPointProperties,
     PCBShape,
     PolygonalShape,
     PottingRegion,
@@ -46,6 +48,7 @@ from ansys.sherlock.core.types.layer_types import (
     SlotShape,
     TestPointProperties,
     UpdateICTFixturesRequest,
+    UpdateMountPointsRequest,
     UpdatePottingRegionRequest,
     UpdateTestPointsRequest,
 )
@@ -72,6 +75,8 @@ def test_all():
 
     # Update APIs must be called after properties APIs so all pass
     helper_test_update_ict_fixtures(layer)
+    helper_test_update_mount_points(layer)
+    helper_test_get_mount_point_props(layer)
     helper_test_update_mount_points_by_file(layer)
     helper_test_update_potting_region(layer)
     helper_test_update_test_fixtures_by_file(layer)
@@ -2115,6 +2120,396 @@ def helper_test_update_ict_fixtures(layer):
         assert properties_response.ICTFixtureProperties[1].boundary == "Center"
         assert properties_response.ICTFixtureProperties[1].constraints == "Y-axis translation"
         assert properties_response.ICTFixtureProperties[1].chassisMaterial == "NYLON"
+
+
+def helper_test_update_mount_points(layer):
+    """Test update_mount_points API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    mount_point_1 = MountPointProperties(
+        id="MP1",
+        type="Mount Pad",
+        shape="Rectangular",
+        units="mm",
+        x=1.0,
+        y=-2.0,
+        length=2.0,
+        width=1.0,
+        diameter=2.0,
+        nodes="4",
+        rotation=45,
+        side="BOTTOM",
+        height=1.0,
+        material="GOLD",
+        boundary="Outline",
+        constraints="X-axis translation|Z-axis translation",
+        polygon="",
+        state="DISABLED",
+        chassis_material="SILVER",
+    )
+
+    mount_point_without_id = MountPointProperties(
+        id="",
+        type="Standoff",
+        shape="Circular",
+        units="mil",
+        x=100,
+        y=50,
+        length=200,
+        width=200,
+        diameter=200,
+        nodes="6",
+        rotation=0,
+        side="BOTTOM",
+        height=10,
+        material="FERRITE",
+        boundary="Center",
+        constraints="Y-axis translation",
+        polygon="",
+        state="ENABLED",
+        chassis_material="NYLON",
+    )
+
+    try:
+        UpdateMountPointsRequest(project="", cca_name=cca_name, mount_points=[mount_point_1])
+        pytest.fail("No exception thrown when using missing project")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateMountPointsRequest(project=project, cca_name="", mount_points=[mount_point_1])
+        pytest.fail("No exception thrown when using missing cca_name")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateMountPointsRequest(project=project, cca_name=cca_name, mount_points=[])
+        pytest.fail("No exception thrown when using missing mount_points")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, mount_points must contain at least one item."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing type")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, type is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing shape")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, shape is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing units")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, units is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing side")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, side is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing state")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, state is invalid because it is None or empty."
+        )
+
+    if layer._is_connection_up():
+        # Happy Path
+        try:
+            successful_response = layer.update_mount_points(
+                UpdateMountPointsRequest(
+                    project=project,
+                    cca_name=cca_name,
+                    mount_points=[mount_point_1, mount_point_without_id],
+                )
+            )
+            assert successful_response.returnCode.value == 0
+        except Exception as e:
+            pytest.fail(f"Exception thrown during successful mount point update: {e}")
+
+
+def helper_test_get_mount_point_props(layer):
+    """Test get_mount_point_props API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project="",
+            cca_name=cca_name,
+            mount_point_ids="MP1",
+        )
+        pytest.fail("No exception raised when using missing project")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name="",
+            mount_point_ids="MP1",
+        )
+        pytest.fail("No exception raised when using missing cca_name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid mount_point_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, mount_point_ids is invalid because it is None or empty."
+        )
+
+    if layer._is_connection_up():
+        # Dependent on helper_test_update_mount_points to set the mount point properties
+
+        properties_request = GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="MP0, MP5",
+        )
+
+        properties_request = GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="MP1, MP5",
+        )
+
+        properties_response = layer.get_mount_point_props(properties_request)
+
+        assert properties_response.mountPointsProperties[0].ID == "MP1"
+        assert properties_response.mountPointsProperties[0].type == "Mount Pad"
+        assert properties_response.mountPointsProperties[0].shape == "Rectangular"
+        assert properties_response.mountPointsProperties[0].units == "mm"
+        assert properties_response.mountPointsProperties[0].x == "1"
+        assert properties_response.mountPointsProperties[0].y == "-2"
+        assert properties_response.mountPointsProperties[0].length == "2"
+        assert properties_response.mountPointsProperties[0].width == "1"
+        assert properties_response.mountPointsProperties[0].diameter == "2"
+        assert properties_response.mountPointsProperties[0].nodes == "4"
+        assert properties_response.mountPointsProperties[0].rotation == "45.0"
+        assert properties_response.mountPointsProperties[0].side == "BOTTOM"
+        assert properties_response.mountPointsProperties[0].height == "-1.0"
+        assert properties_response.mountPointsProperties[0].material == "GOLD"
+        assert properties_response.mountPointsProperties[0].boundary == "Outline"
+        assert properties_response.mountPointsProperties[0].constraints == (
+            "X-axis translation|" "Z-axis translation"
+        )
+        assert properties_response.mountPointsProperties[0].polygon == ""
+        assert properties_response.mountPointsProperties[0].state == "DISABLED"
+        assert properties_response.mountPointsProperties[0].chassisMaterial == "SILVER"
+
+        assert properties_response.mountPointsProperties[1].ID == "MP5"
+        assert properties_response.mountPointsProperties[1].type == "Standoff"
+        assert properties_response.mountPointsProperties[1].shape == "Circular"
+        assert properties_response.mountPointsProperties[1].units == "mil"
+        assert properties_response.mountPointsProperties[1].x == "100"
+        assert properties_response.mountPointsProperties[1].y == "50"
+        assert properties_response.mountPointsProperties[1].length == "200"
+        assert properties_response.mountPointsProperties[1].width == "200"
+        assert properties_response.mountPointsProperties[1].diameter == "200"
+        assert properties_response.mountPointsProperties[1].nodes == "6"
+        assert properties_response.mountPointsProperties[1].rotation == "0.0"
+        assert properties_response.mountPointsProperties[1].side == "BOTTOM"
+        assert properties_response.mountPointsProperties[1].height == "-10.0"
+        assert properties_response.mountPointsProperties[1].material == "FERRITE"
+        assert properties_response.mountPointsProperties[1].boundary == "Center"
+        assert properties_response.mountPointsProperties[1].constraints == "Y-axis translation"
+        assert properties_response.mountPointsProperties[1].polygon == ""
+        assert properties_response.mountPointsProperties[1].state == "ENABLED"
+        assert properties_response.mountPointsProperties[1].chassisMaterial == "NYLON"
 
 
 def helper_test_export_layer_image(layer):
