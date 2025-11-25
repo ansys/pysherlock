@@ -14,8 +14,10 @@ Classes used for the Layer API.
      CopyPottingRegionRequest
      DeletePottingRegionRequest
      GetICTFixturesPropertiesRequest
+     GetMountPointsPropertiesRequest
      GetTestPointPropertiesRequest
      ICTFixtureProperties
+     MountPointProperties
      PolygonalShape
      RectangularShape
      SlotShape
@@ -27,6 +29,7 @@ Classes used for the Layer API.
      PottingRegionUpdateData
      TestPointProperties
      UpdateICTFixturesRequest
+     UpdateMountPointsRequest
      UpdatePottingRegionRequest
      UpdateTestPointsRequest
 

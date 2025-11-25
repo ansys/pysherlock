@@ -71,27 +71,6 @@ class AVLDescription:
     """DoNotChangeDescription"""
 
 
-class PartLocation:
-    """Part Location property values."""
-
-    def __init__(self, location):
-        """Initialize members from the location."""
-        self.x = location.x
-        """X coordinate"""
-        self.y = location.y
-        """Y coordinate"""
-        self.rotation = location.rotation
-        """Rotation (in degrees)"""
-        self.location_units = location.locationUnits
-        """Units for location coordinates"""
-        self.board_side = location.boardSide
-        """Board side - ``"TOP"`` or ``"BOTTOM"`` """
-        self.mirrored = location.mirrored
-        """Mirrored - ``True`` or ``False`` """
-        self.ref_des = location.refDes
-        """Reference designator"""
-
-
 class GetPartsListPropertiesRequest(BaseModel):
     """Request for getting properties of parts in the parts list of a CCA."""
 

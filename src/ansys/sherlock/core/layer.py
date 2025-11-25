@@ -8,12 +8,14 @@ from ansys.sherlock.core.types.layer_types import (
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
     GetICTFixturesPropertiesRequest,
+    GetMountPointsPropertiesRequest,
     GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
     RectangularShape,
     SlotShape,
     UpdateICTFixturesRequest,
+    UpdateMountPointsRequest,
     UpdatePottingRegionRequest,
     UpdateTestPointsRequest,
 )
@@ -2239,3 +2241,97 @@ class Layer(GrpcStub):
         update_request = request._convert_to_grpc()
         response = self.stub.updateICTFixtures(update_request)
         return response
+
+    @require_version(261)
+    def get_mount_point_props(
+        self, request: GetMountPointsPropertiesRequest
+    ) -> SherlockLayerService_pb2.GetMountPointsPropertiesResponse:
+        """
+        Return the properties for each mount point given a comma-separated list of mount point IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetmountPointsPropertiesRequest
+             Contains all the information needed to return the properties for one or more mount
+             points.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.GetMountPointsPropertiesResponse
+            Properties for each mount point that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetMountPointsPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetMountPointsPropertiesRequest(
+        >>>    project = "Tutorial Project"
+        >>>    cca_name = "Main Board"
+        >>>    mount_point_ids = "MP1,MP2"
+        >>> )
+        >>> response = layer.get_mount_point_props(request)
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.getMountPointsProperties(request._convert_to_grpc())
+
+    @require_version(261)
+    def update_mount_points(
+        self, request: UpdateMountPointsRequest
+    ) -> SherlockLayerService_pb2.UpdateMountPointsResponse:
+        """Update mount point properties of a CCA from input parameters.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateMountPointsRequest
+            Contains all the information needed to update the properties for one or more
+            mount points.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.UpdateMountPointsResponse
+            A status code and message for the update mount points request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import UpdateMountPointsRequest,
+        >>> MountPointProperties
+        >>> sherlock = connect()
+        >>> mount_point = MountPointProperties(
+        >>>     id="MP1",
+        >>>     type="Mount Pad",
+        >>>     shape="Rectangular",
+        >>>     units="mm",
+        >>>     side="BOTTOM",
+        >>>     height=1.0,
+        >>>     material="GOLD",
+        >>>     state="DISABLED",
+        >>>     x=0.3,
+        >>>     y=-0.4,
+        >>>     length=1.0,
+        >>>     width=0.2,
+        >>>     diameter=0.0,
+        >>>     nodes="",
+        >>>     rotation=45,
+        >>>     polygon="",
+        >>>     boundary="Outline",
+        >>>     constraints="X-axis translation|Z-axis translation",
+        >>>     chassis_material="SILVER",
+        >>> )
+        >>> response = sherlock.layer.update_mount_points(UpdateMountPointsRequest(
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Main Board",
+        >>>     update_mount_points=[mount_point],
+        >>> ))
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateMountPoints(request._convert_to_grpc())
