@@ -460,6 +460,54 @@ class ImportThermalSignalRequest(BaseModel):
         )
 
 
+class UpdateLifeCycleRequest(BaseModel):
+    """Request to update the life cycle."""
+
+    project: str
+    """Sherlock project name."""
+
+    new_name: str
+    """The new name of the life cycle."""
+
+    new_description: str
+    """The new description of the life cycle."""
+
+    new_reliability_metric: float
+    """The new reliability metric value."""
+
+    new_reliability_metric_units: str
+    """The new reliability metric units."""
+
+    new_service_life: float
+    """The new service life value."""
+
+    new_service_life_units: str
+    """The new service life units."""
+
+    result_archive_file_name: str
+    """File name for saved results. File names will be overwritten.
+       Sub-Assembly results will be saved."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.UpdateLifeCycleRequest:
+        """Convert to gRPC SaveHarmonicProfileRequest."""
+        return SherlockLifeCycleService_pb2.UpdateLifeCycleRequest(
+            project=self.project,
+            newName=self.new_name,
+            newDescription=self.new_description,
+            newReliabilityMetric=self.new_reliability_metric,
+            newReliabilityMetricUnits=self.new_reliability_metric_units,
+            newServiceLife=self.new_service_life,
+            newServiceLifeUnits=self.new_service_life_units,
+            resultArchiveFileName=self.result_archive_file_name,
+        )
+
+
 class SaveHarmonicProfileRequest(BaseModel):
     """Request to save a harmonic life cycle event profile to a .dat or .csv file."""
 

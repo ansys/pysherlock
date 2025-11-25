@@ -52,6 +52,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ShockProfileDatasetCsvFileProperties,
     ShockProfilePulsesCsvFileProperties,
     ThermalProfileCsvFileProperties,
+    UpdateLifeCycleRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
 
@@ -2354,11 +2355,21 @@ class Lifecycle(GrpcStub):
         >>> )
         """
         import_thermal_signal_request = request._convert_to_grpc()
-
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.importThermalSignal(import_thermal_signal_request)
+
+    @require_version(261)
+    def updateLifeCycle(
+        self, request: UpdateLifeCycleRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update life cycle."""
+        update_life_cycle_request = request._convert_to_grpc()
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateLifeCycle(update_life_cycle_request)
 
     @require_version(261)
     def save_harmonic_profile(

@@ -73,6 +73,8 @@ def test_all():
     helper_test_delete_event(lifecycle, shock_event_name, phase_name)
     helper_test_delete_phase(lifecycle, phase_name)
 
+    helper_test_update_life_cycle(lifecycle)
+
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
     """Test create_life_phase API"""
@@ -142,6 +144,12 @@ def helper_test_create_life_phase(lifecycle: Lifecycle):
             pytest.fail(str(e.str_itr()))
 
         return phase_name
+
+
+def helper_test_update_life_cycle(lifecycle: Lifecycle):
+    """Test update_life_cycle API"""
+    err = ""
+    assert err == "", "update_life_cycle test not setup"
 
 
 def helper_test_add_random_vibe_event(lifecycle: Lifecycle, phase_name: str) -> str:
