@@ -133,21 +133,48 @@ jobs:
 
   release:
     name: Release project
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [ package ]
+    if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
+    needs: [ package, update-changelog ]
     runs-on: ubuntu-latest
+    # Specifying a GitHub environment is optional, but strongly encouraged
+    environment: release
+    permissions:
+      id-token: write
+      contents: write
     steps:
-      - name: Release to the public PyPI repository
-        uses: ansys/actions/release-pypi-public@v10
+      - name: "Download the library artifacts from build-library step"
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          twine-username: "__token__"
-          twine-token: ${{ secrets.PYPI_TOKEN }}
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: ${{ env.PACKAGE_NAME }}-artifacts
 
-      - name: Release to GitHub
-        uses: ansys/actions/release-github@v10
+      - name: "Display structure of downloaded files"
+        run: ls -Rla
+
+      - name: "Release to PyPI using trusted publisher"
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        with:
+          repository-url: "https://upload.pypi.org/legacy/"
+          print-hash: true
+          packages-dir: ${{ env.PACKAGE_NAME }}-artifacts
+          skip-existing: false
+
+      - name: "Release to GitHub"
+        uses: ansys/actions/release-github@c2fa7c93f6883114e0e643599431b33d29f0b13f #v10.1.4
         with:
           library-name: ${{ env.PACKAGE_NAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  pull-request-name:
+    if: github.event_name == 'pull_request'
+    name: Check the name of the pull-request
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Check pull-request name
+        uses: ansys/actions/check-pr-title@c2fa7c93f6883114e0e643599431b33d29f0b13f #v10.1.4
+        with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   upload_dev_docs:
