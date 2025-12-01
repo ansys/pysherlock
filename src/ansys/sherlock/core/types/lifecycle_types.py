@@ -473,7 +473,10 @@ class UpdateLifeCycleRequest(BaseModel):
     """The new description of the life cycle."""
 
     new_reliability_metric: float
-    """The new reliability metric value."""
+    """The new reliability metric value.
+    Options are: "Reliability (%)", "Prob. of Failure (%)",
+    "MTBF (years)", "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+    """
 
     new_reliability_metric_units: str
     """The new reliability metric units."""
@@ -482,7 +485,9 @@ class UpdateLifeCycleRequest(BaseModel):
     """The new service life value."""
 
     new_service_life_units: str
-    """The new service life units."""
+    """The new service life units.
+    Options are: "year", "day", "hr", "min", "sec"
+    """
 
     result_archive_file_name: str
     """File name for saved results. File names will be overwritten.

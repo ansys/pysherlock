@@ -39,6 +39,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ShockProfilePulsesCsvFileProperties,
     ThermalProfileCsvFileProperties,
     ThermalSignalFileProperties,
+    UpdateLifeCycleRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
@@ -148,8 +149,101 @@ def helper_test_create_life_phase(lifecycle: Lifecycle):
 
 def helper_test_update_life_cycle(lifecycle: Lifecycle):
     """Test update_life_cycle API"""
-    err = ""
-    assert err == "", "update_life_cycle test not setup"
+
+    if lifecycle._is_connection_up():
+        project = "Tutorial Project"
+        new_name = "new name"
+        new_description = "new description"
+        new_reliability_metric = 20
+
+        # Unit options:
+        # "Reliability (%)", "Prob. of Failure (%)", "MTBF (years)",
+        # "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+        new_reliability_metric_units = "invalid_unit"
+
+        new_service_life = 5
+
+        # Unit options:
+        # "year","day","hr", "min","sec"
+        new_service_life_units = "year"
+
+        result_archive_file_name = "filename"
+
+        # Test invalid reliability unit
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        expected_err = "Unsupported unit type '" + new_reliability_metric_units
+        assert return_code.message.startswith(expected_err)
+        new_reliability_metric_units = "Prob. of Failure (%)"
+
+        # Test invalid service life unit
+        new_service_life_units = "invalid_unit"
+
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        expected_err = "Unsupported unit type '" + new_service_life_units + "' Valid options are: "
+        assert return_code.message.startswith(expected_err)
+        new_service_life_units = "year"
+
+        # Test invalid file name
+        result_archive_file_name = "file/name"
+
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        assert (
+            return_code.message
+            == "Invalid Archive Name: The archive name contains invalid characters"
+        )
+        result_archive_file_name = "filename"
+
+        # Test success
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        assert return_code.message == ""
 
 
 def helper_test_add_random_vibe_event(lifecycle: Lifecycle, phase_name: str) -> str:
