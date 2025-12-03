@@ -8,7 +8,7 @@ updates:
       - "maintenance"
       - "dependencies"
     commit-message:
-      prefix: "MAINT"
+      prefix: "build"
     ignore:
       - dependency-name: "grpcio"
 
@@ -19,4 +19,4 @@ updates:
     labels:
       - "maintenance"
     commit-message:
-      prefix: "MAINT"
+      prefix: "build"
