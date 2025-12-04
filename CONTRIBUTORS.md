@@ -2,7 +2,7 @@
 
 ## Project Lead
 
-* [Natalie Raines](https://github.com/ansys-nraines)
+* [Natalie Raines](https://github.com/ansnraines)
 
 ## Individual Contributors
 
