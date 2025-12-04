@@ -15,7 +15,6 @@ from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportNetListError,
     SherlockExportPartsListError,
-    SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockNoGrpcConnectionException,
     SherlockUpdatePartsFromAVLError,
@@ -32,7 +31,6 @@ from ansys.sherlock.core.types.parts_types import (
     DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
     ImportPartsToAVLRequest,
-    PartLocation,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
@@ -654,83 +652,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @require_version()
-    def get_part_location(
-        self, project: str, cca_name: str, ref_des: str, location_units: str
-    ) -> list[PartLocation]:
-        """Return the location properties for one or more part.
-
-        Available Since: 2022R1
-
-        Parameters
-        ----------
-        project: str
-            Name of the Sherlock project.
-        cca_name: str
-            Name of the CCA.
-        ref_des: str
-            Comma separated list of reference designators of parts to retrieve locations for.
-        location_units: str
-            Valid units for a part's location.
-
-        Returns
-        -------
-        list[PartLocation]
-            PartLocation for each part that corresponds to the reference designators.
-
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> part_locations = sherlock.parts.get_part_location(
-            project="Test",
-            cca_name="Card",
-            ref_des="C1,C2",
-            location_units="in",
-        )
-        >>> print(f"{part_locations}")
-        """
-        try:
-            if project == "":
-                raise SherlockGetPartLocationError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetPartLocationError(message="CCA name is invalid.")
-            if ref_des == "":
-                raise SherlockGetPartLocationError(message="Ref Des is invalid.")
-            if location_units == "":
-                raise SherlockGetPartLocationError(message="Location unit is invalid.")
-            if not self._is_connection_up():
-                raise SherlockNoGrpcConnectionException()
-
-            request = SherlockPartsService_pb2.GetPartLocationRequest(
-                project=project,
-                ccaName=cca_name,
-                refDes=ref_des,
-                locationUnits=location_units,
-            )
-            response = self.stub.getPartLocation(request)
-            return_code = response.returnCode
-
-            if return_code.value == -1:
-                raise SherlockGetPartLocationError(return_code.message)
-
-            locations = []
-            for location in response.locationData:
-                locations.append(PartLocation(location))
-            return locations
-        except SherlockGetPartLocationError as e:
-            LOG.error(str(e))
-            raise e
-
     @require_version(252)
     def get_parts_list_properties(
         self, request: GetPartsListPropertiesRequest
@@ -874,9 +795,10 @@ class Parts(GrpcStub):
                     raise SherlockUpdatePartsFromAVLError(error_array=response.updateErrors)
                 raise SherlockUpdatePartsFromAVLError(message=return_code.message)
 
-            return response
+            return return_code.value
         except SherlockUpdatePartsFromAVLError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version(242)

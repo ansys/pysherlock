@@ -20,3 +20,4 @@ class StackupProperties:
         self.ctez = properties.ctEz
         self.exy = properties.exy
         self.ez = properties.ez
+        self.improve_stackup_model_enabled = properties.improveStackupModelEnabled
