@@ -52,6 +52,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ShockProfileDatasetCsvFileProperties,
     ShockProfilePulsesCsvFileProperties,
     ThermalProfileCsvFileProperties,
+    UpdateLifeCycleRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
 
@@ -2354,11 +2355,69 @@ class Lifecycle(GrpcStub):
         >>> )
         """
         import_thermal_signal_request = request._convert_to_grpc()
-
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.importThermalSignal(import_thermal_signal_request)
+
+    @require_version(261)
+    def update_life_cycle(
+        self, request: UpdateLifeCycleRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update life cycle.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateLifeCycleRequest
+            Request object containing the information needed to update the life cycle.
+            Reliability unit options are:
+            "Reliability (%)", "Prob. of Failure (%)", "MTBF (years)",
+            "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+
+            Service life unit options are:
+            "year","day","hr", "min","sec"
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
+        >>> from ansys.sherlock.core.types.lifecycle_types import ThermalSignalFileProperties
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>>
+        >>> project = "Tutorial Project"
+        >>> new_name = "new name"
+        >>> new_description = "new description"
+        >>> new_reliability_metric = 60
+        >>> new_reliability_metric_units = "year"
+        >>> new_service_life = 0
+        >>> new_service_life_units = "sec"
+        >>> result_archive_file_name = "filename"
+        >>>
+        >>> return_code = lifecycle.update_life_cycle(
+        >>>     UpdateLifeCycleRequest(
+        >>>         project=project,
+        >>>         new_name=new_name,
+        >>>         new_description=new_description,
+        >>>         new_reliability_metric=new_reliability_metric,
+        >>>         new_reliability_metric_units=new_reliability_metric_units,
+        >>>         new_service_life=new_service_life,
+        >>>         new_service_life_units=new_service_life_units,
+        >>>         result_archive_file_name=result_archive_file_name
+        >>>     )
+        >>> )
+        """
+        update_life_cycle_request = request._convert_to_grpc()
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateLifeCycle(update_life_cycle_request)
 
     @require_version(261)
     def save_harmonic_profile(
