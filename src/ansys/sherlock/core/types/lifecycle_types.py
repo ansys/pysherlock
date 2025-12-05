@@ -638,3 +638,77 @@ class DeletePhaseRequest(BaseModel):
             project=self.project,
             phaseName=self.phase_name,
         )
+
+
+class UpdateLifePhaseRequest(BaseModel):
+    """Request for updating an existing life phase in a specified project's life cycle."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """Name of the life cycle phase to be updated."""
+
+    new_phase_name: Optional[str] = None
+    """(Optional) Updated name of life phase."""
+
+    new_description: Optional[str] = None
+    """(Optional) Updated description of life phase."""
+
+    new_duration: Optional[float] = None
+    """(Optional) Updated event duration length."""
+
+    new_duration_units: Optional[str] = None
+    """(Optional) Updated event duration units."""
+
+    new_num_of_cycles: Optional[float] = None
+    """(Optional) Updated number of cycles defined for the life phase."""
+
+    new_cycle_type: Optional[str] = None
+    """(Optional) Updated cycle type. Acceptable values are COUNT, DUTY_CYCLE, PER YEAR, PER DAY,
+        PER HOUR, PER MIN, and PER SEC.
+    """
+
+    result_archive_file_name: Optional[str] = None
+    """(Optional) Filename for saving analysis results and life cycle data, including any
+        sub-assembly results. Any existing results will be overwritten. If this file name is
+        omitted, then analysis results will not be saved during the update.
+    """
+
+    @field_validator("project", "phase_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator(
+        "new_phase_name",
+        "new_description",
+        "new_duration_units",
+        "new_cycle_type",
+        "result_archive_file_name",
+    )
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the optional fields to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.UpdateLifePhaseRequest:
+        request = SherlockLifeCycleService_pb2.UpdateLifePhaseRequest()
+        request.project = self.project
+        request.phaseName = self.phase_name
+        if self.new_phase_name is not None:
+            request.newPhaseName = self.new_phase_name
+        if self.new_description is not None:
+            request.newDescription = self.new_description
+        if self.new_duration is not None:
+            request.newDuration = self.new_duration
+        if self.new_duration_units is not None:
+            request.newDurationUnits = self.new_duration_units
+        if self.new_num_of_cycles is not None:
+            request.newNumOfCycles = self.new_num_of_cycles
+        if self.new_cycle_type is not None:
+            request.newCycleType = self.new_cycle_type
+        if self.result_archive_file_name is not None:
+            request.resultArchiveFileName = self.result_archive_file_name
+        return request
