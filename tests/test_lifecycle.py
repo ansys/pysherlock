@@ -4156,13 +4156,13 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
         req = UpdateLifePhaseRequest(
             project=project,
             phase_name=phase_name,
-            new_phase_name = new_phase_name,
-            new_num_of_cycles = new_num_of_cycles,
-            new_cycle_type = new_cycle_type,
-            new_description = new_description,
-            new_duration = new_duration,
-            new_duration_units = new_duration_units,
-            result_archive_file_name = result_archive_file_name,
+            new_phase_name=new_phase_name,
+            new_num_of_cycles=new_num_of_cycles,
+            new_cycle_type=new_cycle_type,
+            new_description=new_description,
+            new_duration=new_duration,
+            new_duration_units=new_duration_units,
+            result_archive_file_name=result_archive_file_name,
         )
         grpc_obj = req._convert_to_grpc()
         assert grpc_obj.newPhaseName == new_phase_name
@@ -4172,7 +4172,7 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
         assert grpc_obj.newNumOfCycles == new_num_of_cycles
         assert grpc_obj.resultArchiveFileName == result_archive_file_name
 
-        #test some optionals set
+        # test some optionals set
         req = UpdateLifePhaseRequest(
             project=project,
             phase_name=phase_name,
@@ -4240,7 +4240,11 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
             pytest.fail("No exception raised for server error response")
         except Exception as e:
             assert isinstance(e, SherlockUpdateLifePhaseError)
-            assert e.message == "Invalid cycle type. Valid options are: COUNT, DUTY CYCLE, PER YEAR, PER DAY, PER HOUR, PER MIN, PER SEC"
+            assert (
+                e.message
+                == "Invalid cycle type. Valid options are: COUNT, DUTY CYCLE, PER YEAR, PER DAY, "
+                "PER HOUR, PER MIN, PER SEC"
+            )
 
         # valid request but new phase name already exists
         try:
@@ -4254,7 +4258,10 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
             pytest.fail("No exception raised for server error response")
         except Exception as e:
             assert isinstance(e, SherlockUpdateLifePhaseError)
-            assert e.message == "The life phase 'On The Road' already exists for the project's life cycle."
+            assert (
+                e.message
+                == "The life phase 'On The Road' already exists for the project's life cycle."
+            )
 
         # valid request with all optional params.
         response = lifecycle.update_life_phase(
@@ -4283,6 +4290,7 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
             )
         )
         assert response.value == 0
+
 
 if __name__ == "__main__":
     test_all()
