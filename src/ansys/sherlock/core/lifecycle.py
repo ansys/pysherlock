@@ -53,7 +53,6 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ShockProfileDatasetCsvFileProperties,
     ShockProfilePulsesCsvFileProperties,
     ThermalProfileCsvFileProperties,
-    UpdateLifePhaseRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
 
