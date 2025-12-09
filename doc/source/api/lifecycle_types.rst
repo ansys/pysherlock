@@ -21,3 +21,5 @@ Constants
      :members:
 .. autoclass:: ImportThermalSignalRequest
      :members:
+.. autoclass:: UpdateLifePhaseRequest
+     :members:

@@ -37,6 +37,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadThermalProfileError,
     SherlockNoGrpcConnectionException,
     SherlockSaveProfileError,
+    SherlockUpdateLifePhaseError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.lifecycle_types import (
@@ -53,6 +54,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ShockProfilePulsesCsvFileProperties,
     ThermalProfileCsvFileProperties,
     UpdateLifeCycleRequest,
+    UpdateLifePhaseRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
 
@@ -2678,5 +2680,57 @@ class Lifecycle(GrpcStub):
 
         if response.value != 0:
             raise SherlockDeleteError(response.message)
+
+        return response
+
+    @require_version(261)
+    def update_life_phase(
+        self, request: UpdateLifePhaseRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update a life cycle phase for a specific life cycle.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : UpdateLifePhaseRequest
+            Request object containing project, phase name, and one or more of the following optional
+            parameters: new phase name, new description, new duration, new duration units, new
+            number of cycles, new cycle type and results archive file name.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import UpdateLifePhaseRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.update_life_phase(
+        >>>     UpdateLifePhaseRequest(
+        >>>         project="Tutorial Project",
+        >>>         phase_name="Thermal",
+        >>>         new_phase_name="Environmental",
+        >>>         new_num_of_cycles = 100,
+        >>>         new_cycle_type="PER DAY",
+        >>>         new_description="new description",
+        >>>         new_duration=24,
+        >>>         new_duration_units="hr",
+        >>>         result_archive_file_name="Tutorial Project Results 10_7_2025"
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.updateLifePhase(grpc_request)
+
+        if response.value != 0:
+            raise SherlockUpdateLifePhaseError(response.message)
 
         return response
