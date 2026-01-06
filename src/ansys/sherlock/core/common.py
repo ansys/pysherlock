@@ -145,10 +145,10 @@ class Common(GrpcStub):
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
 
-        request = SherlockCommonService_pb2.GetSoldersRequest()
-        response = self.stub.getSolders(request)
+        request = SherlockCommonService_pb2.SolderInfoRequest()
+        response = self.stub.getSolderInfo(request)
 
-        return response.solderName
+        return response.solders
 
     @require_version(251)
     def get_sherlock_info(self) -> str:

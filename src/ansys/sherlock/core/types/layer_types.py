@@ -574,3 +574,148 @@ class UpdateICTFixturesRequest(BaseModel):
             for update_fixture in self.update_fixtures:
                 request.ICTFixtureProperties.append(update_fixture._convert_to_grpc())
         return request
+
+
+class MountPointProperties(BaseModel):
+    """Contains the properties of a mount point."""
+
+    id: str
+    """ID"""
+    type: str
+    """Type"""
+    shape: str
+    """Shape type"""
+    units: str
+    """Units"""
+    x: float
+    """Center X"""
+    y: float
+    """Center Y"""
+    length: float
+    """Length"""
+    width: float
+    """Width"""
+    diameter: float
+    """Diameter"""
+    nodes: str
+    """Number of nodes"""
+    rotation: float
+    """Degrees of rotation"""
+    side: str
+    """Side"""
+    height: float
+    """Height"""
+    material: str
+    """Material"""
+    boundary: str
+    """Boundary point(s)"""
+    constraints: str
+    """FEA constraints"""
+    polygon: str
+    """Coordinates of points"""
+    state: str
+    """State"""
+    chassis_material: str
+    """Chassis material"""
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.MountPointProperties:
+        grpc_mount_point_data = SherlockLayerService_pb2.MountPointProperties()
+
+        grpc_mount_point_data.ID = self.id
+        grpc_mount_point_data.type = self.type
+        grpc_mount_point_data.shape = self.shape
+        grpc_mount_point_data.units = self.units
+        grpc_mount_point_data.x = str(self.x)
+        grpc_mount_point_data.y = str(self.y)
+        grpc_mount_point_data.length = str(self.length)
+        grpc_mount_point_data.width = str(self.width)
+        grpc_mount_point_data.diameter = str(self.diameter)
+        grpc_mount_point_data.nodes = self.nodes
+        grpc_mount_point_data.rotation = str(self.rotation)
+        grpc_mount_point_data.side = self.side
+        grpc_mount_point_data.height = str(self.height)
+        grpc_mount_point_data.material = self.material
+        grpc_mount_point_data.boundary = self.boundary
+        grpc_mount_point_data.constraints = self.constraints
+        grpc_mount_point_data.polygon = self.polygon
+        grpc_mount_point_data.state = self.state
+        grpc_mount_point_data.chassisMaterial = self.chassis_material
+
+        return grpc_mount_point_data
+
+    @field_validator("type", "shape", "units", "side", "state")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class GetMountPointsPropertiesRequest(BaseModel):
+    """Return the properties for each mount point given a comma-separated list of mount point ids."""  # noqa: E501
+
+    project: str
+    """Name of the project."""
+    cca_name: str
+    """Name of the CCA containing the mount point properties to return."""
+    mount_point_ids: Optional[str] = None
+    """Optional Param: Comma-separated list of mount point ids representing one or more mount
+        points. If this parameter is not included, then the entire list of mount points
+        for a given CCA will have their properties returned.
+    """
+
+    @field_validator("project", "cca_name", "mount_point_ids")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("mount_point_ids")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the mount_point_ids to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetMountPointsPropertiesRequest:
+        request = SherlockLayerService_pb2.GetMountPointsPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.mount_point_ids is not None:
+            request.mountPointIDs = self.mount_point_ids
+        return request
+
+
+class UpdateMountPointsRequest(BaseModel):
+    """Contains the properties of a mount point update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    mount_points: list[MountPointProperties]
+    """List of mount points with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("mount_points")
+    @classmethod
+    def list_validation(cls, value: list, info: ValidationInfo):
+        """Validate that mount_points is not empty."""
+        if not value:
+            raise ValueError(f"{info.field_name} must contain at least one item.")
+        return value
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateMountPointsRequest:
+        request = SherlockLayerService_pb2.UpdateMountPointsRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.mount_points is not None:
+            for mount_point in self.mount_points:
+                request.mountPointsProperties.append(mount_point._convert_to_grpc())
+        else:
+            raise ValueError("mount_points is invalid because it is None or empty.")
+
+        return request

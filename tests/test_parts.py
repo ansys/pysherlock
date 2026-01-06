@@ -159,7 +159,7 @@ def helper_test_update_parts_from_AVL(parts: Parts):
                 avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
             )
 
-            assert response.returnCode.value == 0
+            assert response == 0
         except SherlockUpdatePartsFromAVLError as e:
             pytest.fail(e.message)
 
