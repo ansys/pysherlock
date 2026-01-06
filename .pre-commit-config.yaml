@@ -59,9 +59,22 @@ repos:
   hooks:
   - id: check-github-workflows
 
+# Ansys pre-commit hooks for license headers and version management
 - repo: https://github.com/ansys/pre-commit-hooks
   rev: v0.5.2
   hooks:
   - id: add-license-headers
     args:
     - --start_year=2021
+
+# Automatic version increment on pre-push
+- repo: local
+  hooks:
+  - id: auto-version-increment
+    name: Auto Version Increment
+    entry: cmd /c "chcp 65001 > NUL && python .script/pre_push_version_increment.py"
+    language: system
+    stages: [pre-push]
+    always_run: true
+    pass_filenames: false
+    description: "Automatically increment version based on changes"
