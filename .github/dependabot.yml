@@ -11,6 +11,8 @@ updates:
       prefix: "build"
     ignore:
       - dependency-name: "grpcio"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -20,3 +22,5 @@ updates:
       - "maintenance"
     commit-message:
       prefix: "build"
+    cooldown:
+      default-days: 7
