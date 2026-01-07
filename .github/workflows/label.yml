@@ -102,10 +102,9 @@ jobs:
   changelog-fragment:
     name: "Create changelog fragment"
     needs: [labeler]
+    # Grant write access to contents and pull-requests
     permissions:
-      # Grant write permissions
       contents: write
-      # Grant write permissions
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
