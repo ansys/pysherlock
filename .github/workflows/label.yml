@@ -102,10 +102,9 @@ jobs:
   changelog-fragment:
     name: "Create changelog fragment"
     needs: [labeler]
-    # Grant write access to contents and pull-requests
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write         # Required to create changelog fragment files
+      pull-requests: write    # Needed to comment on PR with changelog information
     runs-on: ubuntu-latest
     steps:
     - uses: ansys/actions/doc-changelog@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
