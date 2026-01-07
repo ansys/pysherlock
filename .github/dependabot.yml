@@ -4,8 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    cooldown:
-        days: 0
     labels:
       - "maintenance"
       - "dependencies"
@@ -18,8 +16,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    cooldown:
-        days: 0
     labels:
       - "maintenance"
     commit-message:

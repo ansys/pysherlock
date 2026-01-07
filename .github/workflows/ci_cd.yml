@@ -146,7 +146,6 @@ jobs:
     runs-on: ubuntu-latest
     # Specifying a GitHub environment is optional, but strongly encouraged
     environment: release
-    # Grant write permissions
     permissions:
       id-token: write
       contents: write
@@ -178,7 +177,6 @@ jobs:
     if: github.event_name == 'pull_request'
     name: Check the name of the pull-request
     runs-on: ubuntu-latest
-    # Grant read permissions
     permissions:
       pull-requests: read
     steps:
@@ -191,7 +189,6 @@ jobs:
     name: Upload dev documentation
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    # Grant write permissions
     permissions:
       contents: write
     needs: [ package ]
@@ -208,7 +205,6 @@ jobs:
     name: Upload release documentation
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
-    # Grant write permissions
     permissions:
       contents: write
     needs: [ release ]
@@ -226,7 +222,6 @@ jobs:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
-    # Grant write permissions
     permissions:
       contents: write
       pull-requests: write
