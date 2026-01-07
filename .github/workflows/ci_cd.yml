@@ -147,8 +147,8 @@ jobs:
     # Specifying a GitHub environment is optional, but strongly encouraged
     environment: release
     permissions:
-      id-token: write
-      contents: write
+      id-token: write    # Required for PyPI trusted publisher authentication
+      contents: write    # Needed to download release artifacts
     steps:
       - name: "Download the library artifacts from build-library step"
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
@@ -178,7 +178,7 @@ jobs:
     name: Check the name of the pull-request
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: read
+      pull-requests: read    # Required to read pull-request information
     steps:
       - name: Check pull-request name
         uses: ansys/actions/check-pr-title@41f86da4c9ead510db9135e428e33df9cc6f92e1 #v10.2.3
@@ -190,7 +190,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write    # Required to push documentation to gh-pages branch
     needs: [ package ]
     steps:
       - name: Deploy the latest documentation
@@ -206,7 +206,7 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write    # Required to push stable documentation to gh-pages branch
     needs: [ release ]
     steps:
       - name: Deploy the stable documentation
@@ -223,8 +223,8 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write         # Needed to create changelog entries in repository
+      pull-requests: write    # Required to create pull requests for changelog updates
     steps:
       - uses: ansys/actions/doc-deploy-changelog@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
