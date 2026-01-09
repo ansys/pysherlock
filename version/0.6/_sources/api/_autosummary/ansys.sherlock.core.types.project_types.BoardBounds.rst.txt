@@ -1,0 +1,31 @@
+﻿ansys.sherlock.core.types.project\_types.BoardBounds
+====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: BoardBounds
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      BoardBounds.bounds
+      
+   
+   

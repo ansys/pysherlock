@@ -1,0 +1,46 @@
+﻿ansys.sherlock.core.stackup.Stackup
+===================================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. autoclass:: Stackup
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Stackup.gen_stackup
+      
+      
+      Stackup.get_layer_count
+      
+      
+      Stackup.get_stackup_props
+      
+      
+      Stackup.get_total_conductor_thickness
+      
+      
+      Stackup.list_conductor_layers
+      
+      
+      Stackup.list_laminate_layers
+      
+      
+      Stackup.update_conductor_layer
+      
+      
+      Stackup.update_laminate_layer
+      
+   
+   
+
+   
+   
+   
