@@ -21,6 +21,7 @@ from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
 ANSYS_GRPC_CERTIFICATES = "ANSYS_GRPC_CERTIFICATES"
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
+SHERLOCK_UDS_SERVICE = "sherlock-grpc"
 DEFAULT_CONNECT_TIMEOUT = 120
 sherlock_cmd_args = []
 
@@ -391,6 +392,7 @@ def _connect_grpc_channel(
             transport_mode=transport_mode,
             host=host,
             port=port,
+            uds_service=SHERLOCK_UDS_SERVICE,
             uds_dir=uds_dir,
             uds_id=uds_id,
             certs_dir=certs_dir,
