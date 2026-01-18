@@ -27,3 +27,4 @@
 * [Revathy Venugopal](https://github.com/Revathyvenugopal162)
 * [Rgiannamore91](https://github.com/Rgiannamore91)
 * [Roberto Pastor Muela](https://github.com/RobPasMue)
+* [skola-ansys](https://github.com/skola-ansys)
