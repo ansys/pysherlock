@@ -115,10 +115,34 @@ jobs:
     needs: [ docs-style ]
     runs-on: ubuntu-latest
     steps:
-      - name: Run documentation building action
-        uses: ansys/actions/doc-build@v8
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Upgrade pip tooling
+        run: python -m pip install --upgrade pip wheel setuptools
+
+      - name: Install documentation dependencies (extra [doc])
+        run: |
+          pip install -e ".[doc]"
+
+      - name: Show Sphinx/docutils versions
+        run: |
+          python -c "import sphinx, docutils; print('Sphinx', sphinx.__version__); print('docutils', docutils.__version__)"
+
+      - name: Clean previous autosummary
+        run: |
+          rm -rf doc/source/api/_autosummary || true
+
+      - name: Build Sphinx (warnings as errors)
+        working-directory: doc
+        env:
+          SPHINXOPTS: "--keep-going -n"
+        run: |
+          make clean
+          make html
 
   package:
     name: Package library

@@ -124,4 +124,35 @@ if switcher_version != "dev":
     linkcheck_ignore.append(f"https://github.com/ansys/pysherlock/releases/tag/v{version}")
 
 # Suprpress warnings
-suppress_warnings = ["design.grid", "design.fa-build"]
+suppress_warnings = ["design.grid", "design.fa-build", "docutils"]
+
+# Show only members defined in the class itself, not those inherited from BaseModel
+autodoc_default_options = {
+    "members": True,
+    "no-index": True,
+    "undoc-members": False,
+    "private-members": False,
+    "inherited-members": False,
+    "show-inheritance": False,
+    "imported-members": False,
+    "exclude-members": (
+        "model_*,"  # Pydantic v2 model_* helpers
+        "dict,json,"  # Legacy aliases
+        "parse_obj,parse_raw,parse_file,"
+        "from_orm,schema,schema_json,"
+        "update_forward_refs,validate,construct,copy"
+    ),
+}
+
+# Reduce aggressive evaluation of type hints (Pydantic / typing)
+autodoc_typehints = "description"
+
+
+def setup(app):
+    def skip_pydantic_members(app, what, name, obj, skip, options):
+        # Pydantic v2 internals (cause hard failures with -W)
+        if name.startswith("__pydantic_"):
+            return True
+        return skip
+
+    app.connect("autodoc-skip-member", skip_pydantic_members)

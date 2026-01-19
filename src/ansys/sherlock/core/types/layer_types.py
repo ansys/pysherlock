@@ -5,7 +5,9 @@
 from typing import Union
 
 from ansys.api.sherlock.v0 import SherlockLayerService_pb2
-from pydantic import BaseModel, ValidationInfo, field_validator, model_validator
+from pydantic import BaseModel, ValidationInfo
+from pydantic.functional_validators import field_validator as _field_validator
+from pydantic.functional_validators import model_validator as _model_validator
 from typing_extensions import Self
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
@@ -160,7 +162,7 @@ class PottingRegion(BaseModel):
 
         return grpc_potting_region_data
 
-    @field_validator("cca_name", "potting_id", "potting_side", "potting_material", "potting_units")
+    @_field_validator("cca_name", "potting_id", "potting_side", "potting_material", "potting_units")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -187,7 +189,7 @@ class PottingRegionUpdateData(BaseModel):
         grpc_potting_update_data.pottingRegion.CopyFrom(self.potting_region._convert_to_grpc())
         return grpc_potting_update_data
 
-    @field_validator("potting_region_id_to_update")
+    @_field_validator("potting_region_id_to_update")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -202,7 +204,7 @@ class UpdatePottingRegionRequest(BaseModel):
     update_potting_regions: list[PottingRegionUpdateData]
     """List of potting region data to update."""
 
-    @field_validator("project")
+    @_field_validator("project")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -232,13 +234,13 @@ class PottingRegionCopyData(BaseModel):
     center_y: float
     """Y coordinate for the center of the new potting region."""
 
-    @field_validator("cca_name", "potting_id", "copy_potting_id")
+    @_field_validator("cca_name", "potting_id", "copy_potting_id")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
 
-    @model_validator(mode="after")
+    @_model_validator(mode="after")
     def validate_ids(self) -> Self:
         """Validate that the potting IDs are not the same between the original and copy."""
         if self.potting_id == self.copy_potting_id:
@@ -270,7 +272,7 @@ class CopyPottingRegionRequest(BaseModel):
     potting_region_copy_data: list[PottingRegionCopyData]
     """Data identifying which potting regions to copy and what potting regions to copy from."""
 
-    @field_validator("project")
+    @_field_validator("project")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -296,7 +298,7 @@ class PottingRegionDeleteData(BaseModel):
     potting_id: str
     """Id of the potting region(s) to delete."""
 
-    @field_validator("cca_name", "potting_id")
+    @_field_validator("cca_name", "potting_id")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
@@ -320,7 +322,7 @@ class DeletePottingRegionRequest(BaseModel):
     potting_region_delete_data: list[PottingRegionDeleteData]
     """Data identifying which potting regions should be deleted."""
 
-    @field_validator("project")
+    @_field_validator("project")
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
