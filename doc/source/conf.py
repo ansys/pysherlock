@@ -124,30 +124,4 @@ if switcher_version != "dev":
     linkcheck_ignore.append(f"https://github.com/ansys/pysherlock/releases/tag/v{version}")
 
 # Suprpress warnings
-suppress_warnings = ["design.grid", "design.fa-build", "docutils", "docutils.bullet_list"]
-
-autosummary_ignore_module_all = False
-
-keep_warnings = False
-
-
-# -----------------------------
-# Skip certain members automatically
-# -----------------------------
-def skip_model_members(app, what, name, obj, skip, options):
-    """
-    Skip Pydantic internal model_* members.
-    - `what`: type of the object (module, class, method, ...)
-    - `name`: name of the member
-    - `obj`: the member object itself
-    - `skip`: current skip decision
-    - `options`: autodoc options
-    """
-    if name.startswith("model_"):
-        return True  # skip this member
-    return skip  # keep default behavior for others
-
-
-def setup(app):
-    # connect hook
-    app.connect("autodoc-skip-member", skip_model_members)
+suppress_warnings = ["design.grid", "design.fa-build"]
