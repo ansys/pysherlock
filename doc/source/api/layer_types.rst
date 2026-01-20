@@ -6,23 +6,24 @@ Layer Types
 Classes used for the Layer API.
 
 .. automodule:: ansys.sherlock.core.types.layer_types
-   :members:
-   :undoc-members:
-   :show-inheritance:
+     :imported-members: pydantic.BaseModel
 
 .. autosummary::
-   :toctree: _autosummary
-   :nosignatures:
+     :toctree: _autosummary
 
-   CopyPottingRegionRequest
-   DeletePottingRegionRequest
-   PolygonalShape
-   RectangularShape
-   SlotShape
-   CircularShape
-   PCBShape
-   PottingRegion
-   PottingRegionCopyData
-   PottingRegionDeleteData
-   PottingRegionUpdateData
-   UpdatePottingRegionRequest
+     CopyPottingRegionRequest
+     DeletePottingRegionRequest
+     PolygonalShape
+     RectangularShape
+     SlotShape
+     CircularShape
+     PCBShape
+     PottingRegion
+     PottingRegionCopyData
+     PottingRegionDeleteData
+     PottingRegionUpdateData
+     UpdatePottingRegionRequest
+
+
+
+
