@@ -125,8 +125,3 @@ if switcher_version != "dev":
 
 # Suprpress warnings
 suppress_warnings = ["design.grid", "design.fa-build"]
-
-exclude_patterns = [
-    "**/site-packages/**",
-    "**/dist-packages/**",
-]
