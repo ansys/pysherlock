@@ -27,6 +27,8 @@ import os
 import unittest
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from ansys.sherlock.core import launcher
 
 
@@ -116,6 +118,8 @@ class TestLauncher(unittest.TestCase):
             self.assertEqual(f"invalid literal for int() with base 10: '{version}'", str(e))
 
 
+@pytest.mark.behavioral
+@pytest.mark.requires_sherlock
 class TestLauncherTransportModes(unittest.TestCase):
     def setUp(self):
         self.mock_sherlock_info = MagicMock()
