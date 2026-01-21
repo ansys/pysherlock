@@ -22,28 +22,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Module for shared methods for the gRPC stubs."""
-try:
-    import SherlockCommonService_pb2
-    import SherlockCommonService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2_grpc
-import grpc
+import pytest
 
 
-class GrpcStub:
-    """Provides the gRPC stub."""
+def pytest_addoption(parser):
+    parser.addoption(
+        "--run-behavioral",
+        action="store_true",
+        default=False,
+        help="Run behavioral tests that require Sherlock/real process launches.",
+    )
 
-    def __init__(self, channel: grpc.Channel, server_version: int):
-        """Initialize the gRPC stub."""
-        self.channel = channel
-        self._server_version = server_version
 
-    def _is_connection_up(self):
-        try:
-            stub = SherlockCommonService_pb2_grpc.SherlockCommonServiceStub(self.channel)
-            stub.check(SherlockCommonService_pb2.HealthCheckRequest())
-            return True
-        except grpc.RpcError:
-            return False
+def pytest_configure(config):
+    config.addinivalue_line("markers", "behavioral: mark a test as behavioral/integration")
+    config.addinivalue_line("markers", "requires_sherlock: test requires local Sherlock")
+
+
+def pytest_collection_modifyitems(config, items):
+    run_behavioral = config.getoption("--run-behavioral")
+    skip_behavioral = pytest.mark.skip(reason="skipped by default (need --run-behavioral)")
+
+    for item in items:
+        if "behavioral" in item.keywords:
+            if not run_behavioral:
+                item.add_marker(skip_behavioral)
