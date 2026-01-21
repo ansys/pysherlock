@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all stackup management capabilities."""
 from typing import Optional
@@ -50,7 +50,8 @@ class Stackup(GrpcStub):
     def _init_laminate_thickness_units(self):
         """Initialize the list of units for the laminate thickness.
 
-        Available Since: 2021R1
+        .. deprecated:: 2026 R1
+
         """
         if self._is_connection_up():
             laminate_thickness_unit_request = (
@@ -132,7 +133,13 @@ class Stackup(GrpcStub):
             response = self.stub.listLaminateMaterials(request)
             if response.returnCode.value == 0:
                 manufacturer_materials = response.manufacturerMaterials[0]
-                assert manufacturer_materials.manufacturer == manufacturer
+                if manufacturer_materials.manufacturer != manufacturer:
+                    raise SherlockInvalidMaterialError(
+                        message=(
+                            f"Unexpected manufacturer returned: "
+                            f"{manufacturer_materials.manufacturer}"
+                        )
+                    )
 
                 for grade_material in manufacturer_materials.gradeMaterials:
                     if grade == grade_material.grade:

@@ -18,22 +18,27 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+
+permissions: {}
+
 jobs:
   style:
     name: Code style
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
-        uses: ansys/actions/code-style@v10
+        uses: ansys/actions/code-style@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   docs-style:
     name: Documentation Style Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: PyAnsys documentation style checks
-        uses: ansys/actions/doc-style@v10
+        uses: ansys/actions/doc-style@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           vale-version: "3.4.1"
@@ -42,6 +47,7 @@ jobs:
     name: Build and Smoke tests
     runs-on: ${{ matrix.os }}
     needs: [ style ]
+    permissions: {}
     strategy:
       fail-fast: false
       matrix:
@@ -54,7 +60,7 @@ jobs:
             os: macos-latest
     steps:
       - name: Build wheelhouse and perform smoke test
-        uses: ansys/actions/build-wheelhouse@v10
+        uses: ansys/actions/build-wheelhouse@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           library-namespace: ${{ env.PACKAGE_NAMESPACE }}
@@ -70,10 +76,12 @@ jobs:
         python-version: [ '3.10', '3.11', '3.12', '3.13' ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -95,7 +103,7 @@ jobs:
           pytest -v --cov=ansys.sherlock --cov-report=term --cov-report=html:.cov/html --cov-report=xml:.cov/coverage.xml
 
       - name: Upload coverage results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: env.MAIN_PYTHON_VERSION == matrix.python-version
         with:
           name: coverage-results
@@ -104,7 +112,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: env.MAIN_PYTHON_VERSION == matrix.python-version
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
@@ -116,7 +124,7 @@ jobs:
     runs-on: [ self-hosted, pysherlock ]
     steps:
       - name: Run documentation building action
-        uses: ansys/actions/doc-build@v10
+        uses: ansys/actions/doc-build@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -126,38 +134,67 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build library source and wheel artifacts
-        uses: ansys/actions/build-library@v10
+        uses: ansys/actions/build-library@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   release:
     name: Release project
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [ package ]
+    if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
+    needs: [ package, update-changelog ]
     runs-on: ubuntu-latest
+    # Specifying a GitHub environment is optional, but strongly encouraged
+    environment: release
+    permissions:
+      id-token: write    # Required for PyPI trusted publisher authentication
+      contents: write    # Needed to download release artifacts
     steps:
-      - name: Release to the public PyPI repository
-        uses: ansys/actions/release-pypi-public@v10
+      - name: "Download the library artifacts from build-library step"
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          twine-username: "__token__"
-          twine-token: ${{ secrets.PYPI_TOKEN }}
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: ${{ env.PACKAGE_NAME }}-artifacts
 
-      - name: Release to GitHub
-        uses: ansys/actions/release-github@v10
+      - name: "Display structure of downloaded files"
+        run: ls -Rla
+
+      - name: "Release to PyPI using trusted publisher"
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        with:
+          repository-url: "https://upload.pypi.org/legacy/"
+          print-hash: true
+          packages-dir: ${{ env.PACKAGE_NAME }}-artifacts
+          skip-existing: false
+
+      - name: "Release to GitHub"
+        uses: ansys/actions/release-github@41f86da4c9ead510db9135e428e33df9cc6f92e1 #v10.2.3
         with:
           library-name: ${{ env.PACKAGE_NAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  pull-request-name:
+    if: github.event_name == 'pull_request'
+    name: Check the name of the pull-request
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read    # Required to read pull-request information
+    steps:
+      - name: Check pull-request name
+        uses: ansys/actions/check-pr-title@41f86da4c9ead510db9135e428e33df9cc6f92e1 #v10.2.3
+        with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   upload_dev_docs:
     name: Upload dev documentation
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Required to push documentation to gh-pages branch
     needs: [ package ]
     steps:
       - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@v10
+        uses: ansys/actions/doc-deploy-dev@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -168,10 +205,12 @@ jobs:
     name: Upload release documentation
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Required to push stable documentation to gh-pages branch
     needs: [ release ]
     steps:
       - name: Deploy the stable documentation
-        uses: ansys/actions/doc-deploy-stable@v10
+        uses: ansys/actions/doc-deploy-stable@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -184,11 +223,35 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write         # Needed to create changelog entries in repository
+      pull-requests: write    # Required to create pull requests for changelog updates
     steps:
-      - uses: ansys/actions/doc-deploy-changelog@v10
+      - uses: ansys/actions/doc-deploy-changelog@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
           bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
           bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+
+  check-vulnerabilities:
+    name: "Check library vulnerabilities"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: ansys/actions/check-vulnerabilities@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+          python-package-name: ${{ env.PACKAGE_NAME }}
+          dev-mode: ${{ github.ref != 'refs/heads/main' }}
+
+  actions-security:
+    name: "Check actions security"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ansys/actions/check-actions-security@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
+        with:
+          generate-summary: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          auditing-level: 'high'
+          trust-ansys-actions: true

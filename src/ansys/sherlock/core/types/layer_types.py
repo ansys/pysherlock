@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 # © 2023 ANSYS, Inc. All rights reserved.
 
 """Module containing types for the Layer Service."""
@@ -367,4 +367,355 @@ class GetTestPointPropertiesRequest(BaseModel):
         request.ccaName = self.cca_name
         if self.test_point_ids is not None:
             request.testPointIDs = self.test_point_ids
+        return request
+
+
+class GetICTFixturesPropertiesRequest(BaseModel):
+    """Return the properties for each ICT fixture given a comma-separated list of fixture ids."""
+
+    project: str
+    """Name of the project."""
+    cca_name: str
+    """Name of the CCA containing the ict fixture properties to return."""
+    ict_fixtures_ids: Optional[str] = None
+    """Optional Param: Comma-separated list of ict fixture ids representing one or more ict
+        fixtures.   If this parameter is not included, then the entire list of ict fixtures
+        for a given CCA will have their properties returned.
+    """
+
+    @field_validator("project", "cca_name", "ict_fixtures_ids")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("ict_fixtures_ids")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the ict_fixtures_ids to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetICTFixturesPropertiesRequest:
+        request = SherlockLayerService_pb2.GetICTFixturesPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.ict_fixtures_ids is not None:
+            request.ICTFixtureIDs = self.ict_fixtures_ids
+        return request
+
+
+class TestPointProperties(BaseModel):
+    """Contains the properties of a test point."""
+
+    __test__ = False  # This line is to notify pytest that this is not a test class.
+
+    id: str
+    """ID"""
+    side: str
+    """Side"""
+    units: str
+    """Units"""
+    center_x: float
+    """Center x-value"""
+    center_y: float
+    """Center y-value"""
+    radius: float
+    """Radius"""
+    load_type: SherlockLayerService_pb2.TestPointProperties.LoadType.ValueType
+    """Load type"""
+    load_value: float
+    """Load value"""
+    load_units: str
+    """Load units"""
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.TestPointProperties:
+        grpc_test_point_data = SherlockLayerService_pb2.TestPointProperties()
+
+        grpc_test_point_data.ID = self.id
+        grpc_test_point_data.side = self.side
+        grpc_test_point_data.units = self.units
+        grpc_test_point_data.centerX = self.center_x
+        grpc_test_point_data.centerY = self.center_y
+        grpc_test_point_data.radius = self.radius
+        grpc_test_point_data.loadType = self.load_type
+        grpc_test_point_data.loadValue = self.load_value
+        grpc_test_point_data.loadUnits = self.load_units
+
+        return grpc_test_point_data
+
+    @field_validator("side", "units", "load_type")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdateTestPointsRequest(BaseModel):
+    """Contains the properties of a test points update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    update_test_points: list[TestPointProperties]
+    """List of test points with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateTestPointsRequest:
+        request = SherlockLayerService_pb2.UpdateTestPointsRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.update_test_points is not None:
+            for update_test_point in self.update_test_points:
+                request.testPointProperties.append(update_test_point._convert_to_grpc())
+        return request
+
+
+class ICTFixtureProperties(BaseModel):
+    """Contains the properties of an ict fixture."""
+
+    id: str
+    """ID"""
+    type: str
+    """Type"""
+    units: str
+    """Units"""
+    side: str
+    """Side"""
+    height: str
+    """Height"""
+    material: str
+    """Material"""
+    state: str
+    """State"""
+    shape: str
+    """Shape type"""
+    x: str
+    """Center X"""
+    y: str
+    """Center Y"""
+    length: str
+    """Length"""
+    width: str
+    """Width"""
+    diameter: str
+    """Diameter"""
+    nodes: str
+    """Number of nodes"""
+    rotation: str
+    """Degrees of rotation"""
+    polygon: str
+    """Coordinates of points"""
+    boundary: str
+    """Boundary point(s)"""
+    constraints: str
+    """FEA constraints"""
+    chassis_material: str
+    """Chassis material"""
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.ICTFixtureProperties:
+        grpc_fixture_data = SherlockLayerService_pb2.ICTFixtureProperties()
+
+        grpc_fixture_data.ID = self.id
+        grpc_fixture_data.type = self.type
+        grpc_fixture_data.units = self.units
+        grpc_fixture_data.side = self.side
+        grpc_fixture_data.height = self.height
+        grpc_fixture_data.material = self.material
+        grpc_fixture_data.state = self.state
+        grpc_fixture_data.shape = self.shape
+        grpc_fixture_data.x = self.x
+        grpc_fixture_data.y = self.y
+        grpc_fixture_data.length = self.length
+        grpc_fixture_data.width = self.width
+        grpc_fixture_data.diameter = self.diameter
+        grpc_fixture_data.nodes = self.nodes
+        grpc_fixture_data.rotation = self.rotation
+        grpc_fixture_data.polygon = self.polygon
+        grpc_fixture_data.boundary = self.boundary
+        grpc_fixture_data.constraints = self.constraints
+        grpc_fixture_data.chassisMaterial = self.chassis_material
+
+        return grpc_fixture_data
+
+    @field_validator("type", "units", "side", "state", "shape")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class UpdateICTFixturesRequest(BaseModel):
+    """Contains the properties of an ict fixtures update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    update_fixtures: list[ICTFixtureProperties]
+    """List of ict fixtures with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateICTFixturesRequest:
+        request = SherlockLayerService_pb2.UpdateICTFixturesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.update_fixtures is not None:
+            for update_fixture in self.update_fixtures:
+                request.ICTFixtureProperties.append(update_fixture._convert_to_grpc())
+        return request
+
+
+class MountPointProperties(BaseModel):
+    """Contains the properties of a mount point."""
+
+    id: str
+    """ID"""
+    type: str
+    """Type"""
+    shape: str
+    """Shape type"""
+    units: str
+    """Units"""
+    x: float
+    """Center X"""
+    y: float
+    """Center Y"""
+    length: float
+    """Length"""
+    width: float
+    """Width"""
+    diameter: float
+    """Diameter"""
+    nodes: str
+    """Number of nodes"""
+    rotation: float
+    """Degrees of rotation"""
+    side: str
+    """Side"""
+    height: float
+    """Height"""
+    material: str
+    """Material"""
+    boundary: str
+    """Boundary point(s)"""
+    constraints: str
+    """FEA constraints"""
+    polygon: str
+    """Coordinates of points"""
+    state: str
+    """State"""
+    chassis_material: str
+    """Chassis material"""
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.MountPointProperties:
+        grpc_mount_point_data = SherlockLayerService_pb2.MountPointProperties()
+
+        grpc_mount_point_data.ID = self.id
+        grpc_mount_point_data.type = self.type
+        grpc_mount_point_data.shape = self.shape
+        grpc_mount_point_data.units = self.units
+        grpc_mount_point_data.x = str(self.x)
+        grpc_mount_point_data.y = str(self.y)
+        grpc_mount_point_data.length = str(self.length)
+        grpc_mount_point_data.width = str(self.width)
+        grpc_mount_point_data.diameter = str(self.diameter)
+        grpc_mount_point_data.nodes = self.nodes
+        grpc_mount_point_data.rotation = str(self.rotation)
+        grpc_mount_point_data.side = self.side
+        grpc_mount_point_data.height = str(self.height)
+        grpc_mount_point_data.material = self.material
+        grpc_mount_point_data.boundary = self.boundary
+        grpc_mount_point_data.constraints = self.constraints
+        grpc_mount_point_data.polygon = self.polygon
+        grpc_mount_point_data.state = self.state
+        grpc_mount_point_data.chassisMaterial = self.chassis_material
+
+        return grpc_mount_point_data
+
+    @field_validator("type", "shape", "units", "side", "state")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+
+class GetMountPointsPropertiesRequest(BaseModel):
+    """Return the properties for each mount point given a comma-separated list of mount point ids."""  # noqa: E501
+
+    project: str
+    """Name of the project."""
+    cca_name: str
+    """Name of the CCA containing the mount point properties to return."""
+    mount_point_ids: Optional[str] = None
+    """Optional Param: Comma-separated list of mount point ids representing one or more mount
+        points. If this parameter is not included, then the entire list of mount points
+        for a given CCA will have their properties returned.
+    """
+
+    @field_validator("project", "cca_name", "mount_point_ids")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("mount_point_ids")
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the mount_point_ids to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.GetMountPointsPropertiesRequest:
+        request = SherlockLayerService_pb2.GetMountPointsPropertiesRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.mount_point_ids is not None:
+            request.mountPointIDs = self.mount_point_ids
+        return request
+
+
+class UpdateMountPointsRequest(BaseModel):
+    """Contains the properties of a mount point update per project."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_name: str
+    """Name of the Sherlock CCA."""
+    mount_points: list[MountPointProperties]
+    """List of mount points with their properties to update"""
+
+    @field_validator("project", "cca_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator("mount_points")
+    @classmethod
+    def list_validation(cls, value: list, info: ValidationInfo):
+        """Validate that mount_points is not empty."""
+        if not value:
+            raise ValueError(f"{info.field_name} must contain at least one item.")
+        return value
+
+    def _convert_to_grpc(self) -> SherlockLayerService_pb2.UpdateMountPointsRequest:
+        request = SherlockLayerService_pb2.UpdateMountPointsRequest()
+        request.project = self.project
+        request.ccaName = self.cca_name
+        if self.mount_points is not None:
+            for mount_point in self.mount_points:
+                request.mountPointsProperties.append(mount_point._convert_to_grpc())
+        else:
+            raise ValueError("mount_points is invalid because it is None or empty.")
+
         return request

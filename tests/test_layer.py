@@ -1,10 +1,11 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 import copy
 import os
 import platform
 import uuid
 
+from ansys.api.sherlock.v0 import SherlockLayerService_pb2
 import grpc
 import pydantic
 import pytest
@@ -32,7 +33,11 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
+    GetMountPointsPropertiesRequest,
     GetTestPointPropertiesRequest,
+    ICTFixtureProperties,
+    MountPointProperties,
     PCBShape,
     PolygonalShape,
     PottingRegion,
@@ -41,7 +46,11 @@ from ansys.sherlock.core.types.layer_types import (
     PottingRegionUpdateData,
     RectangularShape,
     SlotShape,
+    TestPointProperties,
+    UpdateICTFixturesRequest,
+    UpdateMountPointsRequest,
     UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 from tests.test_utils import assert_float_equals
@@ -53,26 +62,35 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
-    helper_test_update_mount_points_by_file(layer)
-    helper_test_delete_all_ict_fixtures(layer)
-    helper_test_delete_all_mount_points(layer)
-    helper_test_delete_all_test_points(layer)
     helper_test_add_potting_region(layer)
-    helper_test_update_potting_region(layer)
     helper_test_copy_potting_regions(layer)
-    helper_test_delete_potting_regions(layer)
-    helper_test_update_test_fixtures_by_file(layer)
-    helper_test_update_test_points_by_file(layer)
     helper_test_export_all_mount_points(layer)
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
     region_id = helper_test_add_modeling_region(layer)
-    region_id = helper_test_update_modeling_region(layer, region_id)
-    helper_test_copy_modeling_region(layer, region_id)
-    helper_test_delete_modeling_region(layer, region_id)
     helper_test_list_layers(layer)
+    helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
     helper_test_export_layer_image(layer)
+
+    # Update APIs must be called after properties APIs so all pass
+    helper_test_update_ict_fixtures(layer)
+    helper_test_update_mount_points(layer)
+    helper_test_get_mount_point_props(layer)
+    helper_test_update_mount_points_by_file(layer)
+    helper_test_update_potting_region(layer)
+    helper_test_update_test_fixtures_by_file(layer)
+    helper_test_update_test_points(layer)
+    helper_test_update_test_points_by_file(layer)
+    region_id = helper_test_update_modeling_region(layer, region_id)
+    helper_test_copy_modeling_region(layer, region_id)
+
+    # Delete APIs must be called last so that tests for update/properties APIs pass
+    helper_test_delete_all_ict_fixtures(layer)
+    helper_test_delete_all_mount_points(layer)
+    helper_test_delete_all_test_points(layer)
+    helper_test_delete_modeling_region(layer, region_id)
+    helper_test_delete_potting_regions(layer)
 
 
 def helper_test_add_potting_region(layer: Layer):
@@ -1681,6 +1699,817 @@ def helper_test_get_test_point_props(layer):
         assert allPointsResponses[3].testPointProperties.loadType == 0
         assert allPointsResponses[3].testPointProperties.loadValue == 0.36
         assert allPointsResponses[3].testPointProperties.loadUnits == "N"
+
+
+def helper_test_get_ict_fixtures_props(layer):
+    """Test get_ict_fixtures_props API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    # Missing project name
+    try:
+        GetICTFixturesPropertiesRequest(
+            project="",
+            cca_name=cca_name,
+            ict_fixtures_ids="F1",
+        )
+        pytest.fail("No exception raised when using an invalid project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # Missing CCA name
+    try:
+        GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name="",
+            ict_fixtures_ids="F1",
+        )
+        pytest.fail("No exception raised when using an invalid cca_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # ict_fixtures_ids is the empty string
+    try:
+        GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid ict_fixtures_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+
+        # Bad project name
+        bad_project_request = GetICTFixturesPropertiesRequest(
+            project="Invalid Project Name",
+            cca_name=cca_name,
+            ict_fixtures_ids="F1, F1",
+        )
+        bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
+        assert bad_project_response.returnCode.value == -1
+        assert (
+            bad_project_response.returnCode.message == "Cannot find project: Invalid Project Name"
+        )
+
+        bad_project_request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name="Invalid CCA Name",
+            ict_fixtures_ids="F1, F1",
+        )
+        bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
+        assert bad_project_response.returnCode.value == -1
+        assert bad_project_response.returnCode.message == "Cannot find CCA: Invalid CCA Name"
+
+        # Test request with valid ict fixture ids.
+        request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="F1, F1,",
+        )
+
+        response = layer.get_ict_fixtures_props(request)
+        assert response.returnCode.value == 0
+        assert len(response.ICTFixtureProperties) == 2
+
+        # First requested ID of F1
+        assert response.ICTFixtureProperties[0].ID == "F1"
+        assert response.ICTFixtureProperties[0].type == "Mount Pad"
+        assert response.ICTFixtureProperties[0].units == "mm"
+        assert response.ICTFixtureProperties[0].side == "BOTTOM"
+        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
+        assert response.ICTFixtureProperties[0].material == "ALLOY42"
+        assert response.ICTFixtureProperties[0].state == "ENABLED"
+
+        assert response.ICTFixtureProperties[0].shape == "Rectangular"
+        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
+        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
+        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
+        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
+        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
+
+        assert response.ICTFixtureProperties[0].boundary == "Outline"
+        assert (
+            response.ICTFixtureProperties[0].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
+        assert response.ICTFixtureProperties[0].polygon == ""
+        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
+
+        # Second requested ID of F1
+        assert response.ICTFixtureProperties[1].ID == "F1"
+        assert response.ICTFixtureProperties[1].type == "Mount Pad"
+        assert response.ICTFixtureProperties[1].units == "mm"
+        assert response.ICTFixtureProperties[1].side == "BOTTOM"
+        assert_float_equals(-5.0, float(response.ICTFixtureProperties[1].height))
+        assert response.ICTFixtureProperties[1].material == "ALLOY42"
+        assert response.ICTFixtureProperties[1].state == "ENABLED"
+
+        assert response.ICTFixtureProperties[1].shape == "Rectangular"
+        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[1].x))
+        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[1].y))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].length))
+        assert_float_equals(74.6564, float(response.ICTFixtureProperties[1].width))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].diameter))
+        assert_float_equals(4, int(response.ICTFixtureProperties[1].nodes))
+        assert_float_equals(0.0, float(response.ICTFixtureProperties[1].rotation))
+
+        assert response.ICTFixtureProperties[1].boundary == "Outline"
+        assert (
+            response.ICTFixtureProperties[1].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
+        assert response.ICTFixtureProperties[1].polygon == ""
+        assert response.ICTFixtureProperties[1].chassisMaterial == "ALUMINUM"
+
+        # Test request with a mix of valid and invalid ict fixture ids.
+        mixed_request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="invalid, F1, invalid",
+        )
+
+        mixed_response = layer.get_ict_fixtures_props(mixed_request)
+        assert mixed_response.returnCode.value == -1
+        assert len(mixed_response.ICTFixtureProperties) == 1
+
+        assert response.ICTFixtureProperties[0].ID == "F1"
+        assert response.ICTFixtureProperties[0].type == "Mount Pad"
+        assert response.ICTFixtureProperties[0].units == "mm"
+        assert response.ICTFixtureProperties[0].side == "BOTTOM"
+        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
+        assert response.ICTFixtureProperties[0].material == "ALLOY42"
+        assert response.ICTFixtureProperties[0].state == "ENABLED"
+
+        assert response.ICTFixtureProperties[0].shape == "Rectangular"
+        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
+        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
+        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
+        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
+        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
+        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
+
+        assert response.ICTFixtureProperties[0].boundary == "Outline"
+        assert (
+            response.ICTFixtureProperties[0].constraints
+            == "X-axis translation|Y-axis translation|Z-axis translation"
+        )
+        assert response.ICTFixtureProperties[0].polygon == ""
+        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
+
+
+def helper_test_update_test_points(layer):
+    """Test update_test_points API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    test_point_1 = TestPointProperties(
+        id="TP1",
+        side="BOTTOM",
+        units="in",
+        center_x=1.0,
+        center_y=0.5,
+        radius=0.2,
+        load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
+        load_value=3.0,
+        load_units="ozf",
+    )
+
+    test_point_2 = TestPointProperties(
+        id="",
+        side="TOP",
+        units="mm",
+        center_x=-30,
+        center_y=-10,
+        radius=5,
+        load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Displacement,
+        load_value=0,
+        load_units="in",
+    )
+
+    invalid_test_point = TestPointProperties(
+        id="TP2",
+        side="invalid",
+        units="mm",
+        center_x=60,
+        center_y=-40,
+        radius=4,
+        load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
+        load_value=5,
+        load_units="N",
+    )
+
+    # Missing Project Name
+    try:
+        UpdateTestPointsRequest(project="", cca_name=cca_name, update_test_points=[test_point_1])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # Missing CCA Name
+    try:
+        UpdateTestPointsRequest(project=project, cca_name="", update_test_points=[test_point_1])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+
+        # Invalid test point test
+        invalid_request = UpdateTestPointsRequest(
+            project=project,
+            cca_name=cca_name,
+            update_test_points=[invalid_test_point],
+        )
+        invalid_response = layer.update_test_points(invalid_request)
+        assert invalid_response.returnCode.value == -1
+
+        # Successful test point test
+        successful_request = UpdateTestPointsRequest(
+            project=project,
+            cca_name=cca_name,
+            update_test_points=[test_point_1, test_point_2],
+        )
+        successful_response = layer.update_test_points(successful_request)
+        assert successful_response.returnCode.value == 0
+
+        properties_request = GetTestPointPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            test_point_ids="TP1, TP5",
+        )
+        properties_responses = layer.get_test_point_props(properties_request)
+
+        # Tests updated properties for TP1
+        assert properties_responses[0].testPointProperties.ID == "TP1"
+        assert properties_responses[0].testPointProperties.side == "BOTTOM"
+        assert properties_responses[0].testPointProperties.units == "in"
+        assert_float_equals(1.0, properties_responses[0].testPointProperties.centerX)
+        assert_float_equals(0.5, properties_responses[0].testPointProperties.centerY)
+        assert properties_responses[0].testPointProperties.radius == 0.2
+        assert properties_responses[0].testPointProperties.loadType == 0
+        assert properties_responses[0].testPointProperties.loadValue == 3.0
+        assert properties_responses[0].testPointProperties.loadUnits == "ozf"
+
+        # Tests updated properties for TP5
+        assert properties_responses[1].testPointProperties.ID == "TP5"
+        assert properties_responses[1].testPointProperties.side == "TOP"
+        assert properties_responses[1].testPointProperties.units == "mm"
+        assert_float_equals(-30.0, properties_responses[1].testPointProperties.centerX)
+        assert_float_equals(-10.0, properties_responses[1].testPointProperties.centerY)
+        assert properties_responses[1].testPointProperties.radius == 5.0
+        assert properties_responses[1].testPointProperties.loadType == 1
+        assert properties_responses[1].testPointProperties.loadValue == 0.0
+        assert properties_responses[1].testPointProperties.loadUnits == "in"
+
+
+def helper_test_update_ict_fixtures(layer):
+    """Test update_ict_fixtures API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    fixture_1 = ICTFixtureProperties(
+        id="F1",
+        type="Mount Hole",
+        units="in",
+        side="TOP",
+        height="0.0",
+        material="GOLD",
+        state="DISABLED",
+        shape="Slot",
+        x="0.3",
+        y="-0.4",
+        length="1.0",
+        width="0.2",
+        diameter="0.0",
+        nodes="10",
+        rotation="15",
+        polygon="",
+        boundary="Outline",
+        constraints="X-axis translation|Z-axis translation",
+        chassis_material="SILVER",
+    )
+
+    fixture_2 = ICTFixtureProperties(
+        id="",
+        type="Standoff",
+        units="mil",
+        side="BOTTOM",
+        height="10",
+        material="FERRITE",
+        state="ENABLED",
+        shape="Circular",
+        x="100",
+        y="50",
+        length="20",
+        width="20",
+        diameter="150",
+        nodes="6",
+        rotation="0",
+        polygon="",
+        boundary="Center",
+        constraints="Y-axis translation",
+        chassis_material="NYLON",
+    )
+
+    invalid_fixture = ICTFixtureProperties(
+        id="F1",
+        type="Mount Hole",
+        units="in",
+        side="TOP",
+        height="0.0",
+        material="GOLD",
+        state="DISABLED",
+        shape="Slot",
+        x="invalid",
+        y="-0.4",
+        length="1.0",
+        width="0.2",
+        diameter="0.0",
+        nodes="10",
+        rotation="15",
+        polygon="",
+        boundary="Outline",
+        constraints="X-axis translation|Z-axis translation",
+        chassis_material="SILVER",
+    )
+
+    # Missing Project Name
+    try:
+        UpdateICTFixturesRequest(project="", cca_name=cca_name, update_fixtures=[fixture_1])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    # Missing CCA Name
+    try:
+        UpdateICTFixturesRequest(project=project, cca_name="", update_fixtures=[fixture_1])
+        pytest.fail("No exception thrown when using an invalid parameter")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+
+    if layer._is_connection_up():
+        # Invalid ict fixture test
+        invalid_request = UpdateICTFixturesRequest(
+            project=project,
+            cca_name=cca_name,
+            update_fixtures=[invalid_fixture],
+        )
+        invalid_response = layer.update_ict_fixtures(invalid_request)
+        assert invalid_response.returnCode.value == -1
+
+        # Successful ict fixture test
+        successful_request = UpdateICTFixturesRequest(
+            project=project,
+            cca_name=cca_name,
+            update_fixtures=[fixture_1, fixture_2],
+        )
+        successful_response = layer.update_ict_fixtures(successful_request)
+        assert successful_response.returnCode.value == 0
+
+        properties_request = GetICTFixturesPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            ict_fixtures_ids="F1, F2",
+        )
+
+        properties_response = layer.get_ict_fixtures_props(properties_request)
+
+        # Tests updated properties for F1
+        assert properties_response.ICTFixtureProperties[0].ID == "F1"
+        assert properties_response.ICTFixtureProperties[0].type == "Mount Hole"
+        assert properties_response.ICTFixtureProperties[0].units == "in"
+        assert properties_response.ICTFixtureProperties[0].side == "TOP"
+        assert properties_response.ICTFixtureProperties[0].material == "GOLD"
+        assert properties_response.ICTFixtureProperties[0].state == "DISABLED"
+        assert properties_response.ICTFixtureProperties[0].shape == "Slot"
+        assert properties_response.ICTFixtureProperties[0].x == "0.3"
+        assert properties_response.ICTFixtureProperties[0].y == "-0.4"
+        assert properties_response.ICTFixtureProperties[0].length == "1"
+        assert properties_response.ICTFixtureProperties[0].width == "0.2"
+        assert properties_response.ICTFixtureProperties[0].nodes == "10"
+        assert properties_response.ICTFixtureProperties[0].rotation == "15.0"
+        assert properties_response.ICTFixtureProperties[0].boundary == "Outline"
+        assert properties_response.ICTFixtureProperties[0].constraints == (
+            "X-axis translation|" "Z-axis translation"
+        )
+        assert properties_response.ICTFixtureProperties[0].chassisMaterial == "SILVER"
+
+        # Tests updated properties for F2
+        assert properties_response.ICTFixtureProperties[1].ID == "F2"
+        assert properties_response.ICTFixtureProperties[1].type == "Standoff"
+        assert properties_response.ICTFixtureProperties[1].units == "mil"
+        assert properties_response.ICTFixtureProperties[1].side == "BOTTOM"
+        assert properties_response.ICTFixtureProperties[1].height == "-10.0"
+        assert properties_response.ICTFixtureProperties[1].material == "FERRITE"
+        assert properties_response.ICTFixtureProperties[1].state == "ENABLED"
+        assert properties_response.ICTFixtureProperties[1].shape == "Circular"
+        assert properties_response.ICTFixtureProperties[1].x == "100"
+        assert properties_response.ICTFixtureProperties[1].y == "50"
+        assert properties_response.ICTFixtureProperties[1].length == "150"
+        assert properties_response.ICTFixtureProperties[1].width == "150"
+        assert properties_response.ICTFixtureProperties[1].diameter == "150"
+        assert properties_response.ICTFixtureProperties[1].nodes == "6"
+        assert properties_response.ICTFixtureProperties[1].boundary == "Center"
+        assert properties_response.ICTFixtureProperties[1].constraints == "Y-axis translation"
+        assert properties_response.ICTFixtureProperties[1].chassisMaterial == "NYLON"
+
+
+def helper_test_update_mount_points(layer):
+    """Test update_mount_points API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    mount_point_1 = MountPointProperties(
+        id="MP1",
+        type="Mount Pad",
+        shape="Rectangular",
+        units="mm",
+        x=1.0,
+        y=-2.0,
+        length=2.0,
+        width=1.0,
+        diameter=2.0,
+        nodes="4",
+        rotation=45,
+        side="BOTTOM",
+        height=1.0,
+        material="GOLD",
+        boundary="Outline",
+        constraints="X-axis translation|Z-axis translation",
+        polygon="",
+        state="DISABLED",
+        chassis_material="SILVER",
+    )
+
+    mount_point_without_id = MountPointProperties(
+        id="",
+        type="Standoff",
+        shape="Circular",
+        units="mil",
+        x=100,
+        y=50,
+        length=200,
+        width=200,
+        diameter=200,
+        nodes="6",
+        rotation=0,
+        side="BOTTOM",
+        height=10,
+        material="FERRITE",
+        boundary="Center",
+        constraints="Y-axis translation",
+        polygon="",
+        state="ENABLED",
+        chassis_material="NYLON",
+    )
+
+    try:
+        UpdateMountPointsRequest(project="", cca_name=cca_name, mount_points=[mount_point_1])
+        pytest.fail("No exception thrown when using missing project")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateMountPointsRequest(project=project, cca_name="", mount_points=[mount_point_1])
+        pytest.fail("No exception thrown when using missing cca_name")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateMountPointsRequest(project=project, cca_name=cca_name, mount_points=[])
+        pytest.fail("No exception thrown when using missing mount_points")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, mount_points must contain at least one item."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing type")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, type is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing shape")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, shape is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing units")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, units is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing side")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, side is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing state")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, state is invalid because it is None or empty."
+        )
+
+    if layer._is_connection_up():
+        # Happy Path
+        try:
+            successful_response = layer.update_mount_points(
+                UpdateMountPointsRequest(
+                    project=project,
+                    cca_name=cca_name,
+                    mount_points=[mount_point_1, mount_point_without_id],
+                )
+            )
+            assert successful_response.returnCode.value == 0
+        except Exception as e:
+            pytest.fail(f"Exception thrown during successful mount point update: {e}")
+
+
+def helper_test_get_mount_point_props(layer):
+    """Test get_mount_point_props API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project="",
+            cca_name=cca_name,
+            mount_point_ids="MP1",
+        )
+        pytest.fail("No exception raised when using missing project")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name="",
+            mount_point_ids="MP1",
+        )
+        pytest.fail("No exception raised when using missing cca_name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid mount_point_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, mount_point_ids is invalid because it is None or empty."
+        )
+
+    if layer._is_connection_up():
+        # Dependent on helper_test_update_mount_points to set the mount point properties
+
+        properties_request = GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="MP0, MP5",
+        )
+
+        properties_request = GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="MP1, MP5",
+        )
+
+        properties_response = layer.get_mount_point_props(properties_request)
+
+        assert properties_response.mountPointsProperties[0].ID == "MP1"
+        assert properties_response.mountPointsProperties[0].type == "Mount Pad"
+        assert properties_response.mountPointsProperties[0].shape == "Rectangular"
+        assert properties_response.mountPointsProperties[0].units == "mm"
+        assert properties_response.mountPointsProperties[0].x == "1"
+        assert properties_response.mountPointsProperties[0].y == "-2"
+        assert properties_response.mountPointsProperties[0].length == "2"
+        assert properties_response.mountPointsProperties[0].width == "1"
+        assert properties_response.mountPointsProperties[0].diameter == "2"
+        assert properties_response.mountPointsProperties[0].nodes == "4"
+        assert properties_response.mountPointsProperties[0].rotation == "45.0"
+        assert properties_response.mountPointsProperties[0].side == "BOTTOM"
+        assert properties_response.mountPointsProperties[0].height == "-1.0"
+        assert properties_response.mountPointsProperties[0].material == "GOLD"
+        assert properties_response.mountPointsProperties[0].boundary == "Outline"
+        assert properties_response.mountPointsProperties[0].constraints == (
+            "X-axis translation|" "Z-axis translation"
+        )
+        assert properties_response.mountPointsProperties[0].polygon == ""
+        assert properties_response.mountPointsProperties[0].state == "DISABLED"
+        assert properties_response.mountPointsProperties[0].chassisMaterial == "SILVER"
+
+        assert properties_response.mountPointsProperties[1].ID == "MP5"
+        assert properties_response.mountPointsProperties[1].type == "Standoff"
+        assert properties_response.mountPointsProperties[1].shape == "Circular"
+        assert properties_response.mountPointsProperties[1].units == "mil"
+        assert properties_response.mountPointsProperties[1].x == "100"
+        assert properties_response.mountPointsProperties[1].y == "50"
+        assert properties_response.mountPointsProperties[1].length == "200"
+        assert properties_response.mountPointsProperties[1].width == "200"
+        assert properties_response.mountPointsProperties[1].diameter == "200"
+        assert properties_response.mountPointsProperties[1].nodes == "6"
+        assert properties_response.mountPointsProperties[1].rotation == "0.0"
+        assert properties_response.mountPointsProperties[1].side == "BOTTOM"
+        assert properties_response.mountPointsProperties[1].height == "-10.0"
+        assert properties_response.mountPointsProperties[1].material == "FERRITE"
+        assert properties_response.mountPointsProperties[1].boundary == "Center"
+        assert properties_response.mountPointsProperties[1].constraints == "Y-axis translation"
+        assert properties_response.mountPointsProperties[1].polygon == ""
+        assert properties_response.mountPointsProperties[1].state == "ENABLED"
+        assert properties_response.mountPointsProperties[1].chassisMaterial == "NYLON"
 
 
 def helper_test_export_layer_image(layer):

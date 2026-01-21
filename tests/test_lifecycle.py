@@ -1,9 +1,9 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
-from typing import cast
 import uuid
 
 import grpc
+import pydantic
 import pytest
 
 from ansys.sherlock.core.errors import (
@@ -16,13 +16,33 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockDeleteError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
+    SherlockSaveProfileError,
+    SherlockUpdateLifePhaseError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
+from ansys.sherlock.core.types.lifecycle_types import (
+    DeleteEventRequest,
+    DeletePhaseRequest,
+    HarmonicVibeProfileCsvFileProperties,
+    ImportThermalSignalRequest,
+    RandomVibeProfileCsvFileProperties,
+    SaveHarmonicProfileRequest,
+    SaveRandomVibeProfileRequest,
+    SaveShockPulseProfileRequest,
+    SaveThermalProfileRequest,
+    ShockProfileDatasetCsvFileProperties,
+    ShockProfilePulsesCsvFileProperties,
+    ThermalProfileCsvFileProperties,
+    ThermalSignalFileProperties,
+    UpdateLifeCycleRequest,
+    UpdateLifePhaseRequest,
+)
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
@@ -46,6 +66,18 @@ def test_all():
     helper_test_load_harmonic_profile(lifecycle)
     helper_test_load_shock_profile_dataset(lifecycle)
     helper_test_load_shock_profile_pulses(lifecycle)
+    helper_test_import_thermal_signal(lifecycle)
+
+    helper_test_save_harmonic_profile(lifecycle)
+    helper_test_save_random_vibe_profile(lifecycle)
+    helper_test_save_shock_pulse_profile(lifecycle)
+    helper_test_save_thermal_profile(lifecycle)
+
+    helper_test_delete_event(lifecycle, shock_event_name, phase_name)
+    helper_test_delete_phase(lifecycle, phase_name)
+    helper_test_update_life_phase(lifecycle)
+
+    helper_test_update_life_cycle(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -116,6 +148,105 @@ def helper_test_create_life_phase(lifecycle: Lifecycle):
             pytest.fail(str(e.str_itr()))
 
         return phase_name
+
+
+def helper_test_update_life_cycle(lifecycle: Lifecycle):
+    """Test update_life_cycle API"""
+
+    if lifecycle._is_connection_up():
+        project = "Tutorial Project"
+        new_name = "new name"
+        new_description = "new description"
+        new_reliability_metric = 20
+
+        # Unit options:
+        # "Reliability (%)", "Prob. of Failure (%)", "MTBF (years)",
+        # "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+        new_reliability_metric_units = "invalid_unit"
+
+        new_service_life = 5
+
+        # Unit options:
+        # "year","day","hr", "min","sec"
+        new_service_life_units = "year"
+
+        result_archive_file_name = "filename"
+
+        # Test invalid reliability unit
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        expected_err = "Unsupported unit type '" + new_reliability_metric_units
+        assert return_code.message.startswith(expected_err)
+        new_reliability_metric_units = "Prob. of Failure (%)"
+
+        # Test invalid service life unit
+        new_service_life_units = "invalid_unit"
+
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        expected_err = "Unsupported unit type '" + new_service_life_units + "' Valid options are: "
+        assert return_code.message.startswith(expected_err)
+        new_service_life_units = "year"
+
+        # Test invalid file name
+        result_archive_file_name = "file/name"
+
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        assert (
+            return_code.message
+            == "Invalid Archive Name: The archive name contains invalid characters"
+        )
+        result_archive_file_name = "filename"
+
+        # Test success
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        assert return_code.message == ""
 
 
 def helper_test_add_random_vibe_event(lifecycle: Lifecycle, phase_name: str) -> str:
@@ -1777,46 +1908,227 @@ def helper_test_load_random_vibe_profile(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: Project name is invalid.']"
+        assert str(e.message) == "Project name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
-            "Test",
+            "Test Project",
             "",
             "Random Event",
             "TestProfile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: Phase name is invalid.']"
+        assert str(e.message) == "Phase name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
-            "Test",
+            "Test Project",
             "Phase 1",
             "",
             "TestProfile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: Event name is invalid.']"
+        assert str(e.message) == "Event name is invalid."
 
     try:
         lifecycle.load_random_vibe_profile(
-            "Test",
+            "Test Project",
             "Phase 1",
             "Random Event",
             "",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadRandomVibeProfileError as e:
-        assert str(e.str_itr()) == "['Load random vibe profile error: File path is invalid.']"
+        assert str(e.message) == "File path is invalid."
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+        )
+        pytest.fail("No exception raised when using missing CSV properties")
+    except SherlockLoadRandomVibeProfileError as e:
+        assert (
+            str(e.message)
+            == "CSV file properties must be provided for CSV random vibe profile files."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                amplitude_column="Amplitude",
+                amplitude_units="G2/Hz",
+            ),
+        )
+        pytest.fail("No exception raised when using missing profile name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, profile_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="",
+                frequency_units="Hz",
+                amplitude_column="Amplitude",
+                amplitude_units="G2/Hz",
+            ),
+        )
+        pytest.fail("No exception raised when using missing frequency column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, frequency_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="",
+                amplitude_column="Amplitude",
+                amplitude_units="G2/Hz",
+            ),
+        )
+        pytest.fail("No exception raised when using missing frequency units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, frequency_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                amplitude_column="",
+                amplitude_units="G2/Hz",
+            ),
+        )
+        pytest.fail("No exception raised when using missing amplitude column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, amplitude_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                amplitude_column="Amplitude",
+                amplitude_units="",
+            ),
+        )
+        pytest.fail("No exception raised when using missing amplitude units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, amplitude_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.csv",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=-1,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                amplitude_column="Amplitude",
+                amplitude_units="G2/Hz",
+            ),
+        )
+        pytest.fail("No exception raised when using negative header row count")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, header_row_count must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.load_random_vibe_profile(
+            "Test Project",
+            "Phase 1",
+            "Random Event",
+            "RandomProfile.dat",
+            csv_file_properties=RandomVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                amplitude_column="Amplitude",
+                amplitude_units="G2/Hz",
+            ),
+        )
+        pytest.fail("No exception raised when using csv_file_properties for non-CSV file")
+    except SherlockLoadRandomVibeProfileError as e:
+        assert (
+            str(e.message)
+            == "CSV file properties are not used for non-CSV random vibe profile files."
+        )
 
     if lifecycle._is_connection_up():
         # happy path test missing because needs valid file
         try:
             lifecycle.load_random_vibe_profile(
-                "Invalid Project",
+                "Test Project",
                 "Phase 1",
                 "Random Event",
                 "TestProfile.dat",
@@ -1830,37 +2142,227 @@ def helper_test_load_harmonic_profile(lifecycle: Lifecycle):
     """Test load_harmonic_profile API."""
 
     try:
-        lifecycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat")
+        lifecycle.load_harmonic_profile("", "Phase 1", "Harmonic Event", "Test_Profile.dat", "X")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e.str_itr()) == "['Load harmonic profile error: Project name is invalid.']"
+        assert str(e.message) == "Project name is invalid."
 
     try:
-        lifecycle.load_harmonic_profile("Test", "", "Harmonic Event", "Test_Profile.dat")
+        lifecycle.load_harmonic_profile(
+            "Test Project", "", "Harmonic Event", "Test_Profile.dat", "X"
+        )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e.str_itr()) == "['Load harmonic profile error: Phase name is invalid.']"
+        assert str(e.message) == "Phase name is invalid."
 
     try:
-        lifecycle.load_harmonic_profile("Test", "Phase 1", "", "Test_Profile.dat")
+        lifecycle.load_harmonic_profile("Test Project", "Phase 1", "", "Test_Profile.dat", "X")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e.str_itr()) == "['Load harmonic profile error: Event name is invalid.']"
+        assert str(e.message) == "Event name is invalid."
 
     try:
-        lifecycle.load_harmonic_profile("Test", "Phase 1", "Harmonic Event", "")
+        lifecycle.load_harmonic_profile("Test Project", "Phase 1", "Harmonic Event", "", "X")
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadHarmonicProfileError as e:
-        assert str(e.str_itr()) == "['Load harmonic profile error: File name is invalid.']"
+        assert str(e.message) == "File name is invalid."
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+        )
+        pytest.fail("No exception raised when using missing CSV properties")
+    except SherlockLoadHarmonicProfileError as e:
+        assert (
+            str(e.message) == "CSV file properties must be provided for CSV harmonic profile files."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing profile name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, profile_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="",
+                frequency_units="Hz",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing frequency column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, frequency_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing frequency units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, frequency_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                load_column="",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing load column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, load_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                load_column="Load",
+                load_units="",
+            ),
+        )
+        pytest.fail("No exception raised when using missing load units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, load_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.csv",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=-1,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using negative header row count")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, header_row_count must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.load_harmonic_profile(
+            "Test Project",
+            "Phase 1",
+            "Harmonic Event",
+            "Harmonic_Profile.dat",
+            "X",
+            csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                frequency_column="Frequency",
+                frequency_units="Hz",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using csv_file_properties for non-CSV file")
+    except SherlockLoadHarmonicProfileError as e:
+        assert (
+            str(e.message) == "CSV file properties are not used for non-CSV harmonic profile files."
+        )
 
     if lifecycle._is_connection_up():
         # happy path test missing because needs valid file
         try:
             lifecycle.load_harmonic_profile(
-                "Invalid Project",
+                "Test Project",
                 "Phase 1",
                 "Harmonic Event",
                 "Test_Profile.dat",
+                "x",
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
@@ -1879,40 +2381,285 @@ def helper_test_load_thermal_profile(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e.str_itr()) == "['Load thermal profile error: Project name is invalid.']"
+        assert str(e.message) == "Project name is invalid."
 
     try:
         lifecycle.load_thermal_profile(
-            "Test",
+            "Test Project",
             "",
             "Thermal Event",
             "Tutorial_Profile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e.str_itr()) == "['Load thermal profile error: Phase name is invalid.']"
+        assert str(e.message) == "Phase name is invalid."
 
     try:
         lifecycle.load_thermal_profile(
-            "Test",
+            "Test Project",
             "Phase 1",
             "",
             "Tutorial_Profile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e.str_itr()) == "['Load thermal profile error: Event name is invalid.']"
+        assert str(e.message) == "Event name is invalid."
 
     try:
         lifecycle.load_thermal_profile(
-            "Test",
+            "Test Project",
             "Phase 1",
             "Thermal Event",
             "",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadThermalProfileError as e:
-        assert str(e.str_itr()) == "['Load thermal profile error: File path is invalid.']"
+        assert str(e.message) == "File path is invalid."
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+        )
+        pytest.fail("No exception raised when using missing CSV properties")
+    except SherlockLoadThermalProfileError as e:
+        assert (
+            str(e.message) == "CSV file properties must be provided for CSV thermal profile files."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="Time",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using missing profile name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, profile_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="",
+                type_column="Type",
+                time_column="Time",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using missing step column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, step_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="",
+                time_column="Time",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using missing type column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, type_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using missing time column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, time_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="Time",
+                time_units="",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using missing time units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, time_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="Time",
+                time_units="min",
+                temperature_column="",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using missing temperature column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, temperature_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="Time",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="",
+            ),
+        )
+        pytest.fail("No exception raised when using missing temperature units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, temperature_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.csv",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=-1,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="Time",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using invalid header_row_count")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, header_row_count must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.load_thermal_profile(
+            "Test Project",
+            "Phase 1",
+            "Thermal Event",
+            "Tutorial_Profile.dat",
+            csv_file_properties=ThermalProfileCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                step_column="Step",
+                type_column="Type",
+                time_column="Time",
+                time_units="min",
+                temperature_column="Temp",
+                temperature_units="C",
+            ),
+        )
+        pytest.fail("No exception raised when using csv_file_properties for non-CSV file")
+    except SherlockLoadThermalProfileError as e:
+        assert (
+            str(e.message) == "CSV file properties are not used for non-CSV thermal profile files."
+        )
 
     if lifecycle._is_connection_up():
         # happy path test missing because needs valid file
@@ -1940,46 +2687,227 @@ def helper_test_load_shock_profile_dataset(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e.str_itr()) == "['Load shock profile dataset error: Project name is invalid.']"
+        assert str(e.message) == "Project name is invalid."
 
     try:
         lifecycle.load_shock_profile_dataset(
-            "Test",
+            "Test Project",
             "",
             "Shock Event",
             "Test_Profile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e.str_itr()) == "['Load shock profile dataset error: Phase name is invalid.']"
+        assert str(e.message) == "Phase name is invalid."
 
     try:
         lifecycle.load_shock_profile_dataset(
-            "Test",
+            "Test Project",
             "Phase 1",
             "",
             "Test_Profile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e.str_itr()) == "['Load shock profile dataset error: Event name is invalid.']"
+        assert str(e.message) == "Event name is invalid."
 
     try:
         lifecycle.load_shock_profile_dataset(
-            "Test",
+            "Test Project",
             "Phase 1",
             "Shock Event",
             "",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfileDatasetError as e:
-        assert str(e.str_itr()) == "['Load shock profile dataset error: File path is invalid.']"
+        assert str(e.message) == "File path is invalid."
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+        )
+        pytest.fail("No exception raised when using missing CSV properties")
+    except SherlockLoadShockProfileDatasetError as e:
+        assert (
+            str(e.message)
+            == "CSV file properties must be provided for CSV shock profile dataset files."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="",
+                header_row_count=0,
+                column_delimiter=",",
+                time_column="Time",
+                time_units="ms",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing profile name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, profile_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                time_column="",
+                time_units="ms",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing time column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, time_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                time_column="Time",
+                time_units="",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing time units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, time_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                time_column="Time",
+                time_units="ms",
+                load_column="",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using missing load column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, load_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                time_column="Time",
+                time_units="ms",
+                load_column="Load",
+                load_units="",
+            ),
+        )
+        pytest.fail("No exception raised when using missing load units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, load_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=-1,
+                column_delimiter=",",
+                time_column="Time",
+                time_units="ms",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using invalid header_row_count")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, header_row_count must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.load_shock_profile_dataset(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.dat",
+            csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                column_delimiter=",",
+                time_column="Time",
+                time_units="ms",
+                load_column="Load",
+                load_units="G",
+            ),
+        )
+        pytest.fail("No exception raised when using csv_file_properties for non-CSV file")
+    except SherlockLoadShockProfileDatasetError as e:
+        assert (
+            str(e.message)
+            == "CSV file properties are not used for non-CSV shock profile dataset files."
+        )
 
     if lifecycle._is_connection_up():
         # happy path test missing because needs valid file
         try:
             lifecycle.load_shock_profile_dataset(
-                "Tutorial Project",
+                "Test Project",
                 "Phase 1",
                 "Shock Event",
                 "Test_Profile.dat",
@@ -2000,46 +2928,456 @@ def helper_test_load_shock_profile_pulses(lifecycle: Lifecycle):
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e.str_itr()) == "['Load shock profile pulses error: Project name is invalid.']"
+        assert str(e.message) == "Project name is invalid."
 
     try:
         lifecycle.load_shock_profile_pulses(
-            "Test",
+            "Test Project",
             "",
             "Shock Event",
             "Test_Profile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e.str_itr()) == "['Load shock profile pulses error: Phase name is invalid.']"
+        assert str(e.message) == "Phase name is invalid."
 
     try:
         lifecycle.load_shock_profile_pulses(
-            "Test",
+            "Test Project",
             "Phase 1",
             "",
             "Test_Profile.dat",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e.str_itr()) == "['Load shock profile pulses error: Event name is invalid.']"
+        assert str(e.message) == "Event name is invalid."
 
     try:
         lifecycle.load_shock_profile_pulses(
-            "Test",
+            "Test Project",
             "Phase 1",
             "Shock Event",
             "",
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockLoadShockProfilePulsesError as e:
-        assert str(e.str_itr()) == "['Load shock profile pulses error: File path is invalid.']"
+        assert str(e.message) == "File path is invalid."
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+        )
+        pytest.fail("No exception raised when using missing CSV properties")
+    except SherlockLoadShockProfilePulsesError as e:
+        assert (
+            str(e.message)
+            == "CSV file properties must be provided for CSV shock profile pulses files."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing profile name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, profile_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing shape column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, shape_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing load column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, load_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing load units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, load_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing frequency column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, frequency_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing frequency units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, frequency_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="",
+            ),
+        )
+        pytest.fail("No exception raised when using missing decay column")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, decay_column is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing duration units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, duration_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using missing sample rate units")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, sample_rate_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=-25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using negative duration")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == "Value error, duration must be greater than 0."
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=-0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using negative sample rate")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == "Value error, sample_rate must be greater than 0."
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.csv",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=-1,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using invalid header_row_count")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, header_row_count must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.load_shock_profile_pulses(
+            "Test Project",
+            "Phase 1",
+            "Shock Event",
+            "Test_Profile.dat",
+            csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                profile_name="Test Profile",
+                header_row_count=0,
+                numeric_format="English",
+                column_delimiter=",",
+                duration=25,
+                duration_units="ms",
+                sample_rate=0.1,
+                sample_rate_units="ms",
+                shape_column="Shape",
+                load_column="Load",
+                load_units="G",
+                frequency_column="Frequency",
+                frequency_units="HZ",
+                decay_column="Decay",
+            ),
+        )
+        pytest.fail("No exception raised when using csv_file_properties for non-CSV file")
+    except SherlockLoadShockProfilePulsesError as e:
+        assert (
+            str(e.message)
+            == "CSV file properties are not used for non-CSV shock profile pulses files."
+        )
 
     if lifecycle._is_connection_up():
         # happy path test missing because needs valid file
         try:
             lifecycle.load_shock_profile_pulses(
-                "Tutorial Project",
+                "Test Project",
                 "Phase 1",
                 "Shock Event",
                 "Test_Profile.dat",
@@ -2047,8 +3385,911 @@ def helper_test_load_shock_profile_pulses(lifecycle: Lifecycle):
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockLoadShockProfilePulsesError
-            load_error = cast(SherlockLoadShockProfilePulsesError, e)
-            assert len(load_error.error_array) == 1
+
+
+def helper_test_import_thermal_signal(lifecycle: Lifecycle):
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing file_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, file_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=-1,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using invalid number_of_range_bins parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, number_of_range_bins must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=-1,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using invalid number_of_mean_bins parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, number_of_mean_bins must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=-1,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using invalid number_of_dwell_bins parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, number_of_dwell_bins must be greater than or equal to 0."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="",
+                generated_cycles_label="Generated Cycles from pySherlock",
+            )
+        )
+        pytest.fail("No exception raised when using a missing time_filtering_limit_units parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, time_filtering_limit_units is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=0,
+                number_of_mean_bins=0,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing generated_cycles_label parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, generated_cycles_label is invalid because it is None or empty."
+        )
+
+
+def helper_test_save_harmonic_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_harmonic_profile(
+            SaveHarmonicProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="5 - Harmonic Event",
+                triaxial_axis="x",
+                file_path="C:/Temp/Harmonic.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_harmonic_profile(
+            SaveHarmonicProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="5 - Harmonic Event",
+                triaxial_axis="x",
+                file_path="C:/Temp/Harmonic.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_harmonic_profile(
+            SaveHarmonicProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                triaxial_axis="x",
+                file_path="C:/Temp/Harmonic.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid triaxial_axis
+        try:
+            lifecycle.save_harmonic_profile(
+                SaveHarmonicProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="5 - Harmonic Event",
+                    triaxial_axis="a",
+                    file_path="C:/Temp/Harmonic.dat",
+                )
+            )
+            pytest.fail("No exception raised when using a missing triaxial_axis parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_save_random_vibe_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_random_vibe_profile(
+            SaveRandomVibeProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="RV_Event_01",
+                file_path="C:/Temp/RV_Event_01.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_random_vibe_profile(
+            SaveRandomVibeProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="1 - Vibration",
+                file_path="C:/Temp/1 - Vibration.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_random_vibe_profile(
+            SaveRandomVibeProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                file_path="C:/Temp/1 - Vibration.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid file_path
+        try:
+            lifecycle.save_random_vibe_profile(
+                SaveRandomVibeProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="1 - Vibration",
+                    file_path="C:/Temp/RV_Event_01.txt",
+                )
+            )
+            pytest.fail("No exception raised when using an invalid file_path parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_save_shock_pulse_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_shock_pulse_profile(
+            SaveShockPulseProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="3 - Collision",
+                file_path="C:/Temp/3 - Collision.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_shock_pulse_profile(
+            SaveShockPulseProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="3 - Collision",
+                file_path="C:/Temp/3 - Collision.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_shock_pulse_profile(
+            SaveShockPulseProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                file_path="C:/Temp/3 - Collision.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid file_path
+        try:
+            lifecycle.save_shock_pulse_profile(
+                SaveShockPulseProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="3 - Collision",
+                    file_path="C:/Temp/3 - Collision.txt",
+                )
+            )
+            pytest.fail("No exception raised when using an invalid file_path parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_save_thermal_profile(lifecycle: Lifecycle):
+    # project missing
+    try:
+        lifecycle.save_thermal_profile(
+            SaveThermalProfileRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="ThermalCycle_A",
+                file_path="C:/Temp/ThermalCycle_A.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.save_thermal_profile(
+            SaveThermalProfileRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="ThermalCycle_A",
+                file_path="C:/Temp/ThermalCycle_A.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.save_thermal_profile(
+            SaveThermalProfileRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+                file_path="C:/Temp/ThermalCycle_A.dat",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+
+        # invalid file_path
+        try:
+            lifecycle.save_thermal_profile(
+                SaveThermalProfileRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="ThermalCycle_A",
+                    file_path="C:/Temp/ThermalCycle_A.txt",
+                )
+            )
+            pytest.fail("No exception raised when using an invalid file_path parameter")
+        except Exception as e:
+            assert type(e) == SherlockSaveProfileError
+
+
+def helper_test_delete_event(lifecycle: Lifecycle, event_name: str, phase_name: str):
+    # project missing
+    try:
+        lifecycle.delete_event(
+            DeleteEventRequest(
+                project="",
+                phase_name="On The Road",
+                event_name="ThermalCycle_A",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.delete_event(
+            DeleteEventRequest(
+                project="Tutorial Project",
+                phase_name="",
+                event_name="ThermalCycle_A",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    # event_name missing
+    try:
+        lifecycle.delete_event(
+            DeleteEventRequest(
+                project="Tutorial Project",
+                phase_name="On The Road",
+                event_name="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing event_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, event_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false event_name
+        try:
+            lifecycle.delete_event(
+                DeleteEventRequest(
+                    project="Tutorial Project",
+                    phase_name="On The Road",
+                    event_name="NonExistingEvent",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockDeleteError)
+
+        # valid request with actual event
+        response = lifecycle.delete_event(
+            DeleteEventRequest(
+                project="Tutorial Project",
+                phase_name=phase_name,
+                event_name=event_name,
+            )
+        )
+        assert response.value == 0
+
+
+def helper_test_delete_phase(lifecycle: Lifecycle, phase_name: str):
+    # project missing
+    try:
+        lifecycle.delete_phase(
+            DeletePhaseRequest(
+                project="",
+                phase_name="SomePhase",
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.delete_phase(
+            DeletePhaseRequest(
+                project="Tutorial Project",
+                phase_name="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false phase_name
+        try:
+            lifecycle.delete_phase(
+                DeletePhaseRequest(
+                    project="Tutorial Project",
+                    phase_name="NonExistingPhase",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockDeleteError)
+
+        # valid request with actual phase
+        response = lifecycle.delete_phase(
+            DeletePhaseRequest(
+                project="Tutorial Project",
+                phase_name=phase_name,
+            )
+        )
+        assert response.value == 0
+
+
+def helper_test_update_life_phase(lifecycle: Lifecycle):
+
+    project = "Tutorial Project"
+    phase_name = "Environmental"
+    new_phase_name = "Environment"
+    new_num_of_cycles = 100
+    new_cycle_type = "PER DAY"
+    new_description = "new description"
+    new_duration = 24
+    new_duration_units = "hr"
+    result_archive_file_name = "Tutorial Project Results 10_7_2025"
+
+    # project missing
+    try:
+        lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project="",
+                phase_name=phase_name,
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project=project,
+                phase_name="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false project
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project="Bad Project",
+                    phase_name=phase_name,
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but false phase_name
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name="NonExistingPhase",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # test all optionals omitted, i.e., not set or default
+        req = UpdateLifePhaseRequest(
+            project=project,
+            phase_name=phase_name,
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.project == project
+        assert grpc_obj.phaseName == phase_name
+        assert not grpc_obj.newPhaseName
+        assert not grpc_obj.newDescription
+        assert not grpc_obj.newDuration
+        assert not grpc_obj.newDurationUnits
+        assert not grpc_obj.newNumOfCycles
+        assert not grpc_obj.newCycleType
+        assert not grpc_obj.resultArchiveFileName
+
+        # test all optionals set
+        req = UpdateLifePhaseRequest(
+            project=project,
+            phase_name=phase_name,
+            new_phase_name=new_phase_name,
+            new_num_of_cycles=new_num_of_cycles,
+            new_cycle_type=new_cycle_type,
+            new_description=new_description,
+            new_duration=new_duration,
+            new_duration_units=new_duration_units,
+            result_archive_file_name=result_archive_file_name,
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.newPhaseName == new_phase_name
+        assert grpc_obj.newDescription == new_description
+        assert grpc_obj.newDuration == new_duration
+        assert grpc_obj.newDurationUnits == new_duration_units
+        assert grpc_obj.newNumOfCycles == new_num_of_cycles
+        assert grpc_obj.resultArchiveFileName == result_archive_file_name
+
+        # test some optionals set
+        req = UpdateLifePhaseRequest(
+            project=project,
+            phase_name=phase_name,
+            new_phase_name=new_phase_name,
+            new_duration_units=new_duration_units,
+            # rest are omitted (None)
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.newPhaseName == new_phase_name
+        assert grpc_obj.newDurationUnits == new_duration_units
+        assert not grpc_obj.newDescription
+        assert not grpc_obj.newDuration
+        assert not grpc_obj.newNumOfCycles
+        assert not grpc_obj.newCycleType
+        assert not grpc_obj.resultArchiveFileName
+
+        # valid request but invalid number of cycles param
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_num_of_cycles=-100,
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but invalid duration param
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_duration=-100,
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but invalid duration units param
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_duration_units="dy",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but invalid cycle type
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_cycle_type="PER DY",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+            assert (
+                e.message
+                == "Invalid cycle type. Valid options are: COUNT, DUTY CYCLE, PER YEAR, PER DAY, "
+                "PER HOUR, PER MIN, PER SEC"
+            )
+
+        # valid request but new phase name already exists
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_phase_name="On The Road",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+            assert (
+                e.message
+                == "The life phase 'On The Road' already exists for the project's life cycle."
+            )
+
+        # valid request with all optional params.
+        response = lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project=project,
+                phase_name=phase_name,
+                new_phase_name=new_phase_name,
+                new_num_of_cycles=new_num_of_cycles,
+                new_cycle_type=new_cycle_type,
+                new_description=new_description,
+                new_duration=new_duration,
+                new_duration_units=new_duration_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+        assert response.value == 0
+
+        # valid request with some optional params.
+        response = lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project=project,
+                phase_name=new_phase_name,
+                new_phase_name=phase_name,
+                new_num_of_cycles=new_num_of_cycles,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+        assert response.value == 0
 
 
 if __name__ == "__main__":

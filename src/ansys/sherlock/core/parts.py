@@ -1,10 +1,12 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all parts management capabilities."""
 try:
+    import SherlockCommonService_pb2
     import SherlockPartsService_pb2
     import SherlockPartsService_pb2_grpc
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2
     from ansys.api.sherlock.v0 import SherlockPartsService_pb2_grpc
 
@@ -13,7 +15,6 @@ from ansys.sherlock.core.errors import (
     SherlockEnableLeadModelingError,
     SherlockExportNetListError,
     SherlockExportPartsListError,
-    SherlockGetPartLocationError,
     SherlockImportPartsListError,
     SherlockNoGrpcConnectionException,
     SherlockUpdatePartsFromAVLError,
@@ -29,7 +30,7 @@ from ansys.sherlock.core.types.parts_types import (
     AVLPartNum,
     DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
-    PartLocation,
+    ImportPartsToAVLRequest,
     PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
@@ -651,83 +652,6 @@ class Parts(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @require_version()
-    def get_part_location(
-        self, project: str, cca_name: str, ref_des: str, location_units: str
-    ) -> list[PartLocation]:
-        """Return the location properties for one or more part.
-
-        Available Since: 2022R1
-
-        Parameters
-        ----------
-        project: str
-            Name of the Sherlock project.
-        cca_name: str
-            Name of the CCA.
-        ref_des: str
-            Comma separated list of reference designators of parts to retrieve locations for.
-        location_units: str
-            Valid units for a part's location.
-
-        Returns
-        -------
-        list[PartLocation]
-            PartLocation for each part that corresponds to the reference designators.
-
-        Examples
-        --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
-        >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> part_locations = sherlock.parts.get_part_location(
-            project="Test",
-            cca_name="Card",
-            ref_des="C1,C2",
-            location_units="in",
-        )
-        >>> print(f"{part_locations}")
-        """
-        try:
-            if project == "":
-                raise SherlockGetPartLocationError(message="Project name is invalid.")
-            if cca_name == "":
-                raise SherlockGetPartLocationError(message="CCA name is invalid.")
-            if ref_des == "":
-                raise SherlockGetPartLocationError(message="Ref Des is invalid.")
-            if location_units == "":
-                raise SherlockGetPartLocationError(message="Location unit is invalid.")
-            if not self._is_connection_up():
-                raise SherlockNoGrpcConnectionException()
-
-            request = SherlockPartsService_pb2.GetPartLocationRequest(
-                project=project,
-                ccaName=cca_name,
-                refDes=ref_des,
-                locationUnits=location_units,
-            )
-            response = self.stub.getPartLocation(request)
-            return_code = response.returnCode
-
-            if return_code.value == -1:
-                raise SherlockGetPartLocationError(return_code.message)
-
-            locations = []
-            for location in response.locationData:
-                locations.append(PartLocation(location))
-            return locations
-        except SherlockGetPartLocationError as e:
-            LOG.error(str(e))
-            raise e
-
     @require_version(252)
     def get_parts_list_properties(
         self, request: GetPartsListPropertiesRequest
@@ -871,9 +795,10 @@ class Parts(GrpcStub):
                     raise SherlockUpdatePartsFromAVLError(error_array=response.updateErrors)
                 raise SherlockUpdatePartsFromAVLError(message=return_code.message)
 
-            return response
+            return return_code.value
         except SherlockUpdatePartsFromAVLError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version(242)
@@ -1191,3 +1116,41 @@ class Parts(GrpcStub):
         delete_request = request._convert_to_grpc()
 
         return list(self.stub.deletePartsFromPartsList(delete_request))
+
+    @require_version(261)
+    def import_parts_to_avl(
+        self,
+        request: ImportPartsToAVLRequest,
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Import a parts list into the Approved Vendor List (AVL).
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : ImportPartsToAVLRequest
+            Contains the file path and import mode to use for the AVL parts import.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Return code indicating the result of the AVL parts import.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.part_types import ImportPartsToAVLRequest
+        >>> from ansys.api.sherlock.v0 import SherlockPartsService_pb2
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>>
+        >>> sherlock = launch_sherlock()
+        >>> return_code = sherlock.project.import_parts_to_avl(
+        >>>     ImportPartsToAVLRequest(
+        >>>         import_file="C:/path/to/AVL_parts_file.xls",
+        >>>         import_type=SherlockPartsService_pb2.AVLImportType.Update
+        >>>     )
+        >>> )
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.importPartsToAVL(request._convert_to_grpc())

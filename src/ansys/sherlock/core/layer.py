@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all layer management capabilities."""
 import grpc
@@ -7,12 +7,17 @@ from ansys.sherlock.core.types.layer_types import (
     CircularShape,
     CopyPottingRegionRequest,
     DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
+    GetMountPointsPropertiesRequest,
     GetTestPointPropertiesRequest,
     PCBShape,
     PolygonalShape,
     RectangularShape,
     SlotShape,
+    UpdateICTFixturesRequest,
+    UpdateMountPointsRequest,
     UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
 )
 
 try:
@@ -2097,3 +2102,236 @@ class Layer(GrpcStub):
         ):
             responses.append(get_test_point_props_response)
         return responses
+
+    @require_version(261)
+    def get_ict_fixtures_props(
+        self, request: GetICTFixturesPropertiesRequest
+    ) -> SherlockLayerService_pb2.GetICTFixturesPropertiesResponse:
+        """Return the properties for each ICT fixture given a comma-separated list of fixture IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetICTFixturesPropertiesRequest
+             Contains all the information needed to return the properties for one or more ICT
+             fixtures.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.GetICTFixturesPropertiesResponse
+            Properties for each ICT fixture that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetICTFixturesPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetICTFixturesPropertiesRequest(
+        >>>    project = "Tutorial Project"
+        >>>    cca_name = "Main Board"
+        >>>    ict_fixtures_ids = "F1,F2"
+        >>> )
+        >>> response = layer.get_ict_fixtures_props(request)
+        """
+        get_ict_fixture_props_request = request._convert_to_grpc()
+        response = self.stub.getICTFixturesProperties(get_ict_fixture_props_request)
+
+        return response
+
+    @require_version(261)
+    def update_test_points(
+        self, request: UpdateTestPointsRequest
+    ) -> SherlockLayerService_pb2.UpdateTestPointsResponse:
+        """Update test point properties of a CCA from input parameters.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateTestPointsRequest
+            Contains all the information needed to update the properties for one or more
+            test points.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.UpdateTestPointsResponse
+            A status code and message for the update test points request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import UpdateTestPointsRequest,
+        >>> TestPointProperties
+        >>> from ansys.api.sherlock.v0 import SherlockLayerService_pb2
+        >>> sherlock = connect()
+        >>> test_point = TestPointProperties(
+        >>> id="TP1",
+        >>> side="BOTTOM",
+        >>> units="in",
+        >>> center_x=1.0,
+        >>> center_y=0.5,
+        >>> radius=0.2,
+        >>> load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
+        >>> load_value=3.0,
+        >>> load_units="ozf",
+        >>> )
+        >>> response = sherlock.layer.update_test_points(UpdateTestPointsRequest(
+        >>> project="Tutorial Project",
+        >>> cca_name="Main Board",
+        >>> update_test_points=[test_point],
+        >>> ))
+        """
+        update_request = request._convert_to_grpc()
+        response = self.stub.updateTestPoints(update_request)
+        return response
+
+    @require_version(261)
+    def update_ict_fixtures(
+        self, request: UpdateICTFixturesRequest
+    ) -> SherlockLayerService_pb2.UpdateICTFixturesResponse:
+        """Update ict fixture properties of a CCA from input parameters.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateICTFixturesRequest
+            Contains all the information needed to update the properties for one or more
+            ict fixtures.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.UpdateICTFixturesResponse
+            A status code and message for the update ict fixtures request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import UpdateICTFixturesRequest,
+        >>> ICTFixtureProperties
+        >>> sherlock = connect()
+        >>> fixture = ICTFixtureProperties(
+        >>> id="F1",
+        >>> type="Mount Hole",
+        >>> units="in",
+        >>> side="TOP",
+        >>> height="0.0",
+        >>> material="GOLD",
+        >>> state="DISABLED",
+        >>> shape="Slot",
+        >>> x="0.3",
+        >>> y="-0.4",
+        >>> length="1.0",
+        >>> width="0.2",
+        >>> diameter="0.0",
+        >>> nodes="10",
+        >>> rotation="15",
+        >>> polygon="",
+        >>> boundary="Outline",
+        >>> constraints="X-axis translation|Z-axis translation",
+        >>> chassis_material="SILVER",
+        >>> )
+        >>> response = sherlock.layer.update_ict_fixtures(UpdateICTFixturesRequest(
+        >>> project="Tutorial Project",
+        >>> cca_name="Main Board",
+        >>> update_fixtures=[fixture],
+        >>> ))
+        """
+        update_request = request._convert_to_grpc()
+        response = self.stub.updateICTFixtures(update_request)
+        return response
+
+    @require_version(261)
+    def get_mount_point_props(
+        self, request: GetMountPointsPropertiesRequest
+    ) -> SherlockLayerService_pb2.GetMountPointsPropertiesResponse:
+        """
+        Return the properties for each mount point given a comma-separated list of mount point IDs.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: GetmountPointsPropertiesRequest
+             Contains all the information needed to return the properties for one or more mount
+             points.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.GetMountPointsPropertiesResponse
+            Properties for each mount point that correspond to the reference designators.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import GetMountPointsPropertiesRequest
+        >>> sherlock = launch_sherlock()
+        >>> request = layer_types.GetMountPointsPropertiesRequest(
+        >>>    project = "Tutorial Project"
+        >>>    cca_name = "Main Board"
+        >>>    mount_point_ids = "MP1,MP2"
+        >>> )
+        >>> response = layer.get_mount_point_props(request)
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.getMountPointsProperties(request._convert_to_grpc())
+
+    @require_version(261)
+    def update_mount_points(
+        self, request: UpdateMountPointsRequest
+    ) -> SherlockLayerService_pb2.UpdateMountPointsResponse:
+        """Update mount point properties of a CCA from input parameters.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateMountPointsRequest
+            Contains all the information needed to update the properties for one or more
+            mount points.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.UpdateMountPointsResponse
+            A status code and message for the update mount points request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core.types.layer_types import UpdateMountPointsRequest,
+        >>> MountPointProperties
+        >>> sherlock = connect()
+        >>> mount_point = MountPointProperties(
+        >>>     id="MP1",
+        >>>     type="Mount Pad",
+        >>>     shape="Rectangular",
+        >>>     units="mm",
+        >>>     side="BOTTOM",
+        >>>     height=1.0,
+        >>>     material="GOLD",
+        >>>     state="DISABLED",
+        >>>     x=0.3,
+        >>>     y=-0.4,
+        >>>     length=1.0,
+        >>>     width=0.2,
+        >>>     diameter=0.0,
+        >>>     nodes="",
+        >>>     rotation=45,
+        >>>     polygon="",
+        >>>     boundary="Outline",
+        >>>     constraints="X-axis translation|Z-axis translation",
+        >>>     chassis_material="SILVER",
+        >>> )
+        >>> response = sherlock.layer.update_mount_points(UpdateMountPointsRequest(
+        >>>     project="Tutorial Project",
+        >>>     cca_name="Main Board",
+        >>>     update_mount_points=[mount_point],
+        >>> ))
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateMountPoints(request._convert_to_grpc())

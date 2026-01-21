@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 import grpc
 import pytest
@@ -27,7 +27,7 @@ def test_version_check():
 
 
 def assert_float_equals(expected, actual):
-    assert pytest.approx(expected, abs=1e-14) == pytest.approx(actual, abs=1e-14)
+    assert pytest.approx(actual, abs=1e-14) == pytest.approx(expected, abs=1e-14)
 
 
 if __name__ == "__main__":

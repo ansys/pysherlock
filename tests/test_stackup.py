@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 import grpc
 import pytest
@@ -611,16 +611,34 @@ def helper_test_get_stackup_props(stackup):
                 "Main Board",
             )
 
-            assert (
-                stackup_properties.board_dimension == "190.3171 x 114.3076 mm  [7.4928 x 4.5003 in]"
-            ), "Board dimension"
-            assert stackup_properties.board_thickness == "2.091 mm  [82.3 mil]", "Board thickness"
-            assert stackup_properties.density == "2.0264 g/cc", "Density"
-            assert stackup_properties.conductor_layers_cnt == "6", "Conductor layers count"
-            assert stackup_properties.ctexy == "18.618 ppm/C", "CTExy"
-            assert stackup_properties.ctez == "60.821 ppm/C", "CTEz"
-            assert stackup_properties.exy == "25,420 MPa", "Exy"
-            assert stackup_properties.ez == "6,939 MPa", "Ez"
+            if stackup_properties.improve_stackup_model_enabled:
+                assert (
+                    stackup_properties.board_dimension
+                    == "190.3171 x 114.3076 mm  [7.4928 x 4.5003 in]"
+                ), "Board dimension"
+                assert (
+                    stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
+                ), "Board thickness"
+                assert stackup_properties.density == "2.0264 g/cc", "Density"
+                assert stackup_properties.conductor_layers_cnt == "6", "Conductor layers count"
+                assert stackup_properties.ctexy == "18.556 ppm/C", "CTExy"
+                assert stackup_properties.ctez == "60.821 ppm/C", "CTEz"
+                assert stackup_properties.exy == "24,865 MPa", "Exy"
+                assert stackup_properties.ez == "6,939 MPa", "Ez"
+            else:
+                assert (
+                    stackup_properties.board_dimension
+                    == "190.3171 x 114.3076 mm  [7.4928 x 4.5003 in]"
+                ), "Board dimension"
+                assert (
+                    stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
+                ), "Board thickness"
+                assert stackup_properties.density == "2.0264 g/cc", "Density"
+                assert stackup_properties.conductor_layers_cnt == "6", "Conductor layers count"
+                assert stackup_properties.ctexy == "18.618 ppm/C", "CTExy"
+                assert stackup_properties.ctez == "60.821 ppm/C", "CTEz"
+                assert stackup_properties.exy == "25,420 MPa", "Exy"
+                assert stackup_properties.ez == "6,939 MPa", "Ez"
         except SherlockGetLayerCountError as e:
             pytest.fail(str(e))
 

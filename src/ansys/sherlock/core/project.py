@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all project management capabilities."""
 import os
@@ -430,16 +430,15 @@ class Project(GrpcStub):
             return_code = response.returnCode
 
             if return_code.value == -1:
-                if return_code.message == "":
+                if not return_code.message:
                     raise SherlockListCCAsError(error_array=response.errors)
-
                 raise SherlockListCCAsError(message=return_code.message)
 
-        except SherlockListCCAsError as e:
-            LOG.error(str(e))
-            raise e
+            return response.ccas
 
-        return response.ccas
+        except SherlockListCCAsError as e:
+            LOG.error(str(e.str_itr()))
+            raise e
 
     @require_version(241)
     def add_cca(self, project: str, cca_properties: list[dict[str, bool | float | str]]) -> int:
@@ -909,7 +908,8 @@ class Project(GrpcStub):
                 raise SherlockListStrainMapsError(message=return_code.message)
 
         except Exception as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
         return response.ccaStrainMaps
@@ -1017,7 +1017,8 @@ class Project(GrpcStub):
                 raise SherlockListThermalMapsError(message=return_code.message)
 
         except SherlockListThermalMapsError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
         return response.ccaThermalMaps

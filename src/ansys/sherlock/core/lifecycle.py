@@ -1,10 +1,12 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing all life cycle management capabilities."""
 try:
+    import SherlockCommonService_pb2
     import SherlockLifeCycleService_pb2
     import SherlockLifeCycleService_pb2_grpc
 except ModuleNotFoundError:
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2
     from ansys.api.sherlock.v0 import SherlockLifeCycleService_pb2_grpc
 
@@ -21,6 +23,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalEventError,
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
+    SherlockDeleteError,
     SherlockInvalidHarmonicProfileEntriesError,
     SherlockInvalidLoadDirectionError,
     SherlockInvalidOrientationError,
@@ -33,8 +36,26 @@ from ansys.sherlock.core.errors import (
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
     SherlockNoGrpcConnectionException,
+    SherlockSaveProfileError,
+    SherlockUpdateLifePhaseError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.lifecycle_types import (
+    DeleteEventRequest,
+    DeletePhaseRequest,
+    HarmonicVibeProfileCsvFileProperties,
+    ImportThermalSignalRequest,
+    RandomVibeProfileCsvFileProperties,
+    SaveHarmonicProfileRequest,
+    SaveRandomVibeProfileRequest,
+    SaveShockPulseProfileRequest,
+    SaveThermalProfileRequest,
+    ShockProfileDatasetCsvFileProperties,
+    ShockProfilePulsesCsvFileProperties,
+    ThermalProfileCsvFileProperties,
+    UpdateLifeCycleRequest,
+    UpdateLifePhaseRequest,
+)
 from ansys.sherlock.core.utils.version_check import require_version
 
 
@@ -92,7 +113,8 @@ class Lifecycle(GrpcStub):
     def _init_ampl_units(self):
         """Initialize the list for amplitude units.
 
-        Available Since: 2021R1
+        .. deprecated:: 2026 R1
+
         """
         if self._is_connection_up():
             ampl_unit_request = SherlockLifeCycleService_pb2.ListAmplUnitsRequest()
@@ -114,7 +136,8 @@ class Lifecycle(GrpcStub):
     def _init_load_units(self):
         """Initialize the list for load units.
 
-        Available Since: 2021R1
+        .. deprecated:: 2026 R1
+
         """
         if self._is_connection_up():
             load_unit_request = SherlockLifeCycleService_pb2.ListShockLoadUnitsRequest()
@@ -1735,7 +1758,12 @@ class Lifecycle(GrpcStub):
 
     @require_version()
     def load_random_vibe_profile(
-        self, project: str, phase_name: str, event_name: str, file_path: str
+        self,
+        project: str,
+        phase_name: str,
+        event_name: str,
+        file_path: str,
+        csv_file_properties: RandomVibeProfileCsvFileProperties = None,
     ) -> int:
         """Load random vibe profile from .csv or .dat file.
 
@@ -1750,7 +1778,9 @@ class Lifecycle(GrpcStub):
         event_name: str
             Name of the random vibe event.
         file_path: str
-            File path for thermal profile .dat or .csv file
+            File path for thermal profile .csv or .dat file
+        csv_file_properties: RandomVibeProfileCsvFileProperties
+            Properties of the random vibe profile CSV file, required if the file is in CSV format.
 
         Returns
         -------
@@ -1767,15 +1797,25 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test",
+            project="Test Project",
             cca_name="Card"
         )
 
         >>> sherlock.lifecycle.load_random_vibe_profile(
-                project="Tutorial",
+                project="Test Project",
                 phase_name="Phase 1",
                 event_name="Random Event",
-                file_path="TestProfile.dat"
+                file_path="TestProfile.csv",
+                csv_file_properties=RandomVibeProfileCsvFileProperties(
+                    profile_name="Test Profile",
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    frequency_column="Frequency",
+                    frequency_units="HZ",
+                    amplitude_column="Amplitude",
+                    amplitude_units="G2/Hz"
+                )
         )
         """
         try:
@@ -1787,6 +1827,17 @@ class Lifecycle(GrpcStub):
                 raise SherlockLoadRandomVibeProfileError(message="Event name is invalid.")
             if file_path == "":
                 raise SherlockLoadRandomVibeProfileError(message="File path is invalid.")
+            if file_path.lower().endswith(".csv"):
+                if csv_file_properties is None:
+                    raise SherlockLoadRandomVibeProfileError(
+                        "CSV file properties must be provided for CSV random vibe profile files."
+                    )
+            else:
+                if csv_file_properties is not None:
+                    raise SherlockLoadRandomVibeProfileError(
+                        "CSV file properties are not used for non-CSV random vibe profile files."
+                    )
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -1795,25 +1846,31 @@ class Lifecycle(GrpcStub):
                 phaseName=phase_name,
                 eventName=event_name,
                 filePath=file_path,
+                randomVibeCsvProps=(
+                    csv_file_properties._convert_to_grpc() if csv_file_properties else None
+                ),
             )
             response = self.stub.loadRandomVibeProfile(request)
             return_code = response.returnCode
             if return_code.value == -1:
-                if return_code.message == "":
-                    raise SherlockLoadRandomVibeProfileError(error_array=response.errors)
-
-                raise SherlockLoadRandomVibeProfileError(message=return_code.message)
+                raise SherlockLoadRandomVibeProfileError(message=response.errors)
 
             return return_code.value
+
         except SherlockLoadRandomVibeProfileError as e:
             LOG.error(str(e))
             raise e
 
     @require_version()
     def load_thermal_profile(
-        self, project: str, phase_name: str, event_name: str, file_path: str
+        self,
+        project: str,
+        phase_name: str,
+        event_name: str,
+        file_path: str,
+        csv_file_properties: ThermalProfileCsvFileProperties = None,
     ) -> int:
-        """Load a thermal profile from a .dat or .csv file.
+        """Load a thermal profile from a .csv or .dat file.
 
         Available Since: 2021R1
 
@@ -1826,7 +1883,9 @@ class Lifecycle(GrpcStub):
         event_name: str
             Name of the random vibe event.
         file_path: str
-            File path for thermal profile .dat or .csv file
+            File path for thermal profile .csv or .dat file
+        csv_file_properties: ThermalProfileCsvFileProperties
+            Properties of the thermal profile CSV file, required if the file is in CSV format.
 
         Returns
         -------
@@ -1843,14 +1902,26 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test",
+            project="Test Project",
             cca_name="Card",
         )
-         >>>loaded = sherlock.lifecycle.load_thermal_profile(
-                project="Tutorial",
+         >>> sherlock.lifecycle.load_thermal_profile(
+                project="Test Project",
                 phase_name="Phase 1",
                 event_name="Thermal Event",
-                file_path="Tutorial_Profile.dat"
+                file_path="Tutorial_Profile.csv",
+                csv_file_properties=ThermalProfileCsvFileProperties(
+                    profile_name="Test Profile",
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    step_column="Step",
+                    type_column="Type",
+                    time_column="Time (min)",
+                    time_units="min",
+                    temp_column="Temp (C)",
+                    temp_units="C"
+                )
         )
         """
         try:
@@ -1862,6 +1933,17 @@ class Lifecycle(GrpcStub):
                 raise SherlockLoadThermalProfileError(message="Event name is invalid.")
             if file_path == "":
                 raise SherlockLoadThermalProfileError(message="File path is invalid.")
+            if file_path.lower().endswith(".csv"):
+                if csv_file_properties is None:
+                    raise SherlockLoadThermalProfileError(
+                        "CSV file properties must be provided for CSV thermal profile files."
+                    )
+            else:
+                if csv_file_properties is not None:
+                    raise SherlockLoadThermalProfileError(
+                        "CSV file properties are not used for non-CSV thermal profile files."
+                    )
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -1870,6 +1952,7 @@ class Lifecycle(GrpcStub):
                 phaseName=phase_name,
                 eventName=event_name,
                 filePath=file_path,
+                csvProps=csv_file_properties._convert_to_grpc() if csv_file_properties else None,
             )
             response = self.stub.loadThermalProfile(request)
             return_code = response.returnCode
@@ -1889,9 +1972,15 @@ class Lifecycle(GrpcStub):
 
     @require_version()
     def load_harmonic_profile(
-        self, project: str, phase_name: str, event_name: str, file_path: str
+        self,
+        project: str,
+        phase_name: str,
+        event_name: str,
+        file_path: str,
+        triaxial_axis: str,
+        csv_file_properties: HarmonicVibeProfileCsvFileProperties = None,
     ) -> int:
-        """Load a harmonic profile from a DAT or CSV file to a life cycle phase.
+        """Load a harmonic profile from a .csv or .dat file to a life cycle phase.
 
         Available Since: 2021R1
 
@@ -1904,7 +1993,13 @@ class Lifecycle(GrpcStub):
         event_name: str
             Name of the harmonic event.
         file_path: str
-            Path for DAT or CSV file with the harmonic profile.
+            Path for .csv or .dat file with the harmonic profile.
+        triaxial_axis: str
+            Axis that this profile should be assigned to if the harmonic
+            profile type is ``"Triaxial"``. Options are: ``"x"``, ``"y"``,
+            and ``"z"``.
+        csv_file_properties: HarmonicProfileCsvFileProperties
+            Properties of the harmonic profile CSV file, required if the file is in CSV format.
 
         Returns
         -------
@@ -1921,15 +2016,26 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test",
+            project="Test Project",
             cca_name="Card"
         )
 
-        >>> loaded = sherlock.lifecycle.load_harmonic_profile(
-                project="Tutorial",
+        >>> sherlock.lifecycle.load_harmonic_profile(
+                project="Test Project",
                 phase_name="Phase 1",
                 event_name="Harmonic Event",
-                file_path="Test_Profile.dat"
+                file_path="Test_Profile.csv",
+                triaxial_axis="x",
+                csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+                    profile_name="Test Profile",
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    frequency_column="Frequency",
+                    frequency_units="HZ",
+                    load_column="Load",
+                    load_units="G"
+                )
         )
         """
         try:
@@ -1941,6 +2047,17 @@ class Lifecycle(GrpcStub):
                 raise SherlockLoadHarmonicProfileError(message="Event name is invalid.")
             if file_path == "":
                 raise SherlockLoadHarmonicProfileError(message="File name is invalid.")
+            if file_path.lower().endswith(".csv"):
+                if csv_file_properties is None:
+                    raise SherlockLoadHarmonicProfileError(
+                        "CSV file properties must be provided for CSV harmonic profile files."
+                    )
+            else:
+                if csv_file_properties is not None:
+                    raise SherlockLoadHarmonicProfileError(
+                        "CSV file properties are not used for non-CSV harmonic profile files."
+                    )
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -1949,6 +2066,10 @@ class Lifecycle(GrpcStub):
                 phaseName=phase_name,
                 eventName=event_name,
                 filePath=file_path,
+                harmonicCsvProps=(
+                    csv_file_properties._convert_to_grpc() if csv_file_properties else None
+                ),
+                triaxialAxis=triaxial_axis,
             )
             response = self.stub.loadHarmonicProfile(request)
             return_code = response.returnCode
@@ -1961,12 +2082,18 @@ class Lifecycle(GrpcStub):
 
             return return_code.value
         except SherlockLoadHarmonicProfileError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version()
     def load_shock_profile_dataset(
-        self, project: str, phase_name: str, event_name: str, file_path: str
+        self,
+        project: str,
+        phase_name: str,
+        event_name: str,
+        file_path: str,
+        csv_file_properties: ShockProfileDatasetCsvFileProperties = None,
     ) -> int:
         """Load shock profile dataset from a .csv or .dat file.
 
@@ -1981,7 +2108,9 @@ class Lifecycle(GrpcStub):
         event_name: str
             Name of the random vibe event.
         file_path: str
-            File path for thermal profile .dat or .csv file
+            File path for thermal profile .csv or .dat file
+        csv_file_properties: ShockProfileDatasetCsvFileProperties
+            Properties of the shock profile dataset CSV file, required if the file is in CSV format.
 
         Returns
         -------
@@ -1998,10 +2127,26 @@ class Lifecycle(GrpcStub):
             True,
             True,
             True,
-            project="Test",
+            project="Test Project",
             cca_name="Card"
         )
 
+        >>> sherlock.lifecycle.load_shock_profile_dataset(
+                project="Test Project",
+                phase_name="Phase 1",
+                event_name="Shock Event",
+                file_path="Test_Profile.csv",
+                csv_file_properties=ShockProfileDatasetCsvFileProperties(
+                    profile_name="Test Profile",
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="ms",
+                    load_column="Load",
+                    load_units="G"
+                )
+        )
         """
         try:
             if project == "":
@@ -2012,28 +2157,50 @@ class Lifecycle(GrpcStub):
                 raise SherlockLoadShockProfileDatasetError(message="Event name is invalid.")
             if file_path == "":
                 raise SherlockLoadShockProfileDatasetError(message="File path is invalid.")
+            if file_path.lower().endswith(".csv"):
+                if csv_file_properties is None:
+                    raise SherlockLoadShockProfileDatasetError(
+                        "CSV file properties must be provided for CSV shock profile dataset files."
+                    )
+            else:
+                if csv_file_properties is not None:
+                    raise SherlockLoadShockProfileDatasetError(
+                        "CSV file properties are not used for non-CSV shock profile dataset files."
+                    )
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
-            request = SherlockLifeCycleService_pb2.LoadShockProfilePulsesRequest(
+            request = SherlockLifeCycleService_pb2.LoadShockProfileDatasetRequest(
                 project=project,
                 phaseName=phase_name,
                 eventName=event_name,
                 filePath=file_path,
+                shockDsCsvProps=(
+                    csv_file_properties._convert_to_grpc() if csv_file_properties else None
+                ),
             )
             response = self.stub.loadShockProfileDataset(request)
             return_code = response.returnCode
             if return_code.value == -1:
-                raise SherlockLoadShockProfileDatasetError(return_code.message)
+                if return_code.message == "":
+                    raise SherlockLoadShockProfileDatasetError(error_array=response.errors)
+                raise SherlockLoadShockProfileDatasetError(message=return_code.message)
 
             return return_code.value
         except SherlockLoadShockProfileDatasetError as e:
-            LOG.error(str(e))
+            for error in e.str_itr():
+                LOG.error(error)
             raise e
 
     @require_version()
     def load_shock_profile_pulses(
-        self, project: str, phase_name: str, event_name: str, file_path: str
+        self,
+        project: str,
+        phase_name: str,
+        event_name: str,
+        file_path: str,
+        csv_file_properties: ShockProfilePulsesCsvFileProperties = None,
     ) -> int:
         """Load shock profile pulses from a .csv .dat file.
 
@@ -2048,7 +2215,9 @@ class Lifecycle(GrpcStub):
         event_name: str
             Name of the random vibe event.
         file_path: str
-            Path for thermal profile .dat or .csv file
+            Path for thermal profile .csv or .dat file
+        csv_file_properties: ShockProfilePulsesCsvFileProperties
+            Properties of the shock profile pulses CSV file, required if the file is in CSV format.
 
         Returns
         -------
@@ -2072,9 +2241,24 @@ class Lifecycle(GrpcStub):
                 project="Tutorial",
                 phase_name="Phase 1",
                 event_name="Shock Event",
-                file_path="Test_Profile.dat"
+                file_path="Test_Profile.csv",
+                csv_file_properties=ShockProfilePulsesCsvFileProperties(
+                    profile_name="Test Profile",
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    duration=25,
+                    duration_units="ms",
+                    sample_rate=0.1,
+                    sample_rate_units="ms",
+                    shape_column="Shape",
+                    load_column="Load",
+                    load_units="G",
+                    frequency_column="Frequency",
+                    frequency_units="HZ",
+                    decay_column="Decay",
+                )
         )
-
         """
         try:
             if project == "":
@@ -2085,6 +2269,17 @@ class Lifecycle(GrpcStub):
                 raise SherlockLoadShockProfilePulsesError(message="Event name is invalid.")
             if file_path == "":
                 raise SherlockLoadShockProfilePulsesError(message="File path is invalid.")
+            if file_path.lower().endswith(".csv"):
+                if csv_file_properties is None:
+                    raise SherlockLoadShockProfilePulsesError(
+                        "CSV file properties must be provided for CSV shock profile pulses files."
+                    )
+            else:
+                if csv_file_properties is not None:
+                    raise SherlockLoadShockProfilePulsesError(
+                        "CSV file properties are not used for non-CSV shock profile pulses files."
+                    )
+
             if not self._is_connection_up():
                 raise SherlockNoGrpcConnectionException()
 
@@ -2093,6 +2288,9 @@ class Lifecycle(GrpcStub):
                 phaseName=phase_name,
                 eventName=event_name,
                 filePath=file_path,
+                shockPulsesCsvProps=(
+                    csv_file_properties._convert_to_grpc() if csv_file_properties else None
+                ),
             )
             response = self.stub.loadShockProfilePulses(request)
             return_code = response.returnCode
@@ -2107,3 +2305,432 @@ class Lifecycle(GrpcStub):
             for error in e.str_itr():
                 LOG.error(error)
             raise e
+
+    @require_version(261)
+    def import_thermal_signal(
+        self, request: ImportThermalSignalRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Import a thermal signal to a life cycle phase.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: ImportThermalSignalRequest
+            Request object containing the information needed to import a thermal signal.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
+        >>> from ansys.sherlock.core.types.lifecycle_types import ThermalSignalFileProperties
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.import_thermal_signal(
+        >>> ImportThermalSignalRequest(
+        >>>         file_name="/path/to/thermal_signal_file.csv",
+        >>>         project="TestProject",
+        >>>         thermal_signal_file_properties=ThermalSignalFileProperties(
+        >>>             header_row_count=0,
+        >>>             numeric_format="English",
+        >>>             column_delimiter=",",
+        >>>             time_column="Time",
+        >>>             time_units="sec",
+        >>>             temperature_column="Temperature",
+        >>>             temperature_units="C"
+        >>>         ),
+        >>>         phase_name=phaseName,
+        >>>         time_removal= False,
+        >>>         load_range_percentage=0.25,
+        >>>         number_of_range_bins=0,
+        >>>         number_of_mean_bins=0,
+        >>>         number_of_dwell_bins=0,
+        >>>         temperature_range_filtering_limit=0.0,
+        >>>         time_filtering_limit=72.0,
+        >>>         time_filtering_limit_units="hr",
+        >>>         generated_cycles_label="Second Generated Cycles from Python",
+        >>>     )
+        >>> )
+        """
+        import_thermal_signal_request = request._convert_to_grpc()
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.importThermalSignal(import_thermal_signal_request)
+
+    @require_version(261)
+    def update_life_cycle(
+        self, request: UpdateLifeCycleRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update life cycle.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request: UpdateLifeCycleRequest
+            Request object containing the information needed to update the life cycle.
+            Reliability unit options are:
+            "Reliability (%)", "Prob. of Failure (%)", "MTBF (years)",
+            "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+
+            Service life unit options are:
+            "year","day","hr", "min","sec"
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
+        >>> from ansys.sherlock.core.types.lifecycle_types import ThermalSignalFileProperties
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>>
+        >>> project = "Tutorial Project"
+        >>> new_name = "new name"
+        >>> new_description = "new description"
+        >>> new_reliability_metric = 60
+        >>> new_reliability_metric_units = "year"
+        >>> new_service_life = 0
+        >>> new_service_life_units = "sec"
+        >>> result_archive_file_name = "filename"
+        >>>
+        >>> return_code = lifecycle.update_life_cycle(
+        >>>     UpdateLifeCycleRequest(
+        >>>         project=project,
+        >>>         new_name=new_name,
+        >>>         new_description=new_description,
+        >>>         new_reliability_metric=new_reliability_metric,
+        >>>         new_reliability_metric_units=new_reliability_metric_units,
+        >>>         new_service_life=new_service_life,
+        >>>         new_service_life_units=new_service_life_units,
+        >>>         result_archive_file_name=result_archive_file_name
+        >>>     )
+        >>> )
+        """
+        update_life_cycle_request = request._convert_to_grpc()
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateLifeCycle(update_life_cycle_request)
+
+    @require_version(261)
+    def save_harmonic_profile(
+        self, request: SaveHarmonicProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a harmonic life cycle event profile to a .csv or .dat file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveHarmonicProfileRequest
+            Request object containing the information needed to save a harmonic profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveHarmonicProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_harmonic_profile(
+        >>>     SaveHarmonicProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="DurabilityPhase",
+        >>>         event_name="Harmonic_100Hz",
+        >>>         triaxial_axis="x",
+        >>>         file_path="/tmp/Harmonic_100Hz.csv",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveHarmonicProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+        return response
+
+    @require_version(261)
+    def save_random_vibe_profile(
+        self, request: SaveRandomVibeProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a random vibe life cycle event profile to a .csv or .dat file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveRandomVibeProfileRequest
+            Request object containing the information needed to save a random vibe profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveRandomVibeProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_random_vibe_profile(
+        >>>     SaveRandomVibeProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="RandomVibePhase",
+        >>>         event_name="RV_Event_01",
+        >>>         file_path="/tmp/RV_Event_01.dat",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveRandomVibeProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+    @require_version(261)
+    def save_shock_pulse_profile(
+        self, request: SaveShockPulseProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a shock pulse life cycle event profile to a .csv or .dat file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveShockPulseProfileRequest
+            Request object containing the information needed to save a shock pulse profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveShockPulseProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_shock_pulse_profile(
+        >>>     SaveShockPulseProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ShockPhase",
+        >>>         event_name="Pulse_200g",
+        >>>         file_path="/tmp/Pulse_200g.csv",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveShockPulseProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+    @require_version(261)
+    def save_thermal_profile(
+        self, request: SaveThermalProfileRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a thermal life cycle event profile to a .csv or .dat file.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : SaveThermalProfileRequest
+            Request object containing the information needed to save a thermal profile.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveThermalProfileRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.save_thermal_profile(
+        >>>     SaveThermalProfileRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ThermalPhase",
+        >>>         event_name="ThermalCycle_A",
+        >>>         file_path="/tmp/ThermalCycle_A.dat",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveThermalProfile(grpc_request)
+
+        # Raise error if save failed
+        if response.value != 0:
+            raise SherlockSaveProfileError(response.message)
+
+    @require_version(261)
+    def delete_event(self, request: DeleteEventRequest) -> SherlockCommonService_pb2.ReturnCode:
+        """Delete a life cycle event from a given phase in a project.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : DeleteEventRequest
+            Request object containing project, phase name, and event name.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import DeleteEventRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.delete_event(
+        >>>     DeleteEventRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ThermalPhase",
+        >>>         event_name="ThermalCycle_A",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.deleteEvent(grpc_request)
+
+        if response.value != 0:
+            raise SherlockDeleteError(response.message)
+
+        return response
+
+    @require_version(261)
+    def delete_phase(self, request: DeletePhaseRequest) -> SherlockCommonService_pb2.ReturnCode:
+        """Delete a life cycle phase from a project.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : DeletePhaseRequest
+            Request object containing project and phase name.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import DeletePhaseRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.delete_phase(
+        >>>     DeletePhaseRequest(
+        >>>         project="MyProject",
+        >>>         phase_name="ThermalPhase",
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.deletePhase(grpc_request)
+
+        if response.value != 0:
+            raise SherlockDeleteError(response.message)
+
+        return response
+
+    @require_version(261)
+    def update_life_phase(
+        self, request: UpdateLifePhaseRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update a life cycle phase for a specific life cycle.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        request : UpdateLifePhaseRequest
+            Request object containing project, phase name, and one or more of the following optional
+            parameters: new phase name, new description, new duration, new duration units, new
+            number of cycles, new cycle type and results archive file name.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import UpdateLifePhaseRequest
+        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> sherlock = launch_sherlock()
+        >>> response = sherlock.lifecycle.update_life_phase(
+        >>>     UpdateLifePhaseRequest(
+        >>>         project="Tutorial Project",
+        >>>         phase_name="Thermal",
+        >>>         new_phase_name="Environmental",
+        >>>         new_num_of_cycles = 100,
+        >>>         new_cycle_type="PER DAY",
+        >>>         new_description="new description",
+        >>>         new_duration=24,
+        >>>         new_duration_units="hr",
+        >>>         result_archive_file_name="Tutorial Project Results 10_7_2025"
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.updateLifePhase(grpc_request)
+
+        if response.value != 0:
+            raise SherlockUpdateLifePhaseError(response.message)
+
+        return response

@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Parts Service."""
 
@@ -71,27 +71,6 @@ class AVLDescription:
     """DoNotChangeDescription"""
 
 
-class PartLocation:
-    """Part Location property values."""
-
-    def __init__(self, location):
-        """Initialize members from the location."""
-        self.x = location.x
-        """X coordinate"""
-        self.y = location.y
-        """Y coordinate"""
-        self.rotation = location.rotation
-        """Rotation (in degrees)"""
-        self.location_units = location.locationUnits
-        """Units for location coordinates"""
-        self.board_side = location.boardSide
-        """Board side - ``"TOP"`` or ``"BOTTOM"`` """
-        self.mirrored = location.mirrored
-        """Mirrored - ``True`` or ``False`` """
-        self.ref_des = location.refDes
-        """Reference designator"""
-
-
 class GetPartsListPropertiesRequest(BaseModel):
     """Request for getting properties of parts in the parts list of a CCA."""
 
@@ -162,3 +141,30 @@ class DeletePartsFromPartsListRequest(BaseModel):
             ccaName=self.cca_name,
             refDes=self.reference_designators,
         )
+
+
+class ImportPartsToAVLRequest(BaseModel):
+    """Request to import parts into the Approved Vendor List (AVL)."""
+
+    import_file: str
+    """Full file path to the AVL file."""
+
+    import_type: parts_service.AVLImportType.ValueType
+    """Import mode to use for AVL data."""
+
+    """Allow non-standard types like Protobuf enums in Pydantic models."""
+    model_config = {"arbitrary_types_allowed": True}
+
+    @field_validator("import_file")
+    @classmethod
+    def import_file_validator(cls, value: str, info):
+        """Validate that the import file path is not empty."""
+        if value.strip() == "":
+            raise ValueError(f"{info.field_name} cannot be empty.")
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> parts_service.ImportPartsToAVLRequest:
+        request = parts_service.ImportPartsToAVLRequest()
+        request.importFile = self.import_file
+        request.importType = self.import_type
+        return request

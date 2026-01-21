@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Stackup Service."""
 try:
@@ -20,3 +20,4 @@ class StackupProperties:
         self.ctez = properties.ctEz
         self.exy = properties.exy
         self.ez = properties.ez
+        self.improve_stackup_model_enabled = properties.improveStackupModelEnabled

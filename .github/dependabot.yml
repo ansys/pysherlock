@@ -8,9 +8,11 @@ updates:
       - "maintenance"
       - "dependencies"
     commit-message:
-      prefix: "MAINT"
+      prefix: "build"
     ignore:
       - dependency-name: "grpcio"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -19,4 +21,6 @@ updates:
     labels:
       - "maintenance"
     commit-message:
-      prefix: "MAINT"
+      prefix: "build"
+    cooldown:
+      default-days: 7

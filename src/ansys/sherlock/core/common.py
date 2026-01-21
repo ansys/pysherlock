@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module for running the gRPC APIs in the Sherlock Common service."""
 
@@ -145,10 +145,10 @@ class Common(GrpcStub):
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
 
-        request = SherlockCommonService_pb2.GetSoldersRequest()
-        response = self.stub.getSolders(request)
+        request = SherlockCommonService_pb2.SolderInfoRequest()
+        response = self.stub.getSolderInfo(request)
 
-        return response.solderName
+        return response.solders
 
     @require_version(251)
     def get_sherlock_info(self) -> str:
