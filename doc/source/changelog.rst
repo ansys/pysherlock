@@ -9,6 +9,22 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.3 <https://github.com/ansys/pysherlock/releases/tag/v0.8.3>`_ - January 21, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - feat: secure grpc channels
+          - `#703 <https://github.com/ansys/pysherlock/pull/703>`_
+
+
 `0.8.2 <https://github.com/ansys/pysherlock/releases/tag/v0.8.2>`_ - 2025-01-20
 ===============================================================================
 
