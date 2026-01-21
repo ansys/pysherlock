@@ -27,7 +27,7 @@ repos:
   hooks:
   - id: codespell
     args: ["--toml", "pyproject.toml", "--ignore-words",
-           "doc/styles/config/vocabularies/ANSYS/accept.txt"]
+           "doc/styles/config/vocabularies/ANSYS/accept.txt", --ignore-words=.codespellignorewords]
     additional_dependencies: ["tomli"]
 
 - repo: https://github.com/pycqa/pydocstyle
@@ -50,3 +50,15 @@ repos:
   rev: 0.29.1
   hooks:
     - id: check-github-workflows
+
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: v0.4.4
+  hooks:
+    - id: add-license-headers
+      files: '(src|examples|tests)/.*\.(py)'
+      args:
+      - --custom_template=mit_license.jinja2
+      - --start_year=2021
+    - id: tech-review
+      args:
+      - --product=sherlock
