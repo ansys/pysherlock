@@ -144,7 +144,10 @@ def launch_sherlock(
         sherlock_launch_cmd, _server_version = _get_sherlock_exe_path(
             year=year, release_number=release_number
         )
-        args = [sherlock_launch_cmd, "-grpcPort=" + str(port)]
+        args = [sherlock_launch_cmd]
+
+        if transport_mode not in ["insecure", "mtls", "uds", "wnua"]:
+            args.append(f"-grpcPort={port}")
 
         # Add gRPC options
         if transport_mode in ["insecure", "mtls", "wnua"]:
