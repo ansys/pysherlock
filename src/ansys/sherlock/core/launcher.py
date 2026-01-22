@@ -203,9 +203,6 @@ def launch(
         )
         args = [sherlock_launch_cmd]
 
-        if transport_mode not in ["insecure", "mtls", "uds", "wnua"]:
-            args.append(f"-grpcPort={port}")
-
         # Add gRPC options
         if transport_mode in ["insecure", "mtls", "wnua"]:
             args.append(f"-grpcHost={host}")
