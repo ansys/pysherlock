@@ -67,6 +67,10 @@ def launch_sherlock(
     sherlock_command_args: str = "",
     year: Optional[int] = None,
     release_number: Optional[int] = None,
+    transport_mode: str = "mtls",
+    certs_dir: str = None,
+    uds_dir: str = None,
+    uds_id: str = None,
 ) -> Sherlock:
     r"""Launch Sherlock and start gRPC on a given host and port. Wait up to two minutes to connect.
 
@@ -118,7 +122,16 @@ def launch_sherlock(
     )
 
     sherlock, install_dir = launch_and_connect(
-        host, port, single_project_path, sherlock_command_args, year, release_number
+        host,
+        port,
+        single_project_path,
+        sherlock_command_args,
+        year,
+        release_number,
+        transport_mode=transport_mode,
+        certs_dir=certs_dir,
+        uds_dir=uds_dir,
+        uds_id=uds_id,
     )
     return sherlock
 
