@@ -9,6 +9,22 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.4 <https://github.com/ansys/pysherlock/releases/tag/v0.8.4>`_ - January 23, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - fix: modify launcher.launch_sherlock() to not include the grpcPort argument when using UDS
+          - `#709 <https://github.com/ansys/pysherlock/pull/709>`_
+
+
 `0.8.3 <https://github.com/ansys/pysherlock/releases/tag/v0.8.3>`_ - January 21, 2026
 =====================================================================================
 
