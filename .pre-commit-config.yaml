@@ -35,6 +35,7 @@ repos:
     - pyproject.toml
     - --ignore-words
     - doc/styles/config/vocabularies/ANSYS/accept.txt
+    - --ignore-words=.codespellignorewords
     additional_dependencies:
     - tomli
 
@@ -64,8 +65,13 @@ repos:
   rev: v0.5.2
   hooks:
   - id: add-license-headers
+    files: '(src|examples|tests)/.*\.(py)'
     args:
+    - --custom_template=mit_license.jinja2
     - --start_year=2021
+  - id: tech-review
+    args:
+    - --product=sherlock
 
 # Automatic version increment on pre-push
 - repo: local
@@ -78,3 +84,4 @@ repos:
     always_run: true
     pass_filenames: false
     description: "Automatically increment version based on changes"
+

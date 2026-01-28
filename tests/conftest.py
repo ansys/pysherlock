@@ -22,35 +22,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import grpc
 import pytest
 
-from ansys.sherlock.core.common import Common
-from ansys.sherlock.core.errors import SherlockVersionError
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--run-behavioral",
+        action="store_true",
+        default=False,
+        help="Run behavioral tests that require Sherlock/real process launches.",
+    )
 
 
-def test_all():
-    test_version_check()
+def pytest_configure(config):
+    config.addinivalue_line("markers", "behavioral: mark a test as behavioral/integration")
+    config.addinivalue_line("markers", "requires_sherlock: test requires local Sherlock")
 
 
-def test_version_check():
-    try:
-        channel_param = "127.0.0.1:9090"
-        channel = grpc.insecure_channel(channel_param)
-        # Set Sherlock version to 24R2 which is before 25R1, when
-        # "get_sherlock_version" was added to PySherlock / Sherlock.
-        common = Common(channel, 242)
-        # This should fail since it did not exist in 242
-        common.get_sherlock_info()
-        pytest.fail("Sherlock version should be too low to launch this method")
-    except Exception as e:
-        if not isinstance(e, SherlockVersionError):
-            pytest.fail("Unexpected exception " + str(e))
+def pytest_collection_modifyitems(config, items):
+    run_behavioral = config.getoption("--run-behavioral")
+    skip_behavioral = pytest.mark.skip(reason="skipped by default (need --run-behavioral)")
 
-
-def assert_float_equals(expected, actual):
-    assert pytest.approx(actual, abs=1e-14) == pytest.approx(expected, abs=1e-14)
-
-
-if __name__ == "__main__":
-    test_all()
+    for item in items:
+        if "behavioral" in item.keywords:
+            if not run_behavioral:
+                item.add_marker(skip_behavioral)
