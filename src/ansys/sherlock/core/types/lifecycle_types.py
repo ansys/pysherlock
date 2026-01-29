@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 
 """Module containing types for the Lifecycle Service."""
