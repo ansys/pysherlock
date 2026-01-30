@@ -9,6 +9,48 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`1.0.0 <https://github.com/ansys/pysherlock/releases/tag/v1.0.0>`_ - January 30, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - feat: secure grpc channels
+          - `#704 <https://github.com/ansys/pysherlock/pull/704>`_
+
+        * - Feat: secure grpc channels
+          - `#717 <https://github.com/ansys/pysherlock/pull/717>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build: Bump actions/checkout from 6.0.1 to 6.0.2
+          - `#711 <https://github.com/ansys/pysherlock/pull/711>`_
+
+        * - Chore: remove unneeded files
+          - `#720 <https://github.com/ansys/pysherlock/pull/720>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Feat: secure grpc channels
+          - `#719 <https://github.com/ansys/pysherlock/pull/719>`_
+
+
 `1.0.0 <https://github.com/ansys/pysherlock/releases/tag/v1.0.0>`_ - January 23, 2026
 =====================================================================================
 
