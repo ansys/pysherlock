@@ -9,8 +9,23 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.9.2 <https://github.com/ansys/pysherlock/releases/tag/v0.9.2>`_ - January 23, 2026
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - fix: modify launcher.launch_sherlock() so it has default security set to mtls
+          - `#710 <https://github.com/ansys/pysherlock/pull/710>`_
+
+
+`0.9.1 <https://github.com/ansys/pysherlock/releases/tag/v0.9.1>`_ - January 21, 2026
 `0.8.4 <https://github.com/ansys/pysherlock/releases/tag/v0.8.4>`_ - January 23, 2026
-=====================================================================================
 
 .. tab-set::
 
