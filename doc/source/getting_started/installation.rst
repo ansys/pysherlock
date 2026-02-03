@@ -28,6 +28,8 @@ The following table shows the version of PySherlock to use for each release of S
 +------------+----------+
 | 0.9        | 2025 R2  |
 +------------+----------+
+| 1.0        | 2026 R1  |
++------------+----------+
 
 To install a specific version of PySherlock, use the following command, where the <version> is one
 of the values in the table preceding:
