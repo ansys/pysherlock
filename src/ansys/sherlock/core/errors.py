@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 # © 2024 ANSYS, Inc. All rights reserved
 
 """pysherlock specific errors."""
@@ -1309,3 +1309,15 @@ class SherlockUpdateLifePhaseError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Update life phase error: {self.message}"
+
+
+class SherlockSaveLifeCycleError(Exception):
+    """Contains the error raised when a life cycle cannot be saved."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Save life cycle error: {self.message}"
