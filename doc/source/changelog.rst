@@ -9,19 +9,9 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
-`0.9.1 <https://github.com/ansys/pysherlock/releases/tag/v0.9.1>`_ - January 21, 2026
+`0.9.2 <https://github.com/ansys/pysherlock/releases/tag/v0.9.2>`_ - January 23, 2026
 
 .. tab-set::
-
-
-  .. tab-item:: Added
-
-    .. list-table::
-        :header-rows: 0
-        :widths: auto
-
-        * - feat: secure grpc channels
-          - `#704 <https://github.com/ansys/pysherlock/pull/704>`_
 
 
   .. tab-item:: Documentation
@@ -30,12 +20,28 @@ This document contains the release notes for the project.
         :header-rows: 0
         :widths: auto
 
-        * - MAINT: set secret for GitHub action named "Release to GitHub"
-          - `#574 <https://github.com/ansys/pysherlock/pull/574>`_
+        * - fix: modify launcher.launch_sherlock() so it has default security set to mtls
+          - `#710 <https://github.com/ansys/pysherlock/pull/710>`_
 
 
-`0.9.0 <https://github.com/ansys/pysherlock/releases/tag/v0.9.0>`_ - May 22, 2025
+`0.9.1 <https://github.com/ansys/pysherlock/releases/tag/v0.9.1>`_ - January 21, 2026
+`0.8.4 <https://github.com/ansys/pysherlock/releases/tag/v0.8.4>`_ - January 23, 2026
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - fix: modify launcher.launch_sherlock() to not include the grpcPort argument when using UDS
+          - `#709 <https://github.com/ansys/pysherlock/pull/709>`_
+
+
 `0.8.3 <https://github.com/ansys/pysherlock/releases/tag/v0.8.3>`_ - January 21, 2026
+=====================================================================================
 
 .. tab-set::
 
