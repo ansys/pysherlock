@@ -215,23 +215,23 @@ class Parts(GrpcStub):
         --------
         >>> import SherlockCommonService_pb2
         >>> import SherlockPartsService_pb2
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-        >>> "ODB++ Tutorial.tgz",
-        >>> True,
-        >>> True,
-        >>> True,
-        >>> True,
-        >>> project="Test",
-        >>> cca_name="Card",
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
         >>> )
         >>> sherlock.parts.update_parts_list(
-        >>> "Test",
-        >>> "Card",
-        >>> "Sherlock Part Library",
-        >>> SherlockCommonService_pb2.MatchingMode.Both,
-        >>> SherlockPartsService_pb2.DuplicationMode.Error,
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "Sherlock Part Library",
+        >>>     SherlockCommonService_pb2.MatchingMode.Both,
+        >>>     SherlockPartsService_pb2.DuplicationMode.Error,
         >>> )
         """
         try:
@@ -315,25 +315,25 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.update_parts_locations(
-            "Test",
-            "Card",
-            [
-                ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
-                ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
-            ]
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     [
+        >>>         ("C1", "-2.7", "-1.65", "0", "in", "TOP", "False"),
+        >>>         ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
+        >>>     ]
+        >>> )
         """
         if self.PART_LOCATION_UNITS is None:
             self._init_location_units()
@@ -408,22 +408,22 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.update_parts_locations_by_file(
-            "Test",
-            "Card",
-            "Parts Locations.csv"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "Parts Locations.csv"
+        >>> )
         """
         try:
             if project == "":
@@ -492,23 +492,23 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.import_parts_list(
-            "Test",
-            "Card",
-            "Parts List.csv",
-            False
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "Parts List.csv",
+        >>>     False
+        >>> )
         """
         try:
             if project == "":
@@ -565,22 +565,22 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.export_parts_list(
-            "Test",
-            "Card",
-            "Parts List.csv"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "Parts List.csv"
+        >>> )
         """
         try:
             if project == "":
@@ -632,21 +632,21 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.enable_lead_modeling(
-            "Test",
-            "Card"
-        )
+        >>>     "Test",
+        >>>     "Card"
+        >>> )
         """
         try:
             if project == "":
@@ -695,8 +695,8 @@ class Parts(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.parts_types import (GetPartsListPropertiesRequest)
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>    "ODB++ Tutorial.tgz",
         >>>    True,
@@ -764,30 +764,30 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.parts_types import (
             AVLDescription,
             AVLPartNum,
             PartsListSearchDuplicationMode,
         )
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "C:\\Program Files\\ANSYS Inc\\v241\\sherlock\\tutorial\\ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "C:\\Program Files\\ANSYS Inc\\v241\\sherlock\\tutorial\\ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.update_parts_from_AVL(
-            project="Test",
-            cca_name="Card",
-            matching_mode="Both",
-            duplication=PartsListSearchDuplicationMode.FIRST,
-            avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
-            avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION
-        )
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>>     matching_mode="Both",
+        >>>     duplication=PartsListSearchDuplicationMode.FIRST,
+        >>>     avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
+        >>>     avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION
+        >>> )
         """
         try:
             if project == "":
@@ -862,26 +862,26 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.parts.update_parts_list_properties(
-                "Test",
-                "Card",
-                [
-                    {
-                        "reference_designators": ["C1"],
-                        "properties": [
-                            {"name": "partType", "value": "RESISTOR"}
-                        ]
-                    },
-                    {
-                        "reference_designators": ["C2"],
-                        "properties": [
-                            {"name": "locX", "value": "1"}
-                        ]
-                    }
-                ]
-            )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     [
+        >>>         {
+        >>>             "reference_designators": ["C1"],
+        >>>             "properties": [
+        >>>                 {"name": "partType", "value": "RESISTOR"}
+        >>>             ]
+        >>>         },
+        >>>         {
+        >>>             "reference_designators": ["C2"],
+        >>>             "properties": [
+        >>>                 {"name": "locX", "value": "1"}
+        >>>             ]
+        >>>         }
+        >>>     ]
+        >>> )
         """
         try:
             if project == "":
@@ -991,25 +991,25 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.parts.export_net_list(
-            "Test",
-            "Card",
-            "Net List.csv",
-            col_delimiter=TableDelimiter.TAB,
-            overwrite_existing=True,
-            utf8_enabled=True
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "Net List.csv",
+        >>>     col_delimiter=TableDelimiter.TAB,
+        >>>     overwrite_existing=True,
+        >>>     utf8_enabled=True
+        >>> )
         """
         try:
             if project == "":
@@ -1062,26 +1062,27 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.parts_types import (
-            UpdatePadPropertiesRequest,
-        )
-        >>> sherlock = launch_sherlock()
+        >>>     UpdatePadPropertiesRequest,
+        >>> )
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive(
-            project="Assembly Tutorial",
-            category="category",
-            archive_file=\
-                "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
-        )
+        >>>     project="Assembly Tutorial",
+        >>>     category="category",
+        >>>     archive_file=\
+        >>>         "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        >>> )
         >>> request = UpdatePadPropertiesRequest(
-            project="Assembly Tutorial",
-            cca_name="Main Board",
-            reference_designators=["U1", "R2", "C3"]
-        )
+        >>>     project="Assembly Tutorial",
+        >>>     cca_name="Main Board",
+        >>>     reference_designators=["U1", "R2", "C3"]
+        >>> )
         >>> response = sherlock.parts.update_pad_properties(request)
         >>> for res in response:
-                print(f"Return code: value={res.returnCode.value}, message={res.returnCode.message},
-                reference_designators={res.reference_designators}")
+        >>>     print(f"Return code: value={res.returnCode.value},\
+        >>>     message={res.returnCode.message},\
+        >>>     reference_designators={res.reference_designators}")
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1110,27 +1111,27 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.parts_types import (
-                DeletePartsFromPartsListRequest,
-            )
-        >>> sherlock = launch_sherlock()
+        >>>     DeletePartsFromPartsListRequest,
+        >>> )
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive(
-                project="Assembly Tutorial",
-                category="category",
-                archive_file=\
-                    "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
-            )
+        >>>     project="Assembly Tutorial",
+        >>>     category="category",
+        >>>     archive_file=\
+        >>>         "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        >>> )
         >>> request = DeletePartsFromPartsListRequest(
-                project="Assembly Tutorial",
-                cca_name="Main Board",
-                reference_designators=["U1", "R2", "C3"],
-            )
+        >>>     project="Assembly Tutorial",
+        >>>     cca_name="Main Board",
+        >>>     reference_designators=["U1", "R2", "C3"],
+        >>> )
         >>> response = sherlock.parts.delete_parts_from_parts_list(request)
         >>> for res in response:
-                print(f"Return code: value={res.returnCode.value},
-                message={res.returnCode.message}, "
-                    f"reference designator={res.reference_designators}")
+        >>>     print(f"Return code: value={res.returnCode.value},\
+        >>>     message={res.returnCode.message},\
+        >>>     reference designator={res.reference_designators}")
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1162,9 +1163,8 @@ class Parts(GrpcStub):
         --------
         >>> from ansys.sherlock.core.types.part_types import ImportPartsToAVLRequest
         >>> from ansys.api.sherlock.v0 import SherlockPartsService_pb2
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>>
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> return_code = sherlock.project.import_parts_to_avl(
         >>>     ImportPartsToAVLRequest(
         >>>         import_file="C:/path/to/AVL_parts_file.xls",
