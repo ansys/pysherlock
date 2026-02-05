@@ -101,8 +101,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.delete_project("Test Project")
         """
         try:
@@ -182,8 +182,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
                                 True, True,
                                 ims_stackup=True,
@@ -278,8 +278,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
                                 project="Tutorial",
                                 cca_name="Card",
@@ -351,8 +351,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
                                 True, True,
                                 project="Tutorial",
@@ -426,8 +426,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> ccas = sherlock.project.list_ccas("AssemblyTutorial", ["Main Board"])
         """
         try:
@@ -500,8 +500,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
             "ODB++ Tutorial.tgz",
             True,
@@ -638,7 +638,6 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.project_types import (
             BoardBounds,
             ImageBounds,
@@ -648,7 +647,8 @@ class Project(GrpcStub):
             StrainMapsFileType,
             StrainMapLegendOrientation,
         )
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.add_strain_maps(
             "Tutorial Project",
                 [
@@ -895,8 +895,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> strain_maps = sherlock.project.list_strain_maps(
             "AssemblyTutorial",
             ["Main Board","Power Module"]
@@ -960,8 +960,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> code = sherlock.project.add_project(
             "project name example",
             "project category example",
@@ -1005,8 +1005,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> thermal_maps = sherlock.project.list_thermal_maps(
             "AssemblyTutorial",
             ["Main Board","Power Module"]
@@ -1097,7 +1097,6 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.project_types import (
             BoardBounds,
             ImageBounds,
@@ -1107,7 +1106,8 @@ class Project(GrpcStub):
             ThermalBoardSide,
             ThermalMapsFileType,
         )
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> thermal_map_properties = ImageFile(board_bounds=BoardBounds([
             (1.0, 2.0),
             (3.0, 4.0),
@@ -1431,7 +1431,6 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.project_types import (
             BoardBounds,
             ImageBounds,
@@ -1441,7 +1440,8 @@ class Project(GrpcStub):
             ThermalBoardSide,
             ThermalMapsFileType,
         )
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> thermal_map_properties = ImageFile(board_bounds=BoardBounds([
             (1.0, 2.0),
             (3.0, 4.0),
@@ -1742,8 +1742,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive("Tutorial Project", "Demos",
         "Tutorial Project.zip")
         """
@@ -1802,8 +1802,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive_single_mode("Tutorial Project",
         "Demos",
         "Tutorial Project.zip",
@@ -1903,8 +1903,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.export_project("Tutorial Project",
         True,
         True,
@@ -1995,8 +1995,8 @@ class Project(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
             "ODB++ Tutorial.tgz",
             True,
@@ -2135,8 +2135,8 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import ImportGDSIIRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> return_code = sherlock.project.import_GDSII_file(
         >>>     ImportGDSIIRequest(
         >>>         gdsii_file="path/to/design.gds",
@@ -2181,8 +2181,8 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core.types.project_types import CsvExcelOutlineFile
         >>> from ansys.sherlock.core.types.project_types import OutlineFile
         >>> from ansys.sherlock.core.types.project_types import OutlineFileType
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> responses = sherlock.project.add_outline_file(
         >>>     AddOutlineFileRequest(
         >>>         project="TestProject",
@@ -2239,10 +2239,10 @@ class Project(GrpcStub):
         >>>     CopperImageFile,
         >>> )
         >>> from ansys.api.sherlock.v0 import SherlockProjectService_pb2
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> project_service = SherlockProjectService_pb2
-        >>> sherlock = launch_sherlock()
         >>> return_codes = sherlock.project.import_copper_files(
         >>>     ImportCopperFilesRequest(
         >>>         project="TestProject",

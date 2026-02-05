@@ -16,4 +16,4 @@ page on the Ansys website.
     :maxdepth: 1
 
     installation
-    launch_sherlock
+    launch_and_connect
