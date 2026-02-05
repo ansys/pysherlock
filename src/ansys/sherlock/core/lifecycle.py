@@ -381,24 +381,24 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "sec",
-            4.0,
-            "COUNT"
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "COUNT"
+        >>> )
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -506,36 +506,36 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "sec",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_random_vibe_event(
-            "Test",
-            "Example",
-            "Event1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            "45,45",
-            "Uniaxial",
-            "2,4,5"
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "PER MIN",
+        >>>     "45,45",
+        >>>     "Uniaxial",
+        >>>     "2,4,5"
+        >>> )
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -653,36 +653,36 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "sec",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_random_vibe_event(
-            "Test",
-            "Example",
-            "Event1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            "45,45",
-            "Uniaxial",
-            "2,4,5",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "PER MIN",
+        >>>     "45,45",
+        >>>     "Uniaxial",
+        >>>     "2,4,5",
+        >>> )
         >>> sherlock.lifecycle.add_random_vibe_profiles(
             "Test",
              [(
@@ -823,32 +823,32 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "year",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "year",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_thermal_event(
-            "Test",
-            "Example",
-            "Event1",
-            4.0,
-            "PER YEAR",
-            "STORAGE"
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     4.0,
+        >>>     "PER YEAR",
+        >>>     "STORAGE"
+        >>> )
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -950,47 +950,47 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "year",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "year",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_thermal_event(
-            "Test",
-            "Example",
-            "Event1",
-            4.0,
-            "PER YEAR",
-            "STORAGE",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     4.0,
+        >>>     "PER YEAR",
+        >>>     "STORAGE",
+        >>> )
         >>> sherlock.lifecycle.add_thermal_profiles(
-            "Test",
-            [(
-                "Example",
-                "Event1",
-                "Profile1",
-                "sec",
-                "F",
-                [
-                    ("Steady1", "HOLD", 40, 40),
-                    ("Steady", "HOLD", 20, 20),
-                    ("Back", "RAMP", 20, 40),
-                ],
-            )]
-        )
+        >>>     "Test",
+        >>>     [(
+        >>>         "Example",
+        >>>         "Event1",
+        >>>         "Profile1",
+        >>>         "sec",
+        >>>         "F",
+        >>>         [
+        >>>             ("Steady1", "HOLD", 40, 40),
+        >>>             ("Steady", "HOLD", 20, 20),
+        >>>             ("Back", "RAMP", 20, 40),
+        >>>         ],
+        >>>     )]
+        >>> )
         """
         try:
             if project == "":
@@ -1128,37 +1128,37 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test"
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test"
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "year",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "year",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_harmonic_event(
-            "Test",
-            "Example",
-            "Event1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            5,
-            "45,45",
-            "Uniaxial",
-            "2,4,5"
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "PER MIN",
+        >>>     5,
+        >>>     "45,45",
+        >>>     "Uniaxial",
+        >>>     "2,4,5"
+        >>> )
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -1285,52 +1285,52 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "sec",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_harmonic_event(
-            "Test",
-            "Example",
-            "Event1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            5,
-            "45,45",
-            "Uniaxial",
-            "2,4,5",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "PER MIN",
+        >>>     5,
+        >>>     "45,45",
+        >>>     "Uniaxial",
+        >>>     "2,4,5",
+        >>> )
         >>> sherlock.lifecycle.add_harmonic_vibe_profiles(
-            "Test",
-            [(
-                "Example",
-                "Event1",
-                "Profile1",
-                "HZ",
-                "G",
-                [
-                    (10, 1),
-                    (1000, 1),
-                ],
-                "",
-            )]
-        )
+        >>>     "Test",
+        >>>     [(
+        >>>         "Example",
+        >>>         "Event1",
+        >>>         "Profile1",
+        >>>         "HZ",
+        >>>         "G",
+        >>>         [
+        >>>             (10, 1),
+        >>>             (1000, 1),
+        >>>         ],
+        >>>         "",
+        >>>     )]
+        >>> )
         """
         if self.LOAD_UNIT_LIST is None:
             self._init_load_units()
@@ -1470,35 +1470,35 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "sec",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_shock_event(
-            "Test",
-            "Example",
-            "Event1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            "45,45",
-            "2,4,5"
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "PER MIN",
+        >>>     "45,45",
+        >>>     "2,4,5"
+        >>> )
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -1630,48 +1630,48 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>> )
         >>> sherlock.lifecycle.create_life_phase(
-            "Test",
-            "Example",
-            1.5,
-            "sec",
-            4.0,
-            "COUNT",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "COUNT",
+        >>> )
         >>> sherlock.lifecycle.add_shock_event(
-            "Test",
-            "Example",
-            "Event1",
-            1.5,
-            "sec",
-            4.0,
-            "PER MIN",
-            "45,45",
-            "2,4,5",
-        )
+        >>>     "Test",
+        >>>     "Example",
+        >>>     "Event1",
+        >>>     1.5,
+        >>>     "sec",
+        >>>     4.0,
+        >>>     "PER MIN",
+        >>>     "45,45",
+        >>>     "2,4,5",
+        >>> )
         >>> sherlock.lifecycle.add_shock_profiles(
-            "Test",
-            [(
-                "Example",
-                "Event1",
-                "Profile1",
-                10.0, "ms",
-                0.1, "ms",
-                "G",
-                "HZ",
-                [("HalfSine", 100.0, 100.0, 0)],
-            )]
-        )
+        >>>     "Test",
+        >>>     [(
+        >>>         "Example",
+        >>>         "Event1",
+        >>>         "Profile1",
+        >>>         10.0, "ms",
+        >>>         0.1, "ms",
+        >>>         "G",
+        >>>         "HZ",
+        >>>         [("HalfSine", 100.0, 100.0, 0)],
+        >>>     )]
+        >>> )
         """
         if self.LOAD_UNIT_LIST is None:
             self._init_load_units()
@@ -1811,34 +1811,34 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test Project",
-            cca_name="Card"
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test Project",
+        >>>     cca_name="Card"
+        >>> )
 
         >>> sherlock.lifecycle.load_random_vibe_profile(
-                project="Test Project",
-                phase_name="Phase 1",
-                event_name="Random Event",
-                file_path="TestProfile.csv",
-                csv_file_properties=RandomVibeProfileCsvFileProperties(
-                    profile_name="Test Profile",
-                    header_row_count=0,
-                    numeric_format="English",
-                    column_delimiter=",",
-                    frequency_column="Frequency",
-                    frequency_units="HZ",
-                    amplitude_column="Amplitude",
-                    amplitude_units="G2/Hz"
-                )
-        )
+        >>>     project="Test Project",
+        >>>     phase_name="Phase 1",
+        >>>     event_name="Random Event",
+        >>>     file_path="TestProfile.csv",
+        >>>     csv_file_properties=RandomVibeProfileCsvFileProperties(
+        >>>         profile_name="Test Profile",
+        >>>         header_row_count=0,
+        >>>         numeric_format="English",
+        >>>         column_delimiter=",",
+        >>>         frequency_column="Frequency",
+        >>>         frequency_units="HZ",
+        >>>         amplitude_column="Amplitude",
+        >>>         amplitude_units="G2/Hz"
+        >>>     )
+        >>> )
         """
         try:
             if project == "":
@@ -1916,35 +1916,35 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test Project",
-            cca_name="Card",
-        )
-         >>> sherlock.lifecycle.load_thermal_profile(
-                project="Test Project",
-                phase_name="Phase 1",
-                event_name="Thermal Event",
-                file_path="Tutorial_Profile.csv",
-                csv_file_properties=ThermalProfileCsvFileProperties(
-                    profile_name="Test Profile",
-                    header_row_count=0,
-                    numeric_format="English",
-                    column_delimiter=",",
-                    step_column="Step",
-                    type_column="Type",
-                    time_column="Time (min)",
-                    time_units="min",
-                    temp_column="Temp (C)",
-                    temp_units="C"
-                )
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test Project",
+        >>>     cca_name="Card",
+        >>> )
+        >>> sherlock.lifecycle.load_thermal_profile(
+        >>>     project="Test Project",
+        >>>     phase_name="Phase 1",
+        >>>     event_name="Thermal Event",
+        >>>     file_path="Tutorial_Profile.csv",
+        >>>     csv_file_properties=ThermalProfileCsvFileProperties(
+        >>>         profile_name="Test Profile",
+        >>>         header_row_count=0,
+        >>>         numeric_format="English",
+        >>>         column_delimiter=",",
+        >>>         step_column="Step",
+        >>>         type_column="Type",
+        >>>         time_column="Time (min)",
+        >>>         time_units="min",
+        >>>         temp_column="Temp (C)",
+        >>>         temp_units="C"
+        >>>     )
+        >>> )
         """
         try:
             if project == "":
@@ -2030,35 +2030,35 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test Project",
-            cca_name="Card"
-        )
-
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test Project",
+        >>>     cca_name="Card"
+        >>> )
+        >>>
         >>> sherlock.lifecycle.load_harmonic_profile(
-                project="Test Project",
-                phase_name="Phase 1",
-                event_name="Harmonic Event",
-                file_path="Test_Profile.csv",
-                triaxial_axis="x",
-                csv_file_properties=HarmonicVibeProfileCsvFileProperties(
-                    profile_name="Test Profile",
-                    header_row_count=0,
-                    numeric_format="English",
-                    column_delimiter=",",
-                    frequency_column="Frequency",
-                    frequency_units="HZ",
-                    load_column="Load",
-                    load_units="G"
-                )
-        )
+        >>>     project="Test Project",
+        >>>     phase_name="Phase 1",
+        >>>     event_name="Harmonic Event",
+        >>>     file_path="Test_Profile.csv",
+        >>>     triaxial_axis="x",
+        >>>     csv_file_properties=HarmonicVibeProfileCsvFileProperties(
+        >>>         profile_name="Test Profile",
+        >>>         header_row_count=0,
+        >>>         numeric_format="English",
+        >>>         column_delimiter=",",
+        >>>         frequency_column="Frequency",
+        >>>         frequency_units="HZ",
+        >>>         load_column="Load",
+        >>>         load_units="G"
+        >>>     )
+        >>> )
         """
         try:
             if project == "":
@@ -2141,34 +2141,34 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test Project",
-            cca_name="Card"
-        )
-
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test Project",
+        >>>     cca_name="Card"
+        >>> )
+        >>>
         >>> sherlock.lifecycle.load_shock_profile_dataset(
-                project="Test Project",
-                phase_name="Phase 1",
-                event_name="Shock Event",
-                file_path="Test_Profile.csv",
-                csv_file_properties=ShockProfileDatasetCsvFileProperties(
-                    profile_name="Test Profile",
-                    header_row_count=0,
-                    numeric_format="English",
-                    column_delimiter=",",
-                    time_column="Time",
-                    time_units="ms",
-                    load_column="Load",
-                    load_units="G"
-                )
-        )
+        >>>     project="Test Project",
+        >>>     phase_name="Phase 1",
+        >>>     event_name="Shock Event",
+        >>>     file_path="Test_Profile.csv",
+        >>>     csv_file_properties=ShockProfileDatasetCsvFileProperties(
+        >>>         profile_name="Test Profile",
+        >>>         header_row_count=0,
+        >>>         numeric_format="English",
+        >>>         column_delimiter=",",
+        >>>         time_column="Time",
+        >>>         time_units="ms",
+        >>>         load_column="Load",
+        >>>         load_units="G"
+        >>>     )
+        >>> )
         """
         try:
             if project == "":
@@ -2248,39 +2248,39 @@ class Lifecycle(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.lifecycle.load_shock_profile_pulses(
-                project="Tutorial",
-                phase_name="Phase 1",
-                event_name="Shock Event",
-                file_path="Test_Profile.csv",
-                csv_file_properties=ShockProfilePulsesCsvFileProperties(
-                    profile_name="Test Profile",
-                    header_row_count=0,
-                    numeric_format="English",
-                    column_delimiter=",",
-                    duration=25,
-                    duration_units="ms",
-                    sample_rate=0.1,
-                    sample_rate_units="ms",
-                    shape_column="Shape",
-                    load_column="Load",
-                    load_units="G",
-                    frequency_column="Frequency",
-                    frequency_units="HZ",
-                    decay_column="Decay",
-                )
-        )
+        >>>     project="Tutorial",
+        >>>     phase_name="Phase 1",
+        >>>     event_name="Shock Event",
+        >>>     file_path="Test_Profile.csv",
+        >>>     csv_file_properties=ShockProfilePulsesCsvFileProperties(
+        >>>         profile_name="Test Profile",
+        >>>         header_row_count=0,
+        >>>         numeric_format="English",
+        >>>         column_delimiter=",",
+        >>>         duration=25,
+        >>>         duration_units="ms",
+        >>>         sample_rate=0.1,
+        >>>         sample_rate_units="ms",
+        >>>         shape_column="Shape",
+        >>>         load_column="Load",
+        >>>         load_units="G",
+        >>>         frequency_column="Frequency",
+        >>>         frequency_units="HZ",
+        >>>         decay_column="Decay",
+        >>>     )
+        >>> )
         """
         try:
             if project == "":
@@ -2350,10 +2350,10 @@ class Lifecycle(GrpcStub):
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
         >>> from ansys.sherlock.core.types.lifecycle_types import ThermalSignalFileProperties
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.import_thermal_signal(
-        >>> ImportThermalSignalRequest(
+        >>>     ImportThermalSignalRequest(
         >>>         file_name="/path/to/thermal_signal_file.csv",
         >>>         project="TestProject",
         >>>         thermal_signal_file_properties=ThermalSignalFileProperties(
@@ -2412,8 +2412,8 @@ class Lifecycle(GrpcStub):
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import ImportThermalSignalRequest
         >>> from ansys.sherlock.core.types.lifecycle_types import ThermalSignalFileProperties
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> project = "Tutorial Project"
         >>> new_name = "new name"
@@ -2464,8 +2464,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import SaveHarmonicProfileRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.save_harmonic_profile(
         >>>     SaveHarmonicProfileRequest(
         >>>         project="MyProject",
@@ -2511,8 +2511,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import SaveRandomVibeProfileRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.save_random_vibe_profile(
         >>>     SaveRandomVibeProfileRequest(
         >>>         project="MyProject",
@@ -2555,8 +2555,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import SaveShockPulseProfileRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.save_shock_pulse_profile(
         >>>     SaveShockPulseProfileRequest(
         >>>         project="MyProject",
@@ -2599,8 +2599,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import SaveThermalProfileRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.save_thermal_profile(
         >>>     SaveThermalProfileRequest(
         >>>         project="MyProject",
@@ -2641,8 +2641,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import DeleteEventRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.delete_event(
         >>>     DeleteEventRequest(
         >>>         project="MyProject",
@@ -2683,8 +2683,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import DeletePhaseRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.delete_phase(
         >>>     DeletePhaseRequest(
         >>>         project="MyProject",
@@ -2728,8 +2728,8 @@ class Lifecycle(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.lifecycle_types import UpdateLifePhaseRequest
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.update_life_phase(
         >>>     UpdateLifePhaseRequest(
         >>>         project="Tutorial Project",

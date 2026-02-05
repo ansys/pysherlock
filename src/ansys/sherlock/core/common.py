@@ -160,8 +160,8 @@ class Common(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.common.list_solder_materials()
         """
         if not self._is_connection_up():
@@ -184,8 +184,8 @@ class Common(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> release_version = sherlock.common.get_sherlock_info().releaseVersion
         >>> default_dir = sherlock.common.get_sherlock_info().defaultProjectDir
         >>> is_single_project = sherlock.common.get_sherlock_info().isSingleProjectMode
@@ -209,8 +209,8 @@ class Common(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> solder_data = sherlock.get_solder_info()
         """
         if not self._is_connection_up():
