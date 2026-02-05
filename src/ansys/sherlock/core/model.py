@@ -157,14 +157,14 @@ class Model(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
-        >>> sherlock = launcher.launch_sherlock()
         >>> sherlock.model.export_trace_reinforcement_model(
             'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
             True, False, False)
 
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
-        >>> sherlock = launcher.launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.export_trace_reinforcement_model(
             'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
             True, False, False, "mm", 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
@@ -299,9 +299,9 @@ class Model(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
-        >>> sherlock = launcher.launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.generate_trace_model(
             'Tutorial Project', 'Main Board', 0.05, 'mm'
             0.0, 'mm2', 0.0, 'mm2')
@@ -375,9 +375,9 @@ class Model(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
-        >>> sherlock = launcher.launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.export_aedb(
             'Tutorial Project', 'Main Board', 'c:\Temp\export.aedb',
             True, False)
@@ -567,10 +567,10 @@ class Model(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core.types.analysis_types import ElementOrder
         >>> from ansys.api.sherlock.v0 import SherlockModelService_pb2
-        >>> sherlock = launcher.launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> copper_1_layer = sherlock.model.createExportTraceCopperLayerParams(
                 "Tutorial Project",
                 "Main Board",
@@ -751,40 +751,40 @@ class Model(GrpcStub):
         Examples
         --------
         >>> from ansys.api.sherlock.v0.SherlockModelService_pb2 import PcbMaterialElasticity
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.common_types import (
             Measurement,
         )
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.export_FEA_model(
-                project="Test Project",
-                cca_name="Main Board",
-                export_file="C:/Temp/export.wbjn",
-                analysis="NaturalFreq",
-                drill_hole_parameters=[
-                    {
-                        "drill_hole_modeling": "ENABLED",
-                        "min_hole_diameter": Measurement(value=0.5, unit="mm"),
-                        "max_edge_length": Measurement(value=1.0, unit="mm")
-                    }
-                ],
-                detect_lead_modeling="ENABLED",
-                lead_model_parameters=[
-                    {
-                        "lead_modeling": "ENABLED",
-                        "lead_element_order": "First Order (Linear)",
-                        "max_mesh_size": Measurement(value=0.5, unit="mm"),
-                        "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
-                        "thicknessCount": 3,
-                        "aspectRatio": 2
-                    }
-                ],
-                display_model=True,
-                clear_FEA_database=True,
-                use_FEA_model_id=True,
-                coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic
-            )
+        >>>     project="Test Project",
+        >>>     cca_name="Main Board",
+        >>>     export_file="C:/Temp/export.wbjn",
+        >>>     analysis="NaturalFreq",
+        >>>     drill_hole_parameters=[
+        >>>         {
+        >>>             "drill_hole_modeling": "ENABLED",
+        >>>             "min_hole_diameter": Measurement(value=0.5, unit="mm"),
+        >>>             "max_edge_length": Measurement(value=1.0, unit="mm")
+        >>>         }
+        >>>     ],
+        >>>     detect_lead_modeling="ENABLED",
+        >>>     lead_model_parameters=[
+        >>>         {
+        >>>             "lead_modeling": "ENABLED",
+        >>>             "lead_element_order": "First Order (Linear)",
+        >>>             "max_mesh_size": Measurement(value=0.5, unit="mm"),
+        >>>             "vertical_mesh_size": Measurement(value=0.1, unit="mm"),
+        >>>             "thicknessCount": 3,
+        >>>             "aspectRatio": 2
+        >>>         }
+        >>>     ],
+        >>>     display_model=True,
+        >>>     clear_FEA_database=True,
+        >>>     use_FEA_model_id=True,
+        >>>     coordinate_units="mm",
+        >>>     pcb_material_elasticity=PcbMaterialElasticity.Isotropic
+        >>> )
         """
         try:
             if not project:
