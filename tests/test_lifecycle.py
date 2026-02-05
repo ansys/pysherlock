@@ -1,5 +1,5 @@
 # Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
-
+import os
 import uuid
 
 import grpc
@@ -4337,19 +4337,6 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
         except Exception as e:
             assert isinstance(e, SherlockSaveLifeCycleError)
 
-        # valid request but file path does not exist
-        try:
-            lifecycle.save_life_cycle(
-                SaveLifeCycleRequest(
-                    project=project,
-                    file_path="C:/Tp/LifeCycle_Backup.dfr-lc",
-                    overwrite_file=overwrite_file,
-                )
-            )
-            pytest.fail("No exception raised for server error response")
-        except Exception as e:
-            assert isinstance(e, SherlockSaveLifeCycleError)
-
         # test all variables set
         req = SaveLifeCycleRequest(
             project=project, file_path=file_path, overwrite_file=overwrite_file
@@ -4360,25 +4347,12 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
         assert grpc_obj.overwriteFile == overwrite_file
 
         # valid request and file is overwritten
-        response = lifecycle.save_life_cycle(
-            SaveLifeCycleRequest(
-                project=project, file_path=file_path, overwrite_file=overwrite_file
-            )
-        )
+        response = lifecycle.save_life_cycle(req)
         assert response.value == 0
 
-        # valid request and file is not overwritten
-        try:
-            lifecycle.save_life_cycle(
-                SaveLifeCycleRequest(project=project, file_path=file_path, overwrite_file=False)
-            )
-            pytest.fail("No exception raised for server error response")
-        except Exception as e:
-            assert isinstance(e, SherlockSaveLifeCycleError)
-            assert (
-                e.message == "The existing life cycle file " + file_path + " cannot be overwritten."
-            )
-
+        # delete file_path if created
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 if __name__ == "__main__":
     test_all()

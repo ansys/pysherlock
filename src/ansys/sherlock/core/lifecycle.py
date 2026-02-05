@@ -2757,8 +2757,8 @@ class Lifecycle(GrpcStub):
         Examples
             --------
             >>> from ansys.sherlock.core.types.lifecycle_types import SaveLifeCycleRequest
-            >>> from ansys.sherlock.core.launcher import launch_sherlock
-            >>> sherlock = launch_and_connect()
+            >>> from ansys.sherlock.core import launcher
+            >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
             >>> response = sherlock.lifecycle.save_life_cycle(
             >>>     SaveLifeCycleRequestRequest(
             >>>         project="Tutorial Project",
