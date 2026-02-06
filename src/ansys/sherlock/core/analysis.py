@@ -173,28 +173,28 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>    "ODB++ Tutorial.tgz",
+        >>>    True,
+        >>>    True,
+        >>>    True,
+        >>>    True,
+        >>>    project="Test",
+        >>>    cca_name="Card",
+        >>> )
         >>> sherlock.analysis.run_analysis(
-            "Test",
-            "Card",
-            [
-                (RunAnalysisRequestAnalysisType.NATURAL_FREQ,
-                [
-                    ("Phase 1", ["Harmonic Event"])
-                ]
-                )
-            ]
-        )
+        >>>    "Test",
+        >>>    "Card",
+        >>>    [
+        >>>        (RunAnalysisRequestAnalysisType.NATURAL_FREQ,
+        >>>        [
+        >>>            ("Phase 1", ["Harmonic Event"])
+        >>>        ]
+        >>>        )
+        >>>    ]
+        >>> )
         """
         try:
             if project == "":
@@ -252,17 +252,17 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
@@ -344,40 +344,39 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_harmonic_vibe_props(
-            "Test",
-            [{
-                "cca_name": "Card",
-                "model_source": ModelSource.GENERATED,
-                "harmonic_vibe_count": 2,
-                "harmonic_vibe_damping": "0.01, 0.05",
-                "part_validation_enabled": False,
-                "require_material_assignment_enabled": False,
-                "analysis_temp": 20,
-                "analysis_temp_units": "C",
-                "force_model_rebuild": "AUTO",
-                "filter_by_event_frequency": False,
-                "natural_freq_min": 10,
-                "natural_freq_min_units": "Hz",
-                "natural_freq_max": 1000,
-                "natural_freq_max_units": "KHz",
-                "reuse_modal_analysis": True,
-                "strain_map_natural_freq": 100.13,
-            },
-            ]
-        )
-
+        >>> "Test",
+        >>> [{
+        >>>     "cca_name": "Card",
+        >>>     "model_source": ModelSource.GENERATED,
+        >>>     "harmonic_vibe_count": 2,
+        >>>     "harmonic_vibe_damping": "0.01, 0.05",
+        >>>     "part_validation_enabled": False,
+        >>>     "require_material_assignment_enabled": False,
+        >>>     "analysis_temp": 20,
+        >>>     "analysis_temp_units": "C",
+        >>>     "force_model_rebuild": "AUTO",
+        >>>     "filter_by_event_frequency": False,
+        >>>     "natural_freq_min": 10,
+        >>>     "natural_freq_min_units": "Hz",
+        >>>     "natural_freq_max": 1000,
+        >>>     "natural_freq_max_units": "KHz",
+        >>>     "reuse_modal_analysis": True,
+        >>>     "strain_map_natural_freq": 100.13,
+        >>> },
+        >>> ]
+        >>> )
         """
         try:
             if project == "":
@@ -584,8 +583,8 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.analysis.get_ict_analysis_input_fields()
         """
         if not self._is_connection_up():
@@ -641,30 +640,29 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_ict_analysis_props(
-            "Test",
-            [{
-                "cca_name": "Card",
-                "ict_application_time": 2,
-                "ict_application_time_units": "sec",
-                "ict_number_of_events": 10,
-                "part_validation_enabled": False,
-                "require_material_assignment_enabled": False,
-            },
-            ]
-        )
-
+        >>> "Test",
+        >>> [{
+        >>>     "cca_name": "Card",
+        >>>     "ict_application_time": 2,
+        >>>     "ict_application_time_units": "sec",
+        >>>     "ict_number_of_events": 10,
+        >>>     "part_validation_enabled": False,
+        >>>     "require_material_assignment_enabled": False,
+        >>> },
+        >>> ]
+        >>> )
         """
         try:
             if project == "":
@@ -770,17 +768,17 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
         """
         if not self._is_connection_up():
@@ -854,37 +852,37 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_mechanical_shock_props(
-            "Test",
-            [{
-                "cca_name": "Card",
-                "model_source": ModelSource.GENERATED,
-                "shock_result_count": 2,
-                "critical_shock_strain": 10,
-                "critical_shock_strain_units": "strain",
-                "part_validation_enabled": True,
-                "require_material_assignment_enabled": False,
-                "force_model_rebuild": "AUTO",
-                "natural_freq_min": 10,
-                "natural_freq_min_units": "Hz",
-                "natural_freq_max": 100,
-                "natural_freq_max_units": "KHz",
-                "analysis_temp": 20,
-                "analysis_temp_units": "F",
-            },
-            ]
-        )
+        >>> "Test",
+        >>> [{
+        >>>     "cca_name": "Card",
+        >>>     "model_source": ModelSource.GENERATED,
+        >>>     "shock_result_count": 2,
+        >>>     "critical_shock_strain": 10,
+        >>>     "critical_shock_strain_units": "strain",
+        >>>     "part_validation_enabled": True,
+        >>>     "require_material_assignment_enabled": False,
+        >>>     "force_model_rebuild": "AUTO",
+        >>>     "natural_freq_min": 10,
+        >>>     "natural_freq_min_units": "Hz",
+        >>>     "natural_freq_max": 100,
+        >>>     "natural_freq_max_units": "KHz",
+        >>>     "analysis_temp": 20,
+        >>>     "analysis_temp_units": "F",
+        >>> },
+        >>> ]
+        >>> )
 
         """
         try:
@@ -1015,17 +1013,17 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.get_solder_fatigue_input_fields()
         """
         if not self._is_connection_up():
@@ -1074,30 +1072,29 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_solder_fatigue_props(
-            "Test",
-            [{
-                "cca_name": "Card",
-                "solder_material": "TIN-LEAD (63SN37PB)",
-                "part_temp": 70,
-                "part_temp_units": "F",
-                "use_part_temp_rise_min": True,
-                "part_validation_enabled": True
-            },
-            ]
-        )
-
+        >>> "Test",
+        >>> [{
+        >>>     "cca_name": "Card",
+        >>>     "solder_material": "TIN-LEAD (63SN37PB)",
+        >>>     "part_temp": 70,
+        >>>     "part_temp_units": "F",
+        >>>     "use_part_temp_rise_min": True,
+        >>>     "part_validation_enabled": True
+        >>> },
+        >>> ]
+        >>> )
         """
         try:
             if project == "":
@@ -1195,17 +1192,17 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.get_random_vibe_input_fields(ModelSource.STRAIN_MAP)
         """
         if not self._is_connection_up():
@@ -1298,26 +1295,25 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_random_vibe_props(
-            "Test",
-            "Card",
-            random_vibe_damping="0.01, 0.05",
-            analysis_temp=20,
-            analysis_temp_units="C",
-            model_source=ModelSource.STRAIN_MAP
-        )
-
+        >>>     "Test",
+        >>>     "Card",
+        >>>     random_vibe_damping="0.01, 0.05",
+        >>>     analysis_temp=20,
+        >>>     analysis_temp_units="C",
+        >>>     model_source=ModelSource.STRAIN_MAP
+        >>> )
         """
         try:
             if project == "":
@@ -1386,18 +1382,18 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-                "ODB++ Tutorial.tgz",
-                True,
-                True,
-                True,
-                True,
-                project="Test",
-                cca_name="Card",
-            )
-            >>> sherlock.analysis.get_natural_frequency_input_fields()
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
+        >>> sherlock.analysis.get_natural_frequency_input_fields()
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1461,8 +1457,8 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1568,22 +1564,22 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.analysis_types import (
         >>>     RunStrainMapAnalysisRequestAnalysisType
         >>> )
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
         >>> sherlock.analysis.run_strain_map_analysis(
-                "AssemblyTutorial",
-                "Main Board",
-                [[
-                    RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
-                    [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-                     ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-                     ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
-                ]]
-            )
+        >>>     "AssemblyTutorial",
+        >>>     "Main Board",
+        >>>     [[
+        >>>         RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
+        >>>         [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+        >>>          ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+        >>>          ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
+        >>>     ]]
+        >>> )
         """
         try:
             if project == "":
@@ -1753,27 +1749,27 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> update_request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest
         >>> sherlock.analysis.update_pcb_modeling_props(
-            "Tutorial Project",
-            ["Main Board"],
-            [
-                (
-                    UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
-                    UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                    True,
-                    UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                    ElementOrder.SOLID_SHELL,
-                    6,
-                    "mm",
-                    3,
-                    "mm",
-                    True,
-                )
-            ]
-        )
+        >>> "Tutorial Project",
+        >>> ["Main Board"],
+        >>> [
+        >>>     (
+        >>>         UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
+        >>>         UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+        >>>         True,
+        >>>         UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
+        >>>         ElementOrder.SOLID_SHELL,
+        >>>         6,
+        >>>         "mm",
+        >>>         3,
+        >>>         "mm",
+        >>>         True,
+        >>>     )
+        >>> ]
+        >>> )
         """
         try:
             if project == "":
@@ -1876,32 +1872,32 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_part_modeling_props(
-            "Test",
-            {
-                "cca_name": "Card",
-                "part_enabled": True,
-                "part_min_size": 1,
-                "part_min_size_units": "in",
-                "part_elem_order": "First Order (Linear)",
-                "part_max_edge_length": 1,
-                "part_max_edge_length_units": "in",
-                "part_max_vertical": 1,
-                "part_max_vertical_units": "in",
-                "part_results_filtered": True
-            }
-        )
+        >>> "Test",
+        >>> {
+        >>>     "cca_name": "Card",
+        >>>     "part_enabled": True,
+        >>>     "part_min_size": 1,
+        >>>     "part_min_size_units": "in",
+        >>>     "part_elem_order": "First Order (Linear)",
+        >>>     "part_max_edge_length": 1,
+        >>>     "part_max_edge_length_units": "in",
+        >>>     "part_max_vertical": 1,
+        >>>     "part_max_vertical_units": "in",
+        >>>     "part_results_filtered": True
+        >>> }
+        >>> )
 
         """
         try:
@@ -2006,32 +2002,32 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.analysis.update_part_list_validation_analysis_props(
-            "Test",
-            [{
-                "cca_name": "Card",
-                "process_use_avl": True,
-                "process_use_wizard": False,
-                "process_check_confirmed_properties": True,
-                "process_check_part_numbers": True,
-                "matching_mode": "Part",
-                "avl_require_internal_part_number": True,
-                "avl_require_approved_description": False,
-                "avl_require_approved_manufacturer": True,
-            },
-            ]
-        )
+        >>> "Test",
+        >>> [{
+        >>>     "cca_name": "Card",
+        >>>     "process_use_avl": True,
+        >>>     "process_use_wizard": False,
+        >>>     "process_check_confirmed_properties": True,
+        >>>     "process_check_part_numbers": True,
+        >>>     "matching_mode": "Part",
+        >>>     "avl_require_internal_part_number": True,
+        >>>     "avl_require_approved_description": False,
+        >>>     "avl_require_approved_manufacturer": True,
+        >>> },
+        >>> ]
+        >>> )
         """
         try:
             if not isinstance(properties_per_cca, list):
@@ -2149,20 +2145,20 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> analysis_props = sherlock.analysis.get_parts_list_validation_analysis_props(
-            "Test", "Card"
-        )
+        >>> "Test", "Card"
+        >>> )
         """
         try:
             if project == "":
@@ -2213,43 +2209,43 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.analysis_types import (
-            ComponentFailureMechanism,
-            UpdateComponentFailureMechanismPropsRequest,
-        )
-        >>> sherlock = launch_sherlock()
+        >>> ComponentFailureMechanism,
+        >>> UpdateComponentFailureMechanismPropsRequest,
+        >>> )
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive(
-            project="Assembly Tutorial",
-            category="category",
-            archive_file=\
-                "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
-        )
+        >>> project="Assembly Tutorial",
+        >>> category="category",
+        >>> archive_file=\
+        >>>     "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        >>> )
         >>> update_request1 = ComponentFailureMechanism(
-            cca_name="Main Board",
-            default_part_temp_rise=1.5,
-            default_part_temp_rise_units="K",
-            part_temp_rise_min_enabled=True,
-            part_validation_enabled=False,
-        )
+        >>> cca_name="Main Board",
+        >>> default_part_temp_rise=1.5,
+        >>> default_part_temp_rise_units="K",
+        >>> part_temp_rise_min_enabled=True,
+        >>> part_validation_enabled=False,
+        >>> )
         >>> update_request2 = ComponentFailureMechanism(
-            cca_name="Memory Card 1",
-            default_part_temp_rise=-3.25,
-            default_part_temp_rise_units="F",
-            part_temp_rise_min_enabled=False,
-            part_validation_enabled=True,
-        )
+        >>> cca_name="Memory Card 1",
+        >>> default_part_temp_rise=-3.25,
+        >>> default_part_temp_rise_units="F",
+        >>> part_temp_rise_min_enabled=False,
+        >>> part_validation_enabled=True,
+        >>> )
         >>> request = UpdateComponentFailureMechanismPropsRequest(
-            project="Test",
-            component_failure_mechanism_properties_per_cca=[
-                update_request1,
-                update_request2
-            ]
-        )
+        >>> project="Test",
+        >>> component_failure_mechanism_properties_per_cca=[
+        >>>     update_request1,
+        >>>     update_request2
+        >>> ]
+        >>> )
         >>> return_codes = sherlock.analysis.\
-                update_component_failure_mechanism_analysis_props(request)
+        >>>     update_component_failure_mechanism_analysis_props(request)
         >>> for return_code in return_codes:
-                print(f"Return code: value={return_code.value}, message={return_code.message}")
+        >>>     print(f"Return code: value={return_code.value}, message={return_code.message}")
         """
         update_request = request._convert_to_grpc()
 
@@ -2278,46 +2274,46 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.analysis_types import (
-            SemiconductorWearoutAnalysis,
-            UpdateSemiconductorWearoutAnalysisPropsRequest,
-        )
-        >>> sherlock = launch_sherlock()
+        >>> SemiconductorWearoutAnalysis,
+        >>> UpdateSemiconductorWearoutAnalysisPropsRequest,
+        >>> )
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive(
-            project="Assembly Tutorial",
-            category="category",
-            archive_file=\
-                "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
-        )
+        >>> project="Assembly Tutorial",
+        >>> category="category",
+        >>> archive_file=\
+        >>>     "C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\Assembly Tutorial.zip",
+        >>>)
         >>> update_request1 = SemiconductorWearoutAnalysis(
-            cca_name="Main Board",
-            max_feature_size=1.5,
-            max_feature_size_units="mm",
-            part_temp_rise=10.0,
-            part_temp_rise_units="C",
-            part_temp_rise_min_enabled=True,
-            part_validation_enabled=False,
-        )
+        >>> cca_name="Main Board",
+        >>> max_feature_size=1.5,
+        >>> max_feature_size_units="mm",
+        >>> part_temp_rise=10.0,
+        >>> part_temp_rise_units="C",
+        >>> part_temp_rise_min_enabled=True,
+        >>> part_validation_enabled=False,
+        >>> )
         >>> update_request2 = SemiconductorWearoutAnalysis(
-            cca_name="Memory Card 1",
-            max_feature_size=2.0,
-            max_feature_size_units="mm",
-            part_temp_rise=15.0,
-            part_temp_rise_units="C",
-            part_temp_rise_min_enabled=False,
-            part_validation_enabled=True,
-        )
+        >>> cca_name="Memory Card 1",
+        >>> max_feature_size=2.0,
+        >>> max_feature_size_units="mm",
+        >>> part_temp_rise=15.0,
+        >>> part_temp_rise_units="C",
+        >>> part_temp_rise_min_enabled=False,
+        >>> part_validation_enabled=True,
+        >>> )
         >>> request = UpdateSemiconductorWearoutAnalysisPropsRequest(
-            project="Test",
-            semiconductor_wearout_analysis_properties=[
-                update_request1,
-                update_request2
-            ]
-        )
+        >>> project="Test",
+        >>> semiconductor_wearout_analysis_properties=[
+        >>>     update_request1,
+        >>>     update_request2
+        >>> ]
+        >>> )
         >>> return_codes = sherlock.analysis.update_semiconductor_wearout_props(request)
         >>> for return_code in return_codes:
-                print(f"Return code: value={return_code.value}, message={return_code.message}")
+        >>>     print(f"Return code: value={return_code.value}, message={return_code.message}")
         """
         update_request = request._convert_to_grpc()
 
@@ -2346,51 +2342,51 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.analysis_types import (
-            PTHFatiguePropsAnalysis,
-            UpdatePTHFatiguePropsRequestAnalysisType,
-            UpdatePTHFatiguePropsRequest,
-        )
-        >>> sherlock = launch_sherlock()
+        >>> PTHFatiguePropsAnalysis,
+        >>> UpdatePTHFatiguePropsRequestAnalysisType,
+        >>> UpdatePTHFatiguePropsRequest,
+        >>> )
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_project_zip_archive(
-            project="Assembly Tutorial",
-            category="category",
-            archive_file="C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\
-                Assembly Tutorial.zip",
-        )
+        >>> project="Assembly Tutorial",
+        >>> category="category",
+        >>> archive_file="C:\\Program Files\\ANSYS Inc\\v252\\sherlock\\tutorial\\
+        >>>     Assembly Tutorial.zip",
+        >>> )
         >>> update_request1 = PTHFatiguePropsAnalysis(
-            cca_name="Main Board",
-            qualification=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
-            pth_quality_factor="Good",
-            pth_wall_thickness=0.1,
-            pth_wall_thickness_units="mm",
-            min_hole_size=0.5,
-            min_hole_size_units="mm",
-            max_hole_size=1.0,
-            max_hole_size_units="mm",
-        )
+        >>>     cca_name="Main Board",
+        >>>     qualification=UpdatePTHFatiguePropsRequestAnalysisType.SUPPLIER,
+        >>>     pth_quality_factor="Good",
+        >>>     pth_wall_thickness=0.1,
+        >>>     pth_wall_thickness_units="mm",
+        >>>     min_hole_size=0.5,
+        >>>     min_hole_size_units="mm",
+        >>>     max_hole_size=1.0,
+        >>>     max_hole_size_units="mm",
+        >>> )
         >>> update_request2 = PTHFatiguePropsAnalysis(
-            cca_name="Memory Card 1",
-            qualification=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
-            pth_quality_factor="Good",
-            pth_wall_thickness=0.2,
-            pth_wall_thickness_units="mil",
-            min_hole_size=0.7,
-            min_hole_size_units="mil",
-            max_hole_size=1.5,
-            max_hole_size_units="mil",
-        )
+        >>>     cca_name="Memory Card 1",
+        >>>     qualification=UpdatePTHFatiguePropsRequestAnalysisType.PRODUCT,
+        >>>     pth_quality_factor="Good",
+        >>>     pth_wall_thickness=0.2,
+        >>>     pth_wall_thickness_units="mil",
+        >>>     min_hole_size=0.7,
+        >>>     min_hole_size_units="mil",
+        >>>     max_hole_size=1.5,
+        >>>     max_hole_size_units="mil",
+        >>> )
         >>> request = UpdatePTHFatiguePropsRequest(
-            project="Assembly Tutorial",
-            pth_fatigue_analysis_properties=[
-                update_request1,
-                update_request2
-            ]
-        )
+        >>> project="Assembly Tutorial",
+        >>> pth_fatigue_analysis_properties=[
+        >>>     update_request1,
+        >>>     update_request2,
+        >>> ]
+        >>> )
         >>> return_codes = sherlock.analysis.update_PTH_fatigue_props(request)
         >>> for return_code in return_codes:
-            print(f"Return code: value={return_code.value}, message={return_code.message}")
+        >>>     print(f"Return code: value={return_code.value}, message={return_code.message}")
         """
         update_request = request._convert_to_grpc()
 
