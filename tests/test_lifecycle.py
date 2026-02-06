@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
@@ -22,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import uuid
 
 import grpc
@@ -44,6 +43,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadShockProfileDatasetError,
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
+    SherlockSaveLifeCycleError,
     SherlockSaveProfileError,
     SherlockUpdateLifePhaseError,
 )
@@ -55,6 +55,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ImportThermalSignalRequest,
     RandomVibeProfileCsvFileProperties,
     SaveHarmonicProfileRequest,
+    SaveLifeCycleRequest,
     SaveRandomVibeProfileRequest,
     SaveShockPulseProfileRequest,
     SaveThermalProfileRequest,
@@ -100,6 +101,7 @@ def test_all():
     helper_test_update_life_phase(lifecycle)
 
     helper_test_update_life_cycle(lifecycle)
+    helper_test_save_life_cycle(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -4313,6 +4315,65 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
         )
         assert response.value == 0
 
+
+def helper_test_save_life_cycle(lifecycle: Lifecycle):
+
+    project = "Tutorial Project"
+    file_path = "C:/Temp/LifeCycle_Backup.dfr-lc"
+    overwrite_file = True
+
+    # project missing
+    try:
+        lifecycle.save_life_cycle(
+            SaveLifeCycleRequest(project="", file_path=file_path, overwrite_file=overwrite_file)
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # file path missing
+    try:
+        lifecycle.save_life_cycle(
+            SaveLifeCycleRequest(project=project, file_path="", overwrite_file=overwrite_file)
+        )
+        pytest.fail("No exception raised when using a missing file path parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, file_path is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false project
+        try:
+            lifecycle.save_life_cycle(
+                SaveLifeCycleRequest(
+                    project="bad project", file_path=file_path, overwrite_file=overwrite_file
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockSaveLifeCycleError)
+
+        # test all variables set
+        req = SaveLifeCycleRequest(
+            project=project, file_path=file_path, overwrite_file=overwrite_file
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.project == project
+        assert grpc_obj.filePath == file_path
+        assert grpc_obj.overwriteFile == overwrite_file
+
+        # valid request and file is overwritten
+        response = lifecycle.save_life_cycle(req)
+        assert response.value == 0
+
+        # delete file_path if created
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 if __name__ == "__main__":
     test_all()

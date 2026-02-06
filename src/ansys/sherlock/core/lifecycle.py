@@ -58,6 +58,7 @@ from ansys.sherlock.core.errors import (
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
     SherlockNoGrpcConnectionException,
+    SherlockSaveLifeCycleError,
     SherlockSaveProfileError,
     SherlockUpdateLifePhaseError,
 )
@@ -69,6 +70,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ImportThermalSignalRequest,
     RandomVibeProfileCsvFileProperties,
     SaveHarmonicProfileRequest,
+    SaveLifeCycleRequest,
     SaveRandomVibeProfileRequest,
     SaveShockPulseProfileRequest,
     SaveThermalProfileRequest,
@@ -2754,5 +2756,48 @@ class Lifecycle(GrpcStub):
 
         if response.value != 0:
             raise SherlockUpdateLifePhaseError(response.message)
+
+        return response
+
+    def save_life_cycle(
+        self, request: SaveLifeCycleRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Save a project's life cycle to a .dfr-lc file.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        request : SaveLifeCycleRequest
+            Request object containing project, file path, and overwrite flag.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Status code of the response. 0 for success.
+
+        Examples
+            --------
+            >>> from ansys.sherlock.core.types.lifecycle_types import SaveLifeCycleRequest
+            >>> from ansys.sherlock.core import launcher
+            >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+            >>> response = sherlock.lifecycle.save_life_cycle(
+            >>>     SaveLifeCycleRequestRequest(
+            >>>         project="Tutorial Project",
+            >>>         file_path="/path/to/save/lifecycle_file.dfr-lc",
+            >>>         overwrite_file=True
+            >>>     )
+            >>> )
+            >>> assert response.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.saveLifeCycle(grpc_request)
+
+        if response.value != 0:
+            raise SherlockSaveLifeCycleError(response.message)
 
         return response

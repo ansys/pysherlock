@@ -515,6 +515,35 @@ class UpdateLifeCycleRequest(BaseModel):
         )
 
 
+class SaveLifeCycleRequest(BaseModel):
+    """Request to save a project's life cycle to a .dfr-lc file."""
+
+    project: str
+    """Sherlock project name."""
+
+    file_path: str
+    """Full directory path + file name for where the life cycle file should be saved.
+    The file name should include the .dfr-lc extension."""
+
+    overwrite_file: bool
+    """If true and the file already exists, it will be overwritten.
+    If false and the file exists, then an error will be returned."""
+
+    @field_validator("project", "file_path")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.SaveLifeCycleRequest:
+        """Convert to gRPC SaveLifeCycleRequest."""
+        return SherlockLifeCycleService_pb2.SaveLifeCycleRequest(
+            project=self.project,
+            filePath=self.file_path,
+            overwriteFile=self.overwrite_file,
+        )
+
+
 class SaveHarmonicProfileRequest(BaseModel):
     """Request to save a harmonic life cycle event profile to a .dat or .csv file."""
 
