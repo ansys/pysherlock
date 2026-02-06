@@ -92,8 +92,7 @@ def launch(
         Release number of Sherlock to launch. If not provided,
         the latest installed version of Sherlock will be launched.
     transport_mode: str, optional
-        gRPC transport mode. Supported values are "insecure", "mtls", "wnua", and "uds".
-        Default is "mtls".
+        See :func:`launch_and_connect` for usage.
     certs_dir: str, optional
         Directory containing the mTLS certificates. Default is "./certs".
     uds_dir: str, optional
@@ -200,8 +199,15 @@ def launch_and_connect(
         Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
     transport_mode: str, optional
-        gRPC transport mode. Supported values are "insecure", "mtls", "wnua", and "uds".
-        Default is "mtls".
+        The gRPC transport mode:
+            - "insecure" : unencrypted connection
+            - "mtls" : mutual TLS authentication (default)
+            - "uds" : Unix Domain Socket
+            - "wnua" : Windows Named User Authentication
+
+        See `Securing gRPC connections
+        <https://tools.docs.pyansys.com/version/stable/user_guide/secure_grpc.html>`_
+        for more details.
     certs_dir: str, optional
         Directory containing the mTLS certificates. Default is "./certs".
     uds_dir: str, optional
@@ -267,11 +273,7 @@ def connect(
         Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
     transport_mode : str, optional
-        Transport mode to use:
-            - "insecure" : unencrypted connection (default)
-            - "mtls" : mutual TLS authentication
-            - "uds" : Unix Domain Socket
-            - "wnua" : Windows Named User Authentication
+        See :func:`launch_and_connect` for usage.
     certs_dir: str, optional
         Directory containing the mTLS certificates. Default is "./certs".
     uds_dir : str, optional
