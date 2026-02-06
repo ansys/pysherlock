@@ -1,0 +1,146 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.TestPointProperties
+==========================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: TestPointProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      TestPointProperties.construct
+      
+      
+      TestPointProperties.copy
+      
+      
+      TestPointProperties.dict
+      
+      
+      TestPointProperties.from_orm
+      
+      
+      TestPointProperties.json
+      
+      
+      TestPointProperties.model_construct
+      
+      
+      TestPointProperties.model_copy
+      
+      
+      TestPointProperties.model_dump
+      
+      
+      TestPointProperties.model_dump_json
+      
+      
+      TestPointProperties.model_json_schema
+      
+      
+      TestPointProperties.model_parametrized_name
+      
+      
+      TestPointProperties.model_post_init
+      
+      
+      TestPointProperties.model_rebuild
+      
+      
+      TestPointProperties.model_validate
+      
+      
+      TestPointProperties.model_validate_json
+      
+      
+      TestPointProperties.model_validate_strings
+      
+      
+      TestPointProperties.parse_file
+      
+      
+      TestPointProperties.parse_obj
+      
+      
+      TestPointProperties.parse_raw
+      
+      
+      TestPointProperties.schema
+      
+      
+      TestPointProperties.schema_json
+      
+      
+      TestPointProperties.str_validation
+      
+      
+      TestPointProperties.update_forward_refs
+      
+      
+      TestPointProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      TestPointProperties.model_computed_fields
+      
+      
+      TestPointProperties.model_config
+      
+      
+      TestPointProperties.model_extra
+      
+      
+      TestPointProperties.model_fields
+      
+      
+      TestPointProperties.model_fields_set
+      
+      
+      TestPointProperties.id
+      
+      
+      TestPointProperties.side
+      
+      
+      TestPointProperties.units
+      
+      
+      TestPointProperties.center_x
+      
+      
+      TestPointProperties.center_y
+      
+      
+      TestPointProperties.radius
+      
+      
+      TestPointProperties.load_type
+      
+      
+      TestPointProperties.load_value
+      
+      
+      TestPointProperties.load_units
+      
+   
+   
+
+.. vale on

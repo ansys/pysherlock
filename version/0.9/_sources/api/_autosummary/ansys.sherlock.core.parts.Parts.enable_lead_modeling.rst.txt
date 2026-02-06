@@ -1,0 +1,10 @@
+.. vale off
+
+enable\_lead\_modeling
+======================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.enable_lead_modeling
+
+.. vale on

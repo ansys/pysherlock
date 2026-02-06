@@ -1,0 +1,10 @@
+.. vale off
+
+model\_construct
+================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CopperGerberFile.model_construct
+
+.. vale on

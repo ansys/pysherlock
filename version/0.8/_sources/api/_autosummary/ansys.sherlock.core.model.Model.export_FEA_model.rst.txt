@@ -1,0 +1,10 @@
+.. vale off
+
+export\_FEA\_model
+==================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.export_FEA_model
+
+.. vale on
