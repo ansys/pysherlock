@@ -1,4 +1,4 @@
-.. _launch_and_connect:
+.. _launch_sherlock:
 
 ===============
 Launch Sherlock
