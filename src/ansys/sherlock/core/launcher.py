@@ -28,7 +28,6 @@ import os
 import shlex
 import socket
 from typing import Optional
-import warnings
 
 import grpc
 
@@ -57,69 +56,6 @@ def _is_port_available(host: str = LOCALHOST, port: int = SHERLOCK_DEFAULT_PORT)
                 raise SherlockCannotUsePortError(port, "Port is already in use")
 
             raise SherlockCannotUsePortError(port, str(e))
-
-
-def launch_sherlock(
-    host: str = LOCALHOST,
-    port: int = SHERLOCK_DEFAULT_PORT,
-    single_project_path: str = "",
-    sherlock_command_args: str = "",
-    year: Optional[int] = None,
-    release_number: Optional[int] = None,
-) -> Sherlock:
-    r"""Launch Sherlock and start gRPC on a given host and port. Wait up to two minutes to connect.
-
-    .. deprecated:: 2025 R2
-
-    Use :func:`launch` or :func:`launch_and_connect` instead.
-
-    Parameters
-    ----------
-    host: str, optional
-        IP address to start gRPC on. The default is ``"127.0.0.1"``, which
-        is the IP address for the local host.
-    port: int, optional
-        Port number for the connection.
-    single_project_path : str, optional
-        Path to the Sherlock project if invoking Sherlock in the single-project mode.
-    sherlock_command_args : str, optional
-        Additional command arguments for launching Sherlock.
-    year: int, optional
-        4-digit year of the Sherlock release to launch. If not provided,
-        the latest installed version of Sherlock will be launched.
-    release_number: int, optional
-        Release number of Sherlock to launch. If not provided,
-        the latest installed version of Sherlock will be launched.
-
-    Returns
-    -------
-    Sherlock
-        The instance of sherlock.
-
-    Examples
-    --------
-    >>> from ansys.sherlock.core import launcher
-    >>> launcher.launch_sherlock()
-
-    >>> from ansys.sherlock.core import launcher
-    >>> launcher.launch_sherlock(port=9092, year=2024, release_number=1)
-
-    >>> from ansys.sherlock.core import launcher
-    >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
-    >>> launcher.launch_sherlock(port=9092, single_project_path=project)
-
-    """
-    warnings.warn(
-        "launch_sherlock() is deprecated and will be removed in a future release. "
-        "Use launch() instead.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-
-    sherlock, install_dir = launch_and_connect(
-        host, port, single_project_path, sherlock_command_args, year, release_number
-    )
-    return sherlock
 
 
 def launch(
@@ -156,8 +92,7 @@ def launch(
         Release number of Sherlock to launch. If not provided,
         the latest installed version of Sherlock will be launched.
     transport_mode: str, optional
-        gRPC transport mode. Supported values are "insecure", "mtls", "wnua", and "uds".
-        Default is "mtls".
+        See :func:`launch_and_connect` for usage.
     certs_dir: str, optional
         Directory containing the mTLS certificates. Default is "./certs".
     uds_dir: str, optional
@@ -264,8 +199,15 @@ def launch_and_connect(
         Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
     transport_mode: str, optional
-        gRPC transport mode. Supported values are "insecure", "mtls", "wnua", and "uds".
-        Default is "mtls".
+        The gRPC transport mode:
+            - "insecure" : unencrypted connection
+            - "mtls" : mutual TLS authentication (default)
+            - "uds" : Unix Domain Socket
+            - "wnua" : Windows Named User Authentication
+
+        See `Securing gRPC connections
+        <https://tools.docs.pyansys.com/version/stable/user_guide/secure_grpc.html>`_
+        for more details.
     certs_dir: str, optional
         Directory containing the mTLS certificates. Default is "./certs".
     uds_dir: str, optional
@@ -277,6 +219,12 @@ def launch_and_connect(
     -------
     tuple[Sherlock, str]
         Sherlock gRPC connection object and the installation directory.
+
+    Examples
+    --------
+    >>> from ansys.sherlock.core import launcher
+    >>> sherlock, ansys_install_path = launcher.launch_and_connect(
+    >>>     port=9092, year=2026, release_number=1, transport_mode="wnua")
     """
     ansys_install_path = launch(
         host,
@@ -312,7 +260,7 @@ def connect(
     uds_dir: str = None,
     uds_id: str = None,
 ) -> Sherlock:
-    """Connect to a local instance of Sherlock.
+    r"""Connect to a local instance of Sherlock.
 
     Available Since: 2025R2
 
@@ -325,11 +273,7 @@ def connect(
         Maximum time (in seconds) to wait for the connection to Sherlock to be established.
         Default is 120 seconds.
     transport_mode : str, optional
-        Transport mode to use:
-            - "insecure" : unencrypted connection (default)
-            - "mtls" : mutual TLS authentication
-            - "uds" : Unix Domain Socket
-            - "wnua" : Windows Named User Authentication
+        See :func:`launch_and_connect` for usage.
     certs_dir: str, optional
         Directory containing the mTLS certificates. Default is "./certs".
     uds_dir : str, optional
@@ -341,6 +285,13 @@ def connect(
     -------
     Sherlock
         The instance of Sherlock.
+
+    Examples
+    --------
+    >>> from ansys.sherlock.core import launcher
+    >>> ansys_install_path = launcher.launch(
+    >>>     port=9092, year=2026, release_number=1, transport_mode="wnua")
+    >>> sherlock = launcher.connect(port=9092, timeout=60, transport_mode="wnua")
     """
     try:
         channel = _connect_grpc_channel(
