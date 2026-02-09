@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PottingRegionDeleteData
+==============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PottingRegionDeleteData
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PottingRegionDeleteData.construct
+      
+      
+      PottingRegionDeleteData.copy
+      
+      
+      PottingRegionDeleteData.dict
+      
+      
+      PottingRegionDeleteData.from_orm
+      
+      
+      PottingRegionDeleteData.json
+      
+      
+      PottingRegionDeleteData.model_construct
+      
+      
+      PottingRegionDeleteData.model_copy
+      
+      
+      PottingRegionDeleteData.model_dump
+      
+      
+      PottingRegionDeleteData.model_dump_json
+      
+      
+      PottingRegionDeleteData.model_json_schema
+      
+      
+      PottingRegionDeleteData.model_parametrized_name
+      
+      
+      PottingRegionDeleteData.model_post_init
+      
+      
+      PottingRegionDeleteData.model_rebuild
+      
+      
+      PottingRegionDeleteData.model_validate
+      
+      
+      PottingRegionDeleteData.model_validate_json
+      
+      
+      PottingRegionDeleteData.model_validate_strings
+      
+      
+      PottingRegionDeleteData.parse_file
+      
+      
+      PottingRegionDeleteData.parse_obj
+      
+      
+      PottingRegionDeleteData.parse_raw
+      
+      
+      PottingRegionDeleteData.schema
+      
+      
+      PottingRegionDeleteData.schema_json
+      
+      
+      PottingRegionDeleteData.str_validation
+      
+      
+      PottingRegionDeleteData.update_forward_refs
+      
+      
+      PottingRegionDeleteData.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PottingRegionDeleteData.model_computed_fields
+      
+      
+      PottingRegionDeleteData.model_config
+      
+      
+      PottingRegionDeleteData.model_extra
+      
+      
+      PottingRegionDeleteData.model_fields
+      
+      
+      PottingRegionDeleteData.model_fields_set
+      
+      
+      PottingRegionDeleteData.cca_name
+      
+      
+      PottingRegionDeleteData.potting_id
+      
+   
+   
+
+.. vale on

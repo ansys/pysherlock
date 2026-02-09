@@ -1,0 +1,1640 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LifeCycle Types &#8212; PySherlock</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles\ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../_static/documentation_options.js?v=0ace71c6"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/lifecycle_types';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://sherlock.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Model" href="model.html" />
+    <link rel="prev" title="update_life_phase" href="_autosummary/ansys.sherlock.core.lifecycle.Lifecycle.update_life_phase.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.dev0" />
+  <meta property="og:site_name" content="PyAnsys" />
+  <meta name="physics" content="Electronics" />
+  <meta name="physics" content="Multiphysics" />
+  <meta name="physics" content="Structures" />
+  <link rel="canonical" href="https://sherlock.docs.pyansys.com/version/stable/api/lifecycle_types.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://docs.pyansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PySherlock - Home"/>
+    <img src="../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="PySherlock - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html" title="PySherlock home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock/discussions" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    
+<!--
+  Announcement Version Loader
+  Dynamically loads the announcement.html content into the announcement_msg div.
+-->
+<div id="announcement_msg" aria-live="polite"></div>
+<script>
+  // Fetch and inject the announcement HTML content
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} Announcement.html file not found, Please ignore this, if you are in dev/stable documentation`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+      var msgDiv = document.getElementById("announcement_msg");
+      if (msgDiv) {
+        msgDiv.innerHTML = text;
+      }
+    })
+    .catch((error) => {
+      // Log only unexpected fetch errors
+      if (!(error.message && error.message.startsWith("HTTP error: 404"))) {
+        console.error(`Fetch problem: ${error.message} Announcement.html could not be loaded.`);
+      }
+    });
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html" title="PySherlock home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock/discussions" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis_types.html">Analysis Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_types.html">Common Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launcher.html">Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layer.html">Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layer_types.html">Layer Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html">Lifecycle</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LifeCycle Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts_types.html">Parts Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_types.html">Project Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stackup.html">Stackup</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">API reference</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">LifeCycle Types</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-ansys.sherlock.core.types.lifecycle_types">
+<span id="lifecycle-types"></span><span id="ref-common-types"></span><h1>LifeCycle Types<a class="headerlink" href="#module-ansys.sherlock.core.types.lifecycle_types" title="Link to this heading">#</a></h1>
+<p>Module containing types for the Lifecycle Service.</p>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">HarmonicVibeProfileCsvFileProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of a harmonic vibe profile CSV file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.column_delimiter">
+<span class="sig-name descname"><span class="pre">column_delimiter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.column_delimiter" title="Link to this definition">#</a></dt>
+<dd><p>Delimiter used to separate columns in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.frequency_column">
+<span class="sig-name descname"><span class="pre">frequency_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.frequency_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing frequency values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.frequency_units">
+<span class="sig-name descname"><span class="pre">frequency_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.frequency_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the frequency values</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.header_row_count">
+<span class="sig-name descname"><span class="pre">header_row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.header_row_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of rows before the column header in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.load_column">
+<span class="sig-name descname"><span class="pre">load_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.load_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing load values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.load_units">
+<span class="sig-name descname"><span class="pre">load_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.load_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the load values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.numeric_format">
+<span class="sig-name descname"><span class="pre">numeric_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.numeric_format" title="Link to this definition">#</a></dt>
+<dd><p>Numeric format for the values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.optional_str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optional_str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.optional_str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Allow the test_point_ids to not be set, i.e., None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.profile_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the harmonic vibe profile.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">RandomVibeProfileCsvFileProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of a random vibe profile CSV file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.amplitude_column">
+<span class="sig-name descname"><span class="pre">amplitude_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.amplitude_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing amplitude values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.amplitude_units">
+<span class="sig-name descname"><span class="pre">amplitude_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.amplitude_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the amplitude values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.column_delimiter">
+<span class="sig-name descname"><span class="pre">column_delimiter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.column_delimiter" title="Link to this definition">#</a></dt>
+<dd><p>Delimiter used to separate columns in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.frequency_column">
+<span class="sig-name descname"><span class="pre">frequency_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.frequency_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing frequency values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.frequency_units">
+<span class="sig-name descname"><span class="pre">frequency_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.frequency_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the frequency values</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.header_row_count">
+<span class="sig-name descname"><span class="pre">header_row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.header_row_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of rows before the column header in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.numeric_format">
+<span class="sig-name descname"><span class="pre">numeric_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.numeric_format" title="Link to this definition">#</a></dt>
+<dd><p>Numeric format for the values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.optional_str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optional_str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.optional_str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Allow the test_point_ids to not be set, i.e., None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.profile_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the random vibe profile.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">ShockProfileDatasetCsvFileProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of a shock event profile using dataset CSV file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.column_delimiter">
+<span class="sig-name descname"><span class="pre">column_delimiter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.column_delimiter" title="Link to this definition">#</a></dt>
+<dd><p>Delimiter used to separate columns in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.header_row_count">
+<span class="sig-name descname"><span class="pre">header_row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.header_row_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of rows before the column header in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.load_column">
+<span class="sig-name descname"><span class="pre">load_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.load_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing load values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.load_units">
+<span class="sig-name descname"><span class="pre">load_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.load_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the load values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.numeric_format">
+<span class="sig-name descname"><span class="pre">numeric_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.numeric_format" title="Link to this definition">#</a></dt>
+<dd><p>Numeric format for the values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.optional_str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optional_str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.optional_str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Allow the test_point_ids to not be set, i.e., None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.profile_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the shock vibe profile.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.time_column">
+<span class="sig-name descname"><span class="pre">time_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.time_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing timeuency values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.time_units">
+<span class="sig-name descname"><span class="pre">time_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.time_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the timeuency values</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">ShockProfilePulsesCsvFileProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of a shock event profile using pulses CSV file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.column_delimiter">
+<span class="sig-name descname"><span class="pre">column_delimiter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.column_delimiter" title="Link to this definition">#</a></dt>
+<dd><p>Delimiter used to separate columns in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.decay_column">
+<span class="sig-name descname"><span class="pre">decay_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.decay_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing decay values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.duration" title="Link to this definition">#</a></dt>
+<dd><p>Pulse duration length</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.duration_units">
+<span class="sig-name descname"><span class="pre">duration_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.duration_units" title="Link to this definition">#</a></dt>
+<dd><p>Time units of the pulse duration</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.frequency_column">
+<span class="sig-name descname"><span class="pre">frequency_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.frequency_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing frequency values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.frequency_units">
+<span class="sig-name descname"><span class="pre">frequency_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.frequency_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the frequency values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.greater_than_zero_float_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">greater_than_zero_float_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.greater_than_zero_float_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate float fields listed contain values greater than 0.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.header_row_count">
+<span class="sig-name descname"><span class="pre">header_row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.header_row_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of rows before the column header in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.load_column">
+<span class="sig-name descname"><span class="pre">load_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.load_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing load values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.load_units">
+<span class="sig-name descname"><span class="pre">load_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.load_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the load values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.numeric_format">
+<span class="sig-name descname"><span class="pre">numeric_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.numeric_format" title="Link to this definition">#</a></dt>
+<dd><p>Numeric format for the values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.optional_str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optional_str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.optional_str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Allow the test_point_ids to not be set, i.e., None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.profile_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the shock vibe profile.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.sample_rate">
+<span class="sig-name descname"><span class="pre">sample_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.sample_rate" title="Link to this definition">#</a></dt>
+<dd><p>Sample rate</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.sample_rate_units">
+<span class="sig-name descname"><span class="pre">sample_rate_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.sample_rate_units" title="Link to this definition">#</a></dt>
+<dd><p>Time units of the sample rate</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.shape_column">
+<span class="sig-name descname"><span class="pre">shape_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.shape_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing shape values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">ThermalProfileCsvFileProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of a thermal profile CSV file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.column_delimiter">
+<span class="sig-name descname"><span class="pre">column_delimiter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.column_delimiter" title="Link to this definition">#</a></dt>
+<dd><p>Delimiter used to separate columns in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.header_row_count">
+<span class="sig-name descname"><span class="pre">header_row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.header_row_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of rows before the column header in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.numeric_format">
+<span class="sig-name descname"><span class="pre">numeric_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.numeric_format" title="Link to this definition">#</a></dt>
+<dd><p>Numeric format for the values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.optional_str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optional_str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.optional_str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Allow the test_point_ids to not be set, i.e., None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.profile_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the thermal profile.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.step_column">
+<span class="sig-name descname"><span class="pre">step_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.step_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing step values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.temperature_column">
+<span class="sig-name descname"><span class="pre">temperature_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.temperature_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing temperature values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.temperature_units">
+<span class="sig-name descname"><span class="pre">temperature_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.temperature_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the temperature values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.time_column">
+<span class="sig-name descname"><span class="pre">time_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.time_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing time duration values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.time_units">
+<span class="sig-name descname"><span class="pre">time_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.time_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the time values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.type_column">
+<span class="sig-name descname"><span class="pre">type_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.type_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing step type values.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">ThermalSignalFileProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of a thermal signal file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.column_delimiter">
+<span class="sig-name descname"><span class="pre">column_delimiter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.column_delimiter" title="Link to this definition">#</a></dt>
+<dd><p>Delimiter used to separate columns in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.header_row_count">
+<span class="sig-name descname"><span class="pre">header_row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.header_row_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of rows before the column header in the file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.numeric_format">
+<span class="sig-name descname"><span class="pre">numeric_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.numeric_format" title="Link to this definition">#</a></dt>
+<dd><p>Numeric format for the values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.temperature_column">
+<span class="sig-name descname"><span class="pre">temperature_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.temperature_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing temperature values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.temperature_units">
+<span class="sig-name descname"><span class="pre">temperature_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.temperature_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the temperature values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.time_column">
+<span class="sig-name descname"><span class="pre">time_column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.time_column" title="Link to this definition">#</a></dt>
+<dd><p>Name of the column containing time values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.time_units">
+<span class="sig-name descname"><span class="pre">time_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.time_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the time values.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">ImportThermalSignalRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest" title="Link to this definition">#</a></dt>
+<dd><p>Request to import a thermal signal file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.file_name">
+<span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.file_name" title="Link to this definition">#</a></dt>
+<dd><p>The full path to the CSV thermal signal file to be imported.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.generated_cycles_label">
+<span class="sig-name descname"><span class="pre">generated_cycles_label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.generated_cycles_label" title="Link to this definition">#</a></dt>
+<dd><p>Label used to define the name of all generated thermal events.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.load_range_percentage">
+<span class="sig-name descname"><span class="pre">load_range_percentage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.load_range_percentage" title="Link to this definition">#</a></dt>
+<dd><p>Defines the fraction of the range near peaks and valleys considered as a dwell region.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.non_negative_int_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">non_negative_int_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.non_negative_int_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate integer fields listed contain non-negative values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_dwell_bins">
+<span class="sig-name descname"><span class="pre">number_of_dwell_bins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_dwell_bins" title="Link to this definition">#</a></dt>
+<dd><p>Number of dwell bins for binning cycles, 0 for no dwell binning.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_mean_bins">
+<span class="sig-name descname"><span class="pre">number_of_mean_bins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_mean_bins" title="Link to this definition">#</a></dt>
+<dd><p>Number of mean bins for binning cycles, 0 for no mean binning.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_range_bins">
+<span class="sig-name descname"><span class="pre">number_of_range_bins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_range_bins" title="Link to this definition">#</a></dt>
+<dd><p>Number of range bins for binning cycles, 0 for no range binning.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.phase_name">
+<span class="sig-name descname"><span class="pre">phase_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.phase_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the phase in which the thermal signal is imported.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.project">
+<span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.project" title="Link to this definition">#</a></dt>
+<dd><p>Sherlock project name in which the thermal signal is imported.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.temperature_range_filtering_limit">
+<span class="sig-name descname"><span class="pre">temperature_range_filtering_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.temperature_range_filtering_limit" title="Link to this definition">#</a></dt>
+<dd><p>Minimum cycle range to include in results, 0 for not filtering.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.thermal_signal_file_properties">
+<span class="sig-name descname"><span class="pre">thermal_signal_file_properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties" title="ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalSignalFileProperties</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.thermal_signal_file_properties" title="Link to this definition">#</a></dt>
+<dd><p>Properties of the thermal signal file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_filtering_limit">
+<span class="sig-name descname"><span class="pre">time_filtering_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_filtering_limit" title="Link to this definition">#</a></dt>
+<dd><p>Maximum cycle time to include in results, default is 72 hours.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_filtering_limit_units">
+<span class="sig-name descname"><span class="pre">time_filtering_limit_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_filtering_limit_units" title="Link to this definition">#</a></dt>
+<dd><p>Units of the time filtering limit.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_removal">
+<span class="sig-name descname"><span class="pre">time_removal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_removal" title="Link to this definition">#</a></dt>
+<dd><p>Option to indicate that time results with shorter half-cycle durations are removed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">UpdateLifePhaseRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest" title="Link to this definition">#</a></dt>
+<dd><p>Request for updating an existing life phase in a specified project’s life cycle.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_cycle_type">
+<span class="sig-name descname"><span class="pre">new_cycle_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_cycle_type" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Updated cycle type. Acceptable values are COUNT, DUTY_CYCLE, PER YEAR, PER DAY,
+PER HOUR, PER MIN, and PER SEC.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_description">
+<span class="sig-name descname"><span class="pre">new_description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_description" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Updated description of life phase.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_duration">
+<span class="sig-name descname"><span class="pre">new_duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_duration" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Updated event duration length.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_duration_units">
+<span class="sig-name descname"><span class="pre">new_duration_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_duration_units" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Updated event duration units.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_num_of_cycles">
+<span class="sig-name descname"><span class="pre">new_num_of_cycles</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_num_of_cycles" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Updated number of cycles defined for the life phase.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_phase_name">
+<span class="sig-name descname"><span class="pre">new_phase_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_phase_name" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Updated name of life phase.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.optional_str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optional_str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.optional_str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Allow the optional fields to not be set, i.e., None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.phase_name">
+<span class="sig-name descname"><span class="pre">phase_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.phase_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the life cycle phase to be updated.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.project">
+<span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.project" title="Link to this definition">#</a></dt>
+<dd><p>Sherlock project name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.result_archive_file_name">
+<span class="sig-name descname"><span class="pre">result_archive_file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.result_archive_file_name" title="Link to this definition">#</a></dt>
+<dd><p>(Optional) Filename for saving analysis results and life cycle data, including any
+sub-assembly results. Any existing results will be overwritten. If this file name is
+omitted, then analysis results will not be saved during the update.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.sherlock.core.types.lifecycle_types.</span></span><span class="sig-name descname"><span class="pre">SaveLifeCycleRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest" title="Link to this definition">#</a></dt>
+<dd><p>Request to save a project’s life cycle to a .dfr-lc file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.file_path">
+<span class="sig-name descname"><span class="pre">file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.file_path" title="Link to this definition">#</a></dt>
+<dd><p>Full directory path + file name for where the life cycle file should be saved.
+The file name should include the .dfr-lc extension.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.overwrite_file">
+<span class="sig-name descname"><span class="pre">overwrite_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.overwrite_file" title="Link to this definition">#</a></dt>
+<dd><p>If true and the file already exists, it will be overwritten.
+If false and the file exists, then an error will be returned.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.project">
+<span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.project" title="Link to this definition">#</a></dt>
+<dd><p>Sherlock project name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.str_validation">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.str_validation" title="Link to this definition">#</a></dt>
+<dd><p>Validate string fields listed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.column_delimiter"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.column_delimiter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.frequency_column"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.frequency_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.frequency_units"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.frequency_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.header_row_count"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.header_row_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.load_column"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.load_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.load_units"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.load_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.model_config"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.numeric_format"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.numeric_format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.optional_str_validation"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.optional_str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.profile_name"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.profile_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.HarmonicVibeProfileCsvFileProperties.str_validation"><code class="docutils literal notranslate"><span class="pre">HarmonicVibeProfileCsvFileProperties.str_validation()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.amplitude_column"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.amplitude_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.amplitude_units"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.amplitude_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.column_delimiter"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.column_delimiter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.frequency_column"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.frequency_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.frequency_units"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.frequency_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.header_row_count"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.header_row_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.model_config"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.numeric_format"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.numeric_format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.optional_str_validation"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.optional_str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.profile_name"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.profile_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.RandomVibeProfileCsvFileProperties.str_validation"><code class="docutils literal notranslate"><span class="pre">RandomVibeProfileCsvFileProperties.str_validation()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.column_delimiter"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.column_delimiter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.header_row_count"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.header_row_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.load_column"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.load_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.load_units"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.load_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.model_config"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.numeric_format"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.numeric_format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.optional_str_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.optional_str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.profile_name"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.profile_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.str_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.time_column"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.time_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfileDatasetCsvFileProperties.time_units"><code class="docutils literal notranslate"><span class="pre">ShockProfileDatasetCsvFileProperties.time_units</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.column_delimiter"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.column_delimiter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.decay_column"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.decay_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.duration"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.duration</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.duration_units"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.duration_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.frequency_column"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.frequency_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.frequency_units"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.frequency_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.greater_than_zero_float_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.greater_than_zero_float_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.header_row_count"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.header_row_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.load_column"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.load_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.load_units"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.load_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.model_config"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.numeric_format"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.numeric_format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.optional_str_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.optional_str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.profile_name"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.profile_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.sample_rate"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.sample_rate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.sample_rate_units"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.sample_rate_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.shape_column"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.shape_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ShockProfilePulsesCsvFileProperties.str_validation"><code class="docutils literal notranslate"><span class="pre">ShockProfilePulsesCsvFileProperties.str_validation()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.column_delimiter"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.column_delimiter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.header_row_count"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.header_row_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.model_config"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.numeric_format"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.numeric_format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.optional_str_validation"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.optional_str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.profile_name"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.profile_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.step_column"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.step_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.str_validation"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.temperature_column"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.temperature_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.temperature_units"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.temperature_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.time_column"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.time_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.time_units"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.time_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalProfileCsvFileProperties.type_column"><code class="docutils literal notranslate"><span class="pre">ThermalProfileCsvFileProperties.type_column</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.column_delimiter"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.column_delimiter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.header_row_count"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.header_row_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.model_config"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.numeric_format"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.numeric_format</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.str_validation"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.temperature_column"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.temperature_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.temperature_units"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.temperature_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.time_column"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.time_column</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ThermalSignalFileProperties.time_units"><code class="docutils literal notranslate"><span class="pre">ThermalSignalFileProperties.time_units</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.file_name"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.file_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.generated_cycles_label"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.generated_cycles_label</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.load_range_percentage"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.load_range_percentage</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.model_config"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.non_negative_int_validation"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.non_negative_int_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_dwell_bins"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.number_of_dwell_bins</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_mean_bins"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.number_of_mean_bins</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.number_of_range_bins"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.number_of_range_bins</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.phase_name"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.phase_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.project"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.project</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.str_validation"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.temperature_range_filtering_limit"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.temperature_range_filtering_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.thermal_signal_file_properties"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.thermal_signal_file_properties</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_filtering_limit"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.time_filtering_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_filtering_limit_units"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.time_filtering_limit_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.ImportThermalSignalRequest.time_removal"><code class="docutils literal notranslate"><span class="pre">ImportThermalSignalRequest.time_removal</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.model_config"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_cycle_type"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.new_cycle_type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_description"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.new_description</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_duration"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.new_duration</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_duration_units"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.new_duration_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_num_of_cycles"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.new_num_of_cycles</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.new_phase_name"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.new_phase_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.optional_str_validation"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.optional_str_validation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.phase_name"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.phase_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.project"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.project</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.result_archive_file_name"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.result_archive_file_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.UpdateLifePhaseRequest.str_validation"><code class="docutils literal notranslate"><span class="pre">UpdateLifePhaseRequest.str_validation()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest"><code class="docutils literal notranslate"><span class="pre">SaveLifeCycleRequest</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.file_path"><code class="docutils literal notranslate"><span class="pre">SaveLifeCycleRequest.file_path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.model_config"><code class="docutils literal notranslate"><span class="pre">SaveLifeCycleRequest.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.overwrite_file"><code class="docutils literal notranslate"><span class="pre">SaveLifeCycleRequest.overwrite_file</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.project"><code class="docutils literal notranslate"><span class="pre">SaveLifeCycleRequest.project</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ansys.sherlock.core.types.lifecycle_types.SaveLifeCycleRequest.str_validation"><code class="docutils literal notranslate"><span class="pre">SaveLifeCycleRequest.str_validation()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+
+  
+  <nav class="tocsection editthispage" aria-label="Edit this page">
+    <a href="http://github.com/ansys/pysherlock/edit/main/HarmonicVibeProfileCsvFileProperties.py" rel="noopener noreferrer">
+      <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </nav>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/lifecycle_types.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text", "objectID"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2026 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.7.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

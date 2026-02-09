@@ -1,0 +1,27 @@
+[
+  {
+    "name": "dev",
+    "version": "dev",
+    "url": "https://sherlock.docs.pyansys.com/version/dev/"
+  },
+  {
+    "name": "1.0 (stable)",
+    "version": "1.0",
+    "url": "https://sherlock.docs.pyansys.com/version/stable/"
+  },
+  {
+    "name": "0.9",
+    "version": "0.9",
+    "url": "https://sherlock.docs.pyansys.com/version/0.9/"
+  },
+  {
+    "name": "0.8",
+    "version": "0.8",
+    "url": "https://sherlock.docs.pyansys.com/version/0.8/"
+  },
+  {
+    "name": "Older version",
+    "version": "N/A",
+    "url": "https://sherlock.docs.pyansys.com/version/"
+  }
+]

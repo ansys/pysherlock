@@ -1,0 +1,1245 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Release notes &#8212; PySherlock</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles\ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="_static/documentation_options.js?v=0ace71c6"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'changelog';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://sherlock.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Contribute" href="contributing.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.dev0" />
+  <meta property="og:site_name" content="PyAnsys" />
+  <meta name="physics" content="Electronics" />
+  <meta name="physics" content="Multiphysics" />
+  <meta name="physics" content="Structures" />
+  <link rel="canonical" href="https://sherlock.docs.pyansys.com/version/stable/changelog.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://docs.pyansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PySherlock - Home"/>
+    <img src="_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="PySherlock - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html" title="PySherlock home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="#">
+    Release notes
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock/discussions" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    
+<!--
+  Announcement Version Loader
+  Dynamically loads the announcement.html content into the announcement_msg div.
+-->
+<div id="announcement_msg" aria-live="polite"></div>
+<script>
+  // Fetch and inject the announcement HTML content
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} Announcement.html file not found, Please ignore this, if you are in dev/stable documentation`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+      var msgDiv = document.getElementById("announcement_msg");
+      if (msgDiv) {
+        msgDiv.innerHTML = text;
+      }
+    })
+    .catch((error) => {
+      // Log only unexpected fetch errors
+      if (!(error.message && error.message.startsWith("HTTP error: 404"))) {
+        console.error(`Fetch problem: ${error.message} Announcement.html could not be loaded.`);
+      }
+    });
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html" title="PySherlock home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysherlock/discussions" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Release notes</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="release-notes">
+<span id="ref-release-notes"></span><h1>Release notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h1>
+<p>This document contains the release notes for the project.</p>
+<section id="february-06-2026">
+<h2><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v1.0.1">1.0.1</a> - February 06, 2026<a class="headerlink" href="#february-06-2026" title="Link to this heading">#</a></h2>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-0">
+Miscellaneous</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Chore: remove deprecated launch_sherlock(), update API examples</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/726">#726</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Chore: document gRPC transport modes</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/729">#729</a>, <a class="reference external" href="https://github.com/ansys/pysherlock/pull/730">#730</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-1">
+Documentation</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Chore: remove deprecated launch_sherlock(), update API examples (#726)</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/728">#728</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v1.0.0">1.0.0</a> - January 30, 2026
+<a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.9.2">0.9.2</a> - January 23, 2026</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-2">
+Added</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>feat: secure grpc channels</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/704">#704</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: secure grpc channels</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/717">#717</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-3">
+Miscellaneous</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Build: Bump actions/checkout from 6.0.1 to 6.0.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/711">#711</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Chore: remove unneeded files</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/720">#720</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<input id="sd-tab-item-4" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-4">
+Documentation</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Feat: secure grpc channels</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/719">#719</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v1.0.0">1.0.0</a> - January 23, 2026</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-5">
+Added</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Feat:  added api gettestpointproperties</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/587">#587</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: added api import_copper_files()</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/593">#593</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: Added import thermal signal API</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/612">#612</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: added new PySherlock getICTFixturesProperties API</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/613">#613</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: Added API import_parts_to_avl()</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/617">#617</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: added new PySherlock updateTestPoints API</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/621">#621</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: added new Pysherlock updateICTFixtures API</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/622">#622</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Fix: fixed Pydantic warning issue</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/635">#635</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: Added APIs saveHarmonicProfile(), saveRandomVibeProfile(), saveShockPulseProfile() and saveThermalProfile()</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/641">#641</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: Added APIs delete_event() and delete_phase()</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/648">#648</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<input id="sd-tab-item-6" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-6">
+Miscellaneous</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Docs: fix documentation warnings</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/581">#581</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: bump ansys/actions from 9 to 10</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/582">#582</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Docs: update <code class="docutils literal notranslate"><span class="pre">contributors.md</span></code> with the latest contributors</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/586">#586</a>, <a class="reference external" href="https://github.com/ansys/pysherlock/pull/597">#597</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Test: use pytest.approx() for floating point values</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/596">#596</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: Added time filtering to importThermalSignal API.</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/619">#619</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump actions/checkout from 4 to 5</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/623">#623</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Updated test assertion and test point enums to fix failing unit tests</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/624">#624</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Docs: update <code class="docutils literal notranslate"><span class="pre">html_context</span></code> with PyAnsys tags</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/626">#626</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: Updated rainflow cycle binning to use separate binning parameters for range, mean, and dwell.</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/630">#630</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump actions/setup-python from 5 to 6</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/631">#631</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump actions/labeler from 5 to 6</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/632">#632</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: Added security.md file</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/649">#649</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump peter-evans/create-or-update-comment from 4 to 5</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/657">#657</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: Optimization version check</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/658">#658</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ci: Bump actions/upload-artifact from 4 to 5</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/662">#662</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: Deprecated new APIs and removed previous deprecated APIs</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/664">#664</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Chore:   Update missing or outdated files</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/665">#665</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Fix: Unable to load CSV files into life cycle profiles</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/667">#667</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ci: Bump actions/checkout from 5 to 6</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/670">#670</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: added get_mount_point_props and update_mount_points methods.</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/672">#672</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ci: updated Release action and added Check PR name</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/673">#673</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Ci: Bump actions/download-artifact from 5.0.0 to 6.0.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/674">#674</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: update life cycle</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/677">#677</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Fix: updated Contributors.md</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/681">#681</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ci: added actions security and updated sha versions</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/683">#683</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump actions/checkout from 6.0.0 to 6.0.1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/686">#686</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump actions/setup-python from 6.0.0 to 6.1.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/689">#689</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump ansys/actions from 10.1.4 to 10.2.3</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/691">#691</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump codecov/codecov-action from 5.5.1 to 5.5.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/692">#692</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump actions/download-artifact from 6.0.0 to 7.0.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/694">#694</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Docs: Installation: add row to the version table for Sherlock 2026 R1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/696">#696</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump actions/upload-artifact from 5.0.0 to 6.0.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/699">#699</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Docs: Update ``CONTRIBUTORS.md`` with the latest contributors</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/705">#705</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Chore: update CHANGELOG for v0.8.3</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/706">#706</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Chore: update CHANGELOG for v0.9.1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/708">#708</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<input id="sd-tab-item-7" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-7">
+Documentation</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>chore: update CHANGELOG for v0.9.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/573">#573</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: merge changes made in release/0.9</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/575">#575</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump ansys-sphinx-theme from 1.4.4 to 1.4.5</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/576">#576</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump ansys-sphinx-theme from 1.4.5 to 1.5.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/577">#577</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump ansys-sphinx-theme from 1.5.0 to 1.5.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/579">#579</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump pytest from 8.3.5 to 8.4.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/580">#580</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Maint: bump pandas from 2.2.3 to 2.3.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/585">#585</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: bump pytest-cov from 6.1.1 to 6.2.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/588">#588</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Maint: bump pytest-cov from 6.2.0 to 6.2.1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/590">#590</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Ci: add hooks to the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/591">#591</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Maint: bump ansys-api-sherlock from 0.1.46 to 0.1.47</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/592">#592</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: bump pytest from 8.4.0 to 8.4.1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/594">#594</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Maint: bump numpydoc from 1.8.0 to 1.9.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/598">#598</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: bump ansys-sphinx-theme from 1.5.2 to 1.5.3</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/601">#601</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Maint: bump pandas from 2.3.0 to 2.3.1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/602">#602</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump matplotlib from 3.10.3 to 3.10.5</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/616">#616</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump ansys-api-sherlock from 0.1.48 to 0.1.49</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/620">#620</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump pandas from 2.3.1 to 2.3.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/625">#625</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump ansys-sphinx-theme from 1.5.3 to 1.6.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/628">#628</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MAINT: Bump matplotlib from 3.10.5 to 3.10.6</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/629">#629</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump pytest from 8.4.1 to 8.4.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/633">#633</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump pytest-cov from 6.2.1 to 7.0.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/640">#640</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>MAINT: Bump ansys-sphinx-theme from 1.6.0 to 1.6.1</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/642">#642</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Maint: check vulnerabilities action</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/650">#650</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump pandas from 2.3.2 to 2.3.3</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/653">#653</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Feat: Added pcb_material_elasticity option to export_FEA_model()</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/656">#656</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump matplotlib from 3.10.6 to 3.10.7</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/659">#659</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump ansys-sphinx-theme from 1.6.1 to 1.6.3</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/660">#660</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump pytest from 8.4.2 to 9.0.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/666">#666</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Fix: updated get_stackup_props() to have improveStackupModelEnabled in the response</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/669">#669</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump numpydoc from 1.9.0 to 1.10.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/678">#678</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump sphinx-gallery from 0.19.0 to 0.20.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/679">#679</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fix: updated dependabot prefix</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/680">#680</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump ansys-api-sherlock from 0.1.52 to 0.1.53</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/682">#682</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feat: Implemented Update Life Phase API and added unit tests.</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/685">#685</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump pytest from 9.0.1 to 9.0.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/687">#687</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump ansys-sphinx-theme from 1.6.3 to 1.6.4</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/690">#690</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Build: Bump matplotlib from 3.10.7 to 3.10.8</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/693">#693</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Build: Bump sphinxemoji from 0.3.1 to 0.3.2</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/695">#695</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Chore: increment major version to 1.0</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/712">#712</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<input id="sd-tab-item-8" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-8">
+Test</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Fix: fixed unit tests</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/671">#671</a></p></td>
+</tr>
+<tr class="row-even"><td><p>fix: modify launcher.launch_sherlock() so it has default security set to mtls</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/710">#710</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.9.1">0.9.1</a> - January 21, 2026
+<a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.8.4">0.8.4</a> - January 23, 2026</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-9" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-9">
+Documentation</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>fix: modify launcher.launch_sherlock() to not include the grpcPort argument when using UDS</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/709">#709</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="january-21-2026">
+<h2><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.8.3">0.8.3</a> - January 21, 2026<a class="headerlink" href="#january-21-2026" title="Link to this heading">#</a></h2>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-10">
+Added</label><div class="sd-tab-content docutils">
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>feat: secure grpc channels</p></td>
+<td><p><a class="reference external" href="https://github.com/ansys/pysherlock/pull/703">#703</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="id108">
+<h2><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.8.2">0.8.2</a> - 2025-01-20<a class="headerlink" href="#id108" title="Link to this heading">#</a></h2>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>fix: changed Launcher.launch_sherlock() to properly append sherlock_command_args <a class="reference external" href="https://github.com/ansys/pysherlock/pull/487">#487</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id111">
+<h2><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.8.1">0.8.1</a> - 2024-12-10<a class="headerlink" href="#id111" title="Link to this heading">#</a></h2>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>fix: conf.py issue <a class="reference external" href="https://github.com/ansys/pysherlock/pull/467">#467</a></p></li>
+<li><p>fix: import statements <a class="reference external" href="https://github.com/ansys/pysherlock/pull/470">#470</a></p></li>
+</ul>
+</section>
+<section id="id114">
+<h3>Documentation<a class="headerlink" href="#id114" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>MAINT: Bump pytest from 8.3.3 to 8.3.4 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/459">#459</a></p></li>
+<li><p>MAINT: Bump ansys-sphinx-theme from 1.2.1 to 1.2.3 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/463">#463</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id118">
+<h2><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.8.0">0.8.0</a> - 2024-12-10<a class="headerlink" href="#id118" title="Link to this heading">#</a></h2>
+<section id="id119">
+<h3>Fixed<a class="headerlink" href="#id119" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>fix: conf.py issue <a class="reference external" href="https://github.com/ansys/pysherlock/pull/467">#467</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id122">
+<h2><a class="reference external" href="https://github.com/ansys/pysherlock/releases/tag/v0.8.0">0.8.0</a> - 2024-12-09<a class="headerlink" href="#id122" title="Link to this heading">#</a></h2>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>feat: launching a specific version of Sherlock <a class="reference external" href="https://github.com/ansys/pysherlock/pull/431">#431</a></p></li>
+</ul>
+</section>
+<section id="id124">
+<h3>Fixed<a class="headerlink" href="#id124" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>fix: proper AUTHORS file <a class="reference external" href="https://github.com/ansys/pysherlock/pull/438">#438</a></p></li>
+</ul>
+</section>
+<section id="id126">
+<h3>Documentation<a class="headerlink" href="#id126" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>MAINT: add action changelog and changelog.rst for release notes <a class="reference external" href="https://github.com/ansys/pysherlock/pull/426">#426</a></p></li>
+<li><p>Update unit test for HV strain map analysis. <a class="reference external" href="https://github.com/ansys/pysherlock/pull/428">#428</a></p></li>
+<li><p>MAINT: Bump ansys-sphinx-theme from 1.1.6 to 1.1.7 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/429">#429</a></p></li>
+<li><p>MAINT: Bump grpcio from 1.67.0 to 1.67.1 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/433">#433</a></p></li>
+<li><p>MAINT: Bump pytest-cov from 5.0.0 to 6.0.0 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/434">#434</a></p></li>
+<li><p>MAINT: Bump ansys-sphinx-theme from 1.1.7 to 1.2.0 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/436">#436</a></p></li>
+<li><p>feat: Adding version check to all API methods <a class="reference external" href="https://github.com/ansys/pysherlock/pull/440">#440</a></p></li>
+<li><p>feat: Keith/potting region update <a class="reference external" href="https://github.com/ansys/pysherlock/pull/441">#441</a></p></li>
+<li><p>fix: Analysis.update_harmonic_vibe_props(): add support for setting model source and strain map natural frequency <a class="reference external" href="https://github.com/ansys/pysherlock/pull/442">#442</a></p></li>
+<li><p>docs: update the pull request template <a class="reference external" href="https://github.com/ansys/pysherlock/pull/446">#446</a></p></li>
+<li><p>feat:Keith/copy delete potting region <a class="reference external" href="https://github.com/ansys/pysherlock/pull/448">#448</a></p></li>
+<li><p>MAINT: Bump ansys-sphinx-theme from 1.2.0 to 1.2.1 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/449">#449</a></p></li>
+<li><p>doc: project logo <a class="reference external" href="https://github.com/ansys/pysherlock/pull/450">#450</a></p></li>
+<li><p>MAINT: Bump codecov/codecov-action from 4 to 5 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/451">#451</a></p></li>
+<li><p>feat: add type hints <a class="reference external" href="https://github.com/ansys/pysherlock/pull/454">#454</a></p></li>
+<li><p>feat: increment version of ansys-api-sherlock to 0.1.35 <a class="reference external" href="https://github.com/ansys/pysherlock/pull/461">#461</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#february-06-2026">1.0.1 - February 06, 2026</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#january-21-2026">0.8.3 - January 21, 2026</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id108">0.8.2 - 2025-01-20</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id111">0.8.1 - 2024-12-10</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id114">Documentation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id118">0.8.0 - 2024-12-10</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id119">Fixed</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id122">0.8.0 - 2024-12-09</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id124">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id126">Documentation</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+
+  
+  <nav class="tocsection editthispage" aria-label="Edit this page">
+    <a href="https://github.com/ansys/pysherlock/edit/main/doc/source/changelog.rst" rel="noopener noreferrer">
+      <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </nav>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="_sources/changelog.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text", "objectID"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "_static/search.json";
+const ADVANCE_SEARCH_PATH = "search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2026 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.7.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
