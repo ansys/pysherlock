@@ -23,3 +23,5 @@ Constants
      :members:
 .. autoclass:: UpdateLifePhaseRequest
      :members:
+.. autoclass:: SaveLifeCycleRequest
+     :members:
