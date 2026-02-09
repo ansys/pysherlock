@@ -12,5 +12,4 @@ Launcher
      launch_and_connect
      launch
      connect
-     launch_sherlock
 
