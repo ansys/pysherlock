@@ -1,0 +1,10 @@
+.. vale off
+
+location\_units
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CsvExcelOutlineFile.location_units
+
+.. vale on

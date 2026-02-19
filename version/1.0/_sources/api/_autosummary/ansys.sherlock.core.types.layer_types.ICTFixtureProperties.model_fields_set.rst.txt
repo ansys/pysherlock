@@ -1,0 +1,10 @@
+.. vale off
+
+model\_fields\_set
+==================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoproperty:: ICTFixtureProperties.model_fields_set
+
+.. vale on

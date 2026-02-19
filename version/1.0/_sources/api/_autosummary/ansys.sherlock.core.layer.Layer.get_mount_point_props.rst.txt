@@ -1,0 +1,10 @@
+.. vale off
+
+get\_mount\_point\_props
+========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.get_mount_point_props
+
+.. vale on

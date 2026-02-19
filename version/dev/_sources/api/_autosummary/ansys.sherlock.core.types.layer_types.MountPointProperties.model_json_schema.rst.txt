@@ -1,0 +1,10 @@
+.. vale off
+
+model\_json\_schema
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: MountPointProperties.model_json_schema
+
+.. vale on

@@ -1,0 +1,6 @@
+gen\_stackup
+============
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.gen_stackup

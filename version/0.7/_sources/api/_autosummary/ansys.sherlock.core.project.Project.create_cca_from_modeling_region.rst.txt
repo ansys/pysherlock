@@ -1,0 +1,6 @@
+create\_cca\_from\_modeling\_region
+===================================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.create_cca_from_modeling_region

@@ -1,0 +1,6 @@
+height
+======
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: LegendBounds.height

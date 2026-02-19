@@ -1,0 +1,6 @@
+﻿update\_solder\_fatigue\_props
+==============================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_solder_fatigue_props

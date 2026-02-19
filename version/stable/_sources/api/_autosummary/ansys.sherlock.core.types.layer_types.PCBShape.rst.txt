@@ -1,0 +1,116 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PCBShape
+===============================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PCBShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PCBShape.construct
+      
+      
+      PCBShape.copy
+      
+      
+      PCBShape.dict
+      
+      
+      PCBShape.from_orm
+      
+      
+      PCBShape.json
+      
+      
+      PCBShape.model_construct
+      
+      
+      PCBShape.model_copy
+      
+      
+      PCBShape.model_dump
+      
+      
+      PCBShape.model_dump_json
+      
+      
+      PCBShape.model_json_schema
+      
+      
+      PCBShape.model_parametrized_name
+      
+      
+      PCBShape.model_post_init
+      
+      
+      PCBShape.model_rebuild
+      
+      
+      PCBShape.model_validate
+      
+      
+      PCBShape.model_validate_json
+      
+      
+      PCBShape.model_validate_strings
+      
+      
+      PCBShape.parse_file
+      
+      
+      PCBShape.parse_obj
+      
+      
+      PCBShape.parse_raw
+      
+      
+      PCBShape.schema
+      
+      
+      PCBShape.schema_json
+      
+      
+      PCBShape.update_forward_refs
+      
+      
+      PCBShape.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PCBShape.model_computed_fields
+      
+      
+      PCBShape.model_config
+      
+      
+      PCBShape.model_extra
+      
+      
+      PCBShape.model_fields
+      
+      
+      PCBShape.model_fields_set
+      
+   
+   
+
+.. vale on

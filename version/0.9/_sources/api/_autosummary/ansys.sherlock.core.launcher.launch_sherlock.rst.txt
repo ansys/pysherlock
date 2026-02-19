@@ -1,0 +1,10 @@
+﻿.. vale off
+
+launch\_sherlock
+================
+
+.. currentmodule:: ansys.sherlock.core.launcher
+
+.. autofunction:: launch_sherlock
+
+.. vale on

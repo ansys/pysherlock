@@ -1,0 +1,6 @@
+﻿load\_random\_vibe\_profile
+===========================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.load_random_vibe_profile

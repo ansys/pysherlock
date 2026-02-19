@@ -1,0 +1,29 @@
+﻿ansys.sherlock.core.parts
+=========================
+
+.. automodule:: ansys.sherlock.core.parts
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Parts
+   
+   
+
+   
+   
+   
+
+
+

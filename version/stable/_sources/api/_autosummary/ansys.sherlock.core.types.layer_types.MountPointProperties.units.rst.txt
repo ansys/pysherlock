@@ -1,0 +1,10 @@
+.. vale off
+
+units
+=====
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: MountPointProperties.units
+
+.. vale on

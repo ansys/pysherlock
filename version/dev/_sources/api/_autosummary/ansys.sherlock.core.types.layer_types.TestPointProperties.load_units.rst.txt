@@ -1,0 +1,10 @@
+.. vale off
+
+load\_units
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: TestPointProperties.load_units
+
+.. vale on

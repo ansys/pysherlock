@@ -1,0 +1,6 @@
+image\_bounds
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.image_bounds

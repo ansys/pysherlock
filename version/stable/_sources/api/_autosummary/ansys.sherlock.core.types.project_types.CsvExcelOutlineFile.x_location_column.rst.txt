@@ -1,0 +1,10 @@
+.. vale off
+
+x\_location\_column
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CsvExcelOutlineFile.x_location_column
+
+.. vale on

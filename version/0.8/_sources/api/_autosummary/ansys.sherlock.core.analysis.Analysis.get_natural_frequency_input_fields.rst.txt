@@ -1,0 +1,10 @@
+.. vale off
+
+get\_natural\_frequency\_input\_fields
+======================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.get_natural_frequency_input_fields
+
+.. vale on

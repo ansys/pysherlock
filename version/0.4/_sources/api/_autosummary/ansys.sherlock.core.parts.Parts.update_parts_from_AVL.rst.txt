@@ -1,0 +1,6 @@
+﻿update\_parts\_from\_AVL
+========================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.update_parts_from_AVL

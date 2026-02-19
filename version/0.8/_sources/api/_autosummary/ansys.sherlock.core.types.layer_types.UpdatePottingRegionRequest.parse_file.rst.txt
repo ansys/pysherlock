@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_file
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: UpdatePottingRegionRequest.parse_file
+
+.. vale on

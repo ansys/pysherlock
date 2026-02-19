@@ -1,0 +1,10 @@
+.. vale off
+
+rotation
+========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PolygonalShape.rotation
+
+.. vale on

@@ -1,0 +1,6 @@
+get\_part\_location
+===================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.get_part_location

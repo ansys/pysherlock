@@ -1,0 +1,10 @@
+.. vale off
+
+layer\_snapshot\_enabled
+========================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperFile.layer_snapshot_enabled
+
+.. vale on

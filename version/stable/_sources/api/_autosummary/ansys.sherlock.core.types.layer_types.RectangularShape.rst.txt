@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.RectangularShape
+=======================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: RectangularShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      RectangularShape.construct
+      
+      
+      RectangularShape.copy
+      
+      
+      RectangularShape.dict
+      
+      
+      RectangularShape.from_orm
+      
+      
+      RectangularShape.json
+      
+      
+      RectangularShape.model_construct
+      
+      
+      RectangularShape.model_copy
+      
+      
+      RectangularShape.model_dump
+      
+      
+      RectangularShape.model_dump_json
+      
+      
+      RectangularShape.model_json_schema
+      
+      
+      RectangularShape.model_parametrized_name
+      
+      
+      RectangularShape.model_post_init
+      
+      
+      RectangularShape.model_rebuild
+      
+      
+      RectangularShape.model_validate
+      
+      
+      RectangularShape.model_validate_json
+      
+      
+      RectangularShape.model_validate_strings
+      
+      
+      RectangularShape.parse_file
+      
+      
+      RectangularShape.parse_obj
+      
+      
+      RectangularShape.parse_raw
+      
+      
+      RectangularShape.schema
+      
+      
+      RectangularShape.schema_json
+      
+      
+      RectangularShape.update_forward_refs
+      
+      
+      RectangularShape.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      RectangularShape.model_computed_fields
+      
+      
+      RectangularShape.model_config
+      
+      
+      RectangularShape.model_extra
+      
+      
+      RectangularShape.model_fields
+      
+      
+      RectangularShape.model_fields_set
+      
+      
+      RectangularShape.length
+      
+      
+      RectangularShape.width
+      
+      
+      RectangularShape.center_x
+      
+      
+      RectangularShape.center_y
+      
+      
+      RectangularShape.rotation
+      
+   
+   
+
+.. vale on

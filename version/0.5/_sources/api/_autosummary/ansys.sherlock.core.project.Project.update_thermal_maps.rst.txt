@@ -1,0 +1,6 @@
+update\_thermal\_maps
+=====================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.update_thermal_maps

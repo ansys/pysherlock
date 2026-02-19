@@ -1,0 +1,6 @@
+min\_temperature\_units
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.min_temperature_units

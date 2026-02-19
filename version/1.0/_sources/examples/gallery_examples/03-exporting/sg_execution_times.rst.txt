@@ -1,0 +1,61 @@
+
+:orphan:
+
+.. _sphx_glr_examples_gallery_examples_03-exporting_sg_execution_times:
+
+
+Computation times
+=================
+**00:00.000** total execution time for 9 files **from examples\gallery_examples\03-exporting**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_aedb.py` (``export_aedb.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_mount_points.py` (``export_all_mount_points.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_test_fixtures.py` (``export_all_test_fixtures.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_test_points.py` (``export_all_test_points.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_fea_model.py` (``export_fea_model.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_net_list.py` (``export_net_list.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_part_list.py` (``export_part_list.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_project.py` (``export_project.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_trace_model.py` (``export_trace_model.py``)
+     - 00:00.000
+     - 0.0

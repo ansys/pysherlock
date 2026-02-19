@@ -1,0 +1,10 @@
+.. vale off
+
+get\_test\_point\_props
+=======================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.get_test_point_props
+
+.. vale on

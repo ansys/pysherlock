@@ -1,0 +1,29 @@
+﻿ansys.sherlock.core.stackup
+===========================
+
+.. automodule:: ansys.sherlock.core.stackup
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Stackup
+   
+   
+
+   
+   
+   
+
+
+

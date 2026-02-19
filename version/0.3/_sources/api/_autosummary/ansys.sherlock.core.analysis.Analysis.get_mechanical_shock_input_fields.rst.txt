@@ -1,0 +1,6 @@
+﻿get\_mechanical\_shock\_input\_fields
+=====================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.get_mechanical_shock_input_fields

@@ -1,0 +1,10 @@
+.. vale off
+
+update\_parts\_locations\_by\_file
+==================================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.update_parts_locations_by_file
+
+.. vale on

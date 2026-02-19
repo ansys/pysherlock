@@ -1,0 +1,6 @@
+numeric\_format
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CsvExcelFile.numeric_format

@@ -1,0 +1,43 @@
+﻿ansys.sherlock.core.types.layer\_types.RectangularShape
+=======================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: RectangularShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      RectangularShape.length
+      
+      
+      RectangularShape.width
+      
+      
+      RectangularShape.center_x
+      
+      
+      RectangularShape.center_y
+      
+      
+      RectangularShape.rotation
+      
+   
+   

@@ -1,0 +1,10 @@
+.. vale off
+
+delete\_all\_ict\_fixtures
+==========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.delete_all_ict_fixtures
+
+.. vale on

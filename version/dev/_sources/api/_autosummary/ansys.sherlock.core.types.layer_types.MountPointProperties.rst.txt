@@ -1,0 +1,176 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.MountPointProperties
+===========================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: MountPointProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      MountPointProperties.construct
+      
+      
+      MountPointProperties.copy
+      
+      
+      MountPointProperties.dict
+      
+      
+      MountPointProperties.from_orm
+      
+      
+      MountPointProperties.json
+      
+      
+      MountPointProperties.model_construct
+      
+      
+      MountPointProperties.model_copy
+      
+      
+      MountPointProperties.model_dump
+      
+      
+      MountPointProperties.model_dump_json
+      
+      
+      MountPointProperties.model_json_schema
+      
+      
+      MountPointProperties.model_parametrized_name
+      
+      
+      MountPointProperties.model_post_init
+      
+      
+      MountPointProperties.model_rebuild
+      
+      
+      MountPointProperties.model_validate
+      
+      
+      MountPointProperties.model_validate_json
+      
+      
+      MountPointProperties.model_validate_strings
+      
+      
+      MountPointProperties.parse_file
+      
+      
+      MountPointProperties.parse_obj
+      
+      
+      MountPointProperties.parse_raw
+      
+      
+      MountPointProperties.schema
+      
+      
+      MountPointProperties.schema_json
+      
+      
+      MountPointProperties.str_validation
+      
+      
+      MountPointProperties.update_forward_refs
+      
+      
+      MountPointProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      MountPointProperties.model_computed_fields
+      
+      
+      MountPointProperties.model_config
+      
+      
+      MountPointProperties.model_extra
+      
+      
+      MountPointProperties.model_fields
+      
+      
+      MountPointProperties.model_fields_set
+      
+      
+      MountPointProperties.id
+      
+      
+      MountPointProperties.type
+      
+      
+      MountPointProperties.shape
+      
+      
+      MountPointProperties.units
+      
+      
+      MountPointProperties.x
+      
+      
+      MountPointProperties.y
+      
+      
+      MountPointProperties.length
+      
+      
+      MountPointProperties.width
+      
+      
+      MountPointProperties.diameter
+      
+      
+      MountPointProperties.nodes
+      
+      
+      MountPointProperties.rotation
+      
+      
+      MountPointProperties.side
+      
+      
+      MountPointProperties.height
+      
+      
+      MountPointProperties.material
+      
+      
+      MountPointProperties.boundary
+      
+      
+      MountPointProperties.constraints
+      
+      
+      MountPointProperties.polygon
+      
+      
+      MountPointProperties.state
+      
+      
+      MountPointProperties.chassis_material
+      
+   
+   
+
+.. vale on
