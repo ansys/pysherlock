@@ -24,10 +24,7 @@
 
 """Module containing types for the Common Service."""
 
-try:
-    import SherlockCommonService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2
 
 
 def basic_str_validator(value: str, field_name: str):

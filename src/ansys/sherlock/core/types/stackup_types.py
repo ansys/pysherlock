@@ -23,10 +23,8 @@
 # SOFTWARE.
 
 """Module containing types for the Stackup Service."""
-try:
-    import SherlockStackupService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockStackupService_pb2
+
+from ansys.api.sherlock.v0 import SherlockStackupService_pb2
 
 
 class StackupProperties:

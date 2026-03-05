@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
-# © 2023 - 2025 ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -28,14 +27,10 @@
 from enum import Enum
 from typing import Optional
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
-
-try:
-    import SherlockAnalysisService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 
 analysis_service = SherlockAnalysisService_pb2
 

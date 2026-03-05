@@ -27,6 +27,7 @@
 from enum import Enum
 from typing import List, Optional, Union
 
+from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 from pydantic import BaseModel, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import (
@@ -34,11 +35,6 @@ from ansys.sherlock.core.types.common_types import (
     basic_str_validator,
     optional_str_validator,
 )
-
-try:
-    import SherlockProjectService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 
 project_service = SherlockProjectService_pb2
 thermal_map_file = project_service.ThermalMapFile

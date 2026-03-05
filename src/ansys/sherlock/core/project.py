@@ -26,16 +26,12 @@
 import os
 from typing import Optional
 
+from ansys.api.sherlock.v0 import (
+    SherlockCommonService_pb2,
+    SherlockProjectService_pb2,
+    SherlockProjectService_pb2_grpc,
+)
 import grpc
-
-try:
-    import SherlockCommonService_pb2
-    import SherlockProjectService_pb2
-    import SherlockProjectService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockProjectService_pb2
-    from ansys.api.sherlock.v0 import SherlockProjectService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (

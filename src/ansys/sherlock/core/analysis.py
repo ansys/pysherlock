@@ -25,29 +25,12 @@
 """Module containing all analysis capabilities."""
 from typing import Optional
 
-import grpc
-
-from ansys.sherlock.core.types.analysis_types import (
-    ElementOrder,
-    ModelSource,
-    RunAnalysisRequestAnalysisType,
-    RunStrainMapAnalysisRequestAnalysisType,
-    UpdateComponentFailureMechanismPropsRequest,
-    UpdatePcbModelingPropsRequestAnalysisType,
-    UpdatePcbModelingPropsRequestPcbMaterialModel,
-    UpdatePcbModelingPropsRequestPcbModelType,
-    UpdatePTHFatiguePropsRequest,
-    UpdateSemiconductorWearoutAnalysisPropsRequest,
+from ansys.api.sherlock.v0 import (
+    SherlockAnalysisService_pb2,
+    SherlockAnalysisService_pb2_grpc,
+    SherlockCommonService_pb2,
 )
-
-try:
-    import SherlockAnalysisService_pb2
-    import SherlockAnalysisService_pb2_grpc
-    import SherlockCommonService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
-    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2_grpc
+import grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
@@ -66,6 +49,18 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateSolderFatiguePropsError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.analysis_types import (
+    ElementOrder,
+    ModelSource,
+    RunAnalysisRequestAnalysisType,
+    RunStrainMapAnalysisRequestAnalysisType,
+    UpdateComponentFailureMechanismPropsRequest,
+    UpdatePcbModelingPropsRequestAnalysisType,
+    UpdatePcbModelingPropsRequestPcbMaterialModel,
+    UpdatePcbModelingPropsRequestPcbModelType,
+    UpdatePTHFatiguePropsRequest,
+    UpdateSemiconductorWearoutAnalysisPropsRequest,
+)
 from ansys.sherlock.core.utils.version_check import require_version
 
 
