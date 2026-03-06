@@ -25,22 +25,13 @@
 """Module containing all model generation capabilities."""
 import os.path
 
+from ansys.api.sherlock.v0 import SherlockModelService_pb2, SherlockModelService_pb2_grpc
+from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
+    MeshType,
+    PcbMaterialElasticity,
+    TraceOutputType,
+)
 import grpc
-
-from ansys.sherlock.core.types.analysis_types import ElementOrder
-
-try:
-    import SherlockModelService_pb2
-    from SherlockModelService_pb2 import MeshType, PcbMaterialElasticity, TraceOutputType
-    import SherlockModelService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockModelService_pb2
-    from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
-        MeshType,
-        PcbMaterialElasticity,
-        TraceOutputType,
-    )
-    from ansys.api.sherlock.v0 import SherlockModelService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
@@ -50,6 +41,7 @@ from ansys.sherlock.core.errors import (
     SherlockNoGrpcConnectionException,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.analysis_types import ElementOrder
 from ansys.sherlock.core.types.common_types import Measurement
 from ansys.sherlock.core.utils.version_check import require_version
 

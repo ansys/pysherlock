@@ -27,15 +27,10 @@
 from typing import List, Optional
 import warnings
 
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 from pydantic import BaseModel, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
-
-try:
-    import SherlockCommonService_pb2
-    import SherlockPartsService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 
 parts_service = SherlockPartsService_pb2
 

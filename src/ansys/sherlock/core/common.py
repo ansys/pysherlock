@@ -24,20 +24,13 @@
 
 """Module for running the gRPC APIs in the Sherlock Common service."""
 
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockCommonService_pb2_grpc
 import grpc
-
-from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
-
-try:
-    import SherlockCommonService_pb2
-    import SherlockCommonService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCommonServiceError, SherlockNoGrpcConnectionException
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
 from ansys.sherlock.core.utils.version_check import require_version
 
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
-# © 2024 ANSYS, Inc. All rights reserved
 # SPDX-License-Identifier: MIT
 #
 #

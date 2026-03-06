@@ -23,35 +23,13 @@
 # SOFTWARE.
 
 """Module containing all layer management capabilities."""
-import grpc
-
-from ansys.sherlock.core.types.layer_types import (
-    CircularShape,
-    CopyPottingRegionRequest,
-    DeletePottingRegionRequest,
-    GetICTFixturesPropertiesRequest,
-    GetMountPointsPropertiesRequest,
-    GetTestPointPropertiesRequest,
-    PCBShape,
-    PolygonalShape,
-    RectangularShape,
-    SlotShape,
-    UpdateICTFixturesRequest,
-    UpdateMountPointsRequest,
-    UpdatePottingRegionRequest,
-    UpdateTestPointsRequest,
+from ansys.api.sherlock.v0 import (
+    SherlockCommonService_pb2,
+    SherlockLayerService_pb2,
+    SherlockLayerService_pb2_grpc,
 )
-
-try:
-    import SherlockCommonService_pb2
-    import SherlockLayerService_pb2
-    from SherlockLayerService_pb2 import ModelingRegion
-    import SherlockLayerService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockLayerService_pb2
-    from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
-    from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
+from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
+import grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
@@ -74,6 +52,22 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateTestPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.layer_types import (
+    CircularShape,
+    CopyPottingRegionRequest,
+    DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
+    GetMountPointsPropertiesRequest,
+    GetTestPointPropertiesRequest,
+    PCBShape,
+    PolygonalShape,
+    RectangularShape,
+    SlotShape,
+    UpdateICTFixturesRequest,
+    UpdateMountPointsRequest,
+    UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
+)
 from ansys.sherlock.core.utils.version_check import require_version
 
 

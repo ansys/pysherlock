@@ -23,12 +23,8 @@
 # SOFTWARE.
 
 """Module for shared methods for the gRPC stubs."""
-try:
-    import SherlockCommonService_pb2
-    import SherlockCommonService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2_grpc
+
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockCommonService_pb2_grpc
 import grpc
 
 
