@@ -1,0 +1,278 @@
+
+
+.. _sphx_glr_examples_gallery_examples_01-project-configuration:
+
+Project Configuration
+=====================
+Examples on how to configure a project using PySherlock.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and add a CCA (Circuit Card Assembly) to a project.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_add_cca_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/add_cca`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Add Circuit Card Assembly</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to launch the Sherlock gRPC service, import a project, create a lifecycle phase, and add a harmonic event to the phase, then properly close the connection.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_add_harmonic_event_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/add_harmonic_event`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Add Harmonic Event to Lifecycle Phase</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, create a lifecycle phase, add a harmonic event to the phase, and add harmonic vibration profiles.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_add_harmonic_profile_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/add_harmonic_profile`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Add Harmonic Vibration Profiles</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the Sherlock gRPC service to: - Import a project. - Add modeling regions to a PCB model. - Define different region shapes like polygonal, rectangular, circular, and slot shapes. - Configure PCB and trace model properties for simulation.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_add_modeling_region_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/add_modeling_region`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Add Modeling Regions for PCB Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the Sherlock gRPC service to: - Import a project. - Add potting regions to a PCB model. - Define potting shapes and properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_add_potting_region_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/add_potting_region`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Add Potting Regions for PCB Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update laminate layer properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_laminate_layer_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_laminate_layer`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Laminate Layer Properties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, update mount points using a file, and properly close the connection.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_mount_points_by_file_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_mount_points_by_file`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Mount Points by File</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update part locations.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_part_location_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_part_location`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Part Locations</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update part locations using a CSV file.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_part_location_by_file_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_part_location_by_file`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Part Locations by File</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update part modeling properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_part_modeling_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_part_modeling_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Part Modeling Properties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, update the parts list, and properly close the connection.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_parts_list_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_parts_list`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Parts List</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, update the parts list properties, export the parts list, and properly close the connection.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_parts_list_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_parts_list_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update and Export Parts List Properties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, add potting regions, update existing potting regions, and properly close the connection.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_potting_region_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_potting_region`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Add and Update Potting Regions</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update thermal maps.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/01-project-configuration/images/thumb/sphx_glr_update_thermal_maps_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/01-project-configuration/update_thermal_maps`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Thermal Maps</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gallery_examples/01-project-configuration/add_cca
+   /examples/gallery_examples/01-project-configuration/add_harmonic_event
+   /examples/gallery_examples/01-project-configuration/add_harmonic_profile
+   /examples/gallery_examples/01-project-configuration/add_modeling_region
+   /examples/gallery_examples/01-project-configuration/add_potting_region
+   /examples/gallery_examples/01-project-configuration/update_laminate_layer
+   /examples/gallery_examples/01-project-configuration/update_mount_points_by_file
+   /examples/gallery_examples/01-project-configuration/update_part_location
+   /examples/gallery_examples/01-project-configuration/update_part_location_by_file
+   /examples/gallery_examples/01-project-configuration/update_part_modeling_properties
+   /examples/gallery_examples/01-project-configuration/update_parts_list
+   /examples/gallery_examples/01-project-configuration/update_parts_list_properties
+   /examples/gallery_examples/01-project-configuration/update_potting_region
+   /examples/gallery_examples/01-project-configuration/update_thermal_maps
+

@@ -1,0 +1,10 @@
+.. vale off
+
+max\_temperature
+================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.max_temperature
+
+.. vale on
