@@ -22,13 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-try:
-    import SherlockAnalysisService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
-
 from unittest.mock import Mock
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 import grpc
 import pydantic
 import pytest
