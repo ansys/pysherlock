@@ -1,0 +1,260 @@
+
+
+.. _sphx_glr_examples_gallery_examples_04-analyses:
+
+Running Analyses
+================
+Examples on how to run analyses using PySherlock.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, update part list validation analysis properties, and retrieve those properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_get_parts_list_analysis_props_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/get_parts_list_analysis_props`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Part List Validation Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and retrieve the analysis input fields.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_get_random_vibe_inputs_fields_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/get_random_vibe_inputs_fields`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Get Random Vibration Analysis inputs</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and run various analyses on a project, including part validation, natural frequency, thermal derating, and more.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_run_analysis_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/run_analysis`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run Advanced Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, add strain maps, and run strain map analysis, including harmonic vibration analysis.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_run_harmonic_vibe_strain_map_analysis_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/run_harmonic_vibe_strain_map_analysis`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run Strain Map Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, add strain maps, and run a mechanical shock analysis based on strain maps.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_run_mechanical_shock_strain_map_analysis_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/run_mechanical_shock_strain_map_analysis`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run Mechanical Shock Analysis Example</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, add strain maps, and run random vibration analysis.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_run_random_vibe_strain_map_analysis_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/run_random_vibe_strain_map_analysis`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run Random Vibration Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and configure harmonic vibration analysis properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_harmonic_vibe_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_harmonic_vibe_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Harmonic Vibration Analysis properties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and configure ICT analysis properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_ict_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_ict_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run ICT Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and configure mechanical shock analysis properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_mechanical_shock_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_mechanical_shock_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run Mechanical Shock Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and configure part list validation analysis properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_part_validation_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_part_validation_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Run Part List Validation Analysis</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and configure PCB modeling properties for various analysis types.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_pcb_modeling_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_pcb_modeling_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update PCB Modeling Properties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update random vibration properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_random_vibe_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_random_vibe_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Random Vibration Properties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and update solder fatigue properties.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/04-analyses/images/thumb/sphx_glr_update_solder_fatigue_properties_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/04-analyses/update_solder_fatigue_properties`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Update Solder Fatigue Properties</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gallery_examples/04-analyses/get_parts_list_analysis_props
+   /examples/gallery_examples/04-analyses/get_random_vibe_inputs_fields
+   /examples/gallery_examples/04-analyses/run_analysis
+   /examples/gallery_examples/04-analyses/run_harmonic_vibe_strain_map_analysis
+   /examples/gallery_examples/04-analyses/run_mechanical_shock_strain_map_analysis
+   /examples/gallery_examples/04-analyses/run_random_vibe_strain_map_analysis
+   /examples/gallery_examples/04-analyses/update_harmonic_vibe_properties
+   /examples/gallery_examples/04-analyses/update_ict_properties
+   /examples/gallery_examples/04-analyses/update_mechanical_shock_properties
+   /examples/gallery_examples/04-analyses/update_part_validation_properties
+   /examples/gallery_examples/04-analyses/update_pcb_modeling_properties
+   /examples/gallery_examples/04-analyses/update_random_vibe_properties
+   /examples/gallery_examples/04-analyses/update_solder_fatigue_properties
+
