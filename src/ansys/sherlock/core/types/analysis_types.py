@@ -71,8 +71,8 @@ class RunAnalysisRequestAnalysisType:
     "RANDOM_VIBE"
     COMPONENT_FAILURE_MODE = __analysis_type.ComponentFailureMode
     "COMPONENT_FAILURE_MODE"
-    DFMEA = __analysis_type.DFMEAModule
-    "DFMEA"
+    DFMEA = 8
+    "DFMEA - deprecated 2027 R1"
     PTH_FATIQUE = __analysis_type.PTHFatigue
     "PTH_FATIQUE"
     PART_VALIDATION = __analysis_type.PartValidation
