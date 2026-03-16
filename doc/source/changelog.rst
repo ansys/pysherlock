@@ -9,6 +9,22 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`1.0.2 <https://github.com/ansys/pysherlock/releases/tag/v1.0.2>`_ - March 16, 2026
+===================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build: change minimum versions of grpcio and protobuf and remove upper limits
+          - `#747 <https://github.com/ansys/pysherlock/pull/747>`_
+
+
 `1.0.1 <https://github.com/ansys/pysherlock/releases/tag/v1.0.1>`_ - February 06, 2026
 ======================================================================================
 
