@@ -34,7 +34,7 @@ dependencies = [
 tests = [
     "grpcio==1.78.0",
     "protobuf==7.34.0",
-    "pytest==9.0.2",
+    "pytest==9.0.3",
     "pytest-cov==7.1.0",
 ]
 doc = [
