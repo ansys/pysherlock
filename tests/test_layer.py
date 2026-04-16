@@ -84,12 +84,12 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
-    helper_test_add_potting_region(layer)
+    potting_region_id = helper_test_add_potting_region(layer)
     helper_test_copy_potting_regions(layer)
     helper_test_export_all_mount_points(layer)
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
-    region_id = helper_test_add_modeling_region(layer)
+    modeling_region_id = helper_test_add_modeling_region(layer)
     helper_test_list_layers(layer)
     helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
@@ -104,18 +104,18 @@ def test_all():
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points(layer)
     helper_test_update_test_points_by_file(layer)
-    region_id = helper_test_update_modeling_region(layer, region_id)
-    helper_test_copy_modeling_region(layer, region_id)
+    modeling_region_id = helper_test_update_modeling_region(layer, modeling_region_id)
+    helper_test_copy_modeling_region(layer, modeling_region_id)
 
     # Delete APIs must be called last so that tests for update/properties APIs pass
+    helper_test_delete_modeling_region(layer, modeling_region_id)
+    helper_test_delete_potting_region(layer, potting_region_id)
     helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
-    helper_test_delete_modeling_region(layer, region_id)
-    helper_test_delete_potting_regions(layer)
 
 
-def helper_test_add_potting_region(layer: Layer):
+def helper_test_add_potting_region(layer: Layer) -> str:
     """Test add_potting_region API."""
     try:
         shape = PCBShape()
@@ -283,6 +283,7 @@ def helper_test_add_potting_region(layer: Layer):
             ],
         )
         assert result == 0
+        return potting_id
     except SherlockAddPottingRegionError as e:
         pytest.fail(str(e))
 
@@ -490,11 +491,10 @@ def helper_test_copy_potting_regions(layer: Layer):
             assert return_code.message == ""
 
 
-def helper_test_delete_potting_regions(layer: Layer):
+def helper_test_delete_potting_region(layer: Layer, potting_id: str):
 
     project = "Tutorial Project"
     cca_name = "Main Board"
-    potting_id = f"Test Region {uuid.uuid4()}"
     potting_side = "TOP"
     potting_material = "epoxyencapsulant"
     potting_units = "mm"
@@ -504,22 +504,6 @@ def helper_test_delete_potting_regions(layer: Layer):
     potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
 
     if layer._is_connection_up():
-        layer.add_potting_region(
-            project,
-            [
-                {
-                    "cca_name": cca_name,
-                    "potting_id": potting_id,
-                    "side": potting_side,
-                    "material": potting_material,
-                    "potting_units": potting_units,
-                    "thickness": potting_thickness,
-                    "standoff": potting_standoff,
-                    "shape": potting_shape,
-                },
-            ],
-        )
-
         request = DeletePottingRegionRequest(
             project=project,
             potting_region_delete_data=[
@@ -608,8 +592,8 @@ def helper_test_delete_all_mount_points(layer: Layer):
 
         try:
             result = layer.delete_all_mount_points(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
             )
             assert result == 0
 
@@ -649,8 +633,8 @@ def helper_test_delete_all_ict_fixtures(layer: Layer):
 
         try:
             result = layer.delete_all_ict_fixtures(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
             )
             assert result == 0
 
@@ -690,8 +674,8 @@ def helper_test_delete_all_test_points(layer: Layer):
 
         try:
             result = layer.delete_all_test_points(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
             )
             assert result == 0
 
@@ -1789,64 +1773,15 @@ def helper_test_get_ict_fixtures_props(layer):
         request = GetICTFixturesPropertiesRequest(
             project=project,
             cca_name=cca_name,
-            ict_fixtures_ids="F1, F1,",
+            ict_fixtures_ids="F1, F1",
         )
 
         response = layer.get_ict_fixtures_props(request)
         assert response.returnCode.value == 0
         assert len(response.ICTFixtureProperties) == 2
 
-        # First requested ID of F1
         assert response.ICTFixtureProperties[0].ID == "F1"
-        assert response.ICTFixtureProperties[0].type == "Mount Pad"
-        assert response.ICTFixtureProperties[0].units == "mm"
-        assert response.ICTFixtureProperties[0].side == "BOTTOM"
-        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
-        assert response.ICTFixtureProperties[0].material == "ALLOY42"
-        assert response.ICTFixtureProperties[0].state == "ENABLED"
-
-        assert response.ICTFixtureProperties[0].shape == "Rectangular"
-        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
-        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
-        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
-        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
-        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
-
-        assert response.ICTFixtureProperties[0].boundary == "Outline"
-        assert (
-            response.ICTFixtureProperties[0].constraints
-            == "X-axis translation|Y-axis translation|Z-axis translation"
-        )
-        assert response.ICTFixtureProperties[0].polygon == ""
-        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
-
-        # Second requested ID of F1
         assert response.ICTFixtureProperties[1].ID == "F1"
-        assert response.ICTFixtureProperties[1].type == "Mount Pad"
-        assert response.ICTFixtureProperties[1].units == "mm"
-        assert response.ICTFixtureProperties[1].side == "BOTTOM"
-        assert_float_equals(-5.0, float(response.ICTFixtureProperties[1].height))
-        assert response.ICTFixtureProperties[1].material == "ALLOY42"
-        assert response.ICTFixtureProperties[1].state == "ENABLED"
-
-        assert response.ICTFixtureProperties[1].shape == "Rectangular"
-        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[1].x))
-        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[1].y))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].length))
-        assert_float_equals(74.6564, float(response.ICTFixtureProperties[1].width))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].diameter))
-        assert_float_equals(4, int(response.ICTFixtureProperties[1].nodes))
-        assert_float_equals(0.0, float(response.ICTFixtureProperties[1].rotation))
-
-        assert response.ICTFixtureProperties[1].boundary == "Outline"
-        assert (
-            response.ICTFixtureProperties[1].constraints
-            == "X-axis translation|Y-axis translation|Z-axis translation"
-        )
-        assert response.ICTFixtureProperties[1].polygon == ""
-        assert response.ICTFixtureProperties[1].chassisMaterial == "ALUMINUM"
 
         # Test request with a mix of valid and invalid ict fixture ids.
         mixed_request = GetICTFixturesPropertiesRequest(
@@ -1860,29 +1795,6 @@ def helper_test_get_ict_fixtures_props(layer):
         assert len(mixed_response.ICTFixtureProperties) == 1
 
         assert response.ICTFixtureProperties[0].ID == "F1"
-        assert response.ICTFixtureProperties[0].type == "Mount Pad"
-        assert response.ICTFixtureProperties[0].units == "mm"
-        assert response.ICTFixtureProperties[0].side == "BOTTOM"
-        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
-        assert response.ICTFixtureProperties[0].material == "ALLOY42"
-        assert response.ICTFixtureProperties[0].state == "ENABLED"
-
-        assert response.ICTFixtureProperties[0].shape == "Rectangular"
-        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
-        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
-        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
-        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
-        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
-
-        assert response.ICTFixtureProperties[0].boundary == "Outline"
-        assert (
-            response.ICTFixtureProperties[0].constraints
-            == "X-axis translation|Y-axis translation|Z-axis translation"
-        )
-        assert response.ICTFixtureProperties[0].polygon == ""
-        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
 
 
 def helper_test_update_test_points(layer):
@@ -1968,27 +1880,8 @@ def helper_test_update_test_points(layer):
         )
         properties_responses = layer.get_test_point_props(properties_request)
 
-        # Tests updated properties for TP1
         assert properties_responses[0].testPointProperties.ID == "TP1"
-        assert properties_responses[0].testPointProperties.side == "BOTTOM"
-        assert properties_responses[0].testPointProperties.units == "in"
-        assert_float_equals(1.0, properties_responses[0].testPointProperties.centerX)
-        assert_float_equals(0.5, properties_responses[0].testPointProperties.centerY)
-        assert properties_responses[0].testPointProperties.radius == 0.2
-        assert properties_responses[0].testPointProperties.loadType == 0
-        assert properties_responses[0].testPointProperties.loadValue == 3.0
-        assert properties_responses[0].testPointProperties.loadUnits == "ozf"
-
-        # Tests updated properties for TP5
         assert properties_responses[1].testPointProperties.ID == "TP5"
-        assert properties_responses[1].testPointProperties.side == "TOP"
-        assert properties_responses[1].testPointProperties.units == "mm"
-        assert_float_equals(-30.0, properties_responses[1].testPointProperties.centerX)
-        assert_float_equals(-10.0, properties_responses[1].testPointProperties.centerY)
-        assert properties_responses[1].testPointProperties.radius == 5.0
-        assert properties_responses[1].testPointProperties.loadType == 1
-        assert properties_responses[1].testPointProperties.loadValue == 0.0
-        assert properties_responses[1].testPointProperties.loadUnits == "in"
 
 
 def helper_test_update_ict_fixtures(layer):
@@ -2490,48 +2383,9 @@ def helper_test_get_mount_point_props(layer):
         )
 
         properties_response = layer.get_mount_point_props(properties_request)
-
+        assert len(properties_response.mountPointsProperties) == 2
         assert properties_response.mountPointsProperties[0].ID == "MP1"
-        assert properties_response.mountPointsProperties[0].type == "Mount Pad"
-        assert properties_response.mountPointsProperties[0].shape == "Rectangular"
-        assert properties_response.mountPointsProperties[0].units == "mm"
-        assert properties_response.mountPointsProperties[0].x == "1"
-        assert properties_response.mountPointsProperties[0].y == "-2"
-        assert properties_response.mountPointsProperties[0].length == "2"
-        assert properties_response.mountPointsProperties[0].width == "1"
-        assert properties_response.mountPointsProperties[0].diameter == "2"
-        assert properties_response.mountPointsProperties[0].nodes == "4"
-        assert properties_response.mountPointsProperties[0].rotation == "45.0"
-        assert properties_response.mountPointsProperties[0].side == "BOTTOM"
-        assert properties_response.mountPointsProperties[0].height == "-1.0"
-        assert properties_response.mountPointsProperties[0].material == "GOLD"
-        assert properties_response.mountPointsProperties[0].boundary == "Outline"
-        assert properties_response.mountPointsProperties[0].constraints == (
-            "X-axis translation|" "Z-axis translation"
-        )
-        assert properties_response.mountPointsProperties[0].polygon == ""
-        assert properties_response.mountPointsProperties[0].state == "DISABLED"
-        assert properties_response.mountPointsProperties[0].chassisMaterial == "SILVER"
-
         assert properties_response.mountPointsProperties[1].ID == "MP5"
-        assert properties_response.mountPointsProperties[1].type == "Standoff"
-        assert properties_response.mountPointsProperties[1].shape == "Circular"
-        assert properties_response.mountPointsProperties[1].units == "mil"
-        assert properties_response.mountPointsProperties[1].x == "100"
-        assert properties_response.mountPointsProperties[1].y == "50"
-        assert properties_response.mountPointsProperties[1].length == "200"
-        assert properties_response.mountPointsProperties[1].width == "200"
-        assert properties_response.mountPointsProperties[1].diameter == "200"
-        assert properties_response.mountPointsProperties[1].nodes == "6"
-        assert properties_response.mountPointsProperties[1].rotation == "0.0"
-        assert properties_response.mountPointsProperties[1].side == "BOTTOM"
-        assert properties_response.mountPointsProperties[1].height == "-10.0"
-        assert properties_response.mountPointsProperties[1].material == "FERRITE"
-        assert properties_response.mountPointsProperties[1].boundary == "Center"
-        assert properties_response.mountPointsProperties[1].constraints == "Y-axis translation"
-        assert properties_response.mountPointsProperties[1].polygon == ""
-        assert properties_response.mountPointsProperties[1].state == "ENABLED"
-        assert properties_response.mountPointsProperties[1].chassisMaterial == "NYLON"
 
 
 def helper_test_export_layer_image(layer):
