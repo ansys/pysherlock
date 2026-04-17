@@ -816,3 +816,22 @@ class UpdateLifePhaseRequest(BaseModel):
         if self.result_archive_file_name is not None:
             request.resultArchiveFileName = self.result_archive_file_name
         return request
+
+
+class ListLifeCycleEventsRequest(BaseModel):
+    """Request for listing all life cycle events."""
+
+    project: str
+    """Sherlock project name."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.ListLCEventsRequest:
+        """Convert to gRPC ListLCEventsRequest."""
+        return SherlockLifeCycleService_pb2.ListLCEventsRequest(
+            project=self.project,
+        )

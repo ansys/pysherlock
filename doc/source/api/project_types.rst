@@ -2,9 +2,7 @@
 
 Project Types
 =============
-
-Classes used for the Project API.
-
+.. automodule:: ansys.sherlock.core.types.project_types
 .. currentmodule:: ansys.sherlock.core.types.project_types
 
 .. autosummary::

@@ -49,6 +49,7 @@ from ansys.sherlock.core.errors import (
     SherlockInvalidRandomVibeProfileEntriesError,
     SherlockInvalidShockProfileEntriesError,
     SherlockInvalidThermalProfileEntriesError,
+    SherlockListLifeCycleEventsError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
@@ -65,6 +66,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     DeletePhaseRequest,
     HarmonicVibeProfileCsvFileProperties,
     ImportThermalSignalRequest,
+    ListLifeCycleEventsRequest,
     RandomVibeProfileCsvFileProperties,
     SaveHarmonicProfileRequest,
     SaveLifeCycleRequest,
@@ -349,7 +351,7 @@ class Lifecycle(GrpcStub):
         num_of_cycles: float,
         cycle_type: str,
         description: str = "",
-    ):
+    ) -> int:
         """Create a life phase.
 
         Available Since: 2021R1
@@ -2756,6 +2758,7 @@ class Lifecycle(GrpcStub):
 
         return response
 
+    @require_version(271)
     def save_life_cycle(
         self, request: SaveLifeCycleRequest
     ) -> SherlockCommonService_pb2.ReturnCode:
@@ -2796,5 +2799,47 @@ class Lifecycle(GrpcStub):
 
         if response.value != 0:
             raise SherlockSaveLifeCycleError(response.message)
+
+        return response
+
+    @require_version(271)
+    def list_life_cycle_events(
+        self, request: ListLifeCycleEventsRequest
+    ) -> SherlockLifeCycleService_pb2.ListLCEventsResponse:
+        """Return a list of life cycle events.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        request : ListLifeCycleEventsRequest
+            Request object containing project.
+
+        Returns
+        -------
+        SherlockLifeCycleService_pb2.ListLCEventsResponse
+            The life cycle events for the project.
+
+        Examples
+            --------
+            >>> from ansys.sherlock.core.types.lifecycle_types import ListLifeCycleEventsRequest
+            >>> from ansys.sherlock.core import launcher
+            >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+            >>> response = sherlock.lifecycle.list_life_cycle_events(
+            >>>     ListLifeCycleEventsRequest(
+            >>>         project="Tutorial Project"
+            >>>     )
+            >>> )
+            >>> assert response.returnCode.value == 0
+        """
+        grpc_request = request._convert_to_grpc()
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        response = self.stub.listLifeCycleEvents(grpc_request)
+
+        if response.returnCode.value != 0:
+            raise SherlockListLifeCycleEventsError(response.returnCode.message)
 
         return response
