@@ -8,26 +8,26 @@ version = "1.0.dev0"
 description = "A python wrapper for Ansys Sherlock"
 readme = "README.rst"
 requires-python = ">=3.10,<4"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"}]
 maintainers = [{name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"}]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Information Analysis",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.13"
 ]
 
 dependencies = [
     "ansys-api-sherlock==0.2.0",
     "grpcio>=1.71.2",
     "protobuf>=5.29.6",
-    "pydantic>=2.9.2",
+    "pydantic>=2.9.2"
 ]
 
 [project.optional-dependencies]
@@ -35,7 +35,7 @@ tests = [
     "grpcio==1.78.0",
     "protobuf==7.34.0",
     "pytest==9.0.3",
-    "pytest-cov==7.1.0",
+    "pytest-cov==7.1.0"
 ]
 doc = [
     "ansys-sphinx-theme==1.7.2",
@@ -49,7 +49,7 @@ doc = [
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.6.1",
     "sphinx-gallery==0.20.0",
-    "sphinx-notfound-page==1.1.0",
+    "sphinx-notfound-page==1.1.0"
 ]
 
 [project.urls]
@@ -79,7 +79,7 @@ show_missing = true
 [tool.pytest.ini_options]
 minversion = "7.1"
 testpaths = [
-    "tests",
+    "tests"
 ]
 
 [tool.towncrier]
