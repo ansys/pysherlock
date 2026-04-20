@@ -1342,3 +1342,15 @@ class SherlockSaveLifeCycleError(Exception):
     def __str__(self):
         """Format error message."""
         return f"Save life cycle error: {self.message}"
+
+
+class SherlockListLifeCycleEventsError(Exception):
+    """Contains the error raised when failing to retrieve life cycle events."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"List life cycle events error: {self.message}"

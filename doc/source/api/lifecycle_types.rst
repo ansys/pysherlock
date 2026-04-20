@@ -5,23 +5,22 @@ LifeCycle Types
 .. automodule:: ansys.sherlock.core.types.lifecycle_types
 .. currentmodule:: ansys.sherlock.core.types.lifecycle_types
 
-Constants
----------
-.. autoclass:: HarmonicVibeProfileCsvFileProperties
-     :members:
-.. autoclass:: RandomVibeProfileCsvFileProperties
-     :members:
-.. autoclass:: ShockProfileDatasetCsvFileProperties
-     :members:
-.. autoclass:: ShockProfilePulsesCsvFileProperties
-     :members:
-.. autoclass:: ThermalProfileCsvFileProperties
-     :members:
-.. autoclass:: ThermalSignalFileProperties
-     :members:
-.. autoclass:: ImportThermalSignalRequest
-     :members:
-.. autoclass:: UpdateLifePhaseRequest
-     :members:
-.. autoclass:: SaveLifeCycleRequest
-     :members:
+.. autosummary::
+     :toctree: _autosummary
+
+    HarmonicVibeProfileCsvFileProperties
+    RandomVibeProfileCsvFileProperties
+    ShockProfileDatasetCsvFileProperties
+    ShockProfilePulsesCsvFileProperties
+    ThermalProfileCsvFileProperties
+    ThermalSignalFileProperties
+    ImportThermalSignalRequest
+    SaveLifeCycleRequest
+    SaveHarmonicProfileRequest
+    SaveRandomVibeProfileRequest
+    SaveShockPulseProfileRequest
+    SaveThermalProfileRequest
+    DeleteEventRequest
+    DeletePhaseRequest
+    UpdateLifePhaseRequest
+    ListLifeCycleEventsRequest

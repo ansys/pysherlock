@@ -39,6 +39,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
     SherlockDeleteError,
+    SherlockListLifeCycleEventsError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
@@ -54,6 +55,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     DeletePhaseRequest,
     HarmonicVibeProfileCsvFileProperties,
     ImportThermalSignalRequest,
+    ListLifeCycleEventsRequest,
     RandomVibeProfileCsvFileProperties,
     SaveHarmonicProfileRequest,
     SaveLifeCycleRequest,
@@ -103,6 +105,7 @@ def test_all():
 
     helper_test_update_life_cycle(lifecycle)
     helper_test_save_life_cycle(lifecycle)
+    helper_test_list_life_cycles(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -4375,6 +4378,38 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
         # delete file_path if created
         if os.path.exists(file_path):
             os.remove(file_path)
+
+
+def helper_test_list_life_cycles(lifecycle: Lifecycle):
+
+    project = "Tutorial Project"
+
+    # project missing
+    try:
+        lifecycle.list_life_cycle_events(ListLifeCycleEventsRequest(project=""))
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # test all variables set
+    req = ListLifeCycleEventsRequest(project=project)
+    grpc_obj = req._convert_to_grpc()
+    assert grpc_obj.project == project
+
+    if lifecycle._is_connection_up():
+        # valid request but false project
+        try:
+            lifecycle.list_life_cycle_events(ListLifeCycleEventsRequest(project="bad project"))
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockListLifeCycleEventsError)
+
+        # valid request
+        response = lifecycle.list_life_cycle_events(req)
+        assert response.returnCode.value == 0
 
 
 if __name__ == "__main__":
