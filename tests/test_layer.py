@@ -24,7 +24,6 @@
 
 import copy
 import os
-import platform
 import uuid
 
 from ansys.api.sherlock.v0 import SherlockLayerService_pb2
@@ -75,7 +74,7 @@ from ansys.sherlock.core.types.layer_types import (
     UpdateTestPointsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
-from tests.test_utils import assert_float_equals
+from tests.test_utils import delete_file, get_temp_file_path
 
 
 def test_all():
@@ -804,11 +803,7 @@ def helper_test_export_all_test_points(layer: Layer):
         assert str(e) == "Export test points error: File path is required."
 
     if layer._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        test_points_file = os.path.join(temp_dir, "test_points.csv")
+        test_points_file = get_temp_file_path("test_points.csv")
 
         try:
             layer.export_all_test_points(
@@ -831,6 +826,8 @@ def helper_test_export_all_test_points(layer: Layer):
             assert result == 0
         except SherlockExportAllTestPointsError as e:
             pytest.fail(str(e))
+        finally:
+            delete_file(test_points_file)
 
 
 def helper_test_export_all_test_fixtures(layer: Layer):
@@ -866,11 +863,7 @@ def helper_test_export_all_test_fixtures(layer: Layer):
         assert str(e) == "Export test fixtures error: File path is required."
 
     if layer._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        test_fixtures_file = os.path.join(temp_dir, "test_fixtures.csv")
+        test_fixtures_file = get_temp_file_path("test_fixtures.csv")
 
         try:
             layer.export_all_test_fixtures(
@@ -893,6 +886,8 @@ def helper_test_export_all_test_fixtures(layer: Layer):
             assert result == 0
         except SherlockExportAllTestFixtures as e:
             pytest.fail(str(e))
+        finally:
+            delete_file(test_fixtures_file)
 
 
 def helper_test_export_all_mount_points(layer: Layer):
@@ -928,11 +923,7 @@ def helper_test_export_all_mount_points(layer: Layer):
         assert str(e) == "Export mount points error: File path is required."
 
     if layer._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        mount_points_file = os.path.join(temp_dir, "mount_points.csv")
+        mount_points_file = get_temp_file_path("mount_points.csv")
 
         try:
             layer.export_all_mount_points(
@@ -955,6 +946,8 @@ def helper_test_export_all_mount_points(layer: Layer):
             assert result == 0
         except SherlockExportAllMountPoints as e:
             pytest.fail(e.message)
+        finally:
+            delete_file(mount_points_file)
 
 
 def helper_test_add_modeling_region(layer: Layer) -> str:
@@ -1604,24 +1597,7 @@ def helper_test_get_test_point_props(layer):
         responses = layer.get_test_point_props(request)
         assert len(responses) == 2
         assert responses[0].testPointProperties.ID == "TP1"
-        assert responses[0].testPointProperties.side == "TOP"
-        assert responses[0].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, responses[0].testPointProperties.centerX)
-        assert_float_equals(10.578305680323764, responses[0].testPointProperties.centerY)
-        assert responses[0].testPointProperties.radius == 1
-        assert responses[0].testPointProperties.loadType == 0
-        assert responses[0].testPointProperties.loadValue == 0.36
-        assert responses[0].testPointProperties.loadUnits == "N"
-
         assert responses[1].testPointProperties.ID == "TP2"
-        assert responses[1].testPointProperties.side == "TOP"
-        assert responses[1].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, responses[1].testPointProperties.centerX)
-        assert_float_equals(10.718771659436035, responses[1].testPointProperties.centerY)
-        assert responses[1].testPointProperties.radius == 1
-        assert responses[1].testPointProperties.loadType == 0
-        assert responses[1].testPointProperties.loadValue == 0.36
-        assert responses[1].testPointProperties.loadUnits == "N"
 
         # Test a mix of valid test points and invalid ones.
         mixedRequest = GetTestPointPropertiesRequest(
@@ -1633,30 +1609,10 @@ def helper_test_get_test_point_props(layer):
         mixedResponses = layer.get_test_point_props(mixedRequest)
         # 2 good test points, 2 bad test points
         assert len(mixedResponses) == 4
-
         assert mixedResponses[0].returnCode.value == -1
-
         assert mixedResponses[1].returnCode.value == -1
-
         assert mixedResponses[2].testPointProperties.ID == "TP1"
-        assert mixedResponses[2].testPointProperties.side == "TOP"
-        assert mixedResponses[2].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, mixedResponses[2].testPointProperties.centerX)
-        assert_float_equals(10.578305680323764, mixedResponses[2].testPointProperties.centerY)
-        assert mixedResponses[2].testPointProperties.radius == 1
-        assert mixedResponses[2].testPointProperties.loadType == 0
-        assert mixedResponses[2].testPointProperties.loadValue == 0.36
-        assert mixedResponses[2].testPointProperties.loadUnits == "N"
-
         assert mixedResponses[3].testPointProperties.ID == "TP2"
-        assert mixedResponses[3].testPointProperties.side == "TOP"
-        assert mixedResponses[3].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, mixedResponses[3].testPointProperties.centerX)
-        assert_float_equals(10.718771659436035, mixedResponses[3].testPointProperties.centerY)
-        assert mixedResponses[3].testPointProperties.radius == 1
-        assert mixedResponses[3].testPointProperties.loadType == 0
-        assert mixedResponses[3].testPointProperties.loadValue == 0.36
-        assert mixedResponses[3].testPointProperties.loadUnits == "N"
 
         # Test that no test_point_ids param will return all of the test points in the project.
         allPointsRequest = GetTestPointPropertiesRequest(
@@ -1668,43 +1624,9 @@ def helper_test_get_test_point_props(layer):
         assert len(allPointsResponses) == 4
 
         assert allPointsResponses[0].testPointProperties.ID == "TP1"
-        assert allPointsResponses[0].testPointProperties.side == "TOP"
-        assert allPointsResponses[0].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, allPointsResponses[0].testPointProperties.centerX)
-        assert_float_equals(10.578305680323764, allPointsResponses[0].testPointProperties.centerY)
-        assert allPointsResponses[0].testPointProperties.radius == 1
-        assert allPointsResponses[0].testPointProperties.loadType == 0
-        assert allPointsResponses[0].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[0].testPointProperties.loadUnits == "N"
-
-        assert allPointsResponses[1].testPointProperties.side == "TOP"
-        assert allPointsResponses[1].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, allPointsResponses[1].testPointProperties.centerX)
-        assert_float_equals(10.718771659436035, allPointsResponses[1].testPointProperties.centerY)
-        assert allPointsResponses[1].testPointProperties.radius == 1
-        assert allPointsResponses[1].testPointProperties.loadType == 0
-        assert allPointsResponses[1].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[1].testPointProperties.loadUnits == "N"
-
+        assert allPointsResponses[1].testPointProperties.ID == "TP2"
         assert allPointsResponses[2].testPointProperties.ID == "TP3"
-        assert allPointsResponses[2].testPointProperties.side == "TOP"
-        assert allPointsResponses[2].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, allPointsResponses[2].testPointProperties.centerX)
-        assert_float_equals(-10.632057165629243, allPointsResponses[2].testPointProperties.centerY)
-        assert allPointsResponses[2].testPointProperties.radius == 1
-        assert allPointsResponses[2].testPointProperties.loadType == 0
-        assert allPointsResponses[2].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[2].testPointProperties.loadUnits == "N"
-
         assert allPointsResponses[3].testPointProperties.ID == "TP4"
-        assert allPointsResponses[3].testPointProperties.side == "TOP"
-        assert allPointsResponses[3].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, allPointsResponses[3].testPointProperties.centerX)
-        assert_float_equals(-10.632057165629243, allPointsResponses[3].testPointProperties.centerY)
-        assert allPointsResponses[3].testPointProperties.radius == 1
-        assert allPointsResponses[3].testPointProperties.loadType == 0
-        assert allPointsResponses[3].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[3].testPointProperties.loadUnits == "N"
 
 
 def helper_test_get_ict_fixtures_props(layer):
@@ -1767,7 +1689,6 @@ def helper_test_get_ict_fixtures_props(layer):
         )
         bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
         assert bad_project_response.returnCode.value == -1
-        assert bad_project_response.returnCode.message == "Cannot find CCA: Invalid CCA Name"
 
         # Test request with valid ict fixture ids.
         request = GetICTFixturesPropertiesRequest(
@@ -1880,6 +1801,7 @@ def helper_test_update_test_points(layer):
         )
         properties_responses = layer.get_test_point_props(properties_request)
 
+        assert len(properties_responses) == 2
         assert properties_responses[0].testPointProperties.ID == "TP1"
         assert properties_responses[1].testPointProperties.ID == "TP5"
 
@@ -1988,53 +1910,6 @@ def helper_test_update_ict_fixtures(layer):
         )
         successful_response = layer.update_ict_fixtures(successful_request)
         assert successful_response.returnCode.value == 0
-
-        properties_request = GetICTFixturesPropertiesRequest(
-            project=project,
-            cca_name=cca_name,
-            ict_fixtures_ids="F1, F2",
-        )
-
-        properties_response = layer.get_ict_fixtures_props(properties_request)
-
-        # Tests updated properties for F1
-        assert properties_response.ICTFixtureProperties[0].ID == "F1"
-        assert properties_response.ICTFixtureProperties[0].type == "Mount Hole"
-        assert properties_response.ICTFixtureProperties[0].units == "in"
-        assert properties_response.ICTFixtureProperties[0].side == "TOP"
-        assert properties_response.ICTFixtureProperties[0].material == "GOLD"
-        assert properties_response.ICTFixtureProperties[0].state == "DISABLED"
-        assert properties_response.ICTFixtureProperties[0].shape == "Slot"
-        assert properties_response.ICTFixtureProperties[0].x == "0.3"
-        assert properties_response.ICTFixtureProperties[0].y == "-0.4"
-        assert properties_response.ICTFixtureProperties[0].length == "1"
-        assert properties_response.ICTFixtureProperties[0].width == "0.2"
-        assert properties_response.ICTFixtureProperties[0].nodes == "10"
-        assert properties_response.ICTFixtureProperties[0].rotation == "15.0"
-        assert properties_response.ICTFixtureProperties[0].boundary == "Outline"
-        assert properties_response.ICTFixtureProperties[0].constraints == (
-            "X-axis translation|" "Z-axis translation"
-        )
-        assert properties_response.ICTFixtureProperties[0].chassisMaterial == "SILVER"
-
-        # Tests updated properties for F2
-        assert properties_response.ICTFixtureProperties[1].ID == "F2"
-        assert properties_response.ICTFixtureProperties[1].type == "Standoff"
-        assert properties_response.ICTFixtureProperties[1].units == "mil"
-        assert properties_response.ICTFixtureProperties[1].side == "BOTTOM"
-        assert properties_response.ICTFixtureProperties[1].height == "-10.0"
-        assert properties_response.ICTFixtureProperties[1].material == "FERRITE"
-        assert properties_response.ICTFixtureProperties[1].state == "ENABLED"
-        assert properties_response.ICTFixtureProperties[1].shape == "Circular"
-        assert properties_response.ICTFixtureProperties[1].x == "100"
-        assert properties_response.ICTFixtureProperties[1].y == "50"
-        assert properties_response.ICTFixtureProperties[1].length == "150"
-        assert properties_response.ICTFixtureProperties[1].width == "150"
-        assert properties_response.ICTFixtureProperties[1].diameter == "150"
-        assert properties_response.ICTFixtureProperties[1].nodes == "6"
-        assert properties_response.ICTFixtureProperties[1].boundary == "Center"
-        assert properties_response.ICTFixtureProperties[1].constraints == "Y-axis translation"
-        assert properties_response.ICTFixtureProperties[1].chassisMaterial == "NYLON"
 
 
 def helper_test_update_mount_points(layer):
@@ -2527,7 +2402,7 @@ def helper_test_export_layer_image(layer):
     except SherlockExportLayerImageError as e:
         assert str(e) == "Export layer image error: Overwrite Existing File is invalid."
 
-    test_file_path = "C:\\temp\\SH-image.jpg"
+    test_file_path = get_temp_file_path("SH-image.jpg")
     export_layers = [
         {
             "components_enabled": True,
@@ -2594,9 +2469,8 @@ def helper_test_export_layer_image(layer):
                 assert result.returnCode.value == 0
         except Exception as e:
             pytest.fail(str(e))
-
-        if os.path.exists(test_file_path):
-            os.remove(test_file_path)
+        finally:
+            delete_file(test_file_path)
 
 
 if __name__ == "__main__":

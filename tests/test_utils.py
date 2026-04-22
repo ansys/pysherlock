@@ -22,6 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+import tempfile
+
 import grpc
 import pytest
 
@@ -50,6 +53,15 @@ def test_version_check():
 
 def assert_float_equals(expected, actual):
     assert pytest.approx(actual, abs=1e-14) == pytest.approx(expected, abs=1e-14)
+
+
+def get_temp_file_path(filename: str) -> str:
+    return os.path.join(tempfile.gettempdir(), filename)
+
+
+def delete_file(file_path: str):
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
 
 if __name__ == "__main__":
