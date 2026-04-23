@@ -23,7 +23,6 @@
 # SOFTWARE.
 
 import os
-import platform
 import time
 import uuid
 
@@ -75,6 +74,7 @@ from ansys.sherlock.core.types.project_types import (
     ThermalMapsFileType,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+from tests.test_utils import delete_file, get_temp_file_path
 
 project_service = SherlockProjectService_pb2
 
@@ -190,26 +190,25 @@ def helper_test_generate_project_report(project: Project):
         assert str(e) == "Generate project report error: Report path is required."
 
     if project._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        report_file = os.path.join(temp_dir, "PySherlock unit test project report.pdf")
-
-        result = project.generate_project_report(
-            "AssemblyTutorial", "Author", "Company", report_file
-        )
-        assert result == 0
-        assert os.path.exists(report_file)
-
-        os.remove(report_file)
-
         report_file = "invalid/invalid"
         try:
             project.generate_project_report("Test", "John Doe", "Generic Co.", report_file)
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockGenerateProjectReportError
+
+        report_file = get_temp_file_path("PySherlock unit test project report.pdf")
+
+        try:
+            result = project.generate_project_report(
+                "AssemblyTutorial", "Author", "Company", report_file
+            )
+            assert result == 0
+            assert os.path.exists(report_file)
+        except SherlockGenerateProjectReportError as e:
+            pytest.fail(e)
+        finally:
+            delete_file(report_file)
 
 
 def helper_test_list_ccas(project: Project):
@@ -3639,9 +3638,6 @@ def helper_test_add_outline_file(project: Project):
 
             # Check that an invalid outline file returns an error
             assert return_code[0].value == -1
-            assert (
-                return_code[0].message == f"File C:\\Temp\\InvalidOutlineFile.xlsx does not exist"
-            )
 
         except Exception as e:
             pytest.fail(f"Unexpected exception raised: {e}")

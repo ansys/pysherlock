@@ -21,7 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
 import uuid
 
 import grpc
@@ -70,6 +69,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     UpdateLifePhaseRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+from tests.test_utils import delete_file, get_temp_file_path
 
 
 def test_all():
@@ -4323,7 +4323,7 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
 def helper_test_save_life_cycle(lifecycle: Lifecycle):
 
     project = "Tutorial Project"
-    file_path = "C:/Temp/LifeCycle_Backup.dfr-lc"
+    file_path = get_temp_file_path("LifeCycle_Backup.dfr-lc")
     overwrite_file = True
 
     # project missing
@@ -4372,12 +4372,11 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
         assert grpc_obj.overwriteFile == overwrite_file
 
         # valid request and file is overwritten
-        response = lifecycle.save_life_cycle(req)
-        assert response.value == 0
-
-        # delete file_path if created
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        try:
+            response = lifecycle.save_life_cycle(req)
+            assert response.value == 0
+        finally:
+            delete_file(file_path)
 
 
 def helper_test_list_life_cycles(lifecycle: Lifecycle):
