@@ -24,6 +24,7 @@
 
 import os
 import platform
+from unittest.mock import MagicMock, patch
 
 from ansys.api.sherlock.v0 import SherlockPartsService_pb2
 import grpc
@@ -141,6 +142,25 @@ def helper_test_update_parts_list(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
         assert str(e.str_itr()) == "['Update parts list error: Parts library is invalid.']"
+
+    # Test the returnCode.value == -1 with empty message and errors in updateError
+    mock_response = MagicMock()
+    mock_response.returnCode.value = -1
+    mock_response.returnCode.message = ""
+    mock_response.updateError = ["Error: part not found"]
+    with patch.object(parts, "_is_connection_up", return_value=True):
+        with patch.object(parts.stub, "updatePartsList", return_value=mock_response):
+            try:
+                parts.update_parts_list(
+                    "Test",
+                    "Card",
+                    "Sherlock Part Library",
+                    "Both",
+                    PartsListSearchDuplicationMode.ERROR,
+                )
+                pytest.fail("No exception raised when server returns errors")
+            except SherlockUpdatePartsListError:
+                pass
 
 
 def helper_test_update_parts_from_AVL(parts: Parts):
@@ -834,6 +854,28 @@ def helper_test_update_parts_list_properties(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
         assert str(e.str_itr()) == ("['Update parts list properties error: Value is invalid.']")
+
+    # Test the  returnCode.value == -1 with empty message and errors in updateErrors
+    mock_response = MagicMock()
+    mock_response.returnCode.value = -1
+    mock_response.returnCode.message = ""
+    mock_response.updateErrors = ["Error updating C1: unknown property"]
+    with patch.object(parts, "_is_connection_up", return_value=True):
+        with patch.object(parts.stub, "updatePartsListProperties", return_value=mock_response):
+            try:
+                parts.update_parts_list_properties(
+                    "Test",
+                    "Card",
+                    [
+                        {
+                            "reference_designators": ["C1"],
+                            "properties": [{"name": "partType", "value": "RESISTOR"}],
+                        }
+                    ],
+                )
+                pytest.fail("No exception raised when server returns errors")
+            except SherlockUpdatePartsListPropertiesError:
+                pass
 
     if not parts._is_connection_up():
         return
