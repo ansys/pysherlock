@@ -262,7 +262,7 @@ class Parts(GrpcStub):
         try:
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockUpdatePartsListError(error_array=response.errors)
+                    raise SherlockUpdatePartsListError(error_array=response.updateError)
 
                 raise SherlockUpdatePartsListError(message=return_code.message)
             else:
@@ -941,7 +941,7 @@ class Parts(GrpcStub):
 
             if return_code.value == -1:
                 if return_code.message == "":
-                    raise SherlockUpdatePartsListPropertiesError(error_array=response.errors)
+                    raise SherlockUpdatePartsListPropertiesError(error_array=response.updateErrors)
 
                 raise SherlockUpdatePartsListPropertiesError(message=return_code.message)
 
