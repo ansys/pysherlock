@@ -264,7 +264,7 @@ class Parts(GrpcStub):
                 raise SherlockUpdatePartsListError(message=return_code.message)
 
             return return_code.value
-        
+
         except SherlockUpdatePartsListError as e:
             for error in e.str_itr():
                 LOG.error(error)
