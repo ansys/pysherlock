@@ -146,8 +146,7 @@ def helper_test_update_parts_list(parts: Parts):
     # Test the returnCode.value == -1 with empty message and errors in updateError
     mock_response = MagicMock()
     mock_response.returnCode.value = -1
-    mock_response.returnCode.message = ""
-    mock_response.updateError = ["Error: part not found"]
+    mock_response.returnCode.message = "Error: part not found"
     with patch.object(parts, "_is_connection_up", return_value=True):
         with patch.object(parts.stub, "updatePartsList", return_value=mock_response):
             try:
@@ -159,8 +158,8 @@ def helper_test_update_parts_list(parts: Parts):
                     PartsListSearchDuplicationMode.ERROR,
                 )
                 pytest.fail("No exception raised when server returns errors")
-            except SherlockUpdatePartsListError:
-                pass
+            except SherlockUpdatePartsListError as e:
+                assert e.message == "Error: part not found"
 
 
 def helper_test_update_parts_from_AVL(parts: Parts):
@@ -856,10 +855,13 @@ def helper_test_update_parts_list_properties(parts: Parts):
         assert str(e.str_itr()) == ("['Update parts list properties error: Value is invalid.']")
 
     # Test the  returnCode.value == -1 with empty message and errors in updateErrors
+    mock_error = MagicMock()
+    mock_error.refDes = "C1"
+    mock_error.message = "unknown property"
     mock_response = MagicMock()
     mock_response.returnCode.value = -1
-    mock_response.returnCode.message = ""
-    mock_response.updateErrors = ["Error updating C1: unknown property"]
+    mock_response.returnCode.message = "C1: unknown property"
+    mock_response.updateErrors = [mock_error]
     with patch.object(parts, "_is_connection_up", return_value=True):
         with patch.object(parts.stub, "updatePartsListProperties", return_value=mock_response):
             try:
@@ -874,8 +876,8 @@ def helper_test_update_parts_list_properties(parts: Parts):
                     ],
                 )
                 pytest.fail("No exception raised when server returns errors")
-            except SherlockUpdatePartsListPropertiesError:
-                pass
+            except SherlockUpdatePartsListPropertiesError as e:
+                assert e.message == "C1: unknown property"
 
     if not parts._is_connection_up():
         return
