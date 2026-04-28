@@ -140,7 +140,12 @@ latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 # variables are the title of pdf, watermark
 latex_elements = {"preamble": latex.generate_preamble(html_title)}
 
-linkcheck_ignore = ["https://www.ansys.com/*"]
+linkcheck_exclude_documents = ["changelog"]
+linkcheck_ignore = [
+    "https://github.com/ansys/pysherlock/.*",
+    "https://opensource.org/licenses/MIT",
+    "https://www.ansys.com/*",
+]
 
 # If we are on a release, we have to ignore the "release" URLs, since it is not
 # available until the release is published.
