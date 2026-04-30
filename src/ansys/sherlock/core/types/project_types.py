@@ -1,10 +1,33 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """Module containing types for the Project Service."""
 
 from enum import Enum
 from typing import List, Optional, Union
 
+from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 from pydantic import BaseModel, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import (
@@ -12,11 +35,6 @@ from ansys.sherlock.core.types.common_types import (
     basic_str_validator,
     optional_str_validator,
 )
-
-try:
-    import SherlockProjectService_pb2
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 
 project_service = SherlockProjectService_pb2
 thermal_map_file = project_service.ThermalMapFile

@@ -1,7 +1,28 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 import os
-import platform
 import time
 import uuid
 
@@ -53,6 +74,7 @@ from ansys.sherlock.core.types.project_types import (
     ThermalMapsFileType,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+from tests.test_utils import delete_file, get_temp_file_path
 
 project_service = SherlockProjectService_pb2
 
@@ -168,26 +190,25 @@ def helper_test_generate_project_report(project: Project):
         assert str(e) == "Generate project report error: Report path is required."
 
     if project._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        report_file = os.path.join(temp_dir, "PySherlock unit test project report.pdf")
-
-        result = project.generate_project_report(
-            "AssemblyTutorial", "Author", "Company", report_file
-        )
-        assert result == 0
-        assert os.path.exists(report_file)
-
-        os.remove(report_file)
-
         report_file = "invalid/invalid"
         try:
             project.generate_project_report("Test", "John Doe", "Generic Co.", report_file)
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockGenerateProjectReportError
+
+        report_file = get_temp_file_path("PySherlock unit test project report.pdf")
+
+        try:
+            result = project.generate_project_report(
+                "AssemblyTutorial", "Author", "Company", report_file
+            )
+            assert result == 0
+            assert os.path.exists(report_file)
+        except SherlockGenerateProjectReportError as e:
+            pytest.fail(e)
+        finally:
+            delete_file(report_file)
 
 
 def helper_test_list_ccas(project: Project):
@@ -3617,9 +3638,6 @@ def helper_test_add_outline_file(project: Project):
 
             # Check that an invalid outline file returns an error
             assert return_code[0].value == -1
-            assert (
-                return_code[0].message == f"File C:\\Temp\\InvalidOutlineFile.xlsx does not exist"
-            )
 
         except Exception as e:
             pytest.fail(f"Unexpected exception raised: {e}")

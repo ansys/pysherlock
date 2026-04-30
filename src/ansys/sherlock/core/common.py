@@ -1,21 +1,36 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """Module for running the gRPC APIs in the Sherlock Common service."""
 
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockCommonService_pb2_grpc
 import grpc
-
-from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
-
-try:
-    import SherlockCommonService_pb2
-    import SherlockCommonService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2_grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import SherlockCommonServiceError, SherlockNoGrpcConnectionException
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
 from ansys.sherlock.core.utils.version_check import require_version
 
 
@@ -138,8 +153,8 @@ class Common(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.common.list_solder_materials()
         """
         if not self._is_connection_up():
@@ -162,8 +177,8 @@ class Common(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> release_version = sherlock.common.get_sherlock_info().releaseVersion
         >>> default_dir = sherlock.common.get_sherlock_info().defaultProjectDir
         >>> is_single_project = sherlock.common.get_sherlock_info().isSingleProjectMode
@@ -187,8 +202,8 @@ class Common(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> solder_data = sherlock.get_solder_info()
         """
         if not self._is_connection_up():

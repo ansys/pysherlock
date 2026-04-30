@@ -5,6 +5,12 @@ Analysis Types
 .. automodule:: ansys.sherlock.core.types.analysis_types
 .. currentmodule:: ansys.sherlock.core.types.analysis_types
 
+.. autosummary::
+     :toctree: _autosummary
+
+    ComponentFailureMechanism
+    UpdateComponentFailureMechanismPropsRequest
+
 Constants
 ---------
 .. autoclass:: ElementOrder
@@ -20,8 +26,4 @@ Constants
 .. autoclass:: UpdatePcbModelingPropsRequestPcbMaterialModel
      :members:
 .. autoclass:: UpdatePcbModelingPropsRequestPcbModelType
-     :members:
-.. autoclass:: ComponentFailureMechanism
-     :members:
-.. autoclass:: UpdateComponentFailureMechanismPropsRequest
      :members:

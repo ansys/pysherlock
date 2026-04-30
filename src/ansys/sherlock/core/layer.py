@@ -1,35 +1,35 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """Module containing all layer management capabilities."""
-import grpc
-
-from ansys.sherlock.core.types.layer_types import (
-    CircularShape,
-    CopyPottingRegionRequest,
-    DeletePottingRegionRequest,
-    GetICTFixturesPropertiesRequest,
-    GetMountPointsPropertiesRequest,
-    GetTestPointPropertiesRequest,
-    PCBShape,
-    PolygonalShape,
-    RectangularShape,
-    SlotShape,
-    UpdateICTFixturesRequest,
-    UpdateMountPointsRequest,
-    UpdatePottingRegionRequest,
-    UpdateTestPointsRequest,
+from ansys.api.sherlock.v0 import (
+    SherlockCommonService_pb2,
+    SherlockLayerService_pb2,
+    SherlockLayerService_pb2_grpc,
 )
-
-try:
-    import SherlockCommonService_pb2
-    import SherlockLayerService_pb2
-    from SherlockLayerService_pb2 import ModelingRegion
-    import SherlockLayerService_pb2_grpc
-except ModuleNotFoundError:
-    from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-    from ansys.api.sherlock.v0 import SherlockLayerService_pb2
-    from ansys.api.sherlock.v0 import SherlockLayerService_pb2_grpc
-    from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
+from ansys.api.sherlock.v0.SherlockLayerService_pb2 import ModelingRegion
+import grpc
 
 from ansys.sherlock.core import LOG
 from ansys.sherlock.core.errors import (
@@ -52,6 +52,22 @@ from ansys.sherlock.core.errors import (
     SherlockUpdateTestPointsByFileError,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
+from ansys.sherlock.core.types.layer_types import (
+    CircularShape,
+    CopyPottingRegionRequest,
+    DeletePottingRegionRequest,
+    GetICTFixturesPropertiesRequest,
+    GetMountPointsPropertiesRequest,
+    GetTestPointPropertiesRequest,
+    PCBShape,
+    PolygonalShape,
+    RectangularShape,
+    SlotShape,
+    UpdateICTFixturesRequest,
+    UpdateMountPointsRequest,
+    UpdatePottingRegionRequest,
+    UpdateTestPointsRequest,
+)
 from ansys.sherlock.core.utils.version_check import require_version
 
 
@@ -118,9 +134,9 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -282,11 +298,11 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import PolygonalShape
         >>> from ansys.sherlock.core.types.layer_types import PottingRegionUpdateData
         >>> from ansys.sherlock.core.types.layer_types import PottingRegion
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> update1 = PottingRegionUpdateData(
         >>> potting_region_id_to_update=potting_id,
@@ -356,10 +372,10 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import CopyPottingRegionRequest
         >>> from ansys.sherlock.core.types.layer_types import PottingRegionCopyData
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> copy_request_example = CopyPottingRegionRequest(
         >>> project=project,
@@ -409,10 +425,10 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import DeletePottingRegionRequest
         >>> from ansys.sherlock.core.types.layer_types import PottingRegionDeleteData
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> delete_request_example = DeletePottingRegionRequest(
         >>> project=project,
@@ -459,8 +475,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -535,8 +551,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -598,8 +614,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -661,8 +677,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -731,8 +747,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -811,8 +827,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -903,8 +919,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -984,8 +1000,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1061,8 +1077,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1177,8 +1193,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1450,8 +1466,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1682,8 +1698,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1777,8 +1793,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1856,8 +1872,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -1945,8 +1961,8 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
         >>>     "ODB++ Tutorial.tgz",
         >>>     True,
@@ -2085,9 +2101,9 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import GetTestPointPropertiesRequest
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> request = layer_types.GetTestPointPropertiesRequest(
         >>>    project = "Test Point Test Project"
         >>>    cca_name = "Main Board"
@@ -2124,9 +2140,9 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import GetICTFixturesPropertiesRequest
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> request = layer_types.GetICTFixturesPropertiesRequest(
         >>>    project = "Tutorial Project"
         >>>    cca_name = "Main Board"
@@ -2160,21 +2176,21 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import UpdateTestPointsRequest,
         >>> TestPointProperties
         >>> from ansys.api.sherlock.v0 import SherlockLayerService_pb2
-        >>> sherlock = connect()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> test_point = TestPointProperties(
-        >>> id="TP1",
-        >>> side="BOTTOM",
-        >>> units="in",
-        >>> center_x=1.0,
-        >>> center_y=0.5,
-        >>> radius=0.2,
-        >>> load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
-        >>> load_value=3.0,
-        >>> load_units="ozf",
+        >>>     id="TP1",
+        >>>     side="BOTTOM",
+        >>>     units="in",
+        >>>     center_x=1.0,
+        >>>     center_y=0.5,
+        >>>     radius=0.2,
+        >>>     load_type=SherlockLayerService_pb2.TestPointProperties.LoadType.Force,
+        >>>     load_value=3.0,
+        >>>     load_units="ozf",
         >>> )
         >>> response = sherlock.layer.update_test_points(UpdateTestPointsRequest(
         >>> project="Tutorial Project",
@@ -2207,30 +2223,30 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import UpdateICTFixturesRequest,
         >>> ICTFixtureProperties
-        >>> sherlock = connect()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> fixture = ICTFixtureProperties(
-        >>> id="F1",
-        >>> type="Mount Hole",
-        >>> units="in",
-        >>> side="TOP",
-        >>> height="0.0",
-        >>> material="GOLD",
-        >>> state="DISABLED",
-        >>> shape="Slot",
-        >>> x="0.3",
-        >>> y="-0.4",
-        >>> length="1.0",
-        >>> width="0.2",
-        >>> diameter="0.0",
-        >>> nodes="10",
-        >>> rotation="15",
-        >>> polygon="",
-        >>> boundary="Outline",
-        >>> constraints="X-axis translation|Z-axis translation",
-        >>> chassis_material="SILVER",
+        >>>     id="F1",
+        >>>     type="Mount Hole",
+        >>>     units="in",
+        >>>     side="TOP",
+        >>>     height="0.0",
+        >>>     material="GOLD",
+        >>>     state="DISABLED",
+        >>>     shape="Slot",
+        >>>     x="0.3",
+        >>>     y="-0.4",
+        >>>     length="1.0",
+        >>>     width="0.2",
+        >>>     diameter="0.0",
+        >>>     nodes="10",
+        >>>     rotation="15",
+        >>>     polygon="",
+        >>>     boundary="Outline",
+        >>>     constraints="X-axis translation|Z-axis translation",
+        >>>     chassis_material="SILVER",
         >>> )
         >>> response = sherlock.layer.update_ict_fixtures(UpdateICTFixturesRequest(
         >>> project="Tutorial Project",
@@ -2264,9 +2280,9 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import GetMountPointsPropertiesRequest
-        >>> sherlock = launch_sherlock()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> request = layer_types.GetMountPointsPropertiesRequest(
         >>>    project = "Tutorial Project"
         >>>    cca_name = "Main Board"
@@ -2300,10 +2316,10 @@ class Layer(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.launcher import launch_sherlock
         >>> from ansys.sherlock.core.types.layer_types import UpdateMountPointsRequest,
         >>> MountPointProperties
-        >>> sherlock = connect()
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> mount_point = MountPointProperties(
         >>>     id="MP1",
         >>>     type="Mount Pad",

@@ -5,11 +5,14 @@ Common Types
 .. automodule:: ansys.sherlock.core.types.common_types
 .. currentmodule:: ansys.sherlock.core.types.common_types
 
+.. autosummary::
+     :toctree: _autosummary
+
+    Measurement
+
 Constants
 ---------
 .. autoclass:: ListUnitsRequestUnitType
      :members:
 .. autoclass:: TableDelimiter
-     :members:
-.. autoclass:: Measurement
      :members:

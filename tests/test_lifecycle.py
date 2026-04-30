@@ -1,4 +1,25 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 import uuid
 
@@ -17,12 +38,15 @@ from ansys.sherlock.core.errors import (
     SherlockAddThermalProfilesError,
     SherlockCreateLifePhaseError,
     SherlockDeleteError,
+    SherlockListLifeCycleEventsError,
     SherlockLoadHarmonicProfileError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadShockProfilePulsesError,
     SherlockLoadThermalProfileError,
+    SherlockSaveLifeCycleError,
     SherlockSaveProfileError,
+    SherlockUpdateLifePhaseError,
 )
 from ansys.sherlock.core.lifecycle import Lifecycle
 from ansys.sherlock.core.types.lifecycle_types import (
@@ -30,8 +54,10 @@ from ansys.sherlock.core.types.lifecycle_types import (
     DeletePhaseRequest,
     HarmonicVibeProfileCsvFileProperties,
     ImportThermalSignalRequest,
+    ListLifeCycleEventsRequest,
     RandomVibeProfileCsvFileProperties,
     SaveHarmonicProfileRequest,
+    SaveLifeCycleRequest,
     SaveRandomVibeProfileRequest,
     SaveShockPulseProfileRequest,
     SaveThermalProfileRequest,
@@ -39,8 +65,11 @@ from ansys.sherlock.core.types.lifecycle_types import (
     ShockProfilePulsesCsvFileProperties,
     ThermalProfileCsvFileProperties,
     ThermalSignalFileProperties,
+    UpdateLifeCycleRequest,
+    UpdateLifePhaseRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+from tests.test_utils import delete_file, get_temp_file_path
 
 
 def test_all():
@@ -72,6 +101,11 @@ def test_all():
 
     helper_test_delete_event(lifecycle, shock_event_name, phase_name)
     helper_test_delete_phase(lifecycle, phase_name)
+    helper_test_update_life_phase(lifecycle)
+
+    helper_test_update_life_cycle(lifecycle)
+    helper_test_save_life_cycle(lifecycle)
+    helper_test_list_life_cycles(lifecycle)
 
 
 def helper_test_create_life_phase(lifecycle: Lifecycle):
@@ -142,6 +176,105 @@ def helper_test_create_life_phase(lifecycle: Lifecycle):
             pytest.fail(str(e.str_itr()))
 
         return phase_name
+
+
+def helper_test_update_life_cycle(lifecycle: Lifecycle):
+    """Test update_life_cycle API"""
+
+    if lifecycle._is_connection_up():
+        project = "Tutorial Project"
+        new_name = "new name"
+        new_description = "new description"
+        new_reliability_metric = 20
+
+        # Unit options:
+        # "Reliability (%)", "Prob. of Failure (%)", "MTBF (years)",
+        # "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+        new_reliability_metric_units = "invalid_unit"
+
+        new_service_life = 5
+
+        # Unit options:
+        # "year","day","hr", "min","sec"
+        new_service_life_units = "year"
+
+        result_archive_file_name = "filename"
+
+        # Test invalid reliability unit
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        expected_err = "Unsupported unit type '" + new_reliability_metric_units
+        assert return_code.message.startswith(expected_err)
+        new_reliability_metric_units = "Prob. of Failure (%)"
+
+        # Test invalid service life unit
+        new_service_life_units = "invalid_unit"
+
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        expected_err = "Unsupported unit type '" + new_service_life_units + "' Valid options are: "
+        assert return_code.message.startswith(expected_err)
+        new_service_life_units = "year"
+
+        # Test invalid file name
+        result_archive_file_name = "file/name"
+
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        assert (
+            return_code.message
+            == "Invalid Archive Name: The archive name contains invalid characters"
+        )
+        result_archive_file_name = "filename"
+
+        # Test success
+        return_code = lifecycle.update_life_cycle(
+            UpdateLifeCycleRequest(
+                project=project,
+                new_name=new_name,
+                new_description=new_description,
+                new_reliability_metric=new_reliability_metric,
+                new_reliability_metric_units=new_reliability_metric_units,
+                new_service_life=new_service_life,
+                new_service_life_units=new_service_life_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+
+        assert return_code.message == ""
 
 
 def helper_test_add_random_vibe_event(lifecycle: Lifecycle, phase_name: str) -> str:
@@ -3962,6 +4095,320 @@ def helper_test_delete_phase(lifecycle: Lifecycle, phase_name: str):
             )
         )
         assert response.value == 0
+
+
+def helper_test_update_life_phase(lifecycle: Lifecycle):
+
+    project = "Tutorial Project"
+    phase_name = "Environmental"
+    new_phase_name = "Environment"
+    new_num_of_cycles = 100
+    new_cycle_type = "PER DAY"
+    new_description = "new description"
+    new_duration = 24
+    new_duration_units = "hr"
+    result_archive_file_name = "Tutorial Project Results 10_7_2025"
+
+    # project missing
+    try:
+        lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project="",
+                phase_name=phase_name,
+            )
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # phase_name missing
+    try:
+        lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project=project,
+                phase_name="",
+            )
+        )
+        pytest.fail("No exception raised when using a missing phase_name parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, phase_name is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false project
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project="Bad Project",
+                    phase_name=phase_name,
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but false phase_name
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name="NonExistingPhase",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # test all optionals omitted, i.e., not set or default
+        req = UpdateLifePhaseRequest(
+            project=project,
+            phase_name=phase_name,
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.project == project
+        assert grpc_obj.phaseName == phase_name
+        assert not grpc_obj.newPhaseName
+        assert not grpc_obj.newDescription
+        assert not grpc_obj.newDuration
+        assert not grpc_obj.newDurationUnits
+        assert not grpc_obj.newNumOfCycles
+        assert not grpc_obj.newCycleType
+        assert not grpc_obj.resultArchiveFileName
+
+        # test all optionals set
+        req = UpdateLifePhaseRequest(
+            project=project,
+            phase_name=phase_name,
+            new_phase_name=new_phase_name,
+            new_num_of_cycles=new_num_of_cycles,
+            new_cycle_type=new_cycle_type,
+            new_description=new_description,
+            new_duration=new_duration,
+            new_duration_units=new_duration_units,
+            result_archive_file_name=result_archive_file_name,
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.newPhaseName == new_phase_name
+        assert grpc_obj.newDescription == new_description
+        assert grpc_obj.newDuration == new_duration
+        assert grpc_obj.newDurationUnits == new_duration_units
+        assert grpc_obj.newNumOfCycles == new_num_of_cycles
+        assert grpc_obj.resultArchiveFileName == result_archive_file_name
+
+        # test some optionals set
+        req = UpdateLifePhaseRequest(
+            project=project,
+            phase_name=phase_name,
+            new_phase_name=new_phase_name,
+            new_duration_units=new_duration_units,
+            # rest are omitted (None)
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.newPhaseName == new_phase_name
+        assert grpc_obj.newDurationUnits == new_duration_units
+        assert not grpc_obj.newDescription
+        assert not grpc_obj.newDuration
+        assert not grpc_obj.newNumOfCycles
+        assert not grpc_obj.newCycleType
+        assert not grpc_obj.resultArchiveFileName
+
+        # valid request but invalid number of cycles param
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_num_of_cycles=-100,
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but invalid duration param
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_duration=-100,
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but invalid duration units param
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_duration_units="dy",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+
+        # valid request but invalid cycle type
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_cycle_type="PER DY",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+            assert (
+                e.message
+                == "Invalid cycle type. Valid options are: COUNT, DUTY CYCLE, PER YEAR, PER DAY, "
+                "PER HOUR, PER MIN, PER SEC"
+            )
+
+        # valid request but new phase name already exists
+        try:
+            lifecycle.update_life_phase(
+                UpdateLifePhaseRequest(
+                    project=project,
+                    phase_name=phase_name,
+                    new_phase_name="On The Road",
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockUpdateLifePhaseError)
+            assert (
+                e.message
+                == "The life phase 'On The Road' already exists for the project's life cycle."
+            )
+
+        # valid request with all optional params.
+        response = lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project=project,
+                phase_name=phase_name,
+                new_phase_name=new_phase_name,
+                new_num_of_cycles=new_num_of_cycles,
+                new_cycle_type=new_cycle_type,
+                new_description=new_description,
+                new_duration=new_duration,
+                new_duration_units=new_duration_units,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+        assert response.value == 0
+
+        # valid request with some optional params.
+        response = lifecycle.update_life_phase(
+            UpdateLifePhaseRequest(
+                project=project,
+                phase_name=new_phase_name,
+                new_phase_name=phase_name,
+                new_num_of_cycles=new_num_of_cycles,
+                result_archive_file_name=result_archive_file_name,
+            )
+        )
+        assert response.value == 0
+
+
+def helper_test_save_life_cycle(lifecycle: Lifecycle):
+
+    project = "Tutorial Project"
+    file_path = get_temp_file_path("LifeCycle_Backup.dfr-lc")
+    overwrite_file = True
+
+    # project missing
+    try:
+        lifecycle.save_life_cycle(
+            SaveLifeCycleRequest(project="", file_path=file_path, overwrite_file=overwrite_file)
+        )
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # file path missing
+    try:
+        lifecycle.save_life_cycle(
+            SaveLifeCycleRequest(project=project, file_path="", overwrite_file=overwrite_file)
+        )
+        pytest.fail("No exception raised when using a missing file path parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, file_path is invalid because it is None or empty."
+        )
+
+    if lifecycle._is_connection_up():
+        # valid request but false project
+        try:
+            lifecycle.save_life_cycle(
+                SaveLifeCycleRequest(
+                    project="bad project", file_path=file_path, overwrite_file=overwrite_file
+                )
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockSaveLifeCycleError)
+
+        # test all variables set
+        req = SaveLifeCycleRequest(
+            project=project, file_path=file_path, overwrite_file=overwrite_file
+        )
+        grpc_obj = req._convert_to_grpc()
+        assert grpc_obj.project == project
+        assert grpc_obj.filePath == file_path
+        assert grpc_obj.overwriteFile == overwrite_file
+
+        # valid request and file is overwritten
+        try:
+            response = lifecycle.save_life_cycle(req)
+            assert response.value == 0
+        finally:
+            delete_file(file_path)
+
+
+def helper_test_list_life_cycles(lifecycle: Lifecycle):
+
+    project = "Tutorial Project"
+
+    # project missing
+    try:
+        lifecycle.list_life_cycle_events(ListLifeCycleEventsRequest(project=""))
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # test all variables set
+    req = ListLifeCycleEventsRequest(project=project)
+    grpc_obj = req._convert_to_grpc()
+    assert grpc_obj.project == project
+
+    if lifecycle._is_connection_up():
+        # valid request but false project
+        try:
+            lifecycle.list_life_cycle_events(ListLifeCycleEventsRequest(project="bad project"))
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockListLifeCycleEventsError)
+
+        # valid request
+        response = lifecycle.list_life_cycle_events(req)
+        assert response.returnCode.value == 0
 
 
 if __name__ == "__main__":

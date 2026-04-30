@@ -1,4 +1,26 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """Module containing types for the Lifecycle Service."""
 
@@ -460,6 +482,88 @@ class ImportThermalSignalRequest(BaseModel):
         )
 
 
+class UpdateLifeCycleRequest(BaseModel):
+    """Request to update the life cycle."""
+
+    project: str
+    """Sherlock project name."""
+
+    new_name: str
+    """The new name of the life cycle."""
+
+    new_description: str
+    """The new description of the life cycle."""
+
+    new_reliability_metric: float
+    """The new reliability metric value.
+    Options are: "Reliability (%)", "Prob. of Failure (%)",
+    "MTBF (years)", "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
+    """
+
+    new_reliability_metric_units: str
+    """The new reliability metric units."""
+
+    new_service_life: float
+    """The new service life value."""
+
+    new_service_life_units: str
+    """The new service life units.
+    Options are: "year", "day", "hr", "min", "sec"
+    """
+
+    result_archive_file_name: str
+    """File name for saved results. File names will be overwritten.
+       Sub-Assembly results will be saved."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.UpdateLifeCycleRequest:
+        """Convert to gRPC SaveHarmonicProfileRequest."""
+        return SherlockLifeCycleService_pb2.UpdateLifeCycleRequest(
+            project=self.project,
+            newName=self.new_name,
+            newDescription=self.new_description,
+            newReliabilityMetric=self.new_reliability_metric,
+            newReliabilityMetricUnits=self.new_reliability_metric_units,
+            newServiceLife=self.new_service_life,
+            newServiceLifeUnits=self.new_service_life_units,
+            resultArchiveFileName=self.result_archive_file_name,
+        )
+
+
+class SaveLifeCycleRequest(BaseModel):
+    """Request to save a project's life cycle to a .dfr-lc file."""
+
+    project: str
+    """Sherlock project name."""
+
+    file_path: str
+    """Full directory path + file name for where the life cycle file should be saved.
+    The file name should include the .dfr-lc extension."""
+
+    overwrite_file: bool
+    """If true and the file already exists, it will be overwritten.
+    If false and the file exists, then an error will be returned."""
+
+    @field_validator("project", "file_path")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.SaveLifeCycleRequest:
+        """Convert to gRPC SaveLifeCycleRequest."""
+        return SherlockLifeCycleService_pb2.SaveLifeCycleRequest(
+            project=self.project,
+            filePath=self.file_path,
+            overwriteFile=self.overwrite_file,
+        )
+
+
 class SaveHarmonicProfileRequest(BaseModel):
     """Request to save a harmonic life cycle event profile to a .dat or .csv file."""
 
@@ -637,4 +741,97 @@ class DeletePhaseRequest(BaseModel):
         return SherlockLifeCycleService_pb2.DeletePhaseRequest(
             project=self.project,
             phaseName=self.phase_name,
+        )
+
+
+class UpdateLifePhaseRequest(BaseModel):
+    """Request for updating an existing life phase in a specified project's life cycle."""
+
+    project: str
+    """Sherlock project name."""
+
+    phase_name: str
+    """Name of the life cycle phase to be updated."""
+
+    new_phase_name: Optional[str] = None
+    """(Optional) Updated name of life phase."""
+
+    new_description: Optional[str] = None
+    """(Optional) Updated description of life phase."""
+
+    new_duration: Optional[float] = None
+    """(Optional) Updated event duration length."""
+
+    new_duration_units: Optional[str] = None
+    """(Optional) Updated event duration units."""
+
+    new_num_of_cycles: Optional[float] = None
+    """(Optional) Updated number of cycles defined for the life phase."""
+
+    new_cycle_type: Optional[str] = None
+    """(Optional) Updated cycle type. Acceptable values are COUNT, DUTY_CYCLE, PER YEAR, PER DAY,
+        PER HOUR, PER MIN, and PER SEC.
+    """
+
+    result_archive_file_name: Optional[str] = None
+    """(Optional) Filename for saving analysis results and life cycle data, including any
+        sub-assembly results. Any existing results will be overwritten. If this file name is
+        omitted, then analysis results will not be saved during the update.
+    """
+
+    @field_validator("project", "phase_name")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    @field_validator(
+        "new_phase_name",
+        "new_description",
+        "new_duration_units",
+        "new_cycle_type",
+        "result_archive_file_name",
+    )
+    @classmethod
+    def optional_str_validation(cls, value: Optional[str], info):
+        """Allow the optional fields to not be set, i.e., None."""
+        return optional_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.UpdateLifePhaseRequest:
+        request = SherlockLifeCycleService_pb2.UpdateLifePhaseRequest()
+        request.project = self.project
+        request.phaseName = self.phase_name
+        if self.new_phase_name is not None:
+            request.newPhaseName = self.new_phase_name
+        if self.new_description is not None:
+            request.newDescription = self.new_description
+        if self.new_duration is not None:
+            request.newDuration = self.new_duration
+        if self.new_duration_units is not None:
+            request.newDurationUnits = self.new_duration_units
+        if self.new_num_of_cycles is not None:
+            request.newNumOfCycles = self.new_num_of_cycles
+        if self.new_cycle_type is not None:
+            request.newCycleType = self.new_cycle_type
+        if self.result_archive_file_name is not None:
+            request.resultArchiveFileName = self.result_archive_file_name
+        return request
+
+
+class ListLifeCycleEventsRequest(BaseModel):
+    """Request for listing all life cycle events."""
+
+    project: str
+    """Sherlock project name."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.ListLCEventsRequest:
+        """Convert to gRPC ListLCEventsRequest."""
+        return SherlockLifeCycleService_pb2.ListLCEventsRequest(
+            project=self.project,
         )

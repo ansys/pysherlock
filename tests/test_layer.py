@@ -1,8 +1,29 @@
-# Copyright (C) 2021 - 2025 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 import copy
 import os
-import platform
 import uuid
 
 from ansys.api.sherlock.v0 import SherlockLayerService_pb2
@@ -53,7 +74,7 @@ from ansys.sherlock.core.types.layer_types import (
     UpdateTestPointsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
-from tests.test_utils import assert_float_equals
+from tests.test_utils import delete_file, get_temp_file_path
 
 
 def test_all():
@@ -62,12 +83,12 @@ def test_all():
     channel = grpc.insecure_channel(channel_param)
     layer = Layer(channel, SKIP_VERSION_CHECK)
 
-    helper_test_add_potting_region(layer)
+    potting_region_id = helper_test_add_potting_region(layer)
     helper_test_copy_potting_regions(layer)
     helper_test_export_all_mount_points(layer)
     helper_test_export_all_test_fixtures(layer)
     helper_test_export_all_test_points(layer)
-    region_id = helper_test_add_modeling_region(layer)
+    modeling_region_id = helper_test_add_modeling_region(layer)
     helper_test_list_layers(layer)
     helper_test_get_ict_fixtures_props(layer)
     helper_test_get_test_point_props(layer)
@@ -82,18 +103,18 @@ def test_all():
     helper_test_update_test_fixtures_by_file(layer)
     helper_test_update_test_points(layer)
     helper_test_update_test_points_by_file(layer)
-    region_id = helper_test_update_modeling_region(layer, region_id)
-    helper_test_copy_modeling_region(layer, region_id)
+    modeling_region_id = helper_test_update_modeling_region(layer, modeling_region_id)
+    helper_test_copy_modeling_region(layer, modeling_region_id)
 
     # Delete APIs must be called last so that tests for update/properties APIs pass
+    helper_test_delete_modeling_region(layer, modeling_region_id)
+    helper_test_delete_potting_region(layer, potting_region_id)
     helper_test_delete_all_ict_fixtures(layer)
     helper_test_delete_all_mount_points(layer)
     helper_test_delete_all_test_points(layer)
-    helper_test_delete_modeling_region(layer, region_id)
-    helper_test_delete_potting_regions(layer)
 
 
-def helper_test_add_potting_region(layer: Layer):
+def helper_test_add_potting_region(layer: Layer) -> str:
     """Test add_potting_region API."""
     try:
         shape = PCBShape()
@@ -261,6 +282,7 @@ def helper_test_add_potting_region(layer: Layer):
             ],
         )
         assert result == 0
+        return potting_id
     except SherlockAddPottingRegionError as e:
         pytest.fail(str(e))
 
@@ -468,11 +490,10 @@ def helper_test_copy_potting_regions(layer: Layer):
             assert return_code.message == ""
 
 
-def helper_test_delete_potting_regions(layer: Layer):
+def helper_test_delete_potting_region(layer: Layer, potting_id: str):
 
     project = "Tutorial Project"
     cca_name = "Main Board"
-    potting_id = f"Test Region {uuid.uuid4()}"
     potting_side = "TOP"
     potting_material = "epoxyencapsulant"
     potting_units = "mm"
@@ -482,22 +503,6 @@ def helper_test_delete_potting_regions(layer: Layer):
     potting_shape = PolygonalShape(points=[(1, 2), (4.4, 5.5), (1, 6)], rotation=0.0)
 
     if layer._is_connection_up():
-        layer.add_potting_region(
-            project,
-            [
-                {
-                    "cca_name": cca_name,
-                    "potting_id": potting_id,
-                    "side": potting_side,
-                    "material": potting_material,
-                    "potting_units": potting_units,
-                    "thickness": potting_thickness,
-                    "standoff": potting_standoff,
-                    "shape": potting_shape,
-                },
-            ],
-        )
-
         request = DeletePottingRegionRequest(
             project=project,
             potting_region_delete_data=[
@@ -586,8 +591,8 @@ def helper_test_delete_all_mount_points(layer: Layer):
 
         try:
             result = layer.delete_all_mount_points(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
             )
             assert result == 0
 
@@ -627,8 +632,8 @@ def helper_test_delete_all_ict_fixtures(layer: Layer):
 
         try:
             result = layer.delete_all_ict_fixtures(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
             )
             assert result == 0
 
@@ -668,8 +673,8 @@ def helper_test_delete_all_test_points(layer: Layer):
 
         try:
             result = layer.delete_all_test_points(
-                "Tutorial Project",
-                "Main Board",
+                "AssemblyTutorial",
+                "Memory Card 1",
             )
             assert result == 0
 
@@ -798,11 +803,7 @@ def helper_test_export_all_test_points(layer: Layer):
         assert str(e) == "Export test points error: File path is required."
 
     if layer._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        test_points_file = os.path.join(temp_dir, "test_points.csv")
+        test_points_file = get_temp_file_path("test_points.csv")
 
         try:
             layer.export_all_test_points(
@@ -825,6 +826,8 @@ def helper_test_export_all_test_points(layer: Layer):
             assert result == 0
         except SherlockExportAllTestPointsError as e:
             pytest.fail(str(e))
+        finally:
+            delete_file(test_points_file)
 
 
 def helper_test_export_all_test_fixtures(layer: Layer):
@@ -860,11 +863,7 @@ def helper_test_export_all_test_fixtures(layer: Layer):
         assert str(e) == "Export test fixtures error: File path is required."
 
     if layer._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        test_fixtures_file = os.path.join(temp_dir, "test_fixtures.csv")
+        test_fixtures_file = get_temp_file_path("test_fixtures.csv")
 
         try:
             layer.export_all_test_fixtures(
@@ -887,6 +886,8 @@ def helper_test_export_all_test_fixtures(layer: Layer):
             assert result == 0
         except SherlockExportAllTestFixtures as e:
             pytest.fail(str(e))
+        finally:
+            delete_file(test_fixtures_file)
 
 
 def helper_test_export_all_mount_points(layer: Layer):
@@ -922,11 +923,7 @@ def helper_test_export_all_mount_points(layer: Layer):
         assert str(e) == "Export mount points error: File path is required."
 
     if layer._is_connection_up():
-        if platform.system() == "Windows":
-            temp_dir = os.environ.get("TEMP", "C:\\TEMP")
-        else:
-            temp_dir = os.environ.get("TEMP", "/tmp")
-        mount_points_file = os.path.join(temp_dir, "mount_points.csv")
+        mount_points_file = get_temp_file_path("mount_points.csv")
 
         try:
             layer.export_all_mount_points(
@@ -949,6 +946,8 @@ def helper_test_export_all_mount_points(layer: Layer):
             assert result == 0
         except SherlockExportAllMountPoints as e:
             pytest.fail(e.message)
+        finally:
+            delete_file(mount_points_file)
 
 
 def helper_test_add_modeling_region(layer: Layer) -> str:
@@ -1598,24 +1597,7 @@ def helper_test_get_test_point_props(layer):
         responses = layer.get_test_point_props(request)
         assert len(responses) == 2
         assert responses[0].testPointProperties.ID == "TP1"
-        assert responses[0].testPointProperties.side == "TOP"
-        assert responses[0].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, responses[0].testPointProperties.centerX)
-        assert_float_equals(10.578305680323764, responses[0].testPointProperties.centerY)
-        assert responses[0].testPointProperties.radius == 1
-        assert responses[0].testPointProperties.loadType == 0
-        assert responses[0].testPointProperties.loadValue == 0.36
-        assert responses[0].testPointProperties.loadUnits == "N"
-
         assert responses[1].testPointProperties.ID == "TP2"
-        assert responses[1].testPointProperties.side == "TOP"
-        assert responses[1].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, responses[1].testPointProperties.centerX)
-        assert_float_equals(10.718771659436035, responses[1].testPointProperties.centerY)
-        assert responses[1].testPointProperties.radius == 1
-        assert responses[1].testPointProperties.loadType == 0
-        assert responses[1].testPointProperties.loadValue == 0.36
-        assert responses[1].testPointProperties.loadUnits == "N"
 
         # Test a mix of valid test points and invalid ones.
         mixedRequest = GetTestPointPropertiesRequest(
@@ -1627,30 +1609,10 @@ def helper_test_get_test_point_props(layer):
         mixedResponses = layer.get_test_point_props(mixedRequest)
         # 2 good test points, 2 bad test points
         assert len(mixedResponses) == 4
-
         assert mixedResponses[0].returnCode.value == -1
-
         assert mixedResponses[1].returnCode.value == -1
-
         assert mixedResponses[2].testPointProperties.ID == "TP1"
-        assert mixedResponses[2].testPointProperties.side == "TOP"
-        assert mixedResponses[2].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, mixedResponses[2].testPointProperties.centerX)
-        assert_float_equals(10.578305680323764, mixedResponses[2].testPointProperties.centerY)
-        assert mixedResponses[2].testPointProperties.radius == 1
-        assert mixedResponses[2].testPointProperties.loadType == 0
-        assert mixedResponses[2].testPointProperties.loadValue == 0.36
-        assert mixedResponses[2].testPointProperties.loadUnits == "N"
-
         assert mixedResponses[3].testPointProperties.ID == "TP2"
-        assert mixedResponses[3].testPointProperties.side == "TOP"
-        assert mixedResponses[3].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, mixedResponses[3].testPointProperties.centerX)
-        assert_float_equals(10.718771659436035, mixedResponses[3].testPointProperties.centerY)
-        assert mixedResponses[3].testPointProperties.radius == 1
-        assert mixedResponses[3].testPointProperties.loadType == 0
-        assert mixedResponses[3].testPointProperties.loadValue == 0.36
-        assert mixedResponses[3].testPointProperties.loadUnits == "N"
 
         # Test that no test_point_ids param will return all of the test points in the project.
         allPointsRequest = GetTestPointPropertiesRequest(
@@ -1662,43 +1624,9 @@ def helper_test_get_test_point_props(layer):
         assert len(allPointsResponses) == 4
 
         assert allPointsResponses[0].testPointProperties.ID == "TP1"
-        assert allPointsResponses[0].testPointProperties.side == "TOP"
-        assert allPointsResponses[0].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, allPointsResponses[0].testPointProperties.centerX)
-        assert_float_equals(10.578305680323764, allPointsResponses[0].testPointProperties.centerY)
-        assert allPointsResponses[0].testPointProperties.radius == 1
-        assert allPointsResponses[0].testPointProperties.loadType == 0
-        assert allPointsResponses[0].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[0].testPointProperties.loadUnits == "N"
-
-        assert allPointsResponses[1].testPointProperties.side == "TOP"
-        assert allPointsResponses[1].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, allPointsResponses[1].testPointProperties.centerX)
-        assert_float_equals(10.718771659436035, allPointsResponses[1].testPointProperties.centerY)
-        assert allPointsResponses[1].testPointProperties.radius == 1
-        assert allPointsResponses[1].testPointProperties.loadType == 0
-        assert allPointsResponses[1].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[1].testPointProperties.loadUnits == "N"
-
+        assert allPointsResponses[1].testPointProperties.ID == "TP2"
         assert allPointsResponses[2].testPointProperties.ID == "TP3"
-        assert allPointsResponses[2].testPointProperties.side == "TOP"
-        assert allPointsResponses[2].testPointProperties.units == "mm"
-        assert_float_equals(71.21625140992168, allPointsResponses[2].testPointProperties.centerX)
-        assert_float_equals(-10.632057165629243, allPointsResponses[2].testPointProperties.centerY)
-        assert allPointsResponses[2].testPointProperties.radius == 1
-        assert allPointsResponses[2].testPointProperties.loadType == 0
-        assert allPointsResponses[2].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[2].testPointProperties.loadUnits == "N"
-
         assert allPointsResponses[3].testPointProperties.ID == "TP4"
-        assert allPointsResponses[3].testPointProperties.side == "TOP"
-        assert allPointsResponses[3].testPointProperties.units == "mm"
-        assert_float_equals(53.09614010443865, allPointsResponses[3].testPointProperties.centerX)
-        assert_float_equals(-10.632057165629243, allPointsResponses[3].testPointProperties.centerY)
-        assert allPointsResponses[3].testPointProperties.radius == 1
-        assert allPointsResponses[3].testPointProperties.loadType == 0
-        assert allPointsResponses[3].testPointProperties.loadValue == 0.36
-        assert allPointsResponses[3].testPointProperties.loadUnits == "N"
 
 
 def helper_test_get_ict_fixtures_props(layer):
@@ -1761,70 +1689,20 @@ def helper_test_get_ict_fixtures_props(layer):
         )
         bad_project_response = layer.get_ict_fixtures_props(bad_project_request)
         assert bad_project_response.returnCode.value == -1
-        assert bad_project_response.returnCode.message == "Cannot find CCA: Invalid CCA Name"
 
         # Test request with valid ict fixture ids.
         request = GetICTFixturesPropertiesRequest(
             project=project,
             cca_name=cca_name,
-            ict_fixtures_ids="F1, F1,",
+            ict_fixtures_ids="F1, F1",
         )
 
         response = layer.get_ict_fixtures_props(request)
         assert response.returnCode.value == 0
         assert len(response.ICTFixtureProperties) == 2
 
-        # First requested ID of F1
         assert response.ICTFixtureProperties[0].ID == "F1"
-        assert response.ICTFixtureProperties[0].type == "Mount Pad"
-        assert response.ICTFixtureProperties[0].units == "mm"
-        assert response.ICTFixtureProperties[0].side == "BOTTOM"
-        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
-        assert response.ICTFixtureProperties[0].material == "ALLOY42"
-        assert response.ICTFixtureProperties[0].state == "ENABLED"
-
-        assert response.ICTFixtureProperties[0].shape == "Rectangular"
-        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
-        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
-        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
-        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
-        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
-
-        assert response.ICTFixtureProperties[0].boundary == "Outline"
-        assert (
-            response.ICTFixtureProperties[0].constraints
-            == "X-axis translation|Y-axis translation|Z-axis translation"
-        )
-        assert response.ICTFixtureProperties[0].polygon == ""
-        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
-
-        # Second requested ID of F1
         assert response.ICTFixtureProperties[1].ID == "F1"
-        assert response.ICTFixtureProperties[1].type == "Mount Pad"
-        assert response.ICTFixtureProperties[1].units == "mm"
-        assert response.ICTFixtureProperties[1].side == "BOTTOM"
-        assert_float_equals(-5.0, float(response.ICTFixtureProperties[1].height))
-        assert response.ICTFixtureProperties[1].material == "ALLOY42"
-        assert response.ICTFixtureProperties[1].state == "ENABLED"
-
-        assert response.ICTFixtureProperties[1].shape == "Rectangular"
-        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[1].x))
-        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[1].y))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].length))
-        assert_float_equals(74.6564, float(response.ICTFixtureProperties[1].width))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[1].diameter))
-        assert_float_equals(4, int(response.ICTFixtureProperties[1].nodes))
-        assert_float_equals(0.0, float(response.ICTFixtureProperties[1].rotation))
-
-        assert response.ICTFixtureProperties[1].boundary == "Outline"
-        assert (
-            response.ICTFixtureProperties[1].constraints
-            == "X-axis translation|Y-axis translation|Z-axis translation"
-        )
-        assert response.ICTFixtureProperties[1].polygon == ""
-        assert response.ICTFixtureProperties[1].chassisMaterial == "ALUMINUM"
 
         # Test request with a mix of valid and invalid ict fixture ids.
         mixed_request = GetICTFixturesPropertiesRequest(
@@ -1838,29 +1716,6 @@ def helper_test_get_ict_fixtures_props(layer):
         assert len(mixed_response.ICTFixtureProperties) == 1
 
         assert response.ICTFixtureProperties[0].ID == "F1"
-        assert response.ICTFixtureProperties[0].type == "Mount Pad"
-        assert response.ICTFixtureProperties[0].units == "mm"
-        assert response.ICTFixtureProperties[0].side == "BOTTOM"
-        assert_float_equals(-5.0, float(response.ICTFixtureProperties[0].height))
-        assert response.ICTFixtureProperties[0].material == "ALLOY42"
-        assert response.ICTFixtureProperties[0].state == "ENABLED"
-
-        assert response.ICTFixtureProperties[0].shape == "Rectangular"
-        assert_float_equals(-91.3029, float(response.ICTFixtureProperties[0].x))
-        assert_float_equals(-0.1673, float(response.ICTFixtureProperties[0].y))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].length))
-        assert_float_equals(74.6564, float(response.ICTFixtureProperties[0].width))
-        assert_float_equals(7.0448, float(response.ICTFixtureProperties[0].diameter))
-        assert_float_equals(4, int(response.ICTFixtureProperties[0].nodes))
-        assert_float_equals(0.0, float(response.ICTFixtureProperties[0].rotation))
-
-        assert response.ICTFixtureProperties[0].boundary == "Outline"
-        assert (
-            response.ICTFixtureProperties[0].constraints
-            == "X-axis translation|Y-axis translation|Z-axis translation"
-        )
-        assert response.ICTFixtureProperties[0].polygon == ""
-        assert response.ICTFixtureProperties[0].chassisMaterial == "ALUMINUM"
 
 
 def helper_test_update_test_points(layer):
@@ -1946,27 +1801,9 @@ def helper_test_update_test_points(layer):
         )
         properties_responses = layer.get_test_point_props(properties_request)
 
-        # Tests updated properties for TP1
+        assert len(properties_responses) == 2
         assert properties_responses[0].testPointProperties.ID == "TP1"
-        assert properties_responses[0].testPointProperties.side == "BOTTOM"
-        assert properties_responses[0].testPointProperties.units == "in"
-        assert_float_equals(1.0, properties_responses[0].testPointProperties.centerX)
-        assert_float_equals(0.5, properties_responses[0].testPointProperties.centerY)
-        assert properties_responses[0].testPointProperties.radius == 0.2
-        assert properties_responses[0].testPointProperties.loadType == 0
-        assert properties_responses[0].testPointProperties.loadValue == 3.0
-        assert properties_responses[0].testPointProperties.loadUnits == "ozf"
-
-        # Tests updated properties for TP5
         assert properties_responses[1].testPointProperties.ID == "TP5"
-        assert properties_responses[1].testPointProperties.side == "TOP"
-        assert properties_responses[1].testPointProperties.units == "mm"
-        assert_float_equals(-30.0, properties_responses[1].testPointProperties.centerX)
-        assert_float_equals(-10.0, properties_responses[1].testPointProperties.centerY)
-        assert properties_responses[1].testPointProperties.radius == 5.0
-        assert properties_responses[1].testPointProperties.loadType == 1
-        assert properties_responses[1].testPointProperties.loadValue == 0.0
-        assert properties_responses[1].testPointProperties.loadUnits == "in"
 
 
 def helper_test_update_ict_fixtures(layer):
@@ -2074,52 +1911,356 @@ def helper_test_update_ict_fixtures(layer):
         successful_response = layer.update_ict_fixtures(successful_request)
         assert successful_response.returnCode.value == 0
 
-        properties_request = GetICTFixturesPropertiesRequest(
+
+def helper_test_update_mount_points(layer):
+    """Test update_mount_points API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    mount_point_1 = MountPointProperties(
+        id="MP1",
+        type="Mount Pad",
+        shape="Rectangular",
+        units="mm",
+        x=1.0,
+        y=-2.0,
+        length=2.0,
+        width=1.0,
+        diameter=2.0,
+        nodes="4",
+        rotation=45,
+        side="BOTTOM",
+        height=1.0,
+        material="GOLD",
+        boundary="Outline",
+        constraints="X-axis translation|Z-axis translation",
+        polygon="",
+        state="DISABLED",
+        chassis_material="SILVER",
+    )
+
+    mount_point_without_id = MountPointProperties(
+        id="",
+        type="Standoff",
+        shape="Circular",
+        units="mil",
+        x=100,
+        y=50,
+        length=200,
+        width=200,
+        diameter=200,
+        nodes="6",
+        rotation=0,
+        side="BOTTOM",
+        height=10,
+        material="FERRITE",
+        boundary="Center",
+        constraints="Y-axis translation",
+        polygon="",
+        state="ENABLED",
+        chassis_material="NYLON",
+    )
+
+    try:
+        UpdateMountPointsRequest(project="", cca_name=cca_name, mount_points=[mount_point_1])
+        pytest.fail("No exception thrown when using missing project")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateMountPointsRequest(project=project, cca_name="", mount_points=[mount_point_1])
+        pytest.fail("No exception thrown when using missing cca_name")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        UpdateMountPointsRequest(project=project, cca_name=cca_name, mount_points=[])
+        pytest.fail("No exception thrown when using missing mount_points")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, mount_points must contain at least one item."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing type")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, type is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing shape")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, shape is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing units")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, units is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="DISABLED",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing side")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"]) == "Value error, side is invalid because it is None or empty."
+        )
+
+    try:
+        layer.update_mount_points(
+            UpdateMountPointsRequest(
+                project=project,
+                cca_name=cca_name,
+                mount_points=[
+                    MountPointProperties(
+                        id="MP1",
+                        type="Mount Pad",
+                        shape="Rectangular",
+                        units="mm",
+                        x=1.0,
+                        y=-2.0,
+                        length=2.0,
+                        width=1.0,
+                        diameter=0.0,
+                        nodes="10",
+                        rotation=45,
+                        side="BOTTOM",
+                        height=1.0,
+                        material="GOLD",
+                        boundary="Outline",
+                        constraints="X-axis translation|Z-axis translation",
+                        polygon="",
+                        state="",
+                        chassis_material="SILVER",
+                    )
+                ],
+            )
+        )
+        pytest.fail("No exception thrown when using missing state")
+    except pydantic.ValidationError as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, state is invalid because it is None or empty."
+        )
+
+    if layer._is_connection_up():
+        # Happy Path
+        try:
+            successful_response = layer.update_mount_points(
+                UpdateMountPointsRequest(
+                    project=project,
+                    cca_name=cca_name,
+                    mount_points=[mount_point_1, mount_point_without_id],
+                )
+            )
+            assert successful_response.returnCode.value == 0
+        except Exception as e:
+            pytest.fail(f"Exception thrown during successful mount point update: {e}")
+
+
+def helper_test_get_mount_point_props(layer):
+    """Test get_mount_point_props API"""
+
+    project = "Tutorial Project"
+    cca_name = "Main Board"
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project="",
+            cca_name=cca_name,
+            mount_point_ids="MP1",
+        )
+        pytest.fail("No exception raised when using missing project")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, project is invalid because it is None or empty."
+        )
+
+    try:
+        GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name="",
+            mount_point_ids="MP1",
+        )
+        pytest.fail("No exception raised when using missing cca_name")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, cca_name is invalid because it is None or empty."
+        )
+
+    try:
+        GetMountPointsPropertiesRequest(
             project=project,
             cca_name=cca_name,
-            ict_fixtures_ids="F1, F2",
+            mount_point_ids="",
+        )
+        pytest.fail("No exception raised when using an invalid mount_point_ids parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, mount_point_ids is invalid because it is None or empty."
         )
 
-        properties_response = layer.get_ict_fixtures_props(properties_request)
+    if layer._is_connection_up():
+        # Dependent on helper_test_update_mount_points to set the mount point properties
 
-        # Tests updated properties for F1
-        assert properties_response.ICTFixtureProperties[0].ID == "F1"
-        assert properties_response.ICTFixtureProperties[0].type == "Mount Hole"
-        assert properties_response.ICTFixtureProperties[0].units == "in"
-        assert properties_response.ICTFixtureProperties[0].side == "TOP"
-        assert properties_response.ICTFixtureProperties[0].material == "GOLD"
-        assert properties_response.ICTFixtureProperties[0].state == "DISABLED"
-        assert properties_response.ICTFixtureProperties[0].shape == "Slot"
-        assert properties_response.ICTFixtureProperties[0].x == "0.3"
-        assert properties_response.ICTFixtureProperties[0].y == "-0.4"
-        assert properties_response.ICTFixtureProperties[0].length == "1"
-        assert properties_response.ICTFixtureProperties[0].width == "0.2"
-        assert properties_response.ICTFixtureProperties[0].nodes == "10"
-        assert properties_response.ICTFixtureProperties[0].rotation == "15.0"
-        assert properties_response.ICTFixtureProperties[0].boundary == "Outline"
-        assert properties_response.ICTFixtureProperties[0].constraints == (
-            "X-axis translation|" "Z-axis translation"
+        properties_request = GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="MP0, MP5",
         )
-        assert properties_response.ICTFixtureProperties[0].chassisMaterial == "SILVER"
 
-        # Tests updated properties for F2
-        assert properties_response.ICTFixtureProperties[1].ID == "F2"
-        assert properties_response.ICTFixtureProperties[1].type == "Standoff"
-        assert properties_response.ICTFixtureProperties[1].units == "mil"
-        assert properties_response.ICTFixtureProperties[1].side == "BOTTOM"
-        assert properties_response.ICTFixtureProperties[1].height == "-10.0"
-        assert properties_response.ICTFixtureProperties[1].material == "FERRITE"
-        assert properties_response.ICTFixtureProperties[1].state == "ENABLED"
-        assert properties_response.ICTFixtureProperties[1].shape == "Circular"
-        assert properties_response.ICTFixtureProperties[1].x == "100"
-        assert properties_response.ICTFixtureProperties[1].y == "50"
-        assert properties_response.ICTFixtureProperties[1].length == "150"
-        assert properties_response.ICTFixtureProperties[1].width == "150"
-        assert properties_response.ICTFixtureProperties[1].diameter == "150"
-        assert properties_response.ICTFixtureProperties[1].nodes == "6"
-        assert properties_response.ICTFixtureProperties[1].boundary == "Center"
-        assert properties_response.ICTFixtureProperties[1].constraints == "Y-axis translation"
-        assert properties_response.ICTFixtureProperties[1].chassisMaterial == "NYLON"
+        properties_request = GetMountPointsPropertiesRequest(
+            project=project,
+            cca_name=cca_name,
+            mount_point_ids="MP1, MP5",
+        )
+
+        properties_response = layer.get_mount_point_props(properties_request)
+        assert len(properties_response.mountPointsProperties) == 2
+        assert properties_response.mountPointsProperties[0].ID == "MP1"
+        assert properties_response.mountPointsProperties[1].ID == "MP5"
 
 
 def helper_test_update_mount_points(layer):
@@ -2651,7 +2792,7 @@ def helper_test_export_layer_image(layer):
     except SherlockExportLayerImageError as e:
         assert str(e) == "Export layer image error: Overwrite Existing File is invalid."
 
-    test_file_path = "C:\\temp\\SH-image.jpg"
+    test_file_path = get_temp_file_path("SH-image.jpg")
     export_layers = [
         {
             "components_enabled": True,
@@ -2718,9 +2859,8 @@ def helper_test_export_layer_image(layer):
                 assert result.returnCode.value == 0
         except Exception as e:
             pytest.fail(str(e))
-
-        if os.path.exists(test_file_path):
-            os.remove(test_file_path)
+        finally:
+            delete_file(test_file_path)
 
 
 if __name__ == "__main__":

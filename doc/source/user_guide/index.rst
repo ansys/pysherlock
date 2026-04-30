@@ -38,13 +38,13 @@ Subsequent topics describe how to use PySherlock to automate the process depicte
 
 Launch Sherlock
 ~~~~~~~~~~~~~~~
-Use the :func:`launch_sherlock()<ansys.sherlock.core.launcher.launch_sherlock>`
-method to launch Sherlock and start the gRPC server on the default port:
+Use the :func:`launch_and_connect()<ansys.sherlock.core.launcher.launch_and_connect>`
+method to launch Sherlock:
 
 .. code::
 
-    from ansys.sherlock.core.launcher import launch_sherlock
-    sherlock = launch_sherlock()
+    from ansys.sherlock.core import launcher
+    sherlock, install_dir = launcher.launch_and_connect()
 
 This method returns the ``sherlock`` gRPC connection object, which is used to invoke
 the APIs from their respective services.
@@ -60,13 +60,13 @@ named ``Main Board``:
 .. code::
 
     sherlock.project.import_odb_archive(
-            "C:\\Temp\\ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Tutorial",
-            cca_name="Main Board"
+        "C:\\Temp\\ODB++ Tutorial.tgz",
+        True,
+        True,
+        True,
+        True,
+        project="Tutorial",
+        cca_name="Main Board"
     )
 
 For information on the ``project`` module and its methods, see :ref:`ref_project_module`.
@@ -81,11 +81,11 @@ This code uses the Sherlock Part Library to update the parts list:
 .. code::
 
     sherlock.parts.update_parts_list(
-            "Tutorial",
-            "Main Board",
-            "Sherlock Part Library",
-            "Both",
-            PartsListSearchDuplicationMode.ERROR,
+        "Tutorial",
+        "Main Board",
+        "Sherlock Part Library",
+        "Both",
+        PartsListSearchDuplicationMode.ERROR,
     )
 
 For information on the ``parts`` module and its methods, see :ref:`ref_parts_module`.
@@ -98,16 +98,16 @@ method to add a random vibe event:
 .. code::
 
     sherlock.lifecycle.add_random_vibe_event(
-            "Tutorial",
-            "Phase 1",
-            "RVEvent 1",
-            100,
-            "ms",
-            0.5,
-            "PER MIN",
-            "0,0",
-            "Uniaxial",
-            "0,0,-1"
+        "Tutorial",
+        "Phase 1",
+        "RVEvent 1",
+        100,
+        "ms",
+        0.5,
+        "PER MIN",
+        "0,0",
+        "Uniaxial",
+        "0,0,-1"
     )
 
 For information on the ``lifecycle`` module and its methods, see :ref:`ref_lifecycle_module`.
@@ -120,15 +120,15 @@ method to add a random vibe profile:
 .. code::
 
     sherlock.lifecycle.add_random_vibe_profiles(
-            "Tutorial",
-            [(
-                "Phase 1",
-                "RVEvent 1",
-                "Profile 1",
-                "HZ",
-                "G2/Hz",
-                [(30.4, 7.61e-5), (204, 0.1), (296, 0.06), (385, 0.06), (454, 0.03), (497, 0.06)],
-            )]
+        "Tutorial",
+        [(
+            "Phase 1",
+            "RVEvent 1",
+            "Profile 1",
+            "HZ",
+            "G2/Hz",
+            [(30.4, 7.61e-5), (204, 0.1), (296, 0.06), (385, 0.06), (454, 0.03), (497, 0.06)],
+        )]
     )
 
 For information on the ``lifecycle`` module and its methods, see :ref:`ref_lifecycle_module`.
@@ -141,15 +141,15 @@ to run a random vibe analysis:
 .. code::
 
     sherlock.analysis.run_analysis(
-            "Tutorial",
-            "Main Board",
+        "Tutorial",
+        "Main Board",
+        [
+            (RunAnalysisRequestAnalysisType.RANDOM_VIBE,
             [
-                (RunAnalysisRequestAnalysisType.RANDOM_VIBE,
-                [
-                    ("Phase 1", ["RVEvent 1"])
-                ]
-                )
+                ("Phase 1", ["RVEvent 1"])
             ]
+            )
+        ]
     )
 
 For information on the ``analysis`` module and its methods, see :ref:`ref_analysis_module`.
@@ -163,10 +163,10 @@ in ``C:\Temp\tutorial_project_report.pdf``:
 .. code::
 
     sherlock.project.generate_project_report(
-            "Tutorial",
-            "User Name",
-            "Ansys, Inc",
-            "C:\\Temp\\tutorial_project_report.pdf"
+        "Tutorial",
+        "User Name",
+        "Ansys, Inc",
+        "C:\\Temp\\tutorial_project_report.pdf"
     )
 
 For information on the ``project`` module and its methods, see :ref:`ref_project_module`.
