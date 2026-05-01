@@ -41,6 +41,7 @@ This script demonstrates how to:
 import os
 
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2, SherlockModelService_pb2
+from ansys.api.sherlock.v0.SherlockModelService_pb2 import GeometryType
 from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
 
 from ansys.sherlock.core import launcher
@@ -110,6 +111,7 @@ try:
         drill_hole_min_diameter_units="mm",
         drill_hole_max_edge_length=1.0,
         drill_hole_max_edge_length_units="mm",
+        geometry_type=GeometryType.Step,
     )
     copper_2_layer = sherlock.model.createExportTraceCopperLayerParams(
         project_name="Test",
@@ -133,6 +135,7 @@ try:
         drill_hole_min_diameter_units="mm",
         drill_hole_max_edge_length=1.0,
         drill_hole_max_edge_length_units="mm",
+        geometry_type=GeometryType.Step,
     )
     sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
     print("Trace models exported successfully.")

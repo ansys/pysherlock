@@ -39,7 +39,7 @@ This script demonstrates how to:
 
 import os
 
-from ansys.api.sherlock.v0.SherlockModelService_pb2 import PcbMaterialElasticity
+from ansys.api.sherlock.v0.SherlockModelService_pb2 import GeometryType, PcbMaterialElasticity
 from examples.examples_globals import get_sherlock_tutorial_path, get_temp_dir
 
 from ansys.sherlock.core import launcher
@@ -117,6 +117,7 @@ try:
         use_FEA_model_id=True,
         coordinate_units="mm",
         pcb_material_elasticity=PcbMaterialElasticity.Orthotropic,
+        geometry_type=GeometryType.Step,
     )
     print(f"FEA model exported successfully to: {fea_export_path}")
 except SherlockExportFEAModelError as e:
