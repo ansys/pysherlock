@@ -937,7 +937,9 @@ class Parts(GrpcStub):
             return_code = response.returnCode
 
             if return_code.value == -1:
-                raise SherlockUpdatePartsListPropertiesError(message=return_code.message)
+                raise SherlockUpdatePartsListPropertiesError(
+                    message=return_code.message, update_errors=list(response.updateErrors)
+                )
 
             return return_code.value
 

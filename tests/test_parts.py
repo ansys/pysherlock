@@ -854,14 +854,15 @@ def helper_test_update_parts_list_properties(parts: Parts):
     except SherlockUpdatePartsListPropertiesError as e:
         assert str(e.str_itr()) == ("['Update parts list properties error: Value is invalid.']")
 
-    # Test the  returnCode.value == -1 with empty message and errors in updateErrors
-    mock_error = MagicMock()
-    mock_error.refDes = "C1"
-    mock_error.message = "unknown property"
+    # Test that SherlockUpdatePartsListPropertiesError is raised with the returnCode message
+    # and updateErrors from the response when returnCode.value == -1
+    mock_part_property_error = MagicMock()
+    mock_part_property_error.refDes = "C1"
+    mock_part_property_error.message = "unknown property"
     mock_response = MagicMock()
     mock_response.returnCode.value = -1
-    mock_response.returnCode.message = "C1: unknown property"
-    mock_response.updateErrors = [mock_error]
+    mock_response.returnCode.message = "Error updating parts list"
+    mock_response.updateErrors = [mock_part_property_error]
     with patch.object(parts, "_is_connection_up", return_value=True):
         with patch.object(parts.stub, "updatePartsListProperties", return_value=mock_response):
             try:
@@ -877,7 +878,8 @@ def helper_test_update_parts_list_properties(parts: Parts):
                 )
                 pytest.fail("No exception raised when server returns errors")
             except SherlockUpdatePartsListPropertiesError as e:
-                assert e.message == "C1: unknown property"
+                assert e.message == mock_response.returnCode.message
+                assert e.update_errors == mock_response.updateErrors
 
     if not parts._is_connection_up():
         return
