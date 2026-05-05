@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==0.2.0",
+    "ansys-api-sherlock==0.2.1",
     "grpcio>=1.71.2",
     "protobuf>=5.29.6",
     "pydantic>=2.9.2"
