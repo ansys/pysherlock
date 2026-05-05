@@ -40,7 +40,7 @@ tests = [
 doc = [
     "ansys-sphinx-theme==1.7.2",
     "jupyter_sphinx==0.5.3",
-    "matplotlib==3.10.8",
+    "matplotlib==3.10.9",
     "numpydoc==1.10.0",
     "pandas==2.3.3",
     "Sphinx==8.1.3", # BLOCKED BY sphinx-design - Cannot upgrade to Sphinx 7 for now
@@ -48,7 +48,7 @@ doc = [
     "sphinx-autodoc-typehints==3.0.1",
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.6.1",
-    "sphinx-gallery==0.20.0",
+    "sphinx-gallery==0.21.0",
     "sphinx-notfound-page==1.1.0"
 ]
 
