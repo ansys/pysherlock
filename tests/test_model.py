@@ -27,7 +27,7 @@ import os
 import platform
 import unittest
 
-from ansys.api.sherlock.v0.SherlockModelService_pb2 import PcbMaterialElasticity
+from ansys.api.sherlock.v0.SherlockModelService_pb2 import GeometryType, PcbMaterialElasticity
 import grpc
 import pytest
 
@@ -340,6 +340,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid project name")
         except SherlockExportFEAModelError as e:
@@ -374,6 +375,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid CCA name")
         except SherlockExportFEAModelError as e:
@@ -408,6 +410,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid file path")
         except SherlockExportFEAModelError as e:
@@ -442,6 +445,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid file directory")
         except SherlockExportFEAModelError as e:
@@ -476,6 +480,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid minimum hole diameter")
         except SherlockExportFEAModelError as e:
@@ -510,6 +515,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid maximum edge length")
         except SherlockExportFEAModelError as e:
@@ -544,6 +550,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid maximum mesh size")
         except SherlockExportFEAModelError as e:
@@ -578,6 +585,7 @@ class TestModel(unittest.TestCase):
                 use_FEA_model_id=True,
                 coordinate_units="mm",
                 pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid vertical mesh size")
         except SherlockExportFEAModelError as e:
@@ -613,6 +621,7 @@ class TestModel(unittest.TestCase):
                     use_FEA_model_id=True,
                     coordinate_units="mm",
                     pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                    geometry_type=GeometryType.Step,
                 )
                 pytest.fail("No exception raised for invalid CCA name")
             except Exception as e:
@@ -647,6 +656,7 @@ class TestModel(unittest.TestCase):
                     use_FEA_model_id=False,
                     coordinate_units="mm",
                     pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                    geometry_type=GeometryType.Step,
                 )
                 assert result == 0
 

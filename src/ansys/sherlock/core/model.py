@@ -27,6 +27,7 @@ import os.path
 
 from ansys.api.sherlock.v0 import SherlockModelService_pb2, SherlockModelService_pb2_grpc
 from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
+    GeometryType,
     MeshType,
     PcbMaterialElasticity,
     TraceOutputType,
@@ -73,6 +74,7 @@ class Model(GrpcStub):
         trace_drill_hole_min_diameter_unit: str = "mm",
         trace_drill_hole_max_edge_val: float = 1,
         trace_drill_hole_max_edge_unit: str = "mm",
+        geometry_type: GeometryType = GeometryType.Step,
     ) -> int:
         r"""Export a trace reinforcement model.
 
@@ -139,6 +141,9 @@ class Model(GrpcStub):
         trace_drill_hole_max_edge_unit: str, optional
             Units associated with the maximum segment for representing round drill holes
             by a polygon. The default is ``"mm"``.
+        geometry_type: GeometryType
+            The type of geometry to export for WBJN file. The default value is
+            ``GeometryType.Step``.
 
         Returns
         -------
@@ -217,6 +222,8 @@ class Model(GrpcStub):
         export_request.drillHoleModeling.minHoleDiameter.units = trace_drill_hole_min_diameter_unit
         export_request.drillHoleModeling.maxEdgeLength.value = trace_drill_hole_max_edge_val
         export_request.drillHoleModeling.maxEdgeLength.units = trace_drill_hole_max_edge_unit
+
+        export_request.geometryType = geometry_type
 
         try:
             return_code = self.stub.exportTraceReinforcementModel(export_request)
@@ -451,6 +458,7 @@ class Model(GrpcStub):
         >>>         drill_hole_min_diameter_units="mm",
         >>>         drill_hole_max_edge_length=1.0,
         >>>         drill_hole_max_edge_length_units="mm",
+        >>>         geometry_type=GeometryType.Step,
         >>>     )
         >>> )
         >>> sherlock.model.exportTraceModel(list_of_params_for_layers)
@@ -496,6 +504,7 @@ class Model(GrpcStub):
         drill_hole_min_diameter_units: str = "mm",
         drill_hole_max_edge_length: float = 1.0,
         drill_hole_max_edge_length_units: str = "mm",
+        geometry_type: GeometryType = GeometryType.Step,
     ) -> SherlockModelService_pb2.TraceModelExportParams:
         r"""Create a set of parameters to be used to export a single copper layer.
 
@@ -549,8 +558,11 @@ class Model(GrpcStub):
             Units associated with drill_hole_min_diameter.
         drill_hole_max_edge_length: float = 1.0
             Specifies the length of the line segments used to represent round drill holes.
-        drill_hole_max_edge_length_units: str = "mm"
+        drill_hole_max_edge_length_units: str = "mm",
             Units associated with drill_hole_max_edge_length.
+        geometry_type: GeometryType
+            The type of geometry to export for WBJN file. The default value is
+            ``GeometryType.Step``.
 
         Returns
         -------
@@ -583,7 +595,8 @@ class Model(GrpcStub):
                 False,
                 1.0,
                 "mm",
-                1.0
+                1.0,
+                GeometryType.Step
             )
         >>> copper_2_layer = sherlock.model.createExportTraceCopperLayerParams(
                 "Tutorial Project",
@@ -605,7 +618,8 @@ class Model(GrpcStub):
                 False,
                 1.0,
                 "mm",
-                1.0
+                1.0,
+                GeometryType.Step
             )
         >>> sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
         """
@@ -633,6 +647,7 @@ class Model(GrpcStub):
         ret.clearFEADatabase = clear_FEA_database
         ret.useFEAModelID = use_FEA_model_ID
         ret.coordUnits = coord_units
+        ret.geometryType = geometry_type
 
         # Mesh Type Params
         pmp = ret.pcbMeshPropParam
@@ -671,6 +686,7 @@ class Model(GrpcStub):
         use_FEA_model_id: bool,
         coordinate_units: str,
         pcb_material_elasticity: PcbMaterialElasticity = PcbMaterialElasticity.Isotropic,
+        geometry_type: GeometryType = GeometryType.Step,
     ) -> int:
         """
         Export a FEA model.
@@ -733,6 +749,9 @@ class Model(GrpcStub):
         pcb_material_elasticity: PcbMaterialElasticity
             The type of PCB material elasticity to use when exporting a model. The default value is
             ``PcbMaterialElasticity.Isotropic``.
+        geometry_type: GeometryType
+            The type of geometry to export for WBJN file. The default value is
+            ``GeometryType.Step``.
 
 
         Returns
@@ -742,7 +761,10 @@ class Model(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.api.sherlock.v0.SherlockModelService_pb2 import PcbMaterialElasticity
+        >>> from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
+            GeometryType,
+            PcbMaterialElasticity,
+        )
         >>> from ansys.sherlock.core.types.common_types import (
             Measurement,
         )
@@ -775,7 +797,8 @@ class Model(GrpcStub):
         >>>     clear_FEA_database=True,
         >>>     use_FEA_model_id=True,
         >>>     coordinate_units="mm",
-        >>>     pcb_material_elasticity=PcbMaterialElasticity.Isotropic
+        >>>     pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+        >>>     geometry_type=GeometryType.PartManager
         >>> )
         """
         try:
@@ -859,6 +882,7 @@ class Model(GrpcStub):
             export_request.useFEAModelID = use_FEA_model_id
             export_request.coordinateUnits = coordinate_units
             export_request.pcbMaterialElasticity = pcb_material_elasticity
+            export_request.geometryType = geometry_type
 
             return_code = self.stub.exportFEAModel(export_request)
             if return_code.value != 0:
