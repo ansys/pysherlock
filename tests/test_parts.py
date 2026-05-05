@@ -881,6 +881,27 @@ def helper_test_update_parts_list_properties(parts: Parts):
                 assert e.message == mock_response.returnCode.message
                 assert e.update_errors == mock_response.updateErrors
 
+    # Validate str_itr() formatting with update_errors
+    mock_error_with_ref_des = MagicMock()
+    mock_error_with_ref_des.refDes = "C1"
+    mock_error_with_ref_des.message = "unknown property"
+    e = SherlockUpdatePartsListPropertiesError(update_errors=[mock_error_with_ref_des])
+    assert e.str_itr() == ["Update parts list properties error: C1: unknown property"]
+
+    mock_error_no_ref_des = MagicMock()
+    mock_error_no_ref_des.refDes = ""
+    mock_error_no_ref_des.message = "invalid property name"
+    e = SherlockUpdatePartsListPropertiesError(update_errors=[mock_error_no_ref_des])
+    assert e.str_itr() == ["Update parts list properties error: invalid property name"]
+
+    e = SherlockUpdatePartsListPropertiesError(
+        update_errors=[mock_error_with_ref_des, mock_error_no_ref_des]
+    )
+    assert e.str_itr() == [
+        "Update parts list properties error: C1: unknown property",
+        "Update parts list properties error: invalid property name",
+    ]
+
     if not parts._is_connection_up():
         return
 
