@@ -27,6 +27,8 @@
 from builtins import Exception
 from typing import Optional
 
+from ansys.api.sherlock.v0 import SherlockPartsService_pb2
+
 LOCALHOST = "127.0.0.1"
 SHERLOCK_DEFAULT_PORT = 9090
 
@@ -1017,15 +1019,28 @@ class SherlockImportProjectZipArchiveSingleModeError(Exception):
 class SherlockUpdatePartsListPropertiesError(Exception):
     """Contains the errors raised when a parts list properties cannot be updated."""
 
-    def __init__(self, message: Optional[str] = None, error_array: Optional[list[str]] = None):
+    def __init__(
+        self,
+        message: Optional[str] = None,
+        update_errors: Optional[
+            list[SherlockPartsService_pb2.UpdatePartsListPropertiesResponse.PartPropertyError]
+        ] = None,
+    ):
         """Initialize error message."""
         self.message = message
-        self.error_array = error_array
+        self.update_errors = update_errors
 
     def str_itr(self):
         """Format error message."""
-        if self.error_array is not None:
-            return [f"Update parts list properties error: {error}" for error in self.error_array]
+        if self.update_errors is not None:
+            errors = []
+            for error in self.update_errors:
+                ref_des = getattr(error, "refDes", "")
+                if ref_des:
+                    errors.append(f"Update parts list properties error: {ref_des}: {error.message}")
+                else:
+                    errors.append(f"Update parts list properties error: {error.message}")
+            return errors
 
         elif self.message is not None:
             return [f"Update parts list properties error: {self.message}"]
