@@ -882,9 +882,7 @@ def helper_test_update_parts_list_properties(parts: Parts):
                 assert e.update_errors == mock_response.updateErrors
 
     # Validate str_itr() formatting with update_errors
-    PartPropertyError = (
-        SherlockPartsService_pb2.UpdatePartsListPropertiesResponse.PartPropertyError
-    )
+    PartPropertyError = SherlockPartsService_pb2.UpdatePartsListPropertiesResponse.PartPropertyError
     mock_error_with_ref_des = PartPropertyError(refDes="C1", message="unknown property")
     mock_error_no_ref_des = PartPropertyError(refDes="", message="invalid property name")
 

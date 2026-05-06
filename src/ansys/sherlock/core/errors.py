@@ -1023,9 +1023,7 @@ class SherlockUpdatePartsListPropertiesError(Exception):
         self,
         message: Optional[str] = None,
         update_errors: Optional[
-            list[
-                SherlockPartsService_pb2.UpdatePartsListPropertiesResponse.PartPropertyError
-            ]
+            list[SherlockPartsService_pb2.UpdatePartsListPropertiesResponse.PartPropertyError]
         ] = None,
     ):
         """Initialize error message."""
