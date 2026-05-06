@@ -701,7 +701,8 @@ class Model(GrpcStub):
             Full path for saving exported files to. The file extension must be ``.wbjn``.
         analysis: str
             The type of analysis that is being exported. Valid values are ``NaturalFreq``,
-            ``HarmonicVibe``, ``ICTAnalysis``, ``MechanicalShock`` or ``RandomVibe``.
+            ``HarmonicVibe``, ``ICTAnalysis``, ``MechanicalShock``, ``RandomVibe``, or
+            ``ThermalMech``.
         drill_hole_parameters: list[dict[str, str | Measurement]]
             List of the drill hole parameters consisting of these properties:
 
@@ -725,7 +726,8 @@ class Model(GrpcStub):
                     modeling. Valid values are ``ENABLED`` or ``DISABLED``.
                 - lead_element_order: str
                      The type of the element order. Valid values are ``First Order (Linear)``,
-                     ``Second Order (Quadratic)``, or ``Solid Shell``.
+                     ``Second Order (Quadratic)``, ``Solid Shell``, or ``Shells And Beam``
+                     for CDB export only.
                 - max_mesh_size: MaxMeshSize
                     The properties of the maximum mesh size.
                 - vertical_mesh_size: VerticalMeshSize
