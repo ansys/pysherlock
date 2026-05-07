@@ -24,6 +24,7 @@
 
 import os
 import platform
+from unittest.mock import MagicMock, patch
 
 from ansys.api.sherlock.v0 import SherlockPartsService_pb2
 import grpc
@@ -141,6 +142,24 @@ def helper_test_update_parts_list(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
         assert str(e.str_itr()) == "['Update parts list error: Parts library is invalid.']"
+
+    # Test the returnCode.value == -1 with empty message and errors in updateError
+    mock_response = MagicMock()
+    mock_response.returnCode.value = -1
+    mock_response.returnCode.message = "Error: part not found"
+    with patch.object(parts, "_is_connection_up", return_value=True):
+        with patch.object(parts.stub, "updatePartsList", return_value=mock_response):
+            try:
+                parts.update_parts_list(
+                    "Test",
+                    "Card",
+                    "Sherlock Part Library",
+                    "Both",
+                    PartsListSearchDuplicationMode.ERROR,
+                )
+                pytest.fail("No exception raised when server returns errors")
+            except SherlockUpdatePartsListError as e:
+                assert e.message == "Error: part not found"
 
 
 def helper_test_update_parts_from_AVL(parts: Parts):
@@ -834,6 +853,46 @@ def helper_test_update_parts_list_properties(parts: Parts):
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListPropertiesError as e:
         assert str(e.str_itr()) == ("['Update parts list properties error: Value is invalid.']")
+
+    # Test that SherlockUpdatePartsListPropertiesError is raised with the returnCode message
+    # and updateErrors from the response when returnCode.value == -1
+    mock_part_property_error = MagicMock()
+    mock_part_property_error.refDes = "C1"
+    mock_part_property_error.message = "unknown property"
+    mock_response = MagicMock()
+    mock_response.returnCode.value = -1
+    mock_response.returnCode.message = "Error updating parts list"
+    mock_response.updateErrors = [mock_part_property_error]
+    with patch.object(parts, "_is_connection_up", return_value=True):
+        with patch.object(parts.stub, "updatePartsListProperties", return_value=mock_response):
+            try:
+                parts.update_parts_list_properties(
+                    "Test",
+                    "Card",
+                    [
+                        {
+                            "reference_designators": ["C1"],
+                            "properties": [{"name": "partType", "value": "RESISTOR"}],
+                        }
+                    ],
+                )
+                pytest.fail("No exception raised when server returns errors")
+            except SherlockUpdatePartsListPropertiesError as e:
+                assert e.message == mock_response.returnCode.message
+                assert e.update_errors == mock_response.updateErrors
+
+    # Validate str_itr() formatting with update_errors
+    PartPropertyError = SherlockPartsService_pb2.UpdatePartsListPropertiesResponse.PartPropertyError
+    mock_error_with_ref_des = PartPropertyError(refDes="C1", message="unknown property")
+    mock_error_no_ref_des = PartPropertyError(refDes="", message="invalid property name")
+
+    e = SherlockUpdatePartsListPropertiesError(
+        update_errors=[mock_error_with_ref_des, mock_error_no_ref_des]
+    )
+    assert e.str_itr() == [
+        "Update parts list properties error: C1: unknown property",
+        "Update parts list properties error: invalid property name",
+    ]
 
     if not parts._is_connection_up():
         return
