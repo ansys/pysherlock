@@ -40,7 +40,7 @@ tests = [
 ]
 
 dev = [
-    "grpcio-tools==1.78.0", # same version as in dependencies to avoid compatibility issues
+    "grpcio-tools==1.80.0", # same version as in dependencies to avoid compatibility issues
 ]
 
 doc = [
