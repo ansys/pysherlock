@@ -21,26 +21,26 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14"
+    "Programming Language :: Python :: 3.14",
 ]
 
 dependencies = [
     "ansys-api-sherlock==0.2.2",
-    "grpcio>=1.78.0",
-    "protobuf>=6.31.1,<7.0.0",
-    "pydantic>=2.9.2"
+    "grpcio>=1.80.0",
+    "protobuf>=6.33.5,<7", # avoid DoS vulnerability in >= 6.30.0rc1, <= 6.33.4
+    "pydantic>=2.9.2",
 ]
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.78.0", # same version as in dependencies to avoid compatibility issues
-    "protobuf==6.31.1", # same version as in dependencies to avoid compatibility issues
+    "grpcio==1.80.0",
     "pytest==9.0.3",
-    "pytest-cov==7.1.0"
+    "pytest-cov==7.1.0",
 ]
 
 dev = [
-    "grpcio-tools==1.80.0", # same version as in dependencies to avoid compatibility issues
+    "grpcio==1.80.0",
+    "grpcio-tools==1.80.0",
 ]
 
 doc = [
@@ -55,7 +55,7 @@ doc = [
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.6.1",
     "sphinx-gallery==0.21.0",
-    "sphinx-notfound-page==1.1.0"
+    "sphinx-notfound-page==1.1.0",
 ]
 
 [project.urls]
