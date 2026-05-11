@@ -20,23 +20,29 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13"
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14"
 ]
 
 dependencies = [
     "ansys-api-sherlock==0.2.2",
-    "grpcio>=1.71.2",
-    "protobuf>=5.29.6",
+    "grpcio>=1.78.0",
+    "protobuf>=6.31.1,<7.0.0",
     "pydantic>=2.9.2"
 ]
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.78.0",
-    "protobuf==7.34.0",
+    "grpcio==1.78.0", # same version as in dependencies to avoid compatibility issues
+    "protobuf==6.31.1", # same version as in dependencies to avoid compatibility issues
     "pytest==9.0.3",
     "pytest-cov==7.1.0"
 ]
+
+dev = [
+    "grpcio-tools==1.78.0", # same version as in dependencies to avoid compatibility issues
+]
+
 doc = [
     "ansys-sphinx-theme==1.7.2",
     "jupyter_sphinx==0.5.3",
