@@ -178,7 +178,7 @@ jobs:
           skip-existing: false
 
       - name: "Release to GitHub"
-        uses: ansys/actions/release-github@73fa84c704bb6691f254cfe4d4b928c338b0d4da #v10.3.0
+        uses: ansys/actions/release-github@12ca08fd7f0caa52076cca15c5621482646f8560 #v10.3.1
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -191,7 +191,7 @@ jobs:
       pull-requests: read    # Required to read pull-request information
     steps:
       - name: Check pull-request name
-        uses: ansys/actions/check-pr-title@73fa84c704bb6691f254cfe4d4b928c338b0d4da #v10.3.0
+        uses: ansys/actions/check-pr-title@12ca08fd7f0caa52076cca15c5621482646f8560 #v10.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
