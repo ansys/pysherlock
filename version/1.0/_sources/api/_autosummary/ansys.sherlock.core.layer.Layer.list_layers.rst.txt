@@ -1,0 +1,10 @@
+.. vale off
+
+list\_layers
+============
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.list_layers
+
+.. vale on

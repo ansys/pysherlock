@@ -1,0 +1,6 @@
+image\_y
+========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageBounds.image_y

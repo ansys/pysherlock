@@ -1,0 +1,10 @@
+.. vale off
+
+model\_dump\_json
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: ComponentFailureMechanism.model_dump_json
+
+.. vale on

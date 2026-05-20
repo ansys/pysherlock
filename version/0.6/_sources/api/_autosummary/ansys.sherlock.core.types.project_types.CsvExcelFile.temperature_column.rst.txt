@@ -1,0 +1,6 @@
+temperature\_column
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CsvExcelFile.temperature_column

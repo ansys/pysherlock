@@ -1,0 +1,10 @@
+.. vale off
+
+export\_aedb
+============
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.export_aedb
+
+.. vale on

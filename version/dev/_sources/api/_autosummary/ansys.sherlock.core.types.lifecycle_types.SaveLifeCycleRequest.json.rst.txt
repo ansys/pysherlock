@@ -1,0 +1,10 @@
+.. vale off
+
+json
+====
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: SaveLifeCycleRequest.json
+
+.. vale on

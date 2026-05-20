@@ -1,0 +1,119 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.CopperGerberFile
+=========================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: CopperGerberFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      CopperGerberFile.construct
+      
+      
+      CopperGerberFile.copy
+      
+      
+      CopperGerberFile.dict
+      
+      
+      CopperGerberFile.from_orm
+      
+      
+      CopperGerberFile.json
+      
+      
+      CopperGerberFile.model_construct
+      
+      
+      CopperGerberFile.model_copy
+      
+      
+      CopperGerberFile.model_dump
+      
+      
+      CopperGerberFile.model_dump_json
+      
+      
+      CopperGerberFile.model_json_schema
+      
+      
+      CopperGerberFile.model_parametrized_name
+      
+      
+      CopperGerberFile.model_post_init
+      
+      
+      CopperGerberFile.model_rebuild
+      
+      
+      CopperGerberFile.model_validate
+      
+      
+      CopperGerberFile.model_validate_json
+      
+      
+      CopperGerberFile.model_validate_strings
+      
+      
+      CopperGerberFile.parse_file
+      
+      
+      CopperGerberFile.parse_obj
+      
+      
+      CopperGerberFile.parse_raw
+      
+      
+      CopperGerberFile.schema
+      
+      
+      CopperGerberFile.schema_json
+      
+      
+      CopperGerberFile.update_forward_refs
+      
+      
+      CopperGerberFile.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CopperGerberFile.model_computed_fields
+      
+      
+      CopperGerberFile.model_config
+      
+      
+      CopperGerberFile.model_extra
+      
+      
+      CopperGerberFile.model_fields
+      
+      
+      CopperGerberFile.model_fields_set
+      
+      
+      CopperGerberFile.parse_decimal_first_enabled
+      
+   
+   
+
+.. vale on

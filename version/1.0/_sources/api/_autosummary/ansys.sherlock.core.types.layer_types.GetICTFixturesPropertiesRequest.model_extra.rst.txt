@@ -1,0 +1,10 @@
+.. vale off
+
+model\_extra
+============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoproperty:: GetICTFixturesPropertiesRequest.model_extra
+
+.. vale on

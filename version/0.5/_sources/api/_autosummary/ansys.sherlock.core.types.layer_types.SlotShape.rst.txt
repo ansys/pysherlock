@@ -1,0 +1,46 @@
+﻿ansys.sherlock.core.types.layer\_types.SlotShape
+================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: SlotShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SlotShape.length
+      
+      
+      SlotShape.width
+      
+      
+      SlotShape.node_count
+      
+      
+      SlotShape.center_x
+      
+      
+      SlotShape.center_y
+      
+      
+      SlotShape.rotation
+      
+   
+   

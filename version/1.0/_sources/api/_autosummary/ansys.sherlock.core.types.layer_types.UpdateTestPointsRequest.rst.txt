@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.UpdateTestPointsRequest
+==============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: UpdateTestPointsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateTestPointsRequest.construct
+      
+      
+      UpdateTestPointsRequest.copy
+      
+      
+      UpdateTestPointsRequest.dict
+      
+      
+      UpdateTestPointsRequest.from_orm
+      
+      
+      UpdateTestPointsRequest.json
+      
+      
+      UpdateTestPointsRequest.model_construct
+      
+      
+      UpdateTestPointsRequest.model_copy
+      
+      
+      UpdateTestPointsRequest.model_dump
+      
+      
+      UpdateTestPointsRequest.model_dump_json
+      
+      
+      UpdateTestPointsRequest.model_json_schema
+      
+      
+      UpdateTestPointsRequest.model_parametrized_name
+      
+      
+      UpdateTestPointsRequest.model_post_init
+      
+      
+      UpdateTestPointsRequest.model_rebuild
+      
+      
+      UpdateTestPointsRequest.model_validate
+      
+      
+      UpdateTestPointsRequest.model_validate_json
+      
+      
+      UpdateTestPointsRequest.model_validate_strings
+      
+      
+      UpdateTestPointsRequest.parse_file
+      
+      
+      UpdateTestPointsRequest.parse_obj
+      
+      
+      UpdateTestPointsRequest.parse_raw
+      
+      
+      UpdateTestPointsRequest.schema
+      
+      
+      UpdateTestPointsRequest.schema_json
+      
+      
+      UpdateTestPointsRequest.str_validation
+      
+      
+      UpdateTestPointsRequest.update_forward_refs
+      
+      
+      UpdateTestPointsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateTestPointsRequest.model_computed_fields
+      
+      
+      UpdateTestPointsRequest.model_config
+      
+      
+      UpdateTestPointsRequest.model_extra
+      
+      
+      UpdateTestPointsRequest.model_fields
+      
+      
+      UpdateTestPointsRequest.model_fields_set
+      
+      
+      UpdateTestPointsRequest.project
+      
+      
+      UpdateTestPointsRequest.cca_name
+      
+      
+      UpdateTestPointsRequest.update_test_points
+      
+   
+   
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+export\_all\_test\_points
+=========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.export_all_test_points
+
+.. vale on

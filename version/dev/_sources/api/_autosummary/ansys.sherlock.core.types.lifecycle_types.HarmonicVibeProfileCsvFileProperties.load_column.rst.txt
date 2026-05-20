@@ -1,0 +1,10 @@
+.. vale off
+
+load\_column
+============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: HarmonicVibeProfileCsvFileProperties.load_column
+
+.. vale on

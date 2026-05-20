@@ -1,0 +1,10 @@
+.. vale off
+
+new\_phase\_name
+================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: UpdateLifePhaseRequest.new_phase_name
+
+.. vale on

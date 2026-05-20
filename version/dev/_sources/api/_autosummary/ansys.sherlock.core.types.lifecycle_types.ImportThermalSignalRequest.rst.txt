@@ -1,0 +1,161 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.ImportThermalSignalRequest
+=====================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: ImportThermalSignalRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ImportThermalSignalRequest.construct
+      
+      
+      ImportThermalSignalRequest.copy
+      
+      
+      ImportThermalSignalRequest.dict
+      
+      
+      ImportThermalSignalRequest.from_orm
+      
+      
+      ImportThermalSignalRequest.json
+      
+      
+      ImportThermalSignalRequest.model_construct
+      
+      
+      ImportThermalSignalRequest.model_copy
+      
+      
+      ImportThermalSignalRequest.model_dump
+      
+      
+      ImportThermalSignalRequest.model_dump_json
+      
+      
+      ImportThermalSignalRequest.model_json_schema
+      
+      
+      ImportThermalSignalRequest.model_parametrized_name
+      
+      
+      ImportThermalSignalRequest.model_post_init
+      
+      
+      ImportThermalSignalRequest.model_rebuild
+      
+      
+      ImportThermalSignalRequest.model_validate
+      
+      
+      ImportThermalSignalRequest.model_validate_json
+      
+      
+      ImportThermalSignalRequest.model_validate_strings
+      
+      
+      ImportThermalSignalRequest.non_negative_int_validation
+      
+      
+      ImportThermalSignalRequest.parse_file
+      
+      
+      ImportThermalSignalRequest.parse_obj
+      
+      
+      ImportThermalSignalRequest.parse_raw
+      
+      
+      ImportThermalSignalRequest.schema
+      
+      
+      ImportThermalSignalRequest.schema_json
+      
+      
+      ImportThermalSignalRequest.str_validation
+      
+      
+      ImportThermalSignalRequest.update_forward_refs
+      
+      
+      ImportThermalSignalRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ImportThermalSignalRequest.model_computed_fields
+      
+      
+      ImportThermalSignalRequest.model_config
+      
+      
+      ImportThermalSignalRequest.model_extra
+      
+      
+      ImportThermalSignalRequest.model_fields
+      
+      
+      ImportThermalSignalRequest.model_fields_set
+      
+      
+      ImportThermalSignalRequest.file_name
+      
+      
+      ImportThermalSignalRequest.project
+      
+      
+      ImportThermalSignalRequest.phase_name
+      
+      
+      ImportThermalSignalRequest.thermal_signal_file_properties
+      
+      
+      ImportThermalSignalRequest.time_removal
+      
+      
+      ImportThermalSignalRequest.load_range_percentage
+      
+      
+      ImportThermalSignalRequest.number_of_range_bins
+      
+      
+      ImportThermalSignalRequest.number_of_mean_bins
+      
+      
+      ImportThermalSignalRequest.number_of_dwell_bins
+      
+      
+      ImportThermalSignalRequest.temperature_range_filtering_limit
+      
+      
+      ImportThermalSignalRequest.time_filtering_limit
+      
+      
+      ImportThermalSignalRequest.time_filtering_limit_units
+      
+      
+      ImportThermalSignalRequest.generated_cycles_label
+      
+   
+   
+
+.. vale on

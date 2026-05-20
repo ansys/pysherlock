@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.UpdatePottingRegionRequest
+=================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: UpdatePottingRegionRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdatePottingRegionRequest.construct
+      
+      
+      UpdatePottingRegionRequest.copy
+      
+      
+      UpdatePottingRegionRequest.dict
+      
+      
+      UpdatePottingRegionRequest.from_orm
+      
+      
+      UpdatePottingRegionRequest.json
+      
+      
+      UpdatePottingRegionRequest.model_construct
+      
+      
+      UpdatePottingRegionRequest.model_copy
+      
+      
+      UpdatePottingRegionRequest.model_dump
+      
+      
+      UpdatePottingRegionRequest.model_dump_json
+      
+      
+      UpdatePottingRegionRequest.model_json_schema
+      
+      
+      UpdatePottingRegionRequest.model_parametrized_name
+      
+      
+      UpdatePottingRegionRequest.model_post_init
+      
+      
+      UpdatePottingRegionRequest.model_rebuild
+      
+      
+      UpdatePottingRegionRequest.model_validate
+      
+      
+      UpdatePottingRegionRequest.model_validate_json
+      
+      
+      UpdatePottingRegionRequest.model_validate_strings
+      
+      
+      UpdatePottingRegionRequest.parse_file
+      
+      
+      UpdatePottingRegionRequest.parse_obj
+      
+      
+      UpdatePottingRegionRequest.parse_raw
+      
+      
+      UpdatePottingRegionRequest.schema
+      
+      
+      UpdatePottingRegionRequest.schema_json
+      
+      
+      UpdatePottingRegionRequest.str_validation
+      
+      
+      UpdatePottingRegionRequest.update_forward_refs
+      
+      
+      UpdatePottingRegionRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdatePottingRegionRequest.model_computed_fields
+      
+      
+      UpdatePottingRegionRequest.model_config
+      
+      
+      UpdatePottingRegionRequest.model_extra
+      
+      
+      UpdatePottingRegionRequest.model_fields
+      
+      
+      UpdatePottingRegionRequest.model_fields_set
+      
+      
+      UpdatePottingRegionRequest.project
+      
+      
+      UpdatePottingRegionRequest.update_potting_regions
+      
+   
+   
+
+.. vale on

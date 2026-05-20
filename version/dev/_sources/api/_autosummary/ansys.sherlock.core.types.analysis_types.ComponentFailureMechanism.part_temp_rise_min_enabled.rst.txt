@@ -1,0 +1,10 @@
+.. vale off
+
+part\_temp\_rise\_min\_enabled
+==============================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: ComponentFailureMechanism.part_temp_rise_min_enabled
+
+.. vale on

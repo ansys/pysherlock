@@ -1,0 +1,10 @@
+.. vale off
+
+file\_comment
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperFile.file_comment
+
+.. vale on

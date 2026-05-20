@@ -1,0 +1,10 @@
+.. vale off
+
+update\_test\_points
+====================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_test_points
+
+.. vale on

@@ -1,0 +1,137 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PottingRegionCopyData
+============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PottingRegionCopyData
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PottingRegionCopyData.construct
+      
+      
+      PottingRegionCopyData.copy
+      
+      
+      PottingRegionCopyData.dict
+      
+      
+      PottingRegionCopyData.from_orm
+      
+      
+      PottingRegionCopyData.json
+      
+      
+      PottingRegionCopyData.model_construct
+      
+      
+      PottingRegionCopyData.model_copy
+      
+      
+      PottingRegionCopyData.model_dump
+      
+      
+      PottingRegionCopyData.model_dump_json
+      
+      
+      PottingRegionCopyData.model_json_schema
+      
+      
+      PottingRegionCopyData.model_parametrized_name
+      
+      
+      PottingRegionCopyData.model_post_init
+      
+      
+      PottingRegionCopyData.model_rebuild
+      
+      
+      PottingRegionCopyData.model_validate
+      
+      
+      PottingRegionCopyData.model_validate_json
+      
+      
+      PottingRegionCopyData.model_validate_strings
+      
+      
+      PottingRegionCopyData.parse_file
+      
+      
+      PottingRegionCopyData.parse_obj
+      
+      
+      PottingRegionCopyData.parse_raw
+      
+      
+      PottingRegionCopyData.schema
+      
+      
+      PottingRegionCopyData.schema_json
+      
+      
+      PottingRegionCopyData.str_validation
+      
+      
+      PottingRegionCopyData.update_forward_refs
+      
+      
+      PottingRegionCopyData.validate
+      
+      
+      PottingRegionCopyData.validate_ids
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PottingRegionCopyData.model_computed_fields
+      
+      
+      PottingRegionCopyData.model_config
+      
+      
+      PottingRegionCopyData.model_extra
+      
+      
+      PottingRegionCopyData.model_fields
+      
+      
+      PottingRegionCopyData.model_fields_set
+      
+      
+      PottingRegionCopyData.cca_name
+      
+      
+      PottingRegionCopyData.potting_id
+      
+      
+      PottingRegionCopyData.copy_potting_id
+      
+      
+      PottingRegionCopyData.center_x
+      
+      
+      PottingRegionCopyData.center_y
+      
+   
+   
+
+.. vale on

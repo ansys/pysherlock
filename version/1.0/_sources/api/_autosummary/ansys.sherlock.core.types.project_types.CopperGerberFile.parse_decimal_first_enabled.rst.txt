@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_decimal\_first\_enabled
+==============================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperGerberFile.parse_decimal_first_enabled
+
+.. vale on

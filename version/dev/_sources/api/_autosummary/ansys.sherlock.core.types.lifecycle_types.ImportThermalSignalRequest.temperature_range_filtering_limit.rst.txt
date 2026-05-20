@@ -1,0 +1,10 @@
+.. vale off
+
+temperature\_range\_filtering\_limit
+====================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.temperature_range_filtering_limit
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+sample\_rate
+============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ShockProfilePulsesCsvFileProperties.sample_rate
+
+.. vale on
