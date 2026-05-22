@@ -24,7 +24,7 @@
 
 from unittest.mock import Mock
 
-from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2 as AnalysisService
 import grpc
 import pydantic
 import pytest
@@ -53,6 +53,8 @@ from ansys.sherlock.core.types.analysis_types import (
     RunStrainMapAnalysisRequestAnalysisType,
     SemiconductorWearoutAnalysis,
     UpdateComponentFailureMechanismPropsRequest,
+    UpdateMountPointsPropsAnalysis,
+    UpdateMountPointsPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
@@ -90,6 +92,7 @@ def test_all():
     helper_test_get_parts_list_validation_analysis_props(analysis)
     helper_test_update_component_failure_mechanism_props(analysis)
     helper_test_update_PTH_fatigue_props(analysis)
+    helper_test_update_mount_points_props(analysis)
 
 
 def helper_test_run_analysis(analysis: Analysis):
@@ -1136,7 +1139,7 @@ def helper_test_update_mechanical_shock_props(analysis: Analysis):
             [
                 {
                     "cca_name": "Main Board",
-                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                    "model_source": AnalysisService.ModelSource.GENERATED,
                     "shock_result_count": 2,
                     "critical_shock_strain": 10,
                     "critical_shock_strain_units": "INVALID",
@@ -1162,7 +1165,7 @@ def helper_test_update_mechanical_shock_props(analysis: Analysis):
             [
                 {
                     "cca_name": "Main Board",
-                    "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+                    "model_source": AnalysisService.ModelSource.GENERATED,
                     "shock_result_count": 2,
                     "critical_shock_strain": 10,
                     "critical_shock_strain_units": "strain",
@@ -2227,6 +2230,52 @@ def helper_test_update_PTH_fatigue_props(analysis: Analysis):
         for return_code in responses:
             assert return_code.value == 0
             assert return_code.message == ""
+
+
+def helper_test_update_mount_points_props(analysis: Analysis):
+    """Test update FEA mount point properties API."""
+    try:
+        UpdateMountPointsPropsRequest(
+            project="",
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    analysis_props1 = UpdateMountPointsPropsAnalysis(
+        analysis_type=AnalysisService.UpdateMountPointsPropsRequest.Analysis.HarmonicVibe,
+        mount_points_element_order=AnalysisService.ElementOrder.Linear,
+        mount_points_max_edge_length=12.34,
+        mount_points_max_edge_length_units="in",
+        mount_points_max_vertical=23.45,
+        mount_points_max_vertical_units="in",
+    )
+    analysis_props2 = UpdateMountPointsPropsAnalysis(
+        analysis_type=AnalysisService.UpdateMountPointsPropsRequest.Analysis.ICTAnalysis,
+        mount_points_element_order=AnalysisService.ElementOrder.Quadratic,
+        mount_points_max_edge_length=0.1234,
+        mount_points_max_edge_length_units="m",
+        mount_points_max_vertical=0.2345,
+        mount_points_max_vertical_units="m",
+    )
+
+    request = UpdateMountPointsPropsRequest(
+        project="Tutorial Project",
+        cca_names=["Invalid CCA1", "Invalid CCA2"],
+        analyses=[analysis_props1, analysis_props2],
+    )
+
+    if analysis._is_connection_up():
+        response = analysis.update_mount_points_props(request)
+        assert response.message != ""
+        assert response.value != 0
+
+        request.cca_names = ["Main Board"]
+        response = analysis.update_mount_points_props(request)
+        assert response.message == ""
+        assert response.value == 0
 
 
 if __name__ == "__main__":

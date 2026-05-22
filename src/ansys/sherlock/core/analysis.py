@@ -55,6 +55,7 @@ from ansys.sherlock.core.types.analysis_types import (
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
     UpdateComponentFailureMechanismPropsRequest,
+    UpdateMountPointsPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
@@ -1822,6 +1823,63 @@ class Analysis(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(271)
+    def update_mount_points_props(
+        self, request: UpdateMountPointsPropsRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update FEA Mount Points properties for one or more CCAs.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        request: UpdateMountPointsPropsRequest
+            Contains all the information needed to update the mount point properties
+            for one or more FEA analyses per project.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Return code for the request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.api.sherlock.v0 import (
+        >>>     SherlockAnalysisService_pb2 as AnalysisService,
+        >>> )
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     UpdateMountPointsPropsAnalysis,
+        >>>     UpdateMountPointsPropsRequest,
+        >>> )
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     UpdateMountPointsPropsAnalysis,
+        >>>     UpdateMountPointsPropsRequest,
+        >>> )
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> analysis_props = UpdateMountPointsPropsAnalysis(
+        >>>     analysis_type=AnalysisService.UpdateMountPointsPropsRequest.Analysis.ICTAnalysis,
+        >>>     mount_points_element_order=AnalysisService.ElementOrder.Quadratic,
+        >>>     mount_points_max_edge_length=0.1234,
+        >>>     mount_points_max_edge_length_units="m",
+        >>>     mount_points_max_vertical=0.2345,
+        >>>     mount_points_max_vertical_units="m",
+        >>> )
+        >>> request = UpdateMountPointsPropsRequest(
+        >>>     project="Tutorial Project",
+        >>>     cca_names=["Main Board"],
+        >>>     analyses=[analysis_props],
+        >>> )
+        >>> returnCode = sherlock.analysis.update_mount_points_props(request)
+        >>> assert returnCode.value == 0
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateMountPointsProps(request._convert_to_grpc())
+
     @require_version(241)
     def update_part_modeling_props(
         self, project: str, part_modeling_props: dict[str, bool | float | str]
@@ -1893,7 +1951,6 @@ class Analysis(GrpcStub):
         >>>     "part_results_filtered": True
         >>> }
         >>> )
-
         """
         try:
             if project == "":
@@ -1963,6 +2020,8 @@ class Analysis(GrpcStub):
         properties_per_cca: list[dict[str, bool | str]],
     ) -> int:
         """Update properties for a Part List Validation analysis.
+
+        Available Since: 2025R1
 
         Parameters
         ----------
@@ -2104,6 +2163,8 @@ class Analysis(GrpcStub):
     ) -> SherlockAnalysisService_pb2.PartsListValidationPropsResponse:
         """Get properties for a Part List Validation analysis.
 
+        Available Since: 2025R1
+
         Parameters
         ----------
         project: str
@@ -2191,6 +2252,8 @@ class Analysis(GrpcStub):
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         r"""Update properties for one or more Component Failure Mechanism analysis.
 
+        Available Since: 2025R2
+
         Parameters
         ----------
         request: UpdateComponentFailureMechanismPropsRequest
@@ -2255,6 +2318,8 @@ class Analysis(GrpcStub):
         request: UpdateSemiconductorWearoutAnalysisPropsRequest,
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         r"""Update properties for one or more Semiconductor Wearout Analysis.
+
+        Available Since: 2025R2
 
         Parameters
         ----------
@@ -2323,6 +2388,8 @@ class Analysis(GrpcStub):
         request: UpdatePTHFatiguePropsRequest,
     ) -> list[SherlockCommonService_pb2.ReturnCode]:
         r"""Update properties for one or more Plated Through Hole (PTH) Fatigue Analyses.
+
+        Available Since: 2025R2
 
         Parameters
         ----------

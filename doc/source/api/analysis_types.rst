@@ -9,7 +9,14 @@ Analysis Types
      :toctree: _autosummary
 
     ComponentFailureMechanism
+    PTHFatiguePropsAnalysis
+    SemiconductorWearoutAnalysis
     UpdateComponentFailureMechanismPropsRequest
+    UpdateMountPointsPropsAnalysis
+    UpdateMountPointsPropsRequest
+    UpdatePTHFatiguePropsRequest
+    UpdatePTHFatiguePropsRequestAnalysisType
+    UpdateSemiconductorWearoutAnalysisPropsRequest
 
 Constants
 ---------
