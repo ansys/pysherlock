@@ -369,3 +369,60 @@ class UpdatePTHFatiguePropsRequest(BaseModel):
         for properties in self.pth_fatigue_analysis_properties:
             request.pthFatigueAnalysisProperties.append(properties._convert_to_grpc())
         return request
+
+
+class UpdateMountPointsPropsAnalysis(BaseModel):
+    """Contains the properties of Mount Points for an FEA analysis."""
+
+    analysis_type: analysis_service.UpdateMountPointsPropsRequest.Analysis.AnalysisType.ValueType
+    """Analysis type."""
+    mount_points_element_order: analysis_service.ElementOrder.ValueType
+    """Mount point element order."""
+    mount_points_max_edge_length: float
+    """Mount point maximum edge length."""
+    mount_points_max_edge_length_units: str
+    """Mount point maximum edge length units."""
+    mount_points_max_vertical: float
+    """Mount point maximum vertical mesh size."""
+    mount_points_max_vertical_units: str
+    """Mount point maximum vertical mesh size units."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateMountPointsPropsRequest.Analysis:
+        grpc_data = analysis_service.UpdateMountPointsPropsRequest.Analysis()
+        grpc_data.type = self.analysis_type
+        grpc_data.mountPtElemOrder = self.mount_points_element_order
+        grpc_data.mountPtMaxEdgeLength = self.mount_points_max_edge_length
+        grpc_data.mountPtMaxEdgeLengthUnits = self.mount_points_max_edge_length_units
+        grpc_data.mountPtMaxVertical = self.mount_points_max_vertical
+        grpc_data.mountPtMaxVerticalUnits = self.mount_points_max_vertical_units
+        return grpc_data
+
+
+class UpdateMountPointsPropsRequest(BaseModel):
+    """Contains the properties of a mount points properties update request."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_names: list[str]
+    """Names of CCAs."""
+    analyses: list[UpdateMountPointsPropsAnalysis]
+    """The analyses properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateMountPointsPropsRequest:
+        request = analysis_service.UpdateMountPointsPropsRequest()
+        request.project = self.project
+        for cca_name in self.cca_names:
+            request.ccaNames.append(cca_name)
+        for analysis in self.analyses:
+            request.analyses.append(analysis._convert_to_grpc())
+        return request
