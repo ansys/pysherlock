@@ -55,6 +55,7 @@ from ansys.sherlock.core.types.analysis_types import (
     RunAnalysisRequestAnalysisType,
     RunStrainMapAnalysisRequestAnalysisType,
     UpdateComponentFailureMechanismPropsRequest,
+    UpdateLeadModelingPropsRequest,
     UpdateMountPointsPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
@@ -1879,6 +1880,64 @@ class Analysis(GrpcStub):
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.updateMountPointsProps(request._convert_to_grpc())
+
+    @require_version(271)
+    def update_lead_modeling_props(
+        self, request: UpdateLeadModelingPropsRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update FEA Lead Modeling properties for one or more CCAs.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        request: UpdateLeadModelingPropsRequest
+            Contains all the information needed to update the lead modeling properties
+            for one or more FEA analyses per project.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Return code for the request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.api.sherlock.v0 import (
+        >>>     SherlockAnalysisService_pb2 as AnalysisService,
+        >>> )
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     UpdateLeadModelingPropsAnalysis,
+        >>>     UpdateLeadModelingPropsRequest,
+        >>> )
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     UpdateLeadModelingPropsAnalysis,
+        >>>     UpdateLeadModelingPropsRequest,
+        >>> )
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> analysis_props = UpdateLeadModelingPropsAnalysis(
+        >>>     analysis_type=AnalysisService.UpdateLeadModelingPropsRequest.Analysis.ICTAnalysis,
+        >>>     model_leads=True,
+        >>>     lead_element_order=AnalysisService.ElementOrder.Quadratic,
+        >>>     lead_max_edge_length=0.1234,
+        >>>     lead_max_edge_length_units="m",
+        >>>     lead_max_vertical=0.2345,
+        >>>     lead_max_vertical_units="m",
+        >>> )
+        >>> request = UpdateLeadModelingPropsRequest(
+        >>>     project="Tutorial Project",
+        >>>     cca_names=["Main Board"],
+        >>>     analyses=[analysis_props],
+        >>> )
+        >>> returnCode = sherlock.analysis.update_lead_modeling_props(request)
+        >>> assert returnCode.value == 0
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateLeadModelingProps(request._convert_to_grpc())
 
     @require_version(241)
     def update_part_modeling_props(

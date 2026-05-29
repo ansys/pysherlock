@@ -27,12 +27,10 @@
 from enum import Enum
 from typing import Optional
 
-from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2 as analysis_service
 from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
-
-analysis_service = SherlockAnalysisService_pb2
 
 
 class ElementOrder:
@@ -420,6 +418,66 @@ class UpdateMountPointsPropsRequest(BaseModel):
         self,
     ) -> analysis_service.UpdateMountPointsPropsRequest:
         request = analysis_service.UpdateMountPointsPropsRequest()
+        request.project = self.project
+        for cca_name in self.cca_names:
+            request.ccaNames.append(cca_name)
+        for analysis in self.analyses:
+            request.analyses.append(analysis._convert_to_grpc())
+        return request
+
+
+class UpdateLeadModelingPropsAnalysis(BaseModel):
+    """Contains the properties of Lead Modeling for an FEA analysis."""
+
+    analysis_type: analysis_service.UpdateLeadModelingPropsRequest.Analysis.AnalysisType.ValueType
+    """Analysis type."""
+    model_leads: bool
+    """Whether to enable lead modeling."""
+    lead_element_order: analysis_service.ElementOrder.ValueType
+    """Lead modeling element order."""
+    lead_max_edge_length: float
+    """Lead modeling maximum edge length."""
+    lead_max_edge_length_units: str
+    """Lead modeling maximum edge length units."""
+    lead_max_vertical: float
+    """Lead modeling maximum vertical mesh size."""
+    lead_max_vertical_units: str
+    """Lead modeling maximum vertical mesh size units."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateLeadModelingPropsRequest.Analysis:
+        grpc_data = analysis_service.UpdateLeadModelingPropsRequest.Analysis()
+        grpc_data.type = self.analysis_type
+        grpc_data.modelLeads = self.model_leads
+        grpc_data.leadElemOrder = self.lead_element_order
+        grpc_data.leadMaxEdgeLength = self.lead_max_edge_length
+        grpc_data.leadMaxEdgeLengthUnits = self.lead_max_edge_length_units
+        grpc_data.leadMaxVertical = self.lead_max_vertical
+        grpc_data.leadMaxVerticalUnits = self.lead_max_vertical_units
+        return grpc_data
+
+
+class UpdateLeadModelingPropsRequest(BaseModel):
+    """Contains the properties of a mount points properties update request."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_names: list[str]
+    """Names of CCAs."""
+    analyses: list[UpdateLeadModelingPropsAnalysis]
+    """The analyses properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateLeadModelingPropsRequest:
+        request = analysis_service.UpdateLeadModelingPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)
