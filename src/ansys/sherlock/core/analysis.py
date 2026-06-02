@@ -1855,10 +1855,6 @@ class Analysis(GrpcStub):
         >>>     UpdateMountPointsPropsAnalysis,
         >>>     UpdateMountPointsPropsRequest,
         >>> )
-        >>> from ansys.sherlock.core.types.analysis_types import (
-        >>>     UpdateMountPointsPropsAnalysis,
-        >>>     UpdateMountPointsPropsRequest,
-        >>> )
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> analysis_props = UpdateMountPointsPropsAnalysis(
         >>>     analysis_type=AnalysisService.UpdateMountPointsPropsRequest.Analysis.ICTAnalysis,
@@ -1912,19 +1908,15 @@ class Analysis(GrpcStub):
         >>>     UpdateLeadModelingPropsAnalysis,
         >>>     UpdateLeadModelingPropsRequest,
         >>> )
-        >>> from ansys.sherlock.core.types.analysis_types import (
-        >>>     UpdateLeadModelingPropsAnalysis,
-        >>>     UpdateLeadModelingPropsRequest,
-        >>> )
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> analysis_props = UpdateLeadModelingPropsAnalysis(
         >>>     analysis_type=AnalysisService.UpdateLeadModelingPropsRequest.Analysis.ICTAnalysis,
         >>>     model_leads=True,
         >>>     lead_element_order=AnalysisService.ElementOrder.Quadratic,
         >>>     lead_max_edge_length=0.1234,
-        >>>     lead_max_edge_length_units="m",
+        >>>     lead_max_edge_length_units="mm",
         >>>     lead_max_vertical=0.2345,
-        >>>     lead_max_vertical_units="m",
+        >>>     lead_max_vertical_units="mm",
         >>> )
         >>> request = UpdateLeadModelingPropsRequest(
         >>>     project="Tutorial Project",
