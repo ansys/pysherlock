@@ -459,7 +459,7 @@ class UpdateLeadModelingPropsAnalysis(BaseModel):
 
 
 class UpdateLeadModelingPropsRequest(BaseModel):
-    """Contains the properties of a mount points properties update request."""
+    """Contains the properties of a lead modeling properties update request."""
 
     project: str
     """Name of the Sherlock project."""
