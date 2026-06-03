@@ -12,6 +12,8 @@ Analysis Types
     PTHFatiguePropsAnalysis
     SemiconductorWearoutAnalysis
     UpdateComponentFailureMechanismPropsRequest
+    UpdateLeadModelingPropsAnalysis
+    UpdateLeadModelingPropsRequest
     UpdateMountPointsPropsAnalysis
     UpdateMountPointsPropsRequest
     UpdatePTHFatiguePropsRequest
