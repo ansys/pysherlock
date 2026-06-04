@@ -535,6 +535,29 @@ class UpdateLifeCycleRequest(BaseModel):
         )
 
 
+class LoadLifeCycleRequest(BaseModel):
+    """Request to load a life cycle to a project from a file."""
+
+    project: str
+    """Sherlock project name."""
+
+    file_path: str
+    """Full path to the life cycle file (.dfr-lc or .dat)."""
+
+    @field_validator("project", "file_path")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.LoadLifeCycleRequest:
+        """Convert to gRPC LoadLifeCycleRequest."""
+        return SherlockLifeCycleService_pb2.LoadLifeCycleRequest(
+            project=self.project,
+            filePath=self.file_path,
+        )
+
+
 class SaveLifeCycleRequest(BaseModel):
     """Request to save a project's life cycle to a .dfr-lc file."""
 
@@ -542,8 +565,9 @@ class SaveLifeCycleRequest(BaseModel):
     """Sherlock project name."""
 
     file_path: str
-    """Full directory path + file name for where the life cycle file should be saved.
-    The file name should include the .dfr-lc extension."""
+    """
+    Full path for where the life cycle file should be saved, including the .dfr-lc extension.
+    """
 
     overwrite_file: bool
     """If true and the file already exists, it will be overwritten.

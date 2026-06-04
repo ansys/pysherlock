@@ -409,6 +409,18 @@ class SherlockLoadHarmonicProfileError(Exception):
             return [f"Load harmonic profile error: {self.message}"]
 
 
+class SherlockLoadLifeCycleError(Exception):
+    """Contains the error raised when a life cycle cannot be loaded."""
+
+    def __init__(self, message):
+        """Initialize error message."""
+        self.message = message
+
+    def __str__(self):
+        """Format error message."""
+        return f"Load life cycle error: {self.message}"
+
+
 class SherlockUpdateMountPointsByFileError(Exception):
     """Contains the errors raised when mount points cannot be updated."""
 

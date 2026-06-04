@@ -40,6 +40,7 @@ from ansys.sherlock.core.errors import (
     SherlockDeleteError,
     SherlockListLifeCycleEventsError,
     SherlockLoadHarmonicProfileError,
+    SherlockLoadLifeCycleError,
     SherlockLoadRandomVibeProfileError,
     SherlockLoadShockProfileDatasetError,
     SherlockLoadShockProfilePulsesError,
@@ -55,6 +56,7 @@ from ansys.sherlock.core.types.lifecycle_types import (
     HarmonicVibeProfileCsvFileProperties,
     ImportThermalSignalRequest,
     ListLifeCycleEventsRequest,
+    LoadLifeCycleRequest,
     RandomVibeProfileCsvFileProperties,
     SaveHarmonicProfileRequest,
     SaveLifeCycleRequest,
@@ -105,6 +107,7 @@ def test_all():
 
     helper_test_update_life_cycle(lifecycle)
     helper_test_save_life_cycle(lifecycle)
+    helper_test_load_life_cycle(lifecycle)
     helper_test_list_life_cycles(lifecycle)
 
 
@@ -4140,7 +4143,7 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
         )
 
     if lifecycle._is_connection_up():
-        # valid request but false project
+        # valid request with missing project
         try:
             lifecycle.update_life_phase(
                 UpdateLifePhaseRequest(
@@ -4320,10 +4323,66 @@ def helper_test_update_life_phase(lifecycle: Lifecycle):
         assert response.value == 0
 
 
+def helper_test_load_life_cycle(lifecycle: Lifecycle):
+    project = "Tutorial Project"
+    file_path = get_temp_file_path("PySherlock-LifeCycle_Load_Test.dfr-lc")
+
+    # project missing
+    try:
+        lifecycle.load_life_cycle(LoadLifeCycleRequest(project="", file_path=file_path))
+        pytest.fail("No exception raised when using a missing project parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, project is invalid because it is None or empty."
+        )
+
+    # file path missing
+    try:
+        lifecycle.load_life_cycle(LoadLifeCycleRequest(project=project, file_path=""))
+        pytest.fail("No exception raised when using a missing file path parameter")
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert str(e.errors()[0]["msg"]) == (
+            "Value error, file_path is invalid because it is None or empty."
+        )
+
+    # verify gRPC field mapping (no connection required)
+    req = LoadLifeCycleRequest(project=project, file_path=file_path)
+    grpc_obj = req._convert_to_grpc()
+    assert grpc_obj.project == project
+    assert grpc_obj.filePath == file_path
+
+    if lifecycle._is_connection_up():
+        # valid request with missing project
+        try:
+            lifecycle.load_life_cycle(
+                LoadLifeCycleRequest(project="bad project", file_path=file_path)
+            )
+            pytest.fail("No exception raised for server error response")
+        except Exception as e:
+            assert isinstance(e, SherlockLoadLifeCycleError)
+
+        try:
+            try:
+                # save a lifecycle file so it can be used for loading
+                save_req = SaveLifeCycleRequest(
+                    project=project, file_path=file_path, overwrite_file=True
+                )
+                lifecycle.save_life_cycle(save_req)
+            except Exception as e:
+                pytest.fail(f"Failed to save lifecycle before load test: {e}")
+
+            response = lifecycle.load_life_cycle(req)
+            assert response.value == 0
+        finally:
+            delete_file(file_path)
+
+
 def helper_test_save_life_cycle(lifecycle: Lifecycle):
 
     project = "Tutorial Project"
-    file_path = get_temp_file_path("LifeCycle_Backup.dfr-lc")
+    file_path = get_temp_file_path("PySherlock-LifeCycle_Save_Test.dfr-lc")
     overwrite_file = True
 
     # project missing
@@ -4350,8 +4409,15 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
             "Value error, file_path is invalid because it is None or empty."
         )
 
+    # test all variables set
+    req = SaveLifeCycleRequest(project=project, file_path=file_path, overwrite_file=overwrite_file)
+    grpc_obj = req._convert_to_grpc()
+    assert grpc_obj.project == project
+    assert grpc_obj.filePath == file_path
+    assert grpc_obj.overwriteFile == overwrite_file
+
     if lifecycle._is_connection_up():
-        # valid request but false project
+        # valid request with missing project
         try:
             lifecycle.save_life_cycle(
                 SaveLifeCycleRequest(
@@ -4362,15 +4428,6 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
         except Exception as e:
             assert isinstance(e, SherlockSaveLifeCycleError)
 
-        # test all variables set
-        req = SaveLifeCycleRequest(
-            project=project, file_path=file_path, overwrite_file=overwrite_file
-        )
-        grpc_obj = req._convert_to_grpc()
-        assert grpc_obj.project == project
-        assert grpc_obj.filePath == file_path
-        assert grpc_obj.overwriteFile == overwrite_file
-
         # valid request and file is overwritten
         try:
             response = lifecycle.save_life_cycle(req)
@@ -4380,7 +4437,6 @@ def helper_test_save_life_cycle(lifecycle: Lifecycle):
 
 
 def helper_test_list_life_cycles(lifecycle: Lifecycle):
-
     project = "Tutorial Project"
 
     # project missing
@@ -4399,7 +4455,7 @@ def helper_test_list_life_cycles(lifecycle: Lifecycle):
     assert grpc_obj.project == project
 
     if lifecycle._is_connection_up():
-        # valid request but false project
+        # valid request with missing project
         try:
             lifecycle.list_life_cycle_events(ListLifeCycleEventsRequest(project="bad project"))
             pytest.fail("No exception raised for server error response")
