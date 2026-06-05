@@ -520,7 +520,9 @@ class Model(GrpcStub):
             Name of the CCA containing the trace layer to export.
         output_file_path: str
             File path including the file name and extension where the trace layer will be exported.
-            Valid file extensions: .py, .bdf, .apdl, .cdb, .wbjn, .stp, .step, .tcl, .stl
+
+            Valid file extensions: .py, .bdf, .apdl, .cdb, .wbjn, .stp, .step, .tcl, .stl.
+
             Note: relative paths will be relative to sherlock install directory,
             not the python script.
         copper_layer: str

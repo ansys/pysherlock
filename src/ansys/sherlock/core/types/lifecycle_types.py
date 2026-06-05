@@ -43,9 +43,9 @@ class HarmonicVibeProfileCsvFileProperties(BaseModel):
     """Name of the harmonic vibe profile."""
     header_row_count: int
     """Number of rows before the column header in the file."""
-    column_delimiter: str = ","
+    column_delimiter: Optional[str] = ","
     """Delimiter used to separate columns in the file."""
-    numeric_format: str = None
+    numeric_format: Optional[str] = None
     """Numeric format for the values."""
     frequency_column: str
     """Name of the column containing frequency values."""
@@ -487,33 +487,24 @@ class UpdateLifeCycleRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     new_name: str
     """The new name of the life cycle."""
-
     new_description: str
     """The new description of the life cycle."""
-
     new_reliability_metric: float
-    """The new reliability metric value.
-    Options are: "Reliability (%)", "Prob. of Failure (%)",
-    "MTBF (years)", "MTBF (hours)", "FITs (1E6 hrs)", "FITs (1E9 hrs)"
-    """
-
-    new_reliability_metric_units: str
+    """The new reliability metric value corresponding to one of the following:
+    `Reliability (%)`, `Prob. of Failure (%)`, `MTBF (years)`, `MTBF (hours)`, `FITs (1E6 hrs)`,
+    `FITs (1E9 hrs)`."""
+    new_reliability_metric_units: Optional[str] = None
     """The new reliability metric units."""
-
-    new_service_life: float
+    new_service_life: Optional[float] = None
     """The new service life value."""
-
-    new_service_life_units: str
-    """The new service life units.
-    Options are: "year", "day", "hr", "min", "sec"
+    new_service_life_units: Optional[str] = None
+    """The new service life units ("year", "day", "hr", "min", "sec")."""
+    result_archive_file_name: Optional[str] = None
     """
-
-    result_archive_file_name: str
-    """File name for saved results. File names will be overwritten.
-       Sub-Assembly results will be saved."""
+    File name for saved results (files are overwritten and Sub-Assembly results are saved).
+    """
 
     @field_validator("project")
     @classmethod
@@ -522,7 +513,7 @@ class UpdateLifeCycleRequest(BaseModel):
         return basic_str_validator(value, info.field_name)
 
     def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.UpdateLifeCycleRequest:
-        """Convert to gRPC SaveHarmonicProfileRequest."""
+        """Convert to gRPC UpdateLifeCycleRequest."""
         return SherlockLifeCycleService_pb2.UpdateLifeCycleRequest(
             project=self.project,
             newName=self.new_name,
@@ -540,9 +531,8 @@ class LoadLifeCycleRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     file_path: str
-    """Full path to the life cycle file (.dfr-lc or .dat)."""
+    """Full path to the life cycle file (extensions must be .dfr-lc or .dat)."""
 
     @field_validator("project", "file_path")
     @classmethod
@@ -563,15 +553,10 @@ class SaveLifeCycleRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     file_path: str
-    """
-    Full path for where the life cycle file should be saved, including the .dfr-lc extension.
-    """
-
+    """Full path of the life cycle file, including the .dfr-lc extension."""
     overwrite_file: bool
-    """If true and the file already exists, it will be overwritten.
-    If false and the file exists, then an error will be returned."""
+    """If true, overwrite the file, otherwise return an error if the file exists."""
 
     @field_validator("project", "file_path")
     @classmethod
@@ -593,20 +578,14 @@ class SaveHarmonicProfileRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """The name of the life cycle phase this event is associated with."""
-
     event_name: str
     """Harmonic event name."""
-
     triaxial_axis: str | None = None
-    """If the harmonic profile type is 'Triaxial', the axis this profile should be assigned to.
-    Valid values are: x, y, z.
-    """
-
+    """The axis for Triaxial profiles ("X", "Y", "Z")."""
     file_path: str
-    """Full destination path for the .dat or .csv file."""
+    """Full path of the .dat or .csv file."""
 
     @field_validator("project", "phase_name", "event_name", "file_path", "triaxial_axis")
     @classmethod
@@ -630,15 +609,12 @@ class SaveRandomVibeProfileRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """The name of the life cycle phase this event is associated with."""
-
     event_name: str
     """Random vibe event name."""
-
     file_path: str
-    """Full destination path for the .dat or .csv file."""
+    """Full path of the .dat or .csv file."""
 
     @field_validator("project", "phase_name", "event_name", "file_path")
     @classmethod
@@ -661,15 +637,12 @@ class SaveShockPulseProfileRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """The name of the life cycle phase this event is associated with."""
-
     event_name: str
     """Shock event name."""
-
     file_path: str
-    """Full destination path for the .dat or .csv file."""
+    """Full path of the .dat or .csv file."""
 
     @field_validator("project", "phase_name", "event_name", "file_path")
     @classmethod
@@ -692,15 +665,12 @@ class SaveThermalProfileRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """The name of the life cycle phase this event is associated with."""
-
     event_name: str
     """Thermal event name."""
-
     file_path: str
-    """Full destination path for the .dat or .csv file."""
+    """Full path of the .dat or .csv file."""
 
     @field_validator("project", "phase_name", "event_name", "file_path")
     @classmethod
@@ -723,10 +693,8 @@ class DeleteEventRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """The name of the life cycle phase from which to delete this event."""
-
     event_name: str
     """Name of the event to be deleted."""
 
@@ -750,7 +718,6 @@ class DeletePhaseRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """Name of the life cycle phase to be deleted."""
 
@@ -773,34 +740,26 @@ class UpdateLifePhaseRequest(BaseModel):
 
     project: str
     """Sherlock project name."""
-
     phase_name: str
     """Name of the life cycle phase to be updated."""
-
     new_phase_name: Optional[str] = None
-    """(Optional) Updated name of life phase."""
-
+    """Updated name of life phase."""
     new_description: Optional[str] = None
-    """(Optional) Updated description of life phase."""
-
+    """Updated description of life phase."""
     new_duration: Optional[float] = None
-    """(Optional) Updated event duration length."""
-
+    """Updated event duration length."""
     new_duration_units: Optional[str] = None
-    """(Optional) Updated event duration units."""
-
+    """Updated event duration units."""
     new_num_of_cycles: Optional[float] = None
-    """(Optional) Updated number of cycles defined for the life phase."""
-
+    """Updated number of cycles defined for the life phase."""
     new_cycle_type: Optional[str] = None
-    """(Optional) Updated cycle type. Acceptable values are COUNT, DUTY_CYCLE, PER YEAR, PER DAY,
-        PER HOUR, PER MIN, and PER SEC.
+    """
+    Cycle type ("COUNT", "DUTY_CYCLE", "PER YEAR", "PER DAY", "PER HOUR", "PER MIN", "PER SEC").
     """
 
     result_archive_file_name: Optional[str] = None
-    """(Optional) Filename for saving analysis results and life cycle data, including any
-        sub-assembly results. Any existing results will be overwritten. If this file name is
-        omitted, then analysis results will not be saved during the update.
+    """
+    Save analysis results & life cycle data to this filename (if included), overwriting the file.
     """
 
     @field_validator("project", "phase_name")

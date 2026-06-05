@@ -24,4 +24,5 @@ LifeCycle Types
     ShockProfilePulsesCsvFileProperties
     ThermalProfileCsvFileProperties
     ThermalSignalFileProperties
+    UpdateLifeCycleRequest
     UpdateLifePhaseRequest

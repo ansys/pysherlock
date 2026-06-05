@@ -399,9 +399,10 @@ class GetICTFixturesPropertiesRequest(BaseModel):
     cca_name: str
     """Name of the CCA containing the ict fixture properties to return."""
     ict_fixtures_ids: Optional[str] = None
-    """Optional Param: Comma-separated list of ict fixture ids representing one or more ict
-        fixtures.   If this parameter is not included, then the entire list of ict fixtures
-        for a given CCA will have their properties returned.
+    """
+    Comma-separated list of ict fixture ids representing one or more ict fixtures. If this
+    parameter is not included, then the entire list of ict fixtures for a given CCA will have
+    their properties returned.
     """
 
     @field_validator("project", "cca_name", "ict_fixtures_ids")
