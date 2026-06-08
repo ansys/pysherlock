@@ -40,7 +40,7 @@ tests = [
 
 dev = [
     "grpcio==1.80.0",
-    "grpcio-tools==1.80.0",
+    "grpcio-tools==1.81.0",
 ]
 
 doc = [
