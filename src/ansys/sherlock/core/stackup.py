@@ -262,31 +262,31 @@ class Stackup(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.stackup.gen_stackup(
-            "Test",
-            "Card",
-            82.6,
-            "mil",
-            "Generic",
-            "FR-4",
-            "Generic FR-4",
-            6,
-            0.5,
-            "oz",
-            1.0,
-            "mil",
-            False,
-            1.0,
-            "mil"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     82.6,
+        >>>     "mil",
+        >>>     "Generic",
+        >>>     "FR-4",
+        >>>     "Generic FR-4",
+        >>>     6,
+        >>>     0.5,
+        >>>     "oz",
+        >>>     1.0,
+        >>>     "mil",
+        >>>     False,
+        >>>     1.0,
+        >>>     "mil"
+        >>> )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -387,39 +387,39 @@ class Stackup(GrpcStub):
         resin_material: str, optional
             Resin material. The default is ``""``.
 
-        Note
-        ----
-        Using the default value for a property causes no changes for that property.
-
         Returns
         -------
         int
             Status code of the response. 0 for success.
+
+        Notes
+        -----
+        Using the default value for a property causes no changes for that property.
 
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.stackup.update_conductor_layer(
-            "Test",
-            "Card",
-            "3",
-            "POWER",
-            "COPPER",
-            1.0,
-            "oz",
-            "94.2",
-            "Generic FR-4 Generic FR-4"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "3",
+        >>>     "POWER",
+        >>>     "COPPER",
+        >>>     1.0,
+        >>>     "oz",
+        >>>     "94.2",
+        >>>     "Generic FR-4 Generic FR-4"
+        >>> )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -549,45 +549,45 @@ class Stackup(GrpcStub):
         conductor_percent : str, optional
             Conductor percentage. The default is ``""``.
 
-        Note
-        ----
-        Using the default value for a property causes no changes for that property.
-
         Returns
         -------
         int
             Status code of the response. 0 for success.
+
+        Notes
+        -----
+        Using the default value for a property causes no changes for that property.
 
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.stackup.update_laminate_layer(
-            "Test",
-            "Card",
-            "2",
-            "Generic",
-            "FR-4",
-            "Generic FR-4",
-            0.015,
-            "in",
-            "106",
-            [
-                ("106", 68.0, 0.015, "in")
-            ],
-            "E-GLASS",
-            "COPPER",
-            "0.0"
-        )
+        >>>     "Test",
+        >>>     "Card",
+        >>>     "2",
+        >>>     "Generic",
+        >>>     "FR-4",
+        >>>     "Generic FR-4",
+        >>>     0.015,
+        >>>     "in",
+        >>>     "106",
+        >>>     [
+        >>>         ("106", 68.0, 0.015, "in")
+        >>>     ],
+        >>>     "E-GLASS",
+        >>>     "COPPER",
+        >>>     "0.0"
+        >>> )
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -692,14 +692,14 @@ class Stackup(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> conductorLayers = sherlock.stackup.list_conductor_layers(project="Tutorial")
         >>> for layer in conductorLayers:
         >>>     properties = layer.conductorLayerProps
@@ -753,14 +753,14 @@ class Stackup(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> laminateLayers = sherlock.stackup.list_laminate_layers(project="Tutorial")
         >>> for layer in laminateLayers:
         >>>     properties = layer.laminateProps
@@ -818,17 +818,18 @@ class Stackup(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> conductor_layer_count = sherlock.stackup.get_layer_count(
         >>>    project="Test",
-        >>>    cca_name="Card")
+        >>>    cca_name="Card"
+        >>> )
         >>> print(f"{conductor_layer_count}")
         """
         if project == "":
@@ -872,18 +873,18 @@ class Stackup(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> stackup_props = sherlock.stackup.get_stackup_props(
-               project="Tutorial",
-               cca_name="Main Board"
-            )
+        >>>    project="Tutorial",
+        >>>    cca_name="Main Board"
+        >>> )
         >>> print(f"{stackup_props}")
         """
         if project == "":
@@ -933,18 +934,20 @@ class Stackup(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
-        >>> total_thickness = sherlock.stackup.get_total_conductor_thickness(project="Tutorial",
-                                                                 cca_name="Main Board",
-                                                                 thickness_unit="oz")
-        >>>print(f"{total_thickness}")
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
+        >>> total_thickness = sherlock.stackup.get_total_conductor_thickness(
+        >>>     project="Tutorial",
+        >>>     cca_name="Main Board",
+        >>>     thickness_unit="in",
+        >>> )
+        >>> print(f"{total_thickness}")
         """
         if project == "":
             raise SherlockGetTotalConductorThicknessError(message="Invalid project name")

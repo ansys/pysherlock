@@ -432,7 +432,7 @@ class CopperImageFile(BaseModel):
     """Indicates whether the image represents a background or foreground layer."""
 
     image_color: Optional[str] = ""
-    """Optional color description or label for the image (e.g., 'black', 'white')."""
+    """Color description or label for the image (e.g., "black", "white")."""
 
     """Allow non-standard types like Protobuf enums in Pydantic models."""
     model_config = {"arbitrary_types_allowed": True}
@@ -450,7 +450,7 @@ class CopperFile(BaseModel):
     """The format/type of the copper file (e.g., Gerber, ODB++, IPC2581)."""
 
     file_comment: Optional[str] = ""
-    """Optional comment or description for the copper file."""
+    """Comment or description for the copper file."""
 
     copper_layer: str
     """The name of the copper layer this file is associated with."""
@@ -467,10 +467,10 @@ class CopperFile(BaseModel):
     """List of CCA (circuit card assembly) names associated with this copper file."""
 
     gerber_file: Optional[CopperGerberFile] = None
-    """Optional settings specific to Gerber file import."""
+    """Settings specific to Gerber file import."""
 
     image_file: Optional[CopperImageFile] = None
-    """Optional settings specific to image-based file import."""
+    """Settings specific to image-based file import."""
 
     """Allow non-standard types like Protobuf enums in Pydantic models."""
     model_config = {"arbitrary_types_allowed": True}

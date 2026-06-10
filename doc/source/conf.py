@@ -102,6 +102,7 @@ extensions = [
     "sphinx_gallery.gen_gallery",
     "sphinxemoji.sphinxemoji",
     "ansys_sphinx_theme.extension.linkcode",
+    "sphinxcontrib.autodoc_pydantic",
 ]
 
 intersphinx_mapping = {
@@ -114,6 +115,13 @@ notfound_urls_prefix = "/../"
 
 autodoc_default_flags = ["members"]
 autosummary_generate = True
+
+# autodoc-pydantic config - show field summary and descriptions, hide Methods/Attributes tables
+autodoc_pydantic_model_show_json = False
+autodoc_pydantic_model_show_config_summary = False
+autodoc_pydantic_model_show_field_summary = True
+autodoc_pydantic_field_list_validators = False
+autodoc_pydantic_settings_show_json_schema_extra = False
 
 # Numpydoc config
 numpydoc_show_class_members = False  # we take care of autosummary on our own
