@@ -1,4 +1,4 @@
-.. _ref_common_types:
+.. _ref_lifecycle_types:
 
 LifeCycle Types
 ===============
@@ -8,21 +8,21 @@ LifeCycle Types
 .. autosummary::
      :toctree: _autosummary
 
-    DeleteEventRequest
-    DeletePhaseRequest
-    HarmonicVibeProfileCsvFileProperties
-    ImportThermalSignalRequest
-    ListLifeCycleEventsRequest
-    LoadLifeCycleRequest
-    RandomVibeProfileCsvFileProperties
-    SaveHarmonicProfileRequest
-    SaveLifeCycleRequest
-    SaveRandomVibeProfileRequest
-    SaveShockPulseProfileRequest
-    SaveThermalProfileRequest
-    ShockProfileDatasetCsvFileProperties
-    ShockProfilePulsesCsvFileProperties
-    ThermalProfileCsvFileProperties
-    ThermalSignalFileProperties
-    UpdateLifeCycleRequest
-    UpdateLifePhaseRequest
+     DeleteEventRequest
+     DeletePhaseRequest
+     HarmonicVibeProfileCsvFileProperties
+     ImportThermalSignalRequest
+     ListLifeCycleEventsRequest
+     LoadLifeCycleRequest
+     RandomVibeProfileCsvFileProperties
+     SaveHarmonicProfileRequest
+     SaveLifeCycleRequest
+     SaveRandomVibeProfileRequest
+     SaveShockPulseProfileRequest
+     SaveThermalProfileRequest
+     ShockProfileDatasetCsvFileProperties
+     ShockProfilePulsesCsvFileProperties
+     ThermalProfileCsvFileProperties
+     ThermalSignalFileProperties
+     UpdateLifeCycleRequest
+     UpdateLifePhaseRequest
