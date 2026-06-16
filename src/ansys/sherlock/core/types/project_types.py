@@ -44,14 +44,27 @@ add_strain_map_request = project_service.AddStrainMapRequest
 class BoardBounds:
     """Contains the properties of the board bounds."""
 
+    bounds: list[tuple[float, float]]
+    """Bounds (two tuples of the form (x, y)"""
+
     def __init__(self, bounds: list[tuple[float, float]]):
         """Initialize the board bounds."""
         self.bounds = bounds
-        """list[tuple[float, float]]: bounds (two tuples of the form (x, y)"""
 
 
 class CsvExcelFile:
     """Contains the properties for a thermal map, CSV, or Excel file."""
+
+    header_row_count: int
+    """Header row count"""
+    numeric_format: str
+    """Numeric format"""
+    reference_id_column: str
+    """Reference ID column"""
+    temperature_column: str
+    """Temperature column"""
+    temperature_units: str
+    """Temperature units"""
 
     def __init__(
         self,
@@ -63,19 +76,19 @@ class CsvExcelFile:
     ):
         """Initialize the thermal map, CSV or Excel file properties."""
         self.header_row_count = header_row_count
-        """int: header_row_count"""
         self.numeric_format = numeric_format
-        """str: numeric_format"""
         self.reference_id_column = reference_id_column
-        """str: reference_id_column"""
         self.temperature_column = temperature_column
-        """str: temperature_column"""
         self.temperature_units = temperature_units
-        """str: temperature_units"""
 
 
 class IcepakFile:
     """Contains the properties for a thermal map Icepak file."""
+
+    temperature_offset: float
+    """Temperature offset"""
+    temperature_offset_units: str
+    """Temperature offset units"""
 
     def __init__(
         self,
@@ -84,28 +97,50 @@ class IcepakFile:
     ):
         """Initialize the thermal map Icepak file properties."""
         self.temperature_offset = temperature_offset
-        """float: temperature_offset"""
         self.temperature_offset_units = temperature_offset_units
-        """str: temperature_offset_units"""
 
 
 class ImageBounds:
     """Contains the properties of the image bounds."""
 
+    image_x: float
+    """X coordinate of the upper left corner"""
+    image_y: float
+    """Y coordinate of the upper left corner"""
+    height: float
+    """Height of the image"""
+    width: float
+    """Width of the image"""
+
     def __init__(self, image_x: float, image_y: float, height: float, width: float):
         """Initialize the image bounds properties."""
         self.image_x = image_x
-        """float: x coordinate of the upper left corner"""
         self.image_y = image_y
-        """float: y coordinate of the upper left corner"""
         self.height = height
-        """float: height of the image"""
         self.width = width
-        """float: width of the image"""
 
 
 class ImageFile:
     """Contains the properties for a thermal map image file."""
+
+    board_bounds: BoardBounds
+    """Board bounds"""
+    coordinate_units: str
+    """Coordinate units"""
+    image_bounds: ImageBounds
+    """Image bounds"""
+    legend_bounds: LegendBounds
+    """Legend bounds"""
+    legend_orientation: LegendOrientation
+    """Legend orientation"""
+    max_temperature: float
+    """Max temperature"""
+    max_temperature_units: str
+    """Max temperature units"""
+    min_temperature: float
+    """Min temperature"""
+    min_temperature_units: str
+    """Min temperature units"""
 
     def __init__(
         self,
@@ -121,38 +156,34 @@ class ImageFile:
     ):
         """Initialize the thermal image file properties."""
         self.board_bounds = board_bounds
-        """BoardBounds: board_bounds"""
         self.coordinate_units = coordinate_units
-        """str: coordinate_units"""
         self.image_bounds = image_bounds
-        """ImageBounds: image_bounds"""
         self.legend_bounds = legend_bounds
-        """LegendBounds: legend_bounds"""
         self.legend_orientation = legend_orientation
-        """LegendOrientation: legend_orientation"""
         self.max_temperature = max_temperature
-        """float: max_temperature"""
         self.max_temperature_units = max_temperature_units
-        """str: max_temperature_units"""
         self.min_temperature = min_temperature
-        """float: min_temperature"""
         self.min_temperature_units = min_temperature_units
-        """str: min_temperature_units"""
 
 
 class LegendBounds:
     """Contains the properties of the legend bounds."""
 
+    legend_x: float
+    """X coordinate of the upper left corner"""
+    legend_y: float
+    """Y coordinate of the upper left corner"""
+    height: float
+    """Height of the legend"""
+    width: float
+    """Width of the legend"""
+
     def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
         """Initialize the legend bounds properties."""
         self.legend_x = legend_x
-        """float: x coordinate of the upper left corner"""
         self.legend_y = legend_y
-        """float: y coordinate of the upper left corner"""
         self.height = height
-        """float: height of the legend"""
         self.width = width
-        """float: width of the legend"""
 
 
 class LegendOrientation:

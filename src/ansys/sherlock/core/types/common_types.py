@@ -135,9 +135,12 @@ class TableDelimiter:
 class Measurement:
     """Contains the properties of the measurement."""
 
+    value: float
+    """Measurement value"""
+    unit: str
+    """Measurement units"""
+
     def __init__(self, value: float, unit: str):
         """Initialize the measurement properties."""
         self.value = value
-        """float: Measurement value"""
         self.unit = unit
-        """str: Measurement units"""

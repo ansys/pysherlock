@@ -4,6 +4,7 @@ Parts Types
 ===========
 .. automodule:: ansys.sherlock.core.types.parts_types
 .. currentmodule:: ansys.sherlock.core.types.parts_types
+
 Constants
 ---------
 .. autoclass:: AVLDescription
