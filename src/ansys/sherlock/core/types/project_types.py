@@ -120,6 +120,36 @@ class ImageBounds:
         self.width = width
 
 
+class LegendBounds:
+    """Contains the properties of the legend bounds."""
+
+    legend_x: float
+    """X coordinate of the upper left corner"""
+    legend_y: float
+    """Y coordinate of the upper left corner"""
+    height: float
+    """Height of the legend"""
+    width: float
+    """Width of the legend"""
+
+    def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
+        """Initialize the legend bounds properties."""
+        self.legend_x = legend_x
+        self.legend_y = legend_y
+        self.height = height
+        self.width = width
+
+
+class LegendOrientation:
+    """Constants for legend orientation in the update thermal maps request."""
+
+    __legend_orientation = thermal_map_file.ImageFile.LegendOrientation
+    HORIZONTAL = __legend_orientation.Horizontal
+    "Horizontal"
+    VERTICAL = __legend_orientation.Vertical
+    "Vertical"
+
+
 class ImageFile:
     """Contains the properties for a thermal map image file."""
 
@@ -164,36 +194,6 @@ class ImageFile:
         self.max_temperature_units = max_temperature_units
         self.min_temperature = min_temperature
         self.min_temperature_units = min_temperature_units
-
-
-class LegendBounds:
-    """Contains the properties of the legend bounds."""
-
-    legend_x: float
-    """X coordinate of the upper left corner"""
-    legend_y: float
-    """Y coordinate of the upper left corner"""
-    height: float
-    """Height of the legend"""
-    width: float
-    """Width of the legend"""
-
-    def __init__(self, legend_x: float, legend_y: float, height: float, width: float):
-        """Initialize the legend bounds properties."""
-        self.legend_x = legend_x
-        self.legend_y = legend_y
-        self.height = height
-        self.width = width
-
-
-class LegendOrientation:
-    """Constants for legend orientation in the update thermal maps request."""
-
-    __legend_orientation = thermal_map_file.ImageFile.LegendOrientation
-    HORIZONTAL = __legend_orientation.Horizontal
-    "Horizontal"
-    VERTICAL = __legend_orientation.Vertical
-    "Vertical"
 
 
 class ThermalBoardSide:
