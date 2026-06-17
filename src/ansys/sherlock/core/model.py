@@ -413,14 +413,16 @@ class Model(GrpcStub):
             raise
 
     @require_version(242)
-    def exportTraceModel(self, layer_params: list[bool | int | float | str]) -> int:
+    def exportTraceModel(
+        self, layer_params: list[SherlockModelService_pb2.TraceModelExportParams]
+    ) -> int:
         r"""Export a trace model to a specified output file.
 
         Available Since: 2024R2
 
         Parameters
         ----------
-        layer_params : list[bool | int | float | str]
+        layer_params : list[SherlockModelService_pb2.TraceModelExportParams]
             list of parameters for export a trace model of a single copper layer.
 
         Returns

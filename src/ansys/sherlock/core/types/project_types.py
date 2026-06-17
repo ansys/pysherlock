@@ -161,8 +161,8 @@ class ImageFile:
     """Image bounds"""
     legend_bounds: LegendBounds
     """Legend bounds"""
-    legend_orientation: LegendOrientation
-    """Legend orientation"""
+    legend_orientation: thermal_map_file.ImageFile.LegendOrientation.ValueType
+    """Legend orientation. Constants defined in the LegendOrientation class can be used."""
     max_temperature: float
     """Max temperature"""
     max_temperature_units: str
@@ -178,7 +178,7 @@ class ImageFile:
         coordinate_units: str,
         image_bounds: ImageBounds,
         legend_bounds: LegendBounds,
-        legend_orientation: LegendOrientation,
+        legend_orientation: thermal_map_file.ImageFile.LegendOrientation.ValueType,
         max_temperature: float,
         max_temperature_units: str,
         min_temperature: float,
