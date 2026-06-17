@@ -120,52 +120,6 @@ class ImageBounds:
         self.width = width
 
 
-class ImageFile:
-    """Contains the properties for a thermal map image file."""
-
-    board_bounds: BoardBounds
-    """Board bounds"""
-    coordinate_units: str
-    """Coordinate units"""
-    image_bounds: ImageBounds
-    """Image bounds"""
-    legend_bounds: LegendBounds
-    """Legend bounds"""
-    legend_orientation: LegendOrientation
-    """Legend orientation"""
-    max_temperature: float
-    """Max temperature"""
-    max_temperature_units: str
-    """Max temperature units"""
-    min_temperature: float
-    """Min temperature"""
-    min_temperature_units: str
-    """Min temperature units"""
-
-    def __init__(
-        self,
-        board_bounds: BoardBounds,
-        coordinate_units: str,
-        image_bounds: ImageBounds,
-        legend_bounds: "LegendBounds",
-        legend_orientation: "LegendOrientation",
-        max_temperature: float,
-        max_temperature_units: str,
-        min_temperature: float,
-        min_temperature_units: str,
-    ):
-        """Initialize the thermal image file properties."""
-        self.board_bounds = board_bounds
-        self.coordinate_units = coordinate_units
-        self.image_bounds = image_bounds
-        self.legend_bounds = legend_bounds
-        self.legend_orientation = legend_orientation
-        self.max_temperature = max_temperature
-        self.max_temperature_units = max_temperature_units
-        self.min_temperature = min_temperature
-        self.min_temperature_units = min_temperature_units
-
-
 class LegendBounds:
     """Contains the properties of the legend bounds."""
 
@@ -194,6 +148,52 @@ class LegendOrientation:
     "Horizontal"
     VERTICAL = __legend_orientation.Vertical
     "Vertical"
+
+
+class ImageFile:
+    """Contains the properties for a thermal map image file."""
+
+    board_bounds: BoardBounds
+    """Board bounds"""
+    coordinate_units: str
+    """Coordinate units"""
+    image_bounds: ImageBounds
+    """Image bounds"""
+    legend_bounds: LegendBounds
+    """Legend bounds"""
+    legend_orientation: thermal_map_file.ImageFile.LegendOrientation.ValueType
+    """Legend orientation. Constants defined in the LegendOrientation class can be used."""
+    max_temperature: float
+    """Max temperature"""
+    max_temperature_units: str
+    """Max temperature units"""
+    min_temperature: float
+    """Min temperature"""
+    min_temperature_units: str
+    """Min temperature units"""
+
+    def __init__(
+        self,
+        board_bounds: BoardBounds,
+        coordinate_units: str,
+        image_bounds: ImageBounds,
+        legend_bounds: LegendBounds,
+        legend_orientation: thermal_map_file.ImageFile.LegendOrientation.ValueType,
+        max_temperature: float,
+        max_temperature_units: str,
+        min_temperature: float,
+        min_temperature_units: str,
+    ):
+        """Initialize the thermal image file properties."""
+        self.board_bounds = board_bounds
+        self.coordinate_units = coordinate_units
+        self.image_bounds = image_bounds
+        self.legend_bounds = legend_bounds
+        self.legend_orientation = legend_orientation
+        self.max_temperature = max_temperature
+        self.max_temperature_units = max_temperature_units
+        self.min_temperature = min_temperature
+        self.min_temperature_units = min_temperature_units
 
 
 class ThermalBoardSide:
