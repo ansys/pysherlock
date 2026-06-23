@@ -33,13 +33,11 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "grpcio==1.80.0",
     "pytest==9.1.0",
     "pytest-cov==7.1.0",
 ]
 
 dev = [
-    "grpcio==1.80.0",
     "grpcio-tools==1.81.1",
 ]
 
