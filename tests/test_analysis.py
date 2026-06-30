@@ -63,6 +63,8 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePTHFatiguePropsRequest,
     UpdatePTHFatiguePropsRequestAnalysisType,
     UpdateSemiconductorWearoutAnalysisPropsRequest,
+    UpdateTraceModelingPropsAnalysis,
+    UpdateTraceModelingPropsRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
@@ -94,6 +96,7 @@ def test_all():
     helper_test_get_parts_list_validation_analysis_props(analysis)
     helper_test_update_component_failure_mechanism_props(analysis)
     helper_test_update_PTH_fatigue_props(analysis)
+    helper_test_update_trace_modeling_props(analysis)
     helper_test_update_mount_points_props(analysis)
     helper_test_update_lead_modeling_props(analysis)
 
@@ -2233,6 +2236,48 @@ def helper_test_update_PTH_fatigue_props(analysis: Analysis):
         for return_code in responses:
             assert return_code.value == 0
             assert return_code.message == ""
+
+
+def helper_test_update_trace_modeling_props(analysis: Analysis):
+    """Test update FEA trace modeling properties API."""
+    try:
+        UpdateTraceModelingPropsRequest(
+            project="",
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    analysis_props1 = UpdateTraceModelingPropsAnalysis(
+        analysis_type=AnalysisService.UpdateTraceModelingPropsRequest.Analysis.HarmonicVibe,
+        trace_enabled=False,
+        trace_element_order=AnalysisService.ElementOrder.Linear,
+        trace_max_holes=10,
+    )
+    analysis_props2 = UpdateTraceModelingPropsAnalysis(
+        analysis_type=AnalysisService.UpdateTraceModelingPropsRequest.Analysis.ICTAnalysis,
+        trace_enabled=True,
+        trace_element_order=AnalysisService.ElementOrder.Quadratic,
+        trace_max_holes=20,
+    )
+
+    request = UpdateTraceModelingPropsRequest(
+        project="Tutorial Project",
+        cca_names=["Invalid CCA1", "Invalid CCA2"],
+        analyses=[analysis_props1, analysis_props2],
+    )
+
+    if analysis._is_connection_up():
+        response = analysis.update_trace_modeling_props(request)
+        assert response.message != ""
+        assert response.value != 0
+
+        request.cca_names = ["Main Board"]
+        response = analysis.update_trace_modeling_props(request)
+        assert response.message == ""
+        assert response.value == 0
 
 
 def helper_test_update_mount_points_props(analysis: Analysis):
