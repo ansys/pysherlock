@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdateTraceModelingPropsAnalysis
+================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: UpdateTraceModelingPropsAnalysis
+
+.. vale on

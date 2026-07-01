@@ -1,0 +1,6 @@
+﻿add\_strain\_maps
+=================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.add_strain_maps

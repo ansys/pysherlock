@@ -1,0 +1,10 @@
+.. vale off
+
+chassis\_material
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: ICTFixtureProperties.chassis_material
+
+.. vale on

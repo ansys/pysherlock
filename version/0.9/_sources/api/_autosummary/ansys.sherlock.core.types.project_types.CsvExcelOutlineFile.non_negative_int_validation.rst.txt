@@ -1,0 +1,10 @@
+.. vale off
+
+non\_negative\_int\_validation
+==============================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CsvExcelOutlineFile.non_negative_int_validation
+
+.. vale on

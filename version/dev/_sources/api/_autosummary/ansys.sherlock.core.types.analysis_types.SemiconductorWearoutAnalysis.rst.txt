@@ -1,0 +1,10 @@
+﻿.. vale off
+
+SemiconductorWearoutAnalysis
+============================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: SemiconductorWearoutAnalysis
+
+.. vale on

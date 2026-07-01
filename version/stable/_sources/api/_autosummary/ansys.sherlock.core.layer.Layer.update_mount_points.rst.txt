@@ -1,0 +1,10 @@
+.. vale off
+
+update\_mount\_points
+=====================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_mount_points
+
+.. vale on

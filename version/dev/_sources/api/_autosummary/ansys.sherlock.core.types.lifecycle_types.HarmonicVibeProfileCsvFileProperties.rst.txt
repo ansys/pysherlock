@@ -1,0 +1,10 @@
+﻿.. vale off
+
+HarmonicVibeProfileCsvFileProperties
+====================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: HarmonicVibeProfileCsvFileProperties
+
+.. vale on

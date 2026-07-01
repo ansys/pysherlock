@@ -1,0 +1,6 @@
+add\_modeling\_region
+=====================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.add_modeling_region

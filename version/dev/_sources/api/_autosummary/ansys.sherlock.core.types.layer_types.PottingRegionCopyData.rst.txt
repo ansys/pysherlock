@@ -1,0 +1,10 @@
+﻿.. vale off
+
+PottingRegionCopyData
+=====================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: PottingRegionCopyData
+
+.. vale on

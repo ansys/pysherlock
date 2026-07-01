@@ -1,0 +1,10 @@
+.. vale off
+
+min\_temperature
+================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.min_temperature
+
+.. vale on

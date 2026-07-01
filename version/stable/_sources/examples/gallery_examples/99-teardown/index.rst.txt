@@ -1,0 +1,44 @@
+
+
+.. _sphx_glr_examples_gallery_examples_99-teardown:
+
+Teardown
+========
+Scripts to run after the examples.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This restores the environment after running the examples.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/99-teardown/images/thumb/sphx_glr_teardown_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/99-teardown/teardown`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Teardown</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gallery_examples/99-teardown/teardown
+

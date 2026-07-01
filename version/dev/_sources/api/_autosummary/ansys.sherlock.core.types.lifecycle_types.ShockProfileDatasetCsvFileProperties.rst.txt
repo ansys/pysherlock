@@ -1,0 +1,10 @@
+﻿.. vale off
+
+ShockProfileDatasetCsvFileProperties
+====================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: ShockProfileDatasetCsvFileProperties
+
+.. vale on

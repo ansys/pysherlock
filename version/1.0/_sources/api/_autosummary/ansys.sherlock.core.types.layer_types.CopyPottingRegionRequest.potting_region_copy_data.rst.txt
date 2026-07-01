@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_region\_copy\_data
+===========================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: CopyPottingRegionRequest.potting_region_copy_data
+
+.. vale on

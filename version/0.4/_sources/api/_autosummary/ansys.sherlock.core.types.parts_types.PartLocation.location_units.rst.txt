@@ -1,0 +1,6 @@
+location\_units
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoattribute:: PartLocation.location_units
