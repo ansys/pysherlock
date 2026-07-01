@@ -369,6 +369,57 @@ class UpdatePTHFatiguePropsRequest(BaseModel):
         return request
 
 
+class UpdateTraceModelingPropsAnalysis(BaseModel):
+    """Contains the properties of Trace Modeling for an FEA analysis."""
+
+    analysis_type: analysis_service.UpdateTraceModelingPropsRequest.Analysis.AnalysisType.ValueType
+    """Analysis type."""
+    trace_enabled: bool
+    """Whether to enable trace modeling."""
+    trace_element_order: analysis_service.ElementOrder.ValueType
+    """Trace modeling element order."""
+    trace_max_holes: int
+    """Trace modeling maximum holes per trace."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateTraceModelingPropsRequest.Analysis:
+        grpc_data = analysis_service.UpdateTraceModelingPropsRequest.Analysis()
+        grpc_data.type = self.analysis_type
+        grpc_data.traceEnabled = self.trace_enabled
+        grpc_data.traceElemOrder = self.trace_element_order
+        grpc_data.traceMaxHoles = self.trace_max_holes
+        return grpc_data
+
+
+class UpdateTraceModelingPropsRequest(BaseModel):
+    """Contains the properties of a trace modeling properties update request."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_names: list[str]
+    """Names of CCAs."""
+    analyses: list[UpdateTraceModelingPropsAnalysis]
+    """The analyses properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, info.field_name)
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateTraceModelingPropsRequest:
+        request = analysis_service.UpdateTraceModelingPropsRequest()
+        request.project = self.project
+        for cca_name in self.cca_names:
+            request.ccaNames.append(cca_name)
+        for analysis in self.analyses:
+            request.analyses.append(analysis._convert_to_grpc())
+        return request
+
+
 class UpdateMountPointsPropsAnalysis(BaseModel):
     """Contains the properties of Mount Points for an FEA analysis."""
 

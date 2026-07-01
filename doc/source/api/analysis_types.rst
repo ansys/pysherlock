@@ -19,6 +19,8 @@ Analysis Types
      UpdatePTHFatiguePropsRequest
      UpdatePTHFatiguePropsRequestAnalysisType
      UpdateSemiconductorWearoutAnalysisPropsRequest
+     UpdateTraceModelingPropsAnalysis
+     UpdateTraceModelingPropsRequest
 
 Constants
 ---------
