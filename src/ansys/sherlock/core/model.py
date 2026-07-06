@@ -29,7 +29,7 @@ from ansys.api.sherlock.v0 import SherlockModelService_pb2, SherlockModelService
 from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
     GeometryType,
     MeshType,
-    PcbMaterialElasticity,
+    PcbMaterialType,
     TraceOutputType,
 )
 import grpc
@@ -155,16 +155,16 @@ class Model(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
         >>> sherlock.model.export_trace_reinforcement_model(
-            'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
-            True, False, False)
-
+        >>>     'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
+        >>>     True, False, False)
+        >>>
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.sherlock.core import model
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.export_trace_reinforcement_model(
-            'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
-            True, False, False, "mm", 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
+        >>>     'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
+        >>>     True, False, False, "mm", 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
         """
         try:
             if not project_name:
@@ -302,8 +302,8 @@ class Model(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.generate_trace_model(
-            'Tutorial Project', 'Main Board', 0.05, 'mm'
-            0.0, 'mm2', 0.0, 'mm2')
+        >>>     'Tutorial Project', 'Main Board', 0.05, 'mm'
+        >>>     0.0, 'mm2', 0.0, 'mm2')
 
         """
         try:
@@ -378,8 +378,8 @@ class Model(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.export_aedb(
-            'Tutorial Project', 'Main Board', 'c:\Temp\export.aedb',
-            True, False)
+        >>>     'Tutorial Project', 'Main Board', 'c:\Temp\export.aedb',
+        >>>     True, False)
         """
         try:
             if not project_name:
@@ -580,51 +580,49 @@ class Model(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> copper_1_layer = sherlock.model.createExportTraceCopperLayerParams(
-                "Tutorial Project",
-                "Main Board",
-                ".\\outputfile_path.stp",
-                "copper-01.odb",
-                False,
-                False,
-                False,
-                False,
-                "mm",
-                SherlockModelService_pb2.MeshType.NONE,
-                False,
-                SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-                ElementOrder.LINEAR,
-                1.0,
-                "mm",
-                2,
-                False,
-                1.0,
-                "mm",
-                1.0,
-                GeometryType.Step
-            )
+        >>>     "Tutorial Project",
+        >>>     "Main Board",
+        >>>     ".\\outputfile_path.stp",
+        >>>     "copper-01.odb",
+        >>>     False,
+        >>>     False,
+        >>>     False,
+        >>>     False,
+        >>>     "mm",
+        >>>     SherlockModelService_pb2.MeshType.NONE,
+        >>>     False,
+        >>>     SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
+        >>>     ElementOrder.LINEAR,
+        >>>     1.0,
+        >>>     "mm",
+        >>>     2,
+        >>>     False,
+        >>>     1.0,
+        >>>     "mm",
+        >>>     1.0,
+        >>>     GeometryType.Step
+        >>> )
         >>> copper_2_layer = sherlock.model.createExportTraceCopperLayerParams(
-                "Tutorial Project",
-                "Main Board",
-                ".\\outputfile_path2.stp",
-                "copper-02.odb",
-                False,
-                False,
-                False,
-                False,
-                "mm",
-                SherlockModelService_pb2.MeshType.NONE,
-                False,
-                SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-                ElementOrder.LINEAR,
-                1.0,
-                "mm",
-                2,
-                False,
-                1.0,
-                "mm",
-                1.0,
-                GeometryType.Step
-            )
+        >>>     "Tutorial Project",
+        >>>     "Main Board",
+        >>>     ".\\outputfile_path2.stp",
+        >>>     "copper-02.odb",
+        >>>     False,
+        >>>     False,
+        >>>     "mm",
+        >>>     SherlockModelService_pb2.MeshType.NONE,
+        >>>     False,
+        >>>     SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
+        >>>     ElementOrder.LINEAR,
+        >>>     1.0,
+        >>>     "mm",
+        >>>     2,
+        >>>     False,
+        >>>     1.0,
+        >>>     "mm",
+        >>>     1.0,
+        >>>     GeometryType.Step
+        >>> )
         >>> sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
         """
         try:
@@ -689,7 +687,7 @@ class Model(GrpcStub):
         clear_FEA_database: bool,
         use_FEA_model_id: bool,
         coordinate_units: str,
-        pcb_material_elasticity: PcbMaterialElasticity = PcbMaterialElasticity.Isotropic,
+        pcb_material_type: PcbMaterialType = PcbMaterialType.Isotropic,
         geometry_type: GeometryType = GeometryType.Step,
     ) -> int:
         """
@@ -752,9 +750,9 @@ class Model(GrpcStub):
             Whether to use FEA model ID.
         coordinate_units: str
             Units of the model coordinates to use when exporting a model.
-        pcb_material_elasticity: PcbMaterialElasticity
+        pcb_material_type: PcbMaterialType
             The type of PCB material elasticity to use when exporting a model. The default value is
-            ``PcbMaterialElasticity.Isotropic``.
+            ``PcbMaterialType.Isotropic``.
         geometry_type: GeometryType
             The type of geometry to export for WBJN file. The default value is
             ``GeometryType.Step``.
@@ -768,12 +766,12 @@ class Model(GrpcStub):
         Examples
         --------
         >>> from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
-            GeometryType,
-            PcbMaterialElasticity,
-        )
+        >>> GeometryType,
+        >>> PcbMaterialType,
+        >>> )
         >>> from ansys.sherlock.core.types.common_types import (
-            Measurement,
-        )
+        >>> Measurement,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.model.export_FEA_model(
@@ -803,7 +801,7 @@ class Model(GrpcStub):
         >>>     clear_FEA_database=True,
         >>>     use_FEA_model_id=True,
         >>>     coordinate_units="mm",
-        >>>     pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+        >>>     pcb_material_type=PcbMaterialType.Isotropic,
         >>>     geometry_type=GeometryType.PartManager
         >>> )
         """
@@ -819,7 +817,7 @@ class Model(GrpcStub):
 
             if not os.path.exists(os.path.dirname(export_file)):
                 raise SherlockExportFEAModelError(
-                    message=f"Export file directory " f'"{export_file}" ' f"does not exist."
+                    message=f'Export file directory "{export_file}" does not exist.'
                 )
 
             for param in drill_hole_parameters:
@@ -887,7 +885,7 @@ class Model(GrpcStub):
             export_request.clearFEADatabase = clear_FEA_database
             export_request.useFEAModelID = use_FEA_model_id
             export_request.coordinateUnits = coordinate_units
-            export_request.pcbMaterialElasticity = pcb_material_elasticity
+            export_request.pcbMaterialType = pcb_material_type
             export_request.geometryType = geometry_type
 
             return_code = self.stub.exportFEAModel(export_request)

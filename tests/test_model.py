@@ -27,7 +27,7 @@ import os
 import platform
 import unittest
 
-from ansys.api.sherlock.v0.SherlockModelService_pb2 import GeometryType, PcbMaterialElasticity
+from ansys.api.sherlock.v0.SherlockModelService_pb2 import GeometryType, PcbMaterialType
 import grpc
 import pytest
 
@@ -339,7 +339,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid project name")
@@ -374,7 +374,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid CCA name")
@@ -409,7 +409,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid file path")
@@ -444,7 +444,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid file directory")
@@ -479,7 +479,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid minimum hole diameter")
@@ -514,7 +514,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid maximum edge length")
@@ -549,7 +549,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid maximum mesh size")
@@ -584,7 +584,7 @@ class TestModel(unittest.TestCase):
                 clear_FEA_database=True,
                 use_FEA_model_id=True,
                 coordinate_units="mm",
-                pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                pcb_material_type=PcbMaterialType.Isotropic,
                 geometry_type=GeometryType.Step,
             )
             pytest.fail("No exception raised for invalid vertical mesh size")
@@ -620,7 +620,7 @@ class TestModel(unittest.TestCase):
                     clear_FEA_database=True,
                     use_FEA_model_id=True,
                     coordinate_units="mm",
-                    pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                    pcb_material_type=PcbMaterialType.Isotropic,
                     geometry_type=GeometryType.Step,
                 )
                 pytest.fail("No exception raised for invalid CCA name")
@@ -655,7 +655,7 @@ class TestModel(unittest.TestCase):
                     clear_FEA_database=False,
                     use_FEA_model_id=False,
                     coordinate_units="mm",
-                    pcb_material_elasticity=PcbMaterialElasticity.Isotropic,
+                    pcb_material_type=PcbMaterialType.Isotropic,
                     geometry_type=GeometryType.Step,
                 )
                 assert result == 0
