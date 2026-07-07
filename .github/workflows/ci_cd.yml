@@ -134,7 +134,7 @@ jobs:
             -Name "LongPathsEnabled" -Value 1 -PropertyType DWord -Force
           Write-Host "Windows Long Paths enabled (a runner service restart may be required once)."
       - name: Run documentation building action
-        uses: ansys/actions/doc-build@d946b24b9a765f4169bcc94afdb27bd1a0533741 # v10.3.2
+        uses: ansys/actions/doc-build@a5b0351dc277d68c2dc1beca2d2674c7dfa4fc55 # v10.3.3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
