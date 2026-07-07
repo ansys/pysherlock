@@ -751,7 +751,7 @@ class Model(GrpcStub):
         coordinate_units: str
             Units of the model coordinates to use when exporting a model.
         pcb_material_type: PcbMaterialType
-            The type of PCB material elasticity to use when exporting a model. The default value is
+            The type of PCB material type to use when exporting a model. The default value is
             ``PcbMaterialType.Isotropic``.
         geometry_type: GeometryType
             The type of geometry to export for WBJN file. The default value is
