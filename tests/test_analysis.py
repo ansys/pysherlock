@@ -2254,12 +2254,16 @@ def helper_test_update_trace_modeling_props(analysis: Analysis):
         analysis_type=AnalysisService.UpdateTraceModelingPropsRequest.Analysis.HarmonicVibe,
         trace_enabled=False,
         trace_element_order=AnalysisService.ElementOrder.Linear,
+        trace_max_edge_length=0.1,
+        trace_max_edge_length_units="mm",
         trace_max_holes=10,
     )
     analysis_props2 = UpdateTraceModelingPropsAnalysis(
         analysis_type=AnalysisService.UpdateTraceModelingPropsRequest.Analysis.ICTAnalysis,
         trace_enabled=True,
         trace_element_order=AnalysisService.ElementOrder.Quadratic,
+        trace_max_edge_length=0.2,
+        trace_max_edge_length_units="m",
         trace_max_holes=20,
     )
 

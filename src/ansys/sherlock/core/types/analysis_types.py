@@ -378,6 +378,10 @@ class UpdateTraceModelingPropsAnalysis(BaseModel):
     """Whether to enable trace modeling."""
     trace_element_order: analysis_service.ElementOrder.ValueType
     """Trace modeling element order."""
+    trace_max_edge_length: float
+    """Trace max mesh size."""
+    trace_max_edge_length_units: str
+    """Trace max mesh size units."""
     trace_max_holes: int
     """Trace modeling maximum holes per trace."""
 
@@ -388,6 +392,8 @@ class UpdateTraceModelingPropsAnalysis(BaseModel):
         grpc_data.type = self.analysis_type
         grpc_data.traceEnabled = self.trace_enabled
         grpc_data.traceElemOrder = self.trace_element_order
+        grpc_data.traceMaxEdgeLength = self.trace_max_edge_length
+        grpc_data.traceMaxEdgeLengthUnits = self.trace_max_edge_length_units
         grpc_data.traceMaxHoles = self.trace_max_holes
         return grpc_data
 
