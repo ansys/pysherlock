@@ -513,6 +513,12 @@ def helper_test_list_conductor_layers(stackup: Stackup):
             layer_properties = layer_properties_per_layer[0]
             assert layer_properties.layer == "1"
             assert layer_properties.type == "SIGNAL"
+            assert (
+                layer_properties.thermalConductivityXY == 10.397527919715628
+            ), "Incorrect thermalConductivityXY value"
+            assert (
+                layer_properties.thermalConductivityZ == 0.33108334689282604
+            ), "Incorrect thermalConductivityZ value"
         except SherlockListConductorLayersError as e:
             pytest.fail(str(e))
 
@@ -541,6 +547,12 @@ def helper_test_list_laminate_layers(stackup: Stackup):
             assert len(layer_properties_per_layer) == 5, "Incorrect number of laminate layers"
             layer_properties = layer_properties_per_layer[0]
             assert layer_properties.layer == "2"
+            assert (
+                layer_properties.thermalConductivityXY == 10.397527919715628
+            ), "Incorrect thermalConductivityXY value"
+            assert (
+                layer_properties.thermalConductivityZ == 0.33108334689282604
+            ), "Incorrect thermalConductivityZ value"
         except SherlockListLaminateLayersError as e:
             pytest.fail(str(e))
 
@@ -641,12 +653,18 @@ def helper_test_get_stackup_props(stackup):
                 assert (
                     stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
                 ), "Board thickness"
-                assert stackup_properties.density == "2.0264 g/cc", "Density"
+                assert stackup_properties.density == "2.0146 g/cc", "Density"
                 assert stackup_properties.conductor_layers_cnt == "6", "Conductor layers count"
-                assert stackup_properties.ctexy == "18.556 ppm/C", "CTExy"
-                assert stackup_properties.ctez == "60.821 ppm/C", "CTEz"
-                assert stackup_properties.exy == "24,865 MPa", "Exy"
-                assert stackup_properties.ez == "6,939 MPa", "Ez"
+                assert stackup_properties.ctexy == "15.416 ppm/C", "CTExy"
+                assert stackup_properties.ctez == "60.852 ppm/C", "CTEz"
+                assert stackup_properties.exy == "23,269 MPa", "Exy"
+                assert stackup_properties.ez == "6,447 MPa", "Ez"
+                assert (
+                    stackup_properties.thermal_conductivity_xy == "10.397527919715628 W/m-K"
+                ), "Incorrect thermal_conductivity_xy value"
+                assert (
+                    stackup_properties.thermal_conductivity_z == "0.33108334689282604 W/m-K"
+                ), "Incorrect thermal_conductivity_z value"
             else:
                 assert (
                     stackup_properties.board_dimension
@@ -655,12 +673,18 @@ def helper_test_get_stackup_props(stackup):
                 assert (
                     stackup_properties.board_thickness == "2.091 mm  [82.3 mil]"
                 ), "Board thickness"
-                assert stackup_properties.density == "2.0264 g/cc", "Density"
+                assert stackup_properties.density == "2.0146 g/cc", "Density"
                 assert stackup_properties.conductor_layers_cnt == "6", "Conductor layers count"
-                assert stackup_properties.ctexy == "18.618 ppm/C", "CTExy"
-                assert stackup_properties.ctez == "60.821 ppm/C", "CTEz"
-                assert stackup_properties.exy == "25,420 MPa", "Exy"
-                assert stackup_properties.ez == "6,939 MPa", "Ez"
+                assert stackup_properties.ctexy == "15.596 ppm/C", "CTExy"
+                assert stackup_properties.ctez == "60.852 ppm/C", "CTEz"
+                assert stackup_properties.exy == "24,154 MPa", "Exy"
+                assert stackup_properties.ez == "6,447 MPa", "Ez"
+                assert (
+                    stackup_properties.thermal_conductivity_xy == "10.397527919715628 W/m-K"
+                ), "Incorrect thermal_conductivity_xy value"
+                assert (
+                    stackup_properties.thermal_conductivity_z == "0.33108334689282604 W/m-K"
+                ), "Incorrect thermal_conductivity_z value"
         except SherlockGetLayerCountError as e:
             pytest.fail(str(e))
 
