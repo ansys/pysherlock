@@ -41,3 +41,5 @@ class StackupProperties:
         self.exy = properties.exy
         self.ez = properties.ez
         self.improve_stackup_model_enabled = properties.improveStackupModelEnabled
+        self.thermal_conductivity_xy = properties.thermalConductivityXY
+        self.thermal_conductivity_z = properties.thermalConductivityZ
