@@ -38,7 +38,7 @@ tests = [
 ]
 
 dev = [
-    "grpcio-tools==1.81.1",
+    "grpcio-tools==1.82.1",
 ]
 
 doc = [
