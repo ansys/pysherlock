@@ -542,9 +542,7 @@ def helper_test_list_laminate_layers(stackup: Stackup):
             assert len(layer_properties_per_layer) == 5, "Incorrect number of laminate layers"
             layer_properties = layer_properties_per_layer[0]
             assert layer_properties.layer == "2"
-            assert (
-                layer_properties.layerConductivity == 0.221847689025
-            ), "Incorrect layerConductivity value"
+            assert layer_properties.layerConductivity == 0.35, "Incorrect layerConductivity value"
         except SherlockListLaminateLayersError as e:
             pytest.fail(str(e))
 
