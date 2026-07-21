@@ -25,12 +25,25 @@
 """Module containing types for the Analysis Service."""
 
 from enum import Enum
-from typing import Optional
+from typing import Optional, cast
 
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2 as analysis_service
 from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator
+
+TraceModelingAnalysisType = (
+    analysis_service.UpdateTraceModelingPropsRequest.Analysis.AnalysisType.ValueType
+)
+MountPointsAnalysisType = (
+    analysis_service.UpdateMountPointsPropsRequest.Analysis.AnalysisType.ValueType
+)
+LeadModelingAnalysisType = (
+    analysis_service.UpdateLeadModelingPropsRequest.Analysis.AnalysisType.ValueType
+)
+MechanicalPartsAnalysisType = (
+    analysis_service.UpdateMechanicalPartsPropsRequest.Analysis.AnalysisType.ValueType
+)
 
 
 class ElementOrder:
@@ -173,7 +186,7 @@ class ComponentFailureMechanism(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
 
 class UpdateComponentFailureMechanismPropsRequest(BaseModel):
@@ -188,7 +201,7 @@ class UpdateComponentFailureMechanismPropsRequest(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
     def _convert_to_grpc(
         self,
@@ -242,7 +255,7 @@ class SemiconductorWearoutAnalysis(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
 
 class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
@@ -257,7 +270,7 @@ class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
     def _convert_to_grpc(
         self,
@@ -342,7 +355,7 @@ class PTHFatiguePropsAnalysis(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
 
 class UpdatePTHFatiguePropsRequest(BaseModel):
@@ -357,7 +370,7 @@ class UpdatePTHFatiguePropsRequest(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
     def _convert_to_grpc(
         self,
@@ -370,9 +383,9 @@ class UpdatePTHFatiguePropsRequest(BaseModel):
 
 
 class UpdateTraceModelingPropsAnalysis(BaseModel):
-    """Contains the properties of Trace Modeling for an FEA analysis."""
+    """Contains the properties of trace modeling for an FEA analysis."""
 
-    analysis_type: analysis_service.UpdateTraceModelingPropsRequest.Analysis.AnalysisType.ValueType
+    analysis_type: TraceModelingAnalysisType  # type: ignore[valid-type]
     """Analysis type."""
     trace_enabled: bool
     """Whether to enable trace modeling."""
@@ -412,7 +425,7 @@ class UpdateTraceModelingPropsRequest(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
     def _convert_to_grpc(
         self,
@@ -427,9 +440,9 @@ class UpdateTraceModelingPropsRequest(BaseModel):
 
 
 class UpdateMountPointsPropsAnalysis(BaseModel):
-    """Contains the properties of Mount Points for an FEA analysis."""
+    """Contains the properties of mount points for an FEA analysis."""
 
-    analysis_type: analysis_service.UpdateMountPointsPropsRequest.Analysis.AnalysisType.ValueType
+    analysis_type: MountPointsAnalysisType  # type: ignore[valid-type]
     """Analysis type."""
     mount_points_element_order: analysis_service.ElementOrder.ValueType
     """Mount point element order."""
@@ -469,7 +482,7 @@ class UpdateMountPointsPropsRequest(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
     def _convert_to_grpc(
         self,
@@ -484,9 +497,9 @@ class UpdateMountPointsPropsRequest(BaseModel):
 
 
 class UpdateLeadModelingPropsAnalysis(BaseModel):
-    """Contains the properties of Lead Modeling for an FEA analysis."""
+    """Contains the properties of lead modeling for an FEA analysis."""
 
-    analysis_type: analysis_service.UpdateLeadModelingPropsRequest.Analysis.AnalysisType.ValueType
+    analysis_type: LeadModelingAnalysisType  # type: ignore[valid-type]
     """Analysis type."""
     model_leads: bool
     """Whether to enable lead modeling."""
@@ -529,12 +542,72 @@ class UpdateLeadModelingPropsRequest(BaseModel):
     @classmethod
     def str_validation(cls, value: str, info: ValidationInfo):
         """Validate string fields listed."""
-        return basic_str_validator(value, info.field_name)
+        return basic_str_validator(value, cast(str, info.field_name))
 
     def _convert_to_grpc(
         self,
     ) -> analysis_service.UpdateLeadModelingPropsRequest:
         request = analysis_service.UpdateLeadModelingPropsRequest()
+        request.project = self.project
+        for cca_name in self.cca_names:
+            request.ccaNames.append(cca_name)
+        for analysis in self.analyses:
+            request.analyses.append(analysis._convert_to_grpc())
+        return request
+
+
+class UpdateMechanicalPartsPropsAnalysis(BaseModel):
+    """Contains the properties of mechanical parts for an FEA analysis."""
+
+    analysis_type: MechanicalPartsAnalysisType  # type: ignore[valid-type]
+    """Analysis type."""
+    mechanical_parts_enabled: bool
+    """Whether to enable lead modeling."""
+    mechanical_parts_elem_order: analysis_service.ElementOrder.ValueType
+    """Mechanical parts element order."""
+    mechanical_parts_max_edge_length: float
+    """Mechanical parts maximum edge length."""
+    mechanical_parts_max_edge_length_units: str
+    """Mechanical parts maximum edge length units."""
+    mechanical_parts_max_vertical: float
+    """Mechanical parts maximum vertical mesh size."""
+    mechanical_parts_max_vertical_units: str
+    """Mechanical parts maximum vertical mesh size units."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateMechanicalPartsPropsRequest.Analysis:
+        grpc_data = analysis_service.UpdateMechanicalPartsPropsRequest.Analysis()
+        grpc_data.type = self.analysis_type
+        grpc_data.mechanicalPartsEnabled = self.mechanical_parts_enabled
+        grpc_data.mechanicalPartsElemOrder = self.mechanical_parts_elem_order
+        grpc_data.mechanicalPartsMaxEdgeLength = self.mechanical_parts_max_edge_length
+        grpc_data.mechanicalPartsMaxEdgeLengthUnits = self.mechanical_parts_max_edge_length_units
+        grpc_data.mechanicalPartsMaxVertical = self.mechanical_parts_max_vertical
+        grpc_data.mechanicalPartsMaxVerticalUnits = self.mechanical_parts_max_vertical_units
+        return grpc_data
+
+
+class UpdateMechanicalPartsPropsRequest(BaseModel):
+    """Contains the properties of a mechanical parts properties update request."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_names: list[str]
+    """Names of CCAs."""
+    analyses: list[UpdateMechanicalPartsPropsAnalysis]
+    """The analyses properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, cast(str, info.field_name))
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdateMechanicalPartsPropsRequest:
+        request = analysis_service.UpdateMechanicalPartsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)
