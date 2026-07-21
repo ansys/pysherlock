@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==2.0.1",
+    "ansys-api-sherlock==2.0.2",
     "grpcio>=1.80.0",
     "protobuf>=6.33.5,<7", # avoid DoS vulnerability in >= 6.30.0rc1, <= 6.33.4
     "pydantic>=2.9.2",

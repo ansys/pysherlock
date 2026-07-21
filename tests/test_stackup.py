@@ -513,12 +513,7 @@ def helper_test_list_conductor_layers(stackup: Stackup):
             layer_properties = layer_properties_per_layer[0]
             assert layer_properties.layer == "1"
             assert layer_properties.type == "SIGNAL"
-            assert (
-                layer_properties.thermalConductivityXY == 10.421635204081632
-            ), "Incorrect thermalConductivityXY value"
-            assert (
-                layer_properties.thermalConductivityZ == 0.36878200673743683
-            ), "Incorrect thermalConductivityZ value"
+            assert layer_properties.layerConductivity == 192.65, "Incorrect layerConductivity value"
         except SherlockListConductorLayersError as e:
             pytest.fail(str(e))
 
@@ -548,11 +543,8 @@ def helper_test_list_laminate_layers(stackup: Stackup):
             layer_properties = layer_properties_per_layer[0]
             assert layer_properties.layer == "2"
             assert (
-                layer_properties.thermalConductivityXY == 10.421635204081632
-            ), "Incorrect thermalConductivityXY value"
-            assert (
-                layer_properties.thermalConductivityZ == 0.36878200673743683
-            ), "Incorrect thermalConductivityZ value"
+                layer_properties.layerConductivity == 0.221847689025
+            ), "Incorrect layerConductivity value"
         except SherlockListLaminateLayersError as e:
             pytest.fail(str(e))
 
