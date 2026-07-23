@@ -56,6 +56,7 @@ from ansys.sherlock.core.types.analysis_types import (
     RunStrainMapAnalysisRequestAnalysisType,
     UpdateComponentFailureMechanismPropsRequest,
     UpdateLeadModelingPropsRequest,
+    UpdateMechanicalPartsPropsRequest,
     UpdateMountPointsPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
@@ -1984,6 +1985,63 @@ class Analysis(GrpcStub):
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.updateLeadModelingProps(request._convert_to_grpc())
+
+    @require_version(271)
+    def update_mechanical_parts_props(
+        self, request: UpdateMechanicalPartsPropsRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update FEA Mechanical Parts properties for one or more CCAs.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        project: str
+            Name of the Sherlock project.
+        request: UpdateMechanicalPartsPropsRequest
+            Contains all the information needed to update the mechanical parts properties
+            for one or more FEA analyses per project.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Return code for the request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.api.sherlock.v0 import (
+        >>>     SherlockAnalysisService_pb2 as AnalysisService,
+        >>> )
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     UpdateMechanicalPartsPropsAnalysis,
+        >>>     UpdateMechanicalPartsPropsRequest,
+        >>> )
+        >>> MechanicalPartsAnalysisType = (
+        >>>     AnalysisService.UpdateMechanicalPartsPropsRequest.Analysis.AnalysisType
+        >>> )
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> analysis_props = UpdateMechanicalPartsPropsAnalysis(
+        >>>     analysis_type=MechanicalPartsAnalysisType.ICTAnalysis,
+        >>>     mechanical_parts_enabled=True,
+        >>>     mechanical_parts_elem_order=AnalysisService.ElementOrder.Quadratic,
+        >>>     mechanical_parts_max_edge_length=0.1234,
+        >>>     mechanical_parts_max_edge_length_units="mm",
+        >>>     mechanical_parts_max_vertical=0.2345,
+        >>>     mechanical_parts_max_vertical_units="mm",
+        >>> )
+        >>> request = UpdateMechanicalPartsPropsRequest(
+        >>>     project="Tutorial Project",
+        >>>     cca_names=["Main Board"],
+        >>>     analyses=[analysis_props],
+        >>> )
+        >>> returnCode = sherlock.analysis.update_mechanical_parts_props(request)
+        >>> assert returnCode.value == 0
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updateMechanicalPartsProps(request._convert_to_grpc())
 
     @require_version(241)
     def update_part_modeling_props(

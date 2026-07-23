@@ -14,6 +14,8 @@ Analysis Types
      UpdateComponentFailureMechanismPropsRequest
      UpdateLeadModelingPropsAnalysis
      UpdateLeadModelingPropsRequest
+     UpdateMechanicalPartsPropsAnalysis
+     UpdateMechanicalPartsPropsRequest
      UpdateMountPointsPropsAnalysis
      UpdateMountPointsPropsRequest
      UpdatePTHFatiguePropsRequest

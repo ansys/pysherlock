@@ -55,6 +55,8 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdateComponentFailureMechanismPropsRequest,
     UpdateLeadModelingPropsAnalysis,
     UpdateLeadModelingPropsRequest,
+    UpdateMechanicalPartsPropsAnalysis,
+    UpdateMechanicalPartsPropsRequest,
     UpdateMountPointsPropsAnalysis,
     UpdateMountPointsPropsRequest,
     UpdatePcbModelingPropsRequestAnalysisType,
@@ -99,6 +101,7 @@ def test_all():
     helper_test_update_trace_modeling_props(analysis)
     helper_test_update_mount_points_props(analysis)
     helper_test_update_lead_modeling_props(analysis)
+    helper_test_update_mechanical_parts_props(analysis)
 
 
 def helper_test_run_analysis(analysis: Analysis):
@@ -2374,6 +2377,54 @@ def helper_test_update_lead_modeling_props(analysis: Analysis):
 
         request.cca_names = ["Main Board"]
         response = analysis.update_lead_modeling_props(request)
+        assert response.message == ""
+        assert response.value == 0
+
+
+def helper_test_update_mechanical_parts_props(analysis: Analysis):
+    """Test update FEA mechanical parts properties API."""
+    try:
+        UpdateMechanicalPartsPropsRequest(
+            project="",
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    analysis_props1 = UpdateMechanicalPartsPropsAnalysis(
+        analysis_type=AnalysisService.UpdateLeadModelingPropsRequest.Analysis.HarmonicVibe,
+        mechanical_parts_enabled=False,
+        mechanical_parts_elem_order=AnalysisService.ElementOrder.Linear,
+        mechanical_parts_max_edge_length=12.34,
+        mechanical_parts_max_edge_length_units="in",
+        mechanical_parts_max_vertical=23.45,
+        mechanical_parts_max_vertical_units="in",
+    )
+    analysis_props2 = UpdateMechanicalPartsPropsAnalysis(
+        analysis_type=AnalysisService.UpdateLeadModelingPropsRequest.Analysis.ICTAnalysis,
+        mechanical_parts_enabled=True,
+        mechanical_parts_elem_order=AnalysisService.ElementOrder.Quadratic,
+        mechanical_parts_max_edge_length=0.1234,
+        mechanical_parts_max_edge_length_units="m",
+        mechanical_parts_max_vertical=0.2345,
+        mechanical_parts_max_vertical_units="m",
+    )
+
+    request = UpdateMechanicalPartsPropsRequest(
+        project="Tutorial Project",
+        cca_names=["Invalid CCA1", "Invalid CCA2"],
+        analyses=[analysis_props1, analysis_props2],
+    )
+
+    if analysis._is_connection_up():
+        response = analysis.update_mechanical_parts_props(request)
+        assert response.message != ""
+        assert response.value != 0
+
+        request.cca_names = ["Main Board"]
+        response = analysis.update_mechanical_parts_props(request)
         assert response.message == ""
         assert response.value == 0
 
