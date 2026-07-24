@@ -1,0 +1,116 @@
+
+
+.. _sphx_glr_examples_gallery_examples_02-importing:
+
+Importing Projects and Files
+============================
+Examples on how to import projects and files using PySherlock.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service and import an IPC-2581 project,">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/02-importing/images/thumb/sphx_glr_import_ipc_2581_archive_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/02-importing/import_ipc_2581_archive`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Import IPC-2581 Archive</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to launch the Sherlock gRPC service, import an ODB++ archive, and handle common exceptions during the import process.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/02-importing/images/thumb/sphx_glr_import_odb_archive_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/02-importing/import_odb_archive`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Import ODB++ Archive</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and import parts lists.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/02-importing/images/thumb/sphx_glr_import_parts_list_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/02-importing/import_parts_list`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Import Parts List</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to launch the Sherlock gRPC service in single-project mode, import a project, and handle common exceptions during the import process.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/02-importing/images/thumb/sphx_glr_import_project_zip_archive_single_mode_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/02-importing/import_project_zip_archive_single_mode`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Sherlock Project Import in Single Mode</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to launch the Sherlock gRPC service, import a project archive, and handle common exceptions during the import process.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/02-importing/images/thumb/sphx_glr_import_project_zip_file_thumb.png
+    :alt:
+
+  :doc:`/examples/gallery_examples/02-importing/import_project_zip_file`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Sherlock Project Import with gRPC</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gallery_examples/02-importing/import_ipc_2581_archive
+   /examples/gallery_examples/02-importing/import_odb_archive
+   /examples/gallery_examples/02-importing/import_parts_list
+   /examples/gallery_examples/02-importing/import_project_zip_archive_single_mode
+   /examples/gallery_examples/02-importing/import_project_zip_file
+

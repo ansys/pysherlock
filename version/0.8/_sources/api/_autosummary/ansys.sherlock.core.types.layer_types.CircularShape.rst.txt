@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.CircularShape
+====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: CircularShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      CircularShape.construct
+      
+      
+      CircularShape.copy
+      
+      
+      CircularShape.dict
+      
+      
+      CircularShape.from_orm
+      
+      
+      CircularShape.json
+      
+      
+      CircularShape.model_construct
+      
+      
+      CircularShape.model_copy
+      
+      
+      CircularShape.model_dump
+      
+      
+      CircularShape.model_dump_json
+      
+      
+      CircularShape.model_json_schema
+      
+      
+      CircularShape.model_parametrized_name
+      
+      
+      CircularShape.model_post_init
+      
+      
+      CircularShape.model_rebuild
+      
+      
+      CircularShape.model_validate
+      
+      
+      CircularShape.model_validate_json
+      
+      
+      CircularShape.model_validate_strings
+      
+      
+      CircularShape.parse_file
+      
+      
+      CircularShape.parse_obj
+      
+      
+      CircularShape.parse_raw
+      
+      
+      CircularShape.schema
+      
+      
+      CircularShape.schema_json
+      
+      
+      CircularShape.update_forward_refs
+      
+      
+      CircularShape.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CircularShape.model_computed_fields
+      
+      
+      CircularShape.model_config
+      
+      
+      CircularShape.model_extra
+      
+      
+      CircularShape.model_fields
+      
+      
+      CircularShape.model_fields_set
+      
+      
+      CircularShape.diameter
+      
+      
+      CircularShape.node_count
+      
+      
+      CircularShape.center_x
+      
+      
+      CircularShape.center_y
+      
+      
+      CircularShape.rotation
+      
+   
+   
+
+.. vale on

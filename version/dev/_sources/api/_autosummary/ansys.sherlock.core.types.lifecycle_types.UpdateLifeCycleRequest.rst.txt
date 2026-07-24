@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdateLifeCycleRequest
+======================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: UpdateLifeCycleRequest
+
+.. vale on

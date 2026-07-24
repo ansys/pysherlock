@@ -1,0 +1,10 @@
+.. vale off
+
+add\_outline\_file
+==================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.add_outline_file
+
+.. vale on

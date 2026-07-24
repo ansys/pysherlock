@@ -1,0 +1,10 @@
+.. vale off
+
+update\_potting\_regions
+========================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: UpdatePottingRegionRequest.update_potting_regions
+
+.. vale on

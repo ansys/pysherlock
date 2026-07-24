@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdateMountPointsPropsRequest
+=============================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: UpdateMountPointsPropsRequest
+
+.. vale on

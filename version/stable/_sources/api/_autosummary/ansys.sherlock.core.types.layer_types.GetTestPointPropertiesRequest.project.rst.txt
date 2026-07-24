@@ -1,0 +1,10 @@
+.. vale off
+
+project
+=======
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: GetTestPointPropertiesRequest.project
+
+.. vale on

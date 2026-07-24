@@ -1,0 +1,6 @@
+update\_conductor\_layer
+========================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.update_conductor_layer

@@ -1,0 +1,6 @@
+run\_analysis
+=============
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.run_analysis

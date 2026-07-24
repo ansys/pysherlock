@@ -1,0 +1,6 @@
+add\_random\_vibe\_event
+========================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.add_random_vibe_event

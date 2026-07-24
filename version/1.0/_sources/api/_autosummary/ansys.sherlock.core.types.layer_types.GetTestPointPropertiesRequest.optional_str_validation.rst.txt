@@ -1,0 +1,10 @@
+.. vale off
+
+optional\_str\_validation
+=========================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: GetTestPointPropertiesRequest.optional_str_validation
+
+.. vale on

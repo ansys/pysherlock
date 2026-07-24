@@ -1,0 +1,10 @@
+﻿.. vale off
+
+GetTestPointPropertiesRequest
+=============================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: GetTestPointPropertiesRequest
+
+.. vale on

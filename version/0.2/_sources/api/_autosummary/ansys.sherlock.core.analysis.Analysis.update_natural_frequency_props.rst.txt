@@ -1,0 +1,6 @@
+﻿update\_natural\_frequency\_props
+=================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_natural_frequency_props

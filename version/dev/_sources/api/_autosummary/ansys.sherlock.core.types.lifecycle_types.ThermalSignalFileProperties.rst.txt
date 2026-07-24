@@ -1,0 +1,10 @@
+﻿.. vale off
+
+ThermalSignalFileProperties
+===========================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: ThermalSignalFileProperties
+
+.. vale on

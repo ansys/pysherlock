@@ -1,0 +1,10 @@
+﻿.. vale off
+
+PTHFatiguePropsAnalysis
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: PTHFatiguePropsAnalysis
+
+.. vale on
