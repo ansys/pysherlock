@@ -18,6 +18,8 @@ Analysis Types
      UpdateMechanicalPartsPropsRequest
      UpdateMountPointsPropsAnalysis
      UpdateMountPointsPropsRequest
+     UpdatePottingRegionsPropsAnalysis
+     UpdatePottingRegionsPropsRequest
      UpdatePTHFatiguePropsRequest
      UpdatePTHFatiguePropsRequestAnalysisType
      UpdateSemiconductorWearoutAnalysisPropsRequest
