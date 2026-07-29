@@ -62,6 +62,8 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
+    UpdatePottingRegionsPropsAnalysis,
+    UpdatePottingRegionsPropsRequest,
     UpdatePTHFatiguePropsRequest,
     UpdatePTHFatiguePropsRequestAnalysisType,
     UpdateSemiconductorWearoutAnalysisPropsRequest,
@@ -102,6 +104,7 @@ def test_all():
     helper_test_update_mount_points_props(analysis)
     helper_test_update_lead_modeling_props(analysis)
     helper_test_update_mechanical_parts_props(analysis)
+    helper_test_update_potting_regions_props(analysis)
 
 
 def helper_test_run_analysis(analysis: Analysis):
@@ -2425,6 +2428,54 @@ def helper_test_update_mechanical_parts_props(analysis: Analysis):
 
         request.cca_names = ["Main Board"]
         response = analysis.update_mechanical_parts_props(request)
+        assert response.message == ""
+        assert response.value == 0
+
+
+def helper_test_update_potting_regions_props(analysis: Analysis):
+    """Test update FEA potting regions properties API."""
+    try:
+        UpdatePottingRegionsPropsRequest(
+            project="",
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            e.errors()[0]["msg"] == "Value error, project is invalid because it is None or empty."
+        )
+
+    analysis_props1 = UpdatePottingRegionsPropsAnalysis(
+        analysis_type=AnalysisService.UpdateLeadModelingPropsRequest.Analysis.HarmonicVibe,
+        potting_enabled=False,
+        potting_elem_order=AnalysisService.ElementOrder.Linear,
+        potting_max_edge_length=12.34,
+        potting_max_edge_length_units="in",
+        potting_max_vertical=23.45,
+        potting_max_vertical_units="in",
+    )
+    analysis_props2 = UpdatePottingRegionsPropsAnalysis(
+        analysis_type=AnalysisService.UpdateLeadModelingPropsRequest.Analysis.ICTAnalysis,
+        potting_enabled=True,
+        potting_elem_order=AnalysisService.ElementOrder.Quadratic,
+        potting_max_edge_length=0.1234,
+        potting_max_edge_length_units="m",
+        potting_max_vertical=0.2345,
+        potting_max_vertical_units="m",
+    )
+
+    request = UpdatePottingRegionsPropsRequest(
+        project="Tutorial Project",
+        cca_names=["Invalid CCA1", "Invalid CCA2"],
+        analyses=[analysis_props1, analysis_props2],
+    )
+
+    if analysis._is_connection_up():
+        response = analysis.update_potting_regions_props(request)
+        assert response.message != ""
+        assert response.value != 0
+
+        request.cca_names = ["Main Board"]
+        response = analysis.update_potting_regions_props(request)
         assert response.message == ""
         assert response.value == 0
 

@@ -44,6 +44,9 @@ LeadModelingAnalysisType = (
 MechanicalPartsAnalysisType = (
     analysis_service.UpdateMechanicalPartsPropsRequest.Analysis.AnalysisType.ValueType
 )
+PottingRegionsAnalysisType = (
+    analysis_service.UpdatePottingRegionsPropsRequest.Analysis.AnalysisType.ValueType
+)
 
 
 class ElementOrder:
@@ -608,6 +611,66 @@ class UpdateMechanicalPartsPropsRequest(BaseModel):
         self,
     ) -> analysis_service.UpdateMechanicalPartsPropsRequest:
         request = analysis_service.UpdateMechanicalPartsPropsRequest()
+        request.project = self.project
+        for cca_name in self.cca_names:
+            request.ccaNames.append(cca_name)
+        for analysis in self.analyses:
+            request.analyses.append(analysis._convert_to_grpc())
+        return request
+
+
+class UpdatePottingRegionsPropsAnalysis(BaseModel):
+    """Contains the properties of potting regions for an FEA analysis."""
+
+    analysis_type: PottingRegionsAnalysisType  # type: ignore[valid-type]
+    """Analysis type."""
+    potting_enabled: bool
+    """Whether to enable potting regions."""
+    potting_elem_order: analysis_service.ElementOrder.ValueType
+    """Potting regions element order."""
+    potting_max_edge_length: float
+    """Potting regions maximum edge length."""
+    potting_max_edge_length_units: str
+    """Potting regions maximum edge length units."""
+    potting_max_vertical: float
+    """Potting regions maximum vertical mesh size."""
+    potting_max_vertical_units: str
+    """Potting regions maximum vertical mesh size units."""
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdatePottingRegionsPropsRequest.Analysis:
+        grpc_data = analysis_service.UpdatePottingRegionsPropsRequest.Analysis()
+        grpc_data.type = self.analysis_type
+        grpc_data.pottingEnabled = self.potting_enabled
+        grpc_data.pottingElemOrder = self.potting_elem_order
+        grpc_data.pottingMaxEdgeLength = self.potting_max_edge_length
+        grpc_data.pottingMaxEdgeLengthUnits = self.potting_max_edge_length_units
+        grpc_data.pottingMaxVertical = self.potting_max_vertical
+        grpc_data.pottingMaxVerticalUnits = self.potting_max_vertical_units
+        return grpc_data
+
+
+class UpdatePottingRegionsPropsRequest(BaseModel):
+    """Contains the properties of a potting regions properties update request."""
+
+    project: str
+    """Name of the Sherlock project."""
+    cca_names: list[str]
+    """Names of CCAs."""
+    analyses: list[UpdatePottingRegionsPropsAnalysis]
+    """The analyses properties to update."""
+
+    @field_validator("project")
+    @classmethod
+    def str_validation(cls, value: str, info: ValidationInfo):
+        """Validate string fields listed."""
+        return basic_str_validator(value, cast(str, info.field_name))
+
+    def _convert_to_grpc(
+        self,
+    ) -> analysis_service.UpdatePottingRegionsPropsRequest:
+        request = analysis_service.UpdatePottingRegionsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)

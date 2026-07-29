@@ -61,6 +61,7 @@ from ansys.sherlock.core.types.analysis_types import (
     UpdatePcbModelingPropsRequestAnalysisType,
     UpdatePcbModelingPropsRequestPcbMaterialModel,
     UpdatePcbModelingPropsRequestPcbModelType,
+    UpdatePottingRegionsPropsRequest,
     UpdatePTHFatiguePropsRequest,
     UpdateSemiconductorWearoutAnalysisPropsRequest,
     UpdateTraceModelingPropsRequest,
@@ -2042,6 +2043,58 @@ class Analysis(GrpcStub):
             raise SherlockNoGrpcConnectionException()
 
         return self.stub.updateMechanicalPartsProps(request._convert_to_grpc())
+
+    @require_version(271)
+    def update_potting_regions_props(
+        self, request: UpdatePottingRegionsPropsRequest
+    ) -> SherlockCommonService_pb2.ReturnCode:
+        """Update FEA Potting Regions properties for one or more CCAs.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        request: UpdatePottingRegionsPropsRequest
+            Contains all the information needed to update the potting regions properties
+            for one or more FEA analyses per project.
+
+        Returns
+        -------
+        SherlockCommonService_pb2.ReturnCode
+            Return code for the request.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> from ansys.api.sherlock.v0 import (
+        >>>     SherlockAnalysisService_pb2 as AnalysisService,
+        >>> )
+        >>> from ansys.sherlock.core.types.analysis_types import (
+        >>>     UpdatePottingRegionsPropsAnalysis,
+        >>>     UpdatePottingRegionsPropsRequest,
+        >>> )
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> analysis_props = UpdatePottingRegionsPropsAnalysis(
+        >>>     analysis_type=AnalysisService.UpdatePottingRegionsPropsRequest.Analysis.ICTAnalysis,
+        >>>     potting_enabled=True,
+        >>>     potting_elem_order=AnalysisService.ElementOrder.Quadratic,
+        >>>     potting_max_edge_length=0.1234,
+        >>>     potting_max_edge_length_units="mm",
+        >>>     potting_max_vertical=0.2345,
+        >>>     potting_max_vertical_units="mm",
+        >>> )
+        >>> request = UpdatePottingRegionsPropsRequest(
+        >>>     project="Tutorial Project",
+        >>>     cca_names=["Main Board"],
+        >>>     analyses=[analysis_props],
+        >>> )
+        >>> returnCode = sherlock.analysis.update_potting_regions_props(request)
+        >>> assert returnCode.value == 0
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        return self.stub.updatePottingRegionsProps(request._convert_to_grpc())
 
     @require_version(241)
     def update_part_modeling_props(
