@@ -677,4 +677,3 @@ class UpdatePottingRegionsPropsRequest(BaseModel):
         for analysis in self.analyses:
             request.analyses.append(analysis._convert_to_grpc())
         return request
-
