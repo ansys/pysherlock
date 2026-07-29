@@ -38,7 +38,7 @@ jobs:
       contents: read
     steps:
       - name: PyAnsys documentation style checks
-        uses: ansys/actions/doc-style@7419880d64bb0bba83f968ca803611df0b76faf0 # v10.3.4
+        uses: ansys/actions/doc-style@84b6533ae76f5dde69a1df26c18682160a8121cf # v10.3.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           vale-version: "3.4.1"
@@ -76,12 +76,12 @@ jobs:
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
 
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -123,7 +123,7 @@ jobs:
     needs: [ docs-style ]
     runs-on: [ self-hosted, pysherlock ]
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Enable Windows long paths
@@ -134,7 +134,7 @@ jobs:
             -Name "LongPathsEnabled" -Value 1 -PropertyType DWord -Force
           Write-Host "Windows Long Paths enabled (a runner service restart may be required once)."
       - name: Run documentation building action
-        uses: ansys/actions/doc-build@7419880d64bb0bba83f968ca803611df0b76faf0 # v10.3.4
+        uses: ansys/actions/doc-build@84b6533ae76f5dde69a1df26c18682160a8121cf # v10.3.5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -170,7 +170,7 @@ jobs:
         run: ls -Rla
 
       - name: "Release to PyPI using trusted publisher"
-        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
+        uses: pypa/gh-action-pypi-publish@ba38be9e461d3875417946c167d0b5f3d385a247 # v1.14.1
         with:
           repository-url: "https://upload.pypi.org/legacy/"
           print-hash: true
@@ -178,7 +178,7 @@ jobs:
           skip-existing: false
 
       - name: "Release to GitHub"
-        uses: ansys/actions/release-github@7419880d64bb0bba83f968ca803611df0b76faf0 #v10.3.4
+        uses: ansys/actions/release-github@84b6533ae76f5dde69a1df26c18682160a8121cf #v10.3.5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -248,7 +248,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: ansys/actions/check-vulnerabilities@7419880d64bb0bba83f968ca803611df0b76faf0 # v10.3.4
+      - uses: ansys/actions/check-vulnerabilities@84b6533ae76f5dde69a1df26c18682160a8121cf # v10.3.5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
