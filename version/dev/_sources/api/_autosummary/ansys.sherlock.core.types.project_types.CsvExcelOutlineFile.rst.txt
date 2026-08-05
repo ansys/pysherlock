@@ -1,0 +1,10 @@
+﻿.. vale off
+
+CsvExcelOutlineFile
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autopydantic_model:: CsvExcelOutlineFile
+
+.. vale on

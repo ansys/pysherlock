@@ -1,0 +1,10 @@
+﻿.. vale off
+
+SaveRandomVibeProfileRequest
+============================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: SaveRandomVibeProfileRequest
+
+.. vale on

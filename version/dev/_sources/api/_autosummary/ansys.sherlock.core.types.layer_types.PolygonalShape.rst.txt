@@ -1,0 +1,10 @@
+﻿.. vale off
+
+PolygonalShape
+==============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: PolygonalShape
+
+.. vale on

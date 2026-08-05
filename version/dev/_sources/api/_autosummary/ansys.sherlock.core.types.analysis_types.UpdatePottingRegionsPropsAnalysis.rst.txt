@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdatePottingRegionsPropsAnalysis
+=================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: UpdatePottingRegionsPropsAnalysis
+
+.. vale on

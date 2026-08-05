@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdatePottingRegionRequest
+==========================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: UpdatePottingRegionRequest
+
+.. vale on

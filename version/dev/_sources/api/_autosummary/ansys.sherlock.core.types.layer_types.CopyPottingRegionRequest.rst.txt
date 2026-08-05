@@ -1,0 +1,10 @@
+﻿.. vale off
+
+CopyPottingRegionRequest
+========================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: CopyPottingRegionRequest
+
+.. vale on

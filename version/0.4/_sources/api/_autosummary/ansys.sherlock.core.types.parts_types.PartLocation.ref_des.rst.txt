@@ -1,0 +1,6 @@
+ref\_des
+========
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoattribute:: PartLocation.ref_des

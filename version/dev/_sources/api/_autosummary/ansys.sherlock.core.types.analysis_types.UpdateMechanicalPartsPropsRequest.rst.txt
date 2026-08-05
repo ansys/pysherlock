@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdateMechanicalPartsPropsRequest
+=================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: UpdateMechanicalPartsPropsRequest
+
+.. vale on

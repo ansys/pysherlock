@@ -1,0 +1,6 @@
+﻿delete\_project
+===============
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.delete_project

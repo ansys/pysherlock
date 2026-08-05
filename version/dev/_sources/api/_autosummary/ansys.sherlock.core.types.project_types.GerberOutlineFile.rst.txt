@@ -1,0 +1,10 @@
+﻿.. vale off
+
+GerberOutlineFile
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autopydantic_model:: GerberOutlineFile
+
+.. vale on

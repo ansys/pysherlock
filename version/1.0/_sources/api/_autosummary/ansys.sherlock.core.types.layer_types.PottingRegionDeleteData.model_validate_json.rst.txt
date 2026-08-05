@@ -1,0 +1,10 @@
+.. vale off
+
+model\_validate\_json
+=====================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: PottingRegionDeleteData.model_validate_json
+
+.. vale on

@@ -1,0 +1,10 @@
+﻿.. vale off
+
+SaveHarmonicProfileRequest
+==========================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: SaveHarmonicProfileRequest
+
+.. vale on

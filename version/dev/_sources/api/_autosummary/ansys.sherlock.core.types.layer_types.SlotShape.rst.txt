@@ -1,0 +1,10 @@
+﻿.. vale off
+
+SlotShape
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: SlotShape
+
+.. vale on

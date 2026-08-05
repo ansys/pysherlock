@@ -1,0 +1,44 @@
+
+
+.. _sphx_glr_examples_gallery_examples_00-setup:
+
+Setup
+=====
+Scripts to run before the examples to prepare the tests.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This prepares the environment for running the examples.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/00-setup/images/thumb/sphx_glr_setup_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_00-setup_setup.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Setup</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gallery_examples/00-setup/setup
+

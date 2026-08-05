@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_material
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegion.potting_material
+
+.. vale on

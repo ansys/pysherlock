@@ -1,0 +1,10 @@
+﻿.. vale off
+
+PCBShape
+========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: PCBShape
+
+.. vale on

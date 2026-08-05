@@ -1,0 +1,10 @@
+.. vale off
+
+update\_modeling\_region
+========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_modeling_region
+
+.. vale on
