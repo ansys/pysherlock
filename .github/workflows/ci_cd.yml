@@ -76,6 +76,15 @@ jobs:
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
 
     steps:
+      - name: Clean up stale git lock file
+        shell: powershell
+        run: |
+          $lockFile = Join-Path $env:GITHUB_WORKSPACE ".git\config.lock"
+          if (Test-Path $lockFile) {
+            Write-Host "Removing stale git lock file: $lockFile"
+            Remove-Item $lockFile -Force
+          }
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -123,6 +132,15 @@ jobs:
     needs: [ docs-style ]
     runs-on: [ self-hosted, pysherlock ]
     steps:
+      - name: Clean up stale git lock file
+        shell: powershell
+        run: |
+          $lockFile = Join-Path $env:GITHUB_WORKSPACE ".git\config.lock"
+          if (Test-Path $lockFile) {
+            Write-Host "Removing stale git lock file: $lockFile"
+            Remove-Item $lockFile -Force
+          }
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
