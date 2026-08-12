@@ -26,7 +26,7 @@
 
 from typing import Optional
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import BaseModel, ValidationInfo, field_validator, model_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator, optional_str_validator
 
@@ -433,11 +433,14 @@ class ImportThermalSignalRequest(BaseModel):
     load_range_percentage: float
     """Defines the fraction of the range near peaks and valleys considered as a dwell region."""
     number_of_range_bins: int
-    """Number of range bins for binning cycles, 0 for no range binning."""
+    """Number of range bins for binning cycles. This number must be greater than 0 and
+    allowCyclesBinning must be true for binning to occur. Partial binning is not allowed."""
     number_of_mean_bins: int
-    """Number of mean bins for binning cycles, 0 for no mean binning."""
+    """Number of mean bins for binning cycles. This number must be greater than 0 and
+    allowCyclesBinning must be true for binning to occur. Partial binning is not allowed."""
     number_of_dwell_bins: int
-    """Number of dwell bins for binning cycles, 0 for no dwell binning."""
+    """Number of dwell bins for binning cycles. This number must be greater than 0 and
+    allowCycleBinning must be true for binning to occur. Partial binning is not allowed."""
     temperature_range_filtering_limit: float
     """Minimum cycle range to include in results, 0 for not filtering."""
     time_filtering_limit: float
@@ -446,6 +449,9 @@ class ImportThermalSignalRequest(BaseModel):
     """Units of the time filtering limit."""
     generated_cycles_label: str
     """Label used to define the name of all generated thermal events."""
+    allow_cycles_binning: bool
+    """If true, cycles binning will occur based on the number of range, mean, and dwell bins
+    defined. If false, cycle binning will be turned off."""
 
     @field_validator(
         "file_name", "project", "phase_name", "time_filtering_limit_units", "generated_cycles_label"
@@ -463,6 +469,22 @@ class ImportThermalSignalRequest(BaseModel):
             raise ValueError(f"{info.field_name} must be greater than or equal to 0.")
         return value
 
+    @model_validator(mode="after")
+    def validate_partial_binning(self):
+        """Validate that binning is not partially defined when binning is enabled."""
+        if self.allow_cycles_binning:
+            bins = (
+                self.number_of_range_bins,
+                self.number_of_mean_bins,
+                self.number_of_dwell_bins,
+            )
+            if any(b == 0 for b in bins):
+                raise ValueError(
+                    "partial binning is not supported. Please enter a positive number for "
+                    "all three bin fields."
+                )
+        return self
+
     def _convert_to_grpc(self) -> SherlockLifeCycleService_pb2.ImportThermalSignalRequest:
         """Convert to gRPC ImportThermalSignalRequest."""
         return SherlockLifeCycleService_pb2.ImportThermalSignalRequest(
@@ -479,6 +501,7 @@ class ImportThermalSignalRequest(BaseModel):
             timeFilteringLimit=self.time_filtering_limit,
             timeFilteringLimitUnits=self.time_filtering_limit_units,
             generatedCyclesLabel=self.generated_cycles_label,
+            allowCyclesBinning=self.allow_cycles_binning,
         )
 
 
