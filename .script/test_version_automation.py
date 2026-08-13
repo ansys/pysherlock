@@ -48,7 +48,7 @@ name = "ansys-sherlock-core"
 version = "{version}"
 description = "A Python wrapper for Ansys Sherlock"
 readme = "README.rst"
-requires-python = ">=3.10,<4"
+requires-python = ">=3.12,<4"
 license = {{file = "LICENSE"}}
 
 [project.urls]
