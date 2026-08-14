@@ -1,0 +1,10 @@
+﻿.. vale off
+
+UpdateLeadModelingPropsRequest
+==============================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autopydantic_model:: UpdateLeadModelingPropsRequest
+
+.. vale on

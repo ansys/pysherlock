@@ -1,0 +1,10 @@
+﻿.. vale off
+
+SaveLifeCycleRequest
+====================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autopydantic_model:: SaveLifeCycleRequest
+
+.. vale on

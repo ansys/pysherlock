@@ -1,0 +1,6 @@
+update\_test\_fixtures\_by\_file
+================================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_test_fixtures_by_file

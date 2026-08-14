@@ -1,0 +1,10 @@
+﻿.. vale off
+
+GetICTFixturesPropertiesRequest
+===============================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: GetICTFixturesPropertiesRequest
+
+.. vale on

@@ -1,0 +1,10 @@
+﻿.. vale off
+
+GetMountPointsPropertiesRequest
+===============================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: GetMountPointsPropertiesRequest
+
+.. vale on

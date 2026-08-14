@@ -1,0 +1,10 @@
+﻿.. vale off
+
+CopperGerberFile
+================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autopydantic_model:: CopperGerberFile
+
+.. vale on

@@ -1,0 +1,10 @@
+﻿.. vale off
+
+CopperImageFile
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autopydantic_model:: CopperImageFile
+
+.. vale on

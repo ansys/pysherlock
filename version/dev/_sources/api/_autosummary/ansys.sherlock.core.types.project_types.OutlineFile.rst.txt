@@ -1,0 +1,10 @@
+﻿.. vale off
+
+OutlineFile
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autopydantic_model:: OutlineFile
+
+.. vale on

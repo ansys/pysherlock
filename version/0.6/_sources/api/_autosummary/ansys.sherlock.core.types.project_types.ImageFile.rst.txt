@@ -1,0 +1,55 @@
+﻿ansys.sherlock.core.types.project\_types.ImageFile
+==================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: ImageFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ImageFile.board_bounds
+      
+      
+      ImageFile.coordinate_units
+      
+      
+      ImageFile.image_bounds
+      
+      
+      ImageFile.legend_bounds
+      
+      
+      ImageFile.legend_orientation
+      
+      
+      ImageFile.max_temperature
+      
+      
+      ImageFile.max_temperature_units
+      
+      
+      ImageFile.min_temperature
+      
+      
+      ImageFile.min_temperature_units
+      
+   
+   

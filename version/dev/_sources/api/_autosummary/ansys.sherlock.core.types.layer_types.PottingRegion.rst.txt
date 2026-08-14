@@ -1,0 +1,10 @@
+﻿.. vale off
+
+PottingRegion
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autopydantic_model:: PottingRegion
+
+.. vale on
