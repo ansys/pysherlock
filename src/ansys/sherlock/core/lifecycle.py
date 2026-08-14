@@ -2378,6 +2378,7 @@ class Lifecycle(GrpcStub):
         >>>         time_filtering_limit=72.0,
         >>>         time_filtering_limit_units="hr",
         >>>         generated_cycles_label="Second Generated Cycles from Python",
+        >>>         allow_cycles_binning=True,
         >>>     )
         >>> )
         """

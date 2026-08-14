@@ -3443,6 +3443,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using a missing file_name parameter")
@@ -3477,6 +3478,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using a missing project parameter")
@@ -3511,6 +3513,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using a missing phase_name parameter")
@@ -3545,6 +3548,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using invalid number_of_range_bins parameter")
@@ -3579,6 +3583,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using invalid number_of_mean_bins parameter")
@@ -3613,6 +3618,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using invalid number_of_dwell_bins parameter")
@@ -3647,6 +3653,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="",
                 generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using a missing time_filtering_limit_units parameter")
@@ -3681,6 +3688,7 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
                 time_filtering_limit=72.0,
                 time_filtering_limit_units="hr",
                 generated_cycles_label="",
+                allow_cycles_binning=False,
             )
         )
         pytest.fail("No exception raised when using a missing generated_cycles_label parameter")
@@ -3689,6 +3697,45 @@ def helper_test_import_thermal_signal(lifecycle: Lifecycle):
         assert (
             str(e.errors()[0]["msg"])
             == "Value error, generated_cycles_label is invalid because it is None or empty."
+        )
+
+    try:
+        lifecycle.import_thermal_signal(
+            ImportThermalSignalRequest(
+                file_name="C:/Temp/ThermalSignalMissing.csv",
+                project="Tutorial Project",
+                thermal_signal_file_properties=ThermalSignalFileProperties(
+                    header_row_count=0,
+                    numeric_format="English",
+                    column_delimiter=",",
+                    time_column="Time",
+                    time_units="sec",
+                    temperature_column="Temperature",
+                    temperature_units="C",
+                ),
+                phase_name="Environmental",
+                time_removal=False,
+                load_range_percentage=0.25,
+                number_of_range_bins=2,
+                number_of_mean_bins=3,
+                number_of_dwell_bins=0,
+                temperature_range_filtering_limit=0.0,
+                time_filtering_limit=72.0,
+                time_filtering_limit_units="hr",
+                generated_cycles_label="Generated Cycles from pySherlock",
+                allow_cycles_binning=True,
+            )
+        )
+        pytest.fail(
+            "No exception raised when allow_cycles_binning is true and at least one of the "
+            "range, mean, and dwell bins equals 0"
+        )
+    except Exception as e:
+        assert isinstance(e, pydantic.ValidationError)
+        assert (
+            str(e.errors()[0]["msg"])
+            == "Value error, partial binning is not supported. Please enter a positive number for "
+            "all three bin fields."
         )
 
 
