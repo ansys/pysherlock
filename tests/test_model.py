@@ -629,7 +629,7 @@ class TestModel(unittest.TestCase):
 
             try:
                 result = model.export_FEA_model(
-                    project="Tutorial Project",
+                    project="AssemblyTutorial",
                     cca_name="Main Board",
                     export_file=path,
                     analysis="NaturalFreq",
