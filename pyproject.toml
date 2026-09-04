@@ -24,8 +24,8 @@ classifiers = [
 
 dependencies = [
     "ansys-api-sherlock==2.3.0",
-    "grpcio>=1.80.0",
-    "protobuf>=6.33.5,<8",
+    "grpcio>=1.71.2",
+    "protobuf>=5.29.6",
     "pydantic>=2.9.2",
 ]
 
@@ -37,7 +37,7 @@ tests = [
 
 dev = [
     "coverage>=7.0,<8",
-    "grpcio-tools==1.83.0",
+    "grpcio-tools>=1.71.2,<1.72",
     "pre-commit>=4.0,<5"
 ]
 
