@@ -37,7 +37,7 @@ tests = [
 
 dev = [
     "coverage>=7.0,<8",
-    "grpcio-tools>=1.71.2,<1.72",
+    "grpcio-tools>=1.71.2,<1.84",
     "pre-commit>=4.0,<5"
 ]
 
