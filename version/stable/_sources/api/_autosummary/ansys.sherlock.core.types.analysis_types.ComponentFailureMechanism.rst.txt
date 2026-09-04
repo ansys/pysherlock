@@ -1,0 +1,134 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.ComponentFailureMechanism
+===================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: ComponentFailureMechanism
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ComponentFailureMechanism.construct
+      
+      
+      ComponentFailureMechanism.copy
+      
+      
+      ComponentFailureMechanism.dict
+      
+      
+      ComponentFailureMechanism.from_orm
+      
+      
+      ComponentFailureMechanism.json
+      
+      
+      ComponentFailureMechanism.model_construct
+      
+      
+      ComponentFailureMechanism.model_copy
+      
+      
+      ComponentFailureMechanism.model_dump
+      
+      
+      ComponentFailureMechanism.model_dump_json
+      
+      
+      ComponentFailureMechanism.model_json_schema
+      
+      
+      ComponentFailureMechanism.model_parametrized_name
+      
+      
+      ComponentFailureMechanism.model_post_init
+      
+      
+      ComponentFailureMechanism.model_rebuild
+      
+      
+      ComponentFailureMechanism.model_validate
+      
+      
+      ComponentFailureMechanism.model_validate_json
+      
+      
+      ComponentFailureMechanism.model_validate_strings
+      
+      
+      ComponentFailureMechanism.parse_file
+      
+      
+      ComponentFailureMechanism.parse_obj
+      
+      
+      ComponentFailureMechanism.parse_raw
+      
+      
+      ComponentFailureMechanism.schema
+      
+      
+      ComponentFailureMechanism.schema_json
+      
+      
+      ComponentFailureMechanism.str_validation
+      
+      
+      ComponentFailureMechanism.update_forward_refs
+      
+      
+      ComponentFailureMechanism.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ComponentFailureMechanism.model_computed_fields
+      
+      
+      ComponentFailureMechanism.model_config
+      
+      
+      ComponentFailureMechanism.model_extra
+      
+      
+      ComponentFailureMechanism.model_fields
+      
+      
+      ComponentFailureMechanism.model_fields_set
+      
+      
+      ComponentFailureMechanism.cca_name
+      
+      
+      ComponentFailureMechanism.default_part_temp_rise
+      
+      
+      ComponentFailureMechanism.default_part_temp_rise_units
+      
+      
+      ComponentFailureMechanism.part_temp_rise_min_enabled
+      
+      
+      ComponentFailureMechanism.part_validation_enabled
+      
+   
+   
+
+.. vale on

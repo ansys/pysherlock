@@ -1,0 +1,10 @@
+.. vale off
+
+get\_ict\_fixtures\_props
+=========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.get_ict_fixtures_props
+
+.. vale on

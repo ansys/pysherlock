@@ -1,0 +1,122 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.ListLifeCycleEventsRequest
+=====================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: ListLifeCycleEventsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ListLifeCycleEventsRequest.construct
+      
+      
+      ListLifeCycleEventsRequest.copy
+      
+      
+      ListLifeCycleEventsRequest.dict
+      
+      
+      ListLifeCycleEventsRequest.from_orm
+      
+      
+      ListLifeCycleEventsRequest.json
+      
+      
+      ListLifeCycleEventsRequest.model_construct
+      
+      
+      ListLifeCycleEventsRequest.model_copy
+      
+      
+      ListLifeCycleEventsRequest.model_dump
+      
+      
+      ListLifeCycleEventsRequest.model_dump_json
+      
+      
+      ListLifeCycleEventsRequest.model_json_schema
+      
+      
+      ListLifeCycleEventsRequest.model_parametrized_name
+      
+      
+      ListLifeCycleEventsRequest.model_post_init
+      
+      
+      ListLifeCycleEventsRequest.model_rebuild
+      
+      
+      ListLifeCycleEventsRequest.model_validate
+      
+      
+      ListLifeCycleEventsRequest.model_validate_json
+      
+      
+      ListLifeCycleEventsRequest.model_validate_strings
+      
+      
+      ListLifeCycleEventsRequest.parse_file
+      
+      
+      ListLifeCycleEventsRequest.parse_obj
+      
+      
+      ListLifeCycleEventsRequest.parse_raw
+      
+      
+      ListLifeCycleEventsRequest.schema
+      
+      
+      ListLifeCycleEventsRequest.schema_json
+      
+      
+      ListLifeCycleEventsRequest.str_validation
+      
+      
+      ListLifeCycleEventsRequest.update_forward_refs
+      
+      
+      ListLifeCycleEventsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ListLifeCycleEventsRequest.model_computed_fields
+      
+      
+      ListLifeCycleEventsRequest.model_config
+      
+      
+      ListLifeCycleEventsRequest.model_extra
+      
+      
+      ListLifeCycleEventsRequest.model_fields
+      
+      
+      ListLifeCycleEventsRequest.model_fields_set
+      
+      
+      ListLifeCycleEventsRequest.project
+      
+   
+   
+
+.. vale on

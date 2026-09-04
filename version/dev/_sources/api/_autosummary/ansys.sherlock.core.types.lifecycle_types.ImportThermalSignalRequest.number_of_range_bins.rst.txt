@@ -1,0 +1,10 @@
+.. vale off
+
+number\_of\_range\_bins
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.number_of_range_bins
+
+.. vale on

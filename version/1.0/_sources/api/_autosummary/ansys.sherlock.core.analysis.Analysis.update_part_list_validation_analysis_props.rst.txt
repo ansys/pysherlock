@@ -1,0 +1,10 @@
+.. vale off
+
+update\_part\_list\_validation\_analysis\_props
+===============================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_part_list_validation_analysis_props
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+trace\_enabled
+==============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateTraceModelingPropsAnalysis.trace_enabled
+
+.. vale on

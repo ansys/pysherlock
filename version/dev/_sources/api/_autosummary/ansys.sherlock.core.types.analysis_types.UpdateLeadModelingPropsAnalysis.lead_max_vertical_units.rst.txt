@@ -1,0 +1,10 @@
+.. vale off
+
+lead\_max\_vertical\_units
+==========================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateLeadModelingPropsAnalysis.lead_max_vertical_units
+
+.. vale on

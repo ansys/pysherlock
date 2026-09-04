@@ -1,0 +1,10 @@
+.. vale off
+
+copy\_modeling\_region
+======================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.copy_modeling_region
+
+.. vale on

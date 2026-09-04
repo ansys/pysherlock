@@ -1,0 +1,10 @@
+.. vale off
+
+model\_validate
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: ComponentFailureMechanism.model_validate
+
+.. vale on

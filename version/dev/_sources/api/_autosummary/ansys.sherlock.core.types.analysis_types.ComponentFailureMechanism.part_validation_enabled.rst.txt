@@ -1,0 +1,10 @@
+.. vale off
+
+part\_validation\_enabled
+=========================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: ComponentFailureMechanism.part_validation_enabled
+
+.. vale on

@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdatePTHFatiguePropsRequest
+======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdatePTHFatiguePropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdatePTHFatiguePropsRequest.construct
+      
+      
+      UpdatePTHFatiguePropsRequest.copy
+      
+      
+      UpdatePTHFatiguePropsRequest.dict
+      
+      
+      UpdatePTHFatiguePropsRequest.from_orm
+      
+      
+      UpdatePTHFatiguePropsRequest.json
+      
+      
+      UpdatePTHFatiguePropsRequest.model_construct
+      
+      
+      UpdatePTHFatiguePropsRequest.model_copy
+      
+      
+      UpdatePTHFatiguePropsRequest.model_dump
+      
+      
+      UpdatePTHFatiguePropsRequest.model_dump_json
+      
+      
+      UpdatePTHFatiguePropsRequest.model_json_schema
+      
+      
+      UpdatePTHFatiguePropsRequest.model_parametrized_name
+      
+      
+      UpdatePTHFatiguePropsRequest.model_post_init
+      
+      
+      UpdatePTHFatiguePropsRequest.model_rebuild
+      
+      
+      UpdatePTHFatiguePropsRequest.model_validate
+      
+      
+      UpdatePTHFatiguePropsRequest.model_validate_json
+      
+      
+      UpdatePTHFatiguePropsRequest.model_validate_strings
+      
+      
+      UpdatePTHFatiguePropsRequest.parse_file
+      
+      
+      UpdatePTHFatiguePropsRequest.parse_obj
+      
+      
+      UpdatePTHFatiguePropsRequest.parse_raw
+      
+      
+      UpdatePTHFatiguePropsRequest.schema
+      
+      
+      UpdatePTHFatiguePropsRequest.schema_json
+      
+      
+      UpdatePTHFatiguePropsRequest.str_validation
+      
+      
+      UpdatePTHFatiguePropsRequest.update_forward_refs
+      
+      
+      UpdatePTHFatiguePropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdatePTHFatiguePropsRequest.model_computed_fields
+      
+      
+      UpdatePTHFatiguePropsRequest.model_config
+      
+      
+      UpdatePTHFatiguePropsRequest.model_extra
+      
+      
+      UpdatePTHFatiguePropsRequest.model_fields
+      
+      
+      UpdatePTHFatiguePropsRequest.model_fields_set
+      
+      
+      UpdatePTHFatiguePropsRequest.project
+      
+      
+      UpdatePTHFatiguePropsRequest.pth_fatigue_analysis_properties
+      
+   
+   
+
+.. vale on

@@ -1,0 +1,140 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.SemiconductorWearoutAnalysis
+======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: SemiconductorWearoutAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SemiconductorWearoutAnalysis.construct
+      
+      
+      SemiconductorWearoutAnalysis.copy
+      
+      
+      SemiconductorWearoutAnalysis.dict
+      
+      
+      SemiconductorWearoutAnalysis.from_orm
+      
+      
+      SemiconductorWearoutAnalysis.json
+      
+      
+      SemiconductorWearoutAnalysis.model_construct
+      
+      
+      SemiconductorWearoutAnalysis.model_copy
+      
+      
+      SemiconductorWearoutAnalysis.model_dump
+      
+      
+      SemiconductorWearoutAnalysis.model_dump_json
+      
+      
+      SemiconductorWearoutAnalysis.model_json_schema
+      
+      
+      SemiconductorWearoutAnalysis.model_parametrized_name
+      
+      
+      SemiconductorWearoutAnalysis.model_post_init
+      
+      
+      SemiconductorWearoutAnalysis.model_rebuild
+      
+      
+      SemiconductorWearoutAnalysis.model_validate
+      
+      
+      SemiconductorWearoutAnalysis.model_validate_json
+      
+      
+      SemiconductorWearoutAnalysis.model_validate_strings
+      
+      
+      SemiconductorWearoutAnalysis.parse_file
+      
+      
+      SemiconductorWearoutAnalysis.parse_obj
+      
+      
+      SemiconductorWearoutAnalysis.parse_raw
+      
+      
+      SemiconductorWearoutAnalysis.schema
+      
+      
+      SemiconductorWearoutAnalysis.schema_json
+      
+      
+      SemiconductorWearoutAnalysis.str_validation
+      
+      
+      SemiconductorWearoutAnalysis.update_forward_refs
+      
+      
+      SemiconductorWearoutAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SemiconductorWearoutAnalysis.model_computed_fields
+      
+      
+      SemiconductorWearoutAnalysis.model_config
+      
+      
+      SemiconductorWearoutAnalysis.model_extra
+      
+      
+      SemiconductorWearoutAnalysis.model_fields
+      
+      
+      SemiconductorWearoutAnalysis.model_fields_set
+      
+      
+      SemiconductorWearoutAnalysis.cca_name
+      
+      
+      SemiconductorWearoutAnalysis.max_feature_size
+      
+      
+      SemiconductorWearoutAnalysis.max_feature_size_units
+      
+      
+      SemiconductorWearoutAnalysis.part_temp_rise
+      
+      
+      SemiconductorWearoutAnalysis.part_temp_rise_units
+      
+      
+      SemiconductorWearoutAnalysis.part_temp_rise_min_enabled
+      
+      
+      SemiconductorWearoutAnalysis.part_validation_enabled
+      
+   
+   
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+from\_orm
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: ComponentFailureMechanism.from_orm
+
+.. vale on

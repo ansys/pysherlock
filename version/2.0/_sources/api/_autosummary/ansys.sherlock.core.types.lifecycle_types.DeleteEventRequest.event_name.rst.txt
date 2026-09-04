@@ -1,0 +1,10 @@
+.. vale off
+
+event\_name
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: DeleteEventRequest.event_name
+
+.. vale on

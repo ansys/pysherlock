@@ -1,0 +1,122 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PolygonalShape
+=====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PolygonalShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PolygonalShape.construct
+      
+      
+      PolygonalShape.copy
+      
+      
+      PolygonalShape.dict
+      
+      
+      PolygonalShape.from_orm
+      
+      
+      PolygonalShape.json
+      
+      
+      PolygonalShape.model_construct
+      
+      
+      PolygonalShape.model_copy
+      
+      
+      PolygonalShape.model_dump
+      
+      
+      PolygonalShape.model_dump_json
+      
+      
+      PolygonalShape.model_json_schema
+      
+      
+      PolygonalShape.model_parametrized_name
+      
+      
+      PolygonalShape.model_post_init
+      
+      
+      PolygonalShape.model_rebuild
+      
+      
+      PolygonalShape.model_validate
+      
+      
+      PolygonalShape.model_validate_json
+      
+      
+      PolygonalShape.model_validate_strings
+      
+      
+      PolygonalShape.parse_file
+      
+      
+      PolygonalShape.parse_obj
+      
+      
+      PolygonalShape.parse_raw
+      
+      
+      PolygonalShape.schema
+      
+      
+      PolygonalShape.schema_json
+      
+      
+      PolygonalShape.update_forward_refs
+      
+      
+      PolygonalShape.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PolygonalShape.model_computed_fields
+      
+      
+      PolygonalShape.model_config
+      
+      
+      PolygonalShape.model_extra
+      
+      
+      PolygonalShape.model_fields
+      
+      
+      PolygonalShape.model_fields_set
+      
+      
+      PolygonalShape.points
+      
+      
+      PolygonalShape.rotation
+      
+   
+   
+
+.. vale on

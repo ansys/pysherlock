@@ -1,0 +1,10 @@
+.. vale off
+
+trace\_element\_order
+=====================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateTraceModelingPropsAnalysis.trace_element_order
+
+.. vale on

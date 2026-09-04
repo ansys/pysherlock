@@ -1,0 +1,29 @@
+﻿ansys.sherlock.core.analysis
+============================
+
+.. automodule:: ansys.sherlock.core.analysis
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Analysis
+   
+   
+
+   
+   
+   
+
+
+

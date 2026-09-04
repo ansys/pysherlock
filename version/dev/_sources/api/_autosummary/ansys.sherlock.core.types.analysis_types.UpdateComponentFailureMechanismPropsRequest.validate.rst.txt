@@ -1,0 +1,10 @@
+.. vale off
+
+validate
+========
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: UpdateComponentFailureMechanismPropsRequest.validate
+
+.. vale on

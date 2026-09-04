@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.SaveRandomVibeProfileRequest
+=======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: SaveRandomVibeProfileRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SaveRandomVibeProfileRequest.construct
+      
+      
+      SaveRandomVibeProfileRequest.copy
+      
+      
+      SaveRandomVibeProfileRequest.dict
+      
+      
+      SaveRandomVibeProfileRequest.from_orm
+      
+      
+      SaveRandomVibeProfileRequest.json
+      
+      
+      SaveRandomVibeProfileRequest.model_construct
+      
+      
+      SaveRandomVibeProfileRequest.model_copy
+      
+      
+      SaveRandomVibeProfileRequest.model_dump
+      
+      
+      SaveRandomVibeProfileRequest.model_dump_json
+      
+      
+      SaveRandomVibeProfileRequest.model_json_schema
+      
+      
+      SaveRandomVibeProfileRequest.model_parametrized_name
+      
+      
+      SaveRandomVibeProfileRequest.model_post_init
+      
+      
+      SaveRandomVibeProfileRequest.model_rebuild
+      
+      
+      SaveRandomVibeProfileRequest.model_validate
+      
+      
+      SaveRandomVibeProfileRequest.model_validate_json
+      
+      
+      SaveRandomVibeProfileRequest.model_validate_strings
+      
+      
+      SaveRandomVibeProfileRequest.parse_file
+      
+      
+      SaveRandomVibeProfileRequest.parse_obj
+      
+      
+      SaveRandomVibeProfileRequest.parse_raw
+      
+      
+      SaveRandomVibeProfileRequest.schema
+      
+      
+      SaveRandomVibeProfileRequest.schema_json
+      
+      
+      SaveRandomVibeProfileRequest.str_validation
+      
+      
+      SaveRandomVibeProfileRequest.update_forward_refs
+      
+      
+      SaveRandomVibeProfileRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SaveRandomVibeProfileRequest.model_computed_fields
+      
+      
+      SaveRandomVibeProfileRequest.model_config
+      
+      
+      SaveRandomVibeProfileRequest.model_extra
+      
+      
+      SaveRandomVibeProfileRequest.model_fields
+      
+      
+      SaveRandomVibeProfileRequest.model_fields_set
+      
+      
+      SaveRandomVibeProfileRequest.project
+      
+      
+      SaveRandomVibeProfileRequest.phase_name
+      
+      
+      SaveRandomVibeProfileRequest.event_name
+      
+      
+      SaveRandomVibeProfileRequest.file_path
+      
+   
+   
+
+.. vale on

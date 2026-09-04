@@ -1,0 +1,10 @@
+.. vale off
+
+overwrite\_file
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveLifeCycleRequest.overwrite_file
+
+.. vale on

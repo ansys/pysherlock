@@ -1,0 +1,149 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.HarmonicVibeProfileCsvFileProperties
+===============================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: HarmonicVibeProfileCsvFileProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      HarmonicVibeProfileCsvFileProperties.construct
+      
+      
+      HarmonicVibeProfileCsvFileProperties.copy
+      
+      
+      HarmonicVibeProfileCsvFileProperties.dict
+      
+      
+      HarmonicVibeProfileCsvFileProperties.from_orm
+      
+      
+      HarmonicVibeProfileCsvFileProperties.json
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_construct
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_copy
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_dump
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_dump_json
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_json_schema
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_parametrized_name
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_post_init
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_rebuild
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_validate
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_validate_json
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_validate_strings
+      
+      
+      HarmonicVibeProfileCsvFileProperties.non_negative_int_validation
+      
+      
+      HarmonicVibeProfileCsvFileProperties.optional_str_validation
+      
+      
+      HarmonicVibeProfileCsvFileProperties.parse_file
+      
+      
+      HarmonicVibeProfileCsvFileProperties.parse_obj
+      
+      
+      HarmonicVibeProfileCsvFileProperties.parse_raw
+      
+      
+      HarmonicVibeProfileCsvFileProperties.schema
+      
+      
+      HarmonicVibeProfileCsvFileProperties.schema_json
+      
+      
+      HarmonicVibeProfileCsvFileProperties.str_validation
+      
+      
+      HarmonicVibeProfileCsvFileProperties.update_forward_refs
+      
+      
+      HarmonicVibeProfileCsvFileProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      HarmonicVibeProfileCsvFileProperties.model_computed_fields
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_config
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_extra
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_fields
+      
+      
+      HarmonicVibeProfileCsvFileProperties.model_fields_set
+      
+      
+      HarmonicVibeProfileCsvFileProperties.profile_name
+      
+      
+      HarmonicVibeProfileCsvFileProperties.header_row_count
+      
+      
+      HarmonicVibeProfileCsvFileProperties.column_delimiter
+      
+      
+      HarmonicVibeProfileCsvFileProperties.numeric_format
+      
+      
+      HarmonicVibeProfileCsvFileProperties.frequency_column
+      
+      
+      HarmonicVibeProfileCsvFileProperties.frequency_units
+      
+      
+      HarmonicVibeProfileCsvFileProperties.load_column
+      
+      
+      HarmonicVibeProfileCsvFileProperties.load_units
+      
+   
+   
+
+.. vale on

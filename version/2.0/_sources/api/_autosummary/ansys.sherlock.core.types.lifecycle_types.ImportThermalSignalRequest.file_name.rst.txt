@@ -1,0 +1,10 @@
+.. vale off
+
+file\_name
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.file_name
+
+.. vale on

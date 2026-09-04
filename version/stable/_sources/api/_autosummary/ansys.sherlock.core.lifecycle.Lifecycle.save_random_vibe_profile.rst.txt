@@ -1,0 +1,10 @@
+.. vale off
+
+save\_random\_vibe\_profile
+===========================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.save_random_vibe_profile
+
+.. vale on

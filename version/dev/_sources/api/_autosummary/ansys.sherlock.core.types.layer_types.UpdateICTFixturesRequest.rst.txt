@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.UpdateICTFixturesRequest
+===============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: UpdateICTFixturesRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateICTFixturesRequest.construct
+      
+      
+      UpdateICTFixturesRequest.copy
+      
+      
+      UpdateICTFixturesRequest.dict
+      
+      
+      UpdateICTFixturesRequest.from_orm
+      
+      
+      UpdateICTFixturesRequest.json
+      
+      
+      UpdateICTFixturesRequest.model_construct
+      
+      
+      UpdateICTFixturesRequest.model_copy
+      
+      
+      UpdateICTFixturesRequest.model_dump
+      
+      
+      UpdateICTFixturesRequest.model_dump_json
+      
+      
+      UpdateICTFixturesRequest.model_json_schema
+      
+      
+      UpdateICTFixturesRequest.model_parametrized_name
+      
+      
+      UpdateICTFixturesRequest.model_post_init
+      
+      
+      UpdateICTFixturesRequest.model_rebuild
+      
+      
+      UpdateICTFixturesRequest.model_validate
+      
+      
+      UpdateICTFixturesRequest.model_validate_json
+      
+      
+      UpdateICTFixturesRequest.model_validate_strings
+      
+      
+      UpdateICTFixturesRequest.parse_file
+      
+      
+      UpdateICTFixturesRequest.parse_obj
+      
+      
+      UpdateICTFixturesRequest.parse_raw
+      
+      
+      UpdateICTFixturesRequest.schema
+      
+      
+      UpdateICTFixturesRequest.schema_json
+      
+      
+      UpdateICTFixturesRequest.str_validation
+      
+      
+      UpdateICTFixturesRequest.update_forward_refs
+      
+      
+      UpdateICTFixturesRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateICTFixturesRequest.model_computed_fields
+      
+      
+      UpdateICTFixturesRequest.model_config
+      
+      
+      UpdateICTFixturesRequest.model_extra
+      
+      
+      UpdateICTFixturesRequest.model_fields
+      
+      
+      UpdateICTFixturesRequest.model_fields_set
+      
+      
+      UpdateICTFixturesRequest.project
+      
+      
+      UpdateICTFixturesRequest.cca_name
+      
+      
+      UpdateICTFixturesRequest.update_fixtures
+      
+   
+   
+
+.. vale on

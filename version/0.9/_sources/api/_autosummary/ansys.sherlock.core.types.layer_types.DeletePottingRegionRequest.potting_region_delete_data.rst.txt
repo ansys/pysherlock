@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_region\_delete\_data
+=============================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: DeletePottingRegionRequest.potting_region_delete_data
+
+.. vale on

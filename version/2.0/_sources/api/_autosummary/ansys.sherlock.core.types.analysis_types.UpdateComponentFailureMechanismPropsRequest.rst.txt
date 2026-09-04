@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateComponentFailureMechanismPropsRequest
+=====================================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateComponentFailureMechanismPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.construct
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.copy
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.dict
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.from_orm
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.json
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_construct
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_copy
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_dump
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_dump_json
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_json_schema
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_parametrized_name
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_post_init
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_rebuild
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_validate
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_validate_json
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_validate_strings
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.parse_file
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.parse_obj
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.parse_raw
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.schema
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.schema_json
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.str_validation
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.update_forward_refs
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateComponentFailureMechanismPropsRequest.model_computed_fields
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_config
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_extra
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_fields
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.model_fields_set
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.project
+      
+      
+      UpdateComponentFailureMechanismPropsRequest.component_failure_mechanism_properties_per_cca
+      
+   
+   
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+model\_copy
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: SaveThermalProfileRequest.model_copy
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+number\_of\_dwell\_bins
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.number_of_dwell_bins
+
+.. vale on

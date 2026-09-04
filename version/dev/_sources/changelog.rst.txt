@@ -1,0 +1,1258 @@
+.. _ref_release_notes:
+
+Release notes
+#############
+
+This document contains the release notes for the project.
+
+.. vale off
+
+.. towncrier release notes start
+
+`2.0.0 <https://github.com/ansys/pysherlock/releases/tag/v2.0.0>`_ - September 01, 2026
+=======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Feat:  added api gettestpointproperties
+          - `#587 <https://github.com/ansys/pysherlock/pull/587>`_
+
+        * - Feat: added api import_copper_files()
+          - `#593 <https://github.com/ansys/pysherlock/pull/593>`_
+
+        * - Feat: Added import thermal signal API
+          - `#612 <https://github.com/ansys/pysherlock/pull/612>`_
+
+        * - Feat: added new PySherlock getICTFixturesProperties API
+          - `#613 <https://github.com/ansys/pysherlock/pull/613>`_
+
+        * - Feat: Added API import_parts_to_avl()
+          - `#617 <https://github.com/ansys/pysherlock/pull/617>`_
+
+        * - Feat: added new PySherlock updateTestPoints API
+          - `#621 <https://github.com/ansys/pysherlock/pull/621>`_
+
+        * - Feat: added new Pysherlock updateICTFixtures API
+          - `#622 <https://github.com/ansys/pysherlock/pull/622>`_
+
+        * - Fix: fixed Pydantic warning issue
+          - `#635 <https://github.com/ansys/pysherlock/pull/635>`_
+
+        * - Feat: Added APIs saveHarmonicProfile(), saveRandomVibeProfile(), saveShockPulseProfile() and saveThermalProfile()
+          - `#641 <https://github.com/ansys/pysherlock/pull/641>`_
+
+        * - Feat: Added APIs delete_event() and delete_phase()
+          - `#648 <https://github.com/ansys/pysherlock/pull/648>`_
+
+        * - Feat: Added support for specifying geometry type when exporting WBJN models.
+          - `#777 <https://github.com/ansys/pysherlock/pull/777>`_
+
+        * - Feat: Added ThermalMech to exportFEAModel and updated documentation for LeadModelParam.leadElemOrder
+          - `#780 <https://github.com/ansys/pysherlock/pull/780>`_
+
+        * - Feat: add Analysis.update_mount_points_props()
+          - `#792 <https://github.com/ansys/pysherlock/pull/792>`_
+
+        * - Feat: add Analysis.update_lead_modeling_props()
+          - `#797 <https://github.com/ansys/pysherlock/pull/797>`_
+
+        * - Feat: add Analysis.update_trace_modeling_props()
+          - `#818 <https://github.com/ansys/pysherlock/pull/818>`_
+
+        * - Feat: add Max Mesh Size fields to request to update trace modeling properties
+          - `#824 <https://github.com/ansys/pysherlock/pull/824>`_
+
+        * - Feat: Updated APIs list_laminates, list_conductor_layers, get_stackup_props
+          - `#833 <https://github.com/ansys/pysherlock/pull/833>`_
+
+        * - Fix: Fixed ListLaminatesResponse and ListConductorLayersResponse
+          - `#850 <https://github.com/ansys/pysherlock/pull/850>`_
+
+        * - Feat: add Analysis.update_mechanical_parts_props()
+          - `#851 <https://github.com/ansys/pysherlock/pull/851>`_
+
+        * - Feat: add Analysis.update_potting_regions_props()
+          - `#864 <https://github.com/ansys/pysherlock/pull/864>`_
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix: fixed bug in update_parts_list_properties()
+          - `#772 <https://github.com/ansys/pysherlock/pull/772>`_
+
+        * - Fix: project_types.py- ImageFile- changed types
+          - `#805 <https://github.com/ansys/pysherlock/pull/805>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - chore: update CHANGELOG for v0.9.0
+          - `#573 <https://github.com/ansys/pysherlock/pull/573>`_
+
+        * - MAINT: merge changes made in release/0.9
+          - `#575 <https://github.com/ansys/pysherlock/pull/575>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.4.4 to 1.4.5
+          - `#576 <https://github.com/ansys/pysherlock/pull/576>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.4.5 to 1.5.0
+          - `#577 <https://github.com/ansys/pysherlock/pull/577>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.5.0 to 1.5.2
+          - `#579 <https://github.com/ansys/pysherlock/pull/579>`_
+
+        * - MAINT: Bump pytest from 8.3.5 to 8.4.0
+          - `#580 <https://github.com/ansys/pysherlock/pull/580>`_
+
+        * - Maint: bump pandas from 2.2.3 to 2.3.0
+          - `#585 <https://github.com/ansys/pysherlock/pull/585>`_
+
+        * - Maint: bump pytest-cov from 6.1.1 to 6.2.0
+          - `#588 <https://github.com/ansys/pysherlock/pull/588>`_
+
+        * - Maint: bump pytest-cov from 6.2.0 to 6.2.1
+          - `#590 <https://github.com/ansys/pysherlock/pull/590>`_
+
+        * - Ci: add hooks to the ``.pre-commit-config.yaml`` file
+          - `#591 <https://github.com/ansys/pysherlock/pull/591>`_
+
+        * - Maint: bump ansys-api-sherlock from 0.1.46 to 0.1.47
+          - `#592 <https://github.com/ansys/pysherlock/pull/592>`_
+
+        * - Maint: bump pytest from 8.4.0 to 8.4.1
+          - `#594 <https://github.com/ansys/pysherlock/pull/594>`_
+
+        * - Maint: bump numpydoc from 1.8.0 to 1.9.0
+          - `#598 <https://github.com/ansys/pysherlock/pull/598>`_
+
+        * - Maint: bump ansys-sphinx-theme from 1.5.2 to 1.5.3
+          - `#601 <https://github.com/ansys/pysherlock/pull/601>`_
+
+        * - Maint: bump pandas from 2.3.0 to 2.3.1
+          - `#602 <https://github.com/ansys/pysherlock/pull/602>`_
+
+        * - MAINT: Bump matplotlib from 3.10.3 to 3.10.5
+          - `#616 <https://github.com/ansys/pysherlock/pull/616>`_
+
+        * - MAINT: Bump ansys-api-sherlock from 0.1.48 to 0.1.49
+          - `#620 <https://github.com/ansys/pysherlock/pull/620>`_
+
+        * - MAINT: Bump pandas from 2.3.1 to 2.3.2
+          - `#625 <https://github.com/ansys/pysherlock/pull/625>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.5.3 to 1.6.0
+          - `#628 <https://github.com/ansys/pysherlock/pull/628>`_
+
+        * - MAINT: Bump matplotlib from 3.10.5 to 3.10.6
+          - `#629 <https://github.com/ansys/pysherlock/pull/629>`_
+
+        * - MAINT: Bump pytest from 8.4.1 to 8.4.2
+          - `#633 <https://github.com/ansys/pysherlock/pull/633>`_
+
+        * - Build: Bump pytest-cov from 6.2.1 to 7.0.0
+          - `#640 <https://github.com/ansys/pysherlock/pull/640>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.6.0 to 1.6.1
+          - `#642 <https://github.com/ansys/pysherlock/pull/642>`_
+
+        * - Maint: check vulnerabilities action
+          - `#650 <https://github.com/ansys/pysherlock/pull/650>`_
+
+        * - Build: Bump pandas from 2.3.2 to 2.3.3
+          - `#653 <https://github.com/ansys/pysherlock/pull/653>`_
+
+        * - Feat: Added pcb_material_elasticity option to export_FEA_model()
+          - `#656 <https://github.com/ansys/pysherlock/pull/656>`_
+
+        * - Build: Bump matplotlib from 3.10.6 to 3.10.7
+          - `#659 <https://github.com/ansys/pysherlock/pull/659>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.6.1 to 1.6.3
+          - `#660 <https://github.com/ansys/pysherlock/pull/660>`_
+
+        * - Build: Bump pytest from 8.4.2 to 9.0.0
+          - `#666 <https://github.com/ansys/pysherlock/pull/666>`_
+
+        * - Fix: updated get_stackup_props() to have improveStackupModelEnabled in the response
+          - `#669 <https://github.com/ansys/pysherlock/pull/669>`_
+
+        * - Build: Bump numpydoc from 1.9.0 to 1.10.0
+          - `#678 <https://github.com/ansys/pysherlock/pull/678>`_
+
+        * - Build: Bump sphinx-gallery from 0.19.0 to 0.20.0
+          - `#679 <https://github.com/ansys/pysherlock/pull/679>`_
+
+        * - Fix: updated dependabot prefix
+          - `#680 <https://github.com/ansys/pysherlock/pull/680>`_
+
+        * - Build: Bump ansys-api-sherlock from 0.1.52 to 0.1.53
+          - `#682 <https://github.com/ansys/pysherlock/pull/682>`_
+
+        * - Feat: Implemented Update Life Phase API and added unit tests.
+          - `#685 <https://github.com/ansys/pysherlock/pull/685>`_
+
+        * - Build: Bump pytest from 9.0.1 to 9.0.2
+          - `#687 <https://github.com/ansys/pysherlock/pull/687>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.6.3 to 1.6.4
+          - `#690 <https://github.com/ansys/pysherlock/pull/690>`_
+
+        * - Build: Bump matplotlib from 3.10.7 to 3.10.8
+          - `#693 <https://github.com/ansys/pysherlock/pull/693>`_
+
+        * - Build: Bump sphinxemoji from 0.3.1 to 0.3.2
+          - `#695 <https://github.com/ansys/pysherlock/pull/695>`_
+
+        * - Chore: increment major version to 1.0
+          - `#712 <https://github.com/ansys/pysherlock/pull/712>`_
+
+        * - Feat: implemented save_life_cycle API
+          - `#723 <https://github.com/ansys/pysherlock/pull/723>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.6.4 to 1.7.0
+          - `#727 <https://github.com/ansys/pysherlock/pull/727>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.7.0 to 1.7.1
+          - `#735 <https://github.com/ansys/pysherlock/pull/735>`_
+
+        * - Build: Bump ansys/actions from 10.2.5 to 10.2.7
+          - `#738 <https://github.com/ansys/pysherlock/pull/738>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.7.1 to 1.7.2
+          - `#739 <https://github.com/ansys/pysherlock/pull/739>`_
+
+        * - Chore: change version of ansys-api-sherlock to 0.2.0
+          - `#745 <https://github.com/ansys/pysherlock/pull/745>`_
+
+        * - Chore: update CHANGELOG for v1.0.2
+          - `#749 <https://github.com/ansys/pysherlock/pull/749>`_
+
+        * - Build: Bump actions/download-artifact from 8.0.0 to 8.0.1
+          - `#750 <https://github.com/ansys/pysherlock/pull/750>`_
+
+        * - Build: Bump codecov/codecov-action from 5.5.2 to 5.5.3
+          - `#751 <https://github.com/ansys/pysherlock/pull/751>`_
+
+        * - Build: Bump codecov/codecov-action from 5.5.3 to 6.0.0
+          - `#754 <https://github.com/ansys/pysherlock/pull/754>`_
+
+        * - Build: Bump ansys/actions from 10.2.7 to 10.2.12
+          - `#755 <https://github.com/ansys/pysherlock/pull/755>`_
+
+        * - Build: Bump pypa/gh-action-pypi-publish from 1.13.0 to 1.14.0
+          - `#756 <https://github.com/ansys/pysherlock/pull/756>`_
+
+        * - Test: Refactor to allow running multiple times without having to re-import Sherlock projects.
+          - `#757 <https://github.com/ansys/pysherlock/pull/757>`_
+
+        * - Build: Bump pytest from 9.0.2 to 9.0.3
+          - `#758 <https://github.com/ansys/pysherlock/pull/758>`_
+
+        * - Build: Bump actions/upload-artifact from 7.0.0 to 7.0.1
+          - `#767 <https://github.com/ansys/pysherlock/pull/767>`_
+
+        * - Chore: Update license metadata in pyproject.toml
+          - `#768 <https://github.com/ansys/pysherlock/pull/768>`_
+
+        * - Feat: add API list_life_cycle_events
+          - `#769 <https://github.com/ansys/pysherlock/pull/769>`_
+
+        * - Test: removed unnecessary validation from layer tests
+          - `#770 <https://github.com/ansys/pysherlock/pull/770>`_
+
+        * - Docs: ignore linkcheck on repository links
+          - `#773 <https://github.com/ansys/pysherlock/pull/773>`_
+
+        * - Build: Bump matplotlib from 3.10.8 to 3.10.9
+          - `#775 <https://github.com/ansys/pysherlock/pull/775>`_
+
+        * - Build: Bump sphinx-gallery from 0.20.0 to 0.21.0
+          - `#776 <https://github.com/ansys/pysherlock/pull/776>`_
+
+        * - Build: Bump ansys/actions from 10.2.12 to 10.3.1
+          - `#778 <https://github.com/ansys/pysherlock/pull/778>`_
+
+        * - Build: add support for python 3.14
+          - `#781 <https://github.com/ansys/pysherlock/pull/781>`_
+
+        * - Build: Bump grpcio-tools from 1.78.0 to 1.80.0
+          - `#782 <https://github.com/ansys/pysherlock/pull/782>`_
+
+        * - Build: pyproject.toml modified to avoid DoS vulnerabilities in protobuf
+          - `#783 <https://github.com/ansys/pysherlock/pull/783>`_
+
+        * - Build: Bump actions/labeler from 6.0.1 to 6.1.0
+          - `#784 <https://github.com/ansys/pysherlock/pull/784>`_
+
+        * - Build: Bump ansys/actions from 10.3.0 to 10.3.1
+          - `#791 <https://github.com/ansys/pysherlock/pull/791>`_
+
+        * - Build: Bump codecov/codecov-action from 6.0.0 to 6.0.1
+          - `#793 <https://github.com/ansys/pysherlock/pull/793>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.7.2 to 1.8.0
+          - `#794 <https://github.com/ansys/pysherlock/pull/794>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.8.0 to 1.8.1
+          - `#795 <https://github.com/ansys/pysherlock/pull/795>`_
+
+        * - Build: Bump ansys/actions from 10.3.1 to 10.3.2
+          - `#796 <https://github.com/ansys/pysherlock/pull/796>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.8.1 to 1.8.2
+          - `#798 <https://github.com/ansys/pysherlock/pull/798>`_
+
+        * - Build: Bump grpcio-tools from 1.80.0 to 1.81.0
+          - `#799 <https://github.com/ansys/pysherlock/pull/799>`_
+
+        * - Feat: add Lifecycle.load_life_cycle()
+          - `#800 <https://github.com/ansys/pysherlock/pull/800>`_
+
+        * - Build: Bump actions/checkout from 6.0.2 to 6.0.3
+          - `#802 <https://github.com/ansys/pysherlock/pull/802>`_
+
+        * - Build: Bump codecov/codecov-action from 6.0.1 to 7.0.0
+          - `#803 <https://github.com/ansys/pysherlock/pull/803>`_
+
+        * - Docs: fixed warnings when generating HTML
+          - `#804 <https://github.com/ansys/pysherlock/pull/804>`_
+
+        * - Build: Bump grpcio-tools from 1.81.0 to 1.81.1
+          - `#808 <https://github.com/ansys/pysherlock/pull/808>`_
+
+        * - Build: Bump pytest from 9.0.3 to 9.1.0
+          - `#809 <https://github.com/ansys/pysherlock/pull/809>`_
+
+        * - Chore: Update missing or outdated files
+          - `#810 <https://github.com/ansys/pysherlock/pull/810>`_, `#870 <https://github.com/ansys/pysherlock/pull/870>`_
+
+        * - Chore: pyproject.toml- remove redundant dependencies for grpcio
+          - `#811 <https://github.com/ansys/pysherlock/pull/811>`_
+
+        * - Build: Bump actions/checkout from 6.0.3 to 7.0.0
+          - `#812 <https://github.com/ansys/pysherlock/pull/812>`_
+
+        * - Chore: update version of ansys-api-sherlock to from 0.2.5 to 1.0.0
+          - `#813 <https://github.com/ansys/pysherlock/pull/813>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.8.2 to 1.9.0
+          - `#814 <https://github.com/ansys/pysherlock/pull/814>`_
+
+        * - Build: Bump pytest from 9.1.0 to 9.1.1
+          - `#815 <https://github.com/ansys/pysherlock/pull/815>`_
+
+        * - Build: Bump actions/setup-python from 6.2.0 to 6.3.0
+          - `#816 <https://github.com/ansys/pysherlock/pull/816>`_
+
+        * - Build: Bump ansys/actions/build-library from 10.3.2 to 10.3.3
+          - `#819 <https://github.com/ansys/pysherlock/pull/819>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 10.3.2 to 10.3.3
+          - `#820 <https://github.com/ansys/pysherlock/pull/820>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-dev from 10.3.2 to 10.3.3
+          - `#821 <https://github.com/ansys/pysherlock/pull/821>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 10.3.2 to 10.3.3
+          - `#822 <https://github.com/ansys/pysherlock/pull/822>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-changelog from 10.3.2 to 10.3.3
+          - `#823 <https://github.com/ansys/pysherlock/pull/823>`_
+
+        * - Build: Bump ansys/actions/doc-style from 10.3.2 to 10.3.3
+          - `#825 <https://github.com/ansys/pysherlock/pull/825>`_
+
+        * - Build: Bump ansys/actions/doc-changelog from 10.3.2 to 10.3.3
+          - `#826 <https://github.com/ansys/pysherlock/pull/826>`_
+
+        * - Build: Bump ansys/actions/build-wheelhouse from 10.3.2 to 10.3.3
+          - `#827 <https://github.com/ansys/pysherlock/pull/827>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-stable from 10.3.2 to 10.3.3
+          - `#828 <https://github.com/ansys/pysherlock/pull/828>`_
+
+        * - Build: Bump ansys/actions/doc-build from 10.3.2 to 10.3.3
+          - `#829 <https://github.com/ansys/pysherlock/pull/829>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 10.3.2 to 10.3.3
+          - `#830 <https://github.com/ansys/pysherlock/pull/830>`_
+
+        * - Build: Bump ansys/actions/code-style from 10.3.2 to 10.3.3
+          - `#831 <https://github.com/ansys/pysherlock/pull/831>`_
+
+        * - Build: Bump ansys/actions/release-github from 10.3.2 to 10.3.3
+          - `#832 <https://github.com/ansys/pysherlock/pull/832>`_
+
+        * - Build: Bump actions/labeler from 6.1.0 to 6.2.0
+          - `#834 <https://github.com/ansys/pysherlock/pull/834>`_
+
+        * - Test: changed expected values of stackup layer properties
+          - `#835 <https://github.com/ansys/pysherlock/pull/835>`_
+
+        * - Build: Bump grpcio-tools from 1.81.1 to 1.82.1
+          - `#836 <https://github.com/ansys/pysherlock/pull/836>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-changelog from 10.3.3 to 10.3.4
+          - `#837 <https://github.com/ansys/pysherlock/pull/837>`_
+
+        * - Build: Bump ansys/actions/build-library from 10.3.3 to 10.3.4
+          - `#838 <https://github.com/ansys/pysherlock/pull/838>`_
+
+        * - Build: Bump ansys/actions/doc-build from 10.3.3 to 10.3.4
+          - `#839 <https://github.com/ansys/pysherlock/pull/839>`_
+
+        * - Build: Bump ansys/actions/release-github from 10.3.3 to 10.3.4
+          - `#840 <https://github.com/ansys/pysherlock/pull/840>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 10.3.3 to 10.3.4
+          - `#841 <https://github.com/ansys/pysherlock/pull/841>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-stable from 10.3.3 to 10.3.4
+          - `#842 <https://github.com/ansys/pysherlock/pull/842>`_
+
+        * - Build: Bump ansys/actions/doc-changelog from 10.3.3 to 10.3.4
+          - `#843 <https://github.com/ansys/pysherlock/pull/843>`_
+
+        * - Build: Bump ansys/actions/doc-style from 10.3.3 to 10.3.4
+          - `#844 <https://github.com/ansys/pysherlock/pull/844>`_
+
+        * - Build: Bump ansys/actions/build-wheelhouse from 10.3.3 to 10.3.4
+          - `#845 <https://github.com/ansys/pysherlock/pull/845>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 10.3.3 to 10.3.4
+          - `#846 <https://github.com/ansys/pysherlock/pull/846>`_
+
+        * - Build: Bump ansys/actions/code-style from 10.3.3 to 10.3.4
+          - `#847 <https://github.com/ansys/pysherlock/pull/847>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 10.3.3 to 10.3.4
+          - `#848 <https://github.com/ansys/pysherlock/pull/848>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-dev from 10.3.3 to 10.3.4
+          - `#849 <https://github.com/ansys/pysherlock/pull/849>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 10.3.4 to 10.3.5
+          - `#852 <https://github.com/ansys/pysherlock/pull/852>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-changelog from 10.3.4 to 10.3.5
+          - `#853 <https://github.com/ansys/pysherlock/pull/853>`_
+
+        * - Build: Bump ansys/actions/code-style from 10.3.4 to 10.3.5
+          - `#854 <https://github.com/ansys/pysherlock/pull/854>`_
+
+        * - Build: Bump actions/labeler from 6.2.0 to 7.0.0
+          - `#855 <https://github.com/ansys/pysherlock/pull/855>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-stable from 10.3.4 to 10.3.5
+          - `#856 <https://github.com/ansys/pysherlock/pull/856>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 10.3.4 to 10.3.5
+          - `#857 <https://github.com/ansys/pysherlock/pull/857>`_
+
+        * - Build: Bump ansys/actions/doc-changelog from 10.3.4 to 10.3.5
+          - `#858 <https://github.com/ansys/pysherlock/pull/858>`_
+
+        * - Build: Bump ansys/actions/build-library from 10.3.4 to 10.3.5
+          - `#859 <https://github.com/ansys/pysherlock/pull/859>`_
+
+        * - Build: Bump ansys/actions/doc-build from 10.3.4 to 10.3.5
+          - `#860 <https://github.com/ansys/pysherlock/pull/860>`_
+
+        * - Build: Bump ansys/actions/build-wheelhouse from 10.3.4 to 10.3.5
+          - `#861 <https://github.com/ansys/pysherlock/pull/861>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 10.3.4 to 10.3.5
+          - `#862 <https://github.com/ansys/pysherlock/pull/862>`_
+
+        * - Build: Bump ansys/actions/release-github from 10.3.4 to 10.3.5
+          - `#863 <https://github.com/ansys/pysherlock/pull/863>`_
+
+        * - Build: Bump actions/setup-python from 6.3.0 to 7.0.0
+          - `#865 <https://github.com/ansys/pysherlock/pull/865>`_
+
+        * - Build: Bump pypa/gh-action-pypi-publish from 1.14.0 to 1.14.1
+          - `#866 <https://github.com/ansys/pysherlock/pull/866>`_
+
+        * - Build: Bump ansys/actions/doc-style from 10.3.4 to 10.3.5
+          - `#867 <https://github.com/ansys/pysherlock/pull/867>`_
+
+        * - Build: Bump actions/checkout from 7.0.0 to 7.0.1
+          - `#868 <https://github.com/ansys/pysherlock/pull/868>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-dev from 10.3.4 to 10.3.5
+          - `#869 <https://github.com/ansys/pysherlock/pull/869>`_
+
+        * - Build: Bump grpcio-tools from 1.82.1 to 1.83.0
+          - `#871 <https://github.com/ansys/pysherlock/pull/871>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 10.3.5 to 10.3.6
+          - `#877 <https://github.com/ansys/pysherlock/pull/877>`_
+
+        * - Build: Bump pypa/gh-action-pypi-publish from 1.14.1 to 1.14.2
+          - `#879 <https://github.com/ansys/pysherlock/pull/879>`_
+
+        * - Build: Bump ansys/actions/build-wheelhouse from 10.3.5 to 10.3.6
+          - `#880 <https://github.com/ansys/pysherlock/pull/880>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-stable from 10.3.5 to 10.3.6
+          - `#881 <https://github.com/ansys/pysherlock/pull/881>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 10.3.5 to 10.3.6
+          - `#882 <https://github.com/ansys/pysherlock/pull/882>`_
+
+        * - Build: Bump ansys/actions/release-github from 10.3.5 to 10.3.6
+          - `#883 <https://github.com/ansys/pysherlock/pull/883>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 10.3.5 to 10.3.6
+          - `#884 <https://github.com/ansys/pysherlock/pull/884>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-changelog from 10.3.5 to 10.3.6
+          - `#885 <https://github.com/ansys/pysherlock/pull/885>`_
+
+        * - Build: Bump ansys/actions/doc-style from 10.3.5 to 10.3.6
+          - `#886 <https://github.com/ansys/pysherlock/pull/886>`_
+
+        * - Chore: modify tox.ini to have correct Python version mappings and added 3.14
+          - `#887 <https://github.com/ansys/pysherlock/pull/887>`_
+
+        * - Build: Update Python version support from 3.10 to 3.12 in CI/CD and documentation
+          - `#888 <https://github.com/ansys/pysherlock/pull/888>`_
+
+        * - Build: Update flit-core requirement from <4,>=3.2 to >=3.2,<5
+          - `#889 <https://github.com/ansys/pysherlock/pull/889>`_
+
+        * - Feat: Added allowCyclesBinning flag and updated unit tests
+          - `#890 <https://github.com/ansys/pysherlock/pull/890>`_
+
+        * - Build: Bump pandas from 2.3.3 to 3.0.5
+          - `#891 <https://github.com/ansys/pysherlock/pull/891>`_
+
+        * - Build: Bump sphinx-design from 0.6.1 to 0.7.0
+          - `#892 <https://github.com/ansys/pysherlock/pull/892>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.0.1 to 3.13.2
+          - `#893 <https://github.com/ansys/pysherlock/pull/893>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.9.0 to 1.10.0
+          - `#894 <https://github.com/ansys/pysherlock/pull/894>`_
+
+        * - Build: Bump matplotlib from 3.10.9 to 3.11.1
+          - `#895 <https://github.com/ansys/pysherlock/pull/895>`_
+
+        * - Build: Bump ansys/actions/doc-style from 10.3.6 to 11.0.2
+          - `#896 <https://github.com/ansys/pysherlock/pull/896>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 10.3.6 to 11.0.2
+          - `#897 <https://github.com/ansys/pysherlock/pull/897>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 10.3.6 to 11.0.0
+          - `#898 <https://github.com/ansys/pysherlock/pull/898>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-stable from 10.3.6 to 11.0.3
+          - `#899 <https://github.com/ansys/pysherlock/pull/899>`_
+
+        * - Build: Bump ansys/actions/build-library from 10.3.5 to 11.0.0
+          - `#900 <https://github.com/ansys/pysherlock/pull/900>`_
+
+        * - Test: modify testing export FEA model
+          - `#901 <https://github.com/ansys/pysherlock/pull/901>`_
+
+        * - Build: Bump ansys/actions/doc-style from 11.0.2 to 11.0.3
+          - `#902 <https://github.com/ansys/pysherlock/pull/902>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 11.0.2 to 11.0.3
+          - `#903 <https://github.com/ansys/pysherlock/pull/903>`_
+
+        * - Build: Bump grpcio-tools from 1.71.2 to 1.83.0
+          - `#904 <https://github.com/ansys/pysherlock/pull/904>`_
+
+        * - Build: Bump ansys/actions/release-github from 10.3.6 to 11.0.3
+          - `#905 <https://github.com/ansys/pysherlock/pull/905>`_
+
+        * - Build: Bump ansys/actions/build-wheelhouse from 10.3.6 to 11.0.3
+          - `#906 <https://github.com/ansys/pysherlock/pull/906>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 10.3.6 to 11.0.3
+          - `#907 <https://github.com/ansys/pysherlock/pull/907>`_
+
+        * - Build: Bump ansys/actions/code-style from 10.3.5 to 11.0.3
+          - `#908 <https://github.com/ansys/pysherlock/pull/908>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 11.0.0 to 11.0.3
+          - `#909 <https://github.com/ansys/pysherlock/pull/909>`_
+
+        * - Build: Bump ansys/actions/doc-changelog from 10.3.5 to 11.0.3
+          - `#910 <https://github.com/ansys/pysherlock/pull/910>`_
+
+        * - Build: Bump ansys/actions/build-library from 11.0.0 to 11.0.3
+          - `#911 <https://github.com/ansys/pysherlock/pull/911>`_
+
+        * - Build: Bump ansys/actions/doc-build from 10.3.5 to 11.0.3
+          - `#912 <https://github.com/ansys/pysherlock/pull/912>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-dev from 10.3.5 to 11.0.3
+          - `#913 <https://github.com/ansys/pysherlock/pull/913>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-changelog from 10.3.6 to 11.0.3
+          - `#914 <https://github.com/ansys/pysherlock/pull/914>`_
+
+        * - Chore: update version and add documentation for what version of Sherlock that this is for
+          - `#915 <https://github.com/ansys/pysherlock/pull/915>`_
+
+        * - Build: change version of protobuf from ==5.29.6 to >=6.33.5,<8
+          - `#916 <https://github.com/ansys/pysherlock/pull/916>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.2 to 3.13.4
+          - `#917 <https://github.com/ansys/pysherlock/pull/917>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Docs: fix documentation warnings
+          - `#581 <https://github.com/ansys/pysherlock/pull/581>`_
+
+        * - Maint: bump ansys/actions from 9 to 10
+          - `#582 <https://github.com/ansys/pysherlock/pull/582>`_
+
+        * - Docs: update ``contributors.md`` with the latest contributors
+          - `#586 <https://github.com/ansys/pysherlock/pull/586>`_, `#597 <https://github.com/ansys/pysherlock/pull/597>`_
+
+        * - Test: use pytest.approx() for floating point values
+          - `#596 <https://github.com/ansys/pysherlock/pull/596>`_
+
+        * - Feat: Added time filtering to importThermalSignal API.
+          - `#619 <https://github.com/ansys/pysherlock/pull/619>`_
+
+        * - MAINT: Bump actions/checkout from 4 to 5
+          - `#623 <https://github.com/ansys/pysherlock/pull/623>`_
+
+        * - Updated test assertion and test point enums to fix failing unit tests
+          - `#624 <https://github.com/ansys/pysherlock/pull/624>`_
+
+        * - Docs: update ``html_context`` with PyAnsys tags
+          - `#626 <https://github.com/ansys/pysherlock/pull/626>`_
+
+        * - Feat: Updated rainflow cycle binning to use separate binning parameters for range, mean, and dwell.
+          - `#630 <https://github.com/ansys/pysherlock/pull/630>`_
+
+        * - MAINT: Bump actions/setup-python from 5 to 6
+          - `#631 <https://github.com/ansys/pysherlock/pull/631>`_
+
+        * - MAINT: Bump actions/labeler from 5 to 6
+          - `#632 <https://github.com/ansys/pysherlock/pull/632>`_
+
+        * - Maint: Added security.md file
+          - `#649 <https://github.com/ansys/pysherlock/pull/649>`_
+
+        * - Build: Bump peter-evans/create-or-update-comment from 4 to 5
+          - `#657 <https://github.com/ansys/pysherlock/pull/657>`_
+
+        * - Feat: Optimization version check
+          - `#658 <https://github.com/ansys/pysherlock/pull/658>`_
+
+        * - Ci: Bump actions/upload-artifact from 4 to 5
+          - `#662 <https://github.com/ansys/pysherlock/pull/662>`_
+
+        * - Maint: Deprecated new APIs and removed previous deprecated APIs
+          - `#664 <https://github.com/ansys/pysherlock/pull/664>`_
+
+        * - Chore:   Update missing or outdated files
+          - `#665 <https://github.com/ansys/pysherlock/pull/665>`_
+
+        * - Fix: Unable to load CSV files into life cycle profiles
+          - `#667 <https://github.com/ansys/pysherlock/pull/667>`_
+
+        * - Ci: Bump actions/checkout from 5 to 6
+          - `#670 <https://github.com/ansys/pysherlock/pull/670>`_
+
+        * - Feat: added get_mount_point_props and update_mount_points methods.
+          - `#672 <https://github.com/ansys/pysherlock/pull/672>`_
+
+        * - Ci: updated Release action and added Check PR name
+          - `#673 <https://github.com/ansys/pysherlock/pull/673>`_
+
+        * - Ci: Bump actions/download-artifact from 5.0.0 to 6.0.0
+          - `#674 <https://github.com/ansys/pysherlock/pull/674>`_
+
+        * - Feat: update life cycle
+          - `#677 <https://github.com/ansys/pysherlock/pull/677>`_
+
+        * - Fix: updated Contributors.md
+          - `#681 <https://github.com/ansys/pysherlock/pull/681>`_
+
+        * - Ci: added actions security and updated sha versions
+          - `#683 <https://github.com/ansys/pysherlock/pull/683>`_
+
+        * - Build: Bump actions/checkout from 6.0.0 to 6.0.1
+          - `#686 <https://github.com/ansys/pysherlock/pull/686>`_
+
+        * - Build: Bump actions/setup-python from 6.0.0 to 6.1.0
+          - `#689 <https://github.com/ansys/pysherlock/pull/689>`_
+
+        * - Build: Bump ansys/actions from 10.1.4 to 10.2.3
+          - `#691 <https://github.com/ansys/pysherlock/pull/691>`_
+
+        * - Build: Bump codecov/codecov-action from 5.5.1 to 5.5.2
+          - `#692 <https://github.com/ansys/pysherlock/pull/692>`_
+
+        * - Build: Bump actions/download-artifact from 6.0.0 to 7.0.0
+          - `#694 <https://github.com/ansys/pysherlock/pull/694>`_
+
+        * - Docs: Installation: add row to the version table for Sherlock 2026 R1
+          - `#696 <https://github.com/ansys/pysherlock/pull/696>`_
+
+        * - Build: Bump actions/upload-artifact from 5.0.0 to 6.0.0
+          - `#699 <https://github.com/ansys/pysherlock/pull/699>`_
+
+        * - Docs: Update \`\`CONTRIBUTORS.md\`\` with the latest contributors
+          - `#705 <https://github.com/ansys/pysherlock/pull/705>`_
+
+        * - Chore: update CHANGELOG for v0.8.3
+          - `#706 <https://github.com/ansys/pysherlock/pull/706>`_
+
+        * - Chore: update CHANGELOG for v0.9.1
+          - `#708 <https://github.com/ansys/pysherlock/pull/708>`_
+
+        * - Chore: update CHANGELOG for v0.8.4
+          - `#714 <https://github.com/ansys/pysherlock/pull/714>`_
+
+        * - Chore: update CHANGELOG for v0.9.2
+          - `#715 <https://github.com/ansys/pysherlock/pull/715>`_
+
+        * - Build: Bump actions/setup-python from 6.1.0 to 6.2.0
+          - `#718 <https://github.com/ansys/pysherlock/pull/718>`_
+
+        * - Chore: update CHANGELOG for v1.0.0
+          - `#721 <https://github.com/ansys/pysherlock/pull/721>`_
+
+        * - Chore: Update missing or outdated files
+          - `#722 <https://github.com/ansys/pysherlock/pull/722>`_
+
+        * - Build: Bump ansys/actions from 10.2.3 to 10.2.4
+          - `#724 <https://github.com/ansys/pysherlock/pull/724>`_
+
+        * - Chore: update CHANGELOG for v1.0.1
+          - `#731 <https://github.com/ansys/pysherlock/pull/731>`_
+
+        * - Build: Bump ansys/actions from 10.2.4 to 10.2.5
+          - `#732 <https://github.com/ansys/pysherlock/pull/732>`_
+
+        * - Build: Bump actions/download-artifact from 7.0.0 to 8.0.0
+          - `#734 <https://github.com/ansys/pysherlock/pull/734>`_
+
+        * - Build: Bump actions/upload-artifact from 6.0.0 to 7.0.0
+          - `#736 <https://github.com/ansys/pysherlock/pull/736>`_
+
+        * - Refactor: removed try..except for imports
+          - `#737 <https://github.com/ansys/pysherlock/pull/737>`_
+
+
+  .. tab-item:: Test
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix: fixed unit tests
+          - `#671 <https://github.com/ansys/pysherlock/pull/671>`_
+
+
+`1.0.2 <https://github.com/ansys/pysherlock/releases/tag/v1.0.2>`_ - March 16, 2026
+===================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build: change minimum versions of grpcio and protobuf and remove upper limits
+          - `#747 <https://github.com/ansys/pysherlock/pull/747>`_
+
+
+`1.0.1 <https://github.com/ansys/pysherlock/releases/tag/v1.0.1>`_ - February 06, 2026
+======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: remove deprecated launch_sherlock(), update API examples
+          - `#726 <https://github.com/ansys/pysherlock/pull/726>`_
+
+        * - Chore: document gRPC transport modes
+          - `#729 <https://github.com/ansys/pysherlock/pull/729>`_, `#730 <https://github.com/ansys/pysherlock/pull/730>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: remove deprecated launch_sherlock(), update API examples (#726)
+          - `#728 <https://github.com/ansys/pysherlock/pull/728>`_
+
+
+`1.0.0 <https://github.com/ansys/pysherlock/releases/tag/v1.0.0>`_ - January 30, 2026
+`0.9.2 <https://github.com/ansys/pysherlock/releases/tag/v0.9.2>`_ - January 23, 2026
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - feat: secure grpc channels
+          - `#704 <https://github.com/ansys/pysherlock/pull/704>`_
+
+        * - Feat: secure grpc channels
+          - `#717 <https://github.com/ansys/pysherlock/pull/717>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build: Bump actions/checkout from 6.0.1 to 6.0.2
+          - `#711 <https://github.com/ansys/pysherlock/pull/711>`_
+
+        * - Chore: remove unneeded files
+          - `#720 <https://github.com/ansys/pysherlock/pull/720>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Feat: secure grpc channels
+          - `#719 <https://github.com/ansys/pysherlock/pull/719>`_
+
+
+`1.0.0 <https://github.com/ansys/pysherlock/releases/tag/v1.0.0>`_ - January 23, 2026
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Feat:  added api gettestpointproperties
+          - `#587 <https://github.com/ansys/pysherlock/pull/587>`_
+
+        * - Feat: added api import_copper_files()
+          - `#593 <https://github.com/ansys/pysherlock/pull/593>`_
+
+        * - Feat: Added import thermal signal API
+          - `#612 <https://github.com/ansys/pysherlock/pull/612>`_
+
+        * - Feat: added new PySherlock getICTFixturesProperties API
+          - `#613 <https://github.com/ansys/pysherlock/pull/613>`_
+
+        * - Feat: Added API import_parts_to_avl()
+          - `#617 <https://github.com/ansys/pysherlock/pull/617>`_
+
+        * - Feat: added new PySherlock updateTestPoints API
+          - `#621 <https://github.com/ansys/pysherlock/pull/621>`_
+
+        * - Feat: added new Pysherlock updateICTFixtures API
+          - `#622 <https://github.com/ansys/pysherlock/pull/622>`_
+
+        * - Fix: fixed Pydantic warning issue
+          - `#635 <https://github.com/ansys/pysherlock/pull/635>`_
+
+        * - Feat: Added APIs saveHarmonicProfile(), saveRandomVibeProfile(), saveShockPulseProfile() and saveThermalProfile()
+          - `#641 <https://github.com/ansys/pysherlock/pull/641>`_
+
+        * - Feat: Added APIs delete_event() and delete_phase()
+          - `#648 <https://github.com/ansys/pysherlock/pull/648>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Docs: fix documentation warnings
+          - `#581 <https://github.com/ansys/pysherlock/pull/581>`_
+
+        * - Maint: bump ansys/actions from 9 to 10
+          - `#582 <https://github.com/ansys/pysherlock/pull/582>`_
+
+        * - Docs: update ``contributors.md`` with the latest contributors
+          - `#586 <https://github.com/ansys/pysherlock/pull/586>`_, `#597 <https://github.com/ansys/pysherlock/pull/597>`_
+
+        * - Test: use pytest.approx() for floating point values
+          - `#596 <https://github.com/ansys/pysherlock/pull/596>`_
+
+        * - Feat: Added time filtering to importThermalSignal API.
+          - `#619 <https://github.com/ansys/pysherlock/pull/619>`_
+
+        * - MAINT: Bump actions/checkout from 4 to 5
+          - `#623 <https://github.com/ansys/pysherlock/pull/623>`_
+
+        * - Updated test assertion and test point enums to fix failing unit tests
+          - `#624 <https://github.com/ansys/pysherlock/pull/624>`_
+
+        * - Docs: update ``html_context`` with PyAnsys tags
+          - `#626 <https://github.com/ansys/pysherlock/pull/626>`_
+
+        * - Feat: Updated rainflow cycle binning to use separate binning parameters for range, mean, and dwell.
+          - `#630 <https://github.com/ansys/pysherlock/pull/630>`_
+
+        * - MAINT: Bump actions/setup-python from 5 to 6
+          - `#631 <https://github.com/ansys/pysherlock/pull/631>`_
+
+        * - MAINT: Bump actions/labeler from 5 to 6
+          - `#632 <https://github.com/ansys/pysherlock/pull/632>`_
+
+        * - Maint: Added security.md file
+          - `#649 <https://github.com/ansys/pysherlock/pull/649>`_
+
+        * - Build: Bump peter-evans/create-or-update-comment from 4 to 5
+          - `#657 <https://github.com/ansys/pysherlock/pull/657>`_
+
+        * - Feat: Optimization version check
+          - `#658 <https://github.com/ansys/pysherlock/pull/658>`_
+
+        * - Ci: Bump actions/upload-artifact from 4 to 5
+          - `#662 <https://github.com/ansys/pysherlock/pull/662>`_
+
+        * - Maint: Deprecated new APIs and removed previous deprecated APIs
+          - `#664 <https://github.com/ansys/pysherlock/pull/664>`_
+
+        * - Chore:   Update missing or outdated files
+          - `#665 <https://github.com/ansys/pysherlock/pull/665>`_
+
+        * - Fix: Unable to load CSV files into life cycle profiles
+          - `#667 <https://github.com/ansys/pysherlock/pull/667>`_
+
+        * - Ci: Bump actions/checkout from 5 to 6
+          - `#670 <https://github.com/ansys/pysherlock/pull/670>`_
+
+        * - Feat: added get_mount_point_props and update_mount_points methods.
+          - `#672 <https://github.com/ansys/pysherlock/pull/672>`_
+
+        * - Ci: updated Release action and added Check PR name
+          - `#673 <https://github.com/ansys/pysherlock/pull/673>`_
+
+        * - Ci: Bump actions/download-artifact from 5.0.0 to 6.0.0
+          - `#674 <https://github.com/ansys/pysherlock/pull/674>`_
+
+        * - Feat: update life cycle
+          - `#677 <https://github.com/ansys/pysherlock/pull/677>`_
+
+        * - Fix: updated Contributors.md
+          - `#681 <https://github.com/ansys/pysherlock/pull/681>`_
+
+        * - Ci: added actions security and updated sha versions
+          - `#683 <https://github.com/ansys/pysherlock/pull/683>`_
+
+        * - Build: Bump actions/checkout from 6.0.0 to 6.0.1
+          - `#686 <https://github.com/ansys/pysherlock/pull/686>`_
+
+        * - Build: Bump actions/setup-python from 6.0.0 to 6.1.0
+          - `#689 <https://github.com/ansys/pysherlock/pull/689>`_
+
+        * - Build: Bump ansys/actions from 10.1.4 to 10.2.3
+          - `#691 <https://github.com/ansys/pysherlock/pull/691>`_
+
+        * - Build: Bump codecov/codecov-action from 5.5.1 to 5.5.2
+          - `#692 <https://github.com/ansys/pysherlock/pull/692>`_
+
+        * - Build: Bump actions/download-artifact from 6.0.0 to 7.0.0
+          - `#694 <https://github.com/ansys/pysherlock/pull/694>`_
+
+        * - Docs: Installation: add row to the version table for Sherlock 2026 R1
+          - `#696 <https://github.com/ansys/pysherlock/pull/696>`_
+
+        * - Build: Bump actions/upload-artifact from 5.0.0 to 6.0.0
+          - `#699 <https://github.com/ansys/pysherlock/pull/699>`_
+
+        * - Docs: Update \`\`CONTRIBUTORS.md\`\` with the latest contributors
+          - `#705 <https://github.com/ansys/pysherlock/pull/705>`_
+
+        * - Chore: update CHANGELOG for v0.8.3
+          - `#706 <https://github.com/ansys/pysherlock/pull/706>`_
+
+        * - Chore: update CHANGELOG for v0.9.1
+          - `#708 <https://github.com/ansys/pysherlock/pull/708>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - chore: update CHANGELOG for v0.9.0
+          - `#573 <https://github.com/ansys/pysherlock/pull/573>`_
+
+        * - MAINT: merge changes made in release/0.9
+          - `#575 <https://github.com/ansys/pysherlock/pull/575>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.4.4 to 1.4.5
+          - `#576 <https://github.com/ansys/pysherlock/pull/576>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.4.5 to 1.5.0
+          - `#577 <https://github.com/ansys/pysherlock/pull/577>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.5.0 to 1.5.2
+          - `#579 <https://github.com/ansys/pysherlock/pull/579>`_
+
+        * - MAINT: Bump pytest from 8.3.5 to 8.4.0
+          - `#580 <https://github.com/ansys/pysherlock/pull/580>`_
+
+        * - Maint: bump pandas from 2.2.3 to 2.3.0
+          - `#585 <https://github.com/ansys/pysherlock/pull/585>`_
+
+        * - Maint: bump pytest-cov from 6.1.1 to 6.2.0
+          - `#588 <https://github.com/ansys/pysherlock/pull/588>`_
+
+        * - Maint: bump pytest-cov from 6.2.0 to 6.2.1
+          - `#590 <https://github.com/ansys/pysherlock/pull/590>`_
+
+        * - Ci: add hooks to the ``.pre-commit-config.yaml`` file
+          - `#591 <https://github.com/ansys/pysherlock/pull/591>`_
+
+        * - Maint: bump ansys-api-sherlock from 0.1.46 to 0.1.47
+          - `#592 <https://github.com/ansys/pysherlock/pull/592>`_
+
+        * - Maint: bump pytest from 8.4.0 to 8.4.1
+          - `#594 <https://github.com/ansys/pysherlock/pull/594>`_
+
+        * - Maint: bump numpydoc from 1.8.0 to 1.9.0
+          - `#598 <https://github.com/ansys/pysherlock/pull/598>`_
+
+        * - Maint: bump ansys-sphinx-theme from 1.5.2 to 1.5.3
+          - `#601 <https://github.com/ansys/pysherlock/pull/601>`_
+
+        * - Maint: bump pandas from 2.3.0 to 2.3.1
+          - `#602 <https://github.com/ansys/pysherlock/pull/602>`_
+
+        * - MAINT: Bump matplotlib from 3.10.3 to 3.10.5
+          - `#616 <https://github.com/ansys/pysherlock/pull/616>`_
+
+        * - MAINT: Bump ansys-api-sherlock from 0.1.48 to 0.1.49
+          - `#620 <https://github.com/ansys/pysherlock/pull/620>`_
+
+        * - MAINT: Bump pandas from 2.3.1 to 2.3.2
+          - `#625 <https://github.com/ansys/pysherlock/pull/625>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.5.3 to 1.6.0
+          - `#628 <https://github.com/ansys/pysherlock/pull/628>`_
+
+        * - MAINT: Bump matplotlib from 3.10.5 to 3.10.6
+          - `#629 <https://github.com/ansys/pysherlock/pull/629>`_
+
+        * - MAINT: Bump pytest from 8.4.1 to 8.4.2
+          - `#633 <https://github.com/ansys/pysherlock/pull/633>`_
+
+        * - Build: Bump pytest-cov from 6.2.1 to 7.0.0
+          - `#640 <https://github.com/ansys/pysherlock/pull/640>`_
+
+        * - MAINT: Bump ansys-sphinx-theme from 1.6.0 to 1.6.1
+          - `#642 <https://github.com/ansys/pysherlock/pull/642>`_
+
+        * - Maint: check vulnerabilities action
+          - `#650 <https://github.com/ansys/pysherlock/pull/650>`_
+
+        * - Build: Bump pandas from 2.3.2 to 2.3.3
+          - `#653 <https://github.com/ansys/pysherlock/pull/653>`_
+
+        * - Feat: Added pcb_material_elasticity option to export_FEA_model()
+          - `#656 <https://github.com/ansys/pysherlock/pull/656>`_
+
+        * - Build: Bump matplotlib from 3.10.6 to 3.10.7
+          - `#659 <https://github.com/ansys/pysherlock/pull/659>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.6.1 to 1.6.3
+          - `#660 <https://github.com/ansys/pysherlock/pull/660>`_
+
+        * - Build: Bump pytest from 8.4.2 to 9.0.0
+          - `#666 <https://github.com/ansys/pysherlock/pull/666>`_
+
+        * - Fix: updated get_stackup_props() to have improveStackupModelEnabled in the response
+          - `#669 <https://github.com/ansys/pysherlock/pull/669>`_
+
+        * - Build: Bump numpydoc from 1.9.0 to 1.10.0
+          - `#678 <https://github.com/ansys/pysherlock/pull/678>`_
+
+        * - Build: Bump sphinx-gallery from 0.19.0 to 0.20.0
+          - `#679 <https://github.com/ansys/pysherlock/pull/679>`_
+
+        * - Fix: updated dependabot prefix
+          - `#680 <https://github.com/ansys/pysherlock/pull/680>`_
+
+        * - Build: Bump ansys-api-sherlock from 0.1.52 to 0.1.53
+          - `#682 <https://github.com/ansys/pysherlock/pull/682>`_
+
+        * - Feat: Implemented Update Life Phase API and added unit tests.
+          - `#685 <https://github.com/ansys/pysherlock/pull/685>`_
+
+        * - Build: Bump pytest from 9.0.1 to 9.0.2
+          - `#687 <https://github.com/ansys/pysherlock/pull/687>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.6.3 to 1.6.4
+          - `#690 <https://github.com/ansys/pysherlock/pull/690>`_
+
+        * - Build: Bump matplotlib from 3.10.7 to 3.10.8
+          - `#693 <https://github.com/ansys/pysherlock/pull/693>`_
+
+        * - Build: Bump sphinxemoji from 0.3.1 to 0.3.2
+          - `#695 <https://github.com/ansys/pysherlock/pull/695>`_
+
+        * - Chore: increment major version to 1.0
+          - `#712 <https://github.com/ansys/pysherlock/pull/712>`_
+
+
+  .. tab-item:: Test
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix: fixed unit tests
+          - `#671 <https://github.com/ansys/pysherlock/pull/671>`_
+        * - fix: modify launcher.launch_sherlock() so it has default security set to mtls
+          - `#710 <https://github.com/ansys/pysherlock/pull/710>`_
+
+
+`0.9.1 <https://github.com/ansys/pysherlock/releases/tag/v0.9.1>`_ - January 21, 2026
+`0.8.4 <https://github.com/ansys/pysherlock/releases/tag/v0.8.4>`_ - January 23, 2026
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - fix: modify launcher.launch_sherlock() to not include the grpcPort argument when using UDS
+          - `#709 <https://github.com/ansys/pysherlock/pull/709>`_
+
+
+`0.8.3 <https://github.com/ansys/pysherlock/releases/tag/v0.8.3>`_ - January 21, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - feat: secure grpc channels
+          - `#703 <https://github.com/ansys/pysherlock/pull/703>`_
+
+
+`0.8.2 <https://github.com/ansys/pysherlock/releases/tag/v0.8.2>`_ - 2025-01-20
+===============================================================================
+
+Documentation
+^^^^^^^^^^^^^
+
+- fix: changed Launcher.launch_sherlock() to properly append sherlock_command_args `#487 <https://github.com/ansys/pysherlock/pull/487>`_
+
+`0.8.1 <https://github.com/ansys/pysherlock/releases/tag/v0.8.1>`_ - 2024-12-10
+===============================================================================
+
+Fixed
+^^^^^
+
+- fix: conf.py issue `#467 <https://github.com/ansys/pysherlock/pull/467>`_
+- fix: import statements `#470 <https://github.com/ansys/pysherlock/pull/470>`_
+
+
+Documentation
+^^^^^^^^^^^^^
+
+- MAINT: Bump pytest from 8.3.3 to 8.3.4 `#459 <https://github.com/ansys/pysherlock/pull/459>`_
+- MAINT: Bump ansys-sphinx-theme from 1.2.1 to 1.2.3 `#463 <https://github.com/ansys/pysherlock/pull/463>`_
+
+`0.8.0 <https://github.com/ansys/pysherlock/releases/tag/v0.8.0>`_ - 2024-12-10
+===============================================================================
+
+Fixed
+^^^^^
+
+- fix: conf.py issue `#467 <https://github.com/ansys/pysherlock/pull/467>`_
+
+`0.8.0 <https://github.com/ansys/pysherlock/releases/tag/v0.8.0>`_ - 2024-12-09
+===============================================================================
+
+Added
+^^^^^
+
+- feat: launching a specific version of Sherlock `#431 <https://github.com/ansys/pysherlock/pull/431>`_
+
+
+Fixed
+^^^^^
+
+- fix: proper AUTHORS file `#438 <https://github.com/ansys/pysherlock/pull/438>`_
+
+
+Documentation
+^^^^^^^^^^^^^
+
+- MAINT: add action changelog and changelog.rst for release notes `#426 <https://github.com/ansys/pysherlock/pull/426>`_
+- Update unit test for HV strain map analysis. `#428 <https://github.com/ansys/pysherlock/pull/428>`_
+- MAINT: Bump ansys-sphinx-theme from 1.1.6 to 1.1.7 `#429 <https://github.com/ansys/pysherlock/pull/429>`_
+- MAINT: Bump grpcio from 1.67.0 to 1.67.1 `#433 <https://github.com/ansys/pysherlock/pull/433>`_
+- MAINT: Bump pytest-cov from 5.0.0 to 6.0.0 `#434 <https://github.com/ansys/pysherlock/pull/434>`_
+- MAINT: Bump ansys-sphinx-theme from 1.1.7 to 1.2.0 `#436 <https://github.com/ansys/pysherlock/pull/436>`_
+- feat: Adding version check to all API methods `#440 <https://github.com/ansys/pysherlock/pull/440>`_
+- feat: Keith/potting region update `#441 <https://github.com/ansys/pysherlock/pull/441>`_
+- fix: Analysis.update_harmonic_vibe_props(): add support for setting model source and strain map natural frequency `#442 <https://github.com/ansys/pysherlock/pull/442>`_
+- docs: update the pull request template `#446 <https://github.com/ansys/pysherlock/pull/446>`_
+- feat:Keith/copy delete potting region `#448 <https://github.com/ansys/pysherlock/pull/448>`_
+- MAINT: Bump ansys-sphinx-theme from 1.2.0 to 1.2.1 `#449 <https://github.com/ansys/pysherlock/pull/449>`_
+- doc: project logo `#450 <https://github.com/ansys/pysherlock/pull/450>`_
+- MAINT: Bump codecov/codecov-action from 4 to 5 `#451 <https://github.com/ansys/pysherlock/pull/451>`_
+- feat: add type hints `#454 <https://github.com/ansys/pysherlock/pull/454>`_
+- feat: increment version of ansys-api-sherlock to 0.1.35 `#461 <https://github.com/ansys/pysherlock/pull/461>`_
+
+.. vale on
