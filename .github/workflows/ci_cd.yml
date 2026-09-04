@@ -191,7 +191,7 @@ jobs:
       pull-requests: read    # Required to read pull-request information
     steps:
       - name: Check pull-request name
-        uses: ansys/actions/check-pr-title@7e89e00c5619374a1da8c2e876309d8b15ff0559 #v11.0.3
+        uses: ansys/actions/check-pr-title@21c78f8b27683ae8c93557345392abe39ab21d2f #v11.0.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
