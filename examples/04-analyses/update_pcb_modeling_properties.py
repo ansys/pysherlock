@@ -43,7 +43,6 @@ import os
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
-from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
@@ -127,86 +126,34 @@ try:
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
         cca_names=["Auto Relay"],
-        analyses=[
-            (
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.HarmonicVibe,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
-                True,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform,
-                SherlockAnalysisService_pb2.ElementOrder.SolidShell,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
+        analyses=[(harmonic_vibe, bonded, True, uniform, solid_shell, 6, "mm", 3, "mm", True)],
+    )
+    sherlock.analysis.update_pcb_modeling_props(
+        project="Test",
+        cca_names=["Auto Relay"],
+        analyses=[(natural_freq, bonded, True, uniform, solid_shell, 6, "mm", 3, "mm", True)],
+    )
+    sherlock.analysis.update_pcb_modeling_props(
+        project="Test",
+        cca_names=["Auto Relay"],
+        analyses=[(ict_analysis, bonded, True, uniform, solid_shell, 6, "mm", 3, "mm", True)],
+    )
+    sherlock.analysis.update_pcb_modeling_props(
+        project="Test",
+        cca_names=["Auto Relay"],
+        analyses=[(mechanical_shock, bonded, True, layered, solid_shell, 6, "mm", 3, "mm", True)],
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
         cca_names=["Auto Relay"],
         analyses=[
             (
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+                random_vibe,
+                bonded,
                 True,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform,
-                SherlockAnalysisService_pb2.ElementOrder.SolidShell,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
-    )
-    sherlock.analysis.update_pcb_modeling_props(
-        project="Test",
-        cca_names=["Auto Relay"],
-        analyses=[
-            (
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ICTAnalysis,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
-                True,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform,
-                SherlockAnalysisService_pb2.ElementOrder.SolidShell,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
-    )
-    sherlock.analysis.update_pcb_modeling_props(
-        project="Test",
-        cca_names=["Auto Relay"],
-        analyses=[
-            (
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.MechanicalShock,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
-                True,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered,
-                SherlockAnalysisService_pb2.ElementOrder.SolidShell,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
-    )
-    sherlock.analysis.update_pcb_modeling_props(
-        project="Test",
-        cca_names=["Auto Relay"],
-        analyses=[
-            (
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.RandomVibe,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
-                True,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.LayeredElements,
+                layered_elements,
                 5,
-                SherlockAnalysisService_pb2.ElementOrder.SolidShell,
+                solid_shell,
                 6,
                 "mm",
                 3,
@@ -220,12 +167,12 @@ try:
         cca_names=["Auto Relay"],
         analyses=[
             (
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ThermalMech,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+                thermal_mech,
+                bonded,
                 True,
-                SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.UniformElements,
+                uniform_elements,
                 5,
-                SherlockAnalysisService_pb2.ElementOrder.SolidShell,
+                solid_shell,
                 6,
                 "mm",
                 3,

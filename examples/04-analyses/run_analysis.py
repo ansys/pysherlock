@@ -45,7 +45,6 @@ import os
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
-from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
@@ -104,22 +103,10 @@ try:
     )
 
     analysis_types = [
-        (
-            SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.PTHFatigue,
-            [("Phase 1", ["Thermal Event"])],
-        ),
-        (
-            SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.SemiconductorWearout,
-            [("Phase 1", ["Thermal Event"])],
-        ),
-        (
-            SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ThermalDerating,
-            [("Phase 1", ["Thermal Event"])],
-        ),
-        (
-            SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ComponentFailureMode,
-            [("Phase 1", ["Thermal Event"])],
-        ),
+        (pth_fatigue, [("Phase 1", ["Thermal Event"])]),
+        (semiconductor_wearout, [("Phase 1", ["Thermal Event"])]),
+        (thermal_derating, [("Phase 1", ["Thermal Event"])]),
+        (component_failure_mode, [("Phase 1", ["Thermal Event"])]),
     ]
 
     for analysis_type, params in analysis_types:
