@@ -46,6 +46,7 @@ import os
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,

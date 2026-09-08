@@ -153,7 +153,7 @@ try:
         cca_name="Main Board",
         strain_map_analyses=[
             [
-                random_vibe,
+                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                 [
                     ["On The Road", "1 - Vibration", "TOP", "StrainMap - Top"],
                     ["On The Road", "1 - Vibration", "BOTTOM", "StrainMap - Bottom"],

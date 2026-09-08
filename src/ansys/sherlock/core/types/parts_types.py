@@ -26,8 +26,7 @@
 
 from typing import List, Optional
 
-from ansys.api.sherlock.v0 import SherlockCommonService_pb2
-from ansys.api.sherlock.v0 import SherlockPartsService_pb2 as PartsService
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2 as PartsService
 from pydantic import BaseModel, field_validator
 
 from ansys.sherlock.core.types.common_types import basic_str_validator, deprecation

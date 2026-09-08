@@ -174,7 +174,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
                 "Invalid CCA",
                 [
                     [
-                        random_vibe,
+                        AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -199,7 +199,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
                 "Main Board",
                 [
                     [
-                        random_vibe,
+                        AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                         [
                             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -224,7 +224,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
                 "Main Board",
                 [
                     [
-                        harmonic_vibe,
+                        AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.HarmonicVibe,
                         [
                             ["Phase 1", "Harmonic Vibe", "TOP", "MainBoardStrain - Top"],
                             ["Phase 1", "Harmonic Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -249,7 +249,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "Main Board",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -268,7 +268,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -355,7 +355,12 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [[random_vibe, event_strain_maps]],
+            [
+                [
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
+                    event_strain_maps,
+                ]
+            ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
@@ -369,7 +374,12 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
         analysis.run_strain_map_analysis(
             "AssemblyTutorial",
             "Main Board",
-            [[random_vibe, event_strain_maps]],
+            [
+                [
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
+                    event_strain_maps,
+                ]
+            ],
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockRunStrainMapAnalysisError as e:
@@ -384,7 +394,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "Main Board",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM"],
@@ -406,7 +416,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "Main Board",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -428,7 +438,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "Main Board",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -450,7 +460,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "Main Board",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -458,7 +468,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
                     ],
                 ],
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -481,7 +491,7 @@ def helper_test_run_strain_map_analysis(analysis: Analysis):
             "Main Board",
             [
                 [
-                    random_vibe,
+                    AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                     [
                         ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
                         ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
@@ -1545,7 +1555,20 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
             analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Invalid CCA"],
-                [(natural_freq, bonded, True, layered, solid_shell, 6.5, "mm", 3.2, "mm", True)],
+                [
+                    (
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+                        True,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered,
+                        AnalysisService.ElementOrder.SolidShell,
+                        6.5,
+                        "mm",
+                        3.2,
+                        "mm",
+                        True,
+                    )
+                ],
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
@@ -1556,7 +1579,20 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
-                [(natural_freq, bonded, True, uniform, solid_shell, 6.5, "mm", 3.2, "mm", True)],
+                [
+                    (
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+                        True,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform,
+                        AnalysisService.ElementOrder.SolidShell,
+                        6.5,
+                        "mm",
+                        3.2,
+                        "mm",
+                        True,
+                    )
+                ],
             )
             assert result1 == 0
         except SherlockUpdatePcbModelingPropsError as e:
@@ -1566,7 +1602,20 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
             result1 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
-                [(natural_freq, bonded, True, uniform, solid_shell, 6.5, "mm", 3.2, "mm", True)],
+                [
+                    (
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+                        True,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform,
+                        AnalysisService.ElementOrder.SolidShell,
+                        6.5,
+                        "mm",
+                        3.2,
+                        "mm",
+                        True,
+                    )
+                ],
             )
             assert result1 == 0
         except SherlockUpdatePcbModelingPropsError as e:
@@ -1576,7 +1625,20 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
             result2 = analysis.update_pcb_modeling_props(
                 "Tutorial Project",
                 ["Main Board"],
-                [(natural_freq, bonded, True, layered, solid_shell, 6.5, "mm", 3.2, "mm", True)],
+                [
+                    (
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+                        True,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered,
+                        AnalysisService.ElementOrder.SolidShell,
+                        6.5,
+                        "mm",
+                        3.2,
+                        "mm",
+                        True,
+                    )
+                ],
             )
             assert result2 == 0
         except SherlockUpdatePcbModelingPropsError as e:
@@ -1588,12 +1650,12 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
                 ["Main Board"],
                 [
                     (
-                        natural_freq,
-                        bonded,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
                         True,
-                        uniform_elements,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform_ELEMENTS,
                         94,
-                        solid_shell,
+                        AnalysisService.ElementOrder.SolidShell,
                         6.5,
                         "mm",
                         3.2,
@@ -1612,12 +1674,12 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
                 ["Main Board"],
                 [
                     (
-                        natural_freq,
-                        bonded,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
                         True,
-                        layered_elements,
+                        AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered_ELEMENTS,
                         94,
-                        solid_shell,
+                        AnalysisService.ElementOrder.SolidShell,
                         6.5,
                         "mm",
                         3.2,
