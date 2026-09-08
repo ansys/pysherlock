@@ -46,12 +46,9 @@ from ansys.sherlock.core.errors import (
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
-    AVLDescription,
-    AVLPartNum,
     DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
     ImportPartsToAVLRequest,
-    PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
@@ -185,7 +182,7 @@ class Parts(GrpcStub):
         cca_name: str,
         part_library: str,
         matching_mode: str,
-        duplication_mode: PartsListSearchDuplicationMode,
+        duplication_mode: SherlockPartsService_pb2.DuplicationMode.ValueType,
     ) -> int:
         """Update a parts list based on matching and duplication preferences.
 
@@ -201,7 +198,7 @@ class Parts(GrpcStub):
             Name of the parts library.
         matching_mode: str
             Matching mode for updates.
-        duplication_mode: PartsListSearchDuplicationMode
+        duplication_mode: SherlockPartsService_pb2.DuplicationMode.ValueType
             How to handle duplication during the update.
 
         Returns
@@ -211,8 +208,7 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> import SherlockCommonService_pb2
-        >>> import SherlockPartsService_pb2
+        >>> from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
@@ -721,9 +717,9 @@ class Parts(GrpcStub):
         project: str,
         cca_name: str,
         matching_mode: str,
-        duplication_mode: PartsListSearchDuplicationMode,
-        avl_part_num: AVLPartNum,
-        avl_description: AVLDescription,
+        duplication_mode: SherlockPartsService_pb2.DuplicationMode.ValueType,
+        avl_part_num: SherlockPartsService_pb2.AVLPartNum.ValueType,
+        avl_description: SherlockPartsService_pb2.AVLDescription.ValueType,
     ) -> SherlockPartsService_pb2.UpdatePartsListFromAVLResponse:
         r"""Update the parts list from the Approved Vendor List (AVL).
 
@@ -737,11 +733,11 @@ class Parts(GrpcStub):
             Name of the CCA.
         matching_mode: str
             Determines how parts are matched against the AVL
-        duplication_mode: PartsListSearchDuplicationMode
+        duplication_mode: SherlockPartsService_pb2.DuplicationMode.ValueType
             Determines how duplicate part matches are handled when found
-        avl_part_num: AVLPartNum
+        avl_part_num: SherlockPartsService_pb2.AVLPartNum.ValueType
             Determines what part number info in the parts list is updated from the AVL
-        avl_description: AVLDescription
+        avl_description: SherlockPartsService_pb2.AVLDescription.ValueType
             Determines if the part description is updated or not
 
         Returns
@@ -759,11 +755,7 @@ class Parts(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.types.parts_types import (
-            AVLDescription,
-            AVLPartNum,
-            PartsListSearchDuplicationMode,
-        )
+        >>> from ansys.api.sherlock.v0 import SherlockPartsService_pb2
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
@@ -779,9 +771,9 @@ class Parts(GrpcStub):
         >>>     project="Test",
         >>>     cca_name="Card",
         >>>     matching_mode="Both",
-        >>>     duplication=PartsListSearchDuplicationMode.FIRST,
-        >>>     avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
-        >>>     avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION
+        >>>     duplication_mode=SherlockPartsService_pb2.DuplicationMode.First,
+        >>>     avl_part_num=SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum,
+        >>>     avl_description=SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription,
         >>> )
         """
         try:

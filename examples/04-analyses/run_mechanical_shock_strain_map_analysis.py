@@ -44,6 +44,7 @@ For further details, refer to the official documentation on mechanical shock ana
 
 import os
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.api.sherlock.v0.SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
 from examples.examples_globals import get_sherlock_tutorial_path
 
@@ -53,7 +54,6 @@ from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
 )
-from ansys.sherlock.core.types.analysis_types import ModelSource
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
 
 ###############################################################################
@@ -127,7 +127,7 @@ try:
         mechanical_shock_properties=[
             {
                 "cca_name": "Main Board",
-                "model_source": ModelSource.STRAIN_MAP,
+                "model_source": SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
                 "shock_result_count": 1,
                 "part_validation_enabled": False,
                 "require_material_assignment_enabled": True,

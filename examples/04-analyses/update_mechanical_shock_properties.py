@@ -45,12 +45,12 @@ import os
 
 from examples.examples_globals import get_sherlock_tutorial_path
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockUpdateMechanicalShockPropsError,
 )
-from ansys.sherlock.core.types.analysis_types import ModelSource
 
 ###############################################################################
 # Connect to Sherlock
@@ -97,7 +97,7 @@ try:
         mechanical_shock_properties=[
             {
                 "cca_name": "Auto Relay",
-                "model_source": ModelSource.GENERATED,
+                "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
                 "shock_result_count": 3,
                 "critical_shock_strain": 5,
                 "critical_shock_strain_units": "strain",

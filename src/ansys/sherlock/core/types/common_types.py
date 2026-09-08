@@ -24,7 +24,23 @@
 
 """Module containing types for the Common Service."""
 
+import warnings
+
 from ansys.api.sherlock.v0 import SherlockCommonService_pb2
+
+
+def deprecation(version: str = "25.2"):
+    """Raise a DeprecationWarning when a deprecated class is used."""
+
+    def decorator(cls: object):
+        message = (
+            f"{cls.__name__} is deprecated as of {version}. "
+            "Use the enum values defined in the generated .proto files instead."
+        )
+        warnings.warn(message, DeprecationWarning, stacklevel=2)
+        return cls
+
+    return decorator
 
 
 def basic_str_validator(value: str, field_name: str):

@@ -44,8 +44,7 @@ The updated parts list ensures alignment with a specified library for consistenc
 
 import os
 
-import SherlockCommonService_pb2
-import SherlockPartsService_pb2
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher

@@ -27,52 +27,53 @@
 from enum import Enum
 from typing import Optional, cast
 
-from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2 as analysis_service
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2 as AnalysisService
 from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 
-from ansys.sherlock.core.types.common_types import basic_str_validator
+from ansys.sherlock.core.types.common_types import basic_str_validator, deprecation
 
 TraceModelingAnalysisType = (
-    analysis_service.UpdateTraceModelingPropsRequest.Analysis.AnalysisType.ValueType
+    AnalysisService.UpdateTraceModelingPropsRequest.Analysis.AnalysisType.ValueType
 )
 MountPointsAnalysisType = (
-    analysis_service.UpdateMountPointsPropsRequest.Analysis.AnalysisType.ValueType
+    AnalysisService.UpdateMountPointsPropsRequest.Analysis.AnalysisType.ValueType
 )
 LeadModelingAnalysisType = (
-    analysis_service.UpdateLeadModelingPropsRequest.Analysis.AnalysisType.ValueType
+    AnalysisService.UpdateLeadModelingPropsRequest.Analysis.AnalysisType.ValueType
 )
-MechanicalPartsAnalysisType = (
-    analysis_service.UpdateMechanicalPartsPropsRequest.Analysis.AnalysisType.ValueType
-)
-PottingRegionsAnalysisType = (
-    analysis_service.UpdatePottingRegionsPropsRequest.Analysis.AnalysisType.ValueType
-)
+# These request types are no longer present in the generated protobuf API.
+# Keep compatibility aliases as deprecated placeholders for older integrations.
+MechanicalPartsAnalysisType = int
+PottingRegionsAnalysisType = int
 
 
+@deprecation("25.2")
 class ElementOrder:
     """Constants for Element Order."""
 
-    LINEAR = analysis_service.ElementOrder.Linear
+    LINEAR = AnalysisService.ElementOrder.Linear
     "LINEAR"
-    QUADRATIC = analysis_service.ElementOrder.Quadratic
+    QUADRATIC = AnalysisService.ElementOrder.Quadratic
     "QUADRATIC"
-    SOLID_SHELL = analysis_service.ElementOrder.SolidShell
+    SOLID_SHELL = AnalysisService.ElementOrder.SolidShell
     "SOLID_SHELL"
 
 
+@deprecation("25.2")
 class ModelSource:
     """Constants for Model Source."""
 
-    GENERATED = analysis_service.ModelSource.GENERATED
+    GENERATED = AnalysisService.ModelSource.GENERATED
     "GENERATED"
-    STRAIN_MAP = analysis_service.ModelSource.STRAIN_MAP
+    STRAIN_MAP = AnalysisService.ModelSource.STRAIN_MAP
     "STRAIN_MAP"
 
 
+@deprecation("25.2")
 class RunAnalysisRequestAnalysisType:
     """Constants for type of analysis in the Run Analysis request."""
 
-    __analysis_type = analysis_service.RunAnalysisRequest.Analysis.AnalysisType
+    __analysis_type = AnalysisService.RunAnalysisRequest.Analysis.AnalysisType
     NATURAL_FREQ = __analysis_type.NaturalFreq
     "NATURAL_FREQ"
     HARMONIC_VIBE = __analysis_type.HarmonicVibe
@@ -101,10 +102,11 @@ class RunAnalysisRequestAnalysisType:
     "THERMAL_MECH"
 
 
+@deprecation("25.2")
 class RunStrainMapAnalysisRequestAnalysisType:
     """Constants for type of analysis in the Run Strain Map Analysis request."""
 
-    __analysis_type = analysis_service.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
+    __analysis_type = AnalysisService.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType
     HARMONIC_VIBE = __analysis_type.HarmonicVibe
     "HARMONIC_VIBE"
 
@@ -115,10 +117,11 @@ class RunStrainMapAnalysisRequestAnalysisType:
     "RANDOM_VIBE"
 
 
+@deprecation("25.2")
 class UpdatePcbModelingPropsRequestAnalysisType:
     """Constants for type of analysis in the Update PCB Modeling Properties Analysis request."""
 
-    __analysis_type = analysis_service.UpdatePcbModelingPropsRequest.Analysis.AnalysisType
+    __analysis_type = AnalysisService.UpdatePcbModelingPropsRequest.Analysis.AnalysisType
     HARMONIC_VIBE = __analysis_type.HarmonicVibe
     "HARMONIC_VIBE"
     ICT = __analysis_type.ICTAnalysis
@@ -133,10 +136,11 @@ class UpdatePcbModelingPropsRequestAnalysisType:
     "THERMAL_MECH"
 
 
+@deprecation("25.2")
 class UpdatePcbModelingPropsRequestPcbMaterialModel:
     """Constants for PCB Material Model in the Update PCB Modeling Properties Analysis request."""
 
-    __material_model = analysis_service.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
+    __material_model = AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
     UNIFORM = __material_model.Uniform
     "UNIFORM"
     LAYERED = __material_model.Layered
@@ -147,10 +151,11 @@ class UpdatePcbModelingPropsRequestPcbMaterialModel:
     "LAYERED_ELEMENTS"
 
 
+@deprecation("25.2")
 class UpdatePcbModelingPropsRequestPcbModelType:
     """Constants for PCB Model Type in the Update PCB Modeling Properties Analysis request."""
 
-    __model_type = analysis_service.UpdatePcbModelingPropsRequest.Analysis.PcbModelType
+    __model_type = AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbModelType
     BONDED = __model_type.Bonded
     "BONDED"
 
@@ -172,10 +177,10 @@ class ComponentFailureMechanism(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateComponentFailureMechanismPropsRequest.ComponentFailureMechanism:
+    ) -> AnalysisService.UpdateComponentFailureMechanismPropsRequest.ComponentFailureMechanism:
 
         grpc_data = (
-            analysis_service.UpdateComponentFailureMechanismPropsRequest.ComponentFailureMechanism()
+            AnalysisService.UpdateComponentFailureMechanismPropsRequest.ComponentFailureMechanism()
         )
 
         grpc_data.ccaName = self.cca_name
@@ -208,8 +213,8 @@ class UpdateComponentFailureMechanismPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateComponentFailureMechanismPropsRequest:
-        request = analysis_service.UpdateComponentFailureMechanismPropsRequest()
+    ) -> AnalysisService.UpdateComponentFailureMechanismPropsRequest:
+        request = AnalysisService.UpdateComponentFailureMechanismPropsRequest()
         request.project = self.project
         for properties in self.component_failure_mechanism_properties_per_cca:
             request.componentFailureMechanismProperties.append(properties._convert_to_grpc())
@@ -238,10 +243,10 @@ class SemiconductorWearoutAnalysis(BaseModel):
     def _convert_to_grpc(
         self,
     ) -> (
-        analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest.SemiconductorWearoutAnalysis
+        AnalysisService.UpdateSemiconductorWearoutAnalysisPropsRequest.SemiconductorWearoutAnalysis
     ):
 
-        request_class = analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest
+        request_class = AnalysisService.UpdateSemiconductorWearoutAnalysisPropsRequest
         semiconductor_wearout_analysis = request_class.SemiconductorWearoutAnalysis
         grpc_data = semiconductor_wearout_analysis()
 
@@ -277,8 +282,8 @@ class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest:
-        request = analysis_service.UpdateSemiconductorWearoutAnalysisPropsRequest()
+    ) -> AnalysisService.UpdateSemiconductorWearoutAnalysisPropsRequest:
+        request = AnalysisService.UpdateSemiconductorWearoutAnalysisPropsRequest()
         request.project = self.project
         for properties in self.semiconductor_wearout_analysis_properties:
             request.semiconductorWearoutAnalysisProperties.append(properties._convert_to_grpc())
@@ -288,7 +293,7 @@ class UpdateSemiconductorWearoutAnalysisPropsRequest(BaseModel):
 class UpdatePTHFatiguePropsRequestAnalysisType(Enum):
     """Constants for qualification choices in the Update PTH Fatigue Properties request."""
 
-    __qualification = analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis.Qualification
+    __qualification = AnalysisService.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis.Qualification
     NONE = __qualification.NONE
     "NONE"
     PER_LOT = __qualification.PER_LOT
@@ -325,8 +330,8 @@ class PTHFatiguePropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis:
-        grpc_data = analysis_service.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis()
+    ) -> AnalysisService.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis:
+        grpc_data = AnalysisService.UpdatePTHFatiguePropsRequest.PTHFatigueAnalysis()
 
         grpc_data.ccaName = self.cca_name
         if self.qualification is not None:
@@ -377,8 +382,8 @@ class UpdatePTHFatiguePropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdatePTHFatiguePropsRequest:
-        request = analysis_service.UpdatePTHFatiguePropsRequest()
+    ) -> AnalysisService.UpdatePTHFatiguePropsRequest:
+        request = AnalysisService.UpdatePTHFatiguePropsRequest()
         request.project = self.project
         for properties in self.pth_fatigue_analysis_properties:
             request.pthFatigueAnalysisProperties.append(properties._convert_to_grpc())
@@ -392,7 +397,7 @@ class UpdateTraceModelingPropsAnalysis(BaseModel):
     """Analysis type."""
     trace_enabled: bool
     """Whether to enable trace modeling."""
-    trace_element_order: analysis_service.ElementOrder.ValueType
+    trace_element_order: AnalysisService.ElementOrder.ValueType
     """Trace modeling element order."""
     trace_max_edge_length: float
     """Trace max mesh size."""
@@ -403,8 +408,8 @@ class UpdateTraceModelingPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateTraceModelingPropsRequest.Analysis:
-        grpc_data = analysis_service.UpdateTraceModelingPropsRequest.Analysis()
+    ) -> AnalysisService.UpdateTraceModelingPropsRequest.Analysis:
+        grpc_data = AnalysisService.UpdateTraceModelingPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.traceEnabled = self.trace_enabled
         grpc_data.traceElemOrder = self.trace_element_order
@@ -432,8 +437,8 @@ class UpdateTraceModelingPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateTraceModelingPropsRequest:
-        request = analysis_service.UpdateTraceModelingPropsRequest()
+    ) -> AnalysisService.UpdateTraceModelingPropsRequest:
+        request = AnalysisService.UpdateTraceModelingPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)
@@ -447,7 +452,7 @@ class UpdateMountPointsPropsAnalysis(BaseModel):
 
     analysis_type: MountPointsAnalysisType  # type: ignore[valid-type]
     """Analysis type."""
-    mount_points_element_order: analysis_service.ElementOrder.ValueType
+    mount_points_element_order: AnalysisService.ElementOrder.ValueType
     """Mount point element order."""
     mount_points_max_edge_length: float
     """Mount point maximum edge length."""
@@ -460,8 +465,8 @@ class UpdateMountPointsPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateMountPointsPropsRequest.Analysis:
-        grpc_data = analysis_service.UpdateMountPointsPropsRequest.Analysis()
+    ) -> AnalysisService.UpdateMountPointsPropsRequest.Analysis:
+        grpc_data = AnalysisService.UpdateMountPointsPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.mountPtElemOrder = self.mount_points_element_order
         grpc_data.mountPtMaxEdgeLength = self.mount_points_max_edge_length
@@ -489,8 +494,8 @@ class UpdateMountPointsPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateMountPointsPropsRequest:
-        request = analysis_service.UpdateMountPointsPropsRequest()
+    ) -> AnalysisService.UpdateMountPointsPropsRequest:
+        request = AnalysisService.UpdateMountPointsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)
@@ -506,7 +511,7 @@ class UpdateLeadModelingPropsAnalysis(BaseModel):
     """Analysis type."""
     model_leads: bool
     """Whether to enable lead modeling."""
-    lead_element_order: analysis_service.ElementOrder.ValueType
+    lead_element_order: AnalysisService.ElementOrder.ValueType
     """Lead modeling element order."""
     lead_max_edge_length: float
     """Lead modeling maximum edge length."""
@@ -519,8 +524,8 @@ class UpdateLeadModelingPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateLeadModelingPropsRequest.Analysis:
-        grpc_data = analysis_service.UpdateLeadModelingPropsRequest.Analysis()
+    ) -> AnalysisService.UpdateLeadModelingPropsRequest.Analysis:
+        grpc_data = AnalysisService.UpdateLeadModelingPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.modelLeads = self.model_leads
         grpc_data.leadElemOrder = self.lead_element_order
@@ -549,8 +554,8 @@ class UpdateLeadModelingPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateLeadModelingPropsRequest:
-        request = analysis_service.UpdateLeadModelingPropsRequest()
+    ) -> AnalysisService.UpdateLeadModelingPropsRequest:
+        request = AnalysisService.UpdateLeadModelingPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)
@@ -566,7 +571,7 @@ class UpdateMechanicalPartsPropsAnalysis(BaseModel):
     """Analysis type."""
     mechanical_parts_enabled: bool
     """Whether to enable lead modeling."""
-    mechanical_parts_elem_order: analysis_service.ElementOrder.ValueType
+    mechanical_parts_elem_order: AnalysisService.ElementOrder.ValueType
     """Mechanical parts element order."""
     mechanical_parts_max_edge_length: float
     """Mechanical parts maximum edge length."""
@@ -579,8 +584,8 @@ class UpdateMechanicalPartsPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateMechanicalPartsPropsRequest.Analysis:
-        grpc_data = analysis_service.UpdateMechanicalPartsPropsRequest.Analysis()
+    ) -> object:
+        grpc_data = AnalysisService.UpdateMechanicalPartsPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.mechanicalPartsEnabled = self.mechanical_parts_enabled
         grpc_data.mechanicalPartsElemOrder = self.mechanical_parts_elem_order
@@ -609,8 +614,8 @@ class UpdateMechanicalPartsPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdateMechanicalPartsPropsRequest:
-        request = analysis_service.UpdateMechanicalPartsPropsRequest()
+    ) -> object:
+        request = AnalysisService.UpdateMechanicalPartsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)
@@ -626,7 +631,7 @@ class UpdatePottingRegionsPropsAnalysis(BaseModel):
     """Analysis type."""
     potting_enabled: bool
     """Whether to enable potting regions."""
-    potting_elem_order: analysis_service.ElementOrder.ValueType
+    potting_elem_order: AnalysisService.ElementOrder.ValueType
     """Potting regions element order."""
     potting_max_edge_length: float
     """Potting regions maximum edge length."""
@@ -639,8 +644,8 @@ class UpdatePottingRegionsPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdatePottingRegionsPropsRequest.Analysis:
-        grpc_data = analysis_service.UpdatePottingRegionsPropsRequest.Analysis()
+    ) -> object:
+        grpc_data = AnalysisService.UpdatePottingRegionsPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.pottingEnabled = self.potting_enabled
         grpc_data.pottingElemOrder = self.potting_elem_order
@@ -669,8 +674,8 @@ class UpdatePottingRegionsPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> analysis_service.UpdatePottingRegionsPropsRequest:
-        request = analysis_service.UpdatePottingRegionsPropsRequest()
+    ) -> object:
+        request = AnalysisService.UpdatePottingRegionsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
             request.ccaNames.append(cca_name)

@@ -51,10 +51,6 @@ from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
 )
-from ansys.sherlock.core.types.analysis_types import (
-    ModelSource,
-    RunStrainMapAnalysisRequestAnalysisType,
-)
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
 
 ###############################################################################
@@ -125,7 +121,7 @@ try:
     sherlock.analysis.update_random_vibe_props(
         project="Test",
         cca_name="Main Board",
-        model_source=ModelSource.STRAIN_MAP,
+        model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
         random_vibe_damping="0.01",
         part_validation_enabled=False,
         require_material_assignment_enabled=True,
@@ -154,7 +150,7 @@ try:
         cca_name="Main Board",
         strain_map_analyses=[
             [
-                RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
+                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
                 [
                     ["On The Road", "1 - Vibration", "TOP", "StrainMap - Top"],
                     ["On The Road", "1 - Vibration", "BOTTOM", "StrainMap - Bottom"],
