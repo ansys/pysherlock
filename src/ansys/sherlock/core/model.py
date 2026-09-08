@@ -499,7 +499,9 @@ class Model(GrpcStub):
         mesh_type: int = MeshType.NONE,
         is_modeling_region_enabled: bool = False,
         trace_output_type: int = TraceOutputType.ALL_REGIONS,
-        element_order: SherlockAnalysisService_pb2.ElementOrder.ValueType = SherlockAnalysisService_pb2.ElementOrder.Linear,
+        element_order: SherlockAnalysisService_pb2.ElementOrder.ValueType = (
+            SherlockAnalysisService_pb2.ElementOrder.Linear
+        ),
         max_mesh_size: float = 1.0,
         max_mesh_size_units: str = "mm",
         max_holes_per_trace: int = 2,
@@ -548,7 +550,9 @@ class Model(GrpcStub):
             Determines if pre-defined modeling regions will be applied to the exported trace model.
         trace_output_type: TraceOutputType = TraceOutputType.ALL_REGIONS
             Options to select which trace regions to include in the 3D model.
-        element_order: SherlockAnalysisService_pb2.ElementOrder.ValueType = SherlockAnalysisService_pb2.ElementOrder.Linear
+        element_order: SherlockAnalysisService_pb2.ElementOrder.ValueType = (
+            SherlockAnalysisService_pb2.ElementOrder.Linear
+        )
             Type of FEA element to be used when modeling each component.
         max_mesh_size: float = 1.0
             Indicates the desired element sizes.

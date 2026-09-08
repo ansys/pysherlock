@@ -145,12 +145,15 @@ except SherlockRunStrainMapAnalysisError as e:
 
 try:
     analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
+    random_vibe = (
+        SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe  # noqa: E501
+    )
     sherlock.analysis.run_strain_map_analysis(
         project="Test",
         cca_name="Main Board",
         strain_map_analyses=[
             [
-                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
+                random_vibe,
                 [
                     ["On The Road", "1 - Vibration", "TOP", "StrainMap - Top"],
                     ["On The Road", "1 - Vibration", "BOTTOM", "StrainMap - Bottom"],

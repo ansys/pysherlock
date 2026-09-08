@@ -114,7 +114,10 @@ class Analysis(GrpcStub):
     def _add_analyses(
         request: SherlockAnalysisService_pb2.RunAnalysisRequest,
         analyses: list[
-            tuple[SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType, tuple[str, str]]
+            tuple[
+                SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType,
+                tuple[str, str],
+            ]
         ],
     ):
         """Add analyses."""
@@ -134,7 +137,10 @@ class Analysis(GrpcStub):
         project: str,
         cca_name: str,
         analyses: list[
-            tuple[SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType, tuple[str, str]]
+            tuple[
+                SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType,
+                tuple[str, str],
+            ]
         ],
     ) -> int:
         """Run one or more Sherlock analyses.
@@ -149,10 +155,17 @@ class Analysis(GrpcStub):
             Name of the CCA.
         analyses: list of ``elements``
 
-            - elements: list[tuple[SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType, tuple[str, str]]]
+            - elements: list[
+                tuple[
+                    SherlockAnalysisService_pb2.RunAnalysisRequest.
+                    Analysis.AnalysisType.ValueType,
+                    tuple[str, str],
+                ]
+              ]
                 Tuples (``type``, ``event``)
 
-                - analysis_type: SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType
+                - analysis_type: SherlockAnalysisService_pb2.RunAnalysisRequest.
+                  Analysis.AnalysisType.ValueType
                     Type of analysis to run.
 
                 - event: list[tuple[str, str]]
@@ -185,10 +198,12 @@ class Analysis(GrpcStub):
         >>>    "Test",
         >>>    "Card",
         >>>    [
-        >>>        (SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.NaturalFreq,
-        >>>        [
-        >>>            ("Phase 1", ["Harmonic Event"])
-        >>>        ]
+        >>>        (
+        >>>            SherlockAnalysisService_pb2.RunAnalysisRequest.
+        >>>            Analysis.AnalysisType.NaturalFreq,
+        >>>            [
+        >>>                ("Phase 1", ["Harmonic Event"])
+        >>>            ],
         >>>        )
         >>>    ]
         >>> )
@@ -1534,7 +1549,10 @@ class Analysis(GrpcStub):
         project: str,
         cca_name: str,
         strain_map_analyses: list[
-            list[SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType | list[list[str]]]
+            list[
+                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType  # noqa: E501
+                | list[list[str]]
+            ]
         ],
     ) -> int:
         """Run one or more strain map analyses.
@@ -1547,10 +1565,16 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the main CCA for the analysis.
-        strain_map_analyses: list[list[SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType | list[list[str]]]]
+        strain_map_analyses: list[
+            list[
+                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+                StrainMapAnalysis.AnalysisType.ValueType | list[list[str]]
+            ]
+        ]
             Analyses consisting of these properties:
 
-            - analysis_type: SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType
+            - analysis_type: SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+              StrainMapAnalysis.AnalysisType.ValueType
                 Type of analysis to run.
             - event_strain_maps: list
                 Strain maps assigned to the desired life cycle events for
@@ -1582,10 +1606,19 @@ class Analysis(GrpcStub):
         >>>     "AssemblyTutorial",
         >>>     "Main Board",
         >>>     [[
-        >>>         SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.RandomVibe,
-        >>>         [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-        >>>          ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-        >>>          ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
+        >>>         SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+        >>>         StrainMapAnalysis.AnalysisType.RandomVibe,
+        >>>         [
+        >>>             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+        >>>             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+        >>>             [
+        >>>                 "Phase 1",
+        >>>                 "Random Vibe",
+        >>>                 "TOP",
+        >>>                 "MemoryCard1Strain",
+        >>>                 "Memory Card 1",
+        >>>             ],
+        >>>         ],
         >>>     ]]
         >>> )
         """
@@ -1701,9 +1734,9 @@ class Analysis(GrpcStub):
                 bool
                 | float
                 | str
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType  # noqa: E501
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType  # noqa: E501
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType  # noqa: E501
                 | SherlockAnalysisService_pb2.ElementOrder.ValueType,
                 ...,
             ]
@@ -1719,19 +1752,33 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_names: list
             Names of the CCAs to be used for the analysis.
-        analyses: list[tuple[bool | float | str | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType\
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType\
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType\
-                | SherlockAnalysisService_pb2.ElementOrder.ValueType, ...]]
+        analyses: list[
+            tuple[
+                bool
+                | float
+                | str
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+                Analysis.AnalysisType.ValueType
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+                Analysis.PcbModelType.ValueType
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+                Analysis.PcbMaterialModel.ValueType
+                | SherlockAnalysisService_pb2.ElementOrder.ValueType,
+                ...,
+            ]
+        ]
             Elements consisting of the following properties:
 
-            - analysis_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType
+            - analysis_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.AnalysisType.ValueType
                 Type of analysis applied.
-            - pcb_model_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType
+            - pcb_model_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.PcbModelType.ValueType
                 The PCB modeling mesh type.
             - modeling_region_enabled: bool
                 Indicates if modeling regions are enabled.
-            - pcb_material_model: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
+            - pcb_material_model: SherlockAnalysisService_pb2.
+              UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
                 The PCB modeling PCB model type.
             - pcb_max_materials: Optional[int]
                 The number of PCB materials for Uniform Elements and Layered Elements PCB model
@@ -1765,10 +1812,13 @@ class Analysis(GrpcStub):
         >>> ["Main Board"],
         >>> [
         >>>     (
-        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.HarmonicVibe,
-        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded,
+        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>         Analysis.AnalysisType.HarmonicVibe,
+        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>         Analysis.PcbModelType.Bonded,
         >>>         True,
-        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform,
+        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>         Analysis.PcbMaterialModel.Uniform,
         >>>         SherlockAnalysisService_pb2.ElementOrder.SolidShell,
         >>>         6,
         >>>         "mm",
