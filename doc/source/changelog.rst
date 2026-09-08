@@ -9,6 +9,61 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.0.1 <https://github.com/ansys/pysherlock/releases/tag/v2.0.1>`_ - September 08, 2026
+=======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v2.0.0
+          - `#918 <https://github.com/ansys/pysherlock/pull/918>`_
+
+        * - Chore: add script that generates requirements-for-safety.txt to be used for checking vulnerabilities
+          - `#921 <https://github.com/ansys/pysherlock/pull/921>`_
+
+        * - Build: Bump ansys/actions/doc-build from 11.0.3 to 11.0.4
+          - `#923 <https://github.com/ansys/pysherlock/pull/923>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 11.0.3 to 11.0.4
+          - `#924 <https://github.com/ansys/pysherlock/pull/924>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-changelog from 11.0.3 to 11.0.4
+          - `#925 <https://github.com/ansys/pysherlock/pull/925>`_
+
+        * - Build: Bump ansys/actions/doc-style from 11.0.3 to 11.0.4
+          - `#926 <https://github.com/ansys/pysherlock/pull/926>`_
+
+        * - Build: Bump ansys/actions/release-github from 11.0.3 to 11.0.4
+          - `#927 <https://github.com/ansys/pysherlock/pull/927>`_
+
+        * - Build: Bump ansys/actions/build-library from 11.0.3 to 11.0.4
+          - `#928 <https://github.com/ansys/pysherlock/pull/928>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-dev from 11.0.3 to 11.0.4
+          - `#929 <https://github.com/ansys/pysherlock/pull/929>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 11.0.3 to 11.0.4
+          - `#931 <https://github.com/ansys/pysherlock/pull/931>`_
+
+        * - Build: Update grpcio-tools requirement from <1.72,>=1.71.2 to >=1.71.2,<1.84
+          - `#933 <https://github.com/ansys/pysherlock/pull/933>`_
+
+        * - Build: change dependency versions to conform with PyAnsys requirements
+          - `#934 <https://github.com/ansys/pysherlock/pull/934>`_
+
+        * - Build: Bump ansys/actions/doc-changelog from 11.0.3 to 11.0.5
+          - `#935 <https://github.com/ansys/pysherlock/pull/935>`_
+
+        * - Build: remove upper limit for protobuf version in dependencies
+          - `#941 <https://github.com/ansys/pysherlock/pull/941>`_
+
+
 `2.0.0 <https://github.com/ansys/pysherlock/releases/tag/v2.0.0>`_ - September 01, 2026
 =======================================================================================
 
