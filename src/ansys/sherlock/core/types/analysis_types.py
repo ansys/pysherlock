@@ -41,13 +41,15 @@ MountPointsAnalysisType = (
 LeadModelingAnalysisType = (
     AnalysisService.UpdateLeadModelingPropsRequest.Analysis.AnalysisType.ValueType
 )
-# These request types are no longer present in the generated protobuf API.
-# Keep compatibility aliases as deprecated placeholders for older integrations.
-MechanicalPartsAnalysisType = int
-PottingRegionsAnalysisType = int
+MechanicalPartsAnalysisType = (
+    AnalysisService.UpdateMechanicalPartsPropsRequest.Analysis.AnalysisType.ValueType
+)
+PottingRegionsAnalysisType = (
+    AnalysisService.UpdatePottingRegionsPropsRequest.Analysis.AnalysisType.ValueType
+)
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class ElementOrder:
     """Constants for Element Order."""
 
@@ -59,7 +61,7 @@ class ElementOrder:
     "SOLID_SHELL"
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class ModelSource:
     """Constants for Model Source."""
 
@@ -69,7 +71,7 @@ class ModelSource:
     "STRAIN_MAP"
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class RunAnalysisRequestAnalysisType:
     """Constants for type of analysis in the Run Analysis request."""
 
@@ -102,7 +104,7 @@ class RunAnalysisRequestAnalysisType:
     "THERMAL_MECH"
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class RunStrainMapAnalysisRequestAnalysisType:
     """Constants for type of analysis in the Run Strain Map Analysis request."""
 
@@ -117,7 +119,7 @@ class RunStrainMapAnalysisRequestAnalysisType:
     "RANDOM_VIBE"
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class UpdatePcbModelingPropsRequestAnalysisType:
     """Constants for type of analysis in the Update PCB Modeling Properties Analysis request."""
 
@@ -136,7 +138,7 @@ class UpdatePcbModelingPropsRequestAnalysisType:
     "THERMAL_MECH"
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class UpdatePcbModelingPropsRequestPcbMaterialModel:
     """Constants for PCB Material Model in the Update PCB Modeling Properties Analysis request."""
 
@@ -151,7 +153,7 @@ class UpdatePcbModelingPropsRequestPcbMaterialModel:
     "LAYERED_ELEMENTS"
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class UpdatePcbModelingPropsRequestPcbModelType:
     """Constants for PCB Model Type in the Update PCB Modeling Properties Analysis request."""
 
@@ -312,7 +314,7 @@ class PTHFatiguePropsAnalysis(BaseModel):
     cca_name: str
     """Name of the CCA."""
     qualification: Optional[UpdatePTHFatiguePropsRequestAnalysisType] = None
-    """Qualification choice for IST/HATS."""  # noqa: E501
+    """Qualification choice for IST/HATS."""
     pth_quality_factor: Optional[str] = None
     """Quality factor for PTH."""
     pth_wall_thickness: Optional[float] = None
@@ -584,7 +586,7 @@ class UpdateMechanicalPartsPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> object:
+    ) -> AnalysisService.UpdateMechanicalPartsPropsRequest.Analysis:
         grpc_data = AnalysisService.UpdateMechanicalPartsPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.mechanicalPartsEnabled = self.mechanical_parts_enabled
@@ -614,7 +616,7 @@ class UpdateMechanicalPartsPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> object:
+    ) -> AnalysisService.UpdateMechanicalPartsPropsRequest:
         request = AnalysisService.UpdateMechanicalPartsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:
@@ -644,7 +646,7 @@ class UpdatePottingRegionsPropsAnalysis(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> object:
+    ) -> AnalysisService.UpdatePottingRegionsPropsRequest.Analysis:
         grpc_data = AnalysisService.UpdatePottingRegionsPropsRequest.Analysis()
         grpc_data.type = self.analysis_type
         grpc_data.pottingEnabled = self.potting_enabled
@@ -674,7 +676,7 @@ class UpdatePottingRegionsPropsRequest(BaseModel):
 
     def _convert_to_grpc(
         self,
-    ) -> object:
+    ) -> AnalysisService.UpdatePottingRegionsPropsRequest:
         request = AnalysisService.UpdatePottingRegionsPropsRequest()
         request.project = self.project
         for cca_name in self.cca_names:

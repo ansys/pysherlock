@@ -33,7 +33,7 @@ from pydantic import BaseModel, field_validator
 from ansys.sherlock.core.types.common_types import basic_str_validator, deprecation
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class PartsListSearchMatchingMode:
     """DEPRECATED. Constants for Matching Mode in Update Parts List & Update Parts from AVL."""
 
@@ -44,7 +44,7 @@ class PartsListSearchMatchingMode:
     """Part"""
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class PartsListSearchDuplicationMode:
     """Constants for Duplication Mode in Update Parts List and Update Parts from AVL request."""
 
@@ -57,7 +57,7 @@ class PartsListSearchDuplicationMode:
     """Ignore"""
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class AVLPartNum:
     """Constants for AVLPartNum in the Update Parts List from AVL request."""
 
@@ -70,7 +70,7 @@ class AVLPartNum:
     """DoNotChangeVendorOrPartNum"""
 
 
-@deprecation("25.2")
+@deprecation("27.1")
 class AVLDescription:
     """Constants for AVLDescription in the Update Parts List from AVL request."""
 

@@ -29,7 +29,7 @@ import warnings
 from ansys.api.sherlock.v0 import SherlockCommonService_pb2
 
 
-def deprecation(version: str = "25.2"):
+def deprecation(version: str = "27.1"):
     """Raise a DeprecationWarning when a deprecated class is used."""
 
     def decorator(cls: object):

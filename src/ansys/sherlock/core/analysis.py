@@ -61,6 +61,19 @@ from ansys.sherlock.core.types.analysis_types import (
 )
 from ansys.sherlock.core.utils.version_check import require_version
 
+RunStrainMapAnalysisType = (
+    SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType
+)
+PcbModelingAnalysisType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType
+)
+PcbModelType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType
+)
+PcbMaterialModel = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
+)
+
 
 class Analysis(GrpcStub):
     """Contains all analysis capabilities."""
@@ -1548,12 +1561,7 @@ class Analysis(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        strain_map_analyses: list[
-            list[
-                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType  # noqa: E501
-                | list[list[str]]
-            ]
-        ],
+        strain_map_analyses: list[list[RunStrainMapAnalysisType | list[list[str]]]],
     ) -> int:
         """Run one or more strain map analyses.
 
@@ -1734,9 +1742,9 @@ class Analysis(GrpcStub):
                 bool
                 | float
                 | str
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType  # noqa: E501
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType  # noqa: E501
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType  # noqa: E501
+                | PcbModelingAnalysisType
+                | PcbModelType
+                | PcbMaterialModel
                 | SherlockAnalysisService_pb2.ElementOrder.ValueType,
                 ...,
             ]

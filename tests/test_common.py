@@ -35,14 +35,14 @@ from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
 
 
 def test_proto_enum_wrapper_deprecation_warning():
-    """Deprecated enum wrapper classes should warn with the 25.2 deprecation version."""
+    """Deprecated enum wrapper classes should warn with the 27.1 deprecation version."""
     import ansys.sherlock.core.types.analysis_types as analysis_types_module
     import ansys.sherlock.core.types.parts_types as parts_types_module
 
-    with pytest.warns(DeprecationWarning, match=r"25\.2.*proto"):
+    with pytest.warns(DeprecationWarning, match=r"27\.1.*proto"):
         importlib.reload(analysis_types_module)
 
-    with pytest.warns(DeprecationWarning, match=r"25\.2.*proto"):
+    with pytest.warns(DeprecationWarning, match=r"27\.1.*proto"):
         importlib.reload(parts_types_module)
 
 
