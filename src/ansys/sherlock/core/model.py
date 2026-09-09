@@ -25,7 +25,11 @@
 """Module containing all model generation capabilities."""
 import os.path
 
-from ansys.api.sherlock.v0 import SherlockModelService_pb2, SherlockModelService_pb2_grpc
+from ansys.api.sherlock.v0 import (
+    SherlockAnalysisService_pb2,
+    SherlockModelService_pb2,
+    SherlockModelService_pb2_grpc,
+)
 from ansys.api.sherlock.v0.SherlockModelService_pb2 import (
     GeometryType,
     MeshType,
@@ -42,7 +46,6 @@ from ansys.sherlock.core.errors import (
     SherlockNoGrpcConnectionException,
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
-from ansys.sherlock.core.types.analysis_types import ElementOrder
 from ansys.sherlock.core.types.common_types import Measurement
 from ansys.sherlock.core.utils.version_check import require_version
 
@@ -432,7 +435,6 @@ class Model(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.types.analysis_types import ElementOrder
         >>> from ansys.sherlock.core import launcher
         >>> from ansys.api.sherlock.v0 import SherlockModelService_pb2
         >>> sherlock, ansys_install_path = launcher.launch_and_connect()
@@ -451,7 +453,7 @@ class Model(GrpcStub):
         >>>         mesh_type=SherlockModelService_pb2.MeshType.NONE,
         >>>         is_modeling_region_enabled=False,
         >>>         trace_output_type=SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-        >>>         element_order=ElementOrder.LINEAR,
+        >>>         element_order=SherlockAnalysisService_pb2.ElementOrder.Linear,
         >>>         max_mesh_size=1.0,
         >>>         max_mesh_size_units="mm",
         >>>         max_holes_per_trace=2,
@@ -497,7 +499,9 @@ class Model(GrpcStub):
         mesh_type: int = MeshType.NONE,
         is_modeling_region_enabled: bool = False,
         trace_output_type: int = TraceOutputType.ALL_REGIONS,
-        element_order: ElementOrder = ElementOrder.LINEAR,
+        element_order: SherlockAnalysisService_pb2.ElementOrder.ValueType = (
+            SherlockAnalysisService_pb2.ElementOrder.Linear
+        ),
         max_mesh_size: float = 1.0,
         max_mesh_size_units: str = "mm",
         max_holes_per_trace: int = 2,
@@ -546,7 +550,9 @@ class Model(GrpcStub):
             Determines if pre-defined modeling regions will be applied to the exported trace model.
         trace_output_type: TraceOutputType = TraceOutputType.ALL_REGIONS
             Options to select which trace regions to include in the 3D model.
-        element_order: ElementOrder = ElementOrder.LINEAR
+        element_order: SherlockAnalysisService_pb2.ElementOrder.ValueType = (
+            SherlockAnalysisService_pb2.ElementOrder.Linear
+        )
             Type of FEA element to be used when modeling each component.
         max_mesh_size: float = 1.0
             Indicates the desired element sizes.
@@ -575,7 +581,6 @@ class Model(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.types.analysis_types import ElementOrder
         >>> from ansys.api.sherlock.v0 import SherlockModelService_pb2
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
@@ -592,7 +597,7 @@ class Model(GrpcStub):
         >>>     SherlockModelService_pb2.MeshType.NONE,
         >>>     False,
         >>>     SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-        >>>     ElementOrder.LINEAR,
+        >>>     SherlockAnalysisService_pb2.ElementOrder.Linear,
         >>>     1.0,
         >>>     "mm",
         >>>     2,
@@ -613,7 +618,7 @@ class Model(GrpcStub):
         >>>     SherlockModelService_pb2.MeshType.NONE,
         >>>     False,
         >>>     SherlockModelService_pb2.TraceOutputType.ALL_REGIONS,
-        >>>     ElementOrder.LINEAR,
+        >>>     SherlockAnalysisService_pb2.ElementOrder.Linear,
         >>>     1.0,
         >>>     "mm",
         >>>     2,

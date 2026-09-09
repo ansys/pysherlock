@@ -50,23 +50,29 @@ from ansys.sherlock.core.errors import (
 )
 from ansys.sherlock.core.grpc_stub import GrpcStub
 from ansys.sherlock.core.types.analysis_types import (
-    ElementOrder,
-    ModelSource,
-    RunAnalysisRequestAnalysisType,
-    RunStrainMapAnalysisRequestAnalysisType,
     UpdateComponentFailureMechanismPropsRequest,
     UpdateLeadModelingPropsRequest,
     UpdateMechanicalPartsPropsRequest,
     UpdateMountPointsPropsRequest,
-    UpdatePcbModelingPropsRequestAnalysisType,
-    UpdatePcbModelingPropsRequestPcbMaterialModel,
-    UpdatePcbModelingPropsRequestPcbModelType,
     UpdatePottingRegionsPropsRequest,
     UpdatePTHFatiguePropsRequest,
     UpdateSemiconductorWearoutAnalysisPropsRequest,
     UpdateTraceModelingPropsRequest,
 )
 from ansys.sherlock.core.utils.version_check import require_version
+
+RunStrainMapAnalysisType = (
+    SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.StrainMapAnalysis.AnalysisType.ValueType
+)
+PcbModelingAnalysisType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType
+)
+PcbModelType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType
+)
+PcbMaterialModel = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
+)
 
 
 class Analysis(GrpcStub):
@@ -120,7 +126,12 @@ class Analysis(GrpcStub):
     @staticmethod
     def _add_analyses(
         request: SherlockAnalysisService_pb2.RunAnalysisRequest,
-        analyses: list[tuple[RunAnalysisRequestAnalysisType, tuple[str, str]]],
+        analyses: list[
+            tuple[
+                SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType,
+                tuple[str, str],
+            ]
+        ],
     ):
         """Add analyses."""
         for a in analyses:
@@ -138,7 +149,12 @@ class Analysis(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        analyses: list[tuple[RunAnalysisRequestAnalysisType, tuple[str, str]]],
+        analyses: list[
+            tuple[
+                SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType,
+                tuple[str, str],
+            ]
+        ],
     ) -> int:
         """Run one or more Sherlock analyses.
 
@@ -152,10 +168,17 @@ class Analysis(GrpcStub):
             Name of the CCA.
         analyses: list of ``elements``
 
-            - elements: list[tuple[RunAnalysisRequestAnalysisType, tuple[str, str]]]
+            - elements: list[
+                tuple[
+                    SherlockAnalysisService_pb2.RunAnalysisRequest.
+                    Analysis.AnalysisType.ValueType,
+                    tuple[str, str],
+                ]
+              ]
                 Tuples (``type``, ``event``)
 
-                - analysis_type: RunAnalysisRequestAnalysisType
+                - analysis_type: SherlockAnalysisService_pb2.RunAnalysisRequest.
+                  Analysis.AnalysisType.ValueType
                     Type of analysis to run.
 
                 - event: list[tuple[str, str]]
@@ -188,10 +211,12 @@ class Analysis(GrpcStub):
         >>>    "Test",
         >>>    "Card",
         >>>    [
-        >>>        (RunAnalysisRequestAnalysisType.NATURAL_FREQ,
-        >>>        [
-        >>>            ("Phase 1", ["Harmonic Event"])
-        >>>        ]
+        >>>        (
+        >>>            SherlockAnalysisService_pb2.RunAnalysisRequest.
+        >>>            Analysis.AnalysisType.NaturalFreq,
+        >>>            [
+        >>>                ("Phase 1", ["Harmonic Event"])
+        >>>            ],
         >>>        )
         >>>    ]
         >>> )
@@ -233,7 +258,8 @@ class Analysis(GrpcStub):
 
     @require_version()
     def get_harmonic_vibe_input_fields(
-        self, model_source: Optional[ModelSource] = None
+        self,
+        model_source: Optional[SherlockAnalysisService_pb2.ModelSource.ValueType] = None,
     ) -> list[str]:
         """Get harmonic vibe property fields based on the user configuration.
 
@@ -241,7 +267,7 @@ class Analysis(GrpcStub):
 
         Parameters
         ----------
-        model_source: ModelSource, optional
+        model_source: SherlockAnalysisService_pb2.ModelSource.ValueType, optional
             Model source to get the harmonic vibe property fields from.
             The default is ``None``.
 
@@ -263,7 +289,9 @@ class Analysis(GrpcStub):
         >>>     project="Test",
         >>>     cca_name="Card",
         >>> )
-        >>> sherlock.analysis.get_harmonic_vibe_input_fields(ModelSource.GENERATED)
+        >>> sherlock.analysis.get_harmonic_vibe_input_fields(
+        >>>     SherlockAnalysisService_pb2.ModelSource.GENERATED
+        >>> )
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -295,7 +323,7 @@ class Analysis(GrpcStub):
 
             - cca_name: str
                 Name of the CCA.
-            - model_source: ModelSource
+            - model_source: SherlockAnalysisService_pb2.ModelSource.ValueType
                 Model source. The default is ``None``.
             - harmonic_vibe_count: int
                 Number of harmonic vibe result layers to generate. The default is ``None``.
@@ -359,7 +387,7 @@ class Analysis(GrpcStub):
         >>> "Test",
         >>> [{
         >>>     "cca_name": "Card",
-        >>>     "model_source": ModelSource.GENERATED,
+        >>>     "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
         >>>     "harmonic_vibe_count": 2,
         >>>     "harmonic_vibe_damping": "0.01, 0.05",
         >>>     "part_validation_enabled": False,
@@ -748,7 +776,8 @@ class Analysis(GrpcStub):
 
     @require_version(241)
     def get_mechanical_shock_input_fields(
-        self, model_source: Optional[ModelSource] = None
+        self,
+        model_source: Optional[SherlockAnalysisService_pb2.ModelSource.ValueType] = None,
     ) -> list[str]:
         """Get mechanical shock property fields based on the user configuration.
 
@@ -756,7 +785,7 @@ class Analysis(GrpcStub):
 
         Parameters
         ----------
-        model_source: ModelSource, optional
+        model_source: SherlockAnalysisService_pb2.ModelSource.ValueType, optional
             Model source to get the random vibe property fields from.
             Only GENERATED is supported.
             Default is ``None``.
@@ -779,7 +808,9 @@ class Analysis(GrpcStub):
         >>>     project="Test",
         >>>     cca_name="Card",
         >>> )
-        >>> sherlock.analysis.get_mechanical_shock_input_fields(ModelSource.GENERATED)
+        >>> sherlock.analysis.get_mechanical_shock_input_fields(
+        >>>     SherlockAnalysisService_pb2.ModelSource.GENERATED
+        >>> )
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -813,7 +844,7 @@ class Analysis(GrpcStub):
 
             - cca_name: str
                 Name of the CCA.
-            - model_source: ModelSource, optional
+            - model_source: SherlockAnalysisService_pb2.ModelSource.ValueType, optional
                 Model source. The default is ``None``.
             - shock_result_count : int
                 Number of mechanical shock result layers to generate.
@@ -867,7 +898,7 @@ class Analysis(GrpcStub):
         >>> "Test",
         >>> [{
         >>>     "cca_name": "Card",
-        >>>     "model_source": ModelSource.GENERATED,
+        >>>     "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
         >>>     "shock_result_count": 2,
         >>>     "critical_shock_strain": 10,
         >>>     "critical_shock_strain_units": "strain",
@@ -1174,14 +1205,17 @@ class Analysis(GrpcStub):
             raise e
 
     @require_version()
-    def get_random_vibe_input_fields(self, model_source: Optional[ModelSource] = None) -> list[str]:
+    def get_random_vibe_input_fields(
+        self,
+        model_source: Optional[SherlockAnalysisService_pb2.ModelSource.ValueType] = None,
+    ) -> list[str]:
         """Get random vibe property fields based on the user configuration.
 
         Available Since: 2023R2
 
         Parameters
         ----------
-        model_source: ModelSource, optional
+        model_source: SherlockAnalysisService_pb2.ModelSource.ValueType, optional
             Model source to get the random vibe property fields from.
             The default is ``None``.
 
@@ -1203,7 +1237,9 @@ class Analysis(GrpcStub):
         >>>     project="Test",
         >>>     cca_name="Card",
         >>> )
-        >>> sherlock.analysis.get_random_vibe_input_fields(ModelSource.STRAIN_MAP)
+        >>> sherlock.analysis.get_random_vibe_input_fields(
+        >>>     SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
+        >>> )
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1233,7 +1269,7 @@ class Analysis(GrpcStub):
         reuse_modal_analysis: Optional[bool] = None,
         perform_nf_freq_range_check: Optional[bool] = None,
         require_material_assignment_enabled: Optional[bool] = None,
-        model_source: Optional[ModelSource] = None,
+        model_source: Optional[SherlockAnalysisService_pb2.ModelSource.ValueType] = None,
         strain_map_natural_freqs: Optional[str] = None,
     ) -> int:
         """Update properties for a random vibe analysis.
@@ -1281,7 +1317,7 @@ class Analysis(GrpcStub):
             This parameter is for NX Nastran analysis only.
         require_material_assignment_enabled: bool, optional
             Whether to require material assignment. The default is ``None``.
-        model_source: ModelSource, optional
+        model_source: SherlockAnalysisService_pb2.ModelSource.ValueType, optional
             Model source. The default is ``None``.
             This parameter is required for strain map analysis.
         strain_map_natural_freqs: str, optional
@@ -1312,7 +1348,7 @@ class Analysis(GrpcStub):
         >>>     random_vibe_damping="0.01, 0.05",
         >>>     analysis_temp=20,
         >>>     analysis_temp_units="C",
-        >>>     model_source=ModelSource.STRAIN_MAP
+        >>>     model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
         >>> )
         """
         try:
@@ -1525,7 +1561,7 @@ class Analysis(GrpcStub):
         self,
         project: str,
         cca_name: str,
-        strain_map_analyses: list[list[RunStrainMapAnalysisRequestAnalysisType | list[list[str]]]],
+        strain_map_analyses: list[list[RunStrainMapAnalysisType | list[list[str]]]],
     ) -> int:
         """Run one or more strain map analyses.
 
@@ -1537,10 +1573,16 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the main CCA for the analysis.
-        strain_map_analyses: list[list[RunStrainMapAnalysisRequestAnalysisType | list[list[str]]]]
+        strain_map_analyses: list[
+            list[
+                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+                StrainMapAnalysis.AnalysisType.ValueType | list[list[str]]
+            ]
+        ]
             Analyses consisting of these properties:
 
-            - analysis_type: RunStrainMapAnalysisRequestAnalysisType
+            - analysis_type: SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+              StrainMapAnalysis.AnalysisType.ValueType
                 Type of analysis to run.
             - event_strain_maps: list
                 Strain maps assigned to the desired life cycle events for
@@ -1564,9 +1606,7 @@ class Analysis(GrpcStub):
 
         Examples
         --------
-        >>> from ansys.sherlock.core.types.analysis_types import (
-        >>>     RunStrainMapAnalysisRequestAnalysisType
-        >>> )
+        >>> from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> analysis_request = SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest
@@ -1574,10 +1614,19 @@ class Analysis(GrpcStub):
         >>>     "AssemblyTutorial",
         >>>     "Main Board",
         >>>     [[
-        >>>         RunStrainMapAnalysisRequestAnalysisType.RANDOM_VIBE,
-        >>>         [["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
-        >>>          ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
-        >>>          ["Phase 1", "Random Vibe", "TOP", "MemoryCard1Strain", "Memory Card 1"]],
+        >>>         SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+        >>>         StrainMapAnalysis.AnalysisType.RandomVibe,
+        >>>         [
+        >>>             ["Phase 1", "Random Vibe", "TOP", "MainBoardStrain - Top"],
+        >>>             ["Phase 1", "Random Vibe", "BOTTOM", "MainBoardStrain - Bottom"],
+        >>>             [
+        >>>                 "Phase 1",
+        >>>                 "Random Vibe",
+        >>>                 "TOP",
+        >>>                 "MemoryCard1Strain",
+        >>>                 "Memory Card 1",
+        >>>             ],
+        >>>         ],
         >>>     ]]
         >>> )
         """
@@ -1693,10 +1742,10 @@ class Analysis(GrpcStub):
                 bool
                 | float
                 | str
-                | UpdatePcbModelingPropsRequestAnalysisType
-                | UpdatePcbModelingPropsRequestPcbModelType
-                | UpdatePcbModelingPropsRequestPcbMaterialModel
-                | ElementOrder,
+                | PcbModelingAnalysisType
+                | PcbModelType
+                | PcbMaterialModel
+                | SherlockAnalysisService_pb2.ElementOrder.ValueType,
                 ...,
             ]
         ],
@@ -1711,24 +1760,38 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_names: list
             Names of the CCAs to be used for the analysis.
-        analyses: list[tuple[bool | float | str | UpdatePcbModelingPropsRequestAnalysisType\
-                | UpdatePcbModelingPropsRequestPcbModelType\
-                | UpdatePcbModelingPropsRequestPcbMaterialModel\
-                | ElementOrder, ...]]
+        analyses: list[
+            tuple[
+                bool
+                | float
+                | str
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+                Analysis.AnalysisType.ValueType
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+                Analysis.PcbModelType.ValueType
+                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+                Analysis.PcbMaterialModel.ValueType
+                | SherlockAnalysisService_pb2.ElementOrder.ValueType,
+                ...,
+            ]
+        ]
             Elements consisting of the following properties:
 
-            - analysis_type: UpdatePcbModelingPropsRequestAnalysisType
+            - analysis_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.AnalysisType.ValueType
                 Type of analysis applied.
-            - pcb_model_type: UpdatePcbModelingPropsRequestPcbModelType
+            - pcb_model_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.PcbModelType.ValueType
                 The PCB modeling mesh type.
             - modeling_region_enabled: bool
                 Indicates if modeling regions are enabled.
-            - pcb_material_model: UpdatePcbModelingPropsRequestPcbMaterialModel
+            - pcb_material_model: SherlockAnalysisService_pb2.
+              UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
                 The PCB modeling PCB model type.
             - pcb_max_materials: Optional[int]
                 The number of PCB materials for Uniform Elements and Layered Elements PCB model
                 types. Not applicable if PCB model is Uniform or Layered.
-            - pcb_elem_order: ElementOrder
+            - pcb_elem_order: SherlockAnalysisService_pb2.ElementOrder.ValueType
                 The element order for PCB elements.
             - pcb_max_edge_length: float
                 The maximum mesh size for PCB elements.
@@ -1757,11 +1820,14 @@ class Analysis(GrpcStub):
         >>> ["Main Board"],
         >>> [
         >>>     (
-        >>>         UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
-        >>>         UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>         Analysis.AnalysisType.HarmonicVibe,
+        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>         Analysis.PcbModelType.Bonded,
         >>>         True,
-        >>>         UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-        >>>         ElementOrder.SOLID_SHELL,
+        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>         Analysis.PcbMaterialModel.Uniform,
+        >>>         SherlockAnalysisService_pb2.ElementOrder.SolidShell,
         >>>         6,
         >>>         "mm",
         >>>         3,

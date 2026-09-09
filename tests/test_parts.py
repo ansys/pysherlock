@@ -46,12 +46,9 @@ from ansys.sherlock.core.errors import (
 from ansys.sherlock.core.parts import Parts
 from ansys.sherlock.core.types.common_types import TableDelimiter
 from ansys.sherlock.core.types.parts_types import (
-    AVLDescription,
-    AVLPartNum,
     DeletePartsFromPartsListRequest,
     GetPartsListPropertiesRequest,
     ImportPartsToAVLRequest,
-    PartsListSearchDuplicationMode,
     UpdatePadPropertiesRequest,
 )
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
@@ -89,7 +86,7 @@ def helper_test_update_parts_list(parts: Parts):
                 "Main Board",
                 "Sherlock Part Library",
                 "Both",
-                PartsListSearchDuplicationMode.ERROR,
+                SherlockPartsService_pb2.DuplicationMode.Error,
             )
             assert result == 0
         except Exception as e:
@@ -101,7 +98,7 @@ def helper_test_update_parts_list(parts: Parts):
                 "Invalid CCA",
                 "Sherlock Part Library",
                 "Both",
-                PartsListSearchDuplicationMode.ERROR,
+                SherlockPartsService_pb2.DuplicationMode.Error,
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
@@ -113,7 +110,7 @@ def helper_test_update_parts_list(parts: Parts):
             "Card",
             "Sherlock Part Library",
             "Both",
-            PartsListSearchDuplicationMode.ERROR,
+            SherlockPartsService_pb2.DuplicationMode.Error,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -125,7 +122,7 @@ def helper_test_update_parts_list(parts: Parts):
             "",
             "Sherlock Part Library",
             "Both",
-            PartsListSearchDuplicationMode.ERROR,
+            SherlockPartsService_pb2.DuplicationMode.Error,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -137,7 +134,7 @@ def helper_test_update_parts_list(parts: Parts):
             "Card",
             "",
             "Both",
-            PartsListSearchDuplicationMode.ERROR,
+            SherlockPartsService_pb2.DuplicationMode.Error,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsListError as e:
@@ -155,7 +152,7 @@ def helper_test_update_parts_list(parts: Parts):
                     "Card",
                     "Sherlock Part Library",
                     "Both",
-                    PartsListSearchDuplicationMode.ERROR,
+                    SherlockPartsService_pb2.DuplicationMode.Error,
                 )
                 pytest.fail("No exception raised when server returns errors")
             except SherlockUpdatePartsListError as e:
@@ -168,9 +165,9 @@ def helper_test_update_parts_from_AVL(parts: Parts):
             project="",
             cca_name="Main Board",
             matching_mode="Both",
-            duplication_mode=PartsListSearchDuplicationMode.FIRST,
-            avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
-            avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
+            duplication_mode=SherlockPartsService_pb2.DuplicationMode.First,
+            avl_part_num=SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum,
+            avl_description=SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsFromAVLError as e:
@@ -181,9 +178,9 @@ def helper_test_update_parts_from_AVL(parts: Parts):
             project="Tutorial Project",
             cca_name="",
             matching_mode="Both",
-            duplication_mode=PartsListSearchDuplicationMode.FIRST,
-            avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
-            avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
+            duplication_mode=SherlockPartsService_pb2.DuplicationMode.First,
+            avl_part_num=SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum,
+            avl_description=SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription,
         )
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockUpdatePartsFromAVLError as e:
@@ -195,9 +192,9 @@ def helper_test_update_parts_from_AVL(parts: Parts):
                 project="Tutorial Project",
                 cca_name="Main Board",
                 matching_mode="Both",
-                duplication_mode=PartsListSearchDuplicationMode.FIRST,
-                avl_part_num=AVLPartNum.ASSIGN_INTERNAL_PART_NUM,
-                avl_description=AVLDescription.ASSIGN_APPROVED_DESCRIPTION,
+                duplication_mode=SherlockPartsService_pb2.DuplicationMode.First,
+                avl_part_num=SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum,
+                avl_description=SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription,
             )
 
             assert response == 0

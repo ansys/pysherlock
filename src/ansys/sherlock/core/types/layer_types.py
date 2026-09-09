@@ -673,7 +673,11 @@ class MountPointProperties(BaseModel):
 
 
 class GetMountPointsPropertiesRequest(BaseModel):
-    """Return the properties for each mount point given a comma-separated list of mount point ids."""  # noqa: E501
+    """Return the properties for each mount point given a comma-separated list of mount point ids.
+
+    The request can target a project and CCA and optionally restrict the results to
+    specific mount point IDs.
+    """
 
     project: str
     """Name of the project."""

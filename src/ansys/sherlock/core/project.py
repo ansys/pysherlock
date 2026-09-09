@@ -703,7 +703,8 @@ class Project(GrpcStub):
                 ):
                     if len(strain_map) < 7 or len(strain_map) > 8:
                         raise SherlockAddStrainMapsError(
-                            f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
+                            "Number of elements "
+                            f"({str(len(strain_maps))}) is wrong for strain map {i}."
                         )
                     elif not isinstance(strain_map[0], str) or strain_map[0] == "":
                         raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")

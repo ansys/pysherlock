@@ -25,25 +25,15 @@
 """Module containing types for the Parts Service."""
 
 from typing import List, Optional
-import warnings
 
-from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
+from ansys.api.sherlock.v0 import SherlockCommonService_pb2
+from ansys.api.sherlock.v0 import SherlockPartsService_pb2 as PartsService
 from pydantic import BaseModel, field_validator
 
-from ansys.sherlock.core.types.common_types import basic_str_validator
-
-parts_service = SherlockPartsService_pb2
+from ansys.sherlock.core.types.common_types import basic_str_validator, deprecation
 
 
-def deprecation(cls: object):
-    """Raise a DeprecationWarning when a deprecated class is used."""
-    message = f"{cls} is deprecated. Use a string with the value of the constant name \
-    as defined in the proto file."
-    warnings.warn(message, DeprecationWarning, stacklevel=2)
-    return cls
-
-
-@deprecation
+@deprecation("27.1")
 class PartsListSearchMatchingMode:
     """DEPRECATED. Constants for Matching Mode in Update Parts List & Update Parts from AVL."""
 
@@ -54,10 +44,11 @@ class PartsListSearchMatchingMode:
     """Part"""
 
 
+@deprecation("27.1")
 class PartsListSearchDuplicationMode:
     """Constants for Duplication Mode in Update Parts List and Update Parts from AVL request."""
 
-    duplication_mode = SherlockPartsService_pb2.DuplicationMode
+    duplication_mode = PartsService.DuplicationMode
     FIRST = duplication_mode.First
     """First"""
     ERROR = duplication_mode.Error
@@ -66,10 +57,11 @@ class PartsListSearchDuplicationMode:
     """Ignore"""
 
 
+@deprecation("27.1")
 class AVLPartNum:
     """Constants for AVLPartNum in the Update Parts List from AVL request."""
 
-    avl_part_num = SherlockPartsService_pb2.AVLPartNum
+    avl_part_num = PartsService.AVLPartNum
     ASSIGN_INTERNAL_PART_NUM = avl_part_num.AssignInternalPartNum
     """AssignInternalPartNum"""
     ASSIGN_VENDOR_AND_PART_NUM = avl_part_num.AssignVendorAndPartNum
@@ -78,10 +70,11 @@ class AVLPartNum:
     """DoNotChangeVendorOrPartNum"""
 
 
+@deprecation("27.1")
 class AVLDescription:
     """Constants for AVLDescription in the Update Parts List from AVL request."""
 
-    avl_description = SherlockPartsService_pb2.AVLDescription
+    avl_description = PartsService.AVLDescription
     ASSIGN_APPROVED_DESCRIPTION = avl_description.AssignApprovedDescription
     """AssignApprovedDescription"""
     DO_NOT_CHANGE_DESCRIPTION = avl_description.DoNotChangeDescription
@@ -104,8 +97,8 @@ class GetPartsListPropertiesRequest(BaseModel):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
 
-    def _convert_to_grpc(self) -> SherlockPartsService_pb2.GetPartsListPropertiesRequest:
-        return SherlockPartsService_pb2.GetPartsListPropertiesRequest(
+    def _convert_to_grpc(self) -> PartsService.GetPartsListPropertiesRequest:
+        return PartsService.GetPartsListPropertiesRequest(
             project=self.project,
             ccaName=self.cca_name,
             refDes=self.reference_designators,
@@ -128,8 +121,8 @@ class UpdatePadPropertiesRequest(BaseModel):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
 
-    def _convert_to_grpc(self) -> parts_service.UpdatePadPropertiesRequest:
-        return parts_service.UpdatePadPropertiesRequest(
+    def _convert_to_grpc(self) -> PartsService.UpdatePadPropertiesRequest:
+        return PartsService.UpdatePadPropertiesRequest(
             project=self.project,
             ccaName=self.cca_name,
             refDes=self.reference_designators,
@@ -152,8 +145,8 @@ class DeletePartsFromPartsListRequest(BaseModel):
         """Validate string fields listed."""
         return basic_str_validator(value, info.field_name)
 
-    def _convert_to_grpc(self) -> parts_service.DeletePartsFromPartsListRequest:
-        return parts_service.DeletePartsFromPartsListRequest(
+    def _convert_to_grpc(self) -> PartsService.DeletePartsFromPartsListRequest:
+        return PartsService.DeletePartsFromPartsListRequest(
             project=self.project,
             ccaName=self.cca_name,
             refDes=self.reference_designators,
@@ -166,7 +159,7 @@ class ImportPartsToAVLRequest(BaseModel):
     import_file: str
     """Full file path to the AVL file."""
 
-    import_type: parts_service.AVLImportType.ValueType
+    import_type: PartsService.AVLImportType.ValueType
     """Import mode to use for AVL data."""
 
     """Allow non-standard types like Protobuf enums in Pydantic models."""
@@ -180,8 +173,8 @@ class ImportPartsToAVLRequest(BaseModel):
             raise ValueError(f"{info.field_name} cannot be empty.")
         return basic_str_validator(value, info.field_name)
 
-    def _convert_to_grpc(self) -> parts_service.ImportPartsToAVLRequest:
-        request = parts_service.ImportPartsToAVLRequest()
+    def _convert_to_grpc(self) -> PartsService.ImportPartsToAVLRequest:
+        request = PartsService.ImportPartsToAVLRequest()
         request.importFile = self.import_file
         request.importType = self.import_type
         return request

@@ -42,6 +42,7 @@ and others.
 
 import os
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
@@ -49,7 +50,6 @@ from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockRunAnalysisError,
 )
-from ansys.sherlock.core.types.analysis_types import RunAnalysisRequestAnalysisType
 
 ###############################################################################
 # Connect to Sherlock
@@ -91,18 +91,22 @@ except SherlockImportProjectZipArchiveError as e:
 
 try:
     # Run analyses
+    pth_fatigue = SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.PTHFatigue
+    semiconductor_wearout = (
+        SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.SemiconductorWearout
+    )
+    thermal_derating = (
+        SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ThermalDerating
+    )
+    component_failure_mode = (
+        SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ComponentFailureMode
+    )
 
     analysis_types = [
-        (RunAnalysisRequestAnalysisType.PTH_FATIQUE, [("Phase 1", ["Thermal Event"])]),
-        (
-            RunAnalysisRequestAnalysisType.SEMICINDUCTOR_WEAROUT,
-            [("Phase 1", ["Thermal Event"])],
-        ),
-        (RunAnalysisRequestAnalysisType.THERMAL_DERATING, [("Phase 1", ["Thermal Event"])]),
-        (
-            RunAnalysisRequestAnalysisType.COMPONENT_FAILURE_MODE,
-            [("Phase 1", ["Thermal Event"])],
-        ),
+        (pth_fatigue, [("Phase 1", ["Thermal Event"])]),
+        (semiconductor_wearout, [("Phase 1", ["Thermal Event"])]),
+        (thermal_derating, [("Phase 1", ["Thermal Event"])]),
+        (component_failure_mode, [("Phase 1", ["Thermal Event"])]),
     ]
 
     for analysis_type, params in analysis_types:

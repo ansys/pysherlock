@@ -40,6 +40,7 @@ This script performs the following steps:
 
 import os
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from examples.examples_globals import get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
@@ -47,11 +48,15 @@ from ansys.sherlock.core.errors import (
     SherlockImportProjectZipArchiveError,
     SherlockUpdatePcbModelingPropsError,
 )
-from ansys.sherlock.core.types.analysis_types import (
-    ElementOrder,
-    UpdatePcbModelingPropsRequestAnalysisType,
-    UpdatePcbModelingPropsRequestPcbMaterialModel,
-    UpdatePcbModelingPropsRequestPcbModelType,
+
+PcbAnalysisType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType
+)
+PcbModelType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType
+)
+PcbMaterialModel = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
 )
 
 ###############################################################################
@@ -93,89 +98,56 @@ except SherlockImportProjectZipArchiveError as e:
 # Configure PCB modeling properties for various analysis types.
 
 try:
+    analysis_type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType
+    material_model = (
+        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
+    )
+    pcb_model_type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType
+
+    harmonic_vibe = analysis_type.HarmonicVibe
+    natural_freq = analysis_type.NaturalFreq
+    ict_analysis = analysis_type.ICTAnalysis
+    mechanical_shock = analysis_type.MechanicalShock
+    random_vibe = analysis_type.RandomVibe
+    thermal_mech = analysis_type.ThermalMech
+    bonded = pcb_model_type.Bonded
+    uniform = material_model.Uniform
+    layered = material_model.Layered
+    layered_elements = material_model.LayeredElements
+    uniform_elements = material_model.UniformElements
+    solid_shell = SherlockAnalysisService_pb2.ElementOrder.SolidShell
+
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
         cca_names=["Auto Relay"],
-        analyses=[
-            (
-                UpdatePcbModelingPropsRequestAnalysisType.HARMONIC_VIBE,
-                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                True,
-                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                ElementOrder.SOLID_SHELL,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
+        analyses=[(harmonic_vibe, bonded, True, uniform, solid_shell, 6, "mm", 3, "mm", True)],
+    )
+    sherlock.analysis.update_pcb_modeling_props(
+        project="Test",
+        cca_names=["Auto Relay"],
+        analyses=[(natural_freq, bonded, True, uniform, solid_shell, 6, "mm", 3, "mm", True)],
+    )
+    sherlock.analysis.update_pcb_modeling_props(
+        project="Test",
+        cca_names=["Auto Relay"],
+        analyses=[(ict_analysis, bonded, True, uniform, solid_shell, 6, "mm", 3, "mm", True)],
+    )
+    sherlock.analysis.update_pcb_modeling_props(
+        project="Test",
+        cca_names=["Auto Relay"],
+        analyses=[(mechanical_shock, bonded, True, layered, solid_shell, 6, "mm", 3, "mm", True)],
     )
     sherlock.analysis.update_pcb_modeling_props(
         project="Test",
         cca_names=["Auto Relay"],
         analyses=[
             (
-                UpdatePcbModelingPropsRequestAnalysisType.NATURAL_FREQUENCY,
-                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                random_vibe,
+                bonded,
                 True,
-                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                ElementOrder.SOLID_SHELL,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
-    )
-    sherlock.analysis.update_pcb_modeling_props(
-        project="Test",
-        cca_names=["Auto Relay"],
-        analyses=[
-            (
-                UpdatePcbModelingPropsRequestAnalysisType.ICT,
-                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                True,
-                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM,
-                ElementOrder.SOLID_SHELL,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
-    )
-    sherlock.analysis.update_pcb_modeling_props(
-        project="Test",
-        cca_names=["Auto Relay"],
-        analyses=[
-            (
-                UpdatePcbModelingPropsRequestAnalysisType.MECHANICAL_SHOCK,
-                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                True,
-                UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED,
-                ElementOrder.SOLID_SHELL,
-                6,
-                "mm",
-                3,
-                "mm",
-                True,
-            )
-        ],
-    )
-    sherlock.analysis.update_pcb_modeling_props(
-        project="Test",
-        cca_names=["Auto Relay"],
-        analyses=[
-            (
-                UpdatePcbModelingPropsRequestAnalysisType.RANDOM_VIBE,
-                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
-                True,
-                UpdatePcbModelingPropsRequestPcbMaterialModel.LAYERED_ELEMENTS,
+                layered_elements,
                 5,
-                ElementOrder.SOLID_SHELL,
+                solid_shell,
                 6,
                 "mm",
                 3,
@@ -189,12 +161,12 @@ try:
         cca_names=["Auto Relay"],
         analyses=[
             (
-                UpdatePcbModelingPropsRequestAnalysisType.THERMAL_MECH,
-                UpdatePcbModelingPropsRequestPcbModelType.BONDED,
+                thermal_mech,
+                bonded,
                 True,
-                UpdatePcbModelingPropsRequestPcbMaterialModel.UNIFORM_ELEMENTS,
+                uniform_elements,
                 5,
-                ElementOrder.SOLID_SHELL,
+                solid_shell,
                 6,
                 "mm",
                 3,
