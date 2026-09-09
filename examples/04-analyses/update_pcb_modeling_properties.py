@@ -49,6 +49,16 @@ from ansys.sherlock.core.errors import (
     SherlockUpdatePcbModelingPropsError,
 )
 
+PcbAnalysisType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ValueType
+)
+PcbModelType = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.ValueType
+)
+PcbMaterialModel = (
+    SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
+)
+
 ###############################################################################
 # Connect to Sherlock
 # ===================
@@ -88,39 +98,23 @@ except SherlockImportProjectZipArchiveError as e:
 # Configure PCB modeling properties for various analysis types.
 
 try:
-    harmonic_vibe = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.HarmonicVibe
+    analysis_type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType
+    material_model = (
+        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel
     )
-    natural_freq = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.NaturalFreq
-    )
-    ict_analysis = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ICTAnalysis
-    )
-    mechanical_shock = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.MechanicalShock  # noqa: E501
-    )
-    random_vibe = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.RandomVibe
-    )
-    thermal_mech = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.AnalysisType.ThermalMech
-    )
-    bonded = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType.Bonded
-    )  # noqa: E501
-    uniform = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform  # noqa: E501
-    )
-    layered = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered  # noqa: E501
-    )
-    layered_elements = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.LayeredElements  # noqa: E501
-    )
-    uniform_elements = (
-        SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.UniformElements  # noqa: E501
-    )
+    pcb_model_type = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.Analysis.PcbModelType
+
+    harmonic_vibe = analysis_type.HarmonicVibe
+    natural_freq = analysis_type.NaturalFreq
+    ict_analysis = analysis_type.ICTAnalysis
+    mechanical_shock = analysis_type.MechanicalShock
+    random_vibe = analysis_type.RandomVibe
+    thermal_mech = analysis_type.ThermalMech
+    bonded = pcb_model_type.Bonded
+    uniform = material_model.Uniform
+    layered = material_model.Layered
+    layered_elements = material_model.LayeredElements
+    uniform_elements = material_model.UniformElements
     solid_shell = SherlockAnalysisService_pb2.ElementOrder.SolidShell
 
     sherlock.analysis.update_pcb_modeling_props(
