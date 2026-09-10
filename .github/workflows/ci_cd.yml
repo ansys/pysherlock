@@ -243,6 +243,22 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  upload_dev_docs:
+    name: Upload dev documentation
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Required to push documentation to gh-pages branch
+    needs: [ package ]
+    steps:
+      - name: Deploy the latest documentation
+        uses: ansys/actions/doc-deploy-dev@21c78f8b27683ae8c93557345392abe39ab21d2f # v11.0.4
+        with:
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+
   upload_docs_release:
     name: Upload release documentation
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
