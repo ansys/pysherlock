@@ -178,7 +178,7 @@ jobs:
           skip-existing: false
 
       - name: "Release to GitHub"
-        uses: ansys/actions/release-github@21c78f8b27683ae8c93557345392abe39ab21d2f #v11.0.4
+        uses: ansys/actions/release-github@3ad3b285bd9b67045477dafc7f9865a3aa39f692 #v11.0.6
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
