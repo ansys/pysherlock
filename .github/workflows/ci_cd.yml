@@ -220,7 +220,7 @@ jobs:
     needs: [ release ]
     steps:
       - name: Deploy the stable documentation
-        uses: ansys/actions/doc-deploy-stable@7e7af221736bc4d9fb84a2ab28f99518e9bca84c # v11.0.5
+        uses: ansys/actions/doc-deploy-stable@3ad3b285bd9b67045477dafc7f9865a3aa39f692 # v11.0.6
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
