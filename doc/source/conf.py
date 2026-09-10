@@ -41,6 +41,11 @@ logger = logging.getLogger(__name__)
 
 pysherlock.BUILDING_GALLERY = True
 
+# Executing the gallery examples requires a live Sherlock installation and takes
+# more than 20 minutes. Unless explicitly requested, the gallery pages are
+# generated without running the example code.
+BUILD_EXAMPLES = os.getenv("PYSHERLOCK_BUILD_EXAMPLES", "false").lower() in ("true", "1", "yes")
+
 DEFAULT_EXAMPLE_EXTENSION = "py"
 DOC_PATH = "doc/source"
 GALLERY_EXAMPLES_PATH = "examples/gallery_examples"
@@ -175,6 +180,8 @@ exclude_patterns = [
 sphinx_gallery_conf = {
     # convert rst to md for ipynb
     "pypandoc": True,
+    # whether the example code is executed while building the gallery
+    "plot_gallery": BUILD_EXAMPLES,
     # path to your examples scripts
     "examples_dirs": ["../../examples/"],
     # path where to save gallery generated examples
@@ -196,6 +203,12 @@ sphinx_gallery_conf = {
     "show_signature": False,
     "ignore_pattern": r"examples_globals.py",
 }
+
+if not BUILD_EXAMPLES:
+    logger.info(
+        "Gallery examples are not executed. "
+        "Set PYSHERLOCK_BUILD_EXAMPLES=true to run them (requires a Sherlock installation)."
+    )
 
 # make rst_epilog a variable, so you can add other epilog parts to it
 rst_epilog = ""
