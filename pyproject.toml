@@ -48,6 +48,7 @@ doc = [
     "matplotlib==3.11.1",
     "numpydoc==1.10.0",
     "pandas==3.0.5",
+    "pypandoc-binary==1.17",
     "Sphinx>=9.1",
     "sphinxemoji==0.3.2",
     "sphinx-autodoc-typehints==3.13.5",

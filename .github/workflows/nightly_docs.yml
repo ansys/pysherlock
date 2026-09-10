@@ -1,0 +1,59 @@
+name: Nightly documentation
+
+# The gallery examples require a live Sherlock installation and take more than
+# 20 minutes to run. They are executed once a day instead of on every pull
+# request, which keeps the single self-hosted runner available for the tests.
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  MAIN_PYTHON_VERSION: '3.14'
+  DOCUMENTATION_CNAME: 'sherlock.docs.pyansys.com'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  docs:
+    name: Documentation with examples
+    runs-on: [ self-hosted, pysherlock ]
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    env:
+      PYSHERLOCK_BUILD_EXAMPLES: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Enable Windows long paths
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+            -Name "LongPathsEnabled" -Value 1 -PropertyType DWord -Force
+          Write-Host "Windows Long Paths enabled (a runner service restart may be required once)."
+      - name: Run documentation building action
+        uses: ansys/actions/doc-build@21c78f8b27683ae8c93557345392abe39ab21d2f # v11.0.4
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  upload_dev_docs:
+    name: Upload dev documentation
+    needs: [ docs ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Required to push documentation to gh-pages branch
+    steps:
+      - name: Deploy the latest documentation
+        uses: ansys/actions/doc-deploy-dev@21c78f8b27683ae8c93557345392abe39ab21d2f # v11.0.4
+        with:
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}

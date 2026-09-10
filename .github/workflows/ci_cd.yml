@@ -2,6 +2,15 @@ name: GitHub CI
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      full-docs:
+        description: "Build the documentation with executed gallery examples (uses the self-hosted runner)"
+        type: boolean
+        default: false
+      full-tests:
+        description: "Run the tests against every supported Python version"
+        type: boolean
+        default: false
   push:
     tags:
       - "*"
@@ -22,6 +31,39 @@ concurrency:
 permissions: {}
 
 jobs:
+  config:
+    name: Compute CI configuration
+    runs-on: ubuntu-latest
+    outputs:
+      full-docs: ${{ steps.eval.outputs.full-docs }}
+      python-versions: ${{ steps.eval.outputs.python-versions }}
+    steps:
+      - name: Evaluate the workload to run on the self-hosted runner
+        id: eval
+        shell: bash
+        env:
+          IS_TAG: ${{ startsWith(github.ref, 'refs/tags/') }}
+          FULL_DOCS_REQUESTED: ${{ inputs.full-docs }}
+          FULL_TESTS_REQUESTED: ${{ inputs.full-tests }}
+          IS_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
+        run: |
+          # Executed examples are only required for the documentation that gets
+          # published on a release. Everything else builds the gallery pages
+          # without running the examples, which frees the self-hosted runner.
+          if [[ "${IS_TAG}" == "true" || "${FULL_DOCS_REQUESTED}" == "true" ]]; then
+            echo "full-docs=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "full-docs=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+          # The self-hosted runner is unique, so matrix entries are serialized.
+          # Pull requests only test the main Python version unless asked otherwise.
+          if [[ "${IS_PULL_REQUEST}" == "true" && "${FULL_TESTS_REQUESTED}" != "true" ]]; then
+            echo "python-versions=[\"${MAIN_PYTHON_VERSION}\"]" >> "${GITHUB_OUTPUT}"
+          else
+            echo 'python-versions=["3.12", "3.13", "3.14"]' >> "${GITHUB_OUTPUT}"
+          fi
+
   style:
     name: Code style
     runs-on: ubuntu-latest
@@ -69,11 +111,12 @@ jobs:
 
   tests:
     name: Tests and coverage
-    needs: [ smoke-tests ]
+    needs: [ smoke-tests, config ]
     runs-on: [ self-hosted, pysherlock ]
+    timeout-minutes: 90
     strategy:
       matrix:
-        python-version: [ '3.12', '3.13', '3.14' ]
+        python-version: ${{ fromJSON(needs.config.outputs.python-versions) }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -120,12 +163,32 @@ jobs:
 
   docs:
     name: Documentation
-    needs: [ docs-style ]
-    runs-on: [ self-hosted, pysherlock ]
+    needs: [ docs-style, config ]
+    # Only builds that execute the gallery examples need Sherlock, and therefore
+    # the self-hosted runner. Every other build runs on a GitHub-hosted runner.
+    runs-on: ${{ needs.config.outputs.full-docs == 'true' && fromJSON('[ "self-hosted", "pysherlock" ]') || 'windows-latest' }}
+    timeout-minutes: 90
+    env:
+      PYSHERLOCK_BUILD_EXAMPLES: ${{ needs.config.outputs.full-docs }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Ensure that a release builds the examples
+        # The documentation published for a release must contain the output of
+        # the examples. This guard makes a misconfiguration fail the release
+        # instead of silently publishing a documentation without results.
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          if [[ "${PYSHERLOCK_BUILD_EXAMPLES}" != "true" ]]; then
+            echo "::error::Releasing requires the gallery examples to be executed, but PYSHERLOCK_BUILD_EXAMPLES is '${PYSHERLOCK_BUILD_EXAMPLES}'."
+            exit 1
+          fi
+          if [[ "${RUNNER_ENVIRONMENT}" != "self-hosted" ]]; then
+            echo "::error::Executing the gallery examples requires the self-hosted runner where Sherlock is installed."
+            exit 1
+          fi
       - name: Enable Windows long paths
         if: runner.os == 'Windows'
         shell: powershell
