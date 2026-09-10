@@ -1534,10 +1534,10 @@ def helper_test_update_pcb_modeling_props(analysis: Analysis):
         layered = AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered
         uniform = AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform
         uniform_elements = (
-            AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Uniform_ELEMENTS
+            AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.UniformElements
         )
         layered_elements = (
-            AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.Layered_ELEMENTS
+            AnalysisService.UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.LayeredElements
         )
         solid_shell = AnalysisService.ElementOrder.SolidShell
 
