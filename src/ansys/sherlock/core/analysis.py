@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -23,6 +23,7 @@
 # SOFTWARE.
 
 """Module containing all analysis capabilities."""
+
 from typing import Optional
 
 from ansys.api.sherlock.v0 import (
