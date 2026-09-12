@@ -1,0 +1,10 @@
+.. vale off
+
+update\_ict\_fixtures
+=====================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_ict_fixtures
+
+.. vale on

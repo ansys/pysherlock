@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.GetICTFixturesPropertiesRequest
+======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: GetICTFixturesPropertiesRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      GetICTFixturesPropertiesRequest.construct
+      
+      
+      GetICTFixturesPropertiesRequest.copy
+      
+      
+      GetICTFixturesPropertiesRequest.dict
+      
+      
+      GetICTFixturesPropertiesRequest.from_orm
+      
+      
+      GetICTFixturesPropertiesRequest.json
+      
+      
+      GetICTFixturesPropertiesRequest.model_construct
+      
+      
+      GetICTFixturesPropertiesRequest.model_copy
+      
+      
+      GetICTFixturesPropertiesRequest.model_dump
+      
+      
+      GetICTFixturesPropertiesRequest.model_dump_json
+      
+      
+      GetICTFixturesPropertiesRequest.model_json_schema
+      
+      
+      GetICTFixturesPropertiesRequest.model_parametrized_name
+      
+      
+      GetICTFixturesPropertiesRequest.model_post_init
+      
+      
+      GetICTFixturesPropertiesRequest.model_rebuild
+      
+      
+      GetICTFixturesPropertiesRequest.model_validate
+      
+      
+      GetICTFixturesPropertiesRequest.model_validate_json
+      
+      
+      GetICTFixturesPropertiesRequest.model_validate_strings
+      
+      
+      GetICTFixturesPropertiesRequest.optional_str_validation
+      
+      
+      GetICTFixturesPropertiesRequest.parse_file
+      
+      
+      GetICTFixturesPropertiesRequest.parse_obj
+      
+      
+      GetICTFixturesPropertiesRequest.parse_raw
+      
+      
+      GetICTFixturesPropertiesRequest.schema
+      
+      
+      GetICTFixturesPropertiesRequest.schema_json
+      
+      
+      GetICTFixturesPropertiesRequest.str_validation
+      
+      
+      GetICTFixturesPropertiesRequest.update_forward_refs
+      
+      
+      GetICTFixturesPropertiesRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      GetICTFixturesPropertiesRequest.model_computed_fields
+      
+      
+      GetICTFixturesPropertiesRequest.model_config
+      
+      
+      GetICTFixturesPropertiesRequest.model_extra
+      
+      
+      GetICTFixturesPropertiesRequest.model_fields
+      
+      
+      GetICTFixturesPropertiesRequest.model_fields_set
+      
+      
+      GetICTFixturesPropertiesRequest.project
+      
+      
+      GetICTFixturesPropertiesRequest.cca_name
+      
+      
+      GetICTFixturesPropertiesRequest.ict_fixtures_ids
+      
+   
+   
+
+.. vale on

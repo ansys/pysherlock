@@ -1,0 +1,10 @@
+.. vale off
+
+list\_life\_cycle\_events
+=========================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.list_life_cycle_events
+
+.. vale on

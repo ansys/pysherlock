@@ -1,0 +1,10 @@
+.. vale off
+
+length
+======
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: SlotShape.length
+
+.. vale on

@@ -1,0 +1,6 @@
+add\_thermal\_profiles
+======================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.add_thermal_profiles

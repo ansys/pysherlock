@@ -1,0 +1,6 @@
+width
+=====
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageBounds.width

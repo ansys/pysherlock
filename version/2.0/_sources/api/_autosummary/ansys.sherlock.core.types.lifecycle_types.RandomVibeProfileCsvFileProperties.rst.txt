@@ -1,0 +1,149 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.RandomVibeProfileCsvFileProperties
+=============================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: RandomVibeProfileCsvFileProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      RandomVibeProfileCsvFileProperties.construct
+      
+      
+      RandomVibeProfileCsvFileProperties.copy
+      
+      
+      RandomVibeProfileCsvFileProperties.dict
+      
+      
+      RandomVibeProfileCsvFileProperties.from_orm
+      
+      
+      RandomVibeProfileCsvFileProperties.json
+      
+      
+      RandomVibeProfileCsvFileProperties.model_construct
+      
+      
+      RandomVibeProfileCsvFileProperties.model_copy
+      
+      
+      RandomVibeProfileCsvFileProperties.model_dump
+      
+      
+      RandomVibeProfileCsvFileProperties.model_dump_json
+      
+      
+      RandomVibeProfileCsvFileProperties.model_json_schema
+      
+      
+      RandomVibeProfileCsvFileProperties.model_parametrized_name
+      
+      
+      RandomVibeProfileCsvFileProperties.model_post_init
+      
+      
+      RandomVibeProfileCsvFileProperties.model_rebuild
+      
+      
+      RandomVibeProfileCsvFileProperties.model_validate
+      
+      
+      RandomVibeProfileCsvFileProperties.model_validate_json
+      
+      
+      RandomVibeProfileCsvFileProperties.model_validate_strings
+      
+      
+      RandomVibeProfileCsvFileProperties.non_negative_int_validation
+      
+      
+      RandomVibeProfileCsvFileProperties.optional_str_validation
+      
+      
+      RandomVibeProfileCsvFileProperties.parse_file
+      
+      
+      RandomVibeProfileCsvFileProperties.parse_obj
+      
+      
+      RandomVibeProfileCsvFileProperties.parse_raw
+      
+      
+      RandomVibeProfileCsvFileProperties.schema
+      
+      
+      RandomVibeProfileCsvFileProperties.schema_json
+      
+      
+      RandomVibeProfileCsvFileProperties.str_validation
+      
+      
+      RandomVibeProfileCsvFileProperties.update_forward_refs
+      
+      
+      RandomVibeProfileCsvFileProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      RandomVibeProfileCsvFileProperties.model_computed_fields
+      
+      
+      RandomVibeProfileCsvFileProperties.model_config
+      
+      
+      RandomVibeProfileCsvFileProperties.model_extra
+      
+      
+      RandomVibeProfileCsvFileProperties.model_fields
+      
+      
+      RandomVibeProfileCsvFileProperties.model_fields_set
+      
+      
+      RandomVibeProfileCsvFileProperties.profile_name
+      
+      
+      RandomVibeProfileCsvFileProperties.header_row_count
+      
+      
+      RandomVibeProfileCsvFileProperties.column_delimiter
+      
+      
+      RandomVibeProfileCsvFileProperties.numeric_format
+      
+      
+      RandomVibeProfileCsvFileProperties.frequency_column
+      
+      
+      RandomVibeProfileCsvFileProperties.frequency_units
+      
+      
+      RandomVibeProfileCsvFileProperties.amplitude_column
+      
+      
+      RandomVibeProfileCsvFileProperties.amplitude_units
+      
+   
+   
+
+.. vale on

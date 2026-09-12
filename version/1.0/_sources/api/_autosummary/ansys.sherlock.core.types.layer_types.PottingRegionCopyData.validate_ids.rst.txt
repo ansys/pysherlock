@@ -1,0 +1,10 @@
+.. vale off
+
+validate\_ids
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: PottingRegionCopyData.validate_ids
+
+.. vale on

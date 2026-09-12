@@ -1,0 +1,10 @@
+.. vale off
+
+lead\_max\_edge\_length
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateLeadModelingPropsAnalysis.lead_max_edge_length
+
+.. vale on

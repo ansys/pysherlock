@@ -1,0 +1,10 @@
+.. vale off
+
+list\_units
+===========
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.list_units
+
+.. vale on

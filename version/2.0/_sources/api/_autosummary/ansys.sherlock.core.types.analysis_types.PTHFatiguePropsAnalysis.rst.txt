@@ -1,0 +1,146 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.PTHFatiguePropsAnalysis
+=================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: PTHFatiguePropsAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PTHFatiguePropsAnalysis.construct
+      
+      
+      PTHFatiguePropsAnalysis.copy
+      
+      
+      PTHFatiguePropsAnalysis.dict
+      
+      
+      PTHFatiguePropsAnalysis.from_orm
+      
+      
+      PTHFatiguePropsAnalysis.json
+      
+      
+      PTHFatiguePropsAnalysis.model_construct
+      
+      
+      PTHFatiguePropsAnalysis.model_copy
+      
+      
+      PTHFatiguePropsAnalysis.model_dump
+      
+      
+      PTHFatiguePropsAnalysis.model_dump_json
+      
+      
+      PTHFatiguePropsAnalysis.model_json_schema
+      
+      
+      PTHFatiguePropsAnalysis.model_parametrized_name
+      
+      
+      PTHFatiguePropsAnalysis.model_post_init
+      
+      
+      PTHFatiguePropsAnalysis.model_rebuild
+      
+      
+      PTHFatiguePropsAnalysis.model_validate
+      
+      
+      PTHFatiguePropsAnalysis.model_validate_json
+      
+      
+      PTHFatiguePropsAnalysis.model_validate_strings
+      
+      
+      PTHFatiguePropsAnalysis.parse_file
+      
+      
+      PTHFatiguePropsAnalysis.parse_obj
+      
+      
+      PTHFatiguePropsAnalysis.parse_raw
+      
+      
+      PTHFatiguePropsAnalysis.schema
+      
+      
+      PTHFatiguePropsAnalysis.schema_json
+      
+      
+      PTHFatiguePropsAnalysis.str_validation
+      
+      
+      PTHFatiguePropsAnalysis.update_forward_refs
+      
+      
+      PTHFatiguePropsAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PTHFatiguePropsAnalysis.model_computed_fields
+      
+      
+      PTHFatiguePropsAnalysis.model_config
+      
+      
+      PTHFatiguePropsAnalysis.model_extra
+      
+      
+      PTHFatiguePropsAnalysis.model_fields
+      
+      
+      PTHFatiguePropsAnalysis.model_fields_set
+      
+      
+      PTHFatiguePropsAnalysis.cca_name
+      
+      
+      PTHFatiguePropsAnalysis.qualification
+      
+      
+      PTHFatiguePropsAnalysis.pth_quality_factor
+      
+      
+      PTHFatiguePropsAnalysis.pth_wall_thickness
+      
+      
+      PTHFatiguePropsAnalysis.pth_wall_thickness_units
+      
+      
+      PTHFatiguePropsAnalysis.min_hole_size
+      
+      
+      PTHFatiguePropsAnalysis.min_hole_size_units
+      
+      
+      PTHFatiguePropsAnalysis.max_hole_size
+      
+      
+      PTHFatiguePropsAnalysis.max_hole_size_units
+      
+   
+   
+
+.. vale on

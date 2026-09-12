@@ -1,0 +1,37 @@
+﻿ansys.sherlock.core.model.Model
+===============================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. autoclass:: Model
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Model.createExportTraceCopperLayerParams
+      
+      
+      Model.exportTraceModel
+      
+      
+      Model.export_aedb
+      
+      
+      Model.export_trace_reinforcement_model
+      
+      
+      Model.generate_trace_model
+      
+   
+   
+
+   
+   
+   

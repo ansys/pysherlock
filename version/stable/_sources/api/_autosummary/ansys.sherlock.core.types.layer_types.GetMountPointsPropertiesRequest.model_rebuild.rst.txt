@@ -1,0 +1,10 @@
+.. vale off
+
+model\_rebuild
+==============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: GetMountPointsPropertiesRequest.model_rebuild
+
+.. vale on

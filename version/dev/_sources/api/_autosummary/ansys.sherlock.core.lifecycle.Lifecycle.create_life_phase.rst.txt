@@ -1,0 +1,10 @@
+.. vale off
+
+create\_life\_phase
+===================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.create_life_phase
+
+.. vale on

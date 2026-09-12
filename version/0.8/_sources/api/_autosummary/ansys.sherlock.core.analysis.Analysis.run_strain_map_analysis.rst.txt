@@ -1,0 +1,10 @@
+.. vale off
+
+run\_strain\_map\_analysis
+==========================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.run_strain_map_analysis
+
+.. vale on

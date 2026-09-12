@@ -1,0 +1,10 @@
+.. vale off
+
+export\_parts\_list
+===================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.export_parts_list
+
+.. vale on

@@ -1,0 +1,6 @@
+get\_harmonic\_vibe\_input\_fields
+==================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.get_harmonic_vibe_input_fields

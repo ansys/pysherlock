@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_file
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: GerberOutlineFile.parse_file
+
+.. vale on

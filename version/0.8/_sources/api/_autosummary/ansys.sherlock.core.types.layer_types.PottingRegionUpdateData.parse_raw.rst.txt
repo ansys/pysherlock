@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_raw
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: PottingRegionUpdateData.parse_raw
+
+.. vale on

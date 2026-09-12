@@ -1,0 +1,10 @@
+.. vale off
+
+schema
+======
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: SaveRandomVibeProfileRequest.schema
+
+.. vale on

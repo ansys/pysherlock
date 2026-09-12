@@ -1,0 +1,10 @@
+.. vale off
+
+amplitude\_column
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: RandomVibeProfileCsvFileProperties.amplitude_column
+
+.. vale on

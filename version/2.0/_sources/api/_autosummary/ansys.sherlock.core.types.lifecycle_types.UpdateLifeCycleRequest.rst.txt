@@ -1,0 +1,143 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.UpdateLifeCycleRequest
+=================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: UpdateLifeCycleRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateLifeCycleRequest.construct
+      
+      
+      UpdateLifeCycleRequest.copy
+      
+      
+      UpdateLifeCycleRequest.dict
+      
+      
+      UpdateLifeCycleRequest.from_orm
+      
+      
+      UpdateLifeCycleRequest.json
+      
+      
+      UpdateLifeCycleRequest.model_construct
+      
+      
+      UpdateLifeCycleRequest.model_copy
+      
+      
+      UpdateLifeCycleRequest.model_dump
+      
+      
+      UpdateLifeCycleRequest.model_dump_json
+      
+      
+      UpdateLifeCycleRequest.model_json_schema
+      
+      
+      UpdateLifeCycleRequest.model_parametrized_name
+      
+      
+      UpdateLifeCycleRequest.model_post_init
+      
+      
+      UpdateLifeCycleRequest.model_rebuild
+      
+      
+      UpdateLifeCycleRequest.model_validate
+      
+      
+      UpdateLifeCycleRequest.model_validate_json
+      
+      
+      UpdateLifeCycleRequest.model_validate_strings
+      
+      
+      UpdateLifeCycleRequest.parse_file
+      
+      
+      UpdateLifeCycleRequest.parse_obj
+      
+      
+      UpdateLifeCycleRequest.parse_raw
+      
+      
+      UpdateLifeCycleRequest.schema
+      
+      
+      UpdateLifeCycleRequest.schema_json
+      
+      
+      UpdateLifeCycleRequest.str_validation
+      
+      
+      UpdateLifeCycleRequest.update_forward_refs
+      
+      
+      UpdateLifeCycleRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateLifeCycleRequest.model_computed_fields
+      
+      
+      UpdateLifeCycleRequest.model_config
+      
+      
+      UpdateLifeCycleRequest.model_extra
+      
+      
+      UpdateLifeCycleRequest.model_fields
+      
+      
+      UpdateLifeCycleRequest.model_fields_set
+      
+      
+      UpdateLifeCycleRequest.project
+      
+      
+      UpdateLifeCycleRequest.new_name
+      
+      
+      UpdateLifeCycleRequest.new_description
+      
+      
+      UpdateLifeCycleRequest.new_reliability_metric
+      
+      
+      UpdateLifeCycleRequest.new_reliability_metric_units
+      
+      
+      UpdateLifeCycleRequest.new_service_life
+      
+      
+      UpdateLifeCycleRequest.new_service_life_units
+      
+      
+      UpdateLifeCycleRequest.result_archive_file_name
+      
+   
+   
+
+.. vale on

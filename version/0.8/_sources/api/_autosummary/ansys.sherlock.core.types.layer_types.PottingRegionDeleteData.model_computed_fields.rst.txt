@@ -1,0 +1,10 @@
+.. vale off
+
+model\_computed\_fields
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegionDeleteData.model_computed_fields
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_elem\_order
+====================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdatePottingRegionsPropsAnalysis.potting_elem_order
+
+.. vale on

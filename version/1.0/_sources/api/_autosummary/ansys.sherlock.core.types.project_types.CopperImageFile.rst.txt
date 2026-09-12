@@ -1,0 +1,122 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.CopperImageFile
+========================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: CopperImageFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      CopperImageFile.construct
+      
+      
+      CopperImageFile.copy
+      
+      
+      CopperImageFile.dict
+      
+      
+      CopperImageFile.from_orm
+      
+      
+      CopperImageFile.json
+      
+      
+      CopperImageFile.model_construct
+      
+      
+      CopperImageFile.model_copy
+      
+      
+      CopperImageFile.model_dump
+      
+      
+      CopperImageFile.model_dump_json
+      
+      
+      CopperImageFile.model_json_schema
+      
+      
+      CopperImageFile.model_parametrized_name
+      
+      
+      CopperImageFile.model_post_init
+      
+      
+      CopperImageFile.model_rebuild
+      
+      
+      CopperImageFile.model_validate
+      
+      
+      CopperImageFile.model_validate_json
+      
+      
+      CopperImageFile.model_validate_strings
+      
+      
+      CopperImageFile.parse_file
+      
+      
+      CopperImageFile.parse_obj
+      
+      
+      CopperImageFile.parse_raw
+      
+      
+      CopperImageFile.schema
+      
+      
+      CopperImageFile.schema_json
+      
+      
+      CopperImageFile.update_forward_refs
+      
+      
+      CopperImageFile.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CopperImageFile.model_computed_fields
+      
+      
+      CopperImageFile.model_config
+      
+      
+      CopperImageFile.model_extra
+      
+      
+      CopperImageFile.model_fields
+      
+      
+      CopperImageFile.model_fields_set
+      
+      
+      CopperImageFile.image_type
+      
+      
+      CopperImageFile.image_color
+      
+   
+   
+
+.. vale on

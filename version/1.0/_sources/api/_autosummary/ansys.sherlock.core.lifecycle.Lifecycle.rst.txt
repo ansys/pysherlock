@@ -1,0 +1,95 @@
+﻿.. vale off
+
+ansys.sherlock.core.lifecycle.Lifecycle
+=======================================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. autoclass:: Lifecycle
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Lifecycle.add_harmonic_event
+      
+      
+      Lifecycle.add_harmonic_vibe_profiles
+      
+      
+      Lifecycle.add_random_vibe_event
+      
+      
+      Lifecycle.add_random_vibe_profiles
+      
+      
+      Lifecycle.add_shock_event
+      
+      
+      Lifecycle.add_shock_profiles
+      
+      
+      Lifecycle.add_thermal_event
+      
+      
+      Lifecycle.add_thermal_profiles
+      
+      
+      Lifecycle.create_life_phase
+      
+      
+      Lifecycle.delete_event
+      
+      
+      Lifecycle.delete_phase
+      
+      
+      Lifecycle.import_thermal_signal
+      
+      
+      Lifecycle.load_harmonic_profile
+      
+      
+      Lifecycle.load_random_vibe_profile
+      
+      
+      Lifecycle.load_shock_profile_dataset
+      
+      
+      Lifecycle.load_shock_profile_pulses
+      
+      
+      Lifecycle.load_thermal_profile
+      
+      
+      Lifecycle.save_harmonic_profile
+      
+      
+      Lifecycle.save_random_vibe_profile
+      
+      
+      Lifecycle.save_shock_pulse_profile
+      
+      
+      Lifecycle.save_thermal_profile
+      
+      
+      Lifecycle.update_life_cycle
+      
+      
+      Lifecycle.update_life_phase
+      
+   
+   
+
+   
+   
+   
+
+.. vale on

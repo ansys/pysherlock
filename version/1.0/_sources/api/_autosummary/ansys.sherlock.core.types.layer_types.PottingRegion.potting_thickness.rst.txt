@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_thickness
+==================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegion.potting_thickness
+
+.. vale on

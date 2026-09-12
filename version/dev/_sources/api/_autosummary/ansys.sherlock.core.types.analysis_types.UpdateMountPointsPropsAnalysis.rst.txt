@@ -1,0 +1,134 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateMountPointsPropsAnalysis
+========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateMountPointsPropsAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateMountPointsPropsAnalysis.construct
+      
+      
+      UpdateMountPointsPropsAnalysis.copy
+      
+      
+      UpdateMountPointsPropsAnalysis.dict
+      
+      
+      UpdateMountPointsPropsAnalysis.from_orm
+      
+      
+      UpdateMountPointsPropsAnalysis.json
+      
+      
+      UpdateMountPointsPropsAnalysis.model_construct
+      
+      
+      UpdateMountPointsPropsAnalysis.model_copy
+      
+      
+      UpdateMountPointsPropsAnalysis.model_dump
+      
+      
+      UpdateMountPointsPropsAnalysis.model_dump_json
+      
+      
+      UpdateMountPointsPropsAnalysis.model_json_schema
+      
+      
+      UpdateMountPointsPropsAnalysis.model_parametrized_name
+      
+      
+      UpdateMountPointsPropsAnalysis.model_post_init
+      
+      
+      UpdateMountPointsPropsAnalysis.model_rebuild
+      
+      
+      UpdateMountPointsPropsAnalysis.model_validate
+      
+      
+      UpdateMountPointsPropsAnalysis.model_validate_json
+      
+      
+      UpdateMountPointsPropsAnalysis.model_validate_strings
+      
+      
+      UpdateMountPointsPropsAnalysis.parse_file
+      
+      
+      UpdateMountPointsPropsAnalysis.parse_obj
+      
+      
+      UpdateMountPointsPropsAnalysis.parse_raw
+      
+      
+      UpdateMountPointsPropsAnalysis.schema
+      
+      
+      UpdateMountPointsPropsAnalysis.schema_json
+      
+      
+      UpdateMountPointsPropsAnalysis.update_forward_refs
+      
+      
+      UpdateMountPointsPropsAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateMountPointsPropsAnalysis.model_computed_fields
+      
+      
+      UpdateMountPointsPropsAnalysis.model_config
+      
+      
+      UpdateMountPointsPropsAnalysis.model_extra
+      
+      
+      UpdateMountPointsPropsAnalysis.model_fields
+      
+      
+      UpdateMountPointsPropsAnalysis.model_fields_set
+      
+      
+      UpdateMountPointsPropsAnalysis.analysis_type
+      
+      
+      UpdateMountPointsPropsAnalysis.mount_points_element_order
+      
+      
+      UpdateMountPointsPropsAnalysis.mount_points_max_edge_length
+      
+      
+      UpdateMountPointsPropsAnalysis.mount_points_max_edge_length_units
+      
+      
+      UpdateMountPointsPropsAnalysis.mount_points_max_vertical
+      
+      
+      UpdateMountPointsPropsAnalysis.mount_points_max_vertical_units
+      
+   
+   
+
+.. vale on

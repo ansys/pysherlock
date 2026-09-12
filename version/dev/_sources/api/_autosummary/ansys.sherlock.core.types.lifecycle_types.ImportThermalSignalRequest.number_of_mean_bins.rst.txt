@@ -1,0 +1,10 @@
+.. vale off
+
+number\_of\_mean\_bins
+======================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.number_of_mean_bins
+
+.. vale on

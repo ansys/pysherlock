@@ -1,0 +1,10 @@
+.. vale off
+
+temperature\_offset\_units
+==========================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: IcepakFile.temperature_offset_units
+
+.. vale on

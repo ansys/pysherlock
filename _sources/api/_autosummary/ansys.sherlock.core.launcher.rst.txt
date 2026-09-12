@@ -1,0 +1,30 @@
+﻿ansys.sherlock.core.launcher
+============================
+
+.. automodule:: ansys.sherlock.core.launcher
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      connect_grpc_channel
+      launch_sherlock
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

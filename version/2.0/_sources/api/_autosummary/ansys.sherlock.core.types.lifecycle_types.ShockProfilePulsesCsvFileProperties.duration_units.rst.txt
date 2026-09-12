@@ -1,0 +1,10 @@
+.. vale off
+
+duration\_units
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ShockProfilePulsesCsvFileProperties.duration_units
+
+.. vale on

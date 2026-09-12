@@ -1,0 +1,10 @@
+.. vale off
+
+analysis\_type
+==============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateLeadModelingPropsAnalysis.analysis_type
+
+.. vale on

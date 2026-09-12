@@ -1,0 +1,10 @@
+.. vale off
+
+import\_copper\_files
+=====================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.import_copper_files
+
+.. vale on

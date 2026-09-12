@@ -1,0 +1,40 @@
+﻿ansys.sherlock.core.types.project\_types.ImageBounds
+====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: ImageBounds
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ImageBounds.image_x
+      
+      
+      ImageBounds.image_y
+      
+      
+      ImageBounds.height
+      
+      
+      ImageBounds.width
+      
+   
+   

@@ -1,0 +1,10 @@
+.. vale off
+
+delete\_event
+=============
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.delete_event
+
+.. vale on
