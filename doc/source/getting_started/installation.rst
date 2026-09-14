@@ -4,6 +4,11 @@
 Install packages
 ================
 
+The below instructions are for Sherlock and PySherlock only. If you have other PyAnsys products, please see the
+`Ansys Metapackage <https://docs.pyansys.com/version/dev/getting-started/install.html>`_ which packages all the PyAnsys products into 1 python package including PySherlock.
+
+If you only care about the PySherlock package continue to the instructions below.
+
 The ``ansys-sherlock-core`` package supports Python 3.12 through Python 3.14 on Windows and Linux.
 
 To use PySherlock, you must download and install both the ``ansys-api-sherlock``
