@@ -9,8 +9,8 @@ To launch Sherlock, use the
 method. This method automatically searches for the latest version of Sherlock installed locally if
 the version isn't specified in the parameters. It then launches the Sherlock gRPC server on
 the port specified. If a port is not specified, port ``9090`` is used. The user should check if the 
-default port number or the parameterized port number is not in use before creating a sherlock gRPC 
-connection.
+Before creating the connection, ``launch_and_connect`` checks that the requested port is available and
+raises ``SherlockCannotUsePortError`` if it is already in use.
 
 This method also launches a Sherlock client connected to the same port and
 returns a ``sherlock`` gRPC connection object that can be used to invoke the APIs from their
