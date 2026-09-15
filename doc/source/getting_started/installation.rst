@@ -4,8 +4,7 @@
 Install packages
 ================
 
-The below instructions are for Sherlock and PySherlock only. If you have other PyAnsys products, please see the
-`Ansys Metapackage <https://docs.pyansys.com/version/dev/getting-started/install.html>`_ which packages all the PyAnsys products into one Python package including PySherlock.
+The below instructions are for Sherlock and PySherlock only. If you have other PyAnsys products, please see the `Ansys Metapackage <https://docs.pyansys.com/version/dev/getting-started/install.html>`_ which packages all the PyAnsys products into one Python package including PySherlock.
 
 If you want to install the PySherlock package without the other PyAnsys packages continue to the instructions below.
 
