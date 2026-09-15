@@ -322,6 +322,108 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(261)
+    def import_ipc2581_archive_single_project_mode(
+        self,
+        archive_file: str,
+        include_other_layers: bool,
+        guess_part_properties: bool,
+        project: Optional[str] = None,
+        cca_name: Optional[str] = None,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+        project_dir: Optional[str] = None,
+        overwrite: bool = False,
+    ) -> int:
+        """Import an IPC-2581 archive file when Sherlock is in single project mode.
+
+        Available Since: 2026R1
+
+        Parameters
+        ----------
+        archive_file: str
+            Full path to the IPC-2581 archive file.
+        include_other_layers: bool
+            Whether to include other layers.
+        guess_part_properties: bool
+            Whether to guess part properties
+        project: str, optional
+            Name of the Sherlock project. The default is ``None``, in which case
+            the name of the IPC-2581 archive file is used for the project name.
+        cca_name: str, optional
+            Name of the CCA. The default is ``None``, in which case the name of
+            the IPC-2581 archive file is used for the CCA name.
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
+        project_dir: str, optional
+            Location where the Sherlock project will be created. The default is ``None``.
+        overwrite: bool, optional
+            Whether to overwrite the project if a project with the same name already
+            exists. The default is ``False``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip", True, True,
+                                project="Tutorial",
+                                cca_name="Card",
+                                polyline_simplification=True,
+                                polyline_tolerance=0.1,
+                                polyline_tolerance_units="mm",
+                                project_dir="C:/Projects",
+                                overwrite=True)
+        """
+        try:
+            if archive_file == "":
+                raise SherlockImportIpc2581Error(message="Archive file path is required.")
+        except SherlockImportIpc2581Error as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        if project is None:
+            project = os.path.splitext(os.path.basename(archive_file))[0]
+        if cca_name is None:
+            cca_name = os.path.splitext(os.path.basename(archive_file))[0]
+
+        request = SherlockProjectService_pb2.ImportIPC2581SingleProjectRequest(
+            archiveFile=archive_file,
+            includeOtherLayers=include_other_layers,
+            guessPartProperties=guess_part_properties,
+            project=project,
+            ccaName=cca_name,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
+            projectDir=project_dir if project_dir is not None else "",
+            overwrite=overwrite,
+        )
+
+        response = self.stub.importIPC2581ArchiveSingleProjectMode(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockImportIpc2581Error(response.message)
+
+            LOG.info(response.message)
+            return response.value
+        except Exception as e:
+            LOG.error(str(e))
+            raise e
+
     @require_version()
     def generate_project_report(
         self, project: str, author: str, company: str, report_file: str

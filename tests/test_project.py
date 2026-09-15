@@ -92,6 +92,7 @@ def test_all():
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
     helper_test_import_ipc2581_archive(project)
+    helper_test_import_ipc2581_archive_single_project_mode(project)
     helper_test_import_project_zip_archive(project)
     helper_test_import_project_zip_archive_single_mode(project)
     helper_test_generate_project_report(project)
@@ -158,6 +159,24 @@ def helper_test_import_ipc2581_archive(project: Project):
     if project._is_connection_up():
         try:
             project.import_ipc2581_archive("Missing Archive File.zip", True, True)
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockImportIpc2581Error
+
+
+def helper_test_import_ipc2581_archive_single_project_mode(project: Project):
+    """Test import_ipc2581_archive_single_project_mode API"""
+    try:
+        project.import_ipc2581_archive_single_project_mode("", True, True)
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockImportIpc2581Error as e:
+        assert str(e) == "Import IPC2581 error: Archive file path is required."
+
+    if project._is_connection_up():
+        try:
+            project.import_ipc2581_archive_single_project_mode(
+                "Missing Archive File.zip", True, True
+            )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportIpc2581Error
