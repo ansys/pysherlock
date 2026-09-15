@@ -239,18 +239,16 @@ def launch_and_connect(
         uds_dir=uds_dir,
         uds_id=uds_id,
     )
-    try:
-        sherlock = connect(
-            port=port,
-            timeout=timeout,
-            transport_mode=transport_mode,
-            uds_dir=uds_dir,
-            uds_id=uds_id,
-        )
-        return sherlock, ansys_install_path
-    except Exception as e:
-        LOG.error(f"Error connecting to Sherlock after launch: {e}")
-        raise RuntimeError(f"Error connecting to Sherlock after launch: {e}")
+
+    sherlock = connect(
+        port=port,
+        timeout=timeout,
+        transport_mode=transport_mode,
+        uds_dir=uds_dir,
+        uds_id=uds_id,
+    )
+    return sherlock, ansys_install_path
+
 
 
 def connect(
