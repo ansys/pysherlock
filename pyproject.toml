@@ -51,7 +51,7 @@ doc = [
     "pypandoc-binary==1.17",
     "Sphinx>=9.1",
     "sphinxemoji==0.3.2",
-    "sphinx-autodoc-typehints==3.13.5",
+    "sphinx-autodoc-typehints==3.13.6",
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.7.0",
     "sphinx-gallery==0.21.0",
