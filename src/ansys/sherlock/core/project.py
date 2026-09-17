@@ -322,7 +322,7 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
-    @require_version(261)
+    @require_version(271)
     def import_ipc2581_archive_single_project_mode(
         self,
         archive_file: str,
@@ -330,10 +330,10 @@ class Project(GrpcStub):
         guess_part_properties: bool,
         project: str,
         cca_name: str,
+        project_dir: str,
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
-        project_dir: Optional[str] = None,
         overwrite: bool = False,
     ) -> int:
         """Import an IPC-2581 archive file when Sherlock is in single project mode.
@@ -352,14 +352,14 @@ class Project(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the CCA.
+        project_dir: str
+            Location where the Sherlock project will be created.
         polyline_simplification: bool, optional
             Whether to enable polyline simplification
         polyline_tolerance: float, optional
             Polyline simplification tolerance
         polyline_tolerance_units: str, optional
             Polyline simplification tolerance units
-        project_dir: str, optional
-            Location where the Sherlock project will be created. The default is ``None``.
         overwrite: bool, optional
             Whether to overwrite the project if a project with the same name already
             exists. The default is ``False``.
@@ -376,10 +376,10 @@ class Project(GrpcStub):
         >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip", True, True,
                                 "Tutorial",
                                 "Card",
+                                "C:/Projects",
                                 polyline_simplification=True,
                                 polyline_tolerance=0.1,
                                 polyline_tolerance_units="mm",
-                                project_dir="C:/Projects",
                                 overwrite=True)
         """
         if not self._is_connection_up():
@@ -394,7 +394,7 @@ class Project(GrpcStub):
             polylineSimplification=polyline_simplification,
             polylineTolerance=polyline_tolerance,
             polylineToleranceUnits=polyline_tolerance_units,
-            projectDir=project_dir if project_dir is not None else "",
+            projectDir=project_dir,
             overwrite=overwrite,
         )
 
