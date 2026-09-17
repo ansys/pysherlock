@@ -338,7 +338,7 @@ class Project(GrpcStub):
     ) -> int:
         """Import an IPC-2581 archive file when Sherlock is in single project mode.
 
-        Available Since: 2026R1
+        Available Since: 2027R1
 
         Parameters
         ----------
