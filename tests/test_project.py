@@ -25,6 +25,7 @@
 import os
 import time
 import uuid
+from unittest.mock import MagicMock, patch
 
 from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 import grpc
@@ -47,6 +48,7 @@ from ansys.sherlock.core.errors import (
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdateThermalMapsError,
 )
 from ansys.sherlock.core.project import Project
@@ -166,6 +168,27 @@ def helper_test_import_ipc2581_archive(project: Project):
 
 def helper_test_import_ipc2581_archive_single_project_mode(project: Project):
     """Test import_ipc2581_archive_single_project_mode API"""
+    with patch.object(project, "_is_connection_up", return_value=False):
+        try:
+            project.import_ipc2581_archive_single_project_mode(
+                "Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
+            )
+            pytest.fail("No exception raised when connection is down")
+        except Exception as e:
+            assert type(e) == SherlockNoGrpcConnectionException
+
+    mock_response = MagicMock()
+    mock_response.value = 0
+    mock_response.message = "OK"
+    with patch.object(project, "_is_connection_up", return_value=True):
+        with patch.object(
+            project.stub, "importIPC2581ArchiveSingleProjectMode", return_value=mock_response
+        ):
+            return_code = project.import_ipc2581_archive_single_project_mode(
+                "Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
+            )
+            assert return_code == 0
+
     if project._is_connection_up():
         try:
             project.import_ipc2581_archive_single_project_mode(
