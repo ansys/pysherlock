@@ -326,11 +326,11 @@ class Project(GrpcStub):
     def import_ipc2581_archive_single_project_mode(
         self,
         archive_file: str,
-        include_other_layers: bool,
-        guess_part_properties: bool,
         project: str,
         cca_name: str,
         project_dir: str,
+        include_other_layers: bool,
+        guess_part_properties: bool,
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
@@ -344,16 +344,16 @@ class Project(GrpcStub):
         ----------
         archive_file: str
             Full path to the IPC-2581 archive file.
-        include_other_layers: bool
-            Whether to include other layers.
-        guess_part_properties: bool
-            Whether to guess part properties
         project: str
             Name of the Sherlock project.
         cca_name: str
             Name of the CCA.
         project_dir: str
             Location where the Sherlock project will be created.
+        include_other_layers: bool
+            Whether to include other layers.
+        guess_part_properties: bool
+            Whether to guess part properties
         polyline_simplification: bool, optional
             Whether to enable polyline simplification
         polyline_tolerance: float, optional
@@ -373,10 +373,11 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip", True, True,
+        >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip",
                                 "Tutorial",
                                 "Card",
                                 "C:/Projects",
+                                True, True,
                                 polyline_simplification=True,
                                 polyline_tolerance=0.1,
                                 polyline_tolerance_units="mm",

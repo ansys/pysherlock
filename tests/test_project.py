@@ -169,7 +169,7 @@ def helper_test_import_ipc2581_archive_single_project_mode(project: Project):
     if project._is_connection_up():
         try:
             project.import_ipc2581_archive_single_project_mode(
-                "Missing Archive File.zip", True, True, "Tutorial", "Card", "C:/Projects"
+                "Missing Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
             )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
