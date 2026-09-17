@@ -25,6 +25,7 @@
 import os
 import time
 import uuid
+from unittest.mock import patch
 
 from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 import grpc
@@ -47,6 +48,7 @@ from ansys.sherlock.core.errors import (
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
+    SherlockNoGrpcConnectionException,
     SherlockUpdateThermalMapsError,
 )
 from ansys.sherlock.core.project import Project
@@ -92,6 +94,7 @@ def test_all():
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
     helper_test_import_ipc2581_archive(project)
+    helper_test_import_ipc2581_archive_single_project_mode(project)
     helper_test_import_project_zip_archive(project)
     helper_test_import_project_zip_archive_single_mode(project)
     helper_test_generate_project_report(project)
@@ -158,6 +161,27 @@ def helper_test_import_ipc2581_archive(project: Project):
     if project._is_connection_up():
         try:
             project.import_ipc2581_archive("Missing Archive File.zip", True, True)
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockImportIpc2581Error
+
+
+def helper_test_import_ipc2581_archive_single_project_mode(project: Project):
+    """Test import_ipc2581_archive_single_project_mode API"""
+    with patch.object(project, "_is_connection_up", return_value=False):
+        try:
+            project.import_ipc2581_archive_single_project_mode(
+                "Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
+            )
+            pytest.fail("No exception raised when connection is down")
+        except Exception as e:
+            assert type(e) == SherlockNoGrpcConnectionException
+
+    if project._is_connection_up():
+        try:
+            project.import_ipc2581_archive_single_project_mode(
+                "Missing Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
+            )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportIpc2581Error
