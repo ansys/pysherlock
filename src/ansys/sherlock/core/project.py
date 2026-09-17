@@ -328,8 +328,8 @@ class Project(GrpcStub):
         archive_file: str,
         include_other_layers: bool,
         guess_part_properties: bool,
-        project: Optional[str] = None,
-        cca_name: Optional[str] = None,
+        project: str,
+        cca_name: str,
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
@@ -348,12 +348,10 @@ class Project(GrpcStub):
             Whether to include other layers.
         guess_part_properties: bool
             Whether to guess part properties
-        project: str, optional
-            Name of the Sherlock project. The default is ``None``, in which case
-            the name of the IPC-2581 archive file is used for the project name.
-        cca_name: str, optional
-            Name of the CCA. The default is ``None``, in which case the name of
-            the IPC-2581 archive file is used for the CCA name.
+        project: str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA.
         polyline_simplification: bool, optional
             Whether to enable polyline simplification
         polyline_tolerance: float, optional
@@ -376,28 +374,16 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip", True, True,
-                                project="Tutorial",
-                                cca_name="Card",
+                                "Tutorial",
+                                "Card",
                                 polyline_simplification=True,
                                 polyline_tolerance=0.1,
                                 polyline_tolerance_units="mm",
                                 project_dir="C:/Projects",
                                 overwrite=True)
         """
-        try:
-            if archive_file == "":
-                raise SherlockImportIpc2581Error(message="Archive file path is required.")
-        except SherlockImportIpc2581Error as e:
-            LOG.error(str(e))
-            raise e
-
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
-
-        if project is None:
-            project = os.path.splitext(os.path.basename(archive_file))[0]
-        if cca_name is None:
-            cca_name = os.path.splitext(os.path.basename(archive_file))[0]
 
         request = SherlockProjectService_pb2.ImportIPC2581SingleProjectRequest(
             archiveFile=archive_file,
