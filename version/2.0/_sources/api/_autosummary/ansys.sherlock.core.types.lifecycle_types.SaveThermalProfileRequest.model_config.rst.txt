@@ -1,0 +1,10 @@
+.. vale off
+
+model\_config
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveThermalProfileRequest.model_config
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+import\_parts\_to\_avl
+======================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.import_parts_to_avl
+
+.. vale on

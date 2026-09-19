@@ -1,0 +1,10 @@
+.. vale off
+
+min\_hole\_size
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: PTHFatiguePropsAnalysis.min_hole_size
+
+.. vale on

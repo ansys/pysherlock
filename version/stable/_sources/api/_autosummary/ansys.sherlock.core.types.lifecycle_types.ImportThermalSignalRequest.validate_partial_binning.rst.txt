@@ -1,0 +1,10 @@
+.. vale off
+
+validate\_partial\_binning
+==========================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: ImportThermalSignalRequest.validate_partial_binning
+
+.. vale on

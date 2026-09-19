@@ -1,0 +1,6 @@
+exportTraceModel
+================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.exportTraceModel

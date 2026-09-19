@@ -1,0 +1,10 @@
+.. vale off
+
+update\_forward\_refs
+=====================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CsvExcelOutlineFile.update_forward_refs
+
+.. vale on

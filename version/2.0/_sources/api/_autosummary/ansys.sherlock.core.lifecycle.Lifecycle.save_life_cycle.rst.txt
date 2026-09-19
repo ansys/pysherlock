@@ -1,0 +1,10 @@
+.. vale off
+
+save\_life\_cycle
+=================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.save_life_cycle
+
+.. vale on

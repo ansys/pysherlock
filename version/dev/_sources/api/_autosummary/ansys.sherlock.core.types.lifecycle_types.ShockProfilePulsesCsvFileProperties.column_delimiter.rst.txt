@@ -1,0 +1,10 @@
+.. vale off
+
+column\_delimiter
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ShockProfilePulsesCsvFileProperties.column_delimiter
+
+.. vale on

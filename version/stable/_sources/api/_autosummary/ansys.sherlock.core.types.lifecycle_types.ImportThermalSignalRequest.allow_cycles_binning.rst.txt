@@ -1,0 +1,10 @@
+.. vale off
+
+allow\_cycles\_binning
+======================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.allow_cycles_binning
+
+.. vale on

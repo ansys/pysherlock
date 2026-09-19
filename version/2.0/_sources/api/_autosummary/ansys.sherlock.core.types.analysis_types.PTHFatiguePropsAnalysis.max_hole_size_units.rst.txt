@@ -1,0 +1,10 @@
+.. vale off
+
+max\_hole\_size\_units
+======================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: PTHFatiguePropsAnalysis.max_hole_size_units
+
+.. vale on

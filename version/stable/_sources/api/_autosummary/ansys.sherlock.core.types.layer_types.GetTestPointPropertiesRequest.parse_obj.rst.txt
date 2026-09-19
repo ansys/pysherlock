@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_obj
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: GetTestPointPropertiesRequest.parse_obj
+
+.. vale on

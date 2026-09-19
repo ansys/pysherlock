@@ -1,0 +1,10 @@
+.. vale off
+
+unit
+====
+
+.. currentmodule:: ansys.sherlock.core.types.common_types
+
+.. autoattribute:: Measurement.unit
+
+.. vale on

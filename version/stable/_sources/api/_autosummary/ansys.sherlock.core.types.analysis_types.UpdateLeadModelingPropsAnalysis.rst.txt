@@ -1,0 +1,137 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateLeadModelingPropsAnalysis
+=========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateLeadModelingPropsAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateLeadModelingPropsAnalysis.construct
+      
+      
+      UpdateLeadModelingPropsAnalysis.copy
+      
+      
+      UpdateLeadModelingPropsAnalysis.dict
+      
+      
+      UpdateLeadModelingPropsAnalysis.from_orm
+      
+      
+      UpdateLeadModelingPropsAnalysis.json
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_construct
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_copy
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_dump
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_dump_json
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_json_schema
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_parametrized_name
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_post_init
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_rebuild
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_validate
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_validate_json
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_validate_strings
+      
+      
+      UpdateLeadModelingPropsAnalysis.parse_file
+      
+      
+      UpdateLeadModelingPropsAnalysis.parse_obj
+      
+      
+      UpdateLeadModelingPropsAnalysis.parse_raw
+      
+      
+      UpdateLeadModelingPropsAnalysis.schema
+      
+      
+      UpdateLeadModelingPropsAnalysis.schema_json
+      
+      
+      UpdateLeadModelingPropsAnalysis.update_forward_refs
+      
+      
+      UpdateLeadModelingPropsAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateLeadModelingPropsAnalysis.model_computed_fields
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_config
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_extra
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_fields
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_fields_set
+      
+      
+      UpdateLeadModelingPropsAnalysis.analysis_type
+      
+      
+      UpdateLeadModelingPropsAnalysis.model_leads
+      
+      
+      UpdateLeadModelingPropsAnalysis.lead_element_order
+      
+      
+      UpdateLeadModelingPropsAnalysis.lead_max_edge_length
+      
+      
+      UpdateLeadModelingPropsAnalysis.lead_max_edge_length_units
+      
+      
+      UpdateLeadModelingPropsAnalysis.lead_max_vertical
+      
+      
+      UpdateLeadModelingPropsAnalysis.lead_max_vertical_units
+      
+   
+   
+
+.. vale on

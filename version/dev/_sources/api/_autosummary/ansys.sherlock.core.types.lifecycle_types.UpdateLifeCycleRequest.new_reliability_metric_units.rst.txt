@@ -1,0 +1,10 @@
+.. vale off
+
+new\_reliability\_metric\_units
+===============================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: UpdateLifeCycleRequest.new_reliability_metric_units
+
+.. vale on

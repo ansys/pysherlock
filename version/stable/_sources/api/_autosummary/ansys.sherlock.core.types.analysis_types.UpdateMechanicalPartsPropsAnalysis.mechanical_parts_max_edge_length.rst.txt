@@ -1,0 +1,10 @@
+.. vale off
+
+mechanical\_parts\_max\_edge\_length
+====================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateMechanicalPartsPropsAnalysis.mechanical_parts_max_edge_length
+
+.. vale on

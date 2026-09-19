@@ -1,0 +1,58 @@
+﻿ansys.sherlock.core.layer.Layer
+===============================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. autoclass:: Layer
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Layer.add_modeling_region
+      
+      
+      Layer.add_potting_region
+      
+      
+      Layer.delete_all_ict_fixtures
+      
+      
+      Layer.delete_all_mount_points
+      
+      
+      Layer.delete_all_test_points
+      
+      
+      Layer.export_all_mount_points
+      
+      
+      Layer.export_all_test_fixtures
+      
+      
+      Layer.export_all_test_points
+      
+      
+      Layer.update_modeling_region
+      
+      
+      Layer.update_mount_points_by_file
+      
+      
+      Layer.update_test_fixtures_by_file
+      
+      
+      Layer.update_test_points_by_file
+      
+   
+   
+
+   
+   
+   

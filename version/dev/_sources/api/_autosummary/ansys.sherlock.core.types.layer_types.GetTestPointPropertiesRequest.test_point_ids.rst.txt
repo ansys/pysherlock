@@ -1,0 +1,10 @@
+.. vale off
+
+test\_point\_ids
+================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: GetTestPointPropertiesRequest.test_point_ids
+
+.. vale on
