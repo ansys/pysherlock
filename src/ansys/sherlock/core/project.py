@@ -307,6 +307,16 @@ class Project(GrpcStub):
                 polyline_tolerance=0.1,
                 polyline_tolerance_units="mm")
         """
+        try:
+            if archive_file == "":
+                raise SherlockImportODBError(message="Archive path is required.")
+        except SherlockImportODBError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
         request = SherlockProjectService_pb2.ImportODBSingleProjectModeRequest(
             archiveFile=archive_file,
             project=project,
