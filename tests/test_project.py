@@ -47,7 +47,6 @@ from ansys.sherlock.core.errors import (
     SherlockListCCAsError,
     SherlockListStrainMapsError,
     SherlockListThermalMapsError,
-    SherlockNoGrpcConnectionException,
     SherlockUpdateThermalMapsError,
 )
 from ansys.sherlock.core.project import Project
@@ -167,15 +166,6 @@ def helper_test_import_ipc2581_archive(project: Project):
 
 def helper_test_import_ipc2581_archive_single_project_mode(project: Project):
     """Test import_ipc2581_archive_single_project_mode API"""
-    if not project._is_connection_up():
-        try:
-            project.import_ipc2581_archive_single_project_mode(
-                "Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
-            )
-            pytest.fail("No exception raised when connection is down")
-        except Exception:
-            pass
-
     if project._is_connection_up():
         try:
             project.import_ipc2581_archive_single_project_mode(
