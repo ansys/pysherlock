@@ -250,10 +250,9 @@ def launch_and_connect(
     return sherlock, ansys_install_path
 
 
-
 def connect(
     port: int = SHERLOCK_DEFAULT_PORT,
-    timeout=DEFAULT_CONNECT_TIMEOUT,
+    timeout: int = DEFAULT_CONNECT_TIMEOUT,
     transport_mode: str = "mtls",
     certs_dir: str = None,
     uds_dir: str = None,
