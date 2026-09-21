@@ -25,7 +25,6 @@
 import os
 import time
 import uuid
-from unittest.mock import patch
 
 from ansys.api.sherlock.v0 import SherlockProjectService_pb2
 import grpc
@@ -168,7 +167,7 @@ def helper_test_import_ipc2581_archive(project: Project):
 
 def helper_test_import_ipc2581_archive_single_project_mode(project: Project):
     """Test import_ipc2581_archive_single_project_mode API"""
-    with patch.object(project, "_is_connection_up", return_value=False):
+    if not project._is_connection_up():
         try:
             project.import_ipc2581_archive_single_project_mode(
                 "Archive File.zip", "Tutorial", "Card", "C:/Projects", True, True
