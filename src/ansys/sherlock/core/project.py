@@ -150,11 +150,9 @@ class Project(GrpcStub):
         archive_file: str
             Full path to the ODB++ archive file.
         project: str
-            Name of the Sherlock project. The default is ``None``, in which
-            case the name of the ODB++ archive file is used for the project name.
+            Name of the Sherlock project.
         cca_name: str
-            Name of the CCA name. The default is ``None``, in which case the
-            name of the ODB++ archive file is used for the CCA name.
+            Name of the CCA name.
         process_layer_thickness: bool
             Whether to assign stackup thickness.
         include_other_layers: bool
@@ -181,14 +179,19 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
-                                True, True,
-                                ims_stackup=True,
-                                project="Tutorial",
-                                cca_name="Card",
-                                polyline_simplification=True,
-                                polyline_tolerance=0.1,
-                                polyline_tolerance_units="mm")
+        >>> sherlock.project.import_odb_archive(
+        >>>                        "ODB++ Tutorial.tgz",
+        >>>                        project="Tutorial",
+        >>>                        cca_name="Card",
+        >>>                        True,
+        >>>                        True,
+        >>>                        True,
+        >>>                        True,
+        >>>                        ims_stackup=True,
+        >>>                        polyline_simplification=True,
+        >>>                        polyline_tolerance=0.1,
+        >>>                        polyline_tolerance_units="mm"
+        >>>                        )
         """
         try:
             if archive_file == "":
@@ -246,10 +249,11 @@ class Project(GrpcStub):
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
+        overwrite: bool = False,
     ) -> int:
         r"""Import an ODB++ archive file, in single project mode.
 
-        Available Since: 2021R1
+        Available Since: 2027R1
 
         Parameters
         ----------
@@ -279,7 +283,10 @@ class Project(GrpcStub):
             Polyline simplification tolerance
         polyline_tolerance_units: str, optional
             Polyline simplification tolerance units
-
+        overwrite:
+            When set to True, if the project parameter is set to a project
+            name that already exists, overwrite that project, otherwise an error
+            will be raised andno import will occur.
         Returns
         -------
         int
@@ -294,18 +301,18 @@ class Project(GrpcStub):
         >>>     transport_mode="wnua",
         >>>     single_project_path=project_test_path)
         >>> sherlock.project.import_odb_archive_single_project(
-                odb_path,
-                "Tutorial",
-                "Main Board",
-                project_test_path,
-                True,
-                True,
-                True,
-                True,
-                ims_stackup=True,
-                polyline_simplification=True,
-                polyline_tolerance=0.1,
-                polyline_tolerance_units="mm")
+        >>>        odb_path,
+        >>>        "Tutorial",
+        >>>        "Main Board",
+        >>>        project_test_path,
+        >>>        True,
+        >>>        True,
+        >>>        True,
+        >>>        True,
+        >>>        ims_stackup=True,
+        >>>        polyline_simplification=True,
+        >>>        polyline_tolerance=0.1,
+        >>>        polyline_tolerance_units="mm")
         """
         try:
             if archive_file == "":
@@ -330,7 +337,7 @@ class Project(GrpcStub):
             polylineSimplification=polyline_simplification,
             polylineTolerance=polyline_tolerance,
             polylineToleranceUnits=polyline_tolerance_units,
-            overwrite=True,
+            overwrite=overwrite,
         )
 
         response = self.stub.importODBArchiveSingleMode(request)
