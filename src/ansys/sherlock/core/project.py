@@ -508,10 +508,10 @@ class Project(GrpcStub):
 
         request = SherlockProjectService_pb2.ImportIPC2581SingleProjectRequest(
             archiveFile=archive_file,
-            includeOtherLayers=include_other_layers,
-            guessPartProperties=guess_part_properties,
             project=project,
             ccaName=cca_name,
+            includeOtherLayers=include_other_layers,
+            guessPartProperties=guess_part_properties,
             polylineSimplification=polyline_simplification,
             polylineTolerance=polyline_tolerance,
             polylineToleranceUnits=polyline_tolerance_units,
