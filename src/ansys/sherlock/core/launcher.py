@@ -24,8 +24,11 @@
 
 """Module for launching Sherlock locally or connecting to a local instance with gRPC."""
 
+import collections
+from collections.abc import Callable
 import errno
 import os
+import re
 import shlex
 import socket
 from typing import Optional
@@ -239,23 +242,20 @@ def launch_and_connect(
         uds_dir=uds_dir,
         uds_id=uds_id,
     )
-    try:
-        sherlock = connect(
-            port=port,
-            timeout=timeout,
-            transport_mode=transport_mode,
-            uds_dir=uds_dir,
-            uds_id=uds_id,
-        )
-        return sherlock, ansys_install_path
-    except Exception as e:
-        LOG.error(f"Error connecting to Sherlock after launch: {e}")
-        raise RuntimeError(f"Error connecting to Sherlock after launch: {e}")
+
+    sherlock = connect(
+        port=port,
+        timeout=timeout,
+        transport_mode=transport_mode,
+        uds_dir=uds_dir,
+        uds_id=uds_id,
+    )
+    return sherlock, ansys_install_path
 
 
 def connect(
     port: int = SHERLOCK_DEFAULT_PORT,
-    timeout=DEFAULT_CONNECT_TIMEOUT,
+    timeout: int = DEFAULT_CONNECT_TIMEOUT,
     transport_mode: str = "mtls",
     certs_dir: str = None,
     uds_dir: str = None,
@@ -395,15 +395,31 @@ def _wait_for_sherlock_grpc_ready(channel, timeout):
         raise SherlockConnectionError(message="Error starting gRPC service")
 
 
+def _extract_awp_root_vars_from_list(
+    env_var_dict: dict[str, str], check_for_sherlock_func: Callable[[str], bool]
+) -> dict[str, str]:
+    env_var_pattern = re.compile(r"AWP_ROOT\d\d\d")
+    supported_installed_versions = {
+        env_key: path
+        for env_key, path in env_var_dict.items()
+        if re.fullmatch(env_var_pattern, env_key) is not None and check_for_sherlock_func(path)
+    }
+    return collections.OrderedDict(
+        sorted(supported_installed_versions.items(), key=lambda item: item[0], reverse=True)
+    )
+
+
+def _is_sherlock_in_path(path: str) -> bool:
+    return os.path.isfile(_get_sherlock_exe_file_path(path))
+
+
 def _get_base_ansys(
     year: Optional[int] = None, release_number: Optional[int] = None
 ) -> tuple[str, int]:
-    supported_installed_versions = {
-        env_key: path
-        for env_key, path in os.environ.items()
-        if env_key.startswith("AWP_ROOT") and os.path.isfile(_get_sherlock_exe_file_path(path))
-    }
 
+    supported_installed_versions = _extract_awp_root_vars_from_list(
+        os.environ, _is_sherlock_in_path
+    )
     sorted_installed_version_keys = sorted(supported_installed_versions, reverse=True)
 
     if year is not None:

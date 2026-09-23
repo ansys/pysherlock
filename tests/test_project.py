@@ -91,6 +91,7 @@ def test_all():
     helper_test_add_strain_maps(project)
     helper_test_delete_project(project)
     helper_test_import_odb_archive(project)
+    helper_test_import_odb_archive_single_project(project)
     helper_test_import_ipc2581_archive(project)
     helper_test_import_ipc2581_archive_single_project_mode(project)
     helper_test_import_project_zip_archive(project)
@@ -134,7 +135,7 @@ def helper_test_delete_project(project: Project):
 def helper_test_import_odb_archive(project: Project):
     """Test import_odb_archive API"""
     try:
-        project.import_odb_archive("", True, True, True, True)
+        project.import_odb_archive("", "", "", True, True, True, True)
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportODBError as e:
         assert str(e) == "Import ODB error: Archive path is required."
@@ -142,7 +143,26 @@ def helper_test_import_odb_archive(project: Project):
     if project._is_connection_up():
         try:
             missing_archive_file = "Missing ODB.tgz"
-            project.import_odb_archive(missing_archive_file, True, True, True, True)
+            project.import_odb_archive("", "", missing_archive_file, True, True, True, True)
+            pytest.fail("No exception raised when using an invalid parameter")
+        except Exception as e:
+            assert type(e) == SherlockImportODBError
+
+
+def helper_test_import_odb_archive_single_project(project: Project):
+    """Test import_odb_archive_single_project API"""
+    try:
+        project.import_odb_archive_single_project("", "", "", "", True, True, True, True)
+        pytest.fail("No exception raised when using an invalid parameter")
+    except SherlockImportODBError as e:
+        assert str(e) == "Import ODB error: Archive path is required."
+
+    if project._is_connection_up():
+        try:
+            missing_archive_file = "Missing ODB.tgz"
+            project.import_odb_archive_single_project(
+                "", "", "", missing_archive_file, True, True, True, True
+            )
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportODBError

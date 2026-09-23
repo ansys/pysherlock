@@ -130,13 +130,13 @@ class Project(GrpcStub):
     def import_odb_archive(
         self,
         archive_file: str,
+        project: str,
+        cca_name: str,
         process_layer_thickness: bool,
         include_other_layers: bool,
         process_cutout_file: bool,
         guess_part_properties: bool,
         ims_stackup: bool = False,
-        project: Optional[str] = None,
-        cca_name: Optional[str] = None,
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
@@ -149,6 +149,10 @@ class Project(GrpcStub):
         ----------
         archive_file: str
             Full path to the ODB++ archive file.
+        project: str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA name.
         process_layer_thickness: bool
             Whether to assign stackup thickness.
         include_other_layers: bool
@@ -159,12 +163,6 @@ class Project(GrpcStub):
             Whether to guess part properties.
         ims_stackup: bool, optional
             Whether to generate an IMS stackup
-        project: str, optional
-            Name of the Sherlock project. The default is ``None``, in which
-            case the name of the ODB++ archive file is used for the project name.
-        cca_name: str, optional
-            Name of the CCA name. The default is ``None``, in which case the
-            name of the ODB++ archive file is used for the CCA name.
         polyline_simplification: bool, optional
             Whether to enable polyline simplification
         polyline_tolerance: float, optional
@@ -181,14 +179,19 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
-                                True, True,
-                                ims_stackup=True,
-                                project="Tutorial",
-                                cca_name="Card",
-                                polyline_simplification=True,
-                                polyline_tolerance=0.1,
-                                polyline_tolerance_units="mm")
+        >>> sherlock.project.import_odb_archive(
+        >>>                        "ODB++ Tutorial.tgz",
+        >>>                        project="Tutorial",
+        >>>                        cca_name="Card",
+        >>>                        True,
+        >>>                        True,
+        >>>                        True,
+        >>>                        True,
+        >>>                        ims_stackup=True,
+        >>>                        polyline_simplification=True,
+        >>>                        polyline_tolerance=0.1,
+        >>>                        polyline_tolerance_units="mm"
+        >>>                        )
         """
         try:
             if archive_file == "":
@@ -221,6 +224,123 @@ class Project(GrpcStub):
 
         response = self.stub.importODBArchive(request)
 
+        try:
+            if response.value == -1:
+                raise SherlockImportODBError(response.message)
+
+            LOG.info(response.message)
+            return response.value
+        except SherlockImportODBError as e:
+            LOG.error(str(e))
+            raise e
+
+    @require_version(271)
+    def import_odb_archive_single_project(
+        self,
+        archive_file: str,
+        project: str,
+        cca_name: str,
+        project_dir: str,
+        process_layer_thickness: bool,
+        include_other_layers: bool,
+        process_cutout_file: bool,
+        guess_part_properties: bool,
+        ims_stackup: bool = False,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+        overwrite: bool = False,
+    ) -> int:
+        r"""Import an ODB++ archive file, in single project mode.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        archive_file: str
+            Full path to the ODB++ archive file.
+        project: str
+            Name of the Sherlock project. The default is ``None``, in which
+            case the name of the ODB++ archive file is used for the project name.
+        cca_name: str
+            Name of the CCA name. The default is ``None``, in which case the
+            name of the ODB++ archive file is used for the CCA name.
+        project_dir: str
+                Directory where the Sherlock project is loaded into.
+        process_layer_thickness: bool
+            Whether to assign stackup thickness.
+        include_other_layers: bool
+            Whether to include other layers.
+        process_cutout_file: bool
+            Whether to process cutouts.
+        guess_part_properties: bool
+            Whether to guess part properties.
+        ims_stackup: bool, optional
+            Whether to generate an IMS stackup
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
+        overwrite:
+            When set to True, if the project parameter is set to a project
+            name that already exists, overwrite that project, otherwise an error
+            will be raised andno import will occur.
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> odb_path="C:\\Users\\username\\ODB++ Tutorial.tgz"
+        >>> project_test_path="C:\\Users\\username\\testprojectarea"
+        >>> sherlock, install_dir = launch_and_connect(
+        >>>     transport_mode="wnua",
+        >>>     single_project_path=project_test_path)
+        >>> sherlock.project.import_odb_archive_single_project(
+        >>>        odb_path,
+        >>>        "Tutorial",
+        >>>        "Main Board",
+        >>>        project_test_path,
+        >>>        True,
+        >>>        True,
+        >>>        True,
+        >>>        True,
+        >>>        ims_stackup=True,
+        >>>        polyline_simplification=True,
+        >>>        polyline_tolerance=0.1,
+        >>>        polyline_tolerance_units="mm")
+        """
+        try:
+            if archive_file == "":
+                raise SherlockImportODBError(message="Archive path is required.")
+        except SherlockImportODBError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockProjectService_pb2.ImportODBSingleProjectModeRequest(
+            archiveFile=archive_file,
+            project=project,
+            ccaName=cca_name,
+            projectDir=project_dir,
+            processLayerThickness=process_layer_thickness,
+            includeOtherLayers=include_other_layers,
+            processCutoutFile=process_cutout_file,
+            guessPartProperties=guess_part_properties,
+            imsStackup=ims_stackup,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
+            overwrite=overwrite,
+        )
+
+        response = self.stub.importODBArchiveSingleMode(request)
         try:
             if response.value == -1:
                 raise SherlockImportODBError(response.message)
