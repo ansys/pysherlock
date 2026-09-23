@@ -442,6 +442,95 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(271)
+    def import_ipc2581_archive_single_project_mode(
+        self,
+        archive_file: str,
+        project: str,
+        cca_name: str,
+        project_dir: str,
+        include_other_layers: bool,
+        guess_part_properties: bool,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+        overwrite: bool = False,
+    ) -> int:
+        """Import an IPC-2581 archive file when Sherlock is in single project mode.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        archive_file: str
+            Full path to the IPC-2581 archive file.
+        project: str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA.
+        project_dir: str
+            Location where the Sherlock project will be created.
+        include_other_layers: bool
+            Whether to include other layers.
+        guess_part_properties: bool
+            Whether to guess part properties
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
+        overwrite: bool, optional
+            Whether to overwrite the project if a project with the same name already
+            exists. The default is ``False``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip",
+        ...                         "Tutorial",
+        ...                         "Card",
+        ...                         "C:/Projects",
+        ...                         True, True,
+        ...                         polyline_simplification=True,
+        ...                         polyline_tolerance=0.1,
+        ...                         polyline_tolerance_units="mm",
+        ...                         overwrite=True)
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockProjectService_pb2.ImportIPC2581SingleProjectRequest(
+            archiveFile=archive_file,
+            project=project,
+            ccaName=cca_name,
+            includeOtherLayers=include_other_layers,
+            guessPartProperties=guess_part_properties,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
+            projectDir=project_dir,
+            overwrite=overwrite,
+        )
+
+        response = self.stub.importIPC2581ArchiveSingleProjectMode(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockImportIpc2581Error(response.message)
+
+            LOG.info(response.message)
+            return response.value
+        except Exception as e:
+            LOG.error(str(e))
+            raise e
+
     @require_version()
     def generate_project_report(
         self, project: str, author: str, company: str, report_file: str
