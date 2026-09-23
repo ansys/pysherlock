@@ -494,14 +494,14 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_ipc2581_archive_single_project_mode("Tutorial.zip",
-                                "Tutorial",
-                                "Card",
-                                "C:/Projects",
-                                True, True,
-                                polyline_simplification=True,
-                                polyline_tolerance=0.1,
-                                polyline_tolerance_units="mm",
-                                overwrite=True)
+        ...                         "Tutorial",
+        ...                         "Card",
+        ...                         "C:/Projects",
+        ...                         True, True,
+        ...                         polyline_simplification=True,
+        ...                         polyline_tolerance=0.1,
+        ...                         polyline_tolerance_units="mm",
+        ...                         overwrite=True)
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
