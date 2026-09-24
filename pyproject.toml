@@ -37,7 +37,7 @@ tests = [
 
 dev = [
     "coverage>=7.0,<8",
-    "grpcio-tools>=1.71.2,<1.84",
+    "grpcio-tools>=1.71.2,<1.85",
     "pre-commit>=4.0,<5"
 ]
 
@@ -45,8 +45,8 @@ doc = [
     "ansys-sphinx-theme==1.11.0",
     "autodoc-pydantic==2.2.0",
     "jupyter_sphinx==0.5.3",
-    "matplotlib==3.11.1",
-    "numpydoc==1.10.0",
+    "matplotlib==3.11.2",
+    "numpydoc==1.11.0",
     "pandas==3.0.5",
     "pypandoc-binary==1.17",
     "Sphinx>=9.1",
@@ -54,7 +54,7 @@ doc = [
     "sphinx-autodoc-typehints==3.13.6",
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.7.0",
-    "sphinx-gallery==0.21.0",
+    "sphinx-gallery==0.22.0",
     "sphinx-notfound-page==1.1.0",
 ]
 
