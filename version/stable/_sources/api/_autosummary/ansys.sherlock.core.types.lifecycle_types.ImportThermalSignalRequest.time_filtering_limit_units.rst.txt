@@ -1,0 +1,10 @@
+.. vale off
+
+time\_filtering\_limit\_units
+=============================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.time_filtering_limit_units
+
+.. vale on

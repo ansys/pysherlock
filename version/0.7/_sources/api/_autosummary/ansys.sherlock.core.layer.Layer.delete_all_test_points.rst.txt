@@ -1,0 +1,6 @@
+delete\_all\_test\_points
+=========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.delete_all_test_points

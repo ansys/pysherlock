@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_max\_edge\_length\_units
+=================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdatePottingRegionsPropsAnalysis.potting_max_edge_length_units
+
+.. vale on

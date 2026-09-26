@@ -1,0 +1,10 @@
+.. vale off
+
+json
+====
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: UpdateComponentFailureMechanismPropsRequest.json
+
+.. vale on

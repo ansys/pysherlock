@@ -1,0 +1,10 @@
+.. vale off
+
+update\_laminate\_layer
+=======================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.update_laminate_layer
+
+.. vale on

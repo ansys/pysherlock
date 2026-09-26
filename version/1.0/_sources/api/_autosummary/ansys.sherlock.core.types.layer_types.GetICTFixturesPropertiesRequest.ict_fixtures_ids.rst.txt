@@ -1,0 +1,10 @@
+.. vale off
+
+ict\_fixtures\_ids
+==================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: GetICTFixturesPropertiesRequest.ict_fixtures_ids
+
+.. vale on

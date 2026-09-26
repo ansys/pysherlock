@@ -1,0 +1,137 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdatePottingRegionsPropsAnalysis
+===========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdatePottingRegionsPropsAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdatePottingRegionsPropsAnalysis.construct
+      
+      
+      UpdatePottingRegionsPropsAnalysis.copy
+      
+      
+      UpdatePottingRegionsPropsAnalysis.dict
+      
+      
+      UpdatePottingRegionsPropsAnalysis.from_orm
+      
+      
+      UpdatePottingRegionsPropsAnalysis.json
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_construct
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_copy
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_dump
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_dump_json
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_json_schema
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_parametrized_name
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_post_init
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_rebuild
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_validate
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_validate_json
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_validate_strings
+      
+      
+      UpdatePottingRegionsPropsAnalysis.parse_file
+      
+      
+      UpdatePottingRegionsPropsAnalysis.parse_obj
+      
+      
+      UpdatePottingRegionsPropsAnalysis.parse_raw
+      
+      
+      UpdatePottingRegionsPropsAnalysis.schema
+      
+      
+      UpdatePottingRegionsPropsAnalysis.schema_json
+      
+      
+      UpdatePottingRegionsPropsAnalysis.update_forward_refs
+      
+      
+      UpdatePottingRegionsPropsAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdatePottingRegionsPropsAnalysis.model_computed_fields
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_config
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_extra
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_fields
+      
+      
+      UpdatePottingRegionsPropsAnalysis.model_fields_set
+      
+      
+      UpdatePottingRegionsPropsAnalysis.analysis_type
+      
+      
+      UpdatePottingRegionsPropsAnalysis.potting_enabled
+      
+      
+      UpdatePottingRegionsPropsAnalysis.potting_elem_order
+      
+      
+      UpdatePottingRegionsPropsAnalysis.potting_max_edge_length
+      
+      
+      UpdatePottingRegionsPropsAnalysis.potting_max_edge_length_units
+      
+      
+      UpdatePottingRegionsPropsAnalysis.potting_max_vertical
+      
+      
+      UpdatePottingRegionsPropsAnalysis.potting_max_vertical_units
+      
+   
+   
+
+.. vale on

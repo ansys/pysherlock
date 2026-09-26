@@ -1,0 +1,6 @@
+update\_test\_points\_by\_file
+==============================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_test_points_by_file

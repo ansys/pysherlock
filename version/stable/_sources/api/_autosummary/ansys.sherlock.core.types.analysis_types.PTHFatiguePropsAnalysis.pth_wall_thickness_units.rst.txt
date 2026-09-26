@@ -1,0 +1,10 @@
+.. vale off
+
+pth\_wall\_thickness\_units
+===========================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: PTHFatiguePropsAnalysis.pth_wall_thickness_units
+
+.. vale on

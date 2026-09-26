@@ -1,0 +1,6 @@
+list\_solder\_materials
+=======================
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.list_solder_materials

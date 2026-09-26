@@ -1,0 +1,6 @@
+board\_side
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoattribute:: PartLocation.board_side

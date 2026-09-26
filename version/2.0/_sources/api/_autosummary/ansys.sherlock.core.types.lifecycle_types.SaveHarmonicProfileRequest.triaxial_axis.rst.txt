@@ -1,0 +1,10 @@
+.. vale off
+
+triaxial\_axis
+==============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveHarmonicProfileRequest.triaxial_axis
+
+.. vale on

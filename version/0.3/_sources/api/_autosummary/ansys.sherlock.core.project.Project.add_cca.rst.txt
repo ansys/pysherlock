@@ -1,0 +1,6 @@
+﻿add\_cca
+========
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.add_cca

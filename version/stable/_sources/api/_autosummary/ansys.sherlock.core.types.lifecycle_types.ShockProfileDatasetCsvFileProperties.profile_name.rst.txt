@@ -1,0 +1,10 @@
+.. vale off
+
+profile\_name
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ShockProfileDatasetCsvFileProperties.profile_name
+
+.. vale on

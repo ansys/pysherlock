@@ -1,0 +1,10 @@
+.. vale off
+
+mount\_points\_max\_edge\_length
+================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateMountPointsPropsAnalysis.mount_points_max_edge_length
+
+.. vale on

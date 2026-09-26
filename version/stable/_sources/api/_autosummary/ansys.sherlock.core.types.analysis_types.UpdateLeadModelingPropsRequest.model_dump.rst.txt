@@ -1,0 +1,10 @@
+.. vale off
+
+model\_dump
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: UpdateLeadModelingPropsRequest.model_dump
+
+.. vale on

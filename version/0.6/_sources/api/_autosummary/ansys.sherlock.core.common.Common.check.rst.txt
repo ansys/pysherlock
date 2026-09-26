@@ -1,0 +1,6 @@
+check
+=====
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.check

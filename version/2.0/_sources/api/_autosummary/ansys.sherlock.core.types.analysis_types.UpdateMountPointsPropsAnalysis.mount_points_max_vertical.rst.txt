@@ -1,0 +1,10 @@
+.. vale off
+
+mount\_points\_max\_vertical
+============================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateMountPointsPropsAnalysis.mount_points_max_vertical
+
+.. vale on

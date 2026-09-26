@@ -1,0 +1,10 @@
+.. vale off
+
+potting\_max\_vertical
+======================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdatePottingRegionsPropsAnalysis.potting_max_vertical
+
+.. vale on

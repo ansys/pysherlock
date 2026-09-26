@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.DeletePhaseRequest
+=============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: DeletePhaseRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      DeletePhaseRequest.construct
+      
+      
+      DeletePhaseRequest.copy
+      
+      
+      DeletePhaseRequest.dict
+      
+      
+      DeletePhaseRequest.from_orm
+      
+      
+      DeletePhaseRequest.json
+      
+      
+      DeletePhaseRequest.model_construct
+      
+      
+      DeletePhaseRequest.model_copy
+      
+      
+      DeletePhaseRequest.model_dump
+      
+      
+      DeletePhaseRequest.model_dump_json
+      
+      
+      DeletePhaseRequest.model_json_schema
+      
+      
+      DeletePhaseRequest.model_parametrized_name
+      
+      
+      DeletePhaseRequest.model_post_init
+      
+      
+      DeletePhaseRequest.model_rebuild
+      
+      
+      DeletePhaseRequest.model_validate
+      
+      
+      DeletePhaseRequest.model_validate_json
+      
+      
+      DeletePhaseRequest.model_validate_strings
+      
+      
+      DeletePhaseRequest.parse_file
+      
+      
+      DeletePhaseRequest.parse_obj
+      
+      
+      DeletePhaseRequest.parse_raw
+      
+      
+      DeletePhaseRequest.schema
+      
+      
+      DeletePhaseRequest.schema_json
+      
+      
+      DeletePhaseRequest.str_validation
+      
+      
+      DeletePhaseRequest.update_forward_refs
+      
+      
+      DeletePhaseRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      DeletePhaseRequest.model_computed_fields
+      
+      
+      DeletePhaseRequest.model_config
+      
+      
+      DeletePhaseRequest.model_extra
+      
+      
+      DeletePhaseRequest.model_fields
+      
+      
+      DeletePhaseRequest.model_fields_set
+      
+      
+      DeletePhaseRequest.project
+      
+      
+      DeletePhaseRequest.phase_name
+      
+   
+   
+
+.. vale on

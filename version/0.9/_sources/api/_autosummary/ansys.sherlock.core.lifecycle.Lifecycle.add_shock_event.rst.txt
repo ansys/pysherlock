@@ -1,0 +1,10 @@
+.. vale off
+
+add\_shock\_event
+=================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.add_shock_event
+
+.. vale on

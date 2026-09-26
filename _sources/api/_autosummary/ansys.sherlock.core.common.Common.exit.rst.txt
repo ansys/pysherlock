@@ -1,0 +1,6 @@
+﻿exit
+====
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.exit
