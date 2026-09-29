@@ -2828,7 +2828,7 @@ class Lifecycle(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> response = sherlock.lifecycle.save_life_cycle(
-        >>>     SaveLifeCycleRequestRequest(
+        >>>     SaveLifeCycleRequest(
         >>>         project="Tutorial Project",
         >>>         file_path="/path/to/save/lifecycle_file.dfr-lc",
         >>>         overwrite_file=True
