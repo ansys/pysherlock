@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
-# © 2023 - 2024 ANSYS, Inc. All rights reserved
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -23,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import importlib
+
 import grpc
 import pytest
 
@@ -30,6 +31,18 @@ from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCommonServiceError
 from ansys.sherlock.core.types.common_types import ListUnitsRequestUnitType
 from ansys.sherlock.core.utils.version_check import SKIP_VERSION_CHECK
+
+
+def test_proto_enum_wrapper_deprecation_warning():
+    """Deprecated enum wrapper classes should warn with the 27.1 deprecation version."""
+    import ansys.sherlock.core.types.analysis_types as analysis_types_module
+    import ansys.sherlock.core.types.parts_types as parts_types_module
+
+    with pytest.warns(DeprecationWarning, match=r"27\.1.*proto"):
+        importlib.reload(analysis_types_module)
+
+    with pytest.warns(DeprecationWarning, match=r"27\.1.*proto"):
+        importlib.reload(parts_types_module)
 
 
 def test_all():

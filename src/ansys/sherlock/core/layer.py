@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -23,6 +23,7 @@
 # SOFTWARE.
 
 """Module containing all layer management capabilities."""
+
 from ansys.api.sherlock.v0 import (
     SherlockCommonService_pb2,
     SherlockLayerService_pb2,
@@ -152,18 +153,19 @@ class Layer(GrpcStub):
         >>>     (9.77, 0)
         >>> ], rotation=87.8)
         >>> sherlock.layer.add_potting_region(
-        >>> "Test",
-        >>> [{
-        >>>     'cca_name': 'Card',
-        >>>     'potting_id': 'Test Region',
-        >>>     'side': 'TOP',
-        >>>     'material': 'epoxyencapsulant',
-        >>>     'potting_units': 'in',
-        >>>     'thickness': 0.1,
-        >>>     'standoff': 0.2,
-        >>>     'shape': polygonal_shape
-        >>> },
-        >>> ])
+        >>>     "Test",
+        >>>     [{
+        >>>         'cca_name': 'Card',
+        >>>         'potting_id': 'Test Region',
+        >>>         'side': 'TOP',
+        >>>         'material': 'epoxyencapsulant',
+        >>>         'potting_units': 'in',
+        >>>         'thickness': 0.1,
+        >>>         'standoff': 0.2,
+        >>>         'shape': polygonal_shape
+        >>>     },
+        >>>     ]
+        >>> )
         """
         try:
             if project == "":
@@ -305,36 +307,36 @@ class Layer(GrpcStub):
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> update1 = PottingRegionUpdateData(
-        >>> potting_region_id_to_update=potting_id,
-        >>> potting_region=PottingRegionData(
-        >>>     cca_name=cca_name,
-        >>>     potting_id=potting_id,
-        >>>     potting_side=potting_side,
-        >>>     potting_material=potting_material,
-        >>>     potting_units=potting_units,
-        >>>     potting_thickness=potting_thickness,
-        >>>     potting_standoff=potting_standoff,
-        >>>     shape=PolygonalShape(
-        >>>         points=[(0, 1), (5, 1), (5, 5), (1, 5)],
-        >>>         rotation=45.0
+        >>>     potting_region_id_to_update=potting_id,
+        >>>     potting_region=PottingRegionData(
+        >>>         cca_name=cca_name,
+        >>>         potting_id=potting_id,
+        >>>         potting_side=potting_side,
+        >>>         potting_material=potting_material,
+        >>>         potting_units=potting_units,
+        >>>         potting_thickness=potting_thickness,
+        >>>         potting_standoff=potting_standoff,
+        >>>         shape=PolygonalShape(
+        >>>             points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+        >>>             rotation=45.0
+        >>>         )
         >>>     )
-        >>> )
         >>> )
         >>> update2 = PottingRegionUpdateData(
-        >>> potting_region_id_to_update=potting_id,
-        >>> potting_region=PottingRegionData(
-        >>>     cca_name=cca_name,
-        >>>     potting_id=potting_id,
-        >>>     potting_side=potting_side,
-        >>>     potting_material=potting_material,
-        >>>     potting_units=potting_units,
-        >>>     potting_thickness=potting_thickness,
-        >>>     potting_standoff=potting_standoff,
-        >>>     shape=PolygonalShape(
-        >>>         points=[(0, 1), (5, 1), (5, 5), (1, 5)],
-        >>>         rotation=0.0
+        >>>     potting_region_id_to_update=potting_id,
+        >>>     potting_region=PottingRegionData(
+        >>>         cca_name=cca_name,
+        >>>         potting_id=potting_id,
+        >>>         potting_side=potting_side,
+        >>>         potting_material=potting_material,
+        >>>         potting_units=potting_units,
+        >>>         potting_thickness=potting_thickness,
+        >>>         potting_standoff=potting_standoff,
+        >>>         shape=PolygonalShape(
+        >>>             points=[(0, 1), (5, 1), (5, 5), (1, 5)],
+        >>>             rotation=0.0
+        >>>         )
         >>>     )
-        >>> )
         >>> )
         >>> example_request = UpdatePottingRegionRequest(
         >>>     "project_name",
@@ -378,23 +380,23 @@ class Layer(GrpcStub):
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>>
         >>> copy_request_example = CopyPottingRegionRequest(
-        >>> project=project,
-        >>> potting_region_copy_data=[
-        >>>     PottingRegionCopyData(
-        >>>         cca_name=cca_name,
-        >>>         potting_id=potting_id,
-        >>>         copy_potting_id=new_id,
-        >>>         center_x=center_x,
-        >>>         center_y=center_y
-        >>>     ),
-        >>>     PottingRegionCopyData(
-        >>>         cca_name=cca_name,
-        >>>         potting_id=new_id,
-        >>>         copy_potting_id=new_id+"1",
-        >>>         center_x=center_x,
-        >>>         center_y=center_y
-        >>>     )
-        >>> ]
+        >>>     project=project,
+        >>>     potting_region_copy_data=[
+        >>>         PottingRegionCopyData(
+        >>>             cca_name=cca_name,
+        >>>             potting_id=potting_id,
+        >>>             copy_potting_id=new_id,
+        >>>             center_x=center_x,
+        >>>             center_y=center_y
+        >>>         ),
+        >>>         PottingRegionCopyData(
+        >>>             cca_name=cca_name,
+        >>>             potting_id=new_id,
+        >>>             copy_potting_id=new_id+"1",
+        >>>             center_x=center_x,
+        >>>             center_y=center_y
+        >>>         )
+        >>>     ]
         >>> )
         >>> responses_example = sherlock.layer.copy_potting_region(copy_request_example)
         """
@@ -1973,24 +1975,24 @@ class Layer(GrpcStub):
         >>>     cca_name="Card"
         >>> )
         >>> layer_infos = [
-        >>> { "layer_folder": "Components",
-        >>>   "layers": ["comp-top"]},
-        >>> { "layer_folder": "Harmonic_Vibe",
-        >>>   "layers":["HV Disp @ 203.39 Hz"]}
+        >>>     {"layer_folder": "Components",
+        >>>      "layers": ["comp-top"]},
+        >>>     {"layer_folder": "Harmonic_Vibe",
+        >>>      "layers": ["HV Disp @ 203.39 Hz"]}
         >>> ]
         >>> export_layers = [
-        >>> {
-        >>>     "components_enabled": True,
-        >>>     "labels_enabled": True,
-        >>>     "leads_enabled": True,
-        >>>     "axes_enabled": True,
-        >>>     "grid_enabled": True,
-        >>>     "layer_infos": layer_infos,
-        >>>     "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
-        >>>     "image_height": 600,
-        >>>     "image_width": 800,
-        >>>     "overwrite_existing_file": True
-        >>> }
+        >>>     {
+        >>>         "components_enabled": True,
+        >>>         "labels_enabled": True,
+        >>>         "leads_enabled": True,
+        >>>         "axes_enabled": True,
+        >>>         "grid_enabled": True,
+        >>>         "layer_infos": layer_infos,
+        >>>         "file_path": "C:\\Users\\user_id\\Downloads\\SH-image.jpg",
+        >>>         "image_height": 600,
+        >>>         "image_width": 800,
+        >>>         "overwrite_existing_file": True
+        >>>     }
         >>> ]
         >>> sherlock.layer.export_layer_image("Tutorial Project", "Card", export_layers)
         """
@@ -2105,9 +2107,9 @@ class Layer(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> request = layer_types.GetTestPointPropertiesRequest(
-        >>>    project = "Test Point Test Project"
-        >>>    cca_name = "Main Board"
-        >>>    test_point_ids = "TP1,TP2"
+        >>>     project="Test Point Test Project",
+        >>>     cca_name="Main Board",
+        >>>     test_point_ids="TP1,TP2"
         >>> )
         >>> responses = layer.get_test_point_props(request)
         """

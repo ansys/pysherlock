@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,6 +50,7 @@ For further details, refer to the official documentation on strain map analysis 
 
 import os
 
+from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.api.sherlock.v0.SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
 from examples.examples_globals import get_sherlock_tutorial_path
 
@@ -55,7 +61,6 @@ from ansys.sherlock.core.errors import (
     SherlockRunStrainMapAnalysisError,
     SherlockUpdateHarmonicVibePropsError,
 )
-from ansys.sherlock.core.types.analysis_types import ModelSource
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
 
 ###############################################################################
@@ -129,7 +134,7 @@ try:
         harmonic_vibe_properties=[
             {
                 "cca_name": "Main Board",
-                "model_source": ModelSource.STRAIN_MAP,
+                "model_source": SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP,
                 "harmonic_vibe_count": 1,
                 "harmonic_vibe_damping": "0.01",
                 "part_validation_enabled": False,

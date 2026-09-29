@@ -34,11 +34,12 @@ if errorlevel 9009 (
 goto end
 
 :html-examples
+set PYSHERLOCK_BUILD_EXAMPLES=true
 %SPHINXBUILD% -M html %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end
 
 :html
-%SPHINXBUILD% -D plot_gallery=0 -b html %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
+%SPHINXBUILD% -b html %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
 goto end
 
 :clean

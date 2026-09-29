@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -23,6 +23,7 @@
 # SOFTWARE.
 
 """Module containing all project management capabilities."""
+
 import os
 from typing import Optional
 
@@ -129,13 +130,13 @@ class Project(GrpcStub):
     def import_odb_archive(
         self,
         archive_file: str,
+        project: str,
+        cca_name: str,
         process_layer_thickness: bool,
         include_other_layers: bool,
         process_cutout_file: bool,
         guess_part_properties: bool,
         ims_stackup: bool = False,
-        project: Optional[str] = None,
-        cca_name: Optional[str] = None,
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
@@ -148,6 +149,10 @@ class Project(GrpcStub):
         ----------
         archive_file: str
             Full path to the ODB++ archive file.
+        project: str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA name.
         process_layer_thickness: bool
             Whether to assign stackup thickness.
         include_other_layers: bool
@@ -158,12 +163,6 @@ class Project(GrpcStub):
             Whether to guess part properties.
         ims_stackup: bool, optional
             Whether to generate an IMS stackup
-        project: str, optional
-            Name of the Sherlock project. The default is ``None``, in which
-            case the name of the ODB++ archive file is used for the project name.
-        cca_name: str, optional
-            Name of the CCA name. The default is ``None``, in which case the
-            name of the ODB++ archive file is used for the CCA name.
         polyline_simplification: bool, optional
             Whether to enable polyline simplification
         polyline_tolerance: float, optional
@@ -180,14 +179,19 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
-                                True, True,
-                                ims_stackup=True,
-                                project="Tutorial",
-                                cca_name="Card",
-                                polyline_simplification=True,
-                                polyline_tolerance=0.1,
-                                polyline_tolerance_units="mm")
+        >>> sherlock.project.import_odb_archive(
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     project="Tutorial",
+        >>>     cca_name="Card",
+        >>>     process_layer_thickness=True,
+        >>>     include_other_layers=True,
+        >>>     process_cutout_file=True,
+        >>>     guess_part_properties=True,
+        >>>     ims_stackup=True,
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm"
+        >>> )
         """
         try:
             if archive_file == "":
@@ -220,6 +224,125 @@ class Project(GrpcStub):
 
         response = self.stub.importODBArchive(request)
 
+        try:
+            if response.value == -1:
+                raise SherlockImportODBError(response.message)
+
+            LOG.info(response.message)
+            return response.value
+        except SherlockImportODBError as e:
+            LOG.error(str(e))
+            raise e
+
+    @require_version(271)
+    def import_odb_archive_single_project(
+        self,
+        archive_file: str,
+        project: str,
+        cca_name: str,
+        project_dir: str,
+        process_layer_thickness: bool,
+        include_other_layers: bool,
+        process_cutout_file: bool,
+        guess_part_properties: bool,
+        ims_stackup: bool = False,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+        overwrite: bool = False,
+    ) -> int:
+        r"""Import an ODB++ archive file, in single project mode.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        archive_file: str
+            Full path to the ODB++ archive file.
+        project: str
+            Name of the Sherlock project. The default is ``None``, in which
+            case the name of the ODB++ archive file is used for the project name.
+        cca_name: str
+            Name of the CCA name. The default is ``None``, in which case the
+            name of the ODB++ archive file is used for the CCA name.
+        project_dir: str
+                Directory where the Sherlock project is loaded into.
+        process_layer_thickness: bool
+            Whether to assign stackup thickness.
+        include_other_layers: bool
+            Whether to include other layers.
+        process_cutout_file: bool
+            Whether to process cutouts.
+        guess_part_properties: bool
+            Whether to guess part properties.
+        ims_stackup: bool, optional
+            Whether to generate an IMS stackup
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
+        overwrite:
+            When set to True, if the project parameter is set to a project
+            name that already exists, overwrite that project, otherwise an error
+            will be raised andno import will occur.
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> odb_path = "C:\\Users\\username\\ODB++ Tutorial.tgz"
+        >>> project_test_path = "C:\\Users\\username\\testprojectarea"
+        >>> sherlock, install_dir = launcher.launch_and_connect(
+        >>>     transport_mode="wnua",
+        >>>     single_project_path=project_test_path
+        >>> )
+        >>> sherlock.project.import_odb_archive_single_project(
+        >>>     odb_path,
+        >>>     "Tutorial",
+        >>>     "Main Board",
+        >>>     project_test_path,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     ims_stackup=True,
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm"
+        >>> )
+        """
+        try:
+            if archive_file == "":
+                raise SherlockImportODBError(message="Archive path is required.")
+        except SherlockImportODBError as e:
+            LOG.error(str(e))
+            raise e
+
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockProjectService_pb2.ImportODBSingleProjectModeRequest(
+            archiveFile=archive_file,
+            project=project,
+            ccaName=cca_name,
+            projectDir=project_dir,
+            processLayerThickness=process_layer_thickness,
+            includeOtherLayers=include_other_layers,
+            processCutoutFile=process_cutout_file,
+            guessPartProperties=guess_part_properties,
+            imsStackup=ims_stackup,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
+            overwrite=overwrite,
+        )
+
+        response = self.stub.importODBArchiveSingleMode(request)
         try:
             if response.value == -1:
                 raise SherlockImportODBError(response.message)
@@ -276,12 +399,16 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
-                                project="Tutorial",
-                                cca_name="Card",
-                                polyline_simplification=True,
-                                polyline_tolerance=0.1,
-                                polyline_tolerance_units="mm")
+        >>> sherlock.project.import_ipc2581_archive(
+        >>>     "Tutorial.zip",
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial",
+        >>>     cca_name="Card",
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm"
+        >>> )
         """
         try:
             if archive_file == "":
@@ -321,6 +448,98 @@ class Project(GrpcStub):
             LOG.error(str(e))
             raise e
 
+    @require_version(271)
+    def import_ipc2581_archive_single_project_mode(
+        self,
+        archive_file: str,
+        project: str,
+        cca_name: str,
+        project_dir: str,
+        include_other_layers: bool,
+        guess_part_properties: bool,
+        polyline_simplification: bool = False,
+        polyline_tolerance: float = 0.1,
+        polyline_tolerance_units: str = "mm",
+        overwrite: bool = False,
+    ) -> int:
+        """Import an IPC-2581 archive file when Sherlock is in single project mode.
+
+        Available Since: 2027R1
+
+        Parameters
+        ----------
+        archive_file: str
+            Full path to the IPC-2581 archive file.
+        project: str
+            Name of the Sherlock project.
+        cca_name: str
+            Name of the CCA.
+        project_dir: str
+            Location where the Sherlock project will be created.
+        include_other_layers: bool
+            Whether to include other layers.
+        guess_part_properties: bool
+            Whether to guess part properties
+        polyline_simplification: bool, optional
+            Whether to enable polyline simplification
+        polyline_tolerance: float, optional
+            Polyline simplification tolerance
+        polyline_tolerance_units: str, optional
+            Polyline simplification tolerance units
+        overwrite: bool, optional
+            Whether to overwrite the project if a project with the same name already
+            exists. The default is ``False``.
+
+        Returns
+        -------
+        int
+            Status code of the response. 0 for success.
+
+        Examples
+        --------
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> sherlock.project.import_ipc2581_archive_single_project_mode(
+        >>>     "Tutorial.zip",
+        >>>     "Tutorial",
+        >>>     "Card",
+        >>>     "C:/Projects",
+        >>>     True,
+        >>>     True,
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm",
+        >>>     overwrite=True,
+        >>> )
+        """
+        if not self._is_connection_up():
+            raise SherlockNoGrpcConnectionException()
+
+        request = SherlockProjectService_pb2.ImportIPC2581SingleProjectRequest(
+            archiveFile=archive_file,
+            project=project,
+            ccaName=cca_name,
+            includeOtherLayers=include_other_layers,
+            guessPartProperties=guess_part_properties,
+            polylineSimplification=polyline_simplification,
+            polylineTolerance=polyline_tolerance,
+            polylineToleranceUnits=polyline_tolerance_units,
+            projectDir=project_dir,
+            overwrite=overwrite,
+        )
+
+        response = self.stub.importIPC2581ArchiveSingleProjectMode(request)
+
+        try:
+            if response.value == -1:
+                raise SherlockImportIpc2581Error(response.message)
+
+            LOG.info(response.message)
+            return response.value
+        except Exception as e:
+            LOG.error(str(e))
+            raise e
+
     @require_version()
     def generate_project_report(
         self, project: str, author: str, company: str, report_file: str
@@ -349,16 +568,21 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
-                                True, True,
-                                project="Tutorial",
-                                cca_name="Card")
+        >>> sherlock.project.import_odb_archive(
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial",
+        >>>     cca_name="Card"
+        >>> )
         >>> sherlock.project.generate_project_report(
-            "Tutorial",
-            "John Doe",
-            "Example",
-            "Project Report.pdf"
-        )
+        >>>     "Tutorial",
+        >>>     "John Doe",
+        >>>     "Example",
+        >>>     "Project Report.pdf"
+        >>> )
         """
         try:
             if project == "":
@@ -499,28 +723,28 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.project.add_cca(
-            "Test",
-            [{
-                'cca_name': 'Card 2',
-                'description': 'Second CCA',
-                'default_solder_type': 'SAC305',
-                'default_stencil_thickness': 10,
-                'default_stencil_thickness_units': 'mm',
-                'default_part_temp_rise': 20,
-                'default_part_temp_rise_units': 'C',
-                'guess_part_properties_enabled': False,
-            },
-            ]
-        )
+        >>>     "Test",
+        >>>     [{
+        >>>         'cca_name': 'Card 2',
+        >>>         'description': 'Second CCA',
+        >>>         'default_solder_type': 'SAC305',
+        >>>         'default_stencil_thickness': 10,
+        >>>         'default_stencil_thickness_units': 'mm',
+        >>>         'default_part_temp_rise': 20,
+        >>>         'default_part_temp_rise_units': 'C',
+        >>>         'guess_part_properties_enabled': False,
+        >>>     },
+        >>>     ]
+        >>> )
 
         """
         try:
@@ -635,58 +859,58 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import (
-            BoardBounds,
-            ImageBounds,
-            ImageFile,
-            LegendBounds,
-            LegendOrientation,
-            StrainMapsFileType,
-            StrainMapLegendOrientation,
-        )
+        >>>     BoardBounds,
+        >>>     ImageBounds,
+        >>>     ImageFile,
+        >>>     LegendBounds,
+        >>>     LegendOrientation,
+        >>>     StrainMapsFileType,
+        >>>     StrainMapLegendOrientation,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.add_strain_maps(
-            "Tutorial Project",
-                [
-                    (
-                        "StrainMap.csv",
-                        "This is the strain map file for the project",
-                        StrainMapsFileType.CSV,
-                        0,
-                        "refDes",
-                        "strain",
-                        "µε",
-                        ["Main Board"]
-                    )
-                ]
-            )
+        >>>     "Tutorial Project",
+        >>>     [
+        >>>         (
+        >>>             "StrainMap.csv",
+        >>>             "This is the strain map file for the project",
+        >>>             StrainMapsFileType.CSV,
+        >>>             0,
+        >>>             "refDes",
+        >>>             "strain",
+        >>>             "µε",
+        >>>             ["Main Board"]
+        >>>         )
+        >>>     ]
+        >>> )
         >>> properties = (
-                BoardBounds([
-                    (1.0, 2.0),
-                    (3.0, 4.0),
-                    (1.0, 2.0),
-                    (1.0, 2.0)
-                ]),
-                "in",
-                ImageBounds(0.0, 0.0, 10.0, 8.0),
-                LegendBounds(1.0, 2.0, 4.0, 2.0),
-                StrainMapLegendOrientation.VERTICAL,
-                20.0,
-                50.0,
-                "µε"
-            )
+        >>>     BoardBounds([
+        >>>         (1.0, 2.0),
+        >>>         (3.0, 4.0),
+        >>>         (1.0, 2.0),
+        >>>         (1.0, 2.0)
+        >>>     ]),
+        >>>     "in",
+        >>>     ImageBounds(0.0, 0.0, 10.0, 8.0),
+        >>>     LegendBounds(1.0, 2.0, 4.0, 2.0),
+        >>>     StrainMapLegendOrientation.VERTICAL,
+        >>>     20.0,
+        >>>     50.0,
+        >>>     "µε"
+        >>> )
         >>> sherlock.project.add_strain_maps(
-            "Tutorial Project",
-                [
-                    (
-                        "StrainMap.jpg",
-                        "This is the strain map image for the project",
-                        StrainMapsFileType.IMAGE,
-                        properties,
-                        ["Main Board"]
-                    )
-                ]
-            )
+        >>>     "Tutorial Project",
+        >>>     [
+        >>>         (
+        >>>             "StrainMap.jpg",
+        >>>             "This is the strain map image for the project",
+        >>>             StrainMapsFileType.IMAGE,
+        >>>             properties,
+        >>>             ["Main Board"]
+        >>>         )
+        >>>     ]
+        >>> )
         """
         try:
             if project == "":
@@ -703,7 +927,8 @@ class Project(GrpcStub):
                 ):
                     if len(strain_map) < 7 or len(strain_map) > 8:
                         raise SherlockAddStrainMapsError(
-                            f"Number of elements ({str(len(strain_maps))}) is wrong for strain map {i}."  # noqa: E501
+                            "Number of elements "
+                            f"({str(len(strain_maps))}) is wrong for strain map {i}."
                         )
                     elif not isinstance(strain_map[0], str) or strain_map[0] == "":
                         raise SherlockAddStrainMapsError(f"Path is required for strain map {i}.")
@@ -894,9 +1119,9 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> strain_maps = sherlock.project.list_strain_maps(
-            "AssemblyTutorial",
-            ["Main Board","Power Module"]
-        )
+        >>>     "AssemblyTutorial",
+        >>>     ["Main Board", "Power Module"]
+        >>> )
         """
         try:
             if project == "":
@@ -959,9 +1184,10 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> code = sherlock.project.add_project(
-            "project name example",
-            "project category example",
-            "project description example")
+        >>>     "project name example",
+        >>>     "project category example",
+        >>>     "project description example"
+        >>> )
         """
         if project_name is None or project_name == "":
             raise SherlockAddProjectError("Project name cannot be blank")
@@ -1004,9 +1230,9 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> thermal_maps = sherlock.project.list_thermal_maps(
-            "AssemblyTutorial",
-            ["Main Board","Power Module"]
-        )
+        >>>     "AssemblyTutorial",
+        >>>     ["Main Board", "Power Module"]
+        >>> )
         """
         try:
             if project == "":
@@ -1094,41 +1320,43 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import (
-            BoardBounds,
-            ImageBounds,
-            ImageFile,
-            LegendBounds,
-            LegendOrientation,
-            ThermalBoardSide,
-            ThermalMapsFileType,
-        )
+        >>>     BoardBounds,
+        >>>     ImageBounds,
+        >>>     ImageFile,
+        >>>     LegendBounds,
+        >>>     LegendOrientation,
+        >>>     ThermalBoardSide,
+        >>>     ThermalMapsFileType,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> thermal_map_properties = ImageFile(board_bounds=BoardBounds([
-            (1.0, 2.0),
-            (3.0, 4.0),
-            (1.0, 2.0),
-            (1.0, 2.0)]),
-            coordinate_units="in",
-            image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
-            legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
-            legend_orientation=LegendOrientation.VERTICAL,
-            max_temperature=50.0,
-            max_temperature_units="C",
-            min_temperature=20.0,
-            min_temperature_units="C"
-        )
+        >>> thermal_map_properties = ImageFile(
+        >>>     board_bounds=BoardBounds([
+        >>>         (1.0, 2.0),
+        >>>         (3.0, 4.0),
+        >>>         (1.0, 2.0),
+        >>>         (1.0, 2.0)
+        >>>     ]),
+        >>>     coordinate_units="in",
+        >>>     image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
+        >>>     legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
+        >>>     legend_orientation=LegendOrientation.VERTICAL,
+        >>>     max_temperature=50.0,
+        >>>     max_temperature_units="C",
+        >>>     min_temperature=20.0,
+        >>>     min_temperature_units="C"
+        >>> )
         >>> files = [
-            {
-                "file_name": "thermal_map_file.jpg",
-                "file_type": ThermalMapsFileType.IMAGE,
-                "file_comment": "Update thermal map",
-                "thermal_board_side": ThermalBoardSide.TOP,
-                "file_data": thermal_map_properties,
-                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-                "cca_names": ["CCA1", "CCA2"]
-            },
-        ]
+        >>>     {
+        >>>         "file_name": "thermal_map_file.jpg",
+        >>>         "file_type": ThermalMapsFileType.IMAGE,
+        >>>         "file_comment": "Update thermal map",
+        >>>         "thermal_board_side": ThermalBoardSide.TOP,
+        >>>         "file_data": thermal_map_properties,
+        >>>         "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+        >>>         "cca_names": ["CCA1", "CCA2"]
+        >>>     },
+        >>> ]
         >>> sherlock.project.update_thermal_maps("Tutorial Project", files)
         """
         try:
@@ -1428,46 +1656,48 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import (
-            BoardBounds,
-            ImageBounds,
-            ImageFile,
-            LegendBounds,
-            LegendOrientation,
-            ThermalBoardSide,
-            ThermalMapsFileType,
-        )
+        >>>     BoardBounds,
+        >>>     ImageBounds,
+        >>>     ImageFile,
+        >>>     LegendBounds,
+        >>>     LegendOrientation,
+        >>>     ThermalBoardSide,
+        >>>     ThermalMapsFileType,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> thermal_map_properties = ImageFile(board_bounds=BoardBounds([
-            (1.0, 2.0),
-            (3.0, 4.0),
-            (1.0, 2.0),
-            (1.0, 2.0)]),
-            coordinate_units="in",
-            image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
-            legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
-            legend_orientation=LegendOrientation.VERTICAL,
-            min_temperature=20.0,
-            min_temperature_units="C",
-            max_temperature=50.0,
-            max_temperature_units="C"
-        )
+        >>> thermal_map_properties = ImageFile(
+        >>>     board_bounds=BoardBounds([
+        >>>         (1.0, 2.0),
+        >>>         (3.0, 4.0),
+        >>>         (1.0, 2.0),
+        >>>         (1.0, 2.0)
+        >>>     ]),
+        >>>     coordinate_units="in",
+        >>>     image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
+        >>>     legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
+        >>>     legend_orientation=LegendOrientation.VERTICAL,
+        >>>     min_temperature=20.0,
+        >>>     min_temperature_units="C",
+        >>>     max_temperature=50.0,
+        >>>     max_temperature_units="C"
+        >>> )
         >>> files = [
-            {
-                "thermal_map_file": "Thermal Image.jpg",
-                "thermal_map_file_properties": [
-                    {
-                        "file_name": "Thermal Image.jpg",
-                        "file_type": ThermalMapsFileType.IMAGE,
-                        "file_comment": "Update thermal map",
-                        "thermal_board_side": ThermalBoardSide.TOP,
-                        "file_data": thermal_map_properties,
-                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-                        "cca_names": ["CCA1", "CCA2"]
-                    },
-                ]
-            }
-        ]
+        >>>     {
+        >>>         "thermal_map_file": "Thermal Image.jpg",
+        >>>         "thermal_map_file_properties": [
+        >>>             {
+        >>>                 "file_name": "Thermal Image.jpg",
+        >>>                 "file_type": ThermalMapsFileType.IMAGE,
+        >>>                 "file_comment": "Update thermal map",
+        >>>                 "thermal_board_side": ThermalBoardSide.TOP,
+        >>>                 "file_data": thermal_map_properties,
+        >>>                 "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+        >>>                 "cca_names": ["CCA1", "CCA2"]
+        >>>             },
+        >>>         ]
+        >>>     }
+        >>> ]
         >>> sherlock.project.add_thermal_maps("Tutorial Project", files)
         """
         try:
@@ -1740,8 +1970,11 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_project_zip_archive("Tutorial Project", "Demos",
-        "Tutorial Project.zip")
+        >>> sherlock.project.import_project_zip_archive(
+        >>>     "Tutorial Project",
+        >>>     "Demos",
+        >>>     "Tutorial Project.zip"
+        >>> )
         """
         try:
             if project == "":
@@ -1800,10 +2033,12 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_project_zip_archive_single_mode("Tutorial Project",
-        "Demos",
-        "Tutorial Project.zip",
-        "New Tutorial Project")
+        >>> sherlock.project.import_project_zip_archive_single_mode(
+        >>>     "Tutorial Project",
+        >>>     "Demos",
+        >>>     "Tutorial Project.zip",
+        >>>     "New Tutorial Project"
+        >>> )
         """
         try:
             if project == "":
@@ -1901,16 +2136,18 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.export_project("Tutorial Project",
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        "C:/Path/To/Exported/Project",
-        "Exported_Project",
-        True)
+        >>> sherlock.project.export_project(
+        >>>     "Tutorial Project",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     "C:/Path/To/Exported/Project",
+        >>>     "Exported_Project",
+        >>>     True
+        >>> )
         """
         try:
             if project_name == "":
@@ -1994,30 +2231,30 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.project.create_cca_from_modeling_region(
-            "Test",
-            [{
-                'cca_name': 'Card',
-                'modeling_region_id': 'MR1'
-                'description': 'Test',
-                'default_solder_type': 'SAC305',
-                'default_stencil_thickness': 10,
-                'default_stencil_thickness_units': 'mm',
-                'default_part_temp_rise': 20,
-                'default_part_temp_rise_units': 'C',
-                'guess_part_properties': False,
-                'generate_image_layers': False,
-            },
-            ]
-        )
+        >>>     "Test",
+        >>>     [{
+        >>>         'cca_name': 'Card',
+        >>>         'modeling_region_id': 'MR1',
+        >>>         'description': 'Test',
+        >>>         'default_solder_type': 'SAC305',
+        >>>         'default_stencil_thickness': 10,
+        >>>         'default_stencil_thickness_units': 'mm',
+        >>>         'default_part_temp_rise': 20,
+        >>>         'default_part_temp_rise_units': 'C',
+        >>>         'guess_part_properties': False,
+        >>>         'generate_image_layers': False,
+        >>>     },
+        >>>     ]
+        >>> )
         """
         try:
             if project == "":

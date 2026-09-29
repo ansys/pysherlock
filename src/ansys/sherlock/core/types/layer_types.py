@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -23,7 +23,6 @@
 # SOFTWARE.
 
 """Module containing types for the Layer Service."""
-
 
 from typing import Optional, Union
 
@@ -673,7 +672,11 @@ class MountPointProperties(BaseModel):
 
 
 class GetMountPointsPropertiesRequest(BaseModel):
-    """Return the properties for each mount point given a comma-separated list of mount point ids."""  # noqa: E501
+    """Return the properties for each mount point given a comma-separated list of mount point ids.
+
+    The request can target a project and CCA and optionally restrict the results to
+    specific mount point IDs.
+    """
 
     project: str
     """Name of the project."""

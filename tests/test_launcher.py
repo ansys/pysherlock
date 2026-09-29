@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
-# © 2023 - 2025 ANSYS, Inc. All rights reserved
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -46,6 +45,21 @@ class TestLauncher(unittest.TestCase):
     def test_base_ansys(self, mock_os_path_isfile):
         mock_os_path_isfile.return_value = True
         self.assertEqual("C:\\Program Files\\ANSYS Inc\\v223", launcher._get_base_ansys()[0])
+
+    def test_extract_env_vars(self):
+
+        mock_env_vars = {"AWP_ROOTDV_DEV": "_", "AWP_ROOT1234": "_", "AWP_ROOT222": "_"}
+        env_vars_found = launcher._extract_awp_root_vars_from_list(mock_env_vars, lambda path: True)
+        expected_env_vars = {"AWP_ROOT222": "_"}
+        assert env_vars_found == expected_env_vars
+
+        # Test the branch where the check_for_sherlock_func returns False,
+        # so no environment variables should be found.
+        env_vars_found = launcher._extract_awp_root_vars_from_list(
+            mock_env_vars, lambda path: False
+        )
+        expected_env_vars = {}
+        assert env_vars_found == expected_env_vars
 
     def test_get_ansys_version_from_awp_root(self):
         self.assertEqual(223, launcher._get_ansys_version_from_awp_root("AWP_ROOT223"))

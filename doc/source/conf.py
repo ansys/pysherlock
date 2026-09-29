@@ -41,6 +41,11 @@ logger = logging.getLogger(__name__)
 
 pysherlock.BUILDING_GALLERY = True
 
+# Executing the gallery examples requires a live Sherlock installation and takes
+# more than 20 minutes. Unless explicitly requested, the gallery pages are
+# generated without running the example code.
+BUILD_EXAMPLES = os.getenv("PYSHERLOCK_BUILD_EXAMPLES", "false").lower() in ("true", "1", "yes")
+
 DEFAULT_EXAMPLE_EXTENSION = "py"
 DOC_PATH = "doc/source"
 GALLERY_EXAMPLES_PATH = "examples/gallery_examples"
@@ -127,16 +132,13 @@ autodoc_pydantic_settings_show_json_schema_extra = False
 numpydoc_show_class_members = False  # we take care of autosummary on our own
 
 # The suffix(es) of source filenames.
-source_suffix = ".rst"
+source_suffix = {".rst": "restructuredtext"}
 
 # The master toctree document.
 master_doc = "index"
 
 # static path
 html_static_path = ["_static"]
-templates_path = ["_templates"]
-# The suffix(es) of source filenames.
-source_suffix = ".rst"
 
 # We have our own custom templates
 templates_path = ["_templates"]
@@ -175,6 +177,10 @@ exclude_patterns = [
 sphinx_gallery_conf = {
     # convert rst to md for ipynb
     "pypandoc": True,
+    # whether the example code is executed while building the gallery.
+    # Sphinx-Gallery expects a string that evaluates to a boolean, so that the
+    # value stays overridable through ``sphinx-build -D plot_gallery=0``.
+    "plot_gallery": str(BUILD_EXAMPLES),
     # path to your examples scripts
     "examples_dirs": ["../../examples/"],
     # path where to save gallery generated examples
@@ -196,6 +202,12 @@ sphinx_gallery_conf = {
     "show_signature": False,
     "ignore_pattern": r"examples_globals.py",
 }
+
+if not BUILD_EXAMPLES:
+    logger.info(
+        "Gallery examples are not executed. "
+        "Set PYSHERLOCK_BUILD_EXAMPLES=true to run them (requires a Sherlock installation)."
+    )
 
 # make rst_epilog a variable, so you can add other epilog parts to it
 rst_epilog = ""

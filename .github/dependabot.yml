@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     labels:
       - "maintenance"
       - "dependencies"
@@ -13,14 +13,41 @@ updates:
       - dependency-name: "grpcio"
     cooldown:
       default-days: 7
+    groups:
+      pip-deps:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     labels:
       - "maintenance"
     commit-message:
       prefix: "build"
     cooldown:
       default-days: 7
+      exclude:
+        - "ansys/actions/*"
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7 # semver-* options are not applicable for pre-commit
+      exclude:
+        - "ansys/pre-commit-hooks/*"
+    labels:
+      - "maintenance"
+    commit-message:
+      prefix: "chore(pre-commit)"
+    groups:
+      pre-commit-hooks:
+        patterns:
+          - "*"

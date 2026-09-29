@@ -80,12 +80,14 @@ This code uses the Sherlock Part Library to update the parts list:
 
 .. code::
 
+    from ansys.api.sherlock.v0 import SherlockCommonService_pb2, SherlockPartsService_pb2
+
     sherlock.parts.update_parts_list(
         "Tutorial",
         "Main Board",
         "Sherlock Part Library",
-        "Both",
-        PartsListSearchDuplicationMode.ERROR,
+        SherlockCommonService_pb2.MatchingMode.Both,
+        SherlockPartsService_pb2.DuplicationMode.Error,
     )
 
 For information on the ``parts`` module and its methods, see :ref:`ref_parts_module`.
@@ -140,16 +142,17 @@ to run a random vibe analysis:
 
 .. code::
 
+    from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
+
     sherlock.analysis.run_analysis(
         "Tutorial",
         "Main Board",
         [
-            (RunAnalysisRequestAnalysisType.RANDOM_VIBE,
-            [
-                ("Phase 1", ["RVEvent 1"])
-            ]
+            (
+                SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.RandomVibe,
+                [("Phase 1", ["RVEvent 1"])],
             )
-        ]
+        ],
     )
 
 For information on the ``analysis`` module and its methods, see :ref:`ref_analysis_module`.

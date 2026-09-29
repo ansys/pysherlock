@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2021 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -2823,18 +2823,18 @@ class Lifecycle(GrpcStub):
             Status code of the response. 0 for success.
 
         Examples
-            --------
-            >>> from ansys.sherlock.core.types.lifecycle_types import SaveLifeCycleRequest
-            >>> from ansys.sherlock.core import launcher
-            >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-            >>> response = sherlock.lifecycle.save_life_cycle(
-            >>>     SaveLifeCycleRequestRequest(
-            >>>         project="Tutorial Project",
-            >>>         file_path="/path/to/save/lifecycle_file.dfr-lc",
-            >>>         overwrite_file=True
-            >>>     )
-            >>> )
-            >>> assert response.value == 0
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import SaveLifeCycleRequest
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> response = sherlock.lifecycle.save_life_cycle(
+        >>>     SaveLifeCycleRequest(
+        >>>         project="Tutorial Project",
+        >>>         file_path="/path/to/save/lifecycle_file.dfr-lc",
+        >>>         overwrite_file=True
+        >>>     )
+        >>> )
+        >>> assert response.value == 0
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2867,16 +2867,16 @@ class Lifecycle(GrpcStub):
             The life cycle events for the project.
 
         Examples
-            --------
-            >>> from ansys.sherlock.core.types.lifecycle_types import ListLifeCycleEventsRequest
-            >>> from ansys.sherlock.core import launcher
-            >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-            >>> response = sherlock.lifecycle.list_life_cycle_events(
-            >>>     ListLifeCycleEventsRequest(
-            >>>         project="Tutorial Project"
-            >>>     )
-            >>> )
-            >>> assert response.returnCode.value == 0
+        --------
+        >>> from ansys.sherlock.core.types.lifecycle_types import ListLifeCycleEventsRequest
+        >>> from ansys.sherlock.core import launcher
+        >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
+        >>> response = sherlock.lifecycle.list_life_cycle_events(
+        >>>     ListLifeCycleEventsRequest(
+        >>>         project="Tutorial Project"
+        >>>     )
+        >>> )
+        >>> assert response.returnCode.value == 0
         """
         grpc_request = request._convert_to_grpc()
 
