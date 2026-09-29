@@ -385,26 +385,26 @@ class Analysis(GrpcStub):
         >>>     cca_name="Card",
         >>> )
         >>> sherlock.analysis.update_harmonic_vibe_props(
-        >>> "Test",
-        >>> [{
-        >>>     "cca_name": "Card",
-        >>>     "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
-        >>>     "harmonic_vibe_count": 2,
-        >>>     "harmonic_vibe_damping": "0.01, 0.05",
-        >>>     "part_validation_enabled": False,
-        >>>     "require_material_assignment_enabled": False,
-        >>>     "analysis_temp": 20,
-        >>>     "analysis_temp_units": "C",
-        >>>     "force_model_rebuild": "AUTO",
-        >>>     "filter_by_event_frequency": False,
-        >>>     "natural_freq_min": 10,
-        >>>     "natural_freq_min_units": "Hz",
-        >>>     "natural_freq_max": 1000,
-        >>>     "natural_freq_max_units": "KHz",
-        >>>     "reuse_modal_analysis": True,
-        >>>     "strain_map_natural_freq": 100.13,
-        >>> },
-        >>> ]
+        >>>     "Test",
+        >>>     [{
+        >>>         "cca_name": "Card",
+        >>>         "model_source": SherlockAnalysisService_pb2.ModelSource.GENERATED,
+        >>>         "harmonic_vibe_count": 2,
+        >>>         "harmonic_vibe_damping": "0.01, 0.05",
+        >>>         "part_validation_enabled": False,
+        >>>         "require_material_assignment_enabled": False,
+        >>>         "analysis_temp": 20,
+        >>>         "analysis_temp_units": "C",
+        >>>         "force_model_rebuild": "AUTO",
+        >>>         "filter_by_event_frequency": False,
+        >>>         "natural_freq_min": 10,
+        >>>         "natural_freq_min_units": "Hz",
+        >>>         "natural_freq_max": 1000,
+        >>>         "natural_freq_max_units": "KHz",
+        >>>         "reuse_modal_analysis": True,
+        >>>         "strain_map_natural_freq": 100.13,
+        >>>     },
+        >>>     ]
         >>> )
         """
         try:
@@ -1817,25 +1817,25 @@ class Analysis(GrpcStub):
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> update_request = SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest
         >>> sherlock.analysis.update_pcb_modeling_props(
-        >>> "Tutorial Project",
-        >>> ["Main Board"],
-        >>> [
-        >>>     (
-        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-        >>>         Analysis.AnalysisType.HarmonicVibe,
-        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-        >>>         Analysis.PcbModelType.Bonded,
-        >>>         True,
-        >>>         SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-        >>>         Analysis.PcbMaterialModel.Uniform,
-        >>>         SherlockAnalysisService_pb2.ElementOrder.SolidShell,
-        >>>         6,
-        >>>         "mm",
-        >>>         3,
-        >>>         "mm",
-        >>>         True,
-        >>>     )
-        >>> ]
+        >>>     "Tutorial Project",
+        >>>     ["Main Board"],
+        >>>     [
+        >>>         (
+        >>>             SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>             Analysis.AnalysisType.HarmonicVibe,
+        >>>             SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>             Analysis.PcbModelType.Bonded,
+        >>>             True,
+        >>>             SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+        >>>             Analysis.PcbMaterialModel.Uniform,
+        >>>             SherlockAnalysisService_pb2.ElementOrder.SolidShell,
+        >>>             6,
+        >>>             "mm",
+        >>>             3,
+        >>>             "mm",
+        >>>             True,
+        >>>         )
+        >>>     ]
         >>> )
         """
         try:

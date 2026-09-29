@@ -180,18 +180,18 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-        >>>                        "ODB++ Tutorial.tgz",
-        >>>                        project="Tutorial",
-        >>>                        cca_name="Card",
-        >>>                        True,
-        >>>                        True,
-        >>>                        True,
-        >>>                        True,
-        >>>                        ims_stackup=True,
-        >>>                        polyline_simplification=True,
-        >>>                        polyline_tolerance=0.1,
-        >>>                        polyline_tolerance_units="mm"
-        >>>                        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     project="Tutorial",
+        >>>     cca_name="Card",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     ims_stackup=True,
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm"
+        >>> )
         """
         try:
             if archive_file == "":
@@ -295,24 +295,26 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core import launcher
-        >>> odb_path="C:\\Users\\username\\ODB++ Tutorial.tgz"
-        >>> project_test_path="C:\\Users\\username\\testprojectarea"
-        >>> sherlock, install_dir = launch_and_connect(
+        >>> odb_path = "C:\\Users\\username\\ODB++ Tutorial.tgz"
+        >>> project_test_path = "C:\\Users\\username\\testprojectarea"
+        >>> sherlock, install_dir = launcher.launch_and_connect(
         >>>     transport_mode="wnua",
-        >>>     single_project_path=project_test_path)
+        >>>     single_project_path=project_test_path
+        >>> )
         >>> sherlock.project.import_odb_archive_single_project(
-        >>>        odb_path,
-        >>>        "Tutorial",
-        >>>        "Main Board",
-        >>>        project_test_path,
-        >>>        True,
-        >>>        True,
-        >>>        True,
-        >>>        True,
-        >>>        ims_stackup=True,
-        >>>        polyline_simplification=True,
-        >>>        polyline_tolerance=0.1,
-        >>>        polyline_tolerance_units="mm")
+        >>>     odb_path,
+        >>>     "Tutorial",
+        >>>     "Main Board",
+        >>>     project_test_path,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     ims_stackup=True,
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm"
+        >>> )
         """
         try:
             if archive_file == "":
@@ -397,12 +399,16 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_ipc2581_archive("Tutorial.zip", True, True,
-                                project="Tutorial",
-                                cca_name="Card",
-                                polyline_simplification=True,
-                                polyline_tolerance=0.1,
-                                polyline_tolerance_units="mm")
+        >>> sherlock.project.import_ipc2581_archive(
+        >>>     "Tutorial.zip",
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial",
+        >>>     cca_name="Card",
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm"
+        >>> )
         """
         try:
             if archive_file == "":
@@ -494,16 +500,16 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_ipc2581_archive_single_project_mode(
-        >>>    "Tutorial.zip",
-        >>>    "Tutorial",
-        >>>    "Card",
-        >>>    "C:/Projects",
-        >>>    True,
-        >>>    True,
-        >>>    polyline_simplification=True,
-        >>>    polyline_tolerance=0.1,
-        >>>    polyline_tolerance_units="mm",
-        >>>    overwrite=True,
+        >>>     "Tutorial.zip",
+        >>>     "Tutorial",
+        >>>     "Card",
+        >>>     "C:/Projects",
+        >>>     True,
+        >>>     True,
+        >>>     polyline_simplification=True,
+        >>>     polyline_tolerance=0.1,
+        >>>     polyline_tolerance_units="mm",
+        >>>     overwrite=True,
         >>> )
         """
         if not self._is_connection_up():
@@ -562,16 +568,21 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_odb_archive("ODB++ Tutorial.tgz", True, True,
-                                True, True,
-                                project="Tutorial",
-                                cca_name="Card")
+        >>> sherlock.project.import_odb_archive(
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Tutorial",
+        >>>     cca_name="Card"
+        >>> )
         >>> sherlock.project.generate_project_report(
-            "Tutorial",
-            "John Doe",
-            "Example",
-            "Project Report.pdf"
-        )
+        >>>     "Tutorial",
+        >>>     "John Doe",
+        >>>     "Example",
+        >>>     "Project Report.pdf"
+        >>> )
         """
         try:
             if project == "":
@@ -712,28 +723,28 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.project.add_cca(
-            "Test",
-            [{
-                'cca_name': 'Card 2',
-                'description': 'Second CCA',
-                'default_solder_type': 'SAC305',
-                'default_stencil_thickness': 10,
-                'default_stencil_thickness_units': 'mm',
-                'default_part_temp_rise': 20,
-                'default_part_temp_rise_units': 'C',
-                'guess_part_properties_enabled': False,
-            },
-            ]
-        )
+        >>>     "Test",
+        >>>     [{
+        >>>         'cca_name': 'Card 2',
+        >>>         'description': 'Second CCA',
+        >>>         'default_solder_type': 'SAC305',
+        >>>         'default_stencil_thickness': 10,
+        >>>         'default_stencil_thickness_units': 'mm',
+        >>>         'default_part_temp_rise': 20,
+        >>>         'default_part_temp_rise_units': 'C',
+        >>>         'guess_part_properties_enabled': False,
+        >>>     },
+        >>>     ]
+        >>> )
 
         """
         try:
@@ -848,58 +859,58 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import (
-            BoardBounds,
-            ImageBounds,
-            ImageFile,
-            LegendBounds,
-            LegendOrientation,
-            StrainMapsFileType,
-            StrainMapLegendOrientation,
-        )
+        >>>     BoardBounds,
+        >>>     ImageBounds,
+        >>>     ImageFile,
+        >>>     LegendBounds,
+        >>>     LegendOrientation,
+        >>>     StrainMapsFileType,
+        >>>     StrainMapLegendOrientation,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.add_strain_maps(
-            "Tutorial Project",
-                [
-                    (
-                        "StrainMap.csv",
-                        "This is the strain map file for the project",
-                        StrainMapsFileType.CSV,
-                        0,
-                        "refDes",
-                        "strain",
-                        "µε",
-                        ["Main Board"]
-                    )
-                ]
-            )
+        >>>     "Tutorial Project",
+        >>>     [
+        >>>         (
+        >>>             "StrainMap.csv",
+        >>>             "This is the strain map file for the project",
+        >>>             StrainMapsFileType.CSV,
+        >>>             0,
+        >>>             "refDes",
+        >>>             "strain",
+        >>>             "µε",
+        >>>             ["Main Board"]
+        >>>         )
+        >>>     ]
+        >>> )
         >>> properties = (
-                BoardBounds([
-                    (1.0, 2.0),
-                    (3.0, 4.0),
-                    (1.0, 2.0),
-                    (1.0, 2.0)
-                ]),
-                "in",
-                ImageBounds(0.0, 0.0, 10.0, 8.0),
-                LegendBounds(1.0, 2.0, 4.0, 2.0),
-                StrainMapLegendOrientation.VERTICAL,
-                20.0,
-                50.0,
-                "µε"
-            )
+        >>>     BoardBounds([
+        >>>         (1.0, 2.0),
+        >>>         (3.0, 4.0),
+        >>>         (1.0, 2.0),
+        >>>         (1.0, 2.0)
+        >>>     ]),
+        >>>     "in",
+        >>>     ImageBounds(0.0, 0.0, 10.0, 8.0),
+        >>>     LegendBounds(1.0, 2.0, 4.0, 2.0),
+        >>>     StrainMapLegendOrientation.VERTICAL,
+        >>>     20.0,
+        >>>     50.0,
+        >>>     "µε"
+        >>> )
         >>> sherlock.project.add_strain_maps(
-            "Tutorial Project",
-                [
-                    (
-                        "StrainMap.jpg",
-                        "This is the strain map image for the project",
-                        StrainMapsFileType.IMAGE,
-                        properties,
-                        ["Main Board"]
-                    )
-                ]
-            )
+        >>>     "Tutorial Project",
+        >>>     [
+        >>>         (
+        >>>             "StrainMap.jpg",
+        >>>             "This is the strain map image for the project",
+        >>>             StrainMapsFileType.IMAGE,
+        >>>             properties,
+        >>>             ["Main Board"]
+        >>>         )
+        >>>     ]
+        >>> )
         """
         try:
             if project == "":
@@ -1108,9 +1119,9 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> strain_maps = sherlock.project.list_strain_maps(
-            "AssemblyTutorial",
-            ["Main Board","Power Module"]
-        )
+        >>>     "AssemblyTutorial",
+        >>>     ["Main Board", "Power Module"]
+        >>> )
         """
         try:
             if project == "":
@@ -1173,9 +1184,10 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> code = sherlock.project.add_project(
-            "project name example",
-            "project category example",
-            "project description example")
+        >>>     "project name example",
+        >>>     "project category example",
+        >>>     "project description example"
+        >>> )
         """
         if project_name is None or project_name == "":
             raise SherlockAddProjectError("Project name cannot be blank")
@@ -1218,9 +1230,9 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> thermal_maps = sherlock.project.list_thermal_maps(
-            "AssemblyTutorial",
-            ["Main Board","Power Module"]
-        )
+        >>>     "AssemblyTutorial",
+        >>>     ["Main Board", "Power Module"]
+        >>> )
         """
         try:
             if project == "":
@@ -1308,41 +1320,43 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import (
-            BoardBounds,
-            ImageBounds,
-            ImageFile,
-            LegendBounds,
-            LegendOrientation,
-            ThermalBoardSide,
-            ThermalMapsFileType,
-        )
+        >>>     BoardBounds,
+        >>>     ImageBounds,
+        >>>     ImageFile,
+        >>>     LegendBounds,
+        >>>     LegendOrientation,
+        >>>     ThermalBoardSide,
+        >>>     ThermalMapsFileType,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> thermal_map_properties = ImageFile(board_bounds=BoardBounds([
-            (1.0, 2.0),
-            (3.0, 4.0),
-            (1.0, 2.0),
-            (1.0, 2.0)]),
-            coordinate_units="in",
-            image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
-            legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
-            legend_orientation=LegendOrientation.VERTICAL,
-            max_temperature=50.0,
-            max_temperature_units="C",
-            min_temperature=20.0,
-            min_temperature_units="C"
-        )
+        >>> thermal_map_properties = ImageFile(
+        >>>     board_bounds=BoardBounds([
+        >>>         (1.0, 2.0),
+        >>>         (3.0, 4.0),
+        >>>         (1.0, 2.0),
+        >>>         (1.0, 2.0)
+        >>>     ]),
+        >>>     coordinate_units="in",
+        >>>     image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
+        >>>     legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
+        >>>     legend_orientation=LegendOrientation.VERTICAL,
+        >>>     max_temperature=50.0,
+        >>>     max_temperature_units="C",
+        >>>     min_temperature=20.0,
+        >>>     min_temperature_units="C"
+        >>> )
         >>> files = [
-            {
-                "file_name": "thermal_map_file.jpg",
-                "file_type": ThermalMapsFileType.IMAGE,
-                "file_comment": "Update thermal map",
-                "thermal_board_side": ThermalBoardSide.TOP,
-                "file_data": thermal_map_properties,
-                "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-                "cca_names": ["CCA1", "CCA2"]
-            },
-        ]
+        >>>     {
+        >>>         "file_name": "thermal_map_file.jpg",
+        >>>         "file_type": ThermalMapsFileType.IMAGE,
+        >>>         "file_comment": "Update thermal map",
+        >>>         "thermal_board_side": ThermalBoardSide.TOP,
+        >>>         "file_data": thermal_map_properties,
+        >>>         "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+        >>>         "cca_names": ["CCA1", "CCA2"]
+        >>>     },
+        >>> ]
         >>> sherlock.project.update_thermal_maps("Tutorial Project", files)
         """
         try:
@@ -1642,46 +1656,48 @@ class Project(GrpcStub):
         Examples
         --------
         >>> from ansys.sherlock.core.types.project_types import (
-            BoardBounds,
-            ImageBounds,
-            ImageFile,
-            LegendBounds,
-            LegendOrientation,
-            ThermalBoardSide,
-            ThermalMapsFileType,
-        )
+        >>>     BoardBounds,
+        >>>     ImageBounds,
+        >>>     ImageFile,
+        >>>     LegendBounds,
+        >>>     LegendOrientation,
+        >>>     ThermalBoardSide,
+        >>>     ThermalMapsFileType,
+        >>> )
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> thermal_map_properties = ImageFile(board_bounds=BoardBounds([
-            (1.0, 2.0),
-            (3.0, 4.0),
-            (1.0, 2.0),
-            (1.0, 2.0)]),
-            coordinate_units="in",
-            image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
-            legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
-            legend_orientation=LegendOrientation.VERTICAL,
-            min_temperature=20.0,
-            min_temperature_units="C",
-            max_temperature=50.0,
-            max_temperature_units="C"
-        )
+        >>> thermal_map_properties = ImageFile(
+        >>>     board_bounds=BoardBounds([
+        >>>         (1.0, 2.0),
+        >>>         (3.0, 4.0),
+        >>>         (1.0, 2.0),
+        >>>         (1.0, 2.0)
+        >>>     ]),
+        >>>     coordinate_units="in",
+        >>>     image_bounds=ImageBounds(0.0, 0.0, 10.0, 8.0),
+        >>>     legend_bounds=LegendBounds(1.0, 2.0, 4.0, 2.0),
+        >>>     legend_orientation=LegendOrientation.VERTICAL,
+        >>>     min_temperature=20.0,
+        >>>     min_temperature_units="C",
+        >>>     max_temperature=50.0,
+        >>>     max_temperature_units="C"
+        >>> )
         >>> files = [
-            {
-                "thermal_map_file": "Thermal Image.jpg",
-                "thermal_map_file_properties": [
-                    {
-                        "file_name": "Thermal Image.jpg",
-                        "file_type": ThermalMapsFileType.IMAGE,
-                        "file_comment": "Update thermal map",
-                        "thermal_board_side": ThermalBoardSide.TOP,
-                        "file_data": thermal_map_properties,
-                        "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
-                        "cca_names": ["CCA1", "CCA2"]
-                    },
-                ]
-            }
-        ]
+        >>>     {
+        >>>         "thermal_map_file": "Thermal Image.jpg",
+        >>>         "thermal_map_file_properties": [
+        >>>             {
+        >>>                 "file_name": "Thermal Image.jpg",
+        >>>                 "file_type": ThermalMapsFileType.IMAGE,
+        >>>                 "file_comment": "Update thermal map",
+        >>>                 "thermal_board_side": ThermalBoardSide.TOP,
+        >>>                 "file_data": thermal_map_properties,
+        >>>                 "thermal_profiles": ["Environmental/1 - Temp Cycle - Min"],
+        >>>                 "cca_names": ["CCA1", "CCA2"]
+        >>>             },
+        >>>         ]
+        >>>     }
+        >>> ]
         >>> sherlock.project.add_thermal_maps("Tutorial Project", files)
         """
         try:
@@ -1954,8 +1970,11 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_project_zip_archive("Tutorial Project", "Demos",
-        "Tutorial Project.zip")
+        >>> sherlock.project.import_project_zip_archive(
+        >>>     "Tutorial Project",
+        >>>     "Demos",
+        >>>     "Tutorial Project.zip"
+        >>> )
         """
         try:
             if project == "":
@@ -2014,10 +2033,12 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.import_project_zip_archive_single_mode("Tutorial Project",
-        "Demos",
-        "Tutorial Project.zip",
-        "New Tutorial Project")
+        >>> sherlock.project.import_project_zip_archive_single_mode(
+        >>>     "Tutorial Project",
+        >>>     "Demos",
+        >>>     "Tutorial Project.zip",
+        >>>     "New Tutorial Project"
+        >>> )
         """
         try:
             if project == "":
@@ -2115,16 +2136,18 @@ class Project(GrpcStub):
         --------
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
-        >>> sherlock.project.export_project("Tutorial Project",
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        "C:/Path/To/Exported/Project",
-        "Exported_Project",
-        True)
+        >>> sherlock.project.export_project(
+        >>>     "Tutorial Project",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     "C:/Path/To/Exported/Project",
+        >>>     "Exported_Project",
+        >>>     True
+        >>> )
         """
         try:
             if project_name == "":
@@ -2208,30 +2231,30 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-            "ODB++ Tutorial.tgz",
-            True,
-            True,
-            True,
-            True,
-            project="Test",
-            cca_name="Card",
-        )
+        >>>     "ODB++ Tutorial.tgz",
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     True,
+        >>>     project="Test",
+        >>>     cca_name="Card",
+        >>> )
         >>> sherlock.project.create_cca_from_modeling_region(
-            "Test",
-            [{
-                'cca_name': 'Card',
-                'modeling_region_id': 'MR1'
-                'description': 'Test',
-                'default_solder_type': 'SAC305',
-                'default_stencil_thickness': 10,
-                'default_stencil_thickness_units': 'mm',
-                'default_part_temp_rise': 20,
-                'default_part_temp_rise_units': 'C',
-                'guess_part_properties': False,
-                'generate_image_layers': False,
-            },
-            ]
-        )
+        >>>     "Test",
+        >>>     [{
+        >>>         'cca_name': 'Card',
+        >>>         'modeling_region_id': 'MR1',
+        >>>         'description': 'Test',
+        >>>         'default_solder_type': 'SAC305',
+        >>>         'default_stencil_thickness': 10,
+        >>>         'default_stencil_thickness_units': 'mm',
+        >>>         'default_part_temp_rise': 20,
+        >>>         'default_part_temp_rise_units': 'C',
+        >>>         'guess_part_properties': False,
+        >>>         'generate_image_layers': False,
+        >>>     },
+        >>>     ]
+        >>> )
         """
         try:
             if project == "":
