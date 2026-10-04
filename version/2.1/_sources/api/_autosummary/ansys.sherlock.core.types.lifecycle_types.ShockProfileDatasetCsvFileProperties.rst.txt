@@ -1,0 +1,149 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.ShockProfileDatasetCsvFileProperties
+===============================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: ShockProfileDatasetCsvFileProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ShockProfileDatasetCsvFileProperties.construct
+      
+      
+      ShockProfileDatasetCsvFileProperties.copy
+      
+      
+      ShockProfileDatasetCsvFileProperties.dict
+      
+      
+      ShockProfileDatasetCsvFileProperties.from_orm
+      
+      
+      ShockProfileDatasetCsvFileProperties.json
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_construct
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_copy
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_dump
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_dump_json
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_json_schema
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_parametrized_name
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_post_init
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_rebuild
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_validate
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_validate_json
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_validate_strings
+      
+      
+      ShockProfileDatasetCsvFileProperties.non_negative_int_validation
+      
+      
+      ShockProfileDatasetCsvFileProperties.optional_str_validation
+      
+      
+      ShockProfileDatasetCsvFileProperties.parse_file
+      
+      
+      ShockProfileDatasetCsvFileProperties.parse_obj
+      
+      
+      ShockProfileDatasetCsvFileProperties.parse_raw
+      
+      
+      ShockProfileDatasetCsvFileProperties.schema
+      
+      
+      ShockProfileDatasetCsvFileProperties.schema_json
+      
+      
+      ShockProfileDatasetCsvFileProperties.str_validation
+      
+      
+      ShockProfileDatasetCsvFileProperties.update_forward_refs
+      
+      
+      ShockProfileDatasetCsvFileProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ShockProfileDatasetCsvFileProperties.model_computed_fields
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_config
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_extra
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_fields
+      
+      
+      ShockProfileDatasetCsvFileProperties.model_fields_set
+      
+      
+      ShockProfileDatasetCsvFileProperties.profile_name
+      
+      
+      ShockProfileDatasetCsvFileProperties.header_row_count
+      
+      
+      ShockProfileDatasetCsvFileProperties.column_delimiter
+      
+      
+      ShockProfileDatasetCsvFileProperties.numeric_format
+      
+      
+      ShockProfileDatasetCsvFileProperties.time_column
+      
+      
+      ShockProfileDatasetCsvFileProperties.time_units
+      
+      
+      ShockProfileDatasetCsvFileProperties.load_column
+      
+      
+      ShockProfileDatasetCsvFileProperties.load_units
+      
+   
+   
+
+.. vale on

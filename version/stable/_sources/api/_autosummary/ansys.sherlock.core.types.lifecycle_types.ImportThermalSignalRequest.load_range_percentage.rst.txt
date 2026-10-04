@@ -1,0 +1,10 @@
+.. vale off
+
+load\_range\_percentage
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.load_range_percentage
+
+.. vale on

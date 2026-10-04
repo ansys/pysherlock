@@ -1,0 +1,10 @@
+.. vale off
+
+model\_fields
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: OutlineFile.model_fields
+
+.. vale on

@@ -1,0 +1,29 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdatePTHFatiguePropsRequestAnalysisType
+==================================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdatePTHFatiguePropsRequestAnalysisType
+
+   
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      
+      
+   
+   
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+result\_archive\_file\_name
+===========================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: UpdateLifePhaseRequest.result_archive_file_name
+
+.. vale on

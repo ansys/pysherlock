@@ -1,0 +1,10 @@
+.. vale off
+
+get\_layer\_count
+=================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.get_layer_count
+
+.. vale on

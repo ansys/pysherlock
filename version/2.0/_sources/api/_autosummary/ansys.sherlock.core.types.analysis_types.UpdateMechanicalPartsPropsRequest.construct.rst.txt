@@ -1,0 +1,10 @@
+.. vale off
+
+construct
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: UpdateMechanicalPartsPropsRequest.construct
+
+.. vale on

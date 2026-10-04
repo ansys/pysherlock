@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.DeletePottingRegionRequest
+=================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: DeletePottingRegionRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      DeletePottingRegionRequest.construct
+      
+      
+      DeletePottingRegionRequest.copy
+      
+      
+      DeletePottingRegionRequest.dict
+      
+      
+      DeletePottingRegionRequest.from_orm
+      
+      
+      DeletePottingRegionRequest.json
+      
+      
+      DeletePottingRegionRequest.model_construct
+      
+      
+      DeletePottingRegionRequest.model_copy
+      
+      
+      DeletePottingRegionRequest.model_dump
+      
+      
+      DeletePottingRegionRequest.model_dump_json
+      
+      
+      DeletePottingRegionRequest.model_json_schema
+      
+      
+      DeletePottingRegionRequest.model_parametrized_name
+      
+      
+      DeletePottingRegionRequest.model_post_init
+      
+      
+      DeletePottingRegionRequest.model_rebuild
+      
+      
+      DeletePottingRegionRequest.model_validate
+      
+      
+      DeletePottingRegionRequest.model_validate_json
+      
+      
+      DeletePottingRegionRequest.model_validate_strings
+      
+      
+      DeletePottingRegionRequest.parse_file
+      
+      
+      DeletePottingRegionRequest.parse_obj
+      
+      
+      DeletePottingRegionRequest.parse_raw
+      
+      
+      DeletePottingRegionRequest.schema
+      
+      
+      DeletePottingRegionRequest.schema_json
+      
+      
+      DeletePottingRegionRequest.str_validation
+      
+      
+      DeletePottingRegionRequest.update_forward_refs
+      
+      
+      DeletePottingRegionRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      DeletePottingRegionRequest.model_computed_fields
+      
+      
+      DeletePottingRegionRequest.model_config
+      
+      
+      DeletePottingRegionRequest.model_extra
+      
+      
+      DeletePottingRegionRequest.model_fields
+      
+      
+      DeletePottingRegionRequest.model_fields_set
+      
+      
+      DeletePottingRegionRequest.project
+      
+      
+      DeletePottingRegionRequest.potting_region_delete_data
+      
+   
+   
+
+.. vale on

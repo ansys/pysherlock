@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.GetMountPointsPropertiesRequest
+======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: GetMountPointsPropertiesRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      GetMountPointsPropertiesRequest.construct
+      
+      
+      GetMountPointsPropertiesRequest.copy
+      
+      
+      GetMountPointsPropertiesRequest.dict
+      
+      
+      GetMountPointsPropertiesRequest.from_orm
+      
+      
+      GetMountPointsPropertiesRequest.json
+      
+      
+      GetMountPointsPropertiesRequest.model_construct
+      
+      
+      GetMountPointsPropertiesRequest.model_copy
+      
+      
+      GetMountPointsPropertiesRequest.model_dump
+      
+      
+      GetMountPointsPropertiesRequest.model_dump_json
+      
+      
+      GetMountPointsPropertiesRequest.model_json_schema
+      
+      
+      GetMountPointsPropertiesRequest.model_parametrized_name
+      
+      
+      GetMountPointsPropertiesRequest.model_post_init
+      
+      
+      GetMountPointsPropertiesRequest.model_rebuild
+      
+      
+      GetMountPointsPropertiesRequest.model_validate
+      
+      
+      GetMountPointsPropertiesRequest.model_validate_json
+      
+      
+      GetMountPointsPropertiesRequest.model_validate_strings
+      
+      
+      GetMountPointsPropertiesRequest.optional_str_validation
+      
+      
+      GetMountPointsPropertiesRequest.parse_file
+      
+      
+      GetMountPointsPropertiesRequest.parse_obj
+      
+      
+      GetMountPointsPropertiesRequest.parse_raw
+      
+      
+      GetMountPointsPropertiesRequest.schema
+      
+      
+      GetMountPointsPropertiesRequest.schema_json
+      
+      
+      GetMountPointsPropertiesRequest.str_validation
+      
+      
+      GetMountPointsPropertiesRequest.update_forward_refs
+      
+      
+      GetMountPointsPropertiesRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      GetMountPointsPropertiesRequest.model_computed_fields
+      
+      
+      GetMountPointsPropertiesRequest.model_config
+      
+      
+      GetMountPointsPropertiesRequest.model_extra
+      
+      
+      GetMountPointsPropertiesRequest.model_fields
+      
+      
+      GetMountPointsPropertiesRequest.model_fields_set
+      
+      
+      GetMountPointsPropertiesRequest.project
+      
+      
+      GetMountPointsPropertiesRequest.cca_name
+      
+      
+      GetMountPointsPropertiesRequest.mount_point_ids
+      
+   
+   
+
+.. vale on

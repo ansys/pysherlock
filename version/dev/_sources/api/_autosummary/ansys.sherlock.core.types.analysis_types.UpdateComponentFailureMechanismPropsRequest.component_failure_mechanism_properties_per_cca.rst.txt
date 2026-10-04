@@ -1,0 +1,10 @@
+.. vale off
+
+component\_failure\_mechanism\_properties\_per\_cca
+===================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateComponentFailureMechanismPropsRequest.component_failure_mechanism_properties_per_cca
+
+.. vale on

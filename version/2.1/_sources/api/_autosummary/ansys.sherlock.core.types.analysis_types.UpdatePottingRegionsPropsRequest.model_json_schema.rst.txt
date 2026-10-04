@@ -1,0 +1,10 @@
+.. vale off
+
+model\_json\_schema
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: UpdatePottingRegionsPropsRequest.model_json_schema
+
+.. vale on

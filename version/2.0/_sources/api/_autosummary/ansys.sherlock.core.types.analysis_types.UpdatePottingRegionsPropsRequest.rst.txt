@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdatePottingRegionsPropsRequest
+==========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdatePottingRegionsPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdatePottingRegionsPropsRequest.construct
+      
+      
+      UpdatePottingRegionsPropsRequest.copy
+      
+      
+      UpdatePottingRegionsPropsRequest.dict
+      
+      
+      UpdatePottingRegionsPropsRequest.from_orm
+      
+      
+      UpdatePottingRegionsPropsRequest.json
+      
+      
+      UpdatePottingRegionsPropsRequest.model_construct
+      
+      
+      UpdatePottingRegionsPropsRequest.model_copy
+      
+      
+      UpdatePottingRegionsPropsRequest.model_dump
+      
+      
+      UpdatePottingRegionsPropsRequest.model_dump_json
+      
+      
+      UpdatePottingRegionsPropsRequest.model_json_schema
+      
+      
+      UpdatePottingRegionsPropsRequest.model_parametrized_name
+      
+      
+      UpdatePottingRegionsPropsRequest.model_post_init
+      
+      
+      UpdatePottingRegionsPropsRequest.model_rebuild
+      
+      
+      UpdatePottingRegionsPropsRequest.model_validate
+      
+      
+      UpdatePottingRegionsPropsRequest.model_validate_json
+      
+      
+      UpdatePottingRegionsPropsRequest.model_validate_strings
+      
+      
+      UpdatePottingRegionsPropsRequest.parse_file
+      
+      
+      UpdatePottingRegionsPropsRequest.parse_obj
+      
+      
+      UpdatePottingRegionsPropsRequest.parse_raw
+      
+      
+      UpdatePottingRegionsPropsRequest.schema
+      
+      
+      UpdatePottingRegionsPropsRequest.schema_json
+      
+      
+      UpdatePottingRegionsPropsRequest.str_validation
+      
+      
+      UpdatePottingRegionsPropsRequest.update_forward_refs
+      
+      
+      UpdatePottingRegionsPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdatePottingRegionsPropsRequest.model_computed_fields
+      
+      
+      UpdatePottingRegionsPropsRequest.model_config
+      
+      
+      UpdatePottingRegionsPropsRequest.model_extra
+      
+      
+      UpdatePottingRegionsPropsRequest.model_fields
+      
+      
+      UpdatePottingRegionsPropsRequest.model_fields_set
+      
+      
+      UpdatePottingRegionsPropsRequest.project
+      
+      
+      UpdatePottingRegionsPropsRequest.cca_names
+      
+      
+      UpdatePottingRegionsPropsRequest.analyses
+      
+   
+   
+
+.. vale on

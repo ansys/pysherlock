@@ -1,0 +1,10 @@
+.. vale off
+
+model\_config
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: ComponentFailureMechanism.model_config
+
+.. vale on

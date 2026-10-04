@@ -1,0 +1,29 @@
+﻿ansys.sherlock.core.common
+==========================
+
+.. automodule:: ansys.sherlock.core.common
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Common
+   
+   
+
+   
+   
+   
+
+
+

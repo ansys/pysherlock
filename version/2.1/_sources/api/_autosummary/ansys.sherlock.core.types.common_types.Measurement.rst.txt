@@ -1,0 +1,38 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.common\_types.Measurement
+===================================================
+
+.. currentmodule:: ansys.sherlock.core.types.common_types
+
+.. autoclass:: Measurement
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      Measurement.value
+      
+      
+      Measurement.unit
+      
+   
+   
+
+.. vale on

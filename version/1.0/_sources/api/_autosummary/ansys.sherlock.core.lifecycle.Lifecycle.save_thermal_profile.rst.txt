@@ -1,0 +1,10 @@
+.. vale off
+
+save\_thermal\_profile
+======================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.save_thermal_profile
+
+.. vale on

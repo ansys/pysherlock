@@ -1,0 +1,10 @@
+.. vale off
+
+width
+=====
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageBounds.width
+
+.. vale on
