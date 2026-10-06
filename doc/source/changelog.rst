@@ -9,6 +9,104 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.0 <https://github.com/ansys/pysherlock/releases/tag/v2.1.0>`_ - September 29, 2026
+=======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: Deprecated Enum wrappers
+          - `#940 <https://github.com/ansys/pysherlock/pull/940>`_
+
+        * - feat: Add importIPC2581ArchiveSingleProjectMode
+          - `#961 <https://github.com/ansys/pysherlock/pull/961>`_
+
+        * - Feat: Added import odb single project
+          - `#965 <https://github.com/ansys/pysherlock/pull/965>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 11.0.4 to 11.0.5
+          - `#936 <https://github.com/ansys/pysherlock/pull/936>`_
+
+        * - Build: Bump ansys/actions/code-style from 11.0.3 to 11.0.5
+          - `#937 <https://github.com/ansys/pysherlock/pull/937>`_
+
+        * - Build: Bump ansys/actions/build-wheelhouse from 11.0.3 to 11.0.6
+          - `#938 <https://github.com/ansys/pysherlock/pull/938>`_
+
+        * - Build: Bump ansys/actions/doc-deploy-stable from 11.0.3 to 11.0.5
+          - `#939 <https://github.com/ansys/pysherlock/pull/939>`_
+
+        * - Chore: update CHANGELOG for v2.0.1
+          - `#942 <https://github.com/ansys/pysherlock/pull/942>`_
+
+        * - Build: Bump ansys/actions/check-actions-security from 11.0.3 to 11.0.6
+          - `#943 <https://github.com/ansys/pysherlock/pull/943>`_
+
+        * - Build: Bump ansys/actions/code-style from 11.0.5 to 11.0.6
+          - `#944 <https://github.com/ansys/pysherlock/pull/944>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.4 to 3.13.5
+          - `#945 <https://github.com/ansys/pysherlock/pull/945>`_
+
+        * - Build: Bump ansys/actions/check-pr-title from 11.0.4 to 11.0.6
+          - `#946 <https://github.com/ansys/pysherlock/pull/946>`_
+
+        * - Build: Bump ansys/actions/check-vulnerabilities from 11.0.5 to 11.0.6
+          - `#947 <https://github.com/ansys/pysherlock/pull/947>`_
+
+        * - Build: Bump ansys/actions/release-github from 11.0.4 to 11.0.6
+          - `#948 <https://github.com/ansys/pysherlock/pull/948>`_
+
+        * - Chore: improve dependabot config
+          - `#949 <https://github.com/ansys/pysherlock/pull/949>`_
+
+        * - Ci: build gallery examples nightly instead of on every run
+          - `#950 <https://github.com/ansys/pysherlock/pull/950>`_
+
+        * - Build: Bump ansys-sphinx-theme from 1.10.0 to 1.11.0
+          - `#952 <https://github.com/ansys/pysherlock/pull/952>`_
+
+        * - Chore(pre-commit): Bump the pre-commit-hooks group with 9 updates
+          - `#957 <https://github.com/ansys/pysherlock/pull/957>`_
+
+        * - Build: Bump the actions group across 1 directory with 13 updates
+          - `#958 <https://github.com/ansys/pysherlock/pull/958>`_
+
+        * - Test: test_analysis- changed the variable name for 2 enum values
+          - `#959 <https://github.com/ansys/pysherlock/pull/959>`_
+
+        * - Docs: Updated documentation for Sherlock port number and pyansys metapackage
+          - `#962 <https://github.com/ansys/pysherlock/pull/962>`_
+
+        * - Feat: Add \`import_ipc2581_archive_single_project_mode\` API
+          - `#963 <https://github.com/ansys/pysherlock/pull/963>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.5 to 3.13.6 in the pip-deps group
+          - `#964 <https://github.com/ansys/pysherlock/pull/964>`_
+
+        * - Build: Bump the pip-deps group with 4 updates
+          - `#966 <https://github.com/ansys/pysherlock/pull/966>`_
+
+        * - Build: Bump codecov/codecov-action from 7.0.0 to 7.1.1 in the actions group
+          - `#967 <https://github.com/ansys/pysherlock/pull/967>`_
+
+        * - Docs: modified formatting of rpc wrapper method examples to be consistent
+          - `#969 <https://github.com/ansys/pysherlock/pull/969>`_
+
+
 `2.0.1 <https://github.com/ansys/pysherlock/releases/tag/v2.0.1>`_ - September 08, 2026
 =======================================================================================
 
