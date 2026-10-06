@@ -130,13 +130,13 @@ class Project(GrpcStub):
     def import_odb_archive(
         self,
         archive_file: str,
-        project: str,
-        cca_name: str,
         process_layer_thickness: bool,
         include_other_layers: bool,
         process_cutout_file: bool,
         guess_part_properties: bool,
         ims_stackup: bool = False,
+        project: Optional[str] = None,
+        cca_name: Optional[str] = None,
         polyline_simplification: bool = False,
         polyline_tolerance: float = 0.1,
         polyline_tolerance_units: str = "mm",
@@ -149,10 +149,6 @@ class Project(GrpcStub):
         ----------
         archive_file: str
             Full path to the ODB++ archive file.
-        project: str
-            Name of the Sherlock project.
-        cca_name: str
-            Name of the CCA name.
         process_layer_thickness: bool
             Whether to assign stackup thickness.
         include_other_layers: bool
@@ -163,6 +159,12 @@ class Project(GrpcStub):
             Whether to guess part properties.
         ims_stackup: bool, optional
             Whether to generate an IMS stackup
+        project: str, optional
+            Name of the Sherlock project. The default is ``None``, in which
+            case the name of the ODB++ archive file is used for the project name.
+        cca_name: str, optional
+            Name of the CCA name. The default is ``None``, in which case the
+            name of the ODB++ archive file is used for the CCA name.
         polyline_simplification: bool, optional
             Whether to enable polyline simplification
         polyline_tolerance: float, optional
@@ -180,14 +182,14 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.import_odb_archive(
-        >>>     "ODB++ Tutorial.tgz",
-        >>>     project="Tutorial",
-        >>>     cca_name="Card",
+        >>>     archive_file="ODB++ Tutorial.tgz",
         >>>     process_layer_thickness=True,
         >>>     include_other_layers=True,
         >>>     process_cutout_file=True,
         >>>     guess_part_properties=True,
         >>>     ims_stackup=True,
+        >>>     project="Tutorial",
+        >>>     cca_name="Card",
         >>>     polyline_simplification=True,
         >>>     polyline_tolerance=0.1,
         >>>     polyline_tolerance_units="mm"

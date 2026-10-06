@@ -135,7 +135,7 @@ def helper_test_delete_project(project: Project):
 def helper_test_import_odb_archive(project: Project):
     """Test import_odb_archive API"""
     try:
-        project.import_odb_archive("", "", "", True, True, True, True)
+        project.import_odb_archive("", True, True, True, True)
         pytest.fail("No exception raised when using an invalid parameter")
     except SherlockImportODBError as e:
         assert str(e) == "Import ODB error: Archive path is required."
@@ -143,7 +143,7 @@ def helper_test_import_odb_archive(project: Project):
     if project._is_connection_up():
         try:
             missing_archive_file = "Missing ODB.tgz"
-            project.import_odb_archive("", "", missing_archive_file, True, True, True, True)
+            project.import_odb_archive(missing_archive_file, True, True, True, True)
             pytest.fail("No exception raised when using an invalid parameter")
         except Exception as e:
             assert type(e) == SherlockImportODBError
