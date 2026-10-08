@@ -55,6 +55,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
     SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
+    SherlockUpdateRandomVibePropsError,
 )
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
 

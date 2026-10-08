@@ -58,6 +58,7 @@ from ansys.sherlock.core.errors import (
     SherlockAddStrainMapsError,
     SherlockImportProjectZipArchiveError,
     SherlockRunStrainMapAnalysisError,
+    SherlockUpdateMechanicalShockPropsError,
 )
 from ansys.sherlock.core.types.project_types import StrainMapsFileType
 
@@ -147,7 +148,7 @@ try:
         ],
     )
     print("Mechanical shock properties updated successfully.")
-except SherlockRunStrainMapAnalysisError as e:
+except SherlockUpdateMechanicalShockPropsError as e:
     print("Error updating mechanical shock properties.")
 
 ###############################################################################
