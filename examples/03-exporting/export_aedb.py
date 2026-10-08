@@ -58,7 +58,7 @@ from ansys.sherlock.core.errors import SherlockExportAEDBError, SherlockImportPr
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -84,7 +84,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print(f"Error importing project zip archive")
 
 ###############################################################################
 # Export AEDB File
@@ -98,6 +98,6 @@ try:
         cca_name="Auto Relay",
         export_file=aedb_export_path,
     )
-    print(f"AEDB file exported successfully to: {aedb_export_path}")
+    print(f"AEDB file exported successfully")
 except SherlockExportAEDBError as e:
-    print(f"Error exporting AEDB: {e}")
+    print(f"Error exporting AEDB")

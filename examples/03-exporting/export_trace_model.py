@@ -60,7 +60,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -86,7 +86,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {e}")
+    print("Error importing project.")
 
 ###############################################################################
 # Export Trace Model
@@ -145,4 +145,4 @@ try:
     sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
     print("Trace models exported successfully.")
 except SherlockModelServiceError as e:
-    print(f"Error exporting trace model: {e}")
+    print("Error exporting trace model.")

@@ -66,7 +66,7 @@ from ansys.sherlock.core.types.project_types import StrainMapsFileType
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -92,7 +92,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Add Strain Map
@@ -118,7 +118,7 @@ try:
     )
     print("Strain maps added successfully.")
 except SherlockAddStrainMapsError as e:
-    print(f"Error adding strain maps: {e}")
+    print("Error adding strain maps.")
 
 ###############################################################################
 # Update Mechanical Shock Properties
@@ -148,7 +148,7 @@ try:
     )
     print("Mechanical shock properties updated successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error updating mechanical shock properties: {e}")
+    print("Error updating mechanical shock properties.")
 
 ###############################################################################
 # Run Mechanical Shock Analysis
@@ -171,4 +171,4 @@ try:
     )
     print("Mechanical shock analysis executed successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error running mechanical shock analysis: {e}")
+    print("Error running mechanical shock analysis.")

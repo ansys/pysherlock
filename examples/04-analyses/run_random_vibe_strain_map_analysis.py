@@ -63,7 +63,7 @@ from ansys.sherlock.core.types.project_types import StrainMapsFileType
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -89,7 +89,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Add Strain Map
@@ -115,7 +115,7 @@ try:
     )
     print("Strain maps added successfully.")
 except SherlockAddStrainMapsError as e:
-    print(f"Error adding strain maps: {e}")
+    print("Error adding strain maps.")
 
 ###############################################################################
 # Update Random Vibration Properties
@@ -140,8 +140,9 @@ try:
         reuse_modal_analysis=True,
         strain_map_natural_freqs="100, 200, 300",
     )
-except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error updating random vibration properties: {e}")
+    print("Random vibration properties updated successfully.")
+except SherlockUpdateRandomVibePropsError as e:
+    print("Error updating random vibration properties.")
 
 ###############################################################################
 # Run Random Vibration Analysis
@@ -167,5 +168,6 @@ try:
             ]
         ],
     )
+    print("Random vibration analysis completed successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error running random vibration analysis: {e}")
+    print("Error running random vibration analysis.")

@@ -60,7 +60,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -86,7 +86,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Export All Test Fixtures
@@ -101,6 +101,6 @@ try:
         export_file=test_fixtures_export_path,
         units="DEFAULT",
     )
-    print(f"All test fixtures exported successfully to: {test_fixtures_export_path}")
+    print("All test fixtures exported successfully.")
 except SherlockExportAllTestFixtures as e:
-    print(f"Error exporting all test fixtures: {e}")
+    print("Error exporting all test fixtures.")

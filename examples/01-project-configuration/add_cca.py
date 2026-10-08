@@ -58,7 +58,7 @@ from ansys.sherlock.core.errors import SherlockAddCCAError, SherlockImportProjec
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -84,7 +84,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {str(e)}")
+    print("Error importing project.")
 
 ###############################################################################
 # Add CCA to Project
@@ -109,4 +109,4 @@ try:
     )
     print("Card 2 added successfully.")
 except SherlockAddCCAError as e:
-    print(f"Error adding CCA: {str(e)}")
+    print("Error adding CCA.")

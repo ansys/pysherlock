@@ -66,7 +66,7 @@ from ansys.sherlock.core.types.layer_types import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -92,7 +92,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 potting_region_id = "Test Region"
 
@@ -127,7 +127,7 @@ try:
     )
     print("Potting region added successfully.")
 except SherlockAddPottingRegionError as e:
-    print(f"Error adding potting region: {e}")
+    print("Error adding potting region.")
 
 ###############################################################################
 # Update Potting Region
@@ -159,4 +159,4 @@ try:
     sherlock.layer.update_potting_region(update_request)
     print("Potting region updated successfully.")
 except Exception as e:
-    print(f"Error updating potting region: {e}")
+    print("Error updating potting region.")

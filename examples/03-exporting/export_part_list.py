@@ -57,7 +57,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -83,7 +83,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Export Parts List
@@ -93,6 +93,6 @@ except SherlockImportProjectZipArchiveError as e:
 try:
     parts_list_path = os.path.join(get_temp_dir(), "exportedParts.csv")
     sherlock.parts.export_parts_list("Test", "Main Board", parts_list_path)
-    print(f"Parts list exported successfully to: {parts_list_path}")
+    print("Parts list exported successfully.")
 except SherlockExportPartsListError as e:
-    print(f"Error exporting parts list: {e}")
+    print("Error exporting parts list.")

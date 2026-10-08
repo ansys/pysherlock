@@ -54,7 +54,7 @@ from ansys.sherlock.core import launcher
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Get Random Vibration Input Fields
@@ -66,4 +66,4 @@ try:
     print("Random vibration analysis input fields:")
     print(random_vibe_input_fields)
 except Exception as e:
-    print(f"Error retrieving random vibration input fields: {e}")
+    print("Error retrieving random vibration input fields.")

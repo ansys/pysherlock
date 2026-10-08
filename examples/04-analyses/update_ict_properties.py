@@ -60,7 +60,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -86,7 +86,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Update ICT Analysis Properties
@@ -110,4 +110,4 @@ try:
     )
     print("ICT analysis properties updated successfully.")
 except SherlockUpdateICTAnalysisPropsError as e:
-    print(f"Error updating ICT analysis properties: {e}")
+    print("Error updating ICT analysis properties.")

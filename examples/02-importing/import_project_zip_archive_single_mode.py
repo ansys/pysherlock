@@ -61,6 +61,7 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleMode
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9093,
     single_project_path=os.getcwd(),
+    transport_mode="wnua",
     # sherlock_command_args="-noGUI",
 )
 store_sherlock_tutorial_path(ansys_install_path)
@@ -79,7 +80,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveSingleModeError as e:
-    print(f"Error importing project: {e}")
+    print("Error importing project.")
 
 ###############################################################################
 # Exit Sherlock

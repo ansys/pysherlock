@@ -52,7 +52,7 @@ from ansys.sherlock.core import LOG, launcher
 
 LOG.info("Teardown: connect to and exit Sherlock")
 try:
-    sherlock = launcher.connect(port=9092, timeout=2)
+    sherlock = launcher.connect(port=9092, timeout=2, transport_mode="wnua")
     sherlock.common.exit(True)
     LOG.info("Sherlock exited successfully.")
 except Exception as e:

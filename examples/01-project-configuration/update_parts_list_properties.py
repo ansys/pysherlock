@@ -62,7 +62,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -88,7 +88,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Update Parts List Properties
@@ -115,4 +115,4 @@ try:
     )
     print("Parts list properties updated successfully.")
 except SherlockUpdatePartsListPropertiesError as e:
-    print(f"Error updating parts list properties: {e}")
+    print("Error updating parts list properties.")
