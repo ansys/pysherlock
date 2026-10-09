@@ -60,7 +60,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -86,7 +86,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {e}")
+    print(f"Error importing project")
 
 ###############################################################################
 # Import IPC-2581 Archive
@@ -107,4 +107,4 @@ try:
     )
     print("IPC-2581 archive imported successfully.")
 except SherlockImportIpc2581Error as e:
-    print(f"Error importing IPC-2581 archive: {e}")
+    print(f"Error importing IPC-2581 archive")

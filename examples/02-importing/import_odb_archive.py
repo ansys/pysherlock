@@ -54,7 +54,7 @@ from ansys.sherlock.core.errors import SherlockImportODBError
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -86,4 +86,4 @@ try:
     )
     print("ODB++ archive imported successfully.")
 except SherlockImportODBError as e:
-    print(f"Error importing ODB++ archive: {e}")
+    print("Error importing ODB++ archive.")

@@ -51,11 +51,14 @@ from ansys.sherlock.core import launcher
 ###############################################################################
 # Launch Sherlock
 # ===============
-# Launch the Sherlock service and ensure proper initialization.
+# Launch Sherlock on Windows in headless mode using Windows Named User Authentication for the gRPC
+# transport mode.
+# See the API reference for how to launch Sherlock on Linux or Windows using other options.
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9092,
-    # sherlock_command_args="-noGUI",
+    transport_mode="wnua",
+    sherlock_command_args="-noGUI",
 )
 
 store_sherlock_tutorial_path(ansys_install_path)

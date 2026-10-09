@@ -57,7 +57,7 @@ from ansys.sherlock.core.types.layer_types import PolygonalShape
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -83,7 +83,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Add Potting Region
@@ -112,4 +112,4 @@ try:
     )
     print("Potting region added successfully.")
 except SherlockAddPottingRegionError as e:
-    print(f"Error adding potting region: {e}")
+    print("Error adding potting region.")

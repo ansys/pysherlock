@@ -58,7 +58,7 @@ from ansys.sherlock.core.types.common_types import TableDelimiter
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -84,7 +84,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Export Net List
@@ -101,6 +101,6 @@ try:
         overwrite_existing=True,
         utf8_enabled=True,
     )
-    print(f"Net list exported successfully to: {net_list_path}")
+    print("Net list exported successfully.")
 except SherlockExportNetListError as e:
-    print(f"Error exporting net list: {e}")
+    print("Error exporting net list.")

@@ -58,7 +58,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -84,7 +84,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Update Part List Validation Properties
@@ -97,7 +97,7 @@ try:
         project="Test",
         properties_per_cca=[
             {
-                "cca_name": "Main Board",
+                "cca_name": "Auto Relay",
                 "process_use_avl": True,
                 "process_use_wizard": True,
                 "process_check_confirmed_properties": False,
@@ -111,4 +111,4 @@ try:
     )
     print("Part list validation analysis properties updated successfully.")
 except SherlockUpdatePartListValidationAnalysisPropsError as e:
-    print(f"Error updating part list validation analysis properties: {e}")
+    print("Error updating part list validation analysis properties.")

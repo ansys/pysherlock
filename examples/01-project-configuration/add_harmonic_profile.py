@@ -62,7 +62,7 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -88,7 +88,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Create Lifecycle Phase and Add Harmonic Event
@@ -138,4 +138,4 @@ try:
     print("Harmonic vibration profile added successfully.")
 
 except Exception as e:
-    print(f"Error creating life phase, harmonic event, or harmonic vibe profiles. {e}")
+    print("Error creating life phase, harmonic event, or harmonic vibe profiles.")

@@ -68,7 +68,7 @@ from ansys.sherlock.core.types.project_types import StrainMapsFileType
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -94,7 +94,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Add Strain Map
@@ -120,7 +120,7 @@ try:
     )
     print("Strain maps added successfully.")
 except SherlockAddStrainMapsError as e:
-    print(f"Error adding strain maps: {e}")
+    print("Error adding strain maps.")
 
 ###############################################################################
 # Update Harmonic Vibration Properties
@@ -154,7 +154,7 @@ try:
     )
     print("Harmonic vibration properties updated successfully.")
 except SherlockUpdateHarmonicVibePropsError as e:
-    print(f"Error updating harmonic vibe properties: {e}")
+    print("Error updating harmonic vibe properties.")
 
 ###############################################################################
 # Run Strain Map Analysis
@@ -177,4 +177,4 @@ try:
     )
     print("Strain map analysis completed successfully.")
 except SherlockRunStrainMapAnalysisError as e:
-    print(f"Error running strain map analysis: {e}")
+    print("Error running strain map analysis.")
