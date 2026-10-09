@@ -9,6 +9,38 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.2 <https://github.com/ansys/pysherlock/releases/tag/v2.1.2>`_ - October 09, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix: Gallery Examples- set the transport_mode when launching or connecting to Sherlock
+          - `#978 <https://github.com/ansys/pysherlock/pull/978>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v2.1.1
+          - `#974 <https://github.com/ansys/pysherlock/pull/974>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.7 to 3.13.8 in the pip-deps group
+          - `#976 <https://github.com/ansys/pysherlock/pull/976>`_
+
+        * - Chore(pre-commit): Bump https://github.com/pycqa/isort from 9.0.1 to 9.0.2 in the pre-commit-hooks group
+          - `#977 <https://github.com/ansys/pysherlock/pull/977>`_
+
+
 `2.1.1 <https://github.com/ansys/pysherlock/releases/tag/v2.1.1>`_ - October 06, 2026
 =====================================================================================
 
