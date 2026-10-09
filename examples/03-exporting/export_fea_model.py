@@ -59,7 +59,7 @@ from ansys.sherlock.core.types.common_types import Measurement
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -85,7 +85,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Export FEA Model
@@ -124,6 +124,6 @@ try:
         pcb_material_type=PcbMaterialType.Orthotropic,
         geometry_type=GeometryType.Step,
     )
-    print(f"FEA model exported successfully to: {fea_export_path}")
+    print("FEA model exported successfully.")
 except SherlockExportFEAModelError as e:
-    print(f"Error exporting FEA model: {e}")
+    print("Error exporting FEA model.")

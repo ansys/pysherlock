@@ -54,20 +54,23 @@ from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleModeError
 
 ###############################################################################
-# Launch PySherlock service in single-project mode
-# ================================================
-# Launch the Sherlock service using the specified project path and wait for initialization.
+# Launch Sherlock in single project mode
+# ======================================
+# Launch Sherlock on Windows in headless mode using Windows Named User Authentication for the gRPC
+# transport mode, specifying the project path.
+# See the API reference for how to launch Sherlock on Linux or Windows using other options.
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9093,
     single_project_path=os.getcwd(),
-    # sherlock_command_args="-noGUI",
+    transport_mode="wnua",
+    sherlock_command_args="-noGUI",
 )
 store_sherlock_tutorial_path(ansys_install_path)
 
 ###############################################################################
-# Import Sherlock Project in Single Mode
-# ======================================
+# Import Sherlock Project in single project mode
+# ==============================================
 # Import a tutorial project ZIP archive provided with the Sherlock installation.
 
 try:
@@ -79,7 +82,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveSingleModeError as e:
-    print(f"Error importing project: {e}")
+    print("Error importing project.")
 
 ###############################################################################
 # Exit Sherlock

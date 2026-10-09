@@ -69,7 +69,7 @@ PcbMaterialModel = (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -95,7 +95,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Update PCB Modeling Properties
@@ -182,4 +182,4 @@ try:
     )
     print("PCB modeling properties updated successfully.")
 except SherlockUpdatePcbModelingPropsError as e:
-    print(f"Error updating PCB modeling properties: {e}")
+    print("Error updating PCB modeling properties.")

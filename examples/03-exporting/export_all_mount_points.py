@@ -61,7 +61,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -87,7 +87,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Export All Mount Points
@@ -102,6 +102,6 @@ try:
         export_file=mount_points_export_path,
         units="DEFAULT",
     )
-    print(f"All mount points exported successfully to: {mount_points_export_path}")
+    print("All mount points exported successfully.")
 except SherlockExportAllMountPoints as e:
-    print(f"Error exporting all mount points: {e}")
+    print("Error exporting all mount points.")

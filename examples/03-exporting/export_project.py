@@ -57,7 +57,7 @@ from ansys.sherlock.core.errors import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -83,7 +83,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project: {e}")
+    print("Error importing project.")
 
 ###############################################################################
 # Export Project
@@ -106,7 +106,7 @@ try:
     )
     print("Project exported successfully with all options enabled.")
 except SherlockExportProjectError as e:
-    print(f"Error exporting project (all options): {e}")
+    print("Error exporting project (all options).")
 
 # Export with limited options
 try:
@@ -124,4 +124,4 @@ try:
     )
     print("Project exported successfully with limited options.")
 except SherlockExportProjectError as e:
-    print(f"Error exporting project (limited options): {e}")
+    print("Error exporting project (limited options).")

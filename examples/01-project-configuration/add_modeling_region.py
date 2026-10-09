@@ -67,7 +67,7 @@ from ansys.sherlock.core.types.layer_types import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10)
+sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
@@ -93,7 +93,7 @@ try:
     )
     print("Tutorial project imported successfully.")
 except SherlockImportProjectZipArchiveError as e:
-    print(f"Error importing project zip archive: {e}")
+    print("Error importing project zip archive.")
 
 ###############################################################################
 # Create Modeling Regions
@@ -213,4 +213,4 @@ try:
     sherlock.layer.add_modeling_region("Test", modeling_regions)
     print("Modeling regions added successfully.")
 except SherlockAddModelingRegionError as e:
-    print(f"Error adding modeling regions: {e}")
+    print("Error adding modeling regions.")
