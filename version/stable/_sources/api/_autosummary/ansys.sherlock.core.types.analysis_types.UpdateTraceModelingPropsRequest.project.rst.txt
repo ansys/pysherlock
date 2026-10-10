@@ -1,0 +1,10 @@
+.. vale off
+
+project
+=======
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateTraceModelingPropsRequest.project
+
+.. vale on

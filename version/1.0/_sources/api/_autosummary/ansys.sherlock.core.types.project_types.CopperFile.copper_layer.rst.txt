@@ -1,0 +1,10 @@
+.. vale off
+
+copper\_layer
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperFile.copper_layer
+
+.. vale on

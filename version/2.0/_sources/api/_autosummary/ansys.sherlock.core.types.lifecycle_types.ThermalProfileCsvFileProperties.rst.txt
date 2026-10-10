@@ -1,0 +1,155 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.ThermalProfileCsvFileProperties
+==========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: ThermalProfileCsvFileProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ThermalProfileCsvFileProperties.construct
+      
+      
+      ThermalProfileCsvFileProperties.copy
+      
+      
+      ThermalProfileCsvFileProperties.dict
+      
+      
+      ThermalProfileCsvFileProperties.from_orm
+      
+      
+      ThermalProfileCsvFileProperties.json
+      
+      
+      ThermalProfileCsvFileProperties.model_construct
+      
+      
+      ThermalProfileCsvFileProperties.model_copy
+      
+      
+      ThermalProfileCsvFileProperties.model_dump
+      
+      
+      ThermalProfileCsvFileProperties.model_dump_json
+      
+      
+      ThermalProfileCsvFileProperties.model_json_schema
+      
+      
+      ThermalProfileCsvFileProperties.model_parametrized_name
+      
+      
+      ThermalProfileCsvFileProperties.model_post_init
+      
+      
+      ThermalProfileCsvFileProperties.model_rebuild
+      
+      
+      ThermalProfileCsvFileProperties.model_validate
+      
+      
+      ThermalProfileCsvFileProperties.model_validate_json
+      
+      
+      ThermalProfileCsvFileProperties.model_validate_strings
+      
+      
+      ThermalProfileCsvFileProperties.non_negative_int_validation
+      
+      
+      ThermalProfileCsvFileProperties.optional_str_validation
+      
+      
+      ThermalProfileCsvFileProperties.parse_file
+      
+      
+      ThermalProfileCsvFileProperties.parse_obj
+      
+      
+      ThermalProfileCsvFileProperties.parse_raw
+      
+      
+      ThermalProfileCsvFileProperties.schema
+      
+      
+      ThermalProfileCsvFileProperties.schema_json
+      
+      
+      ThermalProfileCsvFileProperties.str_validation
+      
+      
+      ThermalProfileCsvFileProperties.update_forward_refs
+      
+      
+      ThermalProfileCsvFileProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ThermalProfileCsvFileProperties.model_computed_fields
+      
+      
+      ThermalProfileCsvFileProperties.model_config
+      
+      
+      ThermalProfileCsvFileProperties.model_extra
+      
+      
+      ThermalProfileCsvFileProperties.model_fields
+      
+      
+      ThermalProfileCsvFileProperties.model_fields_set
+      
+      
+      ThermalProfileCsvFileProperties.profile_name
+      
+      
+      ThermalProfileCsvFileProperties.header_row_count
+      
+      
+      ThermalProfileCsvFileProperties.column_delimiter
+      
+      
+      ThermalProfileCsvFileProperties.numeric_format
+      
+      
+      ThermalProfileCsvFileProperties.step_column
+      
+      
+      ThermalProfileCsvFileProperties.type_column
+      
+      
+      ThermalProfileCsvFileProperties.time_column
+      
+      
+      ThermalProfileCsvFileProperties.time_units
+      
+      
+      ThermalProfileCsvFileProperties.temperature_column
+      
+      
+      ThermalProfileCsvFileProperties.temperature_units
+      
+   
+   
+
+.. vale on

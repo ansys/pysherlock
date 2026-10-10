@@ -1,0 +1,10 @@
+.. vale off
+
+legend\_bounds
+==============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.legend_bounds
+
+.. vale on

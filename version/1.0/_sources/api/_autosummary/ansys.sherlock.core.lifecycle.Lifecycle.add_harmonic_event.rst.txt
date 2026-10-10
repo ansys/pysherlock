@@ -1,0 +1,10 @@
+.. vale off
+
+add\_harmonic\_event
+====================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.add_harmonic_event
+
+.. vale on

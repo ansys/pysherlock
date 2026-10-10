@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_obj
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: ThermalProfileCsvFileProperties.parse_obj
+
+.. vale on

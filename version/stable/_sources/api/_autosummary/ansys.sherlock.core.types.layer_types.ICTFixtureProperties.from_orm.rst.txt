@@ -1,0 +1,10 @@
+.. vale off
+
+from\_orm
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: ICTFixtureProperties.from_orm
+
+.. vale on

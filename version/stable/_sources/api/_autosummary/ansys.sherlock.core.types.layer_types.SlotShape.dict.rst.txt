@@ -1,0 +1,10 @@
+.. vale off
+
+dict
+====
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: SlotShape.dict
+
+.. vale on

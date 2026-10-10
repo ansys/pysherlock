@@ -1,0 +1,10 @@
+.. vale off
+
+model\_fields\_set
+==================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoproperty:: UpdatePottingRegionsPropsRequest.model_fields_set
+
+.. vale on

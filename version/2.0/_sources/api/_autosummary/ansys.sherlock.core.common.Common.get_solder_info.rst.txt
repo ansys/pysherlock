@@ -1,0 +1,10 @@
+.. vale off
+
+get\_solder\_info
+=================
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.get_solder_info
+
+.. vale on

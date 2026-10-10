@@ -1,0 +1,10 @@
+.. vale off
+
+update\_ict\_analysis\_props
+============================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_ict_analysis_props
+
+.. vale on

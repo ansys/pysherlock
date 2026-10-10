@@ -1,0 +1,10 @@
+.. vale off
+
+model\_extra
+============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoproperty:: UpdateComponentFailureMechanismPropsRequest.model_extra
+
+.. vale on

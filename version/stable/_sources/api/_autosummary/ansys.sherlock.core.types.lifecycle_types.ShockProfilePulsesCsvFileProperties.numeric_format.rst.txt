@@ -1,0 +1,10 @@
+.. vale off
+
+numeric\_format
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ShockProfilePulsesCsvFileProperties.numeric_format
+
+.. vale on

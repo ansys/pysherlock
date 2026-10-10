@@ -1,0 +1,10 @@
+.. vale off
+
+list\_conductor\_layers
+=======================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.list_conductor_layers
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+load\_value
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: TestPointProperties.load_value
+
+.. vale on

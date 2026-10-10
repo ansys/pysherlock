@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.UpdateMountPointsRequest
+===============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: UpdateMountPointsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateMountPointsRequest.construct
+      
+      
+      UpdateMountPointsRequest.copy
+      
+      
+      UpdateMountPointsRequest.dict
+      
+      
+      UpdateMountPointsRequest.from_orm
+      
+      
+      UpdateMountPointsRequest.json
+      
+      
+      UpdateMountPointsRequest.list_validation
+      
+      
+      UpdateMountPointsRequest.model_construct
+      
+      
+      UpdateMountPointsRequest.model_copy
+      
+      
+      UpdateMountPointsRequest.model_dump
+      
+      
+      UpdateMountPointsRequest.model_dump_json
+      
+      
+      UpdateMountPointsRequest.model_json_schema
+      
+      
+      UpdateMountPointsRequest.model_parametrized_name
+      
+      
+      UpdateMountPointsRequest.model_post_init
+      
+      
+      UpdateMountPointsRequest.model_rebuild
+      
+      
+      UpdateMountPointsRequest.model_validate
+      
+      
+      UpdateMountPointsRequest.model_validate_json
+      
+      
+      UpdateMountPointsRequest.model_validate_strings
+      
+      
+      UpdateMountPointsRequest.parse_file
+      
+      
+      UpdateMountPointsRequest.parse_obj
+      
+      
+      UpdateMountPointsRequest.parse_raw
+      
+      
+      UpdateMountPointsRequest.schema
+      
+      
+      UpdateMountPointsRequest.schema_json
+      
+      
+      UpdateMountPointsRequest.str_validation
+      
+      
+      UpdateMountPointsRequest.update_forward_refs
+      
+      
+      UpdateMountPointsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateMountPointsRequest.model_computed_fields
+      
+      
+      UpdateMountPointsRequest.model_config
+      
+      
+      UpdateMountPointsRequest.model_extra
+      
+      
+      UpdateMountPointsRequest.model_fields
+      
+      
+      UpdateMountPointsRequest.model_fields_set
+      
+      
+      UpdateMountPointsRequest.project
+      
+      
+      UpdateMountPointsRequest.cca_name
+      
+      
+      UpdateMountPointsRequest.mount_points
+      
+   
+   
+
+.. vale on

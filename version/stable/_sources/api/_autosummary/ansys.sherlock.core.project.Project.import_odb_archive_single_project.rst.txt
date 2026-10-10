@@ -1,0 +1,10 @@
+.. vale off
+
+import\_odb\_archive\_single\_project
+=====================================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.import_odb_archive_single_project
+
+.. vale on

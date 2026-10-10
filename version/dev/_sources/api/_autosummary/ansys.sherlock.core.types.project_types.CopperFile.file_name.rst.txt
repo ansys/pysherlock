@@ -1,0 +1,10 @@
+.. vale off
+
+file\_name
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperFile.file_name
+
+.. vale on

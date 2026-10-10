@@ -1,0 +1,10 @@
+.. vale off
+
+model\_validate
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: SaveThermalProfileRequest.model_validate
+
+.. vale on
