@@ -307,7 +307,7 @@ def connect(
 
         # Create Common without version since the version is unknown
         common = Common(channel=channel, server_version=SKIP_VERSION_CHECK)
-        server_version = None
+        server_version = SKIP_VERSION_CHECK
         try:
             sherlock_info = common.get_sherlock_info()
             if sherlock_info is not None:
