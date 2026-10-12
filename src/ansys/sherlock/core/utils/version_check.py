@@ -30,7 +30,7 @@ from ansys.sherlock.core.errors import SherlockVersionError
 
 _EARLIEST_SUPPORTED_VERSION = 211
 
-# Used in testing. Set this as the version and all version checks will be skipped.
+# Set this as the version and all version checks will be skipped.
 SKIP_VERSION_CHECK = -1
 
 # Set the version to the version of Sherlock where the corresponding API was introduced.
