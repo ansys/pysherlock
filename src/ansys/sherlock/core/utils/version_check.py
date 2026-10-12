@@ -31,20 +31,16 @@ from ansys.sherlock.core.errors import SherlockVersionError
 _EARLIEST_SUPPORTED_VERSION = 211
 
 # Used in testing. Set this as the version and all version checks will be skipped.
-SKIP_VERSION_CHECK = None
+SKIP_VERSION_CHECK = -1
 
-# PySherlock release version to the best Sherlock counterpart version
-#  0.2.0 : 24R1
-#  0.3.0 : 24R1
-#  0.4.0 : 24R1
-#  0.5.0 : 24R2
-#  0.6.0 : 24R2
-#  0.7.0 : 25R1
-#  0.8.0 : 25R1
-#  0.9.0 : 25R2
+# Set the version to the version of Sherlock where the corresponding API was introduced.
+# The number is the last two digits of the year followed by the release number.
+# For example: 211 is 2021 R1, 271 is 2027 R1.
 
 
-def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version: int = None):
+def require_version(
+    min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version: int = _EARLIEST_SUPPORTED_VERSION
+):
     """Check version of server against expected version."""
 
     def decorate(func) -> callable:
@@ -66,8 +62,9 @@ def require_version(min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version:
             nonlocal min_version
             nonlocal max_version
 
-            if max_version is not None and min_version > max_version:
+            if min_version > max_version:
                 raise ValueError("min_version is > max_version in version decorator")
+
             if cur_version < min_version:
                 raise SherlockVersionError(
                     "Sherlock version "
