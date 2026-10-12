@@ -39,7 +39,7 @@ SKIP_VERSION_CHECK = -1
 
 
 def require_version(
-    min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version: int = _EARLIEST_SUPPORTED_VERSION
+    min_version: int = _EARLIEST_SUPPORTED_VERSION, max_version: int = SKIP_VERSION_CHECK
 ):
     """Check version of server against expected version."""
 
@@ -62,7 +62,7 @@ def require_version(
             nonlocal min_version
             nonlocal max_version
 
-            if min_version > max_version:
+            if max_version != SKIP_VERSION_CHECK and min_version > max_version:
                 raise ValueError("min_version is > max_version in version decorator")
 
             if cur_version < min_version:
@@ -74,7 +74,7 @@ def require_version(
                     + " update server to at least version "
                     + str(min_version)
                 )
-            if max_version is not None and cur_version > max_version:
+            if max_version != SKIP_VERSION_CHECK and cur_version > max_version:
                 raise SherlockVersionError(
                     "Sherlock version "
                     + str(cur_version)
