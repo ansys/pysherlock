@@ -9,7 +9,7 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
-`2.1.2 <https://github.com/ansys/pysherlock/releases/tag/v2.1.2>`_ - October 09, 2026
+`2.1.3 <https://github.com/ansys/pysherlock/releases/tag/v2.1.3>`_ - October 13, 2026
 =====================================================================================
 
 .. tab-set::
@@ -23,6 +23,9 @@ This document contains the release notes for the project.
 
         * - Fix: Gallery Examples- set the transport_mode when launching or connecting to Sherlock
           - `#978 <https://github.com/ansys/pysherlock/pull/978>`_
+
+        * - Fix: method versioning use int values instead of None
+          - `#980 <https://github.com/ansys/pysherlock/pull/980>`_
 
 
   .. tab-item:: Documentation
