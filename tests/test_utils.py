@@ -42,7 +42,7 @@ def test_version_check():
         channel = grpc.insecure_channel(channel_param)
         # Set Sherlock version to 24R2 which is before 25R1, when
         # "get_sherlock_version" was added to PySherlock / Sherlock.
-        common = Common(channel, 242)
+        common = Common(channel, server_version=242)
         # This should fail since it did not exist in 242
         common.get_sherlock_info()
         pytest.fail("Sherlock version should be too low to launch this method")

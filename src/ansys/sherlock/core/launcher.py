@@ -40,7 +40,7 @@ from ansys.sherlock.core.common import Common
 from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
 from ansys.sherlock.core.sherlock import Sherlock
 from ansys.sherlock.core.utils.cyberchannel import create_channel
-from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION
+from ansys.sherlock.core.utils.version_check import _EARLIEST_SUPPORTED_VERSION, SKIP_VERSION_CHECK
 
 ANSYS_GRPC_CERTIFICATES = "ANSYS_GRPC_CERTIFICATES"
 LOCALHOST = "127.0.0.1"
@@ -306,8 +306,8 @@ def connect(
         _wait_for_sherlock_grpc_ready(channel, timeout)
 
         # Create Common without version since the version is unknown
-        common = Common(channel=channel, server_version=None)
-        server_version = None
+        common = Common(channel=channel, server_version=SKIP_VERSION_CHECK)
+        server_version = SKIP_VERSION_CHECK
         try:
             sherlock_info = common.get_sherlock_info()
             if sherlock_info is not None:
