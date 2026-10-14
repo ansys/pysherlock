@@ -25,6 +25,10 @@
 import json
 import os
 
+# Connection timeout constants (in seconds)
+SHERLOCK_CONNECT_TIMEOUT = 2
+SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT = 10
+
 
 def get_temp_dir() -> str:
     return os.path.join(os.path.dirname(os.getcwd()), "Temp")

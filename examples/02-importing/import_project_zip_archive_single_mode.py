@@ -62,6 +62,7 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleMode
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9093,
+    timeout=10,
     single_project_path=os.getcwd(),
     transport_mode="wnua",
     sherlock_command_args="-noGUI",
