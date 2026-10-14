@@ -45,6 +45,7 @@ This script demonstrates how to:
 import os
 
 from examples.examples_globals import (
+    SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
     get_sherlock_tutorial_path,
     get_temp_dir,
     store_sherlock_tutorial_path,
@@ -62,7 +63,7 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleMode
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9093,
-    timeout=10,
+    timeout=SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
     single_project_path=os.getcwd(),
     transport_mode="wnua",
     sherlock_command_args="-noGUI",
