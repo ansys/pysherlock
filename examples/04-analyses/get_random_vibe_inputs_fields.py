@@ -47,6 +47,8 @@ For more details on vibration analysis in Sherlock, refer to the official docume
 # sphinx_gallery_thumbnail_path = './images/sherlock_run_analysis_example.png'
 
 
+from examples.examples_globals import SHERLOCK_CONNECT_TIMEOUT
+
 from ansys.sherlock.core import launcher
 
 ###############################################################################
@@ -54,7 +56,7 @@ from ansys.sherlock.core import launcher
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=2, transport_mode="wnua")
+sherlock = launcher.connect(port=9092, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode="wnua")
 
 ###############################################################################
 # Get Random Vibration Input Fields

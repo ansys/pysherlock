@@ -44,7 +44,10 @@ import sys
 # Add the 'examples' directory to the Python path to allow importing files in that directory.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(os.getcwd()))))
 
-from examples.examples_globals import store_sherlock_tutorial_path
+from examples.examples_globals import (
+    SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
+    store_sherlock_tutorial_path,
+)
 
 from ansys.sherlock.core import launcher
 
@@ -57,7 +60,7 @@ from ansys.sherlock.core import launcher
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9092,
-    timeout=10,
+    timeout=SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
     transport_mode="wnua",
     sherlock_command_args="-noGUI",
 )

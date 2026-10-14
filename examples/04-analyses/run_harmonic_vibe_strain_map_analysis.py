@@ -52,7 +52,7 @@ import os
 
 from ansys.api.sherlock.v0 import SherlockAnalysisService_pb2
 from ansys.api.sherlock.v0.SherlockAnalysisService_pb2 import RunStrainMapAnalysisRequest
-from examples.examples_globals import get_sherlock_tutorial_path
+from examples.examples_globals import SHERLOCK_CONNECT_TIMEOUT, get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -68,7 +68,7 @@ from ansys.sherlock.core.types.project_types import StrainMapsFileType
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=2, transport_mode="wnua")
+sherlock = launcher.connect(port=9092, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project
