@@ -58,7 +58,7 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveError
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
+sherlock = launcher.connect(port=9092, timeout=2, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project

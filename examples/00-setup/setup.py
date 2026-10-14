@@ -57,6 +57,7 @@ from ansys.sherlock.core import launcher
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
     port=9092,
+    timeout=10,
     transport_mode="wnua",
     sherlock_command_args="-noGUI",
 )
