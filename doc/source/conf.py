@@ -181,7 +181,7 @@ import re
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
-def _convert_to_project_relative_path(file_path):
+def _convert_to_project_relative_path(file_path: str) -> str:
     """Convert an absolute file path to a project-relative path.
 
     Parameters
@@ -205,7 +205,7 @@ def _convert_to_project_relative_path(file_path):
     return os.path.basename(file_path.replace("\\", "/"))
 
 
-def _make_traceback_project_relative(error_str):
+def _make_traceback_project_relative(error_str: str) -> str:
     """Convert absolute file paths in traceback to project-relative paths.
 
     This replaces full absolute paths with paths relative to the project root,
@@ -257,13 +257,13 @@ def _patch_sphinx_gallery_error_handler():
             """Patched version that converts paths to project-relative format."""
             try:
                 # Call the original function
-                except_rst, formatted_exception = _original_handle_exception(
+                rst_exception, displayed_and_logged_exception = _original_handle_exception(
                     exc_info, src_file, script_vars, gallery_conf
                 )
 
                 return (
-                    _make_traceback_project_relative(except_rst),
-                    _make_traceback_project_relative(formatted_exception),
+                    _make_traceback_project_relative(rst_exception),
+                    _make_traceback_project_relative(displayed_and_logged_exception),
                 )
             except Exception:
                 # If something goes wrong, just return the original output
