@@ -41,7 +41,7 @@ Perform the following steps to set up the environment:
 
 import shutil
 
-from examples.examples_globals import get_temp_dir
+from examples.examples_globals import SHERLOCK_CONNECT_TIMEOUT, get_temp_dir
 
 from ansys.sherlock.core import LOG, launcher
 
@@ -52,7 +52,7 @@ from ansys.sherlock.core import LOG, launcher
 
 LOG.info("Teardown: connect to and exit Sherlock")
 try:
-    sherlock = launcher.connect(port=9092, timeout=2, transport_mode="wnua")
+    sherlock = launcher.connect(port=9092, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode="wnua")
     sherlock.common.exit(True)
     LOG.info("Sherlock exited successfully.")
 except Exception as e:

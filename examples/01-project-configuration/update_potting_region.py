@@ -47,7 +47,7 @@ This script demonstrates how to:
 
 import os
 
-from examples.examples_globals import get_sherlock_tutorial_path
+from examples.examples_globals import SHERLOCK_CONNECT_TIMEOUT, get_sherlock_tutorial_path
 
 from ansys.sherlock.core import launcher
 from ansys.sherlock.core.errors import (
@@ -66,7 +66,7 @@ from ansys.sherlock.core.types.layer_types import (
 # ===================
 # Connect to the Sherlock service and ensure proper initialization.
 
-sherlock = launcher.connect(port=9092, timeout=10, transport_mode="wnua")
+sherlock = launcher.connect(port=9092, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode="wnua")
 
 ###############################################################################
 # Delete Project

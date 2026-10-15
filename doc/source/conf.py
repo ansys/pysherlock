@@ -174,6 +174,112 @@ exclude_patterns = [
 ]
 
 # -- Sphinx Gallery Options ---------------------------------------------------
+import os
+import re
+
+# Get project root (two directories up from this file: doc/source/conf.py)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
+def _convert_to_project_relative_path(file_path: str) -> str:
+    """Convert an absolute file path to a project-relative path.
+
+    Parameters
+    ----------
+    file_path : str
+        Absolute file path
+
+    Returns
+    -------
+    str
+        Path relative to project root, or filename if outside project
+    """
+    try:
+        abs_path = os.path.abspath(file_path)
+        rel_path = os.path.relpath(abs_path, PROJECT_ROOT)
+        # Only use relative path if it doesn't start with '..'
+        if not rel_path.startswith(".."):
+            return rel_path
+    except (ValueError, TypeError):
+        pass
+    return os.path.basename(file_path.replace("\\", "/"))
+
+
+def _make_traceback_project_relative(error_str: str) -> str:
+    """Convert absolute file paths in traceback to project-relative paths.
+
+    This replaces full absolute paths with paths relative to the project root,
+    making the output more readable and less dependent on build system location.
+
+    Note: This function is available for future use if sphinx-gallery supports
+    custom error handlers. Currently, sphinx-gallery formats errors before
+    we can intercept them.
+
+    Parameters
+    ----------
+    error_str : str
+        Error string containing file paths
+
+    Returns
+    -------
+    str
+        Error string with project-relative paths
+    """
+
+    def replace_path(match):
+        # Extract: File " + path + ", line ...
+        prefix = match.group(1)  # 'File "'
+        path = match.group(2)  # The full file path
+        suffix = match.group(3)  # '", line ...'
+
+        relative_path = _convert_to_project_relative_path(path)
+        return f"{prefix}{relative_path}{suffix}"
+
+    # Replace all file paths in traceback lines
+    result = re.sub(r'(File\s+")((?:[a-zA-Z]:[/\\]|/)[^"]+)(",)', replace_path, error_str)
+    return result
+
+
+def _patch_sphinx_gallery_error_handler():
+    """Patch sphinx-gallery to use project-relative paths in error output.
+
+    This function monkeypatches sphinx-gallery's error handling to convert
+    absolute file paths to project-relative paths in error messages shown
+    in generated documentation.
+    """
+    try:
+        from sphinx_gallery import gen_rst
+
+        # Store the original handle_exception function
+        _original_handle_exception = gen_rst.handle_exception
+
+        def _patched_handle_exception(exc_info, src_file, script_vars, gallery_conf):
+            """Patched version that converts paths to project-relative format."""
+            try:
+                # Call the original function
+                rst_exception, displayed_and_logged_exception = _original_handle_exception(
+                    exc_info, src_file, script_vars, gallery_conf
+                )
+
+                return (
+                    _make_traceback_project_relative(rst_exception),
+                    _make_traceback_project_relative(displayed_and_logged_exception),
+                )
+            except Exception:
+                # If something goes wrong, just return the original output
+                return _original_handle_exception(exc_info, src_file, script_vars, gallery_conf)
+
+        # Replace the original function
+        gen_rst.handle_exception = _patched_handle_exception
+    except (ImportError, AttributeError):
+        # sphinx-gallery may not be available or has a different structure
+        pass
+
+
+# Patch sphinx-gallery when this config is loaded
+_patch_sphinx_gallery_error_handler()
+
+
 sphinx_gallery_conf = {
     # convert rst to md for ipynb
     "pypandoc": True,
