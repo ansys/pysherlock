@@ -9,6 +9,38 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.4 <https://github.com/ansys/pysherlock/releases/tag/v2.1.4>`_ - October 15, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix: change example error output to show relative file paths
+          - `#986 <https://github.com/ansys/pysherlock/pull/986>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v2.1.2
+          - `#979 <https://github.com/ansys/pysherlock/pull/979>`_
+
+        * - Chore: update CHANGELOG for v2.1.3
+          - `#983 <https://github.com/ansys/pysherlock/pull/983>`_
+
+        * - Build: gallery examples- lower connection timeouts
+          - `#984 <https://github.com/ansys/pysherlock/pull/984>`_
+
+
 `2.1.3 <https://github.com/ansys/pysherlock/releases/tag/v2.1.3>`_ - October 13, 2026
 =====================================================================================
 
