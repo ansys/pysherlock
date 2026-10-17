@@ -1,0 +1,10 @@
+.. vale off
+
+model\_post\_init
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: SlotShape.model_post_init
+
+.. vale on

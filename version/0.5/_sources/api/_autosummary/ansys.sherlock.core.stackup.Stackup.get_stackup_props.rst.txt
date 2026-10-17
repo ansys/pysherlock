@@ -1,0 +1,6 @@
+get\_stackup\_props
+===================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.get_stackup_props

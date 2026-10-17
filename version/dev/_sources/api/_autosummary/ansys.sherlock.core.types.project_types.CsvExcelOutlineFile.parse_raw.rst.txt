@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_raw
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CsvExcelOutlineFile.parse_raw
+
+.. vale on

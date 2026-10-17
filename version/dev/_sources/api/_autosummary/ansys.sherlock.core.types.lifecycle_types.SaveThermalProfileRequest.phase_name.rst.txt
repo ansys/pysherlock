@@ -1,0 +1,10 @@
+.. vale off
+
+phase\_name
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveThermalProfileRequest.phase_name
+
+.. vale on

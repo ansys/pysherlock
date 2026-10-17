@@ -1,0 +1,6 @@
+update\_mount\_points\_by\_file
+===============================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_mount_points_by_file

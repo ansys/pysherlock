@@ -1,0 +1,10 @@
+.. vale off
+
+update\_potting\_regions\_props
+===============================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_potting_regions_props
+
+.. vale on

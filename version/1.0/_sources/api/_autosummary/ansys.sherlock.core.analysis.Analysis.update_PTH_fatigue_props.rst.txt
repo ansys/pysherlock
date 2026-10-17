@@ -1,0 +1,10 @@
+.. vale off
+
+update\_PTH\_fatigue\_props
+===========================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_PTH_fatigue_props
+
+.. vale on

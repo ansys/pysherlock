@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_raw
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: GetICTFixturesPropertiesRequest.parse_raw
+
+.. vale on

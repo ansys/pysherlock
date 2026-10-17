@@ -1,0 +1,43 @@
+﻿ansys.sherlock.core.types.layer\_types.CircularShape
+====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: CircularShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CircularShape.diameter
+      
+      
+      CircularShape.node_count
+      
+      
+      CircularShape.center_x
+      
+      
+      CircularShape.center_y
+      
+      
+      CircularShape.rotation
+      
+   
+   

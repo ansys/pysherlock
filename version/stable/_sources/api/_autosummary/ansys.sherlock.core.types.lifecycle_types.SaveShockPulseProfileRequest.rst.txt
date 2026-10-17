@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.SaveShockPulseProfileRequest
+=======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: SaveShockPulseProfileRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SaveShockPulseProfileRequest.construct
+      
+      
+      SaveShockPulseProfileRequest.copy
+      
+      
+      SaveShockPulseProfileRequest.dict
+      
+      
+      SaveShockPulseProfileRequest.from_orm
+      
+      
+      SaveShockPulseProfileRequest.json
+      
+      
+      SaveShockPulseProfileRequest.model_construct
+      
+      
+      SaveShockPulseProfileRequest.model_copy
+      
+      
+      SaveShockPulseProfileRequest.model_dump
+      
+      
+      SaveShockPulseProfileRequest.model_dump_json
+      
+      
+      SaveShockPulseProfileRequest.model_json_schema
+      
+      
+      SaveShockPulseProfileRequest.model_parametrized_name
+      
+      
+      SaveShockPulseProfileRequest.model_post_init
+      
+      
+      SaveShockPulseProfileRequest.model_rebuild
+      
+      
+      SaveShockPulseProfileRequest.model_validate
+      
+      
+      SaveShockPulseProfileRequest.model_validate_json
+      
+      
+      SaveShockPulseProfileRequest.model_validate_strings
+      
+      
+      SaveShockPulseProfileRequest.parse_file
+      
+      
+      SaveShockPulseProfileRequest.parse_obj
+      
+      
+      SaveShockPulseProfileRequest.parse_raw
+      
+      
+      SaveShockPulseProfileRequest.schema
+      
+      
+      SaveShockPulseProfileRequest.schema_json
+      
+      
+      SaveShockPulseProfileRequest.str_validation
+      
+      
+      SaveShockPulseProfileRequest.update_forward_refs
+      
+      
+      SaveShockPulseProfileRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SaveShockPulseProfileRequest.model_computed_fields
+      
+      
+      SaveShockPulseProfileRequest.model_config
+      
+      
+      SaveShockPulseProfileRequest.model_extra
+      
+      
+      SaveShockPulseProfileRequest.model_fields
+      
+      
+      SaveShockPulseProfileRequest.model_fields_set
+      
+      
+      SaveShockPulseProfileRequest.project
+      
+      
+      SaveShockPulseProfileRequest.phase_name
+      
+      
+      SaveShockPulseProfileRequest.event_name
+      
+      
+      SaveShockPulseProfileRequest.file_path
+      
+   
+   
+
+.. vale on

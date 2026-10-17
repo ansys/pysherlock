@@ -1,0 +1,10 @@
+.. vale off
+
+str\_validation
+===============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: SaveRandomVibeProfileRequest.str_validation
+
+.. vale on

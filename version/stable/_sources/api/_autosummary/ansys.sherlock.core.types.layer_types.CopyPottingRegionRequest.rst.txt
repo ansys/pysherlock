@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.CopyPottingRegionRequest
+===============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: CopyPottingRegionRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      CopyPottingRegionRequest.construct
+      
+      
+      CopyPottingRegionRequest.copy
+      
+      
+      CopyPottingRegionRequest.dict
+      
+      
+      CopyPottingRegionRequest.from_orm
+      
+      
+      CopyPottingRegionRequest.json
+      
+      
+      CopyPottingRegionRequest.model_construct
+      
+      
+      CopyPottingRegionRequest.model_copy
+      
+      
+      CopyPottingRegionRequest.model_dump
+      
+      
+      CopyPottingRegionRequest.model_dump_json
+      
+      
+      CopyPottingRegionRequest.model_json_schema
+      
+      
+      CopyPottingRegionRequest.model_parametrized_name
+      
+      
+      CopyPottingRegionRequest.model_post_init
+      
+      
+      CopyPottingRegionRequest.model_rebuild
+      
+      
+      CopyPottingRegionRequest.model_validate
+      
+      
+      CopyPottingRegionRequest.model_validate_json
+      
+      
+      CopyPottingRegionRequest.model_validate_strings
+      
+      
+      CopyPottingRegionRequest.parse_file
+      
+      
+      CopyPottingRegionRequest.parse_obj
+      
+      
+      CopyPottingRegionRequest.parse_raw
+      
+      
+      CopyPottingRegionRequest.schema
+      
+      
+      CopyPottingRegionRequest.schema_json
+      
+      
+      CopyPottingRegionRequest.str_validation
+      
+      
+      CopyPottingRegionRequest.update_forward_refs
+      
+      
+      CopyPottingRegionRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CopyPottingRegionRequest.model_computed_fields
+      
+      
+      CopyPottingRegionRequest.model_config
+      
+      
+      CopyPottingRegionRequest.model_extra
+      
+      
+      CopyPottingRegionRequest.model_fields
+      
+      
+      CopyPottingRegionRequest.model_fields_set
+      
+      
+      CopyPottingRegionRequest.project
+      
+      
+      CopyPottingRegionRequest.potting_region_copy_data
+      
+   
+   
+
+.. vale on

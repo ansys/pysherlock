@@ -1,0 +1,10 @@
+.. vale off
+
+export\_layer\_image
+====================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.export_layer_image
+
+.. vale on

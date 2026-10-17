@@ -1,0 +1,10 @@
+.. vale off
+
+json
+====
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CopperFile.json
+
+.. vale on
