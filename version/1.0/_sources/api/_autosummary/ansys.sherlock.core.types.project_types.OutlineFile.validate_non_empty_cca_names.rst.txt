@@ -1,0 +1,10 @@
+.. vale off
+
+validate\_non\_empty\_cca\_names
+================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: OutlineFile.validate_non_empty_cca_names
+
+.. vale on

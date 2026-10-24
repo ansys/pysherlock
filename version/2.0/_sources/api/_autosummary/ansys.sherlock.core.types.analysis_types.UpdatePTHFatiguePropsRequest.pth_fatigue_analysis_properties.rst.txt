@@ -1,0 +1,10 @@
+.. vale off
+
+pth\_fatigue\_analysis\_properties
+==================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdatePTHFatiguePropsRequest.pth_fatigue_analysis_properties
+
+.. vale on

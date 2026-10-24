@@ -1,0 +1,6 @@
+﻿export\_trace\_reinforcement\_model
+===================================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.export_trace_reinforcement_model

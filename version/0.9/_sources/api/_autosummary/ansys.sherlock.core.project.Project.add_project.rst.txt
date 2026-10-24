@@ -1,0 +1,10 @@
+.. vale off
+
+add\_project
+============
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.add_project
+
+.. vale on

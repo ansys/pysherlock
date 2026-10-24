@@ -1,0 +1,44 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.LegendBounds
+=====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: LegendBounds
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      LegendBounds.legend_x
+      
+      
+      LegendBounds.legend_y
+      
+      
+      LegendBounds.height
+      
+      
+      LegendBounds.width
+      
+   
+   
+
+.. vale on

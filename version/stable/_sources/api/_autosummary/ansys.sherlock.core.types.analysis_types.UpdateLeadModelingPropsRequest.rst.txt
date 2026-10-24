@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateLeadModelingPropsRequest
+========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateLeadModelingPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateLeadModelingPropsRequest.construct
+      
+      
+      UpdateLeadModelingPropsRequest.copy
+      
+      
+      UpdateLeadModelingPropsRequest.dict
+      
+      
+      UpdateLeadModelingPropsRequest.from_orm
+      
+      
+      UpdateLeadModelingPropsRequest.json
+      
+      
+      UpdateLeadModelingPropsRequest.model_construct
+      
+      
+      UpdateLeadModelingPropsRequest.model_copy
+      
+      
+      UpdateLeadModelingPropsRequest.model_dump
+      
+      
+      UpdateLeadModelingPropsRequest.model_dump_json
+      
+      
+      UpdateLeadModelingPropsRequest.model_json_schema
+      
+      
+      UpdateLeadModelingPropsRequest.model_parametrized_name
+      
+      
+      UpdateLeadModelingPropsRequest.model_post_init
+      
+      
+      UpdateLeadModelingPropsRequest.model_rebuild
+      
+      
+      UpdateLeadModelingPropsRequest.model_validate
+      
+      
+      UpdateLeadModelingPropsRequest.model_validate_json
+      
+      
+      UpdateLeadModelingPropsRequest.model_validate_strings
+      
+      
+      UpdateLeadModelingPropsRequest.parse_file
+      
+      
+      UpdateLeadModelingPropsRequest.parse_obj
+      
+      
+      UpdateLeadModelingPropsRequest.parse_raw
+      
+      
+      UpdateLeadModelingPropsRequest.schema
+      
+      
+      UpdateLeadModelingPropsRequest.schema_json
+      
+      
+      UpdateLeadModelingPropsRequest.str_validation
+      
+      
+      UpdateLeadModelingPropsRequest.update_forward_refs
+      
+      
+      UpdateLeadModelingPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateLeadModelingPropsRequest.model_computed_fields
+      
+      
+      UpdateLeadModelingPropsRequest.model_config
+      
+      
+      UpdateLeadModelingPropsRequest.model_extra
+      
+      
+      UpdateLeadModelingPropsRequest.model_fields
+      
+      
+      UpdateLeadModelingPropsRequest.model_fields_set
+      
+      
+      UpdateLeadModelingPropsRequest.project
+      
+      
+      UpdateLeadModelingPropsRequest.cca_names
+      
+      
+      UpdateLeadModelingPropsRequest.analyses
+      
+   
+   
+
+.. vale on

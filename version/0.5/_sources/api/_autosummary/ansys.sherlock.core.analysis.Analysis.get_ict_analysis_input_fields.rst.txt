@@ -1,0 +1,6 @@
+get\_ict\_analysis\_input\_fields
+=================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.get_ict_analysis_input_fields

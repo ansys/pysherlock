@@ -1,0 +1,10 @@
+.. vale off
+
+update\_mechanical\_parts\_props
+================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_mechanical_parts_props
+
+.. vale on

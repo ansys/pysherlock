@@ -1,0 +1,10 @@
+.. vale off
+
+side
+====
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: ICTFixtureProperties.side
+
+.. vale on

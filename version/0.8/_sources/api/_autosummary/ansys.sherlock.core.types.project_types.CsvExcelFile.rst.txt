@@ -1,0 +1,47 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.CsvExcelFile
+=====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: CsvExcelFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CsvExcelFile.header_row_count
+      
+      
+      CsvExcelFile.numeric_format
+      
+      
+      CsvExcelFile.reference_id_column
+      
+      
+      CsvExcelFile.temperature_column
+      
+      
+      CsvExcelFile.temperature_units
+      
+   
+   
+
+.. vale on

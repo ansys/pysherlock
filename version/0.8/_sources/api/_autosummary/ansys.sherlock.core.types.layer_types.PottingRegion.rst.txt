@@ -1,0 +1,143 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PottingRegion
+====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PottingRegion
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PottingRegion.construct
+      
+      
+      PottingRegion.copy
+      
+      
+      PottingRegion.dict
+      
+      
+      PottingRegion.from_orm
+      
+      
+      PottingRegion.json
+      
+      
+      PottingRegion.model_construct
+      
+      
+      PottingRegion.model_copy
+      
+      
+      PottingRegion.model_dump
+      
+      
+      PottingRegion.model_dump_json
+      
+      
+      PottingRegion.model_json_schema
+      
+      
+      PottingRegion.model_parametrized_name
+      
+      
+      PottingRegion.model_post_init
+      
+      
+      PottingRegion.model_rebuild
+      
+      
+      PottingRegion.model_validate
+      
+      
+      PottingRegion.model_validate_json
+      
+      
+      PottingRegion.model_validate_strings
+      
+      
+      PottingRegion.parse_file
+      
+      
+      PottingRegion.parse_obj
+      
+      
+      PottingRegion.parse_raw
+      
+      
+      PottingRegion.schema
+      
+      
+      PottingRegion.schema_json
+      
+      
+      PottingRegion.str_validation
+      
+      
+      PottingRegion.update_forward_refs
+      
+      
+      PottingRegion.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PottingRegion.model_computed_fields
+      
+      
+      PottingRegion.model_config
+      
+      
+      PottingRegion.model_extra
+      
+      
+      PottingRegion.model_fields
+      
+      
+      PottingRegion.model_fields_set
+      
+      
+      PottingRegion.cca_name
+      
+      
+      PottingRegion.potting_id
+      
+      
+      PottingRegion.potting_side
+      
+      
+      PottingRegion.potting_material
+      
+      
+      PottingRegion.potting_units
+      
+      
+      PottingRegion.potting_thickness
+      
+      
+      PottingRegion.potting_standoff
+      
+      
+      PottingRegion.shape
+      
+   
+   
+
+.. vale on

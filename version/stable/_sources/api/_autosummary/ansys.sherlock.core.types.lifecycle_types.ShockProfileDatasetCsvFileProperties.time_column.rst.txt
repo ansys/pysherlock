@@ -1,0 +1,10 @@
+.. vale off
+
+time\_column
+============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ShockProfileDatasetCsvFileProperties.time_column
+
+.. vale on

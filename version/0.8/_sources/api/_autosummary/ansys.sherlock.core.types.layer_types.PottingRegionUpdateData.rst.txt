@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.PottingRegionUpdateData
+==============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: PottingRegionUpdateData
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      PottingRegionUpdateData.construct
+      
+      
+      PottingRegionUpdateData.copy
+      
+      
+      PottingRegionUpdateData.dict
+      
+      
+      PottingRegionUpdateData.from_orm
+      
+      
+      PottingRegionUpdateData.json
+      
+      
+      PottingRegionUpdateData.model_construct
+      
+      
+      PottingRegionUpdateData.model_copy
+      
+      
+      PottingRegionUpdateData.model_dump
+      
+      
+      PottingRegionUpdateData.model_dump_json
+      
+      
+      PottingRegionUpdateData.model_json_schema
+      
+      
+      PottingRegionUpdateData.model_parametrized_name
+      
+      
+      PottingRegionUpdateData.model_post_init
+      
+      
+      PottingRegionUpdateData.model_rebuild
+      
+      
+      PottingRegionUpdateData.model_validate
+      
+      
+      PottingRegionUpdateData.model_validate_json
+      
+      
+      PottingRegionUpdateData.model_validate_strings
+      
+      
+      PottingRegionUpdateData.parse_file
+      
+      
+      PottingRegionUpdateData.parse_obj
+      
+      
+      PottingRegionUpdateData.parse_raw
+      
+      
+      PottingRegionUpdateData.schema
+      
+      
+      PottingRegionUpdateData.schema_json
+      
+      
+      PottingRegionUpdateData.str_validation
+      
+      
+      PottingRegionUpdateData.update_forward_refs
+      
+      
+      PottingRegionUpdateData.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PottingRegionUpdateData.model_computed_fields
+      
+      
+      PottingRegionUpdateData.model_config
+      
+      
+      PottingRegionUpdateData.model_extra
+      
+      
+      PottingRegionUpdateData.model_fields
+      
+      
+      PottingRegionUpdateData.model_fields_set
+      
+      
+      PottingRegionUpdateData.potting_region_id_to_update
+      
+      
+      PottingRegionUpdateData.potting_region
+      
+   
+   
+
+.. vale on

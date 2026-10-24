@@ -1,0 +1,6 @@
+list\_strain\_maps
+==================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.list_strain_maps

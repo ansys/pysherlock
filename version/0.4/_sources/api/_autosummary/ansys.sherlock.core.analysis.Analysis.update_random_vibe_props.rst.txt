@@ -1,0 +1,6 @@
+﻿update\_random\_vibe\_props
+===========================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_random_vibe_props

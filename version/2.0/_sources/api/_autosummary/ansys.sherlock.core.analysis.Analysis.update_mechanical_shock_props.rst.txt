@@ -1,0 +1,10 @@
+.. vale off
+
+update\_mechanical\_shock\_props
+================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_mechanical_shock_props
+
+.. vale on
