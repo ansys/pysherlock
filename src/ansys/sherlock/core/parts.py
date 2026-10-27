@@ -227,6 +227,7 @@ class Parts(GrpcStub):
         >>>     SherlockCommonService_pb2.MatchingMode.Both,
         >>>     SherlockPartsService_pb2.DuplicationMode.Error,
         >>> )
+
         """
         try:
             if project == "":
@@ -325,6 +326,7 @@ class Parts(GrpcStub):
         >>>         ("J1", "-3.55", "-2.220446049250313E-16", "90", "in", "TOP", "False"),
         >>>     ]
         >>> )
+
         """
         if self.PART_LOCATION_UNITS is None:
             self._init_location_units()
@@ -415,6 +417,7 @@ class Parts(GrpcStub):
         >>>     "Card",
         >>>     "Parts Locations.csv"
         >>> )
+
         """
         try:
             if project == "":
@@ -500,6 +503,7 @@ class Parts(GrpcStub):
         >>>     "Parts List.csv",
         >>>     False
         >>> )
+
         """
         try:
             if project == "":
@@ -572,6 +576,7 @@ class Parts(GrpcStub):
         >>>     "Card",
         >>>     "Parts List.csv"
         >>> )
+
         """
         try:
             if project == "":
@@ -638,6 +643,7 @@ class Parts(GrpcStub):
         >>>     "Test",
         >>>     "Card"
         >>> )
+
         """
         try:
             if project == "":
@@ -705,6 +711,7 @@ class Parts(GrpcStub):
         >>>     )
         >>> )
         >>> print(f"{part_properties}")
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -775,6 +782,7 @@ class Parts(GrpcStub):
         >>>     avl_part_num=SherlockPartsService_pb2.AVLPartNum.AssignInternalPartNum,
         >>>     avl_description=SherlockPartsService_pb2.AVLDescription.AssignApprovedDescription,
         >>> )
+
         """
         try:
             if project == "":
@@ -817,8 +825,7 @@ class Parts(GrpcStub):
         cca_name: str,
         part_properties: list[dict[str, list[dict[str, str]] | list[str]]],
     ) -> int:
-        """
-        Update one or more properties of one or more parts in a parts list.
+        """Update one or more properties of one or more parts in a parts list.
 
         Available Since: 2024R2
 
@@ -869,6 +876,7 @@ class Parts(GrpcStub):
         >>>         }
         >>>     ]
         >>> )
+
         """
         try:
             if project == "":
@@ -996,6 +1004,7 @@ class Parts(GrpcStub):
         >>>     overwrite_existing=True,
         >>>     utf8_enabled=True
         >>> )
+
         """
         try:
             if project == "":
@@ -1069,6 +1078,7 @@ class Parts(GrpcStub):
         >>>     print(f"Return code: value={res.returnCode.value},\
         >>>     message={res.returnCode.message},\
         >>>     reference_designators={res.reference_designators}")
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1118,6 +1128,7 @@ class Parts(GrpcStub):
         >>>     print(f"Return code: value={res.returnCode.value},\
         >>>     message={res.returnCode.message},\
         >>>     reference designator={res.reference_designators}")
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1157,6 +1168,7 @@ class Parts(GrpcStub):
         >>>         import_type=SherlockPartsService_pb2.AVLImportType.Update
         >>>     )
         >>> )
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()

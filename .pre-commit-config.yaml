@@ -43,9 +43,16 @@ repos:
   rev: v0.8.0
   hooks:
   - id: ruff
+    alias: ruff-src
     args:
     - --select=D
-    - src
+    files: ^src/
+  - id: ruff
+    alias: ruff-examples
+    args:
+    - --select=D
+    - --ignore=D212,D400,D415
+    files: ^examples/
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0

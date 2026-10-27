@@ -167,28 +167,19 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the CCA.
-        analyses: list of ``elements``
+        analyses: list[tuple[AnalysisType, tuple[str, str]]]
+            List of tuples where each tuple contains an analysis type and a list of events.
+            Each element is a tuple of (analysis_type, events):
 
-            - elements: list[
-                tuple[
-                    SherlockAnalysisService_pb2.RunAnalysisRequest.
-                    Analysis.AnalysisType.ValueType,
-                    tuple[str, str],
-                ]
-              ]
-                Tuples (``type``, ``event``)
+            - analysis_type:
+              SherlockAnalysisService_pb2.RunAnalysisRequest.Analysis.AnalysisType.ValueType.
+              Type of analysis to run.
 
-                - analysis_type: SherlockAnalysisService_pb2.RunAnalysisRequest.
-                  Analysis.AnalysisType.ValueType
-                    Type of analysis to run.
+            - events: list[tuple[str, str]]
+              List of tuples containing (phase_name, event_name):
 
-                - event: list[tuple[str, str]]
-                    Tuples (``phase_name``, ``event_name``)
-
-                    - phase_name: str
-                        Name of the life cycle phase.
-                    - event_name: str
-                        Name of the life cycle event.
+              - phase_name (str): Name of the life cycle phase.
+              - event_name (str): Name of the life cycle event.
 
         Returns
         -------
@@ -221,6 +212,7 @@ class Analysis(GrpcStub):
         >>>        )
         >>>    ]
         >>> )
+
         """
         try:
             if project == "":
@@ -293,6 +285,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_harmonic_vibe_input_fields(
         >>>     SherlockAnalysisService_pb2.ModelSource.GENERATED
         >>> )
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -406,6 +399,7 @@ class Analysis(GrpcStub):
         >>>     },
         >>>     ]
         >>> )
+
         """
         try:
             if project == "":
@@ -615,6 +609,7 @@ class Analysis(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.analysis.get_ict_analysis_input_fields()
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -692,6 +687,7 @@ class Analysis(GrpcStub):
         >>> },
         >>> ]
         >>> )
+
         """
         try:
             if project == "":
@@ -812,6 +808,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_mechanical_shock_input_fields(
         >>>     SherlockAnalysisService_pb2.ModelSource.GENERATED
         >>> )
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1057,6 +1054,7 @@ class Analysis(GrpcStub):
         >>>     cca_name="Card",
         >>> )
         >>> sherlock.analysis.get_solder_fatigue_input_fields()
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1127,6 +1125,7 @@ class Analysis(GrpcStub):
         >>> },
         >>> ]
         >>> )
+
         """
         try:
             if project == "":
@@ -1241,6 +1240,7 @@ class Analysis(GrpcStub):
         >>> sherlock.analysis.get_random_vibe_input_fields(
         >>>     SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
         >>> )
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1351,6 +1351,7 @@ class Analysis(GrpcStub):
         >>>     analysis_temp_units="C",
         >>>     model_source=SherlockAnalysisService_pb2.ModelSource.STRAIN_MAP
         >>> )
+
         """
         try:
             if project == "":
@@ -1431,6 +1432,7 @@ class Analysis(GrpcStub):
         >>>     cca_name="Card",
         >>> )
         >>> sherlock.analysis.get_natural_frequency_input_fields()
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1518,6 +1520,7 @@ class Analysis(GrpcStub):
         >>>     analysis_temp=25,
         >>>     analysis_temp_units="C"
         >>> )
+
         """
         try:
             if project == "":
@@ -1574,31 +1577,28 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the main CCA for the analysis.
-        strain_map_analyses: list[
-            list[
-                SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
-                StrainMapAnalysis.AnalysisType.ValueType | list[list[str]]
-            ]
-        ]
-            Analyses consisting of these properties:
+        strain_map_analyses: list[list[tuple]]
+            Analyses consisting of tuples with these properties:
 
-            - analysis_type: SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
-              StrainMapAnalysis.AnalysisType.ValueType
-                Type of analysis to run.
-            - event_strain_maps: list
-                Strain maps assigned to the desired life cycle events for
-                a given PCB side. The list consists of these properties:
+            - First element:
+              SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
+              StrainMapAnalysis.AnalysisType.ValueType.
+              Type of analysis to run.
 
-              - phase_name: str
-                  Life cycle phase name for the strain map assignment.
-              - event_name: str
-                  Life cycle event name for the strain map assignment.
-              - pcb_side: str
-                  PCB side for the strain map. Options are ``"TOP"`` and ``"BOTTOM"``.
-              - strain_map: str
-                  Name of the strain map assigned to the life cycle event.
-              - sub_assembly_name: str, optional
-                  Name of the subassembly CCA to assign the strain map to.
+            - Second element: list[list[str]]
+              Strain maps assigned to the desired life cycle events for
+              a given PCB side. Each inner list contains these properties in order:
+
+              - phase_name (str): Life cycle phase name for the strain map
+                assignment.
+              - event_name (str): Life cycle event name for the strain map
+                assignment.
+              - pcb_side (str): PCB side for the strain map
+                (``"TOP"`` or ``"BOTTOM"``).
+              - strain_map (str): Name of the strain map assigned to the
+                life cycle event.
+              - sub_assembly_name (str, optional): Name of the subassembly
+                CCA to assign the strain map to.
 
         Returns
         -------
@@ -1630,6 +1630,7 @@ class Analysis(GrpcStub):
         >>>         ],
         >>>     ]]
         >>> )
+
         """
         try:
             if project == "":
@@ -1761,50 +1762,50 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_names: list
             Names of the CCAs to be used for the analysis.
-        analyses: list[
-            tuple[
-                bool
-                | float
-                | str
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-                Analysis.AnalysisType.ValueType
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-                Analysis.PcbModelType.ValueType
-                | SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-                Analysis.PcbMaterialModel.ValueType
-                | SherlockAnalysisService_pb2.ElementOrder.ValueType,
-                ...,
-            ]
-        ]
-            Elements consisting of the following properties:
+        analyses: list[tuple]
+            Elements consisting of the following properties in order:
 
-            - analysis_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-              Analysis.AnalysisType.ValueType
-                Type of analysis applied.
-            - pcb_model_type: SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
-              Analysis.PcbModelType.ValueType
-                The PCB modeling mesh type.
-            - modeling_region_enabled: bool
-                Indicates if modeling regions are enabled.
-            - pcb_material_model: SherlockAnalysisService_pb2.
-              UpdatePcbModelingPropsRequest.Analysis.PcbMaterialModel.ValueType
-                The PCB modeling PCB model type.
-            - pcb_max_materials: Optional[int]
-                The number of PCB materials for Uniform Elements and Layered Elements PCB model
-                types. Not applicable if PCB model is Uniform or Layered.
-            - pcb_elem_order: SherlockAnalysisService_pb2.ElementOrder.ValueType
-                The element order for PCB elements.
-            - pcb_max_edge_length: float
-                The maximum mesh size for PCB elements.
-            - pcb_max_edge_length_units: str
-                The length units for the maximum mesh size.
-            - pcb_max_vertical: float
-                The maximum vertical mesh size for PCB elements.
-            - pcb_max_vertical_units: str
-                The length units for the maximum vertical mesh size.
-            - quads_preferred: bool
-                Indicates that the meshing engine should attempt to generate quad-shaped elements
-                when creating the mesh.
+            - analysis_type:
+              SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.AnalysisType.ValueType.
+              Type of analysis applied.
+
+            - pcb_model_type:
+              SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.PcbModelType.ValueType.
+              The PCB modeling mesh type.
+
+            - modeling_region_enabled (bool): Indicates if modeling
+              regions are enabled.
+
+            - pcb_material_model:
+              SherlockAnalysisService_pb2.UpdatePcbModelingPropsRequest.
+              Analysis.PcbMaterialModel.ValueType.
+              The PCB material model type.
+
+            - pcb_max_materials (int, optional): The number of PCB
+              materials for Uniform Elements and Layered Elements PCB model
+              types. Not applicable if PCB model is Uniform or Layered.
+
+            - pcb_elem_order:
+              SherlockAnalysisService_pb2.ElementOrder.ValueType.
+              The element order for PCB elements.
+
+            - pcb_max_edge_length (float): The maximum mesh size for
+              PCB elements.
+
+            - pcb_max_edge_length_units (str): The length units for
+              the maximum mesh size.
+
+            - pcb_max_vertical (float): The maximum vertical mesh size
+              for PCB elements.
+
+            - pcb_max_vertical_units (str): The length units for
+              the maximum vertical mesh size.
+
+            - quads_preferred (bool): Indicates that the meshing engine
+              should attempt to generate quad-shaped elements when creating
+              the mesh.
 
         Returns
         -------
@@ -1837,6 +1838,7 @@ class Analysis(GrpcStub):
         >>>         )
         >>>     ]
         >>> )
+
         """
         try:
             if project == "":
@@ -1941,6 +1943,7 @@ class Analysis(GrpcStub):
         >>> )
         >>> returnCode = sherlock.analysis.update_trace_modeling_props(request)
         >>> assert returnCode.value == 0
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -1994,6 +1997,7 @@ class Analysis(GrpcStub):
         >>> )
         >>> returnCode = sherlock.analysis.update_mount_points_props(request)
         >>> assert returnCode.value == 0
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -2048,6 +2052,7 @@ class Analysis(GrpcStub):
         >>> )
         >>> returnCode = sherlock.analysis.update_lead_modeling_props(request)
         >>> assert returnCode.value == 0
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -2105,6 +2110,7 @@ class Analysis(GrpcStub):
         >>> )
         >>> returnCode = sherlock.analysis.update_mechanical_parts_props(request)
         >>> assert returnCode.value == 0
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -2157,6 +2163,7 @@ class Analysis(GrpcStub):
         >>> )
         >>> returnCode = sherlock.analysis.update_potting_regions_props(request)
         >>> assert returnCode.value == 0
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -2234,6 +2241,7 @@ class Analysis(GrpcStub):
         >>>     "part_results_filtered": True
         >>> }
         >>> )
+
         """
         try:
             if project == "":
@@ -2365,6 +2373,7 @@ class Analysis(GrpcStub):
         >>> },
         >>> ]
         >>> )
+
         """
         try:
             if not isinstance(properties_per_cca, list):
@@ -2498,6 +2507,7 @@ class Analysis(GrpcStub):
         >>> analysis_props = sherlock.analysis.get_parts_list_validation_analysis_props(
         >>> "Test", "Card"
         >>> )
+
         """
         try:
             if project == "":
@@ -2587,6 +2597,7 @@ class Analysis(GrpcStub):
         >>>     update_component_failure_mechanism_analysis_props(request)
         >>> for return_code in return_codes:
         >>>     print(f"Return code: value={return_code.value}, message={return_code.message}")
+
         """
         update_request = request._convert_to_grpc()
 
@@ -2657,6 +2668,7 @@ class Analysis(GrpcStub):
         >>> return_codes = sherlock.analysis.update_semiconductor_wearout_props(request)
         >>> for return_code in return_codes:
         >>>     print(f"Return code: value={return_code.value}, message={return_code.message}")
+
         """
         update_request = request._convert_to_grpc()
 
@@ -2732,6 +2744,7 @@ class Analysis(GrpcStub):
         >>> return_codes = sherlock.analysis.update_PTH_fatigue_props(request)
         >>> for return_code in return_codes:
         >>>     print(f"Return code: value={return_code.value}, message={return_code.message}")
+
         """
         update_request = request._convert_to_grpc()
 
