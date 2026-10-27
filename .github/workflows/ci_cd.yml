@@ -215,7 +215,7 @@ jobs:
   release:
     name: Release project
     if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
-    needs: [ package, update-changelog ]
+    needs: [ package, docs ]
     runs-on: ubuntu-latest
     # Specifying a GitHub environment is optional, but strongly encouraged
     environment: release
@@ -294,6 +294,7 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [ upload_docs_release ]
     runs-on: ubuntu-latest
     permissions:
       contents: write         # Needed to create changelog entries in repository
