@@ -39,13 +39,13 @@ repos:
     additional_dependencies:
     - tomli
 
-- repo: https://github.com/pycqa/pydocstyle
-  rev: 6.3.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.8.0
   hooks:
-  - id: pydocstyle
-    additional_dependencies:
-    - tomli
-    files: ^src/
+  - id: ruff
+    args:
+    - --select=D
+    - src
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0

@@ -52,19 +52,19 @@ You can also install this as a pre-commit hook by running::
 
 This way, it's not possible for you to push code that fails the style checks. For example::
 
-  $ pre-commit install
-  $ git commit -am "added my cool feature"
-  black....................................................................Passed
-  blacken-docs.............................................................Passed
-  isort....................................................................Passed
-  flake8...................................................................Passed
-  codespell................................................................Passed
-  pydocstyle...............................................................Passed
-  check for merge conflicts................................................Passed
-  debug statements (python)................................................Passed
-  check yaml...............................................................Passed
-  trim trailing whitespace.................................................Passed
-  Validate GitHub Workflows................................................Passed
+   $ pre-commit install
+   $ git commit -am "added my cool feature"
+   black....................................................................Passed
+   blacken-docs.............................................................Passed
+   isort....................................................................Passed
+   flake8...................................................................Passed
+   codespell................................................................Passed
+   ruff.....................................................................Passed
+   check for merge conflicts................................................Passed
+   debug statements (python)................................................Passed
+   check yaml...............................................................Passed
+   trim trailing whitespace.................................................Passed
+   Validate GitHub Workflows................................................Passed
 
 Install the package
 -------------------
