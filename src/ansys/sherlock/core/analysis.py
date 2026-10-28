@@ -1577,8 +1577,8 @@ class Analysis(GrpcStub):
             Name of the Sherlock project.
         cca_name: str
             Name of the main CCA for the analysis.
-        strain_map_analyses: list[list[tuple]]
-            Analyses consisting of tuples with these properties:
+        strain_map_analyses: list[list[RunStrainMapAnalysisType | list[list[str]]]]
+            Analyses consisting of two-element lists with these properties:
 
             - First element:
               SherlockAnalysisService_pb2.RunStrainMapAnalysisRequest.
