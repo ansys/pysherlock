@@ -294,6 +294,7 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [ docs ]
     runs-on: ubuntu-latest
     permissions:
       contents: write         # Needed to create changelog entries in repository
