@@ -115,6 +115,7 @@ def launch(
     >>> project = "C:\\Default Projects Directory\\ODB++ Tutorial"
     >>> ansys_install_path = launcher.launch(
     >>>     port=9092, single_project_path=project, year=2024, release_number=2)
+
     """
     # Moved import here since it's only used in this function
     import subprocess  # nosec B404
@@ -177,8 +178,7 @@ def launch_and_connect(
     uds_dir: str = None,
     uds_id: str = None,
 ) -> tuple[Sherlock, str]:
-    """
-    Launch Sherlock, start gRPC on a given host and port, and wait until connected to Sherlock.
+    """Launch Sherlock, start gRPC on a given host and port, and wait until connected to Sherlock.
 
     Available Since: 2025R2
 
@@ -229,6 +229,7 @@ def launch_and_connect(
     >>> from ansys.sherlock.core import launcher
     >>> sherlock, ansys_install_path = launcher.launch_and_connect(
     >>>     port=9092, year=2026, release_number=1, transport_mode="wnua")
+
     """
     ansys_install_path = launch(
         host,
@@ -293,6 +294,7 @@ def connect(
     >>> ansys_install_path = launcher.launch(
     >>>     port=9092, year=2026, release_number=1, transport_mode="wnua")
     >>> sherlock = launcher.connect(port=9092, timeout=60, transport_mode="wnua")
+
     """
     try:
         channel = _connect_grpc_channel(
@@ -342,8 +344,7 @@ def _connect_grpc_channel(
     transport_mode: str = "mtls",
     certs_dir: str = None,
 ) -> grpc.Channel:
-    """
-    Connect to Sherlock gRPC via UDS, TCP, or other transport modes.
+    """Connect to Sherlock gRPC via UDS, TCP, or other transport modes.
 
     Parameters
     ----------
@@ -364,6 +365,7 @@ def _connect_grpc_channel(
     -------
     grpc.Channel
         A gRPC channel connected to Sherlock.
+
     """
     try:
         channel = create_channel(

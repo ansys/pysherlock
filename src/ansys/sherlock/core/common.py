@@ -50,6 +50,7 @@ class Common(GrpcStub):
         -------
         bool
             Whether the Sherlock client is connected via gRPC.
+
         """
         if not self._is_connection_up():
             LOG.warning("Health check failed.")
@@ -68,6 +69,7 @@ class Common(GrpcStub):
         -------
         bool
             Whether the Sherlock client is opened and done initializing.
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -94,6 +96,7 @@ class Common(GrpcStub):
             Whether to close the Sherlock client when the gRPC connection is closed. The default
             is ``False``, in which case the Sherlock client remains open when the gRPC connection
             is closed.
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -121,6 +124,7 @@ class Common(GrpcStub):
         -------
         str
             Units for the unit type.
+
         """
         if unit_type == "":
             raise SherlockCommonServiceError(message="Unit type is missing.")
@@ -156,6 +160,7 @@ class Common(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.common.list_solder_materials()
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -182,6 +187,7 @@ class Common(GrpcStub):
         >>> release_version = sherlock.common.get_sherlock_info().releaseVersion
         >>> default_dir = sherlock.common.get_sherlock_info().defaultProjectDir
         >>> is_single_project = sherlock.common.get_sherlock_info().isSingleProjectMode
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -205,6 +211,7 @@ class Common(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> solder_data = sherlock.get_solder_info()
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()

@@ -101,6 +101,7 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> sherlock.project.delete_project("Test Project")
+
         """
         try:
             if project == "":
@@ -194,6 +195,7 @@ class Project(GrpcStub):
         >>>     polyline_tolerance=0.1,
         >>>     polyline_tolerance_units="mm"
         >>> )
+
         """
         try:
             if archive_file == "":
@@ -289,6 +291,7 @@ class Project(GrpcStub):
             When set to True, if the project parameter is set to a project
             name that already exists, overwrite that project, otherwise an error
             will be raised and no import will occur.
+
         Returns
         -------
         int
@@ -317,6 +320,7 @@ class Project(GrpcStub):
         >>>     polyline_tolerance=0.1,
         >>>     polyline_tolerance_units="mm"
         >>> )
+
         """
         try:
             if archive_file == "":
@@ -411,6 +415,7 @@ class Project(GrpcStub):
         >>>     polyline_tolerance=0.1,
         >>>     polyline_tolerance_units="mm"
         >>> )
+
         """
         try:
             if archive_file == "":
@@ -513,6 +518,7 @@ class Project(GrpcStub):
         >>>     polyline_tolerance_units="mm",
         >>>     overwrite=True,
         >>> )
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -585,6 +591,7 @@ class Project(GrpcStub):
         >>>     "Example",
         >>>     "Project Report.pdf"
         >>> )
+
         """
         try:
             if project == "":
@@ -651,6 +658,7 @@ class Project(GrpcStub):
         >>> from ansys.sherlock.core import launcher
         >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
         >>> ccas = sherlock.project.list_ccas("AssemblyTutorial", ["Main Board"])
+
         """
         try:
             if project == "":
@@ -913,6 +921,7 @@ class Project(GrpcStub):
         >>>         )
         >>>     ]
         >>> )
+
         """
         try:
             if project == "":
@@ -1124,6 +1133,7 @@ class Project(GrpcStub):
         >>>     "AssemblyTutorial",
         >>>     ["Main Board", "Power Module"]
         >>> )
+
         """
         try:
             if project == "":
@@ -1190,6 +1200,7 @@ class Project(GrpcStub):
         >>>     "project category example",
         >>>     "project description example"
         >>> )
+
         """
         if project_name is None or project_name == "":
             raise SherlockAddProjectError("Project name cannot be blank")
@@ -1235,6 +1246,7 @@ class Project(GrpcStub):
         >>>     "AssemblyTutorial",
         >>>     ["Main Board", "Power Module"]
         >>> )
+
         """
         try:
             if project == "":
@@ -1286,8 +1298,7 @@ class Project(GrpcStub):
             ]
         ],
     ) -> int:
-        """
-        Update thermal map files to a Sherlock project.
+        """Update thermal map files to a Sherlock project.
 
         Available Since: 2024R2
 
@@ -1360,6 +1371,7 @@ class Project(GrpcStub):
         >>>     },
         >>> ]
         >>> sherlock.project.update_thermal_maps("Tutorial Project", files)
+
         """
         try:
             if project == "":
@@ -1616,8 +1628,7 @@ class Project(GrpcStub):
             ]
         ],
     ) -> int:
-        """
-        Add thermal map files to a Sherlock project.
+        """Add thermal map files to a Sherlock project.
 
         Available Since: 2024R2
 
@@ -1701,6 +1712,7 @@ class Project(GrpcStub):
         >>>     }
         >>> ]
         >>> sherlock.project.add_thermal_maps("Tutorial Project", files)
+
         """
         try:
             if project == "":
@@ -1949,8 +1961,7 @@ class Project(GrpcStub):
 
     @require_version(242)
     def import_project_zip_archive(self, project: str, category: str, archive_file: str) -> int:
-        """
-        Import a zipped project archive -- multiple project mode.
+        """Import a zipped project archive -- multiple project mode.
 
         Available Since: 2024R2
 
@@ -1977,6 +1988,7 @@ class Project(GrpcStub):
         >>>     "Demos",
         >>>     "Tutorial Project.zip"
         >>> )
+
         """
         try:
             if project == "":
@@ -2010,8 +2022,7 @@ class Project(GrpcStub):
     def import_project_zip_archive_single_mode(
         self, project: str, category: str, archive_file: str, destination_file_directory: str
     ):
-        """
-        Import a zipped project archive -- single project mode.
+        """Import a zipped project archive -- single project mode.
 
         Available Since: 2024R2
 
@@ -2041,6 +2052,7 @@ class Project(GrpcStub):
         >>>     "Tutorial Project.zip",
         >>>     "New Tutorial Project"
         >>> )
+
         """
         try:
             if project == "":
@@ -2101,8 +2113,7 @@ class Project(GrpcStub):
         export_file_name: str,
         overwrite_existing_file: bool,
     ) -> int:
-        """
-        Export a sherlock project.
+        """Export a sherlock project.
 
         Available Since: 2025R1
 
@@ -2150,6 +2161,7 @@ class Project(GrpcStub):
         >>>     "Exported_Project",
         >>>     True
         >>> )
+
         """
         try:
             if project_name == "":
@@ -2257,6 +2269,7 @@ class Project(GrpcStub):
         >>>     },
         >>>     ]
         >>> )
+
         """
         try:
             if project == "":
@@ -2386,6 +2399,7 @@ class Project(GrpcStub):
         >>>     )
         >>> )
         >>> print(f"Import result: {return_code}")
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -2436,6 +2450,7 @@ class Project(GrpcStub):
         >>>         ]
         >>>     )
         >>> )
+
         """
         add_outline_files_request = request._convert_to_grpc()
 
@@ -2519,6 +2534,7 @@ class Project(GrpcStub):
         >>> )
         >>> for response in return_codes:
         >>>     print(f"File: {response.fileName}, Status: {response.returnCode}")
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()

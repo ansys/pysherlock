@@ -288,6 +288,7 @@ class Stackup(GrpcStub):
         >>>     1.0,
         >>>     "mil"
         >>> )
+
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -421,6 +422,7 @@ class Stackup(GrpcStub):
         >>>     "94.2",
         >>>     "Generic FR-4 Generic FR-4"
         >>> )
+
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -589,6 +591,7 @@ class Stackup(GrpcStub):
         >>>     "COPPER",
         >>>     "0.0"
         >>> )
+
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -706,6 +709,7 @@ class Stackup(GrpcStub):
         >>>     properties = layer.conductorLayerProps
         >>>     for prop in properties:
         >>>     print(f"{prop}")
+
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -767,6 +771,7 @@ class Stackup(GrpcStub):
         >>>     properties = layer.laminateProps
         >>>     for prop in properties:
         >>>     print(f"{prop}")
+
         """
         if self.LAMINATE_THICKNESS_UNIT_LIST is None:
             self._init_laminate_thickness_units()
@@ -832,6 +837,7 @@ class Stackup(GrpcStub):
         >>>    cca_name="Card"
         >>> )
         >>> print(f"{conductor_layer_count}")
+
         """
         if project == "":
             raise SherlockGetLayerCountError(message="Project name is invalid.")
@@ -887,6 +893,7 @@ class Stackup(GrpcStub):
         >>>    cca_name="Main Board"
         >>> )
         >>> print(f"{stackup_props}")
+
         """
         if project == "":
             raise SherlockGetStackupPropsError(message="Project name is invalid.")
@@ -949,6 +956,7 @@ class Stackup(GrpcStub):
         >>>     thickness_unit="in",
         >>> )
         >>> print(f"{total_thickness}")
+
         """
         if project == "":
             raise SherlockGetTotalConductorThicknessError(message="Invalid project name")

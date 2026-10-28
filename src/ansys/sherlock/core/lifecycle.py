@@ -402,6 +402,7 @@ class Lifecycle(GrpcStub):
         >>>     4.0,
         >>>     "COUNT"
         >>> )
+
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -539,6 +540,7 @@ class Lifecycle(GrpcStub):
         >>>     "Uniaxial",
         >>>     "2,4,5"
         >>> )
+
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -697,6 +699,7 @@ class Lifecycle(GrpcStub):
                 [(4,8), (5, 50)],
             )]
         )
+
         """
         if self.AMPL_UNIT_LIST is None:
             self._init_ampl_units()
@@ -852,6 +855,7 @@ class Lifecycle(GrpcStub):
         >>>     "PER YEAR",
         >>>     "STORAGE"
         >>> )
+
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -994,6 +998,7 @@ class Lifecycle(GrpcStub):
         >>>         ],
         >>>     )]
         >>> )
+
         """
         try:
             if project == "":
@@ -1162,6 +1167,7 @@ class Lifecycle(GrpcStub):
         >>>     "Uniaxial",
         >>>     "2,4,5"
         >>> )
+
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -1334,6 +1340,7 @@ class Lifecycle(GrpcStub):
         >>>         "",
         >>>     )]
         >>> )
+
         """
         if self.LOAD_UNIT_LIST is None:
             self._init_load_units()
@@ -1502,6 +1509,7 @@ class Lifecycle(GrpcStub):
         >>>     "45,45",
         >>>     "2,4,5"
         >>> )
+
         """
         if self.CYCLE_TYPE_LIST is None:
             self._init_cycle_types()
@@ -1675,6 +1683,7 @@ class Lifecycle(GrpcStub):
         >>>         [("HalfSine", 100.0, 100.0, 0)],
         >>>     )]
         >>> )
+
         """
         if self.LOAD_UNIT_LIST is None:
             self._init_load_units()
@@ -1842,6 +1851,7 @@ class Lifecycle(GrpcStub):
         >>>         amplitude_units="G2/Hz"
         >>>     )
         >>> )
+
         """
         try:
             if project == "":
@@ -1948,6 +1958,7 @@ class Lifecycle(GrpcStub):
         >>>         temp_units="C"
         >>>     )
         >>> )
+
         """
         try:
             if project == "":
@@ -2062,6 +2073,7 @@ class Lifecycle(GrpcStub):
         >>>         load_units="G"
         >>>     )
         >>> )
+
         """
         try:
             if project == "":
@@ -2172,6 +2184,7 @@ class Lifecycle(GrpcStub):
         >>>         load_units="G"
         >>>     )
         >>> )
+
         """
         try:
             if project == "":
@@ -2284,6 +2297,7 @@ class Lifecycle(GrpcStub):
         >>>         decay_column="Decay",
         >>>     )
         >>> )
+
         """
         try:
             if project == "":
@@ -2381,6 +2395,7 @@ class Lifecycle(GrpcStub):
         >>>         allow_cycles_binning=True,
         >>>     )
         >>> )
+
         """
         import_thermal_signal_request = request._convert_to_grpc()
         if not self._is_connection_up():
@@ -2440,6 +2455,7 @@ class Lifecycle(GrpcStub):
         >>>         result_archive_file_name=result_archive_file_name
         >>>     )
         >>> )
+
         """
         update_life_cycle_request = request._convert_to_grpc()
         if not self._is_connection_up():
@@ -2480,6 +2496,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2526,6 +2543,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2570,6 +2588,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2614,6 +2633,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2655,6 +2675,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2696,6 +2717,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2748,6 +2770,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2780,7 +2803,7 @@ class Lifecycle(GrpcStub):
             Status code of the response. 0 for success.
 
         Examples
-            --------
+        --------
             >>> from ansys.sherlock.core.types.lifecycle_types import LoadLifeCycleRequest
             >>> from ansys.sherlock.core import launcher
             >>> sherlock, install_dir = launcher.launch_and_connect(transport_mode="wnua")
@@ -2791,6 +2814,7 @@ class Lifecycle(GrpcStub):
             >>>     )
             >>> )
             >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2835,6 +2859,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
@@ -2877,6 +2902,7 @@ class Lifecycle(GrpcStub):
         >>>     )
         >>> )
         >>> assert response.returnCode.value == 0
+
         """
         grpc_request = request._convert_to_grpc()
 
