@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Automatic Version Incrementer for PySherlock
 

@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""Module containing globals for running the examples."""
+
 import json
 import os
 
@@ -31,6 +33,7 @@ SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT = 10
 
 
 def get_temp_dir() -> str:
+    """Get the path to the temporary directory for storing files."""
     return os.path.join(os.path.dirname(os.getcwd()), "Temp")
 
 

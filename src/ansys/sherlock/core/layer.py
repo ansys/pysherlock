@@ -166,6 +166,7 @@ class Layer(GrpcStub):
         >>>     },
         >>>     ]
         >>> )
+
         """
         try:
             if project == "":
@@ -346,6 +347,7 @@ class Layer(GrpcStub):
         >>>     ]
         >>> )
         >>> return_codes = sherlock.layer.update_potting_region(example_request)
+
         """
         update_request = request._convert_to_grpc()
 
@@ -399,6 +401,7 @@ class Layer(GrpcStub):
         >>>     ]
         >>> )
         >>> responses_example = sherlock.layer.copy_potting_region(copy_request_example)
+
         """
         copy_request = request._convert_to_grpc()
 
@@ -442,6 +445,7 @@ class Layer(GrpcStub):
         >>> ]
         >>> )
         >>> responses_example = sherlock.layer.delete_potting_region(delete_request_example)
+
         """
         delete_request = request._convert_to_grpc()
 
@@ -493,6 +497,7 @@ class Layer(GrpcStub):
         >>>     "Card",
         >>>     "MountPointImport.csv"
         >>> )
+
         """
         try:
             if project == "":
@@ -570,6 +575,7 @@ class Layer(GrpcStub):
         >>>     "MountPointImport.csv",
         >>> )
         >>> sherlock.layer.delete_all_mount_points("Test", "Card")
+
         """
         try:
             if project == "":
@@ -633,6 +639,7 @@ class Layer(GrpcStub):
         >>>     "ICTFixturesImport.csv",
         >>> )
         >>> sherlock.layer.delete_all_ict_fixtures("Test", "Card")
+
         """
         try:
             if project == "":
@@ -696,6 +703,7 @@ class Layer(GrpcStub):
         >>>     "TestPointsImport.csv",
         >>> )
         >>> sherlock.layer.delete_all_test_points("Test", "Card")
+
         """
         try:
             if project == "":
@@ -765,6 +773,7 @@ class Layer(GrpcStub):
         >>>     "Card",
         >>>     "TestPointsImport.csv"
         >>> )
+
         """
         try:
             if project == "":
@@ -845,6 +854,7 @@ class Layer(GrpcStub):
         >>>     "Card",
         >>>     "TestFixturesImport.csv"
         >>> )
+
         """
         try:
             if project == "":
@@ -940,6 +950,7 @@ class Layer(GrpcStub):
         >>>     "DEFAULT",
         >>>     "DEFAULT"
         >>> )
+
         """
         try:
             if project == "":
@@ -1019,6 +1030,7 @@ class Layer(GrpcStub):
         >>>     "TestFixturesExport.csv",
         >>>     "DEFAULT"
         >>> )
+
         """
         try:
             if project == "":
@@ -1096,6 +1108,7 @@ class Layer(GrpcStub):
         >>>     "MountPointsExport.csv",
         >>>     "DEFAULT"
         >>> )
+
         """
         try:
             if project == "":
@@ -1134,8 +1147,7 @@ class Layer(GrpcStub):
             dict[str, bool | float | str | dict[str, bool | float | str] | dict[str, float | str]]
         ],
     ) -> int:
-        """
-        Add one or more modeling regions to a specific project.
+        """Add one or more modeling regions to a specific project.
 
         Parameters
         ----------
@@ -1233,6 +1245,7 @@ class Layer(GrpcStub):
         >>> }
         >>> ]
         >>> result = sherlock.layer.add_modeling_region("Tutorial Project", modeling_regions)
+
         """
         try:
             if not project:
@@ -1406,8 +1419,7 @@ class Layer(GrpcStub):
             ]
         ],
     ) -> int:
-        """
-        Update one or more modeling regions in a specific project.
+        """Update one or more modeling regions in a specific project.
 
         Parameters
         ----------
@@ -1502,6 +1514,7 @@ class Layer(GrpcStub):
         >>>     }
         >>> ]
         >>> result = sherlock.layer.update_modeling_region("Tutorial Project", modeling_regions)
+
         """
         try:
             if not project:
@@ -1669,8 +1682,7 @@ class Layer(GrpcStub):
         project: str,
         copy_regions: list[dict[str, float | str]],
     ) -> int:
-        """
-        Copy one or more modeling regions in a specific project.
+        """Copy one or more modeling regions in a specific project.
 
         Parameters
         ----------
@@ -1721,6 +1733,7 @@ class Layer(GrpcStub):
         >>>     }
         >>> ]
         >>> result = sherlock.layer.copy_modeling_region("Tutorial Project", modeling_regions)
+
         """
         try:
             if not project:
@@ -1808,6 +1821,7 @@ class Layer(GrpcStub):
         >>> )
         >>> modeling_regions = [{"cca_name": "Card", "region_id": "12345"}]
         >>> sherlock.layer.delete_modeling_region("Test", modeling_regions)
+
         """
         try:
             if project == "":
@@ -1889,6 +1903,7 @@ class Layer(GrpcStub):
         >>>     project="Tutorial Project",
         >>>     cca_name="Card"
         >>> )
+
         """
         try:
             if project == "":
@@ -1916,8 +1931,7 @@ class Layer(GrpcStub):
     def export_layer_image(
         self, project: str, cca_name: str, export_layers: list[dict[str, bool | int | str | list]]
     ) -> int:
-        r"""
-        Export one or more 2D Layer Viewer images from a project CCA.
+        r"""Export one or more 2D Layer Viewer images from a project CCA.
 
         Parameters
         ----------
@@ -1995,6 +2009,7 @@ class Layer(GrpcStub):
         >>>     }
         >>> ]
         >>> sherlock.layer.export_layer_image("Tutorial Project", "Card", export_layers)
+
         """
         try:
             if project == "":
@@ -2112,6 +2127,7 @@ class Layer(GrpcStub):
         >>>     test_point_ids="TP1,TP2"
         >>> )
         >>> responses = layer.get_test_point_props(request)
+
         """
         get_test_point_props_request = request._convert_to_grpc()
         responses = []
@@ -2151,6 +2167,7 @@ class Layer(GrpcStub):
         >>>    ict_fixtures_ids = "F1,F2"
         >>> )
         >>> response = layer.get_ict_fixtures_props(request)
+
         """
         get_ict_fixture_props_request = request._convert_to_grpc()
         response = self.stub.getICTFixturesProperties(get_ict_fixture_props_request)
@@ -2199,6 +2216,7 @@ class Layer(GrpcStub):
         >>> cca_name="Main Board",
         >>> update_test_points=[test_point],
         >>> ))
+
         """
         update_request = request._convert_to_grpc()
         response = self.stub.updateTestPoints(update_request)
@@ -2255,6 +2273,7 @@ class Layer(GrpcStub):
         >>> cca_name="Main Board",
         >>> update_fixtures=[fixture],
         >>> ))
+
         """
         update_request = request._convert_to_grpc()
         response = self.stub.updateICTFixtures(update_request)
@@ -2264,14 +2283,13 @@ class Layer(GrpcStub):
     def get_mount_point_props(
         self, request: GetMountPointsPropertiesRequest
     ) -> SherlockLayerService_pb2.GetMountPointsPropertiesResponse:
-        """
-        Return the properties for each mount point given a comma-separated list of mount point IDs.
+        """Return the mount point properties given a comma-separated list of mount point IDs.
 
         Available Since: 2026R1
 
         Parameters
         ----------
-        request: GetmountPointsPropertiesRequest
+        request: GetMountPointsPropertiesRequest
              Contains all the information needed to return the properties for one or more mount
              points.
 
@@ -2291,6 +2309,7 @@ class Layer(GrpcStub):
         >>>    mount_point_ids = "MP1,MP2"
         >>> )
         >>> response = layer.get_mount_point_props(request)
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()
@@ -2348,6 +2367,7 @@ class Layer(GrpcStub):
         >>>     cca_name="Main Board",
         >>>     update_mount_points=[mount_point],
         >>> ))
+
         """
         if not self._is_connection_up():
             raise SherlockNoGrpcConnectionException()

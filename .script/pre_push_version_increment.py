@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Pre-push hook for automatic version increment
 

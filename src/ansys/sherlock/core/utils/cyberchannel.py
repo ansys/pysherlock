@@ -28,7 +28,7 @@ This module provides functions to create gRPC channels based on the specified
 transport mode, including insecure, Unix Domain Sockets (UDS), Windows Named User
 Authentication (WNUA), and Mutual TLS (mTLS).
 
-Example
+Example:
 -------
     channel = create_channel(
         host="localhost",
@@ -505,6 +505,7 @@ def verify_uds_socket(
     -------
     bool
         True if the UDS socket file exists, False otherwise.
+
     """
     # Generate socket filename with optional ID
     uds_filename = f"{uds_service}-{uds_id}.sock" if uds_id else f"{uds_service}.sock"

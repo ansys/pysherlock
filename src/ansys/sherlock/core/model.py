@@ -169,6 +169,7 @@ class Model(GrpcStub):
         >>> sherlock.model.export_trace_reinforcement_model(
         >>>     'Tutorial Project', 'Main Board', 'c:\Temp\export.wbjn',
         >>>     True, False, False, "mm", 1.5, "mm", 0, "mm", "ENABLED", 1.5, "mm", 1, "mm")
+
         """
         try:
             if not project_name:
@@ -384,6 +385,7 @@ class Model(GrpcStub):
         >>> sherlock.model.export_aedb(
         >>>     'Tutorial Project', 'Main Board', 'c:\Temp\export.aedb',
         >>>     True, False)
+
         """
         try:
             if not project_name:
@@ -467,6 +469,7 @@ class Model(GrpcStub):
         >>>     )
         >>> )
         >>> sherlock.model.exportTraceModel(list_of_params_for_layers)
+
         """
         try:
             if not self._is_connection_up():
@@ -630,6 +633,7 @@ class Model(GrpcStub):
         >>>     GeometryType.Step
         >>> )
         >>> sherlock.model.exportTraceModel([copper_1_layer, copper_2_layer])
+
         """
         try:
             if not project_name:
@@ -696,8 +700,7 @@ class Model(GrpcStub):
         pcb_material_type: PcbMaterialType = PcbMaterialType.Isotropic,
         geometry_type: GeometryType = GeometryType.Step,
     ) -> int:
-        """
-        Export a FEA model.
+        """Export a FEA model.
 
         Parameters
         ----------
@@ -810,6 +813,7 @@ class Model(GrpcStub):
         >>>     pcb_material_type=PcbMaterialType.Isotropic,
         >>>     geometry_type=GeometryType.PartManager
         >>> )
+
         """
         try:
             if not project:
