@@ -38,7 +38,7 @@ Perform the following steps to set up the environment.
 
 import os
 import sys
-from time import sleep
+from time import monotonic, sleep
 
 # Add the 'examples' directory to the Python path to allow importing files in that directory.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(os.getcwd()))))
@@ -50,18 +50,32 @@ from examples.examples_globals import (
 )
 
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
+
+SHERLOCK_EXIT_TIMEOUT = 30
 
 try:
     # attempt to exit Sherlock in case a previous run was not properly terminated
     sherlock = launcher.connect(port=9092, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode="wnua")
-    print("Sherlock is already running. Exiting the existing instance.")
-    sherlock.common.exit(True)
-    print("Sherlock exited successfully.")
-    # allow some time for Sherlock to exit before launching a new instance
-    sleep(5)
-except Exception:
+except SherlockConnectionError:
     # Sherlock is not running
     pass
+else:
+    print("Sherlock is already running. Exiting the existing instance.")
+    sherlock.common.exit(True)
+    deadline = monotonic() + SHERLOCK_EXIT_TIMEOUT
+    while True:
+        try:
+            launcher._is_port_available(port=9092)
+            break
+        except SherlockCannotUsePortError as error:
+            remaining = deadline - monotonic()
+            if remaining <= 0:
+                raise TimeoutError(
+                    f"Sherlock did not release port 9092 within {SHERLOCK_EXIT_TIMEOUT} seconds."
+                ) from error
+            sleep(min(0.5, remaining))
+    print("Sherlock exited successfully.")
 
 
 ###############################################################################
