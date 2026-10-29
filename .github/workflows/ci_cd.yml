@@ -87,8 +87,9 @@ jobs:
 
   smoke-tests:
     name: Build and Smoke tests
+    if: ${{ !cancelled() && needs.style.result == 'success' && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
     runs-on: ${{ matrix.os }}
-    needs: [ style ]
+    needs: [ style, update-changelog ]
     permissions: {}
     strategy:
       fail-fast: false
@@ -101,6 +102,10 @@ jobs:
           - should-release: false
             os: macos-latest
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
+          persist-credentials: false
       - name: Build wheelhouse and perform smoke test
         uses: ansys/actions/build-wheelhouse@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
@@ -108,10 +113,12 @@ jobs:
           library-namespace: ${{ env.PACKAGE_NAMESPACE }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
+          checkout: false
 
   tests:
     name: Tests and coverage
-    needs: [ smoke-tests, config ]
+    if: ${{ !cancelled() && needs.smoke-tests.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ smoke-tests, config, update-changelog ]
     runs-on: [ self-hosted, pysherlock ]
     timeout-minutes: 90
     strategy:
@@ -121,6 +128,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
           persist-credentials: false
 
       - name: Set up Python
@@ -163,7 +171,8 @@ jobs:
 
   docs:
     name: Documentation
-    needs: [ docs-style, config ]
+    if: ${{ !cancelled() && needs.docs-style.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ docs-style, config, update-changelog ]
     # Only builds that execute the gallery examples need Sherlock, and therefore
     # the self-hosted runner. Every other build runs on a GitHub-hosted runner.
     runs-on: ${{ needs.config.outputs.full-docs == 'true' && fromJSON('[ "self-hosted", "pysherlock" ]') || 'windows-latest' }}
@@ -173,6 +182,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
           persist-credentials: false
       - name: Ensure that a release builds the examples
         # The documentation published for a release must contain the output of
@@ -200,17 +210,24 @@ jobs:
         uses: ansys/actions/doc-build@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          checkout: false
 
   package:
     name: Package library
-    needs: [ tests, docs ]
+    if: ${{ !cancelled() && needs.tests.result == 'success' && needs.docs.result == 'success' && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ tests, docs, update-changelog ]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
+          persist-credentials: false
       - name: Build library source and wheel artifacts
         uses: ansys/actions/build-library@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          checkout: false
 
   release:
     name: Release project
@@ -294,7 +311,8 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [ package ]
+    outputs:
+      release-commit-sha: ${{ steps.changelog.outputs.release-commit-sha }}
     runs-on: ubuntu-latest
     permissions:
       contents: write         # Needed to create changelog entries in repository
@@ -302,7 +320,8 @@ jobs:
     steps:
       # same-workflow keeps this run going after the tag is recreated.
       # With GITHUB_TOKEN, pushing the tag and PR does not start extra workflow runs.
-      - uses: ansys/actions/doc-deploy-changelog@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+      - id: changelog
+        uses: ansys/actions/doc-deploy-changelog@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
