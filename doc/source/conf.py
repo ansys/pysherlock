@@ -174,7 +174,6 @@ exclude_patterns = [
 ]
 
 # -- Sphinx Gallery Options ---------------------------------------------------
-import os
 import re
 
 # Get project root (two directories up from this file: doc/source/conf.py)
@@ -211,10 +210,6 @@ def _make_traceback_project_relative(error_str: str) -> str:
     This replaces full absolute paths with paths relative to the project root,
     making the output more readable and less dependent on build system location.
 
-    Note: This function is available for future use if sphinx-gallery supports
-    custom error handlers. Currently, sphinx-gallery formats errors before
-    we can intercept them.
-
     Parameters
     ----------
     error_str : str
@@ -241,39 +236,33 @@ def _make_traceback_project_relative(error_str: str) -> str:
 
 
 def _patch_sphinx_gallery_error_handler():
-    """Patch sphinx-gallery to use project-relative paths in error output.
+    """Make sphinx-gallery show project-relative paths in example tracebacks.
 
-    This function monkeypatches sphinx-gallery's error handling to convert
-    absolute file paths to project-relative paths in error messages shown
-    in generated documentation.
+    Wraps ``sphinx_gallery.gen_rst.handle_exception`` so the ``File "..."`` lines in
+    the traceback written to the generated gallery pages are relative to the project
+    root. Console and log output are not changed.
+    If sphinx-gallery cannot be patched, a warning is logged and the
+    default absolute paths are used.
     """
     try:
         from sphinx_gallery import gen_rst
 
-        # Store the original handle_exception function
         _original_handle_exception = gen_rst.handle_exception
 
-        def _patched_handle_exception(exc_info, src_file, script_vars, gallery_conf):
+        def _patched_handle_exception(*args, **kwargs):
             """Patched version that converts paths to project-relative format."""
-            try:
-                # Call the original function
-                rst_exception, displayed_and_logged_exception = _original_handle_exception(
-                    exc_info, src_file, script_vars, gallery_conf
-                )
+            result = _original_handle_exception(*args, **kwargs)
+            if isinstance(result, str):
+                return _make_traceback_project_relative(result)
+            return result
 
-                return (
-                    _make_traceback_project_relative(rst_exception),
-                    _make_traceback_project_relative(displayed_and_logged_exception),
-                )
-            except Exception:
-                # If something goes wrong, just return the original output
-                return _original_handle_exception(exc_info, src_file, script_vars, gallery_conf)
-
-        # Replace the original function
         gen_rst.handle_exception = _patched_handle_exception
-    except (ImportError, AttributeError):
-        # sphinx-gallery may not be available or has a different structure
-        pass
+    except (ImportError, AttributeError) as error:
+        logger.warning(
+            "Could not patch sphinx-gallery to show project-relative paths in "
+            "example tracebacks (%s).",
+            error,
+        )
 
 
 # Patch sphinx-gallery when this config is loaded

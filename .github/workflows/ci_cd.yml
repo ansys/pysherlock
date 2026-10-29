@@ -294,17 +294,20 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [ docs ]
+    needs: [ package ]
     runs-on: ubuntu-latest
     permissions:
       contents: write         # Needed to create changelog entries in repository
       pull-requests: write    # Required to create pull requests for changelog updates
     steps:
+      # same-workflow keeps this run going after the tag is recreated.
+      # With GITHUB_TOKEN, pushing the tag and PR does not start extra workflow runs.
       - uses: ansys/actions/doc-deploy-changelog@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
-          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
           bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+          same-workflow: true
 
   check-vulnerabilities:
     name: "Check library vulnerabilities"
