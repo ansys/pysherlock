@@ -66,24 +66,38 @@ jobs:
 
   style:
     name: Code style
+    if: ${{ !cancelled() && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ update-changelog ]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
+          persist-credentials: false
       - name: PyAnsys code style checks
         uses: ansys/actions/code-style@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          checkout: false
 
   docs-style:
     name: Documentation Style Check
+    if: ${{ !cancelled() && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ update-changelog ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
+          persist-credentials: false
       - name: PyAnsys documentation style checks
         uses: ansys/actions/doc-style@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           vale-version: "3.4.1"
+          checkout: false
 
   smoke-tests:
     name: Build and Smoke tests
