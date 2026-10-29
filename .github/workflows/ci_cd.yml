@@ -262,6 +262,7 @@ jobs:
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          tag-name: ${{ github.ref_name }}
 
   pull-request-name:
     if: github.event_name == 'pull_request'
