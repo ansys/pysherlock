@@ -33,23 +33,50 @@ This prepares the environment for running the examples.
 
 Description
 -----------
-Perform the following steps to set up the environment:
-- Launch Sherlock.
-- Store the Sherlock tutorial path.
+Perform the following steps to set up the environment.
 """
 
 import os
 import sys
+from time import monotonic, sleep
 
 # Add the 'examples' directory to the Python path to allow importing files in that directory.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(os.getcwd()))))
 
 from examples.examples_globals import (
+    SHERLOCK_CONNECT_TIMEOUT,
     SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
     store_sherlock_tutorial_path,
 )
 
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
+
+SHERLOCK_EXIT_TIMEOUT = 30
+
+try:
+    # attempt to exit Sherlock in case a previous run was not properly terminated
+    sherlock = launcher.connect(port=9092, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode="wnua")
+except SherlockConnectionError:
+    # Sherlock is not running
+    pass
+else:
+    print("Sherlock is already running. Exiting the existing instance.")
+    sherlock.common.exit(True)
+    deadline = monotonic() + SHERLOCK_EXIT_TIMEOUT
+    while True:
+        try:
+            launcher._is_port_available(port=9092)
+            break
+        except SherlockCannotUsePortError as error:
+            remaining = deadline - monotonic()
+            if remaining <= 0:
+                raise TimeoutError(
+                    f"Sherlock did not release port 9092 within {SHERLOCK_EXIT_TIMEOUT} seconds."
+                ) from error
+            sleep(min(0.5, remaining))
+    print("Sherlock exited successfully.")
+
 
 ###############################################################################
 # Launch Sherlock
@@ -65,4 +92,5 @@ sherlock, ansys_install_path = launcher.launch_and_connect(
     sherlock_command_args="-noGUI",
 )
 
+# store the path to the Sherlock tutorial directory in a shared data file for use by other examples
 store_sherlock_tutorial_path(ansys_install_path)
