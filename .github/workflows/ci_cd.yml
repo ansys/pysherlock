@@ -111,6 +111,8 @@ jobs:
 
   tests:
     name: Tests and coverage
+    # update-changelog is skipped outside of release tags. On a release tag, it is only skipped when
+    # the style checks or smoke tests failed, so it must succeed before running the tests.
     if: ${{ !cancelled() && needs.smoke-tests.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || (needs.update-changelog.result == 'skipped' && !(github.event_name == 'push' && contains(github.ref, 'refs/tags')))) }}
     needs: [ smoke-tests, config, update-changelog ]
     runs-on: [ self-hosted, pysherlock ]
@@ -164,6 +166,7 @@ jobs:
 
   docs:
     name: Documentation
+    # Same condition as the tests job: on a release tag, update-changelog must have succeeded.
     if: ${{ !cancelled() && needs.docs-style.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || (needs.update-changelog.result == 'skipped' && !(github.event_name == 'push' && contains(github.ref, 'refs/tags')))) }}
     needs: [ docs-style, config, update-changelog ]
     # Only builds that execute the gallery examples need Sherlock, and therefore
