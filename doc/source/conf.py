@@ -252,9 +252,21 @@ def _patch_sphinx_gallery_error_handler():
         def _patched_handle_exception(*args, **kwargs):
             """Patched version that converts paths to project-relative format."""
             result = _original_handle_exception(*args, **kwargs)
-            if isinstance(result, str):
+            if not isinstance(result, str):
+                logger.warning(
+                    "sphinx-gallery handle_exception returned %s instead of str. "
+                    "Example tracebacks keep absolute paths.",
+                    type(result).__name__,
+                )
+                return result
+            try:
                 return _make_traceback_project_relative(result)
-            return result
+            except Exception as error:
+                logger.warning(
+                    "Could not convert the example traceback to project-relative paths (%s).",
+                    error,
+                )
+                return result
 
         gen_rst.handle_exception = _patched_handle_exception
     except (ImportError, AttributeError) as error:
