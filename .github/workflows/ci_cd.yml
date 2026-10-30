@@ -66,8 +66,6 @@ jobs:
 
   style:
     name: Code style
-    if: ${{ !cancelled() && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
-    needs: [ update-changelog ]
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
@@ -77,8 +75,6 @@ jobs:
 
   docs-style:
     name: Documentation Style Check
-    if: ${{ !cancelled() && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
-    needs: [ update-changelog ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -115,7 +111,8 @@ jobs:
 
   tests:
     name: Tests and coverage
-    needs: [ smoke-tests, config ]
+    if: ${{ !cancelled() && needs.smoke-tests.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ smoke-tests, config, update-changelog ]
     runs-on: [ self-hosted, pysherlock ]
     timeout-minutes: 90
     strategy:
@@ -167,7 +164,8 @@ jobs:
 
   docs:
     name: Documentation
-    needs: [ docs-style, config ]
+    if: ${{ !cancelled() && needs.docs-style.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || needs.update-changelog.result == 'skipped') }}
+    needs: [ docs-style, config, update-changelog ]
     # Only builds that execute the gallery examples need Sherlock, and therefore
     # the self-hosted runner. Every other build runs on a GitHub-hosted runner.
     runs-on: ${{ needs.config.outputs.full-docs == 'true' && fromJSON('[ "self-hosted", "pysherlock" ]') || 'windows-latest' }}
@@ -282,12 +280,14 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [ docs-style, smoke-tests ]
     runs-on: ubuntu-latest
     permissions:
       contents: write         # Needed to create changelog entries in repository
       pull-requests: write    # Required to create pull requests for changelog updates
     steps:
-      # Runs first so that nothing is built or tested for a tag that is about to be recreated.
+      # Runs after the fast checks so that a bad tag fails before it is recreated, and before the
+      # tests and examples so that they only run once.
       # If the CHANGELOG changes, this job fails on purpose. The recreated tag starts a second run
       # that finds the CHANGELOG up to date and builds, tests, and releases once.
       # The bot token is required so that the pull request into main starts its checks.
