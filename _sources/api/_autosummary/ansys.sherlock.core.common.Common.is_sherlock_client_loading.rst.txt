@@ -1,0 +1,6 @@
+﻿is\_sherlock\_client\_loading
+=============================
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.is_sherlock_client_loading

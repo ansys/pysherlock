@@ -1,0 +1,10 @@
+.. vale off
+
+gerber\_file
+============
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperFile.gerber_file
+
+.. vale on

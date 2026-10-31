@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.SaveThermalProfileRequest
+====================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: SaveThermalProfileRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SaveThermalProfileRequest.construct
+      
+      
+      SaveThermalProfileRequest.copy
+      
+      
+      SaveThermalProfileRequest.dict
+      
+      
+      SaveThermalProfileRequest.from_orm
+      
+      
+      SaveThermalProfileRequest.json
+      
+      
+      SaveThermalProfileRequest.model_construct
+      
+      
+      SaveThermalProfileRequest.model_copy
+      
+      
+      SaveThermalProfileRequest.model_dump
+      
+      
+      SaveThermalProfileRequest.model_dump_json
+      
+      
+      SaveThermalProfileRequest.model_json_schema
+      
+      
+      SaveThermalProfileRequest.model_parametrized_name
+      
+      
+      SaveThermalProfileRequest.model_post_init
+      
+      
+      SaveThermalProfileRequest.model_rebuild
+      
+      
+      SaveThermalProfileRequest.model_validate
+      
+      
+      SaveThermalProfileRequest.model_validate_json
+      
+      
+      SaveThermalProfileRequest.model_validate_strings
+      
+      
+      SaveThermalProfileRequest.parse_file
+      
+      
+      SaveThermalProfileRequest.parse_obj
+      
+      
+      SaveThermalProfileRequest.parse_raw
+      
+      
+      SaveThermalProfileRequest.schema
+      
+      
+      SaveThermalProfileRequest.schema_json
+      
+      
+      SaveThermalProfileRequest.str_validation
+      
+      
+      SaveThermalProfileRequest.update_forward_refs
+      
+      
+      SaveThermalProfileRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SaveThermalProfileRequest.model_computed_fields
+      
+      
+      SaveThermalProfileRequest.model_config
+      
+      
+      SaveThermalProfileRequest.model_extra
+      
+      
+      SaveThermalProfileRequest.model_fields
+      
+      
+      SaveThermalProfileRequest.model_fields_set
+      
+      
+      SaveThermalProfileRequest.project
+      
+      
+      SaveThermalProfileRequest.phase_name
+      
+      
+      SaveThermalProfileRequest.event_name
+      
+      
+      SaveThermalProfileRequest.file_path
+      
+   
+   
+
+.. vale on

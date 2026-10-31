@@ -1,0 +1,10 @@
+.. vale off
+
+semiconductor\_wearout\_analysis\_properties
+============================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateSemiconductorWearoutAnalysisPropsRequest.semiconductor_wearout_analysis_properties
+
+.. vale on

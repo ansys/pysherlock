@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.DeleteEventRequest
+=============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: DeleteEventRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      DeleteEventRequest.construct
+      
+      
+      DeleteEventRequest.copy
+      
+      
+      DeleteEventRequest.dict
+      
+      
+      DeleteEventRequest.from_orm
+      
+      
+      DeleteEventRequest.json
+      
+      
+      DeleteEventRequest.model_construct
+      
+      
+      DeleteEventRequest.model_copy
+      
+      
+      DeleteEventRequest.model_dump
+      
+      
+      DeleteEventRequest.model_dump_json
+      
+      
+      DeleteEventRequest.model_json_schema
+      
+      
+      DeleteEventRequest.model_parametrized_name
+      
+      
+      DeleteEventRequest.model_post_init
+      
+      
+      DeleteEventRequest.model_rebuild
+      
+      
+      DeleteEventRequest.model_validate
+      
+      
+      DeleteEventRequest.model_validate_json
+      
+      
+      DeleteEventRequest.model_validate_strings
+      
+      
+      DeleteEventRequest.parse_file
+      
+      
+      DeleteEventRequest.parse_obj
+      
+      
+      DeleteEventRequest.parse_raw
+      
+      
+      DeleteEventRequest.schema
+      
+      
+      DeleteEventRequest.schema_json
+      
+      
+      DeleteEventRequest.str_validation
+      
+      
+      DeleteEventRequest.update_forward_refs
+      
+      
+      DeleteEventRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      DeleteEventRequest.model_computed_fields
+      
+      
+      DeleteEventRequest.model_config
+      
+      
+      DeleteEventRequest.model_extra
+      
+      
+      DeleteEventRequest.model_fields
+      
+      
+      DeleteEventRequest.model_fields_set
+      
+      
+      DeleteEventRequest.project
+      
+      
+      DeleteEventRequest.phase_name
+      
+      
+      DeleteEventRequest.event_name
+      
+   
+   
+
+.. vale on

@@ -1,0 +1,30 @@
+﻿ansys.sherlock.core.types.parts\_types.AVLDescription
+=====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoclass:: AVLDescription
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+   
+   

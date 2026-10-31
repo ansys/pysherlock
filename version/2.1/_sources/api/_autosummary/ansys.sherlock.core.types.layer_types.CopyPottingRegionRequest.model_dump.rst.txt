@@ -1,0 +1,10 @@
+.. vale off
+
+model\_dump
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: CopyPottingRegionRequest.model_dump
+
+.. vale on

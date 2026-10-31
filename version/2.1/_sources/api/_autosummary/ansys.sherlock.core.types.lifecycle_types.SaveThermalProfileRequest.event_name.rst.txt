@@ -1,0 +1,10 @@
+.. vale off
+
+event\_name
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveThermalProfileRequest.event_name
+
+.. vale on

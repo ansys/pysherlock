@@ -1,0 +1,10 @@
+.. vale off
+
+optional\_str\_validation
+=========================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: HarmonicVibeProfileCsvFileProperties.optional_str_validation
+
+.. vale on

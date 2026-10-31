@@ -1,0 +1,10 @@
+.. vale off
+
+schema
+======
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: CircularShape.schema
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+copy
+====
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: OutlineFile.copy
+
+.. vale on

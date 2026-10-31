@@ -1,0 +1,10 @@
+.. vale off
+
+model\_extra
+============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoproperty:: SaveHarmonicProfileRequest.model_extra
+
+.. vale on

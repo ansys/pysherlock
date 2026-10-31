@@ -1,0 +1,10 @@
+.. vale off
+
+schema\_json
+============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: RectangularShape.schema_json
+
+.. vale on

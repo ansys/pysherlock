@@ -1,0 +1,10 @@
+.. vale off
+
+update\_pad\_properties
+=======================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.update_pad_properties
+
+.. vale on

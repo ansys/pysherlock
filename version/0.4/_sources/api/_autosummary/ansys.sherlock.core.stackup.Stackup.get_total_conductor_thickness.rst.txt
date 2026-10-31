@@ -1,0 +1,6 @@
+﻿get\_total\_conductor\_thickness
+================================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.get_total_conductor_thickness

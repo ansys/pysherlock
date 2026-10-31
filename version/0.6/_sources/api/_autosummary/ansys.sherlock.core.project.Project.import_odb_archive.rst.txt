@@ -1,0 +1,6 @@
+import\_odb\_archive
+====================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. automethod:: Project.import_odb_archive

@@ -1,0 +1,10 @@
+.. vale off
+
+constraints
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: MountPointProperties.constraints
+
+.. vale on

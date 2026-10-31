@@ -1,0 +1,10 @@
+.. vale off
+
+model\_parametrized\_name
+=========================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: GetTestPointPropertiesRequest.model_parametrized_name
+
+.. vale on

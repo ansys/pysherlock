@@ -1,0 +1,10 @@
+.. vale off
+
+update\_test\_points
+====================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: UpdateTestPointsRequest.update_test_points
+
+.. vale on

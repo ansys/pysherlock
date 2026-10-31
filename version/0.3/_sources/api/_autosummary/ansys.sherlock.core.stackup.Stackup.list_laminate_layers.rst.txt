@@ -1,0 +1,6 @@
+﻿list\_laminate\_layers
+======================
+
+.. currentmodule:: ansys.sherlock.core.stackup
+
+.. automethod:: Stackup.list_laminate_layers

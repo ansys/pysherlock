@@ -1,0 +1,10 @@
+.. vale off
+
+header\_row\_count
+==================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CsvExcelFile.header_row_count
+
+.. vale on
