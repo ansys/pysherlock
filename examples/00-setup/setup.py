@@ -33,23 +33,54 @@ This prepares the environment for running the examples.
 
 Description
 -----------
-Perform the following steps to set up the environment:
-- Launch Sherlock.
-- Store the Sherlock tutorial path.
+Perform the following steps to set up the environment.
 """
 
 import os
 import sys
+from time import monotonic, sleep
 
 # Add the 'examples' directory to the Python path to allow importing files in that directory.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(os.getcwd()))))
 
 from examples.examples_globals import (
+    SHERLOCK_COMMAND_ARGS,
+    SHERLOCK_CONNECT_TIMEOUT,
     SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
+    SHERLOCK_PORT,
+    SHERLOCK_TRANSPORT_MODE,
     store_sherlock_tutorial_path,
 )
 
 from ansys.sherlock.core import launcher
+from ansys.sherlock.core.errors import SherlockCannotUsePortError, SherlockConnectionError
+
+# attempt to exit Sherlock in case a previous run was not properly terminated
+try:
+    sherlock = launcher.connect(
+        port=SHERLOCK_PORT, timeout=SHERLOCK_CONNECT_TIMEOUT, transport_mode=SHERLOCK_TRANSPORT_MODE
+    )
+
+    print(f"Exiting Sherlock that is running on port {SHERLOCK_PORT}.")
+    sherlock.common.exit(True)
+    EXIT_TIMEOUT = 30
+    start_time = monotonic()
+    while True:
+        try:
+            launcher._is_port_available(port=SHERLOCK_PORT)
+            break
+        except SherlockCannotUsePortError as error:
+            if monotonic() - start_time >= EXIT_TIMEOUT:
+                raise TimeoutError(
+                    f"Sherlock did not release port {SHERLOCK_PORT} "
+                    f"within {EXIT_TIMEOUT} seconds."
+                ) from error
+            sleep(0.5)
+    print("Sherlock exited successfully.")
+except SherlockConnectionError:
+    # Sherlock is not running
+    pass
+
 
 ###############################################################################
 # Launch Sherlock
@@ -59,10 +90,11 @@ from ansys.sherlock.core import launcher
 # See the API reference for how to launch Sherlock on Linux or Windows using other options.
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
-    port=9092,
+    port=SHERLOCK_PORT,
     timeout=SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
-    transport_mode="wnua",
-    sherlock_command_args="-noGUI",
+    transport_mode=SHERLOCK_TRANSPORT_MODE,
+    sherlock_command_args=SHERLOCK_COMMAND_ARGS,
 )
 
+# store the path to the Sherlock tutorial directory in a shared data file for use by other examples
 store_sherlock_tutorial_path(ansys_install_path)

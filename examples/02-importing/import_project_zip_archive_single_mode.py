@@ -45,7 +45,10 @@ This script demonstrates how to:
 import os
 
 from examples.examples_globals import (
+    SHERLOCK_COMMAND_ARGS,
     SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
+    SHERLOCK_PORT_SINGLE_PROJECT_MODE,
+    SHERLOCK_TRANSPORT_MODE,
     get_sherlock_tutorial_path,
     get_temp_dir,
     store_sherlock_tutorial_path,
@@ -62,11 +65,11 @@ from ansys.sherlock.core.errors import SherlockImportProjectZipArchiveSingleMode
 # See the API reference for how to launch Sherlock on Linux or Windows using other options.
 
 sherlock, ansys_install_path = launcher.launch_and_connect(
-    port=9093,
+    port=SHERLOCK_PORT_SINGLE_PROJECT_MODE,
     timeout=SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT,
     single_project_path=os.getcwd(),
-    transport_mode="wnua",
-    sherlock_command_args="-noGUI",
+    transport_mode=SHERLOCK_TRANSPORT_MODE,
+    sherlock_command_args=SHERLOCK_COMMAND_ARGS,
 )
 store_sherlock_tutorial_path(ansys_install_path)
 
