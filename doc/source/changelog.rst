@@ -9,6 +9,43 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.6 <https://github.com/ansys/pysherlock/releases/tag/v2.1.6>`_ - November 05, 2026
+======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v2.1.5
+          - `#995 <https://github.com/ansys/pysherlock/pull/995>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.10 to 3.17.2 in the pip-deps group
+          - `#996 <https://github.com/ansys/pysherlock/pull/996>`_
+
+        * - Build: Bump actions/setup-python from 7.0.0 to 7.1.0 in the actions group
+          - `#997 <https://github.com/ansys/pysherlock/pull/997>`_
+
+        * - Chore(pre-commit): Bump https://github.com/astral-sh/ruff-pre-commit from v0.8.0 to 0.17.1 in the pre-commit-hooks group
+          - `#998 <https://github.com/ansys/pysherlock/pull/998>`_
+
+        * - Build: show relative paths in gallery example output errors, exit Sherlock before running examples, reduce number of GitHub actions when creating release
+          - `#999 <https://github.com/ansys/pysherlock/pull/999>`_
+
+        * - Build: Bump the pip-deps group across 1 directory with 5 updates
+          - `#1000 <https://github.com/ansys/pysherlock/pull/1000>`_
+
+        * - Build: Bump the actions group across 1 directory with 13 updates
+          - `#1001 <https://github.com/ansys/pysherlock/pull/1001>`_
+
+        * - Chore(pre-commit): Bump the pre-commit-hooks group with 3 updates
+          - `#1002 <https://github.com/ansys/pysherlock/pull/1002>`_
+
+
 `2.1.5 <https://github.com/ansys/pysherlock/releases/tag/v2.1.5>`_ - October 28, 2026
 =====================================================================================
 
