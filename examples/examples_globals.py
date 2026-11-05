@@ -26,10 +26,14 @@
 
 import json
 import os
+import sys
 
-# Connection timeout constants (in seconds)
 SHERLOCK_CONNECT_TIMEOUT = 2
-SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT = 10
+SHERLOCK_LAUNCH_AND_CONNECT_TIMEOUT = 20
+SHERLOCK_PORT = 9092
+SHERLOCK_PORT_SINGLE_PROJECT_MODE = 9093
+SHERLOCK_TRANSPORT_MODE = "wnua" if sys.platform == "win32" else "uds"
+SHERLOCK_COMMAND_ARGS = "-noGUI"
 
 
 def get_temp_dir() -> str:

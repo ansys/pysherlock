@@ -18,7 +18,7 @@ repos:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.4.1
+  rev: 7.5.0
   hooks:
   - id: flake8
     args:
@@ -40,7 +40,7 @@ repos:
     - tomli
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.8.0
+  rev: v0.17.3
   hooks:
   - id: ruff
     alias: ruff-src
@@ -63,7 +63,7 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.38.2
+  rev: 0.39.0
   hooks:
   - id: check-github-workflows
 

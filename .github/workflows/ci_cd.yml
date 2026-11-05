@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
-        uses: ansys/actions/code-style@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+        uses: ansys/actions/code-style@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -80,7 +80,7 @@ jobs:
       contents: read
     steps:
       - name: PyAnsys documentation style checks
-        uses: ansys/actions/doc-style@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+        uses: ansys/actions/doc-style@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           vale-version: "3.4.1"
@@ -102,7 +102,7 @@ jobs:
             os: macos-latest
     steps:
       - name: Build wheelhouse and perform smoke test
-        uses: ansys/actions/build-wheelhouse@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+        uses: ansys/actions/build-wheelhouse@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           library-namespace: ${{ env.PACKAGE_NAMESPACE }}
@@ -111,7 +111,10 @@ jobs:
 
   tests:
     name: Tests and coverage
-    needs: [ smoke-tests, config ]
+    # update-changelog is skipped outside of release tags. On a release tag, it is only skipped when
+    # the style checks or smoke tests failed, so it must succeed before running the tests.
+    if: ${{ !cancelled() && needs.smoke-tests.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || (needs.update-changelog.result == 'skipped' && !(github.event_name == 'push' && contains(github.ref, 'refs/tags')))) }}
+    needs: [ smoke-tests, config, update-changelog ]
     runs-on: [ self-hosted, pysherlock ]
     timeout-minutes: 90
     strategy:
@@ -124,7 +127,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -163,7 +166,9 @@ jobs:
 
   docs:
     name: Documentation
-    needs: [ docs-style, config ]
+    # Same condition as the tests job: on a release tag, update-changelog must have succeeded.
+    if: ${{ !cancelled() && needs.docs-style.result == 'success' && needs.config.result == 'success' && (needs.update-changelog.result == 'success' || (needs.update-changelog.result == 'skipped' && !(github.event_name == 'push' && contains(github.ref, 'refs/tags')))) }}
+    needs: [ docs-style, config, update-changelog ]
     # Only builds that execute the gallery examples need Sherlock, and therefore
     # the self-hosted runner. Every other build runs on a GitHub-hosted runner.
     runs-on: ${{ needs.config.outputs.full-docs == 'true' && fromJSON('[ "self-hosted", "pysherlock" ]') || 'windows-latest' }}
@@ -197,7 +202,7 @@ jobs:
             -Name "LongPathsEnabled" -Value 1 -PropertyType DWord -Force
           Write-Host "Windows Long Paths enabled (a runner service restart may be required once)."
       - name: Run documentation building action
-        uses: ansys/actions/doc-build@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+        uses: ansys/actions/doc-build@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -207,7 +212,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build library source and wheel artifacts
-        uses: ansys/actions/build-library@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+        uses: ansys/actions/build-library@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -241,7 +246,7 @@ jobs:
           skip-existing: false
 
       - name: "Release to GitHub"
-        uses: ansys/actions/release-github@87ff2e65e8884121f9afc97728ca9f213228ecc2 #v11.1.4
+        uses: ansys/actions/release-github@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 #v11.1.5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -254,25 +259,9 @@ jobs:
       pull-requests: read    # Required to read pull-request information
     steps:
       - name: Check pull-request name
-        uses: ansys/actions/check-pr-title@87ff2e65e8884121f9afc97728ca9f213228ecc2 #v11.1.4
+        uses: ansys/actions/check-pr-title@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 #v11.1.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  upload_dev_docs:
-    name: Upload dev documentation
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write    # Required to push documentation to gh-pages branch
-    needs: [ package ]
-    steps:
-      - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
-        with:
-          cname: ${{ env.DOCUMENTATION_CNAME }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
-          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
 
   upload_docs_release:
     name: Upload release documentation
@@ -283,7 +272,7 @@ jobs:
     needs: [ release ]
     steps:
       - name: Deploy the stable documentation
-        uses: ansys/actions/doc-deploy-stable@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+        uses: ansys/actions/doc-deploy-stable@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -294,13 +283,18 @@ jobs:
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [ docs ]
+    needs: [ docs-style, smoke-tests ]
     runs-on: ubuntu-latest
     permissions:
       contents: write         # Needed to create changelog entries in repository
       pull-requests: write    # Required to create pull requests for changelog updates
     steps:
-      - uses: ansys/actions/doc-deploy-changelog@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+      # Runs after the fast checks so that a bad tag fails before it is recreated, and before the
+      # tests and examples so that they only run once.
+      # If the CHANGELOG changes, this job fails on purpose. The recreated tag starts a second run
+      # that finds the CHANGELOG up to date and builds, tests, and releases once.
+      # The bot token is required so that the pull request into main starts its checks.
+      - uses: ansys/actions/doc-deploy-changelog@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
           bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
@@ -312,7 +306,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: ansys/actions/check-vulnerabilities@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+      - uses: ansys/actions/check-vulnerabilities@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
@@ -323,7 +317,7 @@ jobs:
     name: "Check actions security"
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/check-actions-security@87ff2e65e8884121f9afc97728ca9f213228ecc2 # v11.1.4
+      - uses: ansys/actions/check-actions-security@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           generate-summary: true
           token: ${{ secrets.GITHUB_TOKEN }}

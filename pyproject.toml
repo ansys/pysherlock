@@ -31,27 +31,27 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "pytest==9.1.1",
+    "pytest==9.2.0",
     "pytest-cov==7.1.0",
 ]
 
 dev = [
     "coverage>=7.0,<8",
-    "grpcio-tools>=1.71.2,<1.85",
+    "grpcio-tools>=1.71.2,<1.86",
     "pre-commit>=4.0,<5"
 ]
 
 doc = [
-    "ansys-sphinx-theme==1.11.0",
+    "ansys-sphinx-theme==1.12.1",
     "autodoc-pydantic==2.2.0",
     "jupyter_sphinx==0.5.3",
     "matplotlib==3.11.2",
     "numpydoc==1.11.0",
-    "pandas==3.0.6",
+    "pandas==3.1.0",
     "pypandoc-binary==1.17",
     "Sphinx>=9.1",
     "sphinxemoji==0.3.2",
-    "sphinx-autodoc-typehints==3.13.10",
+    "sphinx-autodoc-typehints==3.17.4",
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.7.0",
     "sphinx-gallery==0.22.1",

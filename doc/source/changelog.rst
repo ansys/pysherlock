@@ -9,6 +9,40 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.5 <https://github.com/ansys/pysherlock/releases/tag/v2.1.5>`_ - October 28, 2026
+=====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.8 to 3.13.9 in the pip-deps group across 1 directory
+          - `#987 <https://github.com/ansys/pysherlock/pull/987>`_
+
+        * - Build: Bump the actions group with 2 updates
+          - `#988 <https://github.com/ansys/pysherlock/pull/988>`_
+
+        * - Chore(pre-commit): Bump the pre-commit-hooks group with 2 updates
+          - `#989 <https://github.com/ansys/pysherlock/pull/989>`_, `#992 <https://github.com/ansys/pysherlock/pull/992>`_
+
+        * - Chore: update CHANGELOG for v2.1.4
+          - `#990 <https://github.com/ansys/pysherlock/pull/990>`_
+
+        * - Build: Bump sphinx-autodoc-typehints from 3.13.9 to 3.13.10 in the pip-deps group
+          - `#991 <https://github.com/ansys/pysherlock/pull/991>`_
+
+        * - Build: Bump the actions group with 14 updates
+          - `#993 <https://github.com/ansys/pysherlock/pull/993>`_
+
+        * - Ci: allow publish gallery examples to complete and get published
+          - `#994 <https://github.com/ansys/pysherlock/pull/994>`_
+
+
 `2.1.4 <https://github.com/ansys/pysherlock/releases/tag/v2.1.4>`_ - October 15, 2026
 =====================================================================================
 
