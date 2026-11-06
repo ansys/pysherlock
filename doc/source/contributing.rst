@@ -241,6 +241,33 @@ However, the recommended way of checking documentation integrity is to use
 
     tox -e doc && your_browser_name .tox/doc_out/index.html
 
+Release workflow
+^^^^^^^^^^^^^^^^
+
+A release tag runs the smoke tests, tests, and documentation with executed
+gallery examples before updating the changelog. If validation fails, no
+changelog commit or pull request is created. Fix the failure and push a new
+release tag, or rerun failed jobs when no source changes are needed.
+
+After validation succeeds, the changelog action updates the tag and opens one
+changelog pull request into ``main``. It uses ``same-workflow`` mode with
+``GITHUB_TOKEN``, so updating the tag does not start another release workflow.
+The repository must allow GitHub Actions to create pull requests.
+
+Packaging uses the final tagged commit. A second documentation build includes
+the release notes and reuses the executed gallery from the same workflow run.
+This build runs on a GitHub-hosted runner with
+``PYSHERLOCK_BUILD_EXAMPLES=false`` and ``PYSHERLOCK_REUSE_GALLERY=true``.
+Missing or stale gallery outputs fail the build rather than publishing
+examples without their results. Both packaging and the final documentation
+must succeed before publication.
+
+The generated changelog branch receives one explicitly dispatched CI run,
+with its Documentation job skipped. Ordinary pull requests still build
+documentation without executing examples. These workflow changes must also
+be present on ``main`` before releasing because the changelog branch is
+created from ``main``.
+
 
 Distributing
 ------------
