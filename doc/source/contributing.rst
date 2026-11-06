@@ -263,7 +263,8 @@ examples without their results. Both packaging and the final documentation
 must succeed before publication.
 
 The generated changelog branch receives one explicitly dispatched CI run,
-with its Documentation job skipped. Ordinary pull requests still build
+with its Documentation job skipped and its pull-request title checked against
+the expected generated changelog title. Ordinary pull requests still build
 documentation without executing examples. These workflow changes must also
 be present on ``main`` before releasing because the changelog branch is
 created from ``main``.

@@ -312,16 +312,35 @@ jobs:
           tag-name: ${{ github.ref_name }}
 
   pull-request-name:
-    if: github.event_name == 'pull_request'
+    needs: [ config ]
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && needs.config.outputs.changelog-only == 'true')
     name: Check the name of the pull-request
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read    # Required to read pull-request information
     steps:
       - name: Check pull-request name
+        if: github.event_name == 'pull_request'
         uses: ansys/actions/check-pr-title@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 #v11.1.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check generated changelog pull-request name
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          CHANGELOG_BRANCH: ${{ github.ref_name }}
+        run: |
+          title=$(gh pr list --head "${CHANGELOG_BRANCH}" --base main --state open --json title --jq '.[].title')
+          version="${CHANGELOG_BRANCH#docs/}"
+          version="${version%-changelog}"
+          # The generated title is a strict subset of the conventional-commit title rules.
+          if [[ "${title}" != "chore: update CHANGELOG for ${version}" ]]; then
+            echo "::error::Expected exactly one open changelog PR with title 'chore: update CHANGELOG for ${version}'."
+            exit 1
+          fi
 
   upload_docs_release:
     name: Upload release documentation
