@@ -1,0 +1,10 @@
+.. vale off
+
+part\_temp\_rise\_units
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: SemiconductorWearoutAnalysis.part_temp_rise_units
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+schema
+======
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CsvExcelOutlineFile.schema
+
+.. vale on

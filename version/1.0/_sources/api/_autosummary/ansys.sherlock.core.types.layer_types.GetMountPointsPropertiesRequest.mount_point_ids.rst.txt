@@ -1,0 +1,10 @@
+.. vale off
+
+mount\_point\_ids
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: GetMountPointsPropertiesRequest.mount_point_ids
+
+.. vale on

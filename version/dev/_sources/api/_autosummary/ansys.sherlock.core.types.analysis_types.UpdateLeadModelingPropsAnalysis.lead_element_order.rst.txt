@@ -1,0 +1,10 @@
+.. vale off
+
+lead\_element\_order
+====================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateLeadModelingPropsAnalysis.lead_element_order
+
+.. vale on

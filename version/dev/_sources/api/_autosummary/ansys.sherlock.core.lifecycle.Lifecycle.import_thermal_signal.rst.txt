@@ -1,0 +1,10 @@
+.. vale off
+
+import\_thermal\_signal
+=======================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.import_thermal_signal
+
+.. vale on

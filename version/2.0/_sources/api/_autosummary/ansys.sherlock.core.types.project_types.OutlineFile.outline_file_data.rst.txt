@@ -1,0 +1,10 @@
+.. vale off
+
+outline\_file\_data
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: OutlineFile.outline_file_data
+
+.. vale on

@@ -1,0 +1,28 @@
+﻿ansys.sherlock.core.layer.Layer
+===============================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. autoclass:: Layer
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Layer.add_potting_region
+      
+      
+      Layer.update_mount_points_by_file
+      
+   
+   
+
+   
+   
+   

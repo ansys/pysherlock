@@ -1,0 +1,49 @@
+﻿ansys.sherlock.core.types.parts\_types.PartLocation
+===================================================
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoclass:: PartLocation
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      PartLocation.x
+      
+      
+      PartLocation.y
+      
+      
+      PartLocation.rotation
+      
+      
+      PartLocation.location_units
+      
+      
+      PartLocation.board_side
+      
+      
+      PartLocation.mirrored
+      
+      
+      PartLocation.ref_des
+      
+   
+   

@@ -1,0 +1,163 @@
+
+:orphan:
+
+.. _sphx_glr_sg_execution_times:
+
+
+Computation times
+=================
+**00:00.000** total execution time for 43 files **from all galleries**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_examples_gallery_examples_00-setup_setup.py` (``..\..\examples\00-setup\setup.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_add_cca.py` (``..\..\examples\01-project-configuration\add_cca.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_add_harmonic_event.py` (``..\..\examples\01-project-configuration\add_harmonic_event.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_add_harmonic_profile.py` (``..\..\examples\01-project-configuration\add_harmonic_profile.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_add_modeling_region.py` (``..\..\examples\01-project-configuration\add_modeling_region.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_add_potting_region.py` (``..\..\examples\01-project-configuration\add_potting_region.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_laminate_layer.py` (``..\..\examples\01-project-configuration\update_laminate_layer.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_mount_points_by_file.py` (``..\..\examples\01-project-configuration\update_mount_points_by_file.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_part_location.py` (``..\..\examples\01-project-configuration\update_part_location.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_part_location_by_file.py` (``..\..\examples\01-project-configuration\update_part_location_by_file.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_part_modeling_properties.py` (``..\..\examples\01-project-configuration\update_part_modeling_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_parts_list.py` (``..\..\examples\01-project-configuration\update_parts_list.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_parts_list_properties.py` (``..\..\examples\01-project-configuration\update_parts_list_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_potting_region.py` (``..\..\examples\01-project-configuration\update_potting_region.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_01-project-configuration_update_thermal_maps.py` (``..\..\examples\01-project-configuration\update_thermal_maps.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_02-importing_import_ipc_2581_archive.py` (``..\..\examples\02-importing\import_ipc_2581_archive.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_02-importing_import_odb_archive.py` (``..\..\examples\02-importing\import_odb_archive.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_02-importing_import_parts_list.py` (``..\..\examples\02-importing\import_parts_list.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_02-importing_import_project_zip_archive_single_mode.py` (``..\..\examples\02-importing\import_project_zip_archive_single_mode.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_02-importing_import_project_zip_file.py` (``..\..\examples\02-importing\import_project_zip_file.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_aedb.py` (``..\..\examples\03-exporting\export_aedb.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_mount_points.py` (``..\..\examples\03-exporting\export_all_mount_points.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_test_fixtures.py` (``..\..\examples\03-exporting\export_all_test_fixtures.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_test_points.py` (``..\..\examples\03-exporting\export_all_test_points.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_fea_model.py` (``..\..\examples\03-exporting\export_fea_model.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_net_list.py` (``..\..\examples\03-exporting\export_net_list.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_part_list.py` (``..\..\examples\03-exporting\export_part_list.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_project.py` (``..\..\examples\03-exporting\export_project.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_trace_model.py` (``..\..\examples\03-exporting\export_trace_model.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_get_parts_list_analysis_props.py` (``..\..\examples\04-analyses\get_parts_list_analysis_props.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_get_random_vibe_inputs_fields.py` (``..\..\examples\04-analyses\get_random_vibe_inputs_fields.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_analysis.py` (``..\..\examples\04-analyses\run_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_harmonic_vibe_strain_map_analysis.py` (``..\..\examples\04-analyses\run_harmonic_vibe_strain_map_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_mechanical_shock_strain_map_analysis.py` (``..\..\examples\04-analyses\run_mechanical_shock_strain_map_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_run_random_vibe_strain_map_analysis.py` (``..\..\examples\04-analyses\run_random_vibe_strain_map_analysis.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_harmonic_vibe_properties.py` (``..\..\examples\04-analyses\update_harmonic_vibe_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_ict_properties.py` (``..\..\examples\04-analyses\update_ict_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_mechanical_shock_properties.py` (``..\..\examples\04-analyses\update_mechanical_shock_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_part_validation_properties.py` (``..\..\examples\04-analyses\update_part_validation_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_pcb_modeling_properties.py` (``..\..\examples\04-analyses\update_pcb_modeling_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_random_vibe_properties.py` (``..\..\examples\04-analyses\update_random_vibe_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_04-analyses_update_solder_fatigue_properties.py` (``..\..\examples\04-analyses\update_solder_fatigue_properties.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_gallery_examples_99-teardown_teardown.py` (``..\..\examples\99-teardown\teardown.py``)
+     - 00:00.000
+     - 0.0

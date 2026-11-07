@@ -1,0 +1,10 @@
+.. vale off
+
+model\_construct
+================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. automethod:: UpdateLeadModelingPropsAnalysis.model_construct
+
+.. vale on

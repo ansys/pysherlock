@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateMechanicalPartsPropsRequest
+===========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateMechanicalPartsPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateMechanicalPartsPropsRequest.construct
+      
+      
+      UpdateMechanicalPartsPropsRequest.copy
+      
+      
+      UpdateMechanicalPartsPropsRequest.dict
+      
+      
+      UpdateMechanicalPartsPropsRequest.from_orm
+      
+      
+      UpdateMechanicalPartsPropsRequest.json
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_construct
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_copy
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_dump
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_dump_json
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_json_schema
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_parametrized_name
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_post_init
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_rebuild
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_validate
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_validate_json
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_validate_strings
+      
+      
+      UpdateMechanicalPartsPropsRequest.parse_file
+      
+      
+      UpdateMechanicalPartsPropsRequest.parse_obj
+      
+      
+      UpdateMechanicalPartsPropsRequest.parse_raw
+      
+      
+      UpdateMechanicalPartsPropsRequest.schema
+      
+      
+      UpdateMechanicalPartsPropsRequest.schema_json
+      
+      
+      UpdateMechanicalPartsPropsRequest.str_validation
+      
+      
+      UpdateMechanicalPartsPropsRequest.update_forward_refs
+      
+      
+      UpdateMechanicalPartsPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateMechanicalPartsPropsRequest.model_computed_fields
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_config
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_extra
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_fields
+      
+      
+      UpdateMechanicalPartsPropsRequest.model_fields_set
+      
+      
+      UpdateMechanicalPartsPropsRequest.project
+      
+      
+      UpdateMechanicalPartsPropsRequest.cca_names
+      
+      
+      UpdateMechanicalPartsPropsRequest.analyses
+      
+   
+   
+
+.. vale on

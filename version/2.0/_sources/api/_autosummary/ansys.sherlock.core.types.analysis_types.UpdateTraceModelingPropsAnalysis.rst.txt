@@ -1,0 +1,134 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateTraceModelingPropsAnalysis
+==========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateTraceModelingPropsAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateTraceModelingPropsAnalysis.construct
+      
+      
+      UpdateTraceModelingPropsAnalysis.copy
+      
+      
+      UpdateTraceModelingPropsAnalysis.dict
+      
+      
+      UpdateTraceModelingPropsAnalysis.from_orm
+      
+      
+      UpdateTraceModelingPropsAnalysis.json
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_construct
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_copy
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_dump
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_dump_json
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_json_schema
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_parametrized_name
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_post_init
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_rebuild
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_validate
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_validate_json
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_validate_strings
+      
+      
+      UpdateTraceModelingPropsAnalysis.parse_file
+      
+      
+      UpdateTraceModelingPropsAnalysis.parse_obj
+      
+      
+      UpdateTraceModelingPropsAnalysis.parse_raw
+      
+      
+      UpdateTraceModelingPropsAnalysis.schema
+      
+      
+      UpdateTraceModelingPropsAnalysis.schema_json
+      
+      
+      UpdateTraceModelingPropsAnalysis.update_forward_refs
+      
+      
+      UpdateTraceModelingPropsAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateTraceModelingPropsAnalysis.model_computed_fields
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_config
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_extra
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_fields
+      
+      
+      UpdateTraceModelingPropsAnalysis.model_fields_set
+      
+      
+      UpdateTraceModelingPropsAnalysis.analysis_type
+      
+      
+      UpdateTraceModelingPropsAnalysis.trace_enabled
+      
+      
+      UpdateTraceModelingPropsAnalysis.trace_element_order
+      
+      
+      UpdateTraceModelingPropsAnalysis.trace_max_edge_length
+      
+      
+      UpdateTraceModelingPropsAnalysis.trace_max_edge_length_units
+      
+      
+      UpdateTraceModelingPropsAnalysis.trace_max_holes
+      
+   
+   
+
+.. vale on

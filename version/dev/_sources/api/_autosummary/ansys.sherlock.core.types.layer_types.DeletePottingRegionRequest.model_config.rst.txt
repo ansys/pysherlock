@@ -1,0 +1,10 @@
+.. vale off
+
+model\_config
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: DeletePottingRegionRequest.model_config
+
+.. vale on

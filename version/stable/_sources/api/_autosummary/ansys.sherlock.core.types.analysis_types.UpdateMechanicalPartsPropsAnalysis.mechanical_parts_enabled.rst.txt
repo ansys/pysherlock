@@ -1,0 +1,10 @@
+.. vale off
+
+mechanical\_parts\_enabled
+==========================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateMechanicalPartsPropsAnalysis.mechanical_parts_enabled
+
+.. vale on

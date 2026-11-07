@@ -1,0 +1,10 @@
+.. vale off
+
+max\_feature\_size
+==================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: SemiconductorWearoutAnalysis.max_feature_size
+
+.. vale on

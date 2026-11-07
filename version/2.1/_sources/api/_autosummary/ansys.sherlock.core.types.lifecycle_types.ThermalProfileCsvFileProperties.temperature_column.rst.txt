@@ -1,0 +1,10 @@
+.. vale off
+
+temperature\_column
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ThermalProfileCsvFileProperties.temperature_column
+
+.. vale on

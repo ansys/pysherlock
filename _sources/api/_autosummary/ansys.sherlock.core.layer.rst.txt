@@ -1,0 +1,29 @@
+﻿ansys.sherlock.core.layer
+=========================
+
+.. automodule:: ansys.sherlock.core.layer
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Layer
+   
+   
+
+   
+   
+   
+
+
+

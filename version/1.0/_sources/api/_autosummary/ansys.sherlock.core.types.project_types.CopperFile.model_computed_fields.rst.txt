@@ -1,0 +1,10 @@
+.. vale off
+
+model\_computed\_fields
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CopperFile.model_computed_fields
+
+.. vale on

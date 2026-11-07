@@ -1,0 +1,10 @@
+.. vale off
+
+copy\_potting\_region
+=====================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.copy_potting_region
+
+.. vale on

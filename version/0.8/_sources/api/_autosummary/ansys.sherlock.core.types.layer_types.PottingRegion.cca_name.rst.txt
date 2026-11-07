@@ -1,0 +1,10 @@
+.. vale off
+
+cca\_name
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegion.cca_name
+
+.. vale on

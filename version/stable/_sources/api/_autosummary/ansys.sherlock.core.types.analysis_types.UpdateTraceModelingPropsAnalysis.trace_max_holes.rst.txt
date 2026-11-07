@@ -1,0 +1,10 @@
+.. vale off
+
+trace\_max\_holes
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateTraceModelingPropsAnalysis.trace_max_holes
+
+.. vale on

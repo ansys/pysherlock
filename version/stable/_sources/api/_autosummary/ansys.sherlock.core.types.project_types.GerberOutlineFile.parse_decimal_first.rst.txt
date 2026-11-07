@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_decimal\_first
+=====================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: GerberOutlineFile.parse_decimal_first
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+project
+=======
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveHarmonicProfileRequest.project
+
+.. vale on
