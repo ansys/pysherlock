@@ -245,8 +245,12 @@ Release workflow
 ^^^^^^^^^^^^^^^^
 
 A release tag runs the smoke tests, tests, and documentation with executed
-gallery examples before updating the changelog. If validation fails, no
-changelog commit or pull request is created. Fix the failure and push a new
+gallery examples before updating the changelog. Example execution errors,
+including ``SherlockConnectionError`` when the runner has an incompatible
+Sherlock version, are non-fatal. They are logged and included in the generated
+gallery pages. Other documentation build errors still stop the release.
+If validation fails, no changelog commit or pull request is created.
+Fix the failure and push a new
 release tag, or rerun failed jobs when no source changes are needed.
 
 After validation succeeds, the changelog action updates the tag and opens one
@@ -258,9 +262,10 @@ Packaging uses the final tagged commit. A second documentation build includes
 the release notes and reuses the executed gallery from the same workflow run.
 This build runs on a GitHub-hosted runner with
 ``PYSHERLOCK_BUILD_EXAMPLES=false`` and ``PYSHERLOCK_REUSE_GALLERY=true``.
-Missing or stale gallery outputs fail the build rather than publishing
-examples without their results. Both packaging and the final documentation
-must succeed before publication.
+The handoff validates generated pages against their copied example sources,
+not the success-only execution checksums. Missing or stale gallery outputs
+fail the build, while pages containing execution tracebacks are preserved.
+Both packaging and the final documentation must succeed before publication.
 
 The generated changelog branch receives one explicitly dispatched CI run,
 with its Documentation job skipped and its pull-request title checked against

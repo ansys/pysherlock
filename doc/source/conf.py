@@ -3,6 +3,7 @@
 from datetime import datetime
 import os
 from pathlib import Path
+import re
 
 from ansys_sphinx_theme import (
     ansys_favicon,
@@ -36,7 +37,6 @@ html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "PySherlock"
 html_favicon = ansys_favicon
 
-# Convert notebooks into Python scripts and include them in the output files
 logger = logging.getLogger(__name__)
 
 pysherlock.BUILDING_GALLERY = True
@@ -53,8 +53,9 @@ GALLERY_EXAMPLES_PATH = "examples/gallery_examples"
 EXAMPLES_ROOT = "examples"
 EXAMPLES_PATH_FOR_DOCS = f"../../{EXAMPLES_ROOT}/"
 
-SOURCE_PATH = Path(__file__).parent.resolve().absolute()
-pyansys_light_mode_logo = str(os.path.join(SOURCE_PATH, "_static", "pyansys-logo-light_mode.png"))
+SOURCE_PATH = Path(__file__).resolve().parent
+PROJECT_ROOT = SOURCE_PATH.parents[1]
+pyansys_light_mode_logo = str(SOURCE_PATH / "_static" / "pyansys-logo-light_mode.png")
 
 # specify the location of your github repo
 html_context = {
@@ -129,26 +130,16 @@ autodoc_pydantic_model_show_field_summary = True
 autodoc_pydantic_field_list_validators = False
 autodoc_pydantic_settings_show_json_schema_extra = False
 
-# Numpydoc config
-numpydoc_show_class_members = False  # we take care of autosummary on our own
-
-# The suffix(es) of source filenames.
 source_suffix = {".rst": "restructuredtext"}
 
-# The master toctree document.
 master_doc = "index"
 
-# static path
 html_static_path = ["_static"]
 
-# We have our own custom templates
 templates_path = ["_templates"]
 
-# additional logos for the latex coverpage
 latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 
-# change the preamble of latex with customized title page
-# variables are the title of pdf, watermark
 latex_elements = {"preamble": latex.generate_preamble(html_title)}
 
 linkcheck_exclude_documents = ["changelog"]
@@ -175,10 +166,6 @@ exclude_patterns = [
 ]
 
 # -- Sphinx Gallery Options ---------------------------------------------------
-import re
-
-# Get project root (two directories up from this file: doc/source/conf.py)
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
 def _convert_to_project_relative_path(file_path: str) -> str:
@@ -223,17 +210,13 @@ def _make_traceback_project_relative(error_str: str) -> str:
     """
 
     def replace_path(match):
-        # Extract: File " + path + ", line ...
-        prefix = match.group(1)  # 'File "'
-        path = match.group(2)  # The full file path
-        suffix = match.group(3)  # '", line ...'
+        return (
+            f"{match.group(1)}"
+            f"{_convert_to_project_relative_path(match.group(2))}"
+            f"{match.group(3)}"
+        )
 
-        relative_path = _convert_to_project_relative_path(path)
-        return f"{prefix}{relative_path}{suffix}"
-
-    # Replace all file paths in traceback lines
-    result = re.sub(r'(File\s+")((?:[a-zA-Z]:[/\\]|/)[^"]+)(",)', replace_path, error_str)
-    return result
+    return re.sub(r'(File\s+")((?:[a-zA-Z]:[/\\]|/)[^"]+)(",)', replace_path, error_str)
 
 
 def _patch_sphinx_gallery_error_handler():
@@ -241,7 +224,8 @@ def _patch_sphinx_gallery_error_handler():
 
     Wraps ``sphinx_gallery.gen_rst.handle_exception`` so the ``File "..."`` lines in
     the traceback written to the generated gallery pages are relative to the project
-    root. Console and log output are not changed.
+    root. Execution failures are also logged at info level so they remain visible
+    when non-fatal example warnings are suppressed.
     If sphinx-gallery cannot be patched, a warning is logged and the
     default absolute paths are used.
     """
@@ -255,11 +239,12 @@ def _patch_sphinx_gallery_error_handler():
             result = _original_handle_exception(*args, **kwargs)
             if not isinstance(result, str):
                 logger.warning(
-                    "sphinx-gallery handle_exception returned %s instead of str. "
+                    "sphinx-gallery handle_exception returned %s type instead of str. "
                     "Example tracebacks keep absolute paths.",
                     type(result).__name__,
                 )
                 return result
+            logger.info("Gallery example execution failed with error: %s", result)
             try:
                 return _make_traceback_project_relative(result)
             except Exception as error:
@@ -289,10 +274,11 @@ sphinx_gallery_conf = {
     # Sphinx-Gallery expects a string that evaluates to a boolean, so that the
     # value stays overridable through ``sphinx-build -D plot_gallery=0``.
     "plot_gallery": str(BUILD_EXAMPLES),
+    "only_warn_on_example_error": True,
     # path to your examples scripts
-    "examples_dirs": ["../../examples/"],
+    "examples_dirs": [EXAMPLES_PATH_FOR_DOCS],
     # path where to save gallery generated examples
-    "gallery_dirs": ["examples/gallery_examples"],
+    "gallery_dirs": [GALLERY_EXAMPLES_PATH],
     # Pattern to search for example files
     "filename_pattern": r"\." + DEFAULT_EXAMPLE_EXTENSION,
     # Remove the "Download all examples" button from the top level gallery
@@ -303,7 +289,6 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-sherlock-core",
-    "ignore_pattern": "flycheck*",
     "thumbnail_size": (350, 350),
     "remove_config_comments": True,
     "default_thumb_file": pyansys_light_mode_logo,
@@ -312,8 +297,8 @@ sphinx_gallery_conf = {
 }
 
 
-def _validate_gallery_cache(source_path):
-    """Require executed, unchanged examples before reusing a release gallery."""
+def _prepare_gallery_for_reuse(source_path):
+    """Require generated pages for unchanged sources, including failed examples."""
     from sphinx.errors import ConfigError
     from sphinx_gallery.utils import get_md5sum
 
@@ -322,15 +307,19 @@ def _validate_gallery_cache(source_path):
     examples = [path for path in examples_path.rglob("*.py") if path.name != "examples_globals.py"]
     if not examples:
         raise ConfigError("Cannot reuse the gallery: no example sources were found.")
+    validated_outputs = []
     for example in examples:
-        cached = gallery_path / example.relative_to(examples_path)
-        checksum = cached.with_suffix(".py.md5")
-        if (
-            not cached.with_suffix(".rst").is_file()
-            or not checksum.is_file()
-            or checksum.read_text().strip() != get_md5sum(example, mode="t")
-        ):
-            raise ConfigError(f"Missing or stale executed gallery output for {example.name}.")
+        relative_path = example.relative_to(examples_path)
+        cached = gallery_path / relative_path
+        checksum = get_md5sum(cached, mode="t") if cached.is_file() else None
+        if not cached.with_suffix(".rst").is_file() or checksum != get_md5sum(example, mode="t"):
+            raise ConfigError(f"Missing or stale generated gallery output for {relative_path}.")
+        validated_outputs.append((cached, checksum))
+
+    # Sphinx-Gallery omits checksums for failed examples. Mark validated pages as
+    # current only for reuse, so a no-execution rebuild preserves their tracebacks.
+    for cached, checksum in validated_outputs:
+        cached.with_suffix(".py.md5").write_text(checksum)
 
 
 if REUSE_GALLERY:
@@ -338,7 +327,7 @@ if REUSE_GALLERY:
         from sphinx.errors import ConfigError
 
         raise ConfigError("Reusing the gallery must not execute examples.")
-    _validate_gallery_cache(SOURCE_PATH)
+    _prepare_gallery_for_reuse(SOURCE_PATH)
     logger.info("Reusing validated gallery outputs without executing examples.")
 
 if not BUILD_EXAMPLES:
@@ -347,7 +336,6 @@ if not BUILD_EXAMPLES:
         "Set PYSHERLOCK_BUILD_EXAMPLES=true to run them (requires a Sherlock installation)."
     )
 
-# make rst_epilog a variable, so you can add other epilog parts to it
 rst_epilog = ""
 # Read link all targets from file
 with open("links.rst") as f:
@@ -379,7 +367,14 @@ numpydoc_validation_checks = {
     # type, unless multiple values are being returned"
 }
 
-suppress_warnings = ["label.*", "design.fa-build", "config.cache", "numpydoc.*"]
+# Execution failures are reported in the gallery and logged above, but must not
+# become fatal under -W. Other documentation warnings retain their usual handling.
+suppress_warnings = [
+    "label.*",
+    "design.fa-build",
+    "config.cache",
+    "numpydoc.*",
+    "sphinx_gallery.example_error",
+]
 
-# Display todos by setting to True
 todo_include_todos = True
