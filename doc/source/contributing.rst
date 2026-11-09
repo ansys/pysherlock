@@ -264,7 +264,7 @@ This build runs on a GitHub-hosted runner with
 ``PYSHERLOCK_BUILD_EXAMPLES=false`` and ``PYSHERLOCK_REUSE_GALLERY=true``.
 The handoff validates generated pages against their copied example sources,
 not the success-only execution checksums. Missing or stale gallery outputs
-fail the build, while pages containing execution tracebacks are preserved.
+fail the build, while pages containing execution error details are preserved.
 Both packaging and the final documentation must succeed before publication.
 
 The generated changelog branch receives one explicitly dispatched CI run,
