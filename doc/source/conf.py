@@ -367,8 +367,9 @@ numpydoc_validation_checks = {
     # type, unless multiple values are being returned"
 }
 
-# Execution failures are reported in the gallery and logged above, but must not
-# become fatal under -W. Other documentation warnings retain their usual handling.
+# Example execution failures remain visible in gallery pages and logs, but do
+# not fail the build when Sphinx treats warnings as errors (-W).
+# Other documentation warnings retain their existing handling.
 suppress_warnings = [
     "label.*",
     "design.fa-build",
