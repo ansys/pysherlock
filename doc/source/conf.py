@@ -45,6 +45,7 @@ pysherlock.BUILDING_GALLERY = True
 # more than 20 minutes. Unless explicitly requested, the gallery pages are
 # generated without running the example code.
 BUILD_EXAMPLES = os.getenv("PYSHERLOCK_BUILD_EXAMPLES", "false").lower() in ("true", "1", "yes")
+REUSE_GALLERY = os.getenv("PYSHERLOCK_REUSE_GALLERY", "false").lower() in ("true", "1", "yes")
 
 DEFAULT_EXAMPLE_EXTENSION = "py"
 DOC_PATH = "doc/source"
@@ -309,6 +310,36 @@ sphinx_gallery_conf = {
     "show_signature": False,
     "ignore_pattern": r"examples_globals.py",
 }
+
+
+def _validate_gallery_cache(source_path):
+    """Require executed, unchanged examples before reusing a release gallery."""
+    from sphinx.errors import ConfigError
+    from sphinx_gallery.utils import get_md5sum
+
+    examples_path = source_path.parent.parent / "examples"
+    gallery_path = source_path / GALLERY_EXAMPLES_PATH
+    examples = [path for path in examples_path.rglob("*.py") if path.name != "examples_globals.py"]
+    if not examples:
+        raise ConfigError("Cannot reuse the gallery: no example sources were found.")
+    for example in examples:
+        cached = gallery_path / example.relative_to(examples_path)
+        checksum = cached.with_suffix(".py.md5")
+        if (
+            not cached.with_suffix(".rst").is_file()
+            or not checksum.is_file()
+            or checksum.read_text().strip() != get_md5sum(example, mode="t")
+        ):
+            raise ConfigError(f"Missing or stale executed gallery output for {example.name}.")
+
+
+if REUSE_GALLERY:
+    if BUILD_EXAMPLES:
+        from sphinx.errors import ConfigError
+
+        raise ConfigError("Reusing the gallery must not execute examples.")
+    _validate_gallery_cache(SOURCE_PATH)
+    logger.info("Reusing validated gallery outputs without executing examples.")
 
 if not BUILD_EXAMPLES:
     logger.info(
