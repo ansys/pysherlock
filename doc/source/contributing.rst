@@ -245,8 +245,8 @@ Release workflow
 ^^^^^^^^^^^^^^^^
 
 A release tag whose commit still has changelog fragments in
-``doc/changelog.d`` runs the smoke tests, tests, and documentation before
-updating the changelog. This first run builds the documentation without
+``doc/changelog.d`` and no CHANGELOG section for the tag runs the smoke tests,
+tests, and documentation before updating the changelog. This first run builds the documentation without
 executing the gallery examples because it does not publish anything.
 If validation fails, no changelog commit or pull request is created.
 Fix the failure and push a new
@@ -258,8 +258,8 @@ commit. It uses the PyAnsys CI bot token because only the bot may delete
 protected release tags. This first run then fails on purpose so that it does
 not release. The recreated tag starts a second run that tests, builds the
 documentation with executed gallery examples and release notes, and releases.
-Pre-release tags keep their fragments, so they release from a single run that
-executes the gallery examples.
+Pre-release tags keep their fragments, so the second run is recognized by the
+CHANGELOG section that the first run added for the tag.
 
 Example execution errors, including ``SherlockConnectionError`` when the
 runner has an incompatible Sherlock version, are non-fatal. They are logged

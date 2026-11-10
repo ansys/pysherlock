@@ -40,11 +40,14 @@ jobs:
       changelog-pending: ${{ steps.eval.outputs.changelog-pending }}
       python-versions: ${{ steps.eval.outputs.python-versions }}
     steps:
-      - name: Check out the changelog fragments of the release tag
+      - name: Check out the changelog of the release tag
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          sparse-checkout: doc/changelog.d
+          sparse-checkout: |
+            doc/changelog.d
+            doc/source/changelog.rst
+          sparse-checkout-cone-mode: false
           persist-credentials: false
 
       - name: Evaluate the workload to run on the self-hosted runner
@@ -57,12 +60,13 @@ jobs:
           FULL_TESTS_REQUESTED: ${{ inputs.full-tests }}
           IS_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
         run: |
-          # The changelog action updates the CHANGELOG when fragments are present, then
-          # recreates the tag and stops this run. Pre-releases keep their fragments, so
-          # their single run always releases.
+          # The changelog action adds a CHANGELOG section when fragments are present and
+          # the section does not exist yet, then recreates the tag and stops this run.
+          # Pre-releases keep their fragments, so the section is what tells the runs apart.
           CHANGELOG_PENDING=false
-          if [[ "${IS_TAG}" == "true" && ! "${TAG_NAME}" =~ (a|b|rc)[0-9]+$ ]] \
-             && [[ -n "$(find doc/changelog.d -type f -name '*.md' -print -quit)" ]]; then
+          if [[ "${IS_TAG}" == "true" ]] \
+             && [[ -n "$(find doc/changelog.d -type f -name '*.md' -print -quit)" ]] \
+             && ! grep -qF "releases/tag/${TAG_NAME}>" doc/source/changelog.rst; then
             CHANGELOG_PENDING=true
           fi
           echo "changelog-pending=${CHANGELOG_PENDING}" >> "${GITHUB_OUTPUT}"
