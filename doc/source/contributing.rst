@@ -244,35 +244,34 @@ However, the recommended way of checking documentation integrity is to use
 Release workflow
 ^^^^^^^^^^^^^^^^
 
-A release tag runs the smoke tests, tests, and documentation with executed
-gallery examples before updating the changelog. Example execution errors,
-including ``SherlockConnectionError`` when the runner has an incompatible
-Sherlock version, are non-fatal. They are logged and included in the generated
-gallery pages. Other documentation build errors still stop the release.
+A release tag whose commit still has changelog fragments in
+``doc/changelog.d`` runs the smoke tests, tests, and documentation before
+updating the changelog. This first run builds the documentation without
+executing the gallery examples because it does not publish anything.
 If validation fails, no changelog commit or pull request is created.
 Fix the failure and push a new
 release tag, or rerun failed jobs when no source changes are needed.
 
-After validation succeeds, the changelog action updates the tag and opens one
-changelog pull request into ``main``. It uses ``same-workflow`` mode with
-``GITHUB_TOKEN``, so updating the tag does not start another release workflow.
-The repository must allow GitHub Actions to create pull requests.
+After validation succeeds, the changelog action updates the CHANGELOG, opens one
+changelog pull request into ``main``, and recreates the tag on the CHANGELOG
+commit. It uses the PyAnsys CI bot token because only the bot may delete
+protected release tags. This first run then fails on purpose so that it does
+not release. The recreated tag starts a second run that tests, builds the
+documentation with executed gallery examples and release notes, and releases.
+Pre-release tags keep their fragments, so they release from a single run that
+executes the gallery examples.
 
-Packaging uses the final tagged commit. A second documentation build includes
-the release notes and reuses the executed gallery from the same workflow run.
-This build runs on a GitHub-hosted runner with
-``PYSHERLOCK_BUILD_EXAMPLES=false`` and ``PYSHERLOCK_REUSE_GALLERY=true``.
-The handoff validates generated pages against their copied example sources,
-not the success-only execution checksums. Missing or stale gallery outputs
-fail the build, while pages containing execution error details are preserved.
-Both packaging and the final documentation must succeed before publication.
+Example execution errors, including ``SherlockConnectionError`` when the
+runner has an incompatible Sherlock version, are non-fatal. They are logged
+and included in the generated gallery pages. Other documentation build errors
+still stop the release.
 
-The generated changelog branch receives one explicitly dispatched CI run,
-with its Documentation job skipped and its pull-request title checked against
-the expected generated changelog title. Ordinary pull requests still build
-documentation without executing examples. These workflow changes must also
-be present on ``main`` before releasing because the changelog branch is
-created from ``main``.
+On a releasing run, the documentation job also verifies with
+``PYSHERLOCK_BUILD_EXAMPLES=false`` and ``PYSHERLOCK_REUSE_GALLERY=true`` that
+every example has generated gallery output. This validates generated pages
+against their copied example sources, not the success-only execution
+checksums. Missing or stale gallery outputs fail the build, while pages
+containing execution error details are preserved.
 
 
 Distributing

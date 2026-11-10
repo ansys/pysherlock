@@ -25,7 +25,8 @@ env:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Let a release run finish after it recreates its tag instead of canceling it midway.
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 
 permissions: {}
@@ -36,30 +37,41 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       full-docs: ${{ steps.eval.outputs.full-docs }}
-      changelog-only: ${{ steps.eval.outputs.changelog-only }}
+      changelog-pending: ${{ steps.eval.outputs.changelog-pending }}
       python-versions: ${{ steps.eval.outputs.python-versions }}
     steps:
+      - name: Check out the changelog fragments of the release tag
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: doc/changelog.d
+          persist-credentials: false
+
       - name: Evaluate the workload to run on the self-hosted runner
         id: eval
         shell: bash
         env:
           IS_TAG: ${{ startsWith(github.ref, 'refs/tags/') }}
+          TAG_NAME: ${{ github.ref_name }}
           FULL_DOCS_REQUESTED: ${{ inputs.full-docs }}
           FULL_TESTS_REQUESTED: ${{ inputs.full-tests }}
           IS_PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
-          CHANGELOG_BRANCH: ${{ github.head_ref || github.ref_name }}
-          IS_CHANGELOG_BOT: ${{ github.actor == 'github-actions[bot]' || github.event.pull_request.user.login == 'github-actions[bot]' }}
         run: |
-          CHANGELOG_ONLY=false
-          if [[ "${IS_CHANGELOG_BOT}" == "true" && "${CHANGELOG_BRANCH}" =~ ^docs/v[0-9]+\.[0-9]+\.[0-9]+((a|b|rc)[0-9]+)?-changelog$ ]]; then
-            CHANGELOG_ONLY=true
+          # The changelog action updates the CHANGELOG when fragments are present, then
+          # recreates the tag and stops this run. Pre-releases keep their fragments, so
+          # their single run always releases.
+          CHANGELOG_PENDING=false
+          if [[ "${IS_TAG}" == "true" && ! "${TAG_NAME}" =~ (a|b|rc)[0-9]+$ ]] \
+             && [[ -n "$(find doc/changelog.d -type f -name '*.md' -print -quit)" ]]; then
+            CHANGELOG_PENDING=true
           fi
-          echo "changelog-only=${CHANGELOG_ONLY}" >> "${GITHUB_OUTPUT}"
+          echo "changelog-pending=${CHANGELOG_PENDING}" >> "${GITHUB_OUTPUT}"
 
           # Executed examples are only required for the documentation that gets
           # published on a release. Everything else builds the gallery pages
           # without running the examples, which frees the self-hosted runner.
-          if [[ "${IS_TAG}" == "true" || "${FULL_DOCS_REQUESTED}" == "true" ]]; then
+          # A release run that only updates the CHANGELOG does not publish anything.
+          if [[ ( "${IS_TAG}" == "true" && "${CHANGELOG_PENDING}" != "true" ) || "${FULL_DOCS_REQUESTED}" == "true" ]]; then
             echo "full-docs=true" >> "${GITHUB_OUTPUT}"
           else
             echo "full-docs=false" >> "${GITHUB_OUTPUT}"
@@ -67,7 +79,7 @@ jobs:
 
           # The self-hosted runner is unique, so matrix entries are serialized.
           # Pull requests only test the main Python version unless asked otherwise.
-          if [[ ( "${IS_PULL_REQUEST}" == "true" || "${CHANGELOG_ONLY}" == "true" ) && "${FULL_TESTS_REQUESTED}" != "true" ]]; then
+          if [[ "${IS_PULL_REQUEST}" == "true" && "${FULL_TESTS_REQUESTED}" != "true" ]]; then
             echo "python-versions=[\"${MAIN_PYTHON_VERSION}\"]" >> "${GITHUB_OUTPUT}"
           else
             echo 'python-versions=["3.12", "3.13", "3.14"]' >> "${GITHUB_OUTPUT}"
@@ -172,7 +184,6 @@ jobs:
 
   docs:
     name: Documentation
-    if: needs.config.outputs.changelog-only != 'true'
     needs: [ docs-style, config ]
     # Only builds that execute the gallery examples need Sherlock, and therefore
     # the self-hosted runner. Every other build runs on a GitHub-hosted runner.
@@ -188,7 +199,7 @@ jobs:
         # The documentation published for a release must contain the output of
         # the examples. This guard makes a misconfiguration fail the release
         # instead of silently publishing a documentation without results.
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') && needs.config.outputs.changelog-pending != 'true'
         shell: bash
         run: |
           if [[ "${PYSHERLOCK_BUILD_EXAMPLES}" != "true" ]]; then
@@ -211,10 +222,9 @@ jobs:
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           checkout: false
-          uploaded-artifact-name-prefix: ${{ startsWith(github.ref, 'refs/tags/') && 'validated-documentation' || 'documentation' }}
 
       - name: Verify that every release example has generated output
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && needs.config.outputs.changelog-pending != 'true'
         shell: powershell
         env:
           PYSHERLOCK_BUILD_EXAMPLES: 'false'
@@ -223,63 +233,24 @@ jobs:
           & .\.venv\Scripts\python.exe -c "import os, runpy; os.chdir('doc/source'); runpy.run_path('conf.py')"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Save executed gallery for the release documentation
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: executed-gallery
-          path: doc/source/examples/gallery_examples
-          if-no-files-found: error
-          retention-days: 7
-
-  docs-release:
-    name: Documentation with release notes
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    needs: [ docs, update-changelog ]
-    runs-on: windows-latest
-    timeout-minutes: 90
-    permissions:
-      contents: read
-    env:
-      PYSHERLOCK_BUILD_EXAMPLES: 'false'
-      PYSHERLOCK_REUSE_GALLERY: 'true'
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ needs.update-changelog.outputs.release-commit-sha }}
-          persist-credentials: false
-      - name: Restore executed gallery
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: executed-gallery
-          path: doc/source/examples/gallery_examples
-      - name: Build documentation without executing examples again
-        uses: ansys/actions/doc-build@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          checkout: false
-
   package:
     name: Package library
+    # On a release tag, update-changelog fails on purpose when it recreates the tag, so only
+    # the run started by the recreated tag packages and releases the library.
     if: ${{ !cancelled() && needs.tests.result == 'success' && needs.docs.result == 'success' && (needs.update-changelog.result == 'success' || (needs.update-changelog.result == 'skipped' && !(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')))) }}
     needs: [ tests, docs, update-changelog ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ needs.update-changelog.outputs.release-commit-sha || github.sha }}
-          persist-credentials: false
       - name: Build library source and wheel artifacts
         uses: ansys/actions/build-library@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          checkout: false
 
   release:
     name: Release project
     if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
-    needs: [ package, docs-release, update-changelog ]
+    needs: [ package, update-changelog ]
     runs-on: ubuntu-latest
     # Specifying a GitHub environment is optional, but strongly encouraged
     environment: release
@@ -312,35 +283,16 @@ jobs:
           tag-name: ${{ github.ref_name }}
 
   pull-request-name:
-    needs: [ config ]
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && needs.config.outputs.changelog-only == 'true')
+    if: github.event_name == 'pull_request'
     name: Check the name of the pull-request
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read    # Required to read pull-request information
     steps:
       - name: Check pull-request name
-        if: github.event_name == 'pull_request'
         uses: ansys/actions/check-pr-title@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 #v11.1.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check generated changelog pull-request name
-        if: github.event_name == 'workflow_dispatch'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          CHANGELOG_BRANCH: ${{ github.ref_name }}
-        run: |
-          title=$(gh pr list --head "${CHANGELOG_BRANCH}" --base main --state open --json title --jq '.[].title')
-          version="${CHANGELOG_BRANCH#docs/}"
-          version="${version%-changelog}"
-          # The generated title is a strict subset of the conventional-commit title rules.
-          if [[ "${title}" != "chore: update CHANGELOG for ${version}" ]]; then
-            echo "::error::Expected exactly one open changelog PR with title 'chore: update CHANGELOG for ${version}'."
-            exit 1
-          fi
 
   upload_docs_release:
     name: Upload release documentation
@@ -348,7 +300,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write    # Required to push stable documentation to gh-pages branch
-    needs: [ release, update-changelog ]
+    needs: [ release ]
     steps:
       - name: Deploy the stable documentation
         uses: ansys/actions/doc-deploy-stable@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
@@ -356,61 +308,36 @@ jobs:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          ref: ${{ needs.update-changelog.outputs.release-commit-sha }}
           bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
           bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
 
   update-changelog:
     name: "Update CHANGELOG (on release)"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [ tests, docs ]
+    needs: [ config, tests, docs ]
     runs-on: ubuntu-latest
-    outputs:
-      release-commit-sha: ${{ steps.changelog.outputs.release-commit-sha }}
     permissions:
       contents: write         # Needed to create changelog entries in repository
       pull-requests: write    # Required to create pull requests for changelog updates
-      actions: write          # Required to start checks on the generated changelog branch
     steps:
-      # Do not mutate the release until tests and documentation generation have passed.
-      # GITHUB_TOKEN prevents the recreated tag and changelog PR from starting duplicate runs.
-      - id: changelog
-        uses: ansys/actions/doc-deploy-changelog@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
+      # Do not mutate the release until the tests and the documentation have passed.
+      # If the CHANGELOG changes, this job fails on purpose after recreating the tag. The
+      # recreated tag starts a second run that finds the CHANGELOG up to date, executes
+      # the gallery examples, and releases.
+      # The bot token is required because only the bot may delete protected release tags,
+      # and so that the tag push and the pull request into main start their own runs.
+      - uses: ansys/actions/doc-deploy-changelog@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
         with:
-          same-workflow: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          bot-user: github-actions[bot]
-          bot-email: 41898282+github-actions[bot]@users.noreply.github.com
+          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
 
-      - name: Ensure only changelog files changed after validation
+      - name: Never release from a run that did not execute the gallery examples
+        if: needs.config.outputs.changelog-pending == 'true'
         shell: bash
-        env:
-          VALIDATED_SHA: ${{ github.sha }}
-          RELEASE_SHA: ${{ steps.changelog.outputs.release-commit-sha }}
         run: |
-          git diff --name-only "${VALIDATED_SHA}" "${RELEASE_SHA}" > changed-files.txt
-          while IFS= read -r path; do
-            case "${path}" in
-              doc/source/changelog.rst|doc/changelog.d/*.md) ;;
-              *) echo "::error::Untested release change: ${path}"; exit 1 ;;
-            esac
-          done < changed-files.txt
-          rm changed-files.txt
-
-      - name: Start changelog branch checks without documentation
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          TAG_NAME: ${{ github.ref_name }}
-        run: |
-          branch="docs/${TAG_NAME}-changelog"
-          pr=$(gh pr list --head "${branch}" --base main --state open --json number --jq '.[].number')
-          if [[ -n "${pr}" ]]; then
-            gh workflow run ci_cd.yml --ref "${branch}"
-          else
-            echo "No open changelog PR for ${TAG_NAME}; no branch checks to start."
-          fi
+          echo "::error::This run built the documentation without executing the gallery examples, so it must not release."
+          exit 1
 
   check-vulnerabilities:
     name: "Check library vulnerabilities"
