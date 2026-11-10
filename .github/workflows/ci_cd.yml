@@ -213,7 +213,7 @@ jobs:
           checkout: false
           uploaded-artifact-name-prefix: ${{ startsWith(github.ref, 'refs/tags/') && 'validated-documentation' || 'documentation' }}
 
-      - name: Verify that every release example has executed output
+      - name: Verify that every release example has generated output
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         shell: powershell
         env:
@@ -372,7 +372,7 @@ jobs:
       pull-requests: write    # Required to create pull requests for changelog updates
       actions: write          # Required to start checks on the generated changelog branch
     steps:
-      # Do not mutate the release until the tests and executed gallery have passed.
+      # Do not mutate the release until tests and documentation generation have passed.
       # GITHUB_TOKEN prevents the recreated tag and changelog PR from starting duplicate runs.
       - id: changelog
         uses: ansys/actions/doc-deploy-changelog@f5e1481b9c128197a30d1dc1dfc52b8cd6865555 # v11.1.5
