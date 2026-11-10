@@ -9,6 +9,28 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.7 <https://github.com/ansys/pysherlock/releases/tag/v2.1.7>`_ - November 10, 2026
+======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v2.1.6
+          - `#1004 <https://github.com/ansys/pysherlock/pull/1004>`_
+
+        * - Build: do not create changelog PR for release until after creating gallery examples
+          - `#1005 <https://github.com/ansys/pysherlock/pull/1005>`_
+
+        * - Ci: allow gallery example failures
+          - `#1007 <https://github.com/ansys/pysherlock/pull/1007>`_
+
+
 `2.1.6 <https://github.com/ansys/pysherlock/releases/tag/v2.1.6>`_ - November 05, 2026
 ======================================================================================
 
