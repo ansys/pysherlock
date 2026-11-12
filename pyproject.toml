@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "ansys-api-sherlock==2.3.0",
+    "ansys-api-sherlock==2.3.1",
     "grpcio>=1.71.2",
     "protobuf>=5.29.6",
     "pydantic>=2.9.2",
@@ -47,11 +47,11 @@ doc = [
     "jupyter_sphinx==0.5.3",
     "matplotlib==3.11.2",
     "numpydoc==1.11.0",
-    "pandas==3.1.0",
+    "pandas==3.1.1",
     "pypandoc-binary==1.17",
     "Sphinx>=9.1",
     "sphinxemoji==0.3.2",
-    "sphinx-autodoc-typehints==3.17.4",
+    "sphinx-autodoc-typehints==3.17.5",
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.7.0",
     "sphinx-gallery==0.22.1",
