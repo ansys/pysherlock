@@ -9,6 +9,31 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`2.1.9 <https://github.com/ansys/pysherlock/releases/tag/v2.1.9>`_ - November 12, 2026
+======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Chore: update CHANGELOG for v2.1.8
+          - `#1010 <https://github.com/ansys/pysherlock/pull/1010>`_
+
+        * - Build: Bump the pip-deps group with 2 updates
+          - `#1011 <https://github.com/ansys/pysherlock/pull/1011>`_
+
+        * - Chore(pre-commit): Bump https://github.com/ansys/pre-commit-hooks from v0.8.0 to 0.8.1 in the pre-commit-hooks group
+          - `#1012 <https://github.com/ansys/pysherlock/pull/1012>`_
+
+        * - Chore: update to ansys-api-sherlock 2.3.1
+          - `#1014 <https://github.com/ansys/pysherlock/pull/1014>`_
+
+
 `2.1.8 <https://github.com/ansys/pysherlock/releases/tag/v2.1.8>`_ - November 11, 2026
 ======================================================================================
 
