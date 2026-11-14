@@ -1,0 +1,10 @@
+.. vale off
+
+center\_x
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: PottingRegionCopyData.center_x
+
+.. vale on

@@ -1,0 +1,10 @@
+.. vale off
+
+model\_json\_schema
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: ThermalSignalFileProperties.model_json_schema
+
+.. vale on

@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateTraceModelingPropsRequest
+=========================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateTraceModelingPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateTraceModelingPropsRequest.construct
+      
+      
+      UpdateTraceModelingPropsRequest.copy
+      
+      
+      UpdateTraceModelingPropsRequest.dict
+      
+      
+      UpdateTraceModelingPropsRequest.from_orm
+      
+      
+      UpdateTraceModelingPropsRequest.json
+      
+      
+      UpdateTraceModelingPropsRequest.model_construct
+      
+      
+      UpdateTraceModelingPropsRequest.model_copy
+      
+      
+      UpdateTraceModelingPropsRequest.model_dump
+      
+      
+      UpdateTraceModelingPropsRequest.model_dump_json
+      
+      
+      UpdateTraceModelingPropsRequest.model_json_schema
+      
+      
+      UpdateTraceModelingPropsRequest.model_parametrized_name
+      
+      
+      UpdateTraceModelingPropsRequest.model_post_init
+      
+      
+      UpdateTraceModelingPropsRequest.model_rebuild
+      
+      
+      UpdateTraceModelingPropsRequest.model_validate
+      
+      
+      UpdateTraceModelingPropsRequest.model_validate_json
+      
+      
+      UpdateTraceModelingPropsRequest.model_validate_strings
+      
+      
+      UpdateTraceModelingPropsRequest.parse_file
+      
+      
+      UpdateTraceModelingPropsRequest.parse_obj
+      
+      
+      UpdateTraceModelingPropsRequest.parse_raw
+      
+      
+      UpdateTraceModelingPropsRequest.schema
+      
+      
+      UpdateTraceModelingPropsRequest.schema_json
+      
+      
+      UpdateTraceModelingPropsRequest.str_validation
+      
+      
+      UpdateTraceModelingPropsRequest.update_forward_refs
+      
+      
+      UpdateTraceModelingPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateTraceModelingPropsRequest.model_computed_fields
+      
+      
+      UpdateTraceModelingPropsRequest.model_config
+      
+      
+      UpdateTraceModelingPropsRequest.model_extra
+      
+      
+      UpdateTraceModelingPropsRequest.model_fields
+      
+      
+      UpdateTraceModelingPropsRequest.model_fields_set
+      
+      
+      UpdateTraceModelingPropsRequest.project
+      
+      
+      UpdateTraceModelingPropsRequest.cca_names
+      
+      
+      UpdateTraceModelingPropsRequest.analyses
+      
+   
+   
+
+.. vale on

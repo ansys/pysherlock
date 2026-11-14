@@ -1,0 +1,134 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.SlotShape
+================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: SlotShape
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SlotShape.construct
+      
+      
+      SlotShape.copy
+      
+      
+      SlotShape.dict
+      
+      
+      SlotShape.from_orm
+      
+      
+      SlotShape.json
+      
+      
+      SlotShape.model_construct
+      
+      
+      SlotShape.model_copy
+      
+      
+      SlotShape.model_dump
+      
+      
+      SlotShape.model_dump_json
+      
+      
+      SlotShape.model_json_schema
+      
+      
+      SlotShape.model_parametrized_name
+      
+      
+      SlotShape.model_post_init
+      
+      
+      SlotShape.model_rebuild
+      
+      
+      SlotShape.model_validate
+      
+      
+      SlotShape.model_validate_json
+      
+      
+      SlotShape.model_validate_strings
+      
+      
+      SlotShape.parse_file
+      
+      
+      SlotShape.parse_obj
+      
+      
+      SlotShape.parse_raw
+      
+      
+      SlotShape.schema
+      
+      
+      SlotShape.schema_json
+      
+      
+      SlotShape.update_forward_refs
+      
+      
+      SlotShape.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SlotShape.model_computed_fields
+      
+      
+      SlotShape.model_config
+      
+      
+      SlotShape.model_extra
+      
+      
+      SlotShape.model_fields
+      
+      
+      SlotShape.model_fields_set
+      
+      
+      SlotShape.length
+      
+      
+      SlotShape.width
+      
+      
+      SlotShape.node_count
+      
+      
+      SlotShape.center_x
+      
+      
+      SlotShape.center_y
+      
+      
+      SlotShape.rotation
+      
+   
+   
+
+.. vale on

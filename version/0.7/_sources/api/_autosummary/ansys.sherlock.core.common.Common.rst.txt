@@ -1,0 +1,37 @@
+﻿ansys.sherlock.core.common.Common
+=================================
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. autoclass:: Common
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Common.check
+      
+      
+      Common.exit
+      
+      
+      Common.is_sherlock_client_loading
+      
+      
+      Common.list_solder_materials
+      
+      
+      Common.list_units
+      
+   
+   
+
+   
+   
+   

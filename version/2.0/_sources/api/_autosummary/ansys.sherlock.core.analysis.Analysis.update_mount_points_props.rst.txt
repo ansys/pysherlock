@@ -1,0 +1,10 @@
+.. vale off
+
+update\_mount\_points\_props
+============================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_mount_points_props
+
+.. vale on

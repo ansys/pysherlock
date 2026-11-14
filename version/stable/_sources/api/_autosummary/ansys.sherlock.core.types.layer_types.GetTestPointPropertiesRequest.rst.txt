@@ -1,0 +1,131 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.GetTestPointPropertiesRequest
+====================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: GetTestPointPropertiesRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      GetTestPointPropertiesRequest.construct
+      
+      
+      GetTestPointPropertiesRequest.copy
+      
+      
+      GetTestPointPropertiesRequest.dict
+      
+      
+      GetTestPointPropertiesRequest.from_orm
+      
+      
+      GetTestPointPropertiesRequest.json
+      
+      
+      GetTestPointPropertiesRequest.model_construct
+      
+      
+      GetTestPointPropertiesRequest.model_copy
+      
+      
+      GetTestPointPropertiesRequest.model_dump
+      
+      
+      GetTestPointPropertiesRequest.model_dump_json
+      
+      
+      GetTestPointPropertiesRequest.model_json_schema
+      
+      
+      GetTestPointPropertiesRequest.model_parametrized_name
+      
+      
+      GetTestPointPropertiesRequest.model_post_init
+      
+      
+      GetTestPointPropertiesRequest.model_rebuild
+      
+      
+      GetTestPointPropertiesRequest.model_validate
+      
+      
+      GetTestPointPropertiesRequest.model_validate_json
+      
+      
+      GetTestPointPropertiesRequest.model_validate_strings
+      
+      
+      GetTestPointPropertiesRequest.optional_str_validation
+      
+      
+      GetTestPointPropertiesRequest.parse_file
+      
+      
+      GetTestPointPropertiesRequest.parse_obj
+      
+      
+      GetTestPointPropertiesRequest.parse_raw
+      
+      
+      GetTestPointPropertiesRequest.schema
+      
+      
+      GetTestPointPropertiesRequest.schema_json
+      
+      
+      GetTestPointPropertiesRequest.str_validation
+      
+      
+      GetTestPointPropertiesRequest.update_forward_refs
+      
+      
+      GetTestPointPropertiesRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      GetTestPointPropertiesRequest.model_computed_fields
+      
+      
+      GetTestPointPropertiesRequest.model_config
+      
+      
+      GetTestPointPropertiesRequest.model_extra
+      
+      
+      GetTestPointPropertiesRequest.model_fields
+      
+      
+      GetTestPointPropertiesRequest.model_fields_set
+      
+      
+      GetTestPointPropertiesRequest.project
+      
+      
+      GetTestPointPropertiesRequest.cca_name
+      
+      
+      GetTestPointPropertiesRequest.test_point_ids
+      
+   
+   
+
+.. vale on

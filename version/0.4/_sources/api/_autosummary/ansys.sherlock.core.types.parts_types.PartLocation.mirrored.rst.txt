@@ -1,0 +1,6 @@
+mirrored
+========
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoattribute:: PartLocation.mirrored

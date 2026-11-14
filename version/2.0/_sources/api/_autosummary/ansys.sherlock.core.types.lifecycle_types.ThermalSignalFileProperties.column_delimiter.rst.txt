@@ -1,0 +1,10 @@
+.. vale off
+
+column\_delimiter
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ThermalSignalFileProperties.column_delimiter
+
+.. vale on

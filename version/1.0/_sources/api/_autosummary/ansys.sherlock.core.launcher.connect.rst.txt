@@ -1,0 +1,10 @@
+﻿.. vale off
+
+connect
+=======
+
+.. currentmodule:: ansys.sherlock.core.launcher
+
+.. autofunction:: connect
+
+.. vale on

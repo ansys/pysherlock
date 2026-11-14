@@ -1,0 +1,10 @@
+.. vale off
+
+qualification
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: PTHFatiguePropsAnalysis.qualification
+
+.. vale on

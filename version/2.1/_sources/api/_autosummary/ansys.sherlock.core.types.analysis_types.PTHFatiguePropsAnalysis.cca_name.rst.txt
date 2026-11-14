@@ -1,0 +1,10 @@
+.. vale off
+
+cca\_name
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: PTHFatiguePropsAnalysis.cca_name
+
+.. vale on

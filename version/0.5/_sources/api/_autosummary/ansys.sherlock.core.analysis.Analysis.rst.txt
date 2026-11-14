@@ -1,0 +1,70 @@
+﻿ansys.sherlock.core.analysis.Analysis
+=====================================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. autoclass:: Analysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Analysis.get_harmonic_vibe_input_fields
+      
+      
+      Analysis.get_ict_analysis_input_fields
+      
+      
+      Analysis.get_mechanical_shock_input_fields
+      
+      
+      Analysis.get_natural_frequency_input_fields
+      
+      
+      Analysis.get_random_vibe_input_fields
+      
+      
+      Analysis.get_solder_fatigue_input_fields
+      
+      
+      Analysis.run_analysis
+      
+      
+      Analysis.run_strain_map_analysis
+      
+      
+      Analysis.update_harmonic_vibe_props
+      
+      
+      Analysis.update_ict_analysis_props
+      
+      
+      Analysis.update_mechanical_shock_props
+      
+      
+      Analysis.update_natural_frequency_props
+      
+      
+      Analysis.update_part_modeling_props
+      
+      
+      Analysis.update_pcb_modeling_props
+      
+      
+      Analysis.update_random_vibe_props
+      
+      
+      Analysis.update_solder_fatigue_props
+      
+   
+   
+
+   
+   
+   

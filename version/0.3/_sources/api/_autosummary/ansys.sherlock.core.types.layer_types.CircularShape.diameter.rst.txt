@@ -1,0 +1,6 @@
+diameter
+========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: CircularShape.diameter

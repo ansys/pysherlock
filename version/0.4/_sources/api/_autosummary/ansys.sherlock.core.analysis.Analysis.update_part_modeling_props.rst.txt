@@ -1,0 +1,6 @@
+﻿update\_part\_modeling\_props
+=============================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_part_modeling_props

@@ -1,0 +1,10 @@
+.. vale off
+
+width
+=====
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: SlotShape.width
+
+.. vale on

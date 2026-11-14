@@ -1,0 +1,188 @@
+
+
+.. _sphx_glr_examples_gallery_examples_03-exporting:
+
+Exporting Projects and Files
+============================
+Examples on how to export projects and files using PySherlock.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export an AEDB file for a CCA.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_aedb_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_aedb.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export AEDB</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export all mount points for a CCA.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_all_mount_points_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_mount_points.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export All Mount Points</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export all test fixtures for a CCA.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_all_test_fixtures_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_test_fixtures.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export All Test Fixtures</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export all test points for a CCA.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_all_test_points_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_all_test_points.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export All Test Points</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export a Finite Element Analysis (FEA) model.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_fea_model_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_fea_model.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export FEA Model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export the net list associated with the imported project.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_net_list_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_net_list.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export Net List</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export the parts list associated with the imported project.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_part_list_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_part_list.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Export Parts List</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, and export the project in multiple configurations.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_project_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_project.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Sherlock Project Export</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to connect to the Sherlock gRPC service, import a project, generate export parameters for copper layers, and export a trace model.">
+
+.. only:: html
+
+  .. image:: /examples/gallery_examples/03-exporting/images/thumb/sphx_glr_export_trace_model_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gallery_examples_03-exporting_export_trace_model.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Sherlock Trace Model Export</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gallery_examples/03-exporting/export_aedb
+   /examples/gallery_examples/03-exporting/export_all_mount_points
+   /examples/gallery_examples/03-exporting/export_all_test_fixtures
+   /examples/gallery_examples/03-exporting/export_all_test_points
+   /examples/gallery_examples/03-exporting/export_fea_model
+   /examples/gallery_examples/03-exporting/export_net_list
+   /examples/gallery_examples/03-exporting/export_part_list
+   /examples/gallery_examples/03-exporting/export_project
+   /examples/gallery_examples/03-exporting/export_trace_model
+

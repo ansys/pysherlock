@@ -1,0 +1,10 @@
+.. vale off
+
+value
+=====
+
+.. currentmodule:: ansys.sherlock.core.types.common_types
+
+.. autoattribute:: Measurement.value
+
+.. vale on

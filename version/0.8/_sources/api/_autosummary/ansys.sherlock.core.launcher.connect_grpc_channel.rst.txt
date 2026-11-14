@@ -1,0 +1,10 @@
+﻿.. vale off
+
+connect\_grpc\_channel
+======================
+
+.. currentmodule:: ansys.sherlock.core.launcher
+
+.. autofunction:: connect_grpc_channel
+
+.. vale on

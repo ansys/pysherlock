@@ -1,0 +1,10 @@
+.. vale off
+
+frequency\_units
+================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: HarmonicVibeProfileCsvFileProperties.frequency_units
+
+.. vale on

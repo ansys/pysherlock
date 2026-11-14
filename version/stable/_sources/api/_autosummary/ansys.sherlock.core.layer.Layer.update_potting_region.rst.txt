@@ -1,0 +1,10 @@
+.. vale off
+
+update\_potting\_region
+=======================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.update_potting_region
+
+.. vale on

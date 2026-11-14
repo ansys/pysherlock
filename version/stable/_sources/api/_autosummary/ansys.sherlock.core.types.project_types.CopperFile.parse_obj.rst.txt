@@ -1,0 +1,10 @@
+.. vale off
+
+parse\_obj
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CopperFile.parse_obj
+
+.. vale on

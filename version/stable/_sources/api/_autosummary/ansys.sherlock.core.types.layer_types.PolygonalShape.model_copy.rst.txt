@@ -1,0 +1,10 @@
+.. vale off
+
+model\_copy
+===========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: PolygonalShape.model_copy
+
+.. vale on

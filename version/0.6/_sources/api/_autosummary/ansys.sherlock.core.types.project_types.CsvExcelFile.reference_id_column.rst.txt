@@ -1,0 +1,6 @@
+reference\_id\_column
+=====================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: CsvExcelFile.reference_id_column
