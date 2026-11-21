@@ -1,0 +1,10 @@
+.. vale off
+
+frequency\_column
+=================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: HarmonicVibeProfileCsvFileProperties.frequency_column
+
+.. vale on

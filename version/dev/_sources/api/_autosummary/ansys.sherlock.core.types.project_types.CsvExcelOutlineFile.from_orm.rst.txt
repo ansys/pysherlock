@@ -1,0 +1,10 @@
+.. vale off
+
+from\_orm
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. automethod:: CsvExcelOutlineFile.from_orm
+
+.. vale on

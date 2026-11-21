@@ -1,0 +1,10 @@
+.. vale off
+
+validate
+========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: UpdateLifePhaseRequest.validate
+
+.. vale on

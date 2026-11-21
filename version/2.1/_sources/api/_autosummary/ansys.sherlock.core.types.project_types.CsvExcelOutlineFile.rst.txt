@@ -1,0 +1,134 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.CsvExcelOutlineFile
+============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: CsvExcelOutlineFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      CsvExcelOutlineFile.construct
+      
+      
+      CsvExcelOutlineFile.copy
+      
+      
+      CsvExcelOutlineFile.dict
+      
+      
+      CsvExcelOutlineFile.from_orm
+      
+      
+      CsvExcelOutlineFile.json
+      
+      
+      CsvExcelOutlineFile.model_construct
+      
+      
+      CsvExcelOutlineFile.model_copy
+      
+      
+      CsvExcelOutlineFile.model_dump
+      
+      
+      CsvExcelOutlineFile.model_dump_json
+      
+      
+      CsvExcelOutlineFile.model_json_schema
+      
+      
+      CsvExcelOutlineFile.model_parametrized_name
+      
+      
+      CsvExcelOutlineFile.model_post_init
+      
+      
+      CsvExcelOutlineFile.model_rebuild
+      
+      
+      CsvExcelOutlineFile.model_validate
+      
+      
+      CsvExcelOutlineFile.model_validate_json
+      
+      
+      CsvExcelOutlineFile.model_validate_strings
+      
+      
+      CsvExcelOutlineFile.non_negative_int_validation
+      
+      
+      CsvExcelOutlineFile.parse_file
+      
+      
+      CsvExcelOutlineFile.parse_obj
+      
+      
+      CsvExcelOutlineFile.parse_raw
+      
+      
+      CsvExcelOutlineFile.schema
+      
+      
+      CsvExcelOutlineFile.schema_json
+      
+      
+      CsvExcelOutlineFile.str_validation
+      
+      
+      CsvExcelOutlineFile.update_forward_refs
+      
+      
+      CsvExcelOutlineFile.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CsvExcelOutlineFile.model_computed_fields
+      
+      
+      CsvExcelOutlineFile.model_config
+      
+      
+      CsvExcelOutlineFile.model_extra
+      
+      
+      CsvExcelOutlineFile.model_fields
+      
+      
+      CsvExcelOutlineFile.model_fields_set
+      
+      
+      CsvExcelOutlineFile.header_row_count
+      
+      
+      CsvExcelOutlineFile.x_location_column
+      
+      
+      CsvExcelOutlineFile.y_location_column
+      
+      
+      CsvExcelOutlineFile.location_units
+      
+   
+   
+
+.. vale on

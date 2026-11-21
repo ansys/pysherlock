@@ -1,0 +1,10 @@
+.. vale off
+
+model\_construct
+================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: UpdatePottingRegionRequest.model_construct
+
+.. vale on

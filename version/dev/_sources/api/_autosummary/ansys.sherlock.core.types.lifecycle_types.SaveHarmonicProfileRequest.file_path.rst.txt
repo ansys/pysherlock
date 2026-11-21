@@ -1,0 +1,10 @@
+.. vale off
+
+file\_path
+==========
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: SaveHarmonicProfileRequest.file_path
+
+.. vale on

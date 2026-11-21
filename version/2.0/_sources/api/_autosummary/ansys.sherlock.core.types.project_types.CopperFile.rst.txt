@@ -1,0 +1,143 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.CopperFile
+===================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: CopperFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      CopperFile.construct
+      
+      
+      CopperFile.copy
+      
+      
+      CopperFile.dict
+      
+      
+      CopperFile.from_orm
+      
+      
+      CopperFile.json
+      
+      
+      CopperFile.model_construct
+      
+      
+      CopperFile.model_copy
+      
+      
+      CopperFile.model_dump
+      
+      
+      CopperFile.model_dump_json
+      
+      
+      CopperFile.model_json_schema
+      
+      
+      CopperFile.model_parametrized_name
+      
+      
+      CopperFile.model_post_init
+      
+      
+      CopperFile.model_rebuild
+      
+      
+      CopperFile.model_validate
+      
+      
+      CopperFile.model_validate_json
+      
+      
+      CopperFile.model_validate_strings
+      
+      
+      CopperFile.parse_file
+      
+      
+      CopperFile.parse_obj
+      
+      
+      CopperFile.parse_raw
+      
+      
+      CopperFile.schema
+      
+      
+      CopperFile.schema_json
+      
+      
+      CopperFile.update_forward_refs
+      
+      
+      CopperFile.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      CopperFile.model_computed_fields
+      
+      
+      CopperFile.model_config
+      
+      
+      CopperFile.model_extra
+      
+      
+      CopperFile.model_fields
+      
+      
+      CopperFile.model_fields_set
+      
+      
+      CopperFile.file_name
+      
+      
+      CopperFile.file_type
+      
+      
+      CopperFile.file_comment
+      
+      
+      CopperFile.copper_layer
+      
+      
+      CopperFile.polarity
+      
+      
+      CopperFile.layer_snapshot_enabled
+      
+      
+      CopperFile.cca
+      
+      
+      CopperFile.gerber_file
+      
+      
+      CopperFile.image_file
+      
+   
+   
+
+.. vale on

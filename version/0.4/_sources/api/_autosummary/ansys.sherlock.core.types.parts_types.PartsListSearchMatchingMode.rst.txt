@@ -1,0 +1,30 @@
+﻿ansys.sherlock.core.types.parts\_types.PartsListSearchMatchingMode
+==================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.parts_types
+
+.. autoclass:: PartsListSearchMatchingMode
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+   
+   

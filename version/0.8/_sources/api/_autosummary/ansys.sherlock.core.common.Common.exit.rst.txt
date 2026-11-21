@@ -1,0 +1,10 @@
+.. vale off
+
+exit
+====
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.exit
+
+.. vale on

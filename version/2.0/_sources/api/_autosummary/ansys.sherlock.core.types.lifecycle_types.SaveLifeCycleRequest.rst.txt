@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.SaveLifeCycleRequest
+===============================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: SaveLifeCycleRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SaveLifeCycleRequest.construct
+      
+      
+      SaveLifeCycleRequest.copy
+      
+      
+      SaveLifeCycleRequest.dict
+      
+      
+      SaveLifeCycleRequest.from_orm
+      
+      
+      SaveLifeCycleRequest.json
+      
+      
+      SaveLifeCycleRequest.model_construct
+      
+      
+      SaveLifeCycleRequest.model_copy
+      
+      
+      SaveLifeCycleRequest.model_dump
+      
+      
+      SaveLifeCycleRequest.model_dump_json
+      
+      
+      SaveLifeCycleRequest.model_json_schema
+      
+      
+      SaveLifeCycleRequest.model_parametrized_name
+      
+      
+      SaveLifeCycleRequest.model_post_init
+      
+      
+      SaveLifeCycleRequest.model_rebuild
+      
+      
+      SaveLifeCycleRequest.model_validate
+      
+      
+      SaveLifeCycleRequest.model_validate_json
+      
+      
+      SaveLifeCycleRequest.model_validate_strings
+      
+      
+      SaveLifeCycleRequest.parse_file
+      
+      
+      SaveLifeCycleRequest.parse_obj
+      
+      
+      SaveLifeCycleRequest.parse_raw
+      
+      
+      SaveLifeCycleRequest.schema
+      
+      
+      SaveLifeCycleRequest.schema_json
+      
+      
+      SaveLifeCycleRequest.str_validation
+      
+      
+      SaveLifeCycleRequest.update_forward_refs
+      
+      
+      SaveLifeCycleRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SaveLifeCycleRequest.model_computed_fields
+      
+      
+      SaveLifeCycleRequest.model_config
+      
+      
+      SaveLifeCycleRequest.model_extra
+      
+      
+      SaveLifeCycleRequest.model_fields
+      
+      
+      SaveLifeCycleRequest.model_fields_set
+      
+      
+      SaveLifeCycleRequest.project
+      
+      
+      SaveLifeCycleRequest.file_path
+      
+      
+      SaveLifeCycleRequest.overwrite_file
+      
+   
+   
+
+.. vale on

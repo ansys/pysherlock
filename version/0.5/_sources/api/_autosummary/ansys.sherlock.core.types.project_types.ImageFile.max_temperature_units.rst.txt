@@ -1,0 +1,6 @@
+max\_temperature\_units
+=======================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.max_temperature_units

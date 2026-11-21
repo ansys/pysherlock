@@ -1,0 +1,10 @@
+.. vale off
+
+mechanical\_parts\_elem\_order
+==============================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateMechanicalPartsPropsAnalysis.mechanical_parts_elem_order
+
+.. vale on

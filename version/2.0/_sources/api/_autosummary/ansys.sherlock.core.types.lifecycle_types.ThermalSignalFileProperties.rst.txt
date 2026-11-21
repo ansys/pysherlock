@@ -1,0 +1,143 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.ThermalSignalFileProperties
+======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: ThermalSignalFileProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ThermalSignalFileProperties.construct
+      
+      
+      ThermalSignalFileProperties.copy
+      
+      
+      ThermalSignalFileProperties.dict
+      
+      
+      ThermalSignalFileProperties.from_orm
+      
+      
+      ThermalSignalFileProperties.json
+      
+      
+      ThermalSignalFileProperties.model_construct
+      
+      
+      ThermalSignalFileProperties.model_copy
+      
+      
+      ThermalSignalFileProperties.model_dump
+      
+      
+      ThermalSignalFileProperties.model_dump_json
+      
+      
+      ThermalSignalFileProperties.model_json_schema
+      
+      
+      ThermalSignalFileProperties.model_parametrized_name
+      
+      
+      ThermalSignalFileProperties.model_post_init
+      
+      
+      ThermalSignalFileProperties.model_rebuild
+      
+      
+      ThermalSignalFileProperties.model_validate
+      
+      
+      ThermalSignalFileProperties.model_validate_json
+      
+      
+      ThermalSignalFileProperties.model_validate_strings
+      
+      
+      ThermalSignalFileProperties.non_negative_int_validation
+      
+      
+      ThermalSignalFileProperties.parse_file
+      
+      
+      ThermalSignalFileProperties.parse_obj
+      
+      
+      ThermalSignalFileProperties.parse_raw
+      
+      
+      ThermalSignalFileProperties.schema
+      
+      
+      ThermalSignalFileProperties.schema_json
+      
+      
+      ThermalSignalFileProperties.str_validation
+      
+      
+      ThermalSignalFileProperties.update_forward_refs
+      
+      
+      ThermalSignalFileProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ThermalSignalFileProperties.model_computed_fields
+      
+      
+      ThermalSignalFileProperties.model_config
+      
+      
+      ThermalSignalFileProperties.model_extra
+      
+      
+      ThermalSignalFileProperties.model_fields
+      
+      
+      ThermalSignalFileProperties.model_fields_set
+      
+      
+      ThermalSignalFileProperties.header_row_count
+      
+      
+      ThermalSignalFileProperties.numeric_format
+      
+      
+      ThermalSignalFileProperties.column_delimiter
+      
+      
+      ThermalSignalFileProperties.time_column
+      
+      
+      ThermalSignalFileProperties.time_units
+      
+      
+      ThermalSignalFileProperties.temperature_column
+      
+      
+      ThermalSignalFileProperties.temperature_units
+      
+   
+   
+
+.. vale on

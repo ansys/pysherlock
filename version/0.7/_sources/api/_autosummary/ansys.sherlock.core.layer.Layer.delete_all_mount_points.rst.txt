@@ -1,0 +1,6 @@
+delete\_all\_mount\_points
+==========================
+
+.. currentmodule:: ansys.sherlock.core.layer
+
+.. automethod:: Layer.delete_all_mount_points

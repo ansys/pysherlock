@@ -1,0 +1,10 @@
+.. vale off
+
+mechanical\_parts\_max\_vertical\_units
+=======================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: UpdateMechanicalPartsPropsAnalysis.mechanical_parts_max_vertical_units
+
+.. vale on

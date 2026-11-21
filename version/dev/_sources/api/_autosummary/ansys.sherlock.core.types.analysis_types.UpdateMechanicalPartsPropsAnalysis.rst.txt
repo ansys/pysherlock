@@ -1,0 +1,137 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateMechanicalPartsPropsAnalysis
+============================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateMechanicalPartsPropsAnalysis
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.construct
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.copy
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.dict
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.from_orm
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.json
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_construct
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_copy
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_dump
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_dump_json
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_json_schema
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_parametrized_name
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_post_init
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_rebuild
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_validate
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_validate_json
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_validate_strings
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.parse_file
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.parse_obj
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.parse_raw
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.schema
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.schema_json
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.update_forward_refs
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateMechanicalPartsPropsAnalysis.model_computed_fields
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_config
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_extra
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_fields
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.model_fields_set
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.analysis_type
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.mechanical_parts_enabled
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.mechanical_parts_elem_order
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.mechanical_parts_max_edge_length
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.mechanical_parts_max_edge_length_units
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.mechanical_parts_max_vertical
+      
+      
+      UpdateMechanicalPartsPropsAnalysis.mechanical_parts_max_vertical_units
+      
+   
+   
+
+.. vale on

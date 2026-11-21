@@ -1,0 +1,10 @@
+.. vale off
+
+diameter
+========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoattribute:: MountPointProperties.diameter
+
+.. vale on

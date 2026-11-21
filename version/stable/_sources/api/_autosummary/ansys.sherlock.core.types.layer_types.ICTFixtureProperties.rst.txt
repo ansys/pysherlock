@@ -1,0 +1,176 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.layer\_types.ICTFixtureProperties
+===========================================================
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. autoclass:: ICTFixtureProperties
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      ICTFixtureProperties.construct
+      
+      
+      ICTFixtureProperties.copy
+      
+      
+      ICTFixtureProperties.dict
+      
+      
+      ICTFixtureProperties.from_orm
+      
+      
+      ICTFixtureProperties.json
+      
+      
+      ICTFixtureProperties.model_construct
+      
+      
+      ICTFixtureProperties.model_copy
+      
+      
+      ICTFixtureProperties.model_dump
+      
+      
+      ICTFixtureProperties.model_dump_json
+      
+      
+      ICTFixtureProperties.model_json_schema
+      
+      
+      ICTFixtureProperties.model_parametrized_name
+      
+      
+      ICTFixtureProperties.model_post_init
+      
+      
+      ICTFixtureProperties.model_rebuild
+      
+      
+      ICTFixtureProperties.model_validate
+      
+      
+      ICTFixtureProperties.model_validate_json
+      
+      
+      ICTFixtureProperties.model_validate_strings
+      
+      
+      ICTFixtureProperties.parse_file
+      
+      
+      ICTFixtureProperties.parse_obj
+      
+      
+      ICTFixtureProperties.parse_raw
+      
+      
+      ICTFixtureProperties.schema
+      
+      
+      ICTFixtureProperties.schema_json
+      
+      
+      ICTFixtureProperties.str_validation
+      
+      
+      ICTFixtureProperties.update_forward_refs
+      
+      
+      ICTFixtureProperties.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ICTFixtureProperties.model_computed_fields
+      
+      
+      ICTFixtureProperties.model_config
+      
+      
+      ICTFixtureProperties.model_extra
+      
+      
+      ICTFixtureProperties.model_fields
+      
+      
+      ICTFixtureProperties.model_fields_set
+      
+      
+      ICTFixtureProperties.id
+      
+      
+      ICTFixtureProperties.type
+      
+      
+      ICTFixtureProperties.units
+      
+      
+      ICTFixtureProperties.side
+      
+      
+      ICTFixtureProperties.height
+      
+      
+      ICTFixtureProperties.material
+      
+      
+      ICTFixtureProperties.state
+      
+      
+      ICTFixtureProperties.shape
+      
+      
+      ICTFixtureProperties.x
+      
+      
+      ICTFixtureProperties.y
+      
+      
+      ICTFixtureProperties.length
+      
+      
+      ICTFixtureProperties.width
+      
+      
+      ICTFixtureProperties.diameter
+      
+      
+      ICTFixtureProperties.nodes
+      
+      
+      ICTFixtureProperties.rotation
+      
+      
+      ICTFixtureProperties.polygon
+      
+      
+      ICTFixtureProperties.boundary
+      
+      
+      ICTFixtureProperties.constraints
+      
+      
+      ICTFixtureProperties.chassis_material
+      
+   
+   
+
+.. vale on

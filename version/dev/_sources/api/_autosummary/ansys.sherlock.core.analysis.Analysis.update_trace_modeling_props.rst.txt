@@ -1,0 +1,10 @@
+.. vale off
+
+update\_trace\_modeling\_props
+==============================
+
+.. currentmodule:: ansys.sherlock.core.analysis
+
+.. automethod:: Analysis.update_trace_modeling_props
+
+.. vale on

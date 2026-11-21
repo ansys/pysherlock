@@ -1,0 +1,6 @@
+﻿generate\_trace\_model
+======================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.generate_trace_model

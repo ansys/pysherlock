@@ -1,0 +1,10 @@
+.. vale off
+
+load\_shock\_profile\_pulses
+============================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.load_shock_profile_pulses
+
+.. vale on

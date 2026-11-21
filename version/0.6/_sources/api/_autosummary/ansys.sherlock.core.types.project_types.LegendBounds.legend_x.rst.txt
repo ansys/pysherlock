@@ -1,0 +1,6 @@
+legend\_x
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: LegendBounds.legend_x

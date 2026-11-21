@@ -1,0 +1,10 @@
+.. vale off
+
+get\_sherlock\_info
+===================
+
+.. currentmodule:: ansys.sherlock.core.common
+
+.. automethod:: Common.get_sherlock_info
+
+.. vale on
