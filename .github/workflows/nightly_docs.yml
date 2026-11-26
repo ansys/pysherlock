@@ -39,7 +39,7 @@ jobs:
             -Name "LongPathsEnabled" -Value 1 -PropertyType DWord -Force
           Write-Host "Windows Long Paths enabled (a runner service restart may be required once)."
       - name: Run documentation building action
-        uses: ansys/actions/doc-build@5a91d7c2c4da2e86f2b3b62ba62daad189a6b77c # v11.2.0
+        uses: ansys/actions/doc-build@06390ed64756cfc992121a6d6626a811e352c0e9 # v11.2.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -51,7 +51,7 @@ jobs:
       contents: write    # Required to push documentation to gh-pages branch
     steps:
       - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@5a91d7c2c4da2e86f2b3b62ba62daad189a6b77c # v11.2.0
+        uses: ansys/actions/doc-deploy-dev@06390ed64756cfc992121a6d6626a811e352c0e9 # v11.2.1
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
