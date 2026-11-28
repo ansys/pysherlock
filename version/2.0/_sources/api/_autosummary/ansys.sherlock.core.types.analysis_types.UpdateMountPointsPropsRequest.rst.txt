@@ -1,0 +1,128 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateMountPointsPropsRequest
+=======================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateMountPointsPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateMountPointsPropsRequest.construct
+      
+      
+      UpdateMountPointsPropsRequest.copy
+      
+      
+      UpdateMountPointsPropsRequest.dict
+      
+      
+      UpdateMountPointsPropsRequest.from_orm
+      
+      
+      UpdateMountPointsPropsRequest.json
+      
+      
+      UpdateMountPointsPropsRequest.model_construct
+      
+      
+      UpdateMountPointsPropsRequest.model_copy
+      
+      
+      UpdateMountPointsPropsRequest.model_dump
+      
+      
+      UpdateMountPointsPropsRequest.model_dump_json
+      
+      
+      UpdateMountPointsPropsRequest.model_json_schema
+      
+      
+      UpdateMountPointsPropsRequest.model_parametrized_name
+      
+      
+      UpdateMountPointsPropsRequest.model_post_init
+      
+      
+      UpdateMountPointsPropsRequest.model_rebuild
+      
+      
+      UpdateMountPointsPropsRequest.model_validate
+      
+      
+      UpdateMountPointsPropsRequest.model_validate_json
+      
+      
+      UpdateMountPointsPropsRequest.model_validate_strings
+      
+      
+      UpdateMountPointsPropsRequest.parse_file
+      
+      
+      UpdateMountPointsPropsRequest.parse_obj
+      
+      
+      UpdateMountPointsPropsRequest.parse_raw
+      
+      
+      UpdateMountPointsPropsRequest.schema
+      
+      
+      UpdateMountPointsPropsRequest.schema_json
+      
+      
+      UpdateMountPointsPropsRequest.str_validation
+      
+      
+      UpdateMountPointsPropsRequest.update_forward_refs
+      
+      
+      UpdateMountPointsPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateMountPointsPropsRequest.model_computed_fields
+      
+      
+      UpdateMountPointsPropsRequest.model_config
+      
+      
+      UpdateMountPointsPropsRequest.model_extra
+      
+      
+      UpdateMountPointsPropsRequest.model_fields
+      
+      
+      UpdateMountPointsPropsRequest.model_fields_set
+      
+      
+      UpdateMountPointsPropsRequest.project
+      
+      
+      UpdateMountPointsPropsRequest.cca_names
+      
+      
+      UpdateMountPointsPropsRequest.analyses
+      
+   
+   
+
+.. vale on

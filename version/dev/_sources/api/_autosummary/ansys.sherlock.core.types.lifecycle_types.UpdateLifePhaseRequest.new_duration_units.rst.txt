@@ -1,0 +1,10 @@
+.. vale off
+
+new\_duration\_units
+====================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: UpdateLifePhaseRequest.new_duration_units
+
+.. vale on

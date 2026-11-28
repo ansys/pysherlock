@@ -1,0 +1,6 @@
+legend\_orientation
+===================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoattribute:: ImageFile.legend_orientation

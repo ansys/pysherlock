@@ -1,0 +1,140 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.OutlineFile
+====================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: OutlineFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      OutlineFile.construct
+      
+      
+      OutlineFile.copy
+      
+      
+      OutlineFile.dict
+      
+      
+      OutlineFile.from_orm
+      
+      
+      OutlineFile.json
+      
+      
+      OutlineFile.model_construct
+      
+      
+      OutlineFile.model_copy
+      
+      
+      OutlineFile.model_dump
+      
+      
+      OutlineFile.model_dump_json
+      
+      
+      OutlineFile.model_json_schema
+      
+      
+      OutlineFile.model_parametrized_name
+      
+      
+      OutlineFile.model_post_init
+      
+      
+      OutlineFile.model_rebuild
+      
+      
+      OutlineFile.model_validate
+      
+      
+      OutlineFile.model_validate_json
+      
+      
+      OutlineFile.model_validate_strings
+      
+      
+      OutlineFile.optional_str_validation
+      
+      
+      OutlineFile.parse_file
+      
+      
+      OutlineFile.parse_obj
+      
+      
+      OutlineFile.parse_raw
+      
+      
+      OutlineFile.schema
+      
+      
+      OutlineFile.schema_json
+      
+      
+      OutlineFile.str_validation
+      
+      
+      OutlineFile.update_forward_refs
+      
+      
+      OutlineFile.validate
+      
+      
+      OutlineFile.validate_non_empty_cca_names
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      OutlineFile.model_computed_fields
+      
+      
+      OutlineFile.model_config
+      
+      
+      OutlineFile.model_extra
+      
+      
+      OutlineFile.model_fields
+      
+      
+      OutlineFile.model_fields_set
+      
+      
+      OutlineFile.file_name
+      
+      
+      OutlineFile.file_comment
+      
+      
+      OutlineFile.file_type
+      
+      
+      OutlineFile.outline_file_data
+      
+      
+      OutlineFile.cca_names
+      
+   
+   
+
+.. vale on

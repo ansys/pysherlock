@@ -1,0 +1,125 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.analysis\_types.UpdateSemiconductorWearoutAnalysisPropsRequest
+========================================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoclass:: UpdateSemiconductorWearoutAnalysisPropsRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.construct
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.copy
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.dict
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.from_orm
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.json
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_construct
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_copy
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_dump
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_dump_json
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_json_schema
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_parametrized_name
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_post_init
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_rebuild
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_validate
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_validate_json
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_validate_strings
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.parse_file
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.parse_obj
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.parse_raw
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.schema
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.schema_json
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.str_validation
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.update_forward_refs
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_computed_fields
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_config
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_extra
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_fields
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.model_fields_set
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.project
+      
+      
+      UpdateSemiconductorWearoutAnalysisPropsRequest.semiconductor_wearout_analysis_properties
+      
+   
+   
+
+.. vale on

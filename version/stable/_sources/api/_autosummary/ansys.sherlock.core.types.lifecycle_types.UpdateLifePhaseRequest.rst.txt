@@ -1,0 +1,149 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.UpdateLifePhaseRequest
+=================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: UpdateLifePhaseRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      UpdateLifePhaseRequest.construct
+      
+      
+      UpdateLifePhaseRequest.copy
+      
+      
+      UpdateLifePhaseRequest.dict
+      
+      
+      UpdateLifePhaseRequest.from_orm
+      
+      
+      UpdateLifePhaseRequest.json
+      
+      
+      UpdateLifePhaseRequest.model_construct
+      
+      
+      UpdateLifePhaseRequest.model_copy
+      
+      
+      UpdateLifePhaseRequest.model_dump
+      
+      
+      UpdateLifePhaseRequest.model_dump_json
+      
+      
+      UpdateLifePhaseRequest.model_json_schema
+      
+      
+      UpdateLifePhaseRequest.model_parametrized_name
+      
+      
+      UpdateLifePhaseRequest.model_post_init
+      
+      
+      UpdateLifePhaseRequest.model_rebuild
+      
+      
+      UpdateLifePhaseRequest.model_validate
+      
+      
+      UpdateLifePhaseRequest.model_validate_json
+      
+      
+      UpdateLifePhaseRequest.model_validate_strings
+      
+      
+      UpdateLifePhaseRequest.optional_str_validation
+      
+      
+      UpdateLifePhaseRequest.parse_file
+      
+      
+      UpdateLifePhaseRequest.parse_obj
+      
+      
+      UpdateLifePhaseRequest.parse_raw
+      
+      
+      UpdateLifePhaseRequest.schema
+      
+      
+      UpdateLifePhaseRequest.schema_json
+      
+      
+      UpdateLifePhaseRequest.str_validation
+      
+      
+      UpdateLifePhaseRequest.update_forward_refs
+      
+      
+      UpdateLifePhaseRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      UpdateLifePhaseRequest.model_computed_fields
+      
+      
+      UpdateLifePhaseRequest.model_config
+      
+      
+      UpdateLifePhaseRequest.model_extra
+      
+      
+      UpdateLifePhaseRequest.model_fields
+      
+      
+      UpdateLifePhaseRequest.model_fields_set
+      
+      
+      UpdateLifePhaseRequest.project
+      
+      
+      UpdateLifePhaseRequest.phase_name
+      
+      
+      UpdateLifePhaseRequest.new_phase_name
+      
+      
+      UpdateLifePhaseRequest.new_description
+      
+      
+      UpdateLifePhaseRequest.new_duration
+      
+      
+      UpdateLifePhaseRequest.new_duration_units
+      
+      
+      UpdateLifePhaseRequest.new_num_of_cycles
+      
+      
+      UpdateLifePhaseRequest.new_cycle_type
+      
+      
+      UpdateLifePhaseRequest.result_archive_file_name
+      
+   
+   
+
+.. vale on

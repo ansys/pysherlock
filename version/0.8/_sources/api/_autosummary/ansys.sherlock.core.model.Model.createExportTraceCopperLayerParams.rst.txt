@@ -1,0 +1,10 @@
+.. vale off
+
+createExportTraceCopperLayerParams
+==================================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.createExportTraceCopperLayerParams
+
+.. vale on

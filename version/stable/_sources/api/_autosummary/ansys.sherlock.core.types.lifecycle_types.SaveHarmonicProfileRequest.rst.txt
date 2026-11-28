@@ -1,0 +1,134 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.lifecycle\_types.SaveHarmonicProfileRequest
+=====================================================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoclass:: SaveHarmonicProfileRequest
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      SaveHarmonicProfileRequest.construct
+      
+      
+      SaveHarmonicProfileRequest.copy
+      
+      
+      SaveHarmonicProfileRequest.dict
+      
+      
+      SaveHarmonicProfileRequest.from_orm
+      
+      
+      SaveHarmonicProfileRequest.json
+      
+      
+      SaveHarmonicProfileRequest.model_construct
+      
+      
+      SaveHarmonicProfileRequest.model_copy
+      
+      
+      SaveHarmonicProfileRequest.model_dump
+      
+      
+      SaveHarmonicProfileRequest.model_dump_json
+      
+      
+      SaveHarmonicProfileRequest.model_json_schema
+      
+      
+      SaveHarmonicProfileRequest.model_parametrized_name
+      
+      
+      SaveHarmonicProfileRequest.model_post_init
+      
+      
+      SaveHarmonicProfileRequest.model_rebuild
+      
+      
+      SaveHarmonicProfileRequest.model_validate
+      
+      
+      SaveHarmonicProfileRequest.model_validate_json
+      
+      
+      SaveHarmonicProfileRequest.model_validate_strings
+      
+      
+      SaveHarmonicProfileRequest.parse_file
+      
+      
+      SaveHarmonicProfileRequest.parse_obj
+      
+      
+      SaveHarmonicProfileRequest.parse_raw
+      
+      
+      SaveHarmonicProfileRequest.schema
+      
+      
+      SaveHarmonicProfileRequest.schema_json
+      
+      
+      SaveHarmonicProfileRequest.str_validation
+      
+      
+      SaveHarmonicProfileRequest.update_forward_refs
+      
+      
+      SaveHarmonicProfileRequest.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      SaveHarmonicProfileRequest.model_computed_fields
+      
+      
+      SaveHarmonicProfileRequest.model_config
+      
+      
+      SaveHarmonicProfileRequest.model_extra
+      
+      
+      SaveHarmonicProfileRequest.model_fields
+      
+      
+      SaveHarmonicProfileRequest.model_fields_set
+      
+      
+      SaveHarmonicProfileRequest.project
+      
+      
+      SaveHarmonicProfileRequest.phase_name
+      
+      
+      SaveHarmonicProfileRequest.event_name
+      
+      
+      SaveHarmonicProfileRequest.triaxial_axis
+      
+      
+      SaveHarmonicProfileRequest.file_path
+      
+   
+   
+
+.. vale on

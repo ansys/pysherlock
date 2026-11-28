@@ -1,0 +1,10 @@
+.. vale off
+
+greater\_than\_zero\_float\_validation
+======================================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: ShockProfilePulsesCsvFileProperties.greater_than_zero_float_validation
+
+.. vale on

@@ -1,0 +1,38 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.IcepakFile
+===================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: IcepakFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      IcepakFile.temperature_offset
+      
+      
+      IcepakFile.temperature_offset_units
+      
+   
+   
+
+.. vale on

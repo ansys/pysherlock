@@ -1,0 +1,10 @@
+.. vale off
+
+generated\_cycles\_label
+========================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.generated_cycles_label
+
+.. vale on

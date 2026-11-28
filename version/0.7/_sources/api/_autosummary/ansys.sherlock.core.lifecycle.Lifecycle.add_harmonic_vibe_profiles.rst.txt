@@ -1,0 +1,6 @@
+add\_harmonic\_vibe\_profiles
+=============================
+
+.. currentmodule:: ansys.sherlock.core.lifecycle
+
+.. automethod:: Lifecycle.add_harmonic_vibe_profiles

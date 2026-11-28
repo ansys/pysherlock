@@ -1,0 +1,10 @@
+.. vale off
+
+schema\_json
+============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. automethod:: SaveHarmonicProfileRequest.schema_json
+
+.. vale on

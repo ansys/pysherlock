@@ -1,0 +1,10 @@
+.. vale off
+
+pth\_quality\_factor
+====================
+
+.. currentmodule:: ansys.sherlock.core.types.analysis_types
+
+.. autoattribute:: PTHFatiguePropsAnalysis.pth_quality_factor
+
+.. vale on

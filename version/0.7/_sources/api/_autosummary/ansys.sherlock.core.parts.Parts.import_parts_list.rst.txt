@@ -1,0 +1,6 @@
+import\_parts\_list
+===================
+
+.. currentmodule:: ansys.sherlock.core.parts
+
+.. automethod:: Parts.import_parts_list

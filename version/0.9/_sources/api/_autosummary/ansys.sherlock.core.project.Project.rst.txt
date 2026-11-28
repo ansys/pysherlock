@@ -1,0 +1,80 @@
+﻿.. vale off
+
+ansys.sherlock.core.project.Project
+===================================
+
+.. currentmodule:: ansys.sherlock.core.project
+
+.. autoclass:: Project
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Project.add_cca
+      
+      
+      Project.add_outline_file
+      
+      
+      Project.add_project
+      
+      
+      Project.add_strain_maps
+      
+      
+      Project.add_thermal_maps
+      
+      
+      Project.create_cca_from_modeling_region
+      
+      
+      Project.delete_project
+      
+      
+      Project.export_project
+      
+      
+      Project.generate_project_report
+      
+      
+      Project.import_GDSII_file
+      
+      
+      Project.import_ipc2581_archive
+      
+      
+      Project.import_odb_archive
+      
+      
+      Project.import_project_zip_archive
+      
+      
+      Project.import_project_zip_archive_single_mode
+      
+      
+      Project.list_ccas
+      
+      
+      Project.list_strain_maps
+      
+      
+      Project.list_thermal_maps
+      
+      
+      Project.update_thermal_maps
+      
+   
+   
+
+   
+   
+   
+
+.. vale on

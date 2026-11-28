@@ -1,0 +1,119 @@
+﻿.. vale off
+
+ansys.sherlock.core.types.project\_types.GerberOutlineFile
+==========================================================
+
+.. currentmodule:: ansys.sherlock.core.types.project_types
+
+.. autoclass:: GerberOutlineFile
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      GerberOutlineFile.construct
+      
+      
+      GerberOutlineFile.copy
+      
+      
+      GerberOutlineFile.dict
+      
+      
+      GerberOutlineFile.from_orm
+      
+      
+      GerberOutlineFile.json
+      
+      
+      GerberOutlineFile.model_construct
+      
+      
+      GerberOutlineFile.model_copy
+      
+      
+      GerberOutlineFile.model_dump
+      
+      
+      GerberOutlineFile.model_dump_json
+      
+      
+      GerberOutlineFile.model_json_schema
+      
+      
+      GerberOutlineFile.model_parametrized_name
+      
+      
+      GerberOutlineFile.model_post_init
+      
+      
+      GerberOutlineFile.model_rebuild
+      
+      
+      GerberOutlineFile.model_validate
+      
+      
+      GerberOutlineFile.model_validate_json
+      
+      
+      GerberOutlineFile.model_validate_strings
+      
+      
+      GerberOutlineFile.parse_file
+      
+      
+      GerberOutlineFile.parse_obj
+      
+      
+      GerberOutlineFile.parse_raw
+      
+      
+      GerberOutlineFile.schema
+      
+      
+      GerberOutlineFile.schema_json
+      
+      
+      GerberOutlineFile.update_forward_refs
+      
+      
+      GerberOutlineFile.validate
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      GerberOutlineFile.model_computed_fields
+      
+      
+      GerberOutlineFile.model_config
+      
+      
+      GerberOutlineFile.model_extra
+      
+      
+      GerberOutlineFile.model_fields
+      
+      
+      GerberOutlineFile.model_fields_set
+      
+      
+      GerberOutlineFile.parse_decimal_first
+      
+   
+   
+
+.. vale on

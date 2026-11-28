@@ -1,0 +1,10 @@
+.. vale off
+
+time\_removal
+=============
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: ImportThermalSignalRequest.time_removal
+
+.. vale on

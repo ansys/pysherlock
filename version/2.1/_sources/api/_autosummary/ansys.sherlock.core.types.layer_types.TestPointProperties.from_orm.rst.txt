@@ -1,0 +1,10 @@
+.. vale off
+
+from\_orm
+=========
+
+.. currentmodule:: ansys.sherlock.core.types.layer_types
+
+.. automethod:: TestPointProperties.from_orm
+
+.. vale on

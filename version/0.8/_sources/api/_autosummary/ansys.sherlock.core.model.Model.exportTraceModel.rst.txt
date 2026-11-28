@@ -1,0 +1,10 @@
+.. vale off
+
+exportTraceModel
+================
+
+.. currentmodule:: ansys.sherlock.core.model
+
+.. automethod:: Model.exportTraceModel
+
+.. vale on

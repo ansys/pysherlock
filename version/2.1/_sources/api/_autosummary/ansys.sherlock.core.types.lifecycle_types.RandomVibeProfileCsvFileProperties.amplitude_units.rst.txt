@@ -1,0 +1,10 @@
+.. vale off
+
+amplitude\_units
+================
+
+.. currentmodule:: ansys.sherlock.core.types.lifecycle_types
+
+.. autoattribute:: RandomVibeProfileCsvFileProperties.amplitude_units
+
+.. vale on
